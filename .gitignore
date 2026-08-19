@@ -1,20 +1,23 @@
-# Environment
+# Environment / secrets - never commit
 .env
+.env.*
+*.key
+*.pem
+**/secrets/
+
+# Python
 *.pyc
 __pycache__/
 .venv/
 venv/
+.ipynb_checkpoints/
 
 # Node
 node_modules/
 dist/
 build/
 
-# Data - keep raw generated data out of git until reviewed
+# Data - keep raw/generated data out of git until reviewed
 data/raw/
 data/generated/
 *.csv
-
-# API keys - never commit
-**/secrets/
-*.key
