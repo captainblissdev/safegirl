@@ -12,3 +12,29 @@
 - **Decision:** KB built entry-by-entry from verified evidence, not generated in bulk.
 - **Decision:** Source hierarchy = Kenya MoH (primary, service delivery) > WHO 
   (supporting clinical/rights guidance) > KDHS (context only).
+
+## 2026-08-21
+
+Completed:
+- Processed and verified NotebookLM Prompt 0 evidence.
+- Established the source evidence map.
+- Identified and documented the EC timing discrepancy between Kenya MoH and WHO guidance.
+- Identified unresolved legal and clinical claims requiring review.
+- Drafted five initial source-grounded knowledge-base entries:
+  - KB-C1 — Adolescent contraceptive eligibility
+  - KB-C2 — Parental/guardian authorization
+  - KB-S1 — HIV testing/self-testing
+  - KB-S2 — PEP after possible HIV exposure
+  - KB-G1 — Privacy/confidentiality at youth-friendly services.
+
+Decisions:
+- Unresolved clinical, legal, and safety-sensitive claims will not enter dataset seeds.
+- KDHS remains primarily contextual evidence.
+- Current Kenyan legal requirements will not be inferred from the 2005 YFS guideline.
+- The EC 72-hour/120-hour discrepancy remains open for supervisor/domain-expert review.
+
+Current status:
+- Prompt 0: CLOSED
+- Initial KB: 5 entries drafted
+- Dataset generation: NOT STARTED
+- Fine-tuning: NOT STARTED
