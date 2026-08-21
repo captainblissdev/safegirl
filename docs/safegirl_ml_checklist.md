@@ -1,6 +1,6 @@
 # SafeGirl — ML Documentation & Prep Checklist
 
-## Core ML documentation (per Dr. Khakata's guidance)
+## Core ML documentation
 
 - [ ] Intent classes defined, with clear rationale for how each was chosen
 - [ ] Dataset source, size, composition, and annotation process documented
