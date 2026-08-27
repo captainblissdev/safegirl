@@ -38,3 +38,25 @@ Current status:
 - Initial KB: 5 entries drafted
 - Dataset generation: NOT STARTED
 - Fine-tuning: NOT STARTED
+
+## 2026-08-27
+- **Superseding freeze:** Replaced 2026-08-20 baseline with expanded version 
+  (Captain-authored). Full changelog per new file docstring: removed standalone 
+  "period" (fixed false-positive on general menstrual questions), removed 
+  broad "symptoms" from STI, added high-signal phrasing across all classes, 
+  scoped ML evaluation explicitly to 4 classes (GBV routing-only, per R8).
+- **Pre-freeze regression (round 2):** Found 2 regressions introduced by the 
+  above changes — (1) "birth control...without parents knowing" misrouted to 
+  general due to overlapping/double-counting parental-consent phrases outscoring 
+  the single contraception hit; (2) "period isn't here" phrasing lost all 
+  pregnancy signal after "period" removal, zero-hit fallback to general.
+- **Fixes applied:** removed redundant "parents knowing"/"parent knowing" 
+  general keywords (overlap with "without my parents"); added "period isn't 
+  here"/"period is not here" to pregnancy.
+- **Final regression: 58/58 (100%)** across all previously-cleared seeds plus 
+  today's additions. Verified before freeze, not after.
+- **Open scope question (not yet resolved, not blocking freeze):** fertility-
+  awareness/natural-method keywords (ovulation, safe days, calendar method) 
+  route correctly but have no grounded KB source. Same category of decision 
+  as puberty-topic scoping — needs an explicit in/out call before any KB 
+  content or seeds are written for this subtopic.

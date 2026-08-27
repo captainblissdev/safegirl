@@ -8,3 +8,7 @@
 | R4 | Domain expert for content/safety-net review | Process | Open | Outreach sent [date] |
 | R5 | Independent test-set reviewer (separate from LLM-paraphrase process) | Methodology/leakage prevention | Open | Outreach pending |
 | R6 | Ethics sign-off needed for adult-reviewer involvement | Ethics/compliance | Open | Question sent to supervisor [date] |
+
+| R8 | GBV-specific authoritative source material — current sourcing (2005 MoH) 
+predates Sexual Offences Act 2006 and 2010 Constitution | Legal/clinical accuracy | 
+Open — raised in supervisor update [27.08.2026] | Blocks GBV dataset scaling |
