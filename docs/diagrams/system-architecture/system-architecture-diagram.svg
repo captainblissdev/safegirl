@@ -1,0 +1,261 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 820" width="100%" height="100%" style="background-color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Arrowhead Markers -->
+    <marker id="arrow-default" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4d4d4d" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1a1a" />
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1a1a" />
+    </marker>
+    <marker id="arrow-amber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1a1a" />
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1a1a" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1a1a" />
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1a1a" />
+    </marker>
+    <marker id="arrow-sky" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a1a1a" />
+    </marker>
+
+    <!-- UML Component Icon Symbol -->
+    <g id="uml-component-icon">
+      <rect x="0" y="0" width="18" height="22" rx="2" fill="#ffffff" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="-4" y="4" width="8" height="4" rx="1" fill="#ffffff" stroke="currentColor" stroke-width="1.2"/>
+      <rect x="-4" y="12" width="8" height="4" rx="1" fill="#ffffff" stroke="currentColor" stroke-width="1.2"/>
+    </g>
+  </defs>
+
+  <!-- Title -->
+  <text x="590" y="25" font-size="18" font-weight="bold" fill="#111111" text-anchor="middle">SafeGirl — System Architecture</text>
+
+  <!-- External Service: Firebase Auth (Placed OUTSIDE Client Layer Box) -->
+  <g id="ext-firebase" transform="translate(50, 50)">
+    <rect x="0" y="0" width="200" height="85" rx="6" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.8" stroke-dasharray="4,3" />
+    <text x="100" y="22" font-size="11" fill="#1a1a1a" text-anchor="middle">«external service»</text>
+    <text x="100" y="42" font-size="14" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Firebase Auth</text>
+    <text x="100" y="60" font-size="11" fill="#6b6b6b" font-style="italic" text-anchor="middle">(Anonymous Tokens Only)</text>
+    <use href="#uml-component-icon" x="172" y="10" color="#1a1a1a" />
+  </g>
+
+  <!-- External Service: Google Gemini API (Placed OUTSIDE Data Layer Box at the Bottom) -->
+  <g id="ext-gemini" transform="translate(925, 590)">
+    <rect x="0" y="0" width="210" height="90" rx="6" fill="#ffffff" stroke="#1a1a1a" stroke-width="1.8" stroke-dasharray="4,3" />
+    <text x="105" y="25" font-size="11" fill="#1a1a1a" text-anchor="middle">«external service»</text>
+    <text x="105" y="44" font-size="14" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Google Gemini API</text>
+    <text x="105" y="62" font-size="11" fill="#6b6b6b" font-style="italic" text-anchor="middle">(AI Studio / LLM Engine)</text>
+    <use href="#uml-component-icon" x="182" y="10" color="#1a1a1a" />
+  </g>
+
+  <!-- ================= CONTAINER LAYERS ================= -->
+  
+  <!-- Layer 1: Client Layer -->
+  <rect x="30" y="160" width="240" height="630" rx="8" fill="#f7f7f7" stroke="#cccccc" stroke-width="1.5" stroke-dasharray="5,5" />
+  <text x="45" y="188" font-size="13" font-weight="bold" fill="#6b6b6b" letter-spacing="0.5">1. CLIENT LAYER</text>
+
+  <!-- Layer 2: Application / Orchestration Layer -->
+  <rect x="290" y="50" width="570" height="740" rx="8" fill="#f7f7f7" stroke="#cccccc" stroke-width="1.5" stroke-dasharray="5,5" />
+  <text x="305" y="78" font-size="13" font-weight="bold" fill="#6b6b6b" letter-spacing="0.5">2. APPLICATION / ORCHESTRATION LAYER</text>
+
+  <!-- Layer 3: Data Layer (Clean boundary containing ONLY Knowledge Base) -->
+  <rect x="910" y="270" width="240" height="250" rx="8" fill="#f7f7f7" stroke="#cccccc" stroke-width="1.5" stroke-dasharray="5,5" />
+  <text x="925" y="298" font-size="13" font-weight="bold" fill="#6b6b6b" letter-spacing="0.5">3. DATA LAYER</text>
+
+
+  <!-- ================= COMPONENTS ================= -->
+
+  <!-- Component: PWA (Client) -->
+  <g id="cmp-pwa" transform="translate(50, 310)">
+    <rect x="0" y="0" width="200" height="230" rx="6" fill="#ffffff" stroke="#1a1a1a" stroke-width="2" />
+    <text x="100" y="25" font-size="11" fill="#1a1a1a" text-anchor="middle">«component»</text>
+    <text x="100" y="45" font-size="15" font-weight="bold" fill="#1a1a1a" text-anchor="middle">PWA (Client)</text>
+    <text x="100" y="63" font-size="12" fill="#1a1a1a" font-style="italic" text-anchor="middle">React + TypeScript</text>
+    <line x1="15" y1="75" x2="185" y2="75" stroke="#ffffff" stroke-width="1" />
+    <text x="20" y="98" font-size="11" fill="#333333">• Anonymous Session</text>
+    <text x="20" y="120" font-size="11" fill="#333333">• Chat Interface (UC-1)</text>
+    <text x="20" y="142" font-size="11" fill="#333333">• Disclaimer Handler (UC-2)</text>
+    <text x="20" y="164" font-size="11" fill="#333333">• Service Worker Caching</text>
+    <use href="#uml-component-icon" x="170" y="10" color="#1a1a1a" />
+  </g>
+
+  <!-- Component: Backend Orchestrator -->
+  <g id="cmp-backend" transform="translate(310, 385)">
+    <rect x="0" y="0" width="200" height="80" rx="6" fill="#ffffff" stroke="#1a1a1a" stroke-width="2" />
+    <text x="100" y="22" font-size="11" fill="#1a1a1a" text-anchor="middle">«component»</text>
+    <text x="100" y="42" font-size="14" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Node/Express Backend</text>
+    <text x="100" y="60" font-size="12" fill="#1a1a1a" font-style="italic" text-anchor="middle">Parallel Orchestrator</text>
+    <use href="#uml-component-icon" x="170" y="10" color="#1a1a1a" />
+  </g>
+
+  <!-- Component: Safety Net -->
+  <g id="cmp-safetynet" transform="translate(570, 80)">
+    <rect x="0" y="0" width="270" height="95" rx="6" fill="#ffffff" stroke="#1a1a1a" stroke-width="2" />
+    <text x="135" y="22" font-size="11" fill="#1a1a1a" text-anchor="middle">«component»</text>
+    <text x="135" y="42" font-size="15" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Safety Net</text>
+    <text x="135" y="58" font-size="11" fill="#1a1a1a" font-style="italic" text-anchor="middle">Keyword Rule Engine</text>
+    <text x="135" y="78" font-size="11" fill="#4d4d4d" text-anchor="middle">Independent GBV/Crisis Detection</text>
+    <use href="#uml-component-icon" x="240" y="10" color="#1a1a1a" />
+  </g>
+
+  <!-- Component: Intent Classifier -->
+  <g id="cmp-classifier" transform="translate(570, 210)">
+    <rect x="0" y="0" width="270" height="105" rx="6" fill="#ffffff" stroke="#1a1a1a" stroke-width="2" />
+    <text x="135" y="22" font-size="11" fill="#1a1a1a" text-anchor="middle">«component»</text>
+    <text x="135" y="42" font-size="15" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Intent Classifier</text>
+    <text x="135" y="58" font-size="11" fill="#1a1a1a" font-style="italic" text-anchor="middle">DistilBERT-multilingual</text>
+    <text x="135" y="78" font-size="11" fill="#4d4d4d" text-anchor="middle">Categorizes query into intent slices</text>
+    <text x="135" y="92" font-size="10" fill="#1a1a1a" text-anchor="middle">(Contraception, STI, Pregnancy, General)</text>
+    <use href="#uml-component-icon" x="240" y="10" color="#1a1a1a" />
+  </g>
+
+  <!-- Component: Retrieval Module -->
+  <g id="cmp-retrieval" transform="translate(570, 350)">
+    <rect x="0" y="0" width="270" height="90" rx="6" fill="#ffffff" stroke="#1a1a1a" stroke-width="2" />
+    <text x="135" y="22" font-size="11" fill="#1a1a1a" text-anchor="middle">«component»</text>
+    <text x="135" y="42" font-size="15" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Retrieval Module</text>
+    <text x="135" y="58" font-size="11" fill="#1a1a1a" font-style="italic" text-anchor="middle">LlamaIndex + Embeddings</text>
+    <text x="135" y="76" font-size="11" fill="#4d4d4d" text-anchor="middle">Queries scoped Knowledge Base slice</text>
+    <use href="#uml-component-icon" x="240" y="10" color="#1a1a1a" />
+  </g>
+
+  <!-- Component: Generation Module -->
+  <g id="cmp-generation" transform="translate(570, 480)">
+    <rect x="0" y="0" width="270" height="90" rx="6" fill="#ffffff" stroke="#1a1a1a" stroke-width="2" />
+    <text x="135" y="22" font-size="11" fill="#1a1a1a" text-anchor="middle">«component»</text>
+    <text x="135" y="42" font-size="15" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Generation Module</text>
+    <text x="135" y="58" font-size="11" fill="#1a1a1a" font-style="italic" text-anchor="middle">Prompt Construction &amp; Grounding</text>
+    <text x="135" y="76" font-size="11" fill="#4d4d4d" text-anchor="middle">Constructs strictly grounded prompt</text>
+    <use href="#uml-component-icon" x="240" y="10" color="#1a1a1a" />
+  </g>
+
+  <!-- Component: Response Orchestration -->
+  <g id="cmp-orchestration" transform="translate(570, 620)">
+    <rect x="0" y="0" width="270" height="90" rx="6" fill="#ffffff" stroke="#4d4d4d" stroke-width="2" />
+    <text x="135" y="22" font-size="11" fill="#4d4d4d" text-anchor="middle">«component»</text>
+    <text x="135" y="42" font-size="15" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Response Orchestration</text>
+    <text x="135" y="62" font-size="11" fill="#4d4d4d" text-anchor="middle">Merges Safety Flag/Clear result</text>
+    <text x="135" y="78" font-size="11" fill="#4d4d4d" text-anchor="middle">with Grounded LLM Response</text>
+    <use href="#uml-component-icon" x="240" y="10" color="#4d4d4d" />
+  </g>
+
+  <!-- Datastore: Knowledge Base -->
+  <g id="cmp-kb" transform="translate(945, 320)">
+    <!-- Cylinder Top -->
+    <path d="M 0 15 A 85 15 0 0 0 170 15 A 85 15 0 0 0 0 15 Z" fill="#ffffff" stroke="#333333" stroke-width="2" />
+    <!-- Cylinder Body -->
+    <path d="M 0 15 L 0 155 A 85 15 0 0 0 170 155 L 170 15 Z" fill="#ffffff" stroke="#333333" stroke-width="2" />
+    <path d="M 0 15 A 85 15 0 0 0 170 15" fill="none" stroke="#333333" stroke-width="2" />
+    <!-- Content -->
+    <text x="85" y="42" font-size="10" fill="#6b6b6b" text-anchor="middle">«datastore»</text>
+    <text x="85" y="58" font-size="13" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Knowledge Base</text>
+    <text x="85" y="72" font-size="10" fill="#1a1a1a" font-style="italic" text-anchor="middle">Vector Store Slices</text>
+    <line x1="20" y1="80" x2="150" y2="80" stroke="#cccccc" stroke-width="1" />
+    <text x="25" y="96" font-size="10" fill="#333333">• Contraception</text>
+    <text x="25" y="110" font-size="10" fill="#333333">• STI</text>
+    <text x="25" y="124" font-size="10" fill="#333333">• Pregnancy / General</text>
+    <text x="25" y="138" font-size="10" fill="#999999">• GBV (Empty)</text>
+  </g>
+
+
+  <!-- ================= RELATIONSHIPS & ARROWS ================= -->
+
+  <!-- Connection: PWA <-> Firebase Auth -->
+  <g id="conn-pwa-firebase">
+    <path d="M 150 310 L 150 135" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrow-orange)" marker-start="url(#arrow-orange)" />
+    <rect x="90" y="210" width="120" height="20" fill="#ffffff" rx="3" />
+    <text x="150" y="224" font-size="10" fill="#1a1a1a" font-weight="bold" text-anchor="middle">Session / Token</text>
+  </g>
+
+  <!-- Connection 1: PWA -> Backend (Submit Q) -->
+  <g id="conn-pwa-backend-req">
+    <path d="M 250 410 L 310 410" fill="none" stroke="#111111" stroke-width="1.8" marker-end="url(#arrow-default)" />
+    <rect x="252" y="388" width="56" height="18" fill="#ffffff" rx="3" />
+    <text x="280" y="401" font-size="9" font-weight="bold" fill="#111111" text-anchor="middle">Submit Q</text>
+  </g>
+
+  <!-- Connection 2: Backend -> PWA (HTTP Response) -->
+  <g id="conn-backend-pwa-resp">
+    <path d="M 310 445 L 250 445" fill="none" stroke="#1a1a1a" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-green)" />
+    <rect x="252" y="450" width="56" height="18" fill="#ffffff" rx="3" />
+    <text x="280" y="463" font-size="9" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Response</text>
+  </g>
+
+  <!-- Connection: Backend -> Safety Net (Parallel Dispatch) -->
+  <g id="conn-backend-safetynet">
+    <path d="M 410 385 L 410 125 L 570 125" fill="none" stroke="#1a1a1a" stroke-width="1.8" marker-end="url(#arrow-red)" />
+    <rect x="425" y="113" width="110" height="22" fill="#ffffff" rx="3" />
+    <text x="480" y="128" font-size="10" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Parallel Dispatch</text>
+  </g>
+
+  <!-- Connection: Backend -> Intent Classifier (Parallel Dispatch) -->
+  <g id="conn-backend-classifier">
+    <path d="M 460 385 L 460 262 L 570 262" fill="none" stroke="#1a1a1a" stroke-width="1.8" marker-end="url(#arrow-amber)" />
+    <rect x="462" y="250" width="95" height="22" fill="#ffffff" rx="3" />
+    <text x="509" y="265" font-size="10" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Parallel Dispatch</text>
+  </g>
+
+  <!-- Connection: Classifier -> Retrieval -->
+  <g id="conn-classifier-retrieval">
+    <line x1="705" y1="315" x2="705" y2="350" stroke="#4d4d4d" stroke-width="1.5" marker-end="url(#arrow-default)" />
+    <rect x="650" y="321" width="110" height="18" fill="#ffffff" rx="3" />
+    <text x="705" y="334" font-size="10" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Intent Category Scope</text>
+  </g>
+
+  <!-- Connection: Retrieval <-> Knowledge Base -->
+  <g id="conn-retrieval-kb">
+    <line x1="840" y1="395" x2="945" y2="395" stroke="#1a1a1a" stroke-width="1.8" marker-end="url(#arrow-sky)" marker-start="url(#arrow-sky)" />
+    <rect x="852" y="368" width="80" height="20" fill="#ffffff" rx="3" />
+    <text x="892" y="382" font-size="9" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Vector Query</text>
+  </g>
+
+  <!-- Connection: Retrieval -> Generation -->
+  <g id="conn-retrieval-generation">
+    <line x1="705" y1="440" x2="705" y2="480" stroke="#4d4d4d" stroke-width="1.5" marker-end="url(#arrow-default)" />
+    <rect x="652" y="448" width="106" height="18" fill="#ffffff" rx="3" />
+    <text x="705" y="461" font-size="10" fill="#4d4d4d" text-anchor="middle">Retrieved Evidence</text>
+  </g>
+
+  <!-- Connection 1: Generation -> Gemini API (Outbound Prompt) -->
+  <g id="conn-gen-gemini-prompt">
+    <path d="M 840 510 L 1030 510 L 1030 590" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrow-blue)" />
+    <rect x="885" y="498" width="110" height="20" fill="#ffffff" rx="3" />
+    <text x="940" y="512" font-size="10" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Constructed Prompt</text>
+  </g>
+
+  <!-- Connection 2: Gemini API -> Generation (Inbound Answer Payload) -->
+  <g id="conn-gemini-gen-payload">
+    <path d="M 925 615 L 940 615 L 940 530 L 840 530" fill="none" stroke="#1a1a1a" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrow-blue)" />
+    <rect x="850" y="513" width="90" height="20" fill="#ffffff" rx="3" />
+    <text x="895" y="527" font-size="10" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Answer Payload</text>
+  </g>
+
+  <!-- Connection: Safety Net -> Response Orchestration -->
+  <g id="conn-safetynet-orchestration">
+    <path d="M 840 125 L 885 125 L 885 665 L 840 665" fill="none" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrow-red)" />
+    <rect x="828" y="210" width="115" height="22" fill="#ffffff" rx="3" transform="rotate(90 885 221)" />
+    <text x="885" y="225" font-size="10" font-weight="bold" fill="#1a1a1a" text-anchor="middle" transform="rotate(90 885 221)">Safety Flag / Clear</text>
+  </g>
+
+  <!-- Connection: Generation -> Response Orchestration -->
+  <g id="conn-generation-orchestration">
+    <line x1="705" y1="570" x2="705" y2="620" stroke="#1a1a1a" stroke-width="1.5" marker-end="url(#arrow-purple)" />
+    <rect x="650" y="582" width="110" height="18" fill="#ffffff" rx="3" />
+    <text x="705" y="595" font-size="10" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Generated Answer</text>
+  </g>
+
+  <!-- Connection: Response Orchestration -> Backend Orchestrator -->
+  <g id="conn-orchestration-backend">
+    <path d="M 570 685 L 390 685 L 390 465" fill="none" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrow-green)" />
+    <rect x="410" y="673" width="130" height="22" fill="#ffffff" rx="3" />
+    <text x="475" y="688" font-size="10" font-weight="bold" fill="#1a1a1a" text-anchor="middle">Final Response Payload</text>
+  </g>
+
+</svg>

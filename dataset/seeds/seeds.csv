@@ -1,0 +1,56 @@
+seed_id,class,text
+SEED-CONTRA-01,contraception,Can I get birth control pills without my parents knowing?
+SEED-CONTRA-02,contraception,Is it safe for a 16-year-old to use an IUD?
+SEED-CONTRA-03,contraception,Where can I get condoms for free near me?
+SEED-CONTRA-04,contraception,Does taking birth control affect my ability to have kids later?
+SEED-CONTRA-05,contraception,Can I get a contraceptive implant if I'm not married?
+SEED-CONTRA-06,contraception,What's the difference between the pill and the injection?
+SEED-CONTRA-07,contraception,Do I have to pay for contraception at a government clinic?
+SEED-CONTRA-08,contraception,Can I switch birth control methods if one isn't working for me?
+SEED-CONTRA-09,contraception,Is emergency contraception different from regular birth control?
+SEED-CONTRA-10,contraception,Can a nurse refuse to give me contraception because of my age?
+SEED-CONTRA-11,contraception,Can I get pregnant from precum?
+SEED-CONTRA-12,contraception,"He pulled out, am I actually safe?"
+SEED-CONTRA-13,contraception,"I forgot my pill, am I still protected?"
+SEED-CONTRA-14,contraception,Which birth control has the least side effects?
+SEED-STI-01,sti,How do I know if I have an STI?
+SEED-STI-02,sti,Can I get tested for HIV without telling my parents?
+SEED-STI-03,sti,What is PrEP and can teenagers use it?
+SEED-STI-04,sti,How soon after sex can I get an accurate HIV test?
+SEED-STI-05,sti,Do I need the HPV vaccine if I'm not sexually active?
+SEED-STI-06,sti,Can STIs be cured completely?
+SEED-STI-07,sti,What actually happens during an HIV test?
+SEED-STI-08,sti,Can I get treated for an STI without a lab test first?
+SEED-STI-09,sti,Why are girls more likely to get STIs than boys?
+SEED-STI-10,sti,Is it normal to feel scared about getting tested?
+SEED-STI-11,sti,Can I have an STI without knowing?
+SEED-STI-12,sti,Why does it burn when I pee?
+SEED-STI-13,sti,Is this discharge normal or nah?
+SEED-STI-14,sti,How soon after sex can I test for STIs?
+SEED-STI-15,sti,Can I get an STI even if my partner has no symptoms?
+SEED-STI-16,sti,Can I get an STI from sitting on a dirty toilet?
+SEED-PREG-01,pregnancy,How many antenatal visits do I need during pregnancy?
+SEED-PREG-02,pregnancy,Can I still go to school if I'm pregnant?
+SEED-PREG-03,pregnancy,What are the health risks of having a baby as a teenager?
+SEED-PREG-04,pregnancy,Do I have to pay for antenatal care?
+SEED-PREG-05,pregnancy,Can I choose to give birth at home instead of a clinic?
+SEED-PREG-06,pregnancy,Will the clinic force me to have a pelvic exam right away?
+SEED-PREG-07,pregnancy,What should I expect at my first antenatal visit?
+SEED-PREG-08,pregnancy,Can I get support if my family doesn't know I'm pregnant?
+SEED-PREG-09,pregnancy,Why do teenage mothers face more health risks than adults?
+SEED-PREG-10,pregnancy,Is it normal to be scared of pregnancy checkups?
+SEED-PREG-11,pregnancy,My period is late… should I be worried?
+SEED-PREG-12,pregnancy,How soon can I take a pregnancy test?
+SEED-PREG-13,pregnancy,The test is negative but my period isn't here, why?
+SEED-PREG-14,pregnancy,I got a positive pregnancy test… now what?
+SEED-PREG-15,pregnancy,I missed my Period am I pregnant?
+SEED-GEN-01,general,What does "youth-friendly" mean at a health clinic?
+SEED-GEN-02,general,Will the clinic tell my parents what we talked about?
+SEED-GEN-03,general,What age counts as "youth" for these services?
+SEED-GEN-04,general,Can I go to a clinic if my school doesn't have one?
+SEED-GEN-05,general,Are these services free for people who can't afford them?
+SEED-GEN-06,general,What if the nurse judges me for asking questions?
+SEED-GEN-07,general,Can I get help outside of school hours?
+SEED-GEN-08,general,Do I need an appointment to talk to someone?
+SEED-GEN-09,general,Is it okay to ask questions I feel embarrassed about?
+SEED-GEN-10,general,What's the difference between a youth centre and a clinic?

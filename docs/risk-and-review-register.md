@@ -12,3 +12,14 @@
 | R8 | GBV-specific authoritative source material — current sourcing (2005 MoH) 
 predates Sexual Offences Act 2006 and 2010 Constitution | Legal/clinical accuracy | 
 Open — raised in supervisor update [27.08.2026] | Blocks GBV dataset scaling |
+
+| R12 | Gemini API terms (effective 2026-03-23) prohibit use in apps "directed 
+towards or likely to be accessed by individuals under 18" and restrict use to 
+"professional/business purposes, not consumer use" — verified against primary 
+source. OpenAI/Anthropic APIs offer compliance pathways but require parental/
+guardian consent, which conflicts with SafeGirl's anonymity design. | 
+Legal/compliance | ACCEPTED RISK — proceeding with Gemini for academic 
+prototype scope | Decision made 2026-08-29. Requires supervisor sign-off. 
+Must be revisited before any real-world deployment. Mitigation: actual usage 
+during project period limited to synthetic/adult-tester queries, not real 
+minor end users. |

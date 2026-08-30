@@ -1,0 +1,186 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="SafeGirl-Architecture" name="SafeGirl System Architecture">
+    <mxGraphModel dx="1200" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="850" background="#ffffff">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="SafeGirl — System Architecture" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="450" y="15" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- EXTERNAL SERVICE: Firebase Auth (OUTSIDE Client Layer) -->
+        <mxCell id="ext_firebase" value="«external service»&#10;&lt;b&gt;Firebase Auth&lt;/b&gt;&#10;&lt;i&gt;(Anonymous Tokens Only)&lt;/i&gt;" style="shape=component;align=center;verticalAlign=middle;spacing=4;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#ea580c;strokeWidth=1.8;dashed=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="50" y="50" width="200" height="85" as="geometry" />
+        </mxCell>
+
+        <!-- EXTERNAL SERVICE: Google Gemini API (OUTSIDE Data Layer) -->
+        <mxCell id="ext_gemini" value="«external service»&#10;&lt;b&gt;Google Gemini API&lt;/b&gt;&#10;&lt;i&gt;(AI Studio / LLM Engine)&lt;/i&gt;" style="shape=component;align=center;verticalAlign=middle;spacing=4;html=1;fontSize=12;fillColor=#ffffff;strokeColor=#2563eb;strokeWidth=1.8;dashed=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="925" y="590" width="210" height="90" as="geometry" />
+        </mxCell>
+
+
+        <!-- ================= CONTAINER LAYERS ================= -->
+
+        <!-- Layer 1: Client Layer -->
+        <mxCell id="layer_client" value="1. CLIENT LAYER" style="shape=rect;html=1;verticalAlign=top;align=left;fontStyle=1;fontSize=13;fillColor=#f8fafc;strokeColor=#cbd5e1;strokeWidth=1.5;dashed=1;whiteSpace=wrap;fontColor=#64748b;" vertex="1" parent="1">
+          <mxGeometry x="30" y="160" width="240" height="630" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 2: Application / Orchestration Layer -->
+        <mxCell id="layer_app" value="2. APPLICATION / ORCHESTRATION LAYER" style="shape=rect;html=1;verticalAlign=top;align=left;fontStyle=1;fontSize=13;fillColor=#f8fafc;strokeColor=#cbd5e1;strokeWidth=1.5;dashed=1;whiteSpace=wrap;fontColor=#64748b;" vertex="1" parent="1">
+          <mxGeometry x="290" y="50" width="570" height="740" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 3: Data Layer -->
+        <mxCell id="layer_data" value="3. DATA LAYER" style="shape=rect;html=1;verticalAlign=top;align=left;fontStyle=1;fontSize=13;fillColor=#f8fafc;strokeColor=#cbd5e1;strokeWidth=1.5;dashed=1;whiteSpace=wrap;fontColor=#64748b;" vertex="1" parent="1">
+          <mxGeometry x="910" y="270" width="240" height="250" as="geometry" />
+        </mxCell>
+
+
+        <!-- ================= COMPONENTS & DATASTORE ================= -->
+
+        <!-- PWA Component -->
+        <mxCell id="cmp_pwa" value="«component»&#10;&lt;b&gt;PWA (Client)&lt;/b&gt;&#10;&lt;i&gt;React + TypeScript&lt;/i&gt;&#10;&#10;• Anonymous Session&#10;• Chat Interface (UC-1)&#10;• Disclaimer Handler (UC-2)&#10;• Service Worker Caching" style="shape=component;align=center;verticalAlign=middle;spacing=6;html=1;fontSize=11;fillColor=#eff6ff;strokeColor=#2563eb;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="50" y="310" width="200" height="230" as="geometry" />
+        </mxCell>
+
+        <!-- Backend Orchestrator -->
+        <mxCell id="cmp_backend" value="«component»&#10;&lt;b&gt;Node/Express Backend&lt;/b&gt;&#10;&lt;i&gt;Parallel Orchestrator&lt;/i&gt;" style="shape=component;align=center;verticalAlign=middle;spacing=4;html=1;fontSize=11;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="310" y="385" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Safety Net -->
+        <mxCell id="cmp_safetynet" value="«component»&#10;&lt;b&gt;Safety Net&lt;/b&gt;&#10;&lt;i&gt;Keyword Rule Engine&lt;/i&gt;&#10;&#10;Independent GBV/Crisis Detection" style="shape=component;align=center;verticalAlign=middle;spacing=4;html=1;fontSize=11;fillColor=#fff1f2;strokeColor=#e11d48;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="570" y="80" width="270" height="95" as="geometry" />
+        </mxCell>
+
+        <!-- Intent Classifier -->
+        <mxCell id="cmp_classifier" value="«component»&#10;&lt;b&gt;Intent Classifier&lt;/b&gt;&#10;&lt;i&gt;DistilBERT-multilingual&lt;/i&gt;&#10;&#10;Categorizes query into intent slices&#10;&lt;font color=&quot;#78350f&quot;&gt;(Contraception, STI, Pregnancy, General)&lt;/font&gt;" style="shape=component;align=center;verticalAlign=middle;spacing=4;html=1;fontSize=11;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="570" y="210" width="270" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Retrieval Module -->
+        <mxCell id="cmp_retrieval" value="«component»&#10;&lt;b&gt;Retrieval Module&lt;/b&gt;&#10;&lt;i&gt;LlamaIndex + Embeddings&lt;/i&gt;&#10;&#10;Queries scoped Knowledge Base slice" style="shape=component;align=center;verticalAlign=middle;spacing=4;html=1;fontSize=11;fillColor=#f0f9ff;strokeColor=#0284c7;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="570" y="350" width="270" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Generation Module -->
+        <mxCell id="cmp_generation" value="«component»&#10;&lt;b&gt;Generation Module&lt;/b&gt;&#10;&lt;i&gt;Prompt Construction &amp; Grounding&lt;/i&gt;&#10;&#10;Constructs strictly grounded prompt" style="shape=component;align=center;verticalAlign=middle;spacing=4;html=1;fontSize=11;fillColor=#faf5ff;strokeColor=#9333ea;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="570" y="480" width="270" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Response Orchestration -->
+        <mxCell id="cmp_orchestration" value="«component»&#10;&lt;b&gt;Response Orchestration&lt;/b&gt;&#10;&#10;Merges Safety Flag/Clear result&#10;with Grounded LLM Response" style="shape=component;align=center;verticalAlign=middle;spacing=4;html=1;fontSize=11;fillColor=#f1f5f9;strokeColor=#475569;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="570" y="620" width="270" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Knowledge Base Datastore -->
+        <mxCell id="cmp_kb" value="«datastore»&#10;&lt;b&gt;Knowledge Base&lt;/b&gt;&#10;&lt;i&gt;Vector Store Slices&lt;/i&gt;&#10;&#10;• Contraception&#10;• STI&#10;• Pregnancy / General&#10;• GBV (Empty)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fontSize=10;fillColor=#ffffff;strokeColor=#334155;strokeWidth=2;align=center;" vertex="1" parent="1">
+          <mxGeometry x="945" y="320" width="170" height="170" as="geometry" />
+        </mxCell>
+
+
+        <!-- ================= CONNECTIONS ================= -->
+
+        <!-- PWA <-> Firebase Auth -->
+        <mxCell id="conn_pwa_firebase" value="Session / Token" style="endArrow=classic;startArrow=classic;html=1;rounded=0;strokeWidth=1.5;strokeColor=#ea580c;dashed=1;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_pwa" target="ext_firebase">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- PWA -> Backend (Submit Q) -->
+        <mxCell id="conn_pwa_bg_req" value="Submit Q" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.8;strokeColor=#0f172a;fontSize=9;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="250" y="410" as="sourcePoint" />
+            <mxPoint x="310" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Backend -> PWA (Response) -->
+        <mxCell id="conn_bg_pwa_resp" value="Response" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.8;strokeColor=#16a34a;dashed=1;fontSize=9;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="310" y="445" as="sourcePoint" />
+            <mxPoint x="250" y="445" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Backend -> Safety Net (Parallel Dispatch) -->
+        <mxCell id="conn_bg_safetynet" value="Parallel Dispatch" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.8;strokeColor=#e11d48;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_backend" target="cmp_safetynet">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="410" y="125" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Backend -> Intent Classifier (Parallel Dispatch) -->
+        <mxCell id="conn_bg_classifier" value="Parallel Dispatch" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.8;strokeColor=#d97706;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_backend" target="cmp_classifier">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="460" y="262" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Classifier -> Retrieval -->
+        <mxCell id="conn_class_ret" value="Intent Category Scope" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.5;strokeColor=#475569;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_classifier" target="cmp_retrieval">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Retrieval <-> Knowledge Base -->
+        <mxCell id="conn_ret_kb" value="Vector Query" style="endArrow=classic;startArrow=classic;html=1;rounded=0;strokeWidth=1.8;strokeColor=#0284c7;fontSize=9;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_retrieval" target="cmp_kb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Retrieval -> Generation -->
+        <mxCell id="conn_ret_gen" value="Retrieved Evidence" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.5;strokeColor=#475569;fontSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_retrieval" target="cmp_generation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Generation -> Gemini API (Prompt) -->
+        <mxCell id="conn_gen_gemini_req" value="Prompt" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.5;strokeColor=#2563eb;dashed=1;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_generation" target="ext_gemini">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1030" y="525" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Gemini API -> Generation (Answer) -->
+        <mxCell id="conn_gemini_gen_resp" value="Answer" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.5;strokeColor=#2563eb;dashed=1;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="ext_gemini" target="cmp_generation">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="705" y="635" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Safety Net -> Response Orchestration -->
+        <mxCell id="conn_safety_orch" value="Safety Flag / Clear" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.5;strokeColor=#e11d48;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_safetynet" target="cmp_orchestration">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="885" y="125" />
+              <mxPoint x="885" y="665" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Generation -> Response Orchestration -->
+        <mxCell id="conn_gen_orch" value="Generated Answer" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.5;strokeColor=#9333ea;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_generation" target="cmp_orchestration">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Response Orchestration -> Backend -->
+        <mxCell id="conn_orch_backend" value="Final Response Payload" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#16a34a;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_orchestration" target="cmp_backend">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="390" y="685" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
