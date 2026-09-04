@@ -1,0 +1,57 @@
+seed_id,paraphrase_id,class,text
+SEED-CONTRA-01,SEED-CONTRA-01-P1,contraception,If I get the pill will my parents find out?
+SEED-CONTRA-01,SEED-CONTRA-01-P2,contraception,Do I have to tell my mom or dad before getting birth control?
+SEED-CONTRA-01,SEED-CONTRA-01-P3,contraception,Is there a way to get on birth control that my parents won't know about?
+SEED-CONTRA-01,SEED-CONTRA-01-P4,contraception,Will the clinic tell my parents if I ask for birth control pills?
+SEED-CONTRA-02,SEED-CONTRA-02-P1,contraception,Can a 16 year old get an IUD safely?
+SEED-CONTRA-02,SEED-CONTRA-02-P2,contraception,I'm 16 is it okay for me to have an IUD put in?
+SEED-CONTRA-02,SEED-CONTRA-02-P3,contraception,Are IUDs safe for teenagers to use?
+SEED-CONTRA-02,SEED-CONTRA-02-P4,contraception,Is there an age limit for getting an IUD?
+SEED-CONTRA-03,SEED-CONTRA-03-P1,contraception,Is there somewhere close by that gives out free condoms?
+SEED-CONTRA-03,SEED-CONTRA-03-P2,contraception,Where do I go to get condoms without paying?
+SEED-CONTRA-03,SEED-CONTRA-03-P3,contraception,Do any clinics near me give free condoms?
+SEED-CONTRA-03,SEED-CONTRA-03-P4,contraception,How do I find a place that has free condoms?
+SEED-CONTRA-04,SEED-CONTRA-04-P1,contraception,Will birth control make it harder for me to get pregnant in the future?
+SEED-CONTRA-04,SEED-CONTRA-04-P2,contraception,If I use contraception now can I still have children later?
+SEED-CONTRA-04,SEED-CONTRA-04-P3,contraception,Does the pill cause fertility problems down the line?
+SEED-CONTRA-04,SEED-CONTRA-04-P4,contraception,Can birth control permanently affect my fertility?
+SEED-CONTRA-05,SEED-CONTRA-05-P1,contraception,Do I need to be married to get the implant?
+SEED-CONTRA-05,SEED-CONTRA-05-P2,contraception,Is the contraceptive implant only for married women?
+SEED-CONTRA-05,SEED-CONTRA-05-P3,contraception,Can I still get an implant if I don't have a husband?
+SEED-CONTRA-05,SEED-CONTRA-05-P4,contraception,Will they refuse to give me an implant because I'm single?
+SEED-CONTRA-06,SEED-CONTRA-06-P1,contraception,How is the birth control pill different from the injection?
+SEED-CONTRA-06,SEED-CONTRA-06-P2,contraception,Pill or injection what's the difference between them?
+SEED-CONTRA-06,SEED-CONTRA-06-P3,contraception,Which is better the pill or the shot?
+SEED-CONTRA-06,SEED-CONTRA-06-P4,contraception,Can someone explain how the pill and the injection compare?
+SEED-CONTRA-07,SEED-CONTRA-07-P1,contraception,Is contraception free at government clinics?
+SEED-CONTRA-07,SEED-CONTRA-07-P2,contraception,How much does birth control cost at a public clinic?
+SEED-CONTRA-07,SEED-CONTRA-07-P3,contraception,Will I be charged for contraceptives at a government hospital?
+SEED-CONTRA-07,SEED-CONTRA-07-P4,contraception,Is birth control free if I go to a public health facility?
+SEED-CONTRA-08,SEED-CONTRA-08-P1,contraception,What if my current birth control isn't working can I change it?
+SEED-CONTRA-08,SEED-CONTRA-08-P2,contraception,Am I allowed to switch to a different contraceptive method?
+SEED-CONTRA-08,SEED-CONTRA-08-P3,contraception,Can I stop one type of birth control and try another?
+SEED-CONTRA-08,SEED-CONTRA-08-P4,contraception,Is it okay to change contraceptive methods if I'm not happy with mine?
+SEED-CONTRA-09,SEED-CONTRA-09-P1,contraception,How is emergency contraception different from normal birth control?
+SEED-CONTRA-09,SEED-CONTRA-09-P2,contraception,Is the morning-after pill the same as regular contraception?
+SEED-CONTRA-09,SEED-CONTRA-09-P3,contraception,What makes emergency contraception different from the pill I take every day?
+SEED-CONTRA-09,SEED-CONTRA-09-P4,contraception,Are emergency pills different from daily birth control pills?
+SEED-CONTRA-10,SEED-CONTRA-10-P1,contraception,Is a nurse allowed to say no to giving me birth control because I'm young?
+SEED-CONTRA-10,SEED-CONTRA-10-P2,contraception,Can I be denied contraception just because of how old I am?
+SEED-CONTRA-10,SEED-CONTRA-10-P3,contraception,What if a nurse won't give me birth control because I'm a teenager?
+SEED-CONTRA-10,SEED-CONTRA-10-P4,contraception,Is it allowed for a nurse to refuse me contraception based on my age?
+SEED-CONTRA-11,SEED-CONTRA-11-P1,contraception,Is it possible to get pregnant from precum?
+SEED-CONTRA-11,SEED-CONTRA-11-P2,contraception,Can precum alone make me pregnant?
+SEED-CONTRA-11,SEED-CONTRA-11-P3,contraception,Does precum have sperm that can cause pregnancy?
+SEED-CONTRA-11,SEED-CONTRA-11-P4,contraception,I heard precum can't get you pregnant is that true?
+SEED-CONTRA-12,SEED-CONTRA-12-P1,contraception,We used the pull out method am I safe from getting pregnant?
+SEED-CONTRA-12,SEED-CONTRA-12-P2,contraception,Is pulling out actually a safe way to avoid pregnancy?
+SEED-CONTRA-12,SEED-CONTRA-12-P3,contraception,He didn't finish inside me does that mean I won't get pregnant?
+SEED-CONTRA-12,SEED-CONTRA-12-P4,contraception,Can I still get pregnant even if he pulled out in time?
+SEED-CONTRA-13,SEED-CONTRA-13-P1,contraception,I missed taking my birth control pill am I still safe?
+SEED-CONTRA-13,SEED-CONTRA-13-P2,contraception,What happens if I forget to take the pill one day?
+SEED-CONTRA-13,SEED-CONTRA-13-P3,contraception,Am I still protected from pregnancy if I skipped a pill?
+SEED-CONTRA-13,SEED-CONTRA-13-P4,contraception,I forgot to take my pill yesterday does that put me at risk?
+SEED-CONTRA-14,SEED-CONTRA-14-P1,contraception,What type of contraception has the fewest side effects?
+SEED-CONTRA-14,SEED-CONTRA-14-P2,contraception,Is there a birth control method that doesn't have many side effects?
+SEED-CONTRA-14,SEED-CONTRA-14-P3,contraception,Which contraceptive option causes the least side effects?
+SEED-CONTRA-14,SEED-CONTRA-14-P4,contraception,What's the gentlest form of birth control with fewer side effects?
