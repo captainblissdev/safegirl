@@ -1,0 +1,169 @@
+seed_id,paraphrase_id,class,text
+SEED-PREG-16,SEED-PREG-16-P1,general,Even though I haven't had sex recently my period is late; could there be another cause?
+SEED-PREG-16,SEED-PREG-16-P2,general,I haven't had sex recently but my period is late; what else could be causing that?
+SEED-PREG-16,SEED-PREG-16-P3,general,My period is late despite not having had sex recently; is there another explanation?
+SEED-PREG-16,SEED-PREG-16-P4,general,Something other than sex might be causing my late period since I haven't had sex recently; what could it be?
+SEED-PREG-24,SEED-PREG-24-P1,general,Could stress or intense exercise cause a late period rather than pregnancy?
+SEED-PREG-24,SEED-PREG-24-P2,general,Is it possible for stress or intense exercise to delay my period instead of it being pregnancy?
+SEED-PREG-24,SEED-PREG-24-P3,general,Might stress or intense exercise be the reason for a late period rather than pregnancy?
+SEED-PREG-24,SEED-PREG-24-P4,general,Can a late period be caused by stress or intense exercise instead of pregnancy?
+SEED-GEN-11,SEED-GEN-11-P1,general,What does giving consent to something actually involve?
+SEED-GEN-11,SEED-GEN-11-P2,general,What's the real meaning of giving consent to something?
+SEED-GEN-11,SEED-GEN-11-P3,general,What does it truly mean when someone gives consent to something?
+SEED-GEN-11,SEED-GEN-11-P4,general,What is actually meant by giving consent to something?
+SEED-GEN-12,SEED-GEN-12-P1,general,What's a way to say no to sex in a relationship without making it awkward?
+SEED-GEN-12,SEED-GEN-12-P2,general,How do I decline sex in a relationship without things feeling uncomfortable?
+SEED-GEN-12,SEED-GEN-12-P3,general,What's the best way to turn down sex in a relationship without it being awkward?
+SEED-GEN-12,SEED-GEN-12-P4,general,How can I say no to sex with a partner without it feeling weird?
+SEED-GEN-13,SEED-GEN-13-P1,general,Is it common to feel pressure from friends to have sex before I'm ready?
+SEED-GEN-13,SEED-GEN-13-P2,general,Is it normal for friends to make me feel pressured into having sex before I'm ready?
+SEED-GEN-13,SEED-GEN-13-P3,general,Is feeling pressured by friends to have sex before I'm ready something that happens normally?
+SEED-GEN-13,SEED-GEN-13-P4,general,Is it typical to feel pushed by friends toward having sex before I'm ready?
+SEED-GEN-14,SEED-GEN-14-P1,general,What should I do if a partner continues asking for sex after I've said I'm not ready?
+SEED-GEN-14,SEED-GEN-14-P2,general,If a partner won't stop asking for sex even after I said I'm not ready what should I do?
+SEED-GEN-14,SEED-GEN-14-P3,general,What's the right move if a partner keeps pushing for sex after I've said I'm not ready?
+SEED-GEN-14,SEED-GEN-14-P4,general,What can I do if my partner keeps requesting sex even though I've said I'm not ready?
+SEED-GEN-15,SEED-GEN-15-P1,general,What are some indicators that a relationship is healthy versus unhealthy?
+SEED-GEN-15,SEED-GEN-15-P2,general,How can you tell the signs of a healthy relationship from an unhealthy one?
+SEED-GEN-15,SEED-GEN-15-P3,general,What signs point to a relationship being healthy rather than unhealthy?
+SEED-GEN-15,SEED-GEN-15-P4,general,What are the signs that distinguish a healthy relationship from an unhealthy one?
+SEED-GEN-16,SEED-GEN-16-P1,general,What's the best way to tell my partner I want to use a condom if they seem hesitant?
+SEED-GEN-16,SEED-GEN-16-P2,general,How can I let my partner know I want to use a condom if they seem unwilling?
+SEED-GEN-16,SEED-GEN-16-P3,general,How should I bring up wanting to use a condom if my partner seems reluctant?
+SEED-GEN-16,SEED-GEN-16-P4,general,How do I communicate wanting a condom to my partner if they seem reluctant about it?
+SEED-GEN-17,SEED-GEN-17-P1,general,Is it fine to ask a partner to get tested before having sex?
+SEED-GEN-17,SEED-GEN-17-P2,general,Is it acceptable to request that a partner get tested before we have sex?
+SEED-GEN-17,SEED-GEN-17-P3,general,Is it appropriate to ask my partner to get tested before we're sexually active together?
+SEED-GEN-17,SEED-GEN-17-P4,general,Can I ask a partner to get tested before we start having sex?
+SEED-GEN-18,SEED-GEN-18-P1,general,Is it normal to feel nervous or unsure about having sex the first time?
+SEED-GEN-18,SEED-GEN-18-P2,general,Is it common to feel uncertain or nervous the first time you have sex?
+SEED-GEN-18,SEED-GEN-18-P3,general,Is feeling nervous or unsure about having sex for the first time typical?
+SEED-GEN-18,SEED-GEN-18-P4,general,Is it usual to feel unsure or anxious about having sex for the first time?
+SEED-GEN-19,SEED-GEN-19-P1,general,Is it possible for a health worker to tell if someone has had sex just by examining them?
+SEED-GEN-19,SEED-GEN-19-P2,general,Can an examination by a health worker reveal whether someone has had sex before?
+SEED-GEN-19,SEED-GEN-19-P3,general,Could a health worker know if a person has had sex before simply by examining them?
+SEED-GEN-19,SEED-GEN-19-P4,general,Is it true a health worker can tell from an exam alone if someone has had sex before?
+SEED-GEN-20,SEED-GEN-20-P1,general,Is being in a relationship required to visit a youth clinic?
+SEED-GEN-20,SEED-GEN-20-P2,general,Do I need to be dating someone to go to a youth clinic?
+SEED-GEN-20,SEED-GEN-20-P3,general,Is a relationship necessary before I can go to a youth clinic?
+SEED-GEN-20,SEED-GEN-20-P4,general,Am I required to be in a relationship to visit a youth clinic?
+SEED-GEN-21,SEED-GEN-21-P1,general,Is it still okay to ask for SRH advice if I haven't had sex yet?
+SEED-GEN-21,SEED-GEN-21-P2,general,Can I get SRH advice even though I haven't had sex yet?
+SEED-GEN-21,SEED-GEN-21-P3,general,Am I able to ask for SRH advice even if I'm not sexually active yet?
+SEED-GEN-21,SEED-GEN-21-P4,general,Is it fine to seek SRH advice before I've ever had sex?
+SEED-GEN-22,SEED-GEN-22-P1,general,Is it okay to ask a health worker about sex even if that's not the reason I came in?
+SEED-GEN-22,SEED-GEN-22-P2,general,Can I bring up sex-related questions with a health worker even if that's not why I visited?
+SEED-GEN-22,SEED-GEN-22-P3,general,Am I allowed to ask a health worker about sex even when that's not my reason for being there?
+SEED-GEN-22,SEED-GEN-22-P4,general,Is it fine to ask sex-related questions to a health worker even if it's unrelated to my visit?
+SEED-GEN-23,SEED-GEN-23-P1,general,What's the real difference between being sexually active and being in a relationship?
+SEED-GEN-23,SEED-GEN-23-P2,general,How is being sexually active actually different from being in a relationship?
+SEED-GEN-23,SEED-GEN-23-P3,general,What truly separates being sexually active from being in a relationship?
+SEED-GEN-23,SEED-GEN-23-P4,general,What is the actual distinction between being sexually active and being in a relationship?
+SEED-GEN-24,SEED-GEN-24-P1,general,Why is communication said to matter so much in relationships?
+SEED-GEN-24,SEED-GEN-24-P2,general,Why do people emphasize communication being so important in relationships?
+SEED-GEN-24,SEED-GEN-24-P3,general,What's the reason people say communication is so important in relationships?
+SEED-GEN-24,SEED-GEN-24-P4,general,Why is communication considered so important within relationships?
+SEED-GEN-25,SEED-GEN-25-P1,general,Is it normal for my period to hurt a lot every month or does that mean I'm just weak?
+SEED-GEN-25,SEED-GEN-25-P2,general,Is having a very painful period every single month normal or am I just being weak about it?
+SEED-GEN-25,SEED-GEN-25-P3,general,Is it typical for periods to be extremely painful every month or is that a sign I'm weak?
+SEED-GEN-25,SEED-GEN-25-P4,general,Is it normal that my period is super painful every month or am I just not handling it well?
+SEED-GEN-26,SEED-GEN-26-P1,general,At what age do girls usually start noticing white discharge in their underwear before their first period?
+SEED-GEN-26,SEED-GEN-26-P2,general,What age is it typical for girls to start getting white discharge before their first period arrives?
+SEED-GEN-26,SEED-GEN-26-P3,general,Around what age does white stuff usually show up in a girl's underwear before her first period?
+SEED-GEN-26,SEED-GEN-26-P4,general,What's the usual age for girls to start seeing white discharge before getting their first period?
+SEED-GEN-27,SEED-GEN-27-P1,general,How can I bring up going to the doctor for my first pelvic exam with my mom without it being weird?
+SEED-GEN-27,SEED-GEN-27-P2,general,What's a good way to tell my mom about needing a first pelvic exam without making it awkward?
+SEED-GEN-27,SEED-GEN-27-P3,general,How do I approach my mom about my first pelvic exam appointment without making things weird?
+SEED-GEN-27,SEED-GEN-27-P4,general,How should I talk to my mom about scheduling my first pelvic exam without it feeling awkward?
+SEED-GEN-28,SEED-GEN-28-P1,general,My vulva looks uneven on one side compared to pictures online; does everyone look different down there?
+SEED-GEN-28,SEED-GEN-28-P2,general,Compared to photos online my vulva seems asymmetrical on one side; is everybody just built differently?
+SEED-GEN-28,SEED-GEN-28-P3,general,One side of my vulva looks different from the other compared to online photos; is that normal variation?
+SEED-GEN-28,SEED-GEN-28-P4,general,My vulva appears asymmetrical compared to what I've seen online; is everyone just shaped differently down there?
+SEED-GEN-29,SEED-GEN-29-P1,general,Why does my mood crash right before my period starts and how do I stop feeling so angry?
+SEED-GEN-29,SEED-GEN-29-P2,general,Why do I feel so low right before my period begins and what can I do about feeling angry?
+SEED-GEN-29,SEED-GEN-29-P3,general,Why does my mood dip so much right before my period and how can I stop the anger?
+SEED-GEN-29,SEED-GEN-29-P4,general,What causes my mood to drop hard before my period starts and how can I feel less angry?
+SEED-GEN-30,SEED-GEN-30-P1,general,I accidentally pulled the string off my tampon trying to remove it; how do I get it out now?
+SEED-GEN-30,SEED-GEN-30-P2,general,While trying to take my tampon out the string came off by accident; what do I do to remove it now?
+SEED-GEN-30,SEED-GEN-30-P3,general,The string on my tampon accidentally came off while I was removing it; how can I get it out now?
+SEED-GEN-30,SEED-GEN-30-P4,general,I pulled the string off my tampon by accident while trying to remove it; what's the way to get it out?
+SEED-GEN-31,SEED-GEN-31-P1,general,Could scented soaps or bath bombs used down there throw off your natural pH balance?
+SEED-GEN-31,SEED-GEN-31-P2,general,Do scented soaps or bath bombs mess with your natural pH balance if used down there?
+SEED-GEN-31,SEED-GEN-31-P3,general,Is it possible for scented soaps or bath bombs to disrupt your natural pH balance down there?
+SEED-GEN-31,SEED-GEN-31-P4,general,Can your natural pH balance be affected by using scented soaps or bath bombs down there?
+SEED-GEN-32,SEED-GEN-32-P1,general,How many days does a typical cycle last and how do I count from my last period to find out when the next is due?
+SEED-GEN-32,SEED-GEN-32-P2,general,What's the typical number of days in a cycle and how do I calculate from my last period when the next will come?
+SEED-GEN-32,SEED-GEN-32-P3,general,How long is a typical menstrual cycle and how do I figure out my next period from the last one?
+SEED-GEN-32,SEED-GEN-32-P4,general,How many days make up a typical cycle and what's the way to count from my last period to the next?
+SEED-GEN-33,SEED-GEN-33-P1,general,Is it safe to keep a menstrual cup in while swimming or overnight while sleeping?
+SEED-GEN-33,SEED-GEN-33-P2,general,Can I safely leave a menstrual cup in during swimming or overnight sleep?
+SEED-GEN-33,SEED-GEN-33-P3,general,Is leaving a menstrual cup in while swimming or sleeping through the night safe?
+SEED-GEN-33,SEED-GEN-33-P4,general,Is it okay to wear a menstrual cup while swimming or sleeping overnight?
+SEED-GEN-34,SEED-GEN-34-P1,general,Why do I feel random sharp stomach pains when I'm ovulating mid-month?
+SEED-GEN-34,SEED-GEN-34-P2,general,What causes random sharp pains in my stomach around mid-month ovulation?
+SEED-GEN-34,SEED-GEN-34-P3,general,Why does my stomach have sharp random pains when I ovulate mid-month?
+SEED-GEN-34,SEED-GEN-34-P4,general,What's behind the random sharp stomach pains I get during mid-month ovulation?
+SEED-GEN-35,SEED-GEN-35-P1,general,What's the real difference between an OB-GYN and a regular primary care doctor?
+SEED-GEN-35,SEED-GEN-35-P2,general,How does an OB-GYN actually differ from a regular primary care doctor?
+SEED-GEN-35,SEED-GEN-35-P3,general,What truly separates an OB-GYN from a regular primary care doctor?
+SEED-GEN-35,SEED-GEN-35-P4,general,What is the actual distinction between an OB-GYN and a primary care doctor?
+SEED-GEN-36,SEED-GEN-36-P1,general,Is it normal for your chest to feel sore or uneven during puberty?
+SEED-GEN-36,SEED-GEN-36-P2,general,Is chest soreness or unevenness normal while going through puberty?
+SEED-GEN-36,SEED-GEN-36-P3,general,Is it typical for your chest to feel uneven or sore during puberty?
+SEED-GEN-36,SEED-GEN-36-P4,general,Is having a sore or uneven chest during puberty something normal?
+SEED-GEN-38,SEED-GEN-38-P1,general,What really happens at your first gynecology appointment if a pap smear isn't part of it?
+SEED-GEN-38,SEED-GEN-38-P2,general,What can I expect at my first gynecology visit if I'm not getting a pap smear?
+SEED-GEN-38,SEED-GEN-38-P3,general,What actually takes place during a first gynecology appointment without a pap smear?
+SEED-GEN-38,SEED-GEN-38-P4,general,What happens at a first gynecology appointment when there's no pap smear involved?
+SEED-GEN-39,SEED-GEN-39-P1,general,Why do I have intense sugar cravings and tiredness right before my cycle starts?
+SEED-GEN-39,SEED-GEN-39-P2,general,What causes strong sugar cravings and fatigue right before my cycle begins?
+SEED-GEN-39,SEED-GEN-39-P3,general,Why does fatigue and sugar craving hit me right before my cycle starts?
+SEED-GEN-39,SEED-GEN-39-P4,general,Why do I experience such strong sugar cravings and tiredness right before my cycle?
+SEED-GEN-40,SEED-GEN-40-P1,general,Is using a heating pad daily for severe cramps okay or could it burn my skin?
+SEED-GEN-40,SEED-GEN-40-P2,general,Can using a heating pad every day for severe cramps be harmful or is it fine?
+SEED-GEN-40,SEED-GEN-40-P3,general,Is it safe to use a heating pad daily for bad cramps or does that risk burning skin?
+SEED-GEN-40,SEED-GEN-40-P4,general,Is a heating pad safe to use every day for severe cramps or can it cause skin burns?
+SEED-GEN-41,SEED-GEN-41-P1,general,How can I tell if my period flow is abnormally heavy or just normally heavy?
+SEED-GEN-41,SEED-GEN-41-P2,general,What's the way to know if my period flow is pathologically heavy versus just regular heavy?
+SEED-GEN-41,SEED-GEN-41-P3,general,How do I figure out if my heavy period flow is a medical concern or just normal heaviness?
+SEED-GEN-41,SEED-GEN-41-P4,general,How can I distinguish between a pathologically heavy period flow and a regular heavy one?
+SEED-GEN-42,SEED-GEN-42-P1,general,Does completely shaving pubic hair make ingrown hairs and razor bumps more likely?
+SEED-GEN-42,SEED-GEN-42-P2,general,Is shaving your pubic hair off entirely more likely to cause ingrown hairs and razor bumps?
+SEED-GEN-42,SEED-GEN-42-P3,general,Does fully shaving off pubic hair increase the chance of ingrown hairs and razor bumps?
+SEED-GEN-42,SEED-GEN-42-P4,general,Are ingrown hairs and razor bumps more likely if you shave your pubic hair completely off?
+SEED-GEN-43,SEED-GEN-43-P1,general,What exactly is the hymen and can sports like horseback riding stretch it before you've had sex?
+SEED-GEN-43,SEED-GEN-43-P2,general,What's the hymen and is it accurate that activities like horseback riding stretch it before sex?
+SEED-GEN-43,SEED-GEN-43-P3,general,What does the hymen actually do and is it true horseback riding and similar sports can stretch it before sex?
+SEED-GEN-43,SEED-GEN-43-P4,general,What is the hymen exactly and can it really be stretched by sports like horseback riding before you have sex?
+SEED-GEN-44,SEED-GEN-44-P1,general,Why does my discharge shift from clear and stretchy to thick and white over the course of the month?
+SEED-GEN-44,SEED-GEN-44-P2,general,What causes my discharge to go from clear and stretchy to thick and white throughout the month?
+SEED-GEN-44,SEED-GEN-44-P3,general,Why does my discharge's color and texture change from clear and stretchy to thick and white during the month?
+SEED-GEN-44,SEED-GEN-44-P4,general,Why does discharge change from clear and stretchy to thick and white as the month goes on?
+SEED-GEN-45,SEED-GEN-45-P1,general,Does taking ibuprofen as soon as cramps begin actually reduce how heavy the bleeding is?
+SEED-GEN-45,SEED-GEN-45-P2,general,Can ibuprofen taken right at the start of cramps actually lessen how heavy you bleed?
+SEED-GEN-45,SEED-GEN-45-P3,general,Does starting ibuprofen right when cramps begin actually cut down on bleeding heaviness?
+SEED-GEN-45,SEED-GEN-45-P4,general,Can taking ibuprofen right as cramps start really reduce the heaviness of bleeding?
+SEED-GEN-47,SEED-GEN-47-P1,general,Is light cramping a couple of days after your period ends completely normal?
+SEED-GEN-47,SEED-GEN-47-P2,general,Is it normal to feel light cramps a few days after your period has fully ended?
+SEED-GEN-47,SEED-GEN-47-P3,general,Is having mild cramping a couple of days after your period ends something normal?
+SEED-GEN-47,SEED-GEN-47-P4,general,Is it typical to experience light cramping days after your period has completely finished?
+SEED-GEN-48,SEED-GEN-48-P1,general,How does period underwear actually work and is a pad needed with them on heavy days?
+SEED-GEN-48,SEED-GEN-48-P2,general,What's the mechanism behind period underwear and do you need a pad too on heavy days?
+SEED-GEN-48,SEED-GEN-48-P3,general,How do period underwear function and should you still wear a pad on heavy days?
+SEED-GEN-48,SEED-GEN-48-P4,general,How does period underwear work and is it necessary to add a pad on heavy days?
+SEED-GEN-49,SEED-GEN-49-P1,general,Why does exercise sometimes ease menstrual cramps even when you don't feel like moving?
+SEED-GEN-49,SEED-GEN-49-P2,general,What makes exercising help menstrual cramps feel better even when moving feels hard?
+SEED-GEN-49,SEED-GEN-49-P3,general,Why do menstrual cramps sometimes improve with exercise even when you don't want to move?
+SEED-GEN-49,SEED-GEN-49-P4,general,Why does working out sometimes relieve menstrual cramps even when you don't feel like exercising?
+SEED-GEN-50,SEED-GEN-50-P1,general,What exactly is PCOS and can teenagers have it if their periods are very irregular?
+SEED-GEN-50,SEED-GEN-50-P2,general,What's Polycystic Ovary Syndrome and is it possible for teens with very irregular periods to have it?
+SEED-GEN-50,SEED-GEN-50-P3,general,What does PCOS mean and can teenagers be diagnosed with it if their periods are extremely irregular?
+SEED-GEN-50,SEED-GEN-50-P4,general,What is PCOS exactly and could a teenager have it if their periods are super irregular?
+SEED-GEN-51,SEED-GEN-51-P1,general,Is it dangerous if a tampon is accidentally left in for 18 hours because it was forgotten?
+SEED-GEN-51,SEED-GEN-51-P2,general,Could it be dangerous if a tampon stays in by accident for 18 hours after being forgotten?
+SEED-GEN-51,SEED-GEN-51-P3,general,Is there danger in a tampon accidentally staying inside for 18 hours due to being forgotten?
+SEED-GEN-51,SEED-GEN-51-P4,general,Is it risky if a tampon is left in accidentally for 18 hours because you forgot about it?
+SEED-GEN-52,SEED-GEN-52-P1,general,What's a way to track my cycle without downloading a smartphone app that collects personal data?
+SEED-GEN-52,SEED-GEN-52-P2,general,How do I keep track of my cycle if I'd rather not use a smartphone app that tracks personal data?
+SEED-GEN-52,SEED-GEN-52-P3,general,Is there a way to monitor my cycle without a smartphone app that tracks my personal information?
+SEED-GEN-52,SEED-GEN-52-P4,general,How can I track my cycle without relying on a smartphone app that stores my personal data?
