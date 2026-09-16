@@ -1,0 +1,41 @@
+seed_id,paraphrase_id,class,text
+SEED-GEN-01,SEED-GEN-01-P01,general,"What does ""youth-friendly"" mean when a clinic offers health services?"
+SEED-GEN-01,SEED-GEN-01-P02,general,"What makes a health clinic ""youth-friendly""?"
+SEED-GEN-01,SEED-GEN-01-P03,general,What should I expect from a youth-friendly health clinic?
+SEED-GEN-01,SEED-GEN-01-P04,general,What does it mean for a clinic to be youth-friendly?
+SEED-GEN-02,SEED-GEN-02-P01,general,Will the clinic tell my parents about what I talked about there?
+SEED-GEN-02,SEED-GEN-02-P02,general,Could my parents find out what I discussed with the clinic?
+SEED-GEN-02,SEED-GEN-02-P03,general,Does the clinic share with my parents what we talked about?
+SEED-GEN-02,SEED-GEN-02-P04,general,Will my parents be told about my conversation with the clinic?
+SEED-GEN-03,SEED-GEN-03-P01,general,"What age is considered ""youth"" for these services?"
+SEED-GEN-03,SEED-GEN-03-P02,general,"Who is included in the ""youth"" age group for these services?"
+SEED-GEN-03,SEED-GEN-03-P03,general,What ages are covered by these youth services?
+SEED-GEN-03,SEED-GEN-03-P04,general,How do these services define the age of a young person?
+SEED-GEN-04,SEED-GEN-04-P01,general,Can I visit a clinic if my school does not have one?
+SEED-GEN-04,SEED-GEN-04-P02,general,What can I do if there is no clinic at my school?
+SEED-GEN-04,SEED-GEN-04-P03,general,Am I able to go to a health clinic even if my school does not have one?
+SEED-GEN-04,SEED-GEN-04-P04,general,Can I use these services somewhere else if my school has no clinic?
+SEED-GEN-05,SEED-GEN-05-P01,general,Are these services free if I cannot afford them?
+SEED-GEN-05,SEED-GEN-05-P02,general,Can people who cannot afford the services get them for free?
+SEED-GEN-05,SEED-GEN-05-P03,general,Do these services cost anything for someone who cannot afford them?
+SEED-GEN-05,SEED-GEN-05-P04,general,Is there a free option for people who cannot afford these services?
+SEED-GEN-06,SEED-GEN-06-P01,general,What should I do if I am worried the nurse will judge me for asking questions?
+SEED-GEN-06,SEED-GEN-06-P02,general,What happens if I feel like the nurse might judge me for my questions?
+SEED-GEN-06,SEED-GEN-06-P03,general,How should I handle it if I am afraid a nurse will judge me when I ask questions?
+SEED-GEN-06,SEED-GEN-06-P04,general,What if I feel uncomfortable asking questions because I think the nurse might judge me?
+SEED-GEN-07,SEED-GEN-07-P01,general,Can I get help after school hours?
+SEED-GEN-07,SEED-GEN-07-P02,general,Are these services available outside school hours?
+SEED-GEN-07,SEED-GEN-07-P03,general,Can I talk to someone about these things when school is not in session?
+SEED-GEN-07,SEED-GEN-07-P04,general,Is there a way to get help if I need it outside of school hours?
+SEED-GEN-08,SEED-GEN-08-P01,general,Do I have to make an appointment before talking to someone?
+SEED-GEN-08,SEED-GEN-08-P02,general,Can I talk to someone without making an appointment first?
+SEED-GEN-08,SEED-GEN-08-P03,general,Is an appointment required if I want to speak to someone?
+SEED-GEN-08,SEED-GEN-08-P04,general,Do I need to book a time before I can talk to someone?
+SEED-GEN-09,SEED-GEN-09-P01,general,Can I ask questions that I feel embarrassed about?
+SEED-GEN-09,SEED-GEN-09-P02,general,Is it okay to bring up questions that make me feel embarrassed?
+SEED-GEN-09,SEED-GEN-09-P03,general,What if I have questions that I feel too embarrassed to ask?
+SEED-GEN-09,SEED-GEN-09-P04,general,Can I still ask about things that I feel uncomfortable talking about?
+SEED-GEN-10,SEED-GEN-10-P01,general,How is a youth centre different from a clinic?
+SEED-GEN-10,SEED-GEN-10-P02,general,What is the difference between going to a youth centre and going to a clinic?
+SEED-GEN-10,SEED-GEN-10-P03,general,How do youth centres and clinics differ?
+SEED-GEN-10,SEED-GEN-10-P04,general,What can a youth centre offer that is different from a clinic?

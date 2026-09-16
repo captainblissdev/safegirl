@@ -13,6 +13,34 @@ SEED-CONTRA-11,contraception,Can I get pregnant from precum?
 SEED-CONTRA-12,contraception,"He pulled out, am I actually safe?"
 SEED-CONTRA-13,contraception,"I forgot my pill, am I still protected?"
 SEED-CONTRA-14,contraception,Which birth control has the least side effects?
+SEED-CONTRA-15,contraception,I took my birth control pill 6 hours late today. Do I need to do anything extra?
+SEED-CONTRA-16,contraception,I vomited shortly after taking my birth control pill. What should I do?
+SEED-CONTRA-17,contraception,I skipped three pills in a row last week. Do I need to start over or use something else for a while?
+SEED-CONTRA-18,contraception,I forgot several pills and had sex without a condom. Could my contraception have failed?
+SEED-CONTRA-19,contraception,Is it okay to stop the pill for a month if I'm not having sex or should I keep taking it?
+SEED-CONTRA-20,contraception,Can I skip the inactive pills and continue straight into another pack?
+SEED-CONTRA-21,contraception,Does changing time zones affect when I should take my contraceptive pill?
+SEED-CONTRA-22,contraception,Can I use a condom and the pill together just to be extra safe or is that pointless?
+SEED-CONTRA-23,contraception,Can I use contraceptive pills that were prescribed to someone else?
+SEED-CONTRA-24,contraception,"If I switch from the pill to an implant, do I need backup protection for a while?"
+SEED-CONTRA-25,contraception,Can I switch from contraceptive pills to the injection without leaving myself unprotected?
+SEED-CONTRA-26,contraception,I want a contraceptive method that does not require me to remember something every day.
+SEED-CONTRA-27,contraception,How long after getting the contraceptive injection does it start protecting me?
+SEED-CONTRA-28,contraception,I am worried that using the contraceptive injection for a long time could affect my future fertility.
+SEED-CONTRA-29,contraception,What happens if a contraceptive patch comes off before I am supposed to replace it?
+SEED-CONTRA-30,contraception,My contraceptive ring came out. Does that affect my protection?
+SEED-CONTRA-31,contraception,The condom felt weird during sex and I think it slipped a bit but I'm not sure. What now?
+SEED-CONTRA-32,contraception,The condom broke last night but I don't want a pregnancy. How soon do I need to take the morning-after pill?
+SEED-CONTRA-33,contraception,Does using two condoms at the same time provide more pregnancy protection?
+SEED-CONTRA-34,contraception,I put the condom on the wrong way and then turned it around. Does that matter?
+SEED-CONTRA-35,contraception,Can emergency contraception still help if I had sex a few days ago?
+SEED-CONTRA-36,contraception,I took emergency contraception and then had unprotected sex again. Am I still protected?
+SEED-CONTRA-37,contraception,I took emergency contraception and now my period is different. Could that be related?
+SEED-CONTRA-38,contraception,Can emergency contraception be used more than once when needed?
+SEED-CONTRA-39,contraception,Can antibiotics affect how well my contraceptive method works?
+SEED-CONTRA-40,contraception,Can the contraceptive injection or pill cause my periods to stop?
+SEED-CONTRA-41,contraception,I've been on the pill for two months now and my periods stopped completely. Is that normal or should I be worried I'm pregnant?
+SEED-CONTRA-42,contraception,How long can a contraceptive implant remain effective?
 SEED-STI-01,sti,How do I know if I have an STI?
 SEED-STI-02,sti,Can I get tested for HIV without telling my parents?
 SEED-STI-03,sti,What is PrEP and can teenagers use it?
@@ -29,6 +57,18 @@ SEED-STI-13,sti,Is this discharge normal or nah?
 SEED-STI-14,sti,How soon after sex can I test for STIs?
 SEED-STI-15,sti,Can I get an STI even if my partner has no symptoms?
 SEED-STI-16,sti,Can I get an STI from sitting on a dirty toilet?
+SEED-STI-17,sti,I've noticed a few tiny painless bumps around my vulva that don't itch. How can I tell if it's razor burn or an infection?
+SEED-STI-18,sti,Can you catch an STI from sharing a towel or sitting on a public toilet seat if the person before you had one?
+SEED-STI-19,sti,My partner had cold sores as a child. Can giving oral sex cause an infection around my genitals?
+SEED-STI-20,sti,"I have yellowish discharge that smells different, but no itching or bumps. Could this mean I have an STI?"
+SEED-STI-21,sti,"If both me and my partner have never had sex before, do we still need to get tested for STIs?"
+SEED-STI-22,sti,"I tested negative last week, but my partner was just diagnosed with trichomoniasis. Do I need treatment anyway?"
+SEED-STI-23,sti,"Does a Pap smear check for all STIs, or do I need to ask the nurse for specific tests?"
+SEED-STI-24,sti,"My ex tested positive for syphilis. If I don't have any sores or other symptoms, could I still have it?"
+SEED-STI-25,sti,Can I get the same STI again after finishing antibiotics if my partner didn't take their treatment?
+SEED-STI-26,sti,The clinic said my STI test result was indeterminate. Does that mean I have an infection or not?
+SEED-STI-27,sti,My partner says they are clean but have never been tested. Should I still be worried about STIs?
+SEED-STI-28,sti,Is it possible to have an STI for years without knowing you have it?
 SEED-PREG-01,pregnancy,How many antenatal visits do I need during pregnancy?
 SEED-PREG-02,pregnancy,Can I still go to school if I'm pregnant?
 SEED-PREG-03,pregnancy,What are the health risks of having a baby as a teenager?
@@ -41,12 +81,22 @@ SEED-PREG-09,pregnancy,Why do teenage mothers face more health risks than adults
 SEED-PREG-10,pregnancy,Is it normal to be scared of pregnancy checkups?
 SEED-PREG-11,pregnancy,My period is late… should I be worried?
 SEED-PREG-12,pregnancy,How soon can I take a pregnancy test?
-SEED-PREG-13,pregnancy,The test is negative but my period isn't here, why?
+SEED-PREG-13,pregnancy,"The test is negative but my period isn't here, why?"
 SEED-PREG-14,pregnancy,I got a positive pregnancy test… now what?
-SEED-PREG-15,pregnancy,I missed my Period am I pregnant?
-SEED-GEN-01,general,What does "youth-friendly" mean at a health clinic?
+SEED-PREG-15,pregnancy,"I missed my period, am I pregnant?"
+SEED-PREG-16,general,"My period is late but I haven't had sex recently, could something else be causing it?"
+SEED-PREG-17,pregnancy,"My pregnancy test is negative but my period is still absent, should I test again?"
+SEED-PREG-18,pregnancy,Can I get pregnant if he pulled out before ejaculating?
+SEED-PREG-19,pregnancy,What are some early signs that I might be pregnant?
+SEED-PREG-20,pregnancy,What does a faint line on a pregnancy test mean?
+SEED-PREG-21,pregnancy,Can I get pregnant from genital contact without penetration?
+SEED-PREG-22,pregnancy,Can drinking a lot of water affect the accuracy of a pregnancy test?
+SEED-PREG-23,pregnancy,How can I confirm whether I'm pregnant after taking emergency contraception?
+SEED-PREG-24,general,Can stress or intense exercise make my period late instead of pregnancy?
+SEED-PREG-25,pregnancy,"I have a positive pregnancy test and pain on one side of my abdomen, should I seek help?"
+SEED-GEN-01,general,"What does ""youth-friendly"" mean at a health clinic?"
 SEED-GEN-02,general,Will the clinic tell my parents what we talked about?
-SEED-GEN-03,general,What age counts as "youth" for these services?
+SEED-GEN-03,general,"What age counts as ""youth"" for these services?"
 SEED-GEN-04,general,Can I go to a clinic if my school doesn't have one?
 SEED-GEN-05,general,Are these services free for people who can't afford them?
 SEED-GEN-06,general,What if the nurse judges me for asking questions?
@@ -54,3 +104,80 @@ SEED-GEN-07,general,Can I get help outside of school hours?
 SEED-GEN-08,general,Do I need an appointment to talk to someone?
 SEED-GEN-09,general,Is it okay to ask questions I feel embarrassed about?
 SEED-GEN-10,general,What's the difference between a youth centre and a clinic?
+SEED-GEN-11,general,What does it actually mean to give consent to something?
+SEED-GEN-12,general,How can I turn down sex in a relationship without it feeling awkward?
+SEED-GEN-13,general,Is it normal to feel pressured by friends to have sex before I'm ready?
+SEED-GEN-14,general,What should I do if a partner keeps asking for sex even after I've said I'm not ready?
+SEED-GEN-15,general,What are some signs of a healthy relationship versus an unhealthy one?
+SEED-GEN-16,general,How do I tell my partner I want to use a condom if they seem reluctant?
+SEED-GEN-17,general,Is it okay to ask a partner to get tested before we have sex?
+SEED-GEN-18,general,Is it normal to feel unsure or nervous about having sex for the first time?
+SEED-GEN-19,general,Can a health worker tell if someone has had sex before just by examining them?
+SEED-GEN-20,general,Do I have to be in a relationship to go to a youth clinic?
+SEED-GEN-21,general,Can I still ask for SRH advice if I haven't had sex yet?
+SEED-GEN-22,general,Can I ask a health worker questions about sex even if that's not why I came in?
+SEED-GEN-23,general,What's the actual difference between being sexually active and being in a relationship?
+SEED-GEN-24,general,Why do people say communication matters so much in relationships?
+SEED-GEN-25,general,"Is it normal for my period to be super painful every single month, or am I just weak?"
+SEED-GEN-26,general,What age does a girl usually start getting white stuff in her underwear before her first period comes?
+SEED-GEN-27,general,How do I talk to my mom about going to the doctor for my first pelvic exam without making it weird?
+SEED-GEN-28,general,My vulva looks asymmetrical on one side compared to photos online. Is everyone built differently down there?
+SEED-GEN-29,general,"Why does my mood drop so hard right before my period starts, and how can I stop feeling so angry?"
+SEED-GEN-30,general,I accidentally pulled the string off my tampon while trying to get it out. How do I get it out now?
+SEED-GEN-31,general,Can using scented soaps or bath bombs down there mess up your natural pH balance?
+SEED-GEN-32,general,"How many days are in a typical cycle, and how do I count from my last period to know when the next one is due?"
+SEED-GEN-33,general,Is it safe to leave a menstrual cup in while swimming or sleeping overnight?
+SEED-GEN-34,general,Why do I get random sharp pains in my stomach when I'm ovulating mid-month?
+SEED-GEN-35,general,What is the actual difference between an OB-GYN and a regular primary care doctor?
+SEED-GEN-36,general,Is it normal for your chest to feel sore or uneven when you're going through puberty?
+SEED-GEN-38,general,What actually happens during your first gynecology appointment if you aren't getting a pap smear?
+SEED-GEN-39,general,Why do I get crazy sugar cravings and fatigue right before my cycle starts?
+SEED-GEN-40,general,"Is it okay to use a heating pad every day for severe cramps, or can it burn your skin?"
+SEED-GEN-41,general,How do I know if my period flow is pathologically heavy or just regular heavy?
+SEED-GEN-42,general,Does shaving your pubic hair completely off make you more prone to getting ingrown hairs and razor bumps?
+SEED-GEN-43,general,"What is the hymen, and is it true that sports like horseback riding can stretch it before you ever have sex?"
+SEED-GEN-44,general,Why does my discharge change color and texture from clear and stretchy to thick and white throughout the month?
+SEED-GEN-45,general,Can taking ibuprofen right when cramps start actually reduce how heavy you bleed?
+SEED-GEN-46,sti,At what age is it recommended for teens to get the HPV vaccine series?
+SEED-GEN-47,general,Is it normal to have light cramping a couple of days after your period completely ends?
+SEED-GEN-48,general,"How do period underwear work, and do you need to wear a pad with them on heavy days?"
+SEED-GEN-49,general,Why does exercising sometimes make menstrual cramps feel better even when you don't feel like moving?
+SEED-GEN-50,general,"What is Polycystic Ovary Syndrome (PCOS), and can teenagers have it if their periods are super irregular?"
+SEED-GEN-51,general,Is it dangerous if a tampon accidentally stays inside for 18 hours because you forgot it was there?
+SEED-GEN-52,general,How can I keep track of my cycle if I don't want to download a smartphone app that tracks my personal data?
+SEED-STI-29,sti,Can genital skin-to-skin contact spread an STI even without penetration?
+SEED-STI-30,sti,"Can condoms protect against every STI, or are some STIs spread by skin-to-skin contact?"
+SEED-STI-31,sti,"If I have no symptoms, how long after a new sexual partner should I wait before getting an STI test?"
+SEED-STI-32,sti,Can I have an STI even if I always use condoms?
+SEED-STI-33,sti,Can I have more than one STI at the same time?
+SEED-STI-34,sti,Does having one STI make it easier to get another STI?
+SEED-STI-35,sti,Can an STI spread between partners even if neither person has symptoms?
+SEED-STI-36,sti,What should I do if I think I was exposed to an STI but I feel completely fine?
+SEED-STI-37,sti,Is it normal to have no symptoms at all even with chlamydia or gonorrhea?
+SEED-STI-38,sti,How do I tell a partner that I tested positive for an STI?
+SEED-STI-39,sti,"Are some STIs curable and others not, or are they all treated the same way?"
+SEED-STI-40,sti,Do I have to pay for STI testing at a public clinic?
+SEED-STI-41,sti,Can I get tested for STIs without anyone else finding out the results?
+SEED-STI-42,sti,"What do genital warts look like, and are they the same thing as herpes sores?"
+SEED-STI-43,sti,"If I test positive for an STI, will that stay on my medical record forever?"
+SEED-STI-44,sti,Can an untreated STI cause long-term problems if I don't get treated right away?
+SEED-PREG-26,pregnancy,What kind of foods should I avoid if I think I might be pregnant?
+SEED-PREG-27,pregnancy,Is it normal to feel extremely tired all the time in early pregnancy?
+SEED-PREG-28,pregnancy,How much weight is normal to gain during pregnancy?
+SEED-PREG-29,pregnancy,"What happens at each stage of pregnancy, month by month?"
+SEED-PREG-30,pregnancy,Is it safe to continue exercising if I'm pregnant?
+SEED-PREG-31,pregnancy,Can I still take my regular medications if I'm pregnant?
+SEED-PREG-32,pregnancy,"What does labor actually feel like, and how will I know it's starting?"
+SEED-PREG-33,pregnancy,Is it normal to feel scared or overwhelmed about becoming a parent?
+SEED-PREG-34,pregnancy,Can my partner come with me to antenatal appointments?
+SEED-PREG-35,pregnancy,What tests or scans will I have during pregnancy?
+SEED-PREG-36,pregnancy,Is it possible to have twins if no one in my family has had twins before?
+SEED-PREG-37,pregnancy,Is it normal to have mood swings during pregnancy?
+SEED-PREG-38,pregnancy,Can I still go swimming or bathe normally while pregnant?
+SEED-PREG-39,pregnancy,What if I don't feel the baby moving as much as I expected?
+SEED-PREG-40,pregnancy,How can I tell if my morning sickness is normal or something more serious?
+SEED-PREG-41,pregnancy,Is spotting or light bleeding early in pregnancy something to worry about?
+SEED-PREG-42,pregnancy,Do I need to tell my school or workplace that I'm pregnant?
+SEED-PREG-43,pregnancy,What are my rights if I want to continue my education while pregnant?
+SEED-PREG-44,pregnancy,Is it true you can tell the sex of the baby just by how you're carrying?
+SEED-PREG-45,pregnancy,"What's considered a high-risk pregnancy, and does being a teenager make mine high-risk?"
