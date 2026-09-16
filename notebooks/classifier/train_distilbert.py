@@ -43,7 +43,7 @@ from sklearn.metrics import (
     confusion_matrix,
     precision_recall_fscore_support,
 )
-from torch.utils.data import Dataset
+from torch.utils.data.dataset import Dataset
 from transformers import (
     DistilBertForSequenceClassification,
     DistilBertTokenizerFast,
