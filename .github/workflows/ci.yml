@@ -60,7 +60,7 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Run offline pipeline tests
-        run: npx tsx src/offline/pipeline.test.ts
+        run: npx tsx src/offline/offlinePipeline.test.ts
 
       - name: Build production application
         run: npx vite build
