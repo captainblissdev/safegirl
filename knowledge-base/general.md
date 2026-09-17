@@ -1,34 +1,19 @@
-# SafeGirl Knowledge Base — General
+# Knowledge Base — General
 
-## KB-G1 — Privacy and Confidentiality at Youth-Friendly Services
+## KB-G1
+- **Intent:** General
+- **User question:** Will the clinic tell my parents what I talked to them about?
+- **Answer:** Youth-friendly health services are expected to keep what you share confidential, including from parents — except in specific situations where the law requires disclosure, which staff should explain to you clearly.
+- **Evidence/claim:** Providers must maintain confidentiality and not leak information to parents; legal exceptions exist but aren't specified in this source.
+- **Source:** Kenya MoH YFS Guidelines (2005), Ch. 3 §3.2–3.3, pp. 16–17
+- **Conditions/limitations:** Exact legal exceptions not established by this source — flag if a user's question implies a specific legal scenario.
+- **Safety/referral notes:** None required.
 
-**KB ID:** KB-G1
-
-**Intent:** General
-
-**User question:**
-Will my health information be kept private at a youth-friendly health service?
-
-**Answer:**
-Kenya's youth-friendly service guidelines require providers to protect young clients' privacy and confidentiality and not disclose sensitive or intimate health information to other people, including parents. The guidelines also note that where specific legal requirements apply, these should be explained clearly to the young person.
-
-**Evidence/claim:**
-YFS providers must actively maintain confidentiality and prevent sensitive client information from being disclosed to others.
-
-**Source:**
-National Guidelines for Provision of Adolescent Youth-Friendly Services, Kenya (2005)
-
-**Section:**
-Chapter 3, Section 3.2 — Provider and Staff Characteristics: Privacy and Confidentiality Honored
-
-**Page:**
-p. 16
-
-**Conditions/limitations:**
-Section 3.3 notes that legal requirements may create exceptions, but the uploaded sources do not establish what those specific current legal requirements are.
-
-**Safety/referral notes:**
-This describes Kenyan YFS standards and should not be interpreted as a guarantee about SafeGirl's own digital privacy architecture.
-
-**Evidence status:**
-VERIFIED_KB_CLAIM
+## KB-G2
+- **Intent:** General
+- **User question:** What age counts as "youth" or "adolescent" for these services?
+- **Answer:** Kenyan services define adolescents as 10–19, youth as 15–24, and young people as 10–24 — these terms are often used interchangeably.
+- **Evidence/claim:** Age range definitions for target populations in Kenya.
+- **Source:** Kenya MoH YFS Guidelines (2005), Ch. 1 §1.1.2, p. 2
+- **Conditions/limitations:** None significant.
+- **Safety/referral notes:** None required.

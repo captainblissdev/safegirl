@@ -110,3 +110,65 @@ Current status:
   compliance-consent framework).
 - **Not resolved, deliberately deferred:** production-readiness question. 
   This decision applies to the academic research prototype scope only.
+
+## V2 Evaluation Methodology (2026-09-16)
+
+V2 evaluation methodology changed from a single seed-level train/validation
+split to 5-fold StratifiedGroupKFold cross-validation. The change was made
+because the expanded V2 dataset and the small V1 validation set make a
+single validation split less stable. seed_id is used as the grouping
+variable to prevent paraphrase leakage, while stratification preserves
+class proportions across folds. V1 results remain reported under their
+original single-split methodology and are not retroactively re-evaluated.
+
+V1 (55 seeds, single train/val split, 80% accuracy / macro-F1 0.7677) is
+locked as a historical baseline -- not merged into the 182-seed set, not
+redistributed into folds, not retrained.
+
+The V1-to-V2 comparison reflects overall development improvement (more/
+better data AND a more robust evaluation protocol), not a claim that
+cross-validation itself improved the model. A controlled ablation
+isolating the data effect alone is a possible future-work item, not part
+of the current comparison.
+
+Final V2 model definition: the 5-fold CV estimates expected performance
+and validates configuration; the deployed/tested V2 model is a fresh
+retrain on all 182 seeds using that validated configuration, not simply
+the best-performing individual fold.
+
+## V2 Paraphrasing Protocol Frozen (2026-09-18)
+
+V2 paraphrasing protocol frozen. The 127 new seeds will each receive
+exactly four English paraphrases, producing 508 new paraphrases.
+Existing V1 paraphrases (220, covering the original 55 seeds) are
+untouched. Generation uses a fixed prompt and category-level batching.
+
+Fixed prompt: "Generate exactly 4 paraphrases for each seed question
+below. Vary phrasing and register naturally, as if different people
+asked the same question differently. Do not use back-translation
+through any other language -- English only, no Sheng or code-switching.
+Do not introduce new medical claims, recommendations, numbers,
+timeframes, diagnoses, treatment details, eligibility criteria, or
+other substantive specifics beyond the semantic scope of the seed
+question. Keep a respectful, non-judgmental tone throughout, especially
+for sensitive or embarrassing topics. Output as CSV:
+seed_id,paraphrase_id,class,text."
+
+Generation metadata recorded contemporaneously in ai-use-log.md per
+batch: tool, model/version, temperature (N/A where not exposed --
+never inferred), prompt, generation date, seed IDs covered,
+number requested/generated/accepted/rejected/replaced.
+
+All paraphrases undergo automated structural checks (no exact
+duplicates, no entries under 10 characters, none identical to source
+seed, exactly 4 per seed, valid seed_id references, no Swahili/Sheng
+markers) and manual semantic/safety review (no scope drift, tone,
+no held-content leakage, no overclaiming on boundary-sensitive topics).
+Rejected paraphrases are regenerated until each seed has exactly four
+accepted paraphrases.
+
+Final V2 dataset: 182 seeds + 728 total paraphrases (220 existing +
+508 new) = 910 examples.
+
+Breakdown of 127 new seeds by current class: contraception 28,
+STI 29, pregnancy 28, general 42.
