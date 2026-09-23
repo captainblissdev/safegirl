@@ -11,3 +11,4 @@ app/frontend/dist/
 safegirl-classifier-checkpoints/
 checkpoints/
 node_modules/
+app/backend/firebase-service-account.json
