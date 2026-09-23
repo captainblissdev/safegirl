@@ -7,12 +7,12 @@ SEED-CONTRA-16,SEED-CONTRA-16-P1,contraception,I threw up shortly after taking m
 SEED-CONTRA-16,SEED-CONTRA-16-P2,contraception,Shortly after taking my birth control pill I vomited; what am I supposed to do?
 SEED-CONTRA-16,SEED-CONTRA-16-P3,contraception,I got sick and vomited right after taking my pill; what's the next step?
 SEED-CONTRA-16,SEED-CONTRA-16-P4,contraception,My birth control pill came back up shortly after I took it; what should I do?
-SEED-CONTRA-17,SEED-CONTRA-17-P1,contraception,I missed three pills in a row last week; do I need to week; do I need to start fresh or add another method temporarily?
+SEED-CONTRA-17,SEED-CONTRA-17-P1,contraception,I missed three pills in a row last week; do I need to start fresh or add another method temporarily?
 SEED-CONTRA-18,SEED-CONTRA-18-P1,contraception,I missed several of my pills and then had unprotected sex; could my contraception have not worked?
-SEED-CONTRA-18,SEED-CONTRA-18-P2,contraception,After forgetting several pills I had sex without a condom; is there a chance restart my pack or use backup protection for a while?
+SEED-CONTRA-18,SEED-CONTRA-18-P2,contraception,After forgetting several pills I had sex without a condom; is there a chance my contraception didn't work?
 SEED-CONTRA-17,SEED-CONTRA-17-P2,contraception,Last week I skipped three pills back to back; should I start a new pack or use another method temporarily?
 SEED-CONTRA-17,SEED-CONTRA-17-P3,contraception,I forgot to take three pills in a row last week; does that mean starting over or using something extra for a while?
-SEED-CONTRA-17,SEED-CONTRA-17-P4,contraception,Three of my pills in a row got skipped last my contraception failed?
+SEED-CONTRA-17,SEED-CONTRA-17-P4,contraception,Three of my pills in a row got skipped last week; should I restart my pack or use backup protection for now?
 SEED-CONTRA-18,SEED-CONTRA-18-P3,contraception,I skipped a number of pills and then had sex with no condom; could that mean my contraception didn't work?
 SEED-CONTRA-18,SEED-CONTRA-18-P4,contraception,Several of my pills were missed and I had unprotected sex afterward; is it possible my contraception failed?
 SEED-CONTRA-19,SEED-CONTRA-19-P1,contraception,If I'm not having sex is it fine to pause the pill for a month or should I continue taking it?
@@ -111,3 +111,18 @@ SEED-CONTRA-42,SEED-CONTRA-42-P1,contraception,For how long does a contraceptive
 SEED-CONTRA-42,SEED-CONTRA-42-P2,contraception,What's the maximum amount of time a contraceptive implant remains effective?
 SEED-CONTRA-42,SEED-CONTRA-42-P3,contraception,How long does a contraceptive implant continue working before it's no longer effective?
 SEED-CONTRA-42,SEED-CONTRA-42-P4,contraception,What is the effective lifespan of a contraceptive implant?
+SEED-CONTRA-43,SEED-CONTRA-43-P1,contraception,What can I take the next day to avoid getting into trouble?
+SEED-CONTRA-43,SEED-CONTRA-43-P2,contraception,"Is there a pill for after, so things don't go wrong?"
+SEED-CONTRA-43,SEED-CONTRA-43-P3,contraception,"After being careless last night, is there something I can take today?"
+SEED-CONTRA-44,SEED-CONTRA-44-P1,contraception,"I'm late for my injection this month, is that a problem?"
+SEED-CONTRA-44,SEED-CONTRA-44-P2,contraception,Does it matter if I miss my usual shot date?
+SEED-CONTRA-45,SEED-CONTRA-45-P1,contraception,What should I use to avoid falling pregnant at this time?
+SEED-CONTRA-45,SEED-CONTRA-45-P2,contraception,Is there something I can use so I don't end up expecting soon?
+SEED-CONTRA-45,SEED-CONTRA-45-P3,contraception,What can help me not fall pregnant for now?
+SEED-CONTRA-46,SEED-CONTRA-46-P1,contraception,Does that little rod under the skin really stop pregnancy for years?
+SEED-CONTRA-46,SEED-CONTRA-46-P2,contraception,"I heard the arm implant stops you from conceiving for a long time, is that true?"
+SEED-CONTRA-47,SEED-CONTRA-47-P1,contraception,"Nothing was used last night, what can I do now?"
+SEED-CONTRA-47,SEED-CONTRA-47-P2,contraception,"We went without protection yesterday, what should I do today?"
+SEED-CONTRA-47,SEED-CONTRA-47-P3,contraception,"No protection was used, what are my options this morning?"
+SEED-CONTRA-48,SEED-CONTRA-48-P1,contraception,Can the injection throw off your monthly cycle?
+SEED-CONTRA-48,SEED-CONTRA-48-P2,contraception,Does the shot affect when your monthly comes?
