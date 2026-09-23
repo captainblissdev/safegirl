@@ -181,3 +181,32 @@ SEED-PREG-42,pregnancy,Do I need to tell my school or workplace that I'm pregnan
 SEED-PREG-43,pregnancy,What are my rights if I want to continue my education while pregnant?
 SEED-PREG-44,pregnancy,Is it true you can tell the sex of the baby just by how you're carrying?
 SEED-PREG-45,pregnancy,"What's considered a high-risk pregnancy, and does being a teenager make mine high-risk?"
+SEED-CONTRA-43,contraception,Is there something I can take the morning after so I don't end up in trouble?
+SEED-CONTRA-44,contraception,"My monthly injection is overdue, does that matter?"
+SEED-CONTRA-45,contraception,What can I use so I don't fall pregnant right now?
+SEED-CONTRA-46,contraception,Is it true the small rod in the arm stops you conceiving for years?
+SEED-CONTRA-47,contraception,"We didn't use anything last night, what are my options today?"
+SEED-CONTRA-48,contraception,Does the injection mess with your monthly cycle?
+SEED-STI-45,sti,Something is not right down there and it stings when I go to the toilet
+SEED-STI-46,sti,I have a smell and discomfort that won't go away
+SEED-STI-47,sti,There's a sore that keeps coming back and I don't know why
+SEED-STI-48,sti,I feel itchy and uncomfortable after being with my partner
+SEED-STI-49,sti,Should I get checked out after being with someone new?
+SEED-STI-50,sti,My private parts have been irritated for over a week now
+SEED-PREG-46,pregnancy,I've been feeling off in the mornings and can't keep food down
+SEED-PREG-47,pregnancy,My monthly hasn't shown up and I'm getting worried
+SEED-PREG-48,pregnancy,Could I be in the family way after we were together last month?
+SEED-PREG-49,pregnancy,My clothes are getting tight around the middle and I feel funny
+SEED-PREG-50,pregnancy,"I keep feeling fluttering in my belly, is that normal this early?"
+SEED-PREG-51,pregnancy,My chest has been tender and I'm more tired than usual lately
+SEED-GEN-53,general,Will anyone find out if I come in for help without telling my parents?
+SEED-GEN-54,general,I'm scared they'll judge me if I ask about this stuff
+SEED-GEN-55,general,Is there somewhere I can go after school without my folks knowing?
+SEED-GEN-56,general,Do I have to pay if I don't have money on me right now?
+SEED-GEN-57,general,Can I talk to someone without giving my real name?
+SEED-GEN-58,general,"I don't know who to trust with this, is this place safe?"
+SEED-STI-51,sti,I get a painful blister down there that heals up then comes right back in the same place
+SEED-STI-52,sti,Every few weeks I get the same small wound that scabs over then breaks open again
+SEED-STI-53,sti,There's a tender bump that shows up goes away then comes back weeks later
+SEED-STI-54,sti,I keep getting the same painful spot that never fully heals before it flares up again
+SEED-STI-55,sti,A sore keeps forming in the same place every time I think it's finally gone
