@@ -49,7 +49,7 @@ The surrounding safety and privacy architecture is kept separate from the classi
 | Component                         | Status                                                              |
 | --------------------------------- | ------------------------------------------------------------------- |
 | Keyword baseline classifier       | ✅ Frozen (2026-08-27)                                               |
-| DistilBERT classifier (V2)        | ✅ Trained — 5-fold CV, final retrain, and independent test complete |
+| DistilBERT classifier (V3)        | ✅ Trained — 5-fold CV, final retrain, and independent test complete |
 | Backend                           | ✅ Working and tested (5/5)                                          |
 | Frontend                          | ✅ Working and tested (4/4), builds cleanly                          |
 | RAG generation (Gemini)           | ⛔ Not implemented — currently stubbed                               |
