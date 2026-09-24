@@ -1,13 +1,6 @@
-import type { QueryResponse } from "./types";
-
-// These CommonJS modules are shared with the backend rule-based pipeline.
-// @ts-expect-error The backend modules do not have TypeScript declarations yet.
-import * as safetyNet from "../../backend/src/safetyNet";
-// @ts-expect-error The backend modules do not have TypeScript declarations yet.
-import * as classifier from "../../backend/src/classifier";
-
-const { checkSafety } = safetyNet;
-const { classify } = classifier;
+import type { QueryResponse } from "../types";
+import { classify } from "./classifier";
+import { checkSafety } from "./safetyNet";
 
 const OFFLINE_ANSWERS: Record<string, string> = {
   contraception:
