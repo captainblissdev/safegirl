@@ -8,6 +8,7 @@
     "test": "node test/backend.test.js"
   },
   "dependencies": {
-    "express": "^4.22.2"
+    "express": "^4.22.2",
+    "firebase-admin": "^14.5.0"
   }
 }

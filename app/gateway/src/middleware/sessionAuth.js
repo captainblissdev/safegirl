@@ -6,18 +6,19 @@
  * information is attached, consistent with SafeGirl's privacy model.
  */
 
-const admin = require("firebase-admin");
+const { initializeApp, getApps, cert } = require("firebase-admin/app");
+const { getAuth } = require("firebase-admin/auth");
 const path = require("path");
 
 const serviceAccountPath =
   process.env.FIREBASE_SERVICE_ACCOUNT_PATH ||
   path.join(__dirname, "../../firebase-service-account.json");
 
-if (!admin.apps.length) {
+if (!getApps().length) {
   const serviceAccount = require(serviceAccountPath);
 
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+  initializeApp({
+    credential: cert(serviceAccount),
   });
 }
 
@@ -51,7 +52,7 @@ async function verifyFirebaseToken(req, res, next) {
   }
 
   try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const decodedToken = await getAuth().verifyIdToken(idToken);
 
     // Firebase UID is used only as an anonymous session identifier.
     req.uid = decodedToken.uid;
