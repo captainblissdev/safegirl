@@ -26,15 +26,15 @@ export async function submitQuery(text: string): Promise<QueryResponse> {
     });
 
     if (!response.ok) {
-      const body = await response.json().catch(() => ({}));
+      const body = (await response.json().catch(() => ({}))) as {
+        error?: string;
+      };
 
-      throw new Error(
-        body.error || `Request failed: ${response.status}`
-      );
+      throw new Error(body.error ?? `Request failed: ${response.status}`);
     }
 
-    return response.json();
-  } catch (err) {
+    return (await response.json()) as QueryResponse;
+  } catch {
     /*
      * A failed fetch can indicate intermittent connectivity even when
      * navigator.onLine still reports true. Fall back to the local
