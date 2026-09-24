@@ -2,7 +2,7 @@
 Generate the client-side offline knowledge-base bundle.
 
 The authoritative knowledge base remains in:
-    knowledge-base/*.md
+    resources/knowledge_base/*.md
 
 This script exports the active KB entries to JSON so the frontend
 can bundle and cache them for offline use.
@@ -10,7 +10,7 @@ can bundle and cache them for offline use.
 Held content separated by "---" is intentionally excluded.
 
 Run from the repository root:
-    python3 app/frontend/scripts/generate-kb-json.py
+    python3 app/interface/src/scripts/generate-kb-json.py
 """
 
 import json
@@ -23,7 +23,8 @@ KB_DIR = os.path.join(
     "..",
     "..",
     "..",
-    "knowledge-base",
+    "resources",
+    "knowledge_base",
 )
 
 OUT_PATH = os.path.join(

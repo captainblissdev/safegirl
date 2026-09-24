@@ -53,8 +53,8 @@ V3 (206 seeds) is a targeted retrain to address that weakness:
            result in decision-log.md or the write-up.
 
 Training must only use manually reviewed paraphrases in
-dataset/reviewed/ -- this script refuses to run against
-dataset/generated/ content.
+resources/reviewed/ -- this script refuses to run against
+resources/generated/ content.
 """
 
 from __future__ import annotations
@@ -95,7 +95,7 @@ EUPHEMISM_HOLDOUT_LABEL = "euphemism_holdout"
 
 MODEL_NAME = "distilbert-base-multilingual-cased"
 
-DATA_DIR = Path("./dataset")
+DATA_DIR = Path("./resources")
 OUTPUT_DIR = Path("./safegirl-classifier-checkpoints-v3")
 
 MAX_LENGTH = 64
@@ -168,7 +168,7 @@ def load_fold_assignment(path: Path) -> dict[str, int | str]:
     integer. Every one of the 206 seeds belongs to exactly one of
     these values; there is no separate 'test' value in this file. The
     independent expert test set (DR-04) lives entirely separately, in
-    dataset/test/, and is loaded by load_test_set() below.
+    resources/test/, and is loaded by load_test_set() below.
     """
     rows = load_csv(path)
     if not rows:
@@ -193,7 +193,7 @@ def load_fold_assignment(path: Path) -> dict[str, int | str]:
 
 
 def load_reviewed_paraphrases(reviewed_dir: Path) -> list[dict[str, str]]:
-    """Refuses to run against dataset/generated/ -- unreviewed content
+    """Refuses to run against resources/generated/ -- unreviewed content
     never enters training, per the standing project review gate."""
     if not reviewed_dir.exists():
         raise RuntimeError(f"Reviewed directory does not exist: {reviewed_dir}")
@@ -263,7 +263,7 @@ def build_fold_datasets(all_examples, fold_assignment: dict[str, int | str]):
 
     This is a lookup against the ALREADY-FROZEN fold assignment
     (StratifiedGroupKFold was run once, on the 202-seed CV pool only,
-    to produce seed_split_assignment_v3.csv) -- paraphrases are never
+    to produce fold_assignment_v3.csv) -- paraphrases are never
     re-split independently, they inherit their seed's fold (or holdout
     status) exactly.
 
@@ -717,7 +717,7 @@ def main() -> None:
         print("WARNING: No GPU detected. Training will run on CPU (very slow).")
 
     seeds_path = DATA_DIR / "seeds" / "seeds.csv"
-    fold_path = DATA_DIR / "seeds" / "seed_split_assignment_v3.csv"
+    fold_path = DATA_DIR / "seeds" / "fold_assignment_v3.csv"
     reviewed_dir = DATA_DIR / "reviewed"
     test_dir = DATA_DIR / "test"
 

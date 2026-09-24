@@ -12,7 +12,7 @@ Before running StratifiedGroupKFold, a fixed set of 4 seeds (one per
 class) is carved OUT of the CV pool entirely. These are the
 "euphemism holdout" seeds -- deliberately never seen during any of
 the 5 CV folds or the final retrain. They (and their paraphrases,
-handled downstream in train_distilbert.py) exist solely to answer one
+handled downstream in train_classifier.py) exist solely to answer one
 question after training: did V3 actually fix the euphemism
 misclassification problem documented against V2? Reusing a
 CV/training seed for that check would not be a real answer.
@@ -28,7 +28,7 @@ Output fold column now contains two kinds of values:
     - the string "euphemism_holdout" -> excluded from all CV/training
 
 This is a deliberate schema change from V2's integer-only fold
-column. train_distilbert.py's loader has been updated to handle it
+column. train_classifier.py's loader has been updated to handle it
 (see load_fold_assignment() and build_fold_datasets() there).
 """
 
@@ -43,12 +43,12 @@ from sklearn.model_selection import StratifiedGroupKFold
 # -------------------------------------------------------------------
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-SEEDS_FILE = PROJECT_ROOT / "dataset" / "seeds" / "seeds.csv"
+SEEDS_FILE = PROJECT_ROOT / "resources" / "seeds" / "seeds.csv"
 OUTPUT_FILE = (
     PROJECT_ROOT
-    / "dataset"
+    / "resources"
     / "seeds"
-    / "seed_split_assignment_v3.csv"
+    / "fold_assignment_v3.csv"
 )
 
 # Reproducibility

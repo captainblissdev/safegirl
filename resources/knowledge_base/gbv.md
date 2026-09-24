@@ -13,4 +13,4 @@ Do not add content to this file until the above are resolved and logged in
 decision-log.md.
 
 Keyword-based safety-net routing scaffolding is not blocked by this hold —
-see notebooks/classifier/baseline_classifier.py.
+see research/experiments/baseline_classifier.py.

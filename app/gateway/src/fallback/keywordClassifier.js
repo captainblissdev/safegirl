@@ -1,6 +1,6 @@
 /**
  * Client-side port of the KeywordBaselineClassifier from
- * app/backend/src/classifier.js. Same duplication caveat as
+ * app/gateway/src/fallback/keywordClassifier.js. Same duplication caveat as
  * safetyNet.ts applies -- keep in sync manually.
  */
 

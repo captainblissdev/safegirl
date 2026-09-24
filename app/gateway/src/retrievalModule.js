@@ -29,11 +29,11 @@ const path = require("path");
  * Knowledge-base directory.
  *
  * From this module:
- * backend/src/retrievalModule.js
+ * app/gateway/src/retrievalModule.js
  *          ↓
- * project/knowledge-base/
+ * resources/knowledge_base/
  */
-const KB_DIR = path.join(__dirname, "..", "..", "..", "knowledge-base");
+const KB_DIR = path.join(__dirname, "..", "..", "..", "resources", "knowledge_base");
 
 /**
  * The four active SRH categories supported by SafeGirl.

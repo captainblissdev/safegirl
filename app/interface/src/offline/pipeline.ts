@@ -1,6 +1,6 @@
 import kbData from "../../src/offline/Kbdata.json";
-import { checkSafety } from "../../../frontend/src/offline/safetyNet";
-import { classify } from "../../../frontend/src/offline/classifier";
+import { checkSafety } from "./safetyNet";
+import { classify } from "./classifier";
 
 interface QueryResponse {
   outcome: "grounded_answer" | "referral";

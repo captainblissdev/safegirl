@@ -16,7 +16,7 @@
  */
 
 const { checkSafety } = require("./safetyNet");
-const { KeywordBaselineClassifier } = require("./classifier");
+const { KeywordBaselineClassifier } = require("./fallback/keywordClassifier");
 const { retrieve } = require("./retrievalModule");
 const { generate } = require("./generationModule");
 const { orchestrate } = require("./responseOrchestrator");

@@ -6,11 +6,10 @@ __pycache__/
 *.pyc
 .env
 
-app/frontend/dist/
+app/interface/dist/
 
 safegirl-classifier-checkpoints/
 checkpoints/
 node_modules/
-app/backend/firebase-service-account.json
 app/gateway/firebase-service-account.json
 **/firebase-service-account*.json

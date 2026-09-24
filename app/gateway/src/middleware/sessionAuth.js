@@ -59,7 +59,7 @@ async function verifyFirebaseToken(req, res, next) {
     return next();
   } catch (error) {
     console.error(
-      `[firebaseAuth] Token verification failed: ${error.message}`
+      `[sessionAuth] Token verification failed: ${error.message}`
     );
 
     return res.status(401).json({

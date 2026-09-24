@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { ChatTurn, Screen } from "./types";
-import { submitQuery } from "./api";
+import { submitQuery } from "./api/client";
 import Disclaimer from "./components/Disclaimer";
 import ChatInterface from "./components/ChatInterface";
 import ReferralScreen from "./components/ReferralScreen";
