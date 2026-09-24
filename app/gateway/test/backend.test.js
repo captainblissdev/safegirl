@@ -26,11 +26,11 @@ async function run() {
    * and retrieves actual knowledge-base content.
    */
   console.log(
-    "Test 1: normal query (contraception) — should retrieve real KB content"
+    "Test 1: normal query (contraception) — should retrieve real KB content",
   );
 
   const r1 = await handleQuery(
-    "Do I have to pay for contraception at a government clinic?"
+    "Do I have to pay for contraception at a government clinic?",
   );
 
   assert.strictEqual(r1.outcome, "grounded_answer");
@@ -48,11 +48,11 @@ async function run() {
    * does not continue into the generation pipeline.
    */
   console.log(
-    "Test 2: flagged query (GBV language) — should short-circuit to referral"
+    "Test 2: flagged query (GBV language) — should short-circuit to referral",
   );
 
   const r2 = await handleQuery(
-    "He forced me and I didn't consent, I don't know what to do"
+    "He forced me and I didn't consent, I don't know what to do",
   );
 
   assert.strictEqual(r2.outcome, "referral");
@@ -70,12 +70,10 @@ async function run() {
    * Verifies that a general query is routed to the general category
    * and can retrieve content from general.md.
    */
-  console.log(
-    "Test 3: general/youth-friendly query — should hit general.md"
-  );
+  console.log("Test 3: general/youth-friendly query — should hit general.md");
 
   const r3 = await handleQuery(
-    "What does youth-friendly mean at a health clinic?"
+    "What does youth-friendly mean at a health clinic?",
   );
 
   assert.strictEqual(r3.outcome, "grounded_answer");
@@ -92,11 +90,11 @@ async function run() {
    * held content is not exposed through retrieval.
    */
   console.log(
-    "Test 4: pregnancy query — should hit pregnancy.md, not the HELD abortion content"
+    "Test 4: pregnancy query — should hit pregnancy.md, not the HELD abortion content",
   );
 
   const r4 = await handleQuery(
-    "Do I have to get a pelvic exam right away at my first visit?"
+    "Do I have to get a pelvic exam right away at my first visit?",
   );
 
   assert.strictEqual(r4.outcome, "grounded_answer");
@@ -105,7 +103,7 @@ async function run() {
 
   assert.ok(
     !r4.message.toLowerCase().includes("abortion"),
-    "HELD content must never leak through"
+    "HELD content must never leak through",
   );
 
   console.log("  message:", r4.message);

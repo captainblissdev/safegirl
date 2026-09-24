@@ -288,13 +288,7 @@ const KEYWORDS = {
  *
  * This ordering is part of the frozen baseline behaviour.
  */
-const PRIORITY = [
-  "gbv",
-  "sti",
-  "contraception",
-  "pregnancy",
-  "general",
-];
+const PRIORITY = ["gbv", "sti", "contraception", "pregnancy", "general"];
 
 /**
  * Escape characters that have special meaning inside a regular expression.
@@ -327,7 +321,7 @@ class KeywordBaselineClassifier extends Classifier {
      */
     for (const [category, keywords] of Object.entries(KEYWORDS)) {
       const matched = keywords.filter((keyword) =>
-        new RegExp(`\\b${escapeRegex(keyword)}\\b`).test(normalizedText)
+        new RegExp(`\\b${escapeRegex(keyword)}\\b`).test(normalizedText),
       );
 
       if (matched.length > 0) {
@@ -349,11 +343,11 @@ class KeywordBaselineClassifier extends Classifier {
      * Select the category with the highest number of keyword matches.
      */
     const maxScore = Math.max(
-      ...Object.values(hits).map((matches) => matches.length)
+      ...Object.values(hits).map((matches) => matches.length),
     );
 
     const tied = Object.keys(hits).filter(
-      (category) => hits[category].length === maxScore
+      (category) => hits[category].length === maxScore,
     );
 
     if (tied.length === 1) {
@@ -396,7 +390,7 @@ class DistilBERTClassifier extends Classifier {
   classify() {
     throw new Error(
       "DistilBERTClassifier is not yet implemented — model has not been " +
-        "fine-tuned. Use KeywordBaselineClassifier until training is complete."
+        "fine-tuned. Use KeywordBaselineClassifier until training is complete.",
     );
   }
 }

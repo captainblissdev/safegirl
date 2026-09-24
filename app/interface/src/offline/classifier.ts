@@ -252,13 +252,7 @@ const KEYWORDS: Record<string, string[]> = {
   ],
 };
 
-const PRIORITY = [
-  "gbv",
-  "sti",
-  "contraception",
-  "pregnancy",
-  "general",
-];
+const PRIORITY = ["gbv", "sti", "contraception", "pregnancy", "general"];
 
 export interface ClassificationResult {
   label: string;
@@ -282,9 +276,7 @@ export function classify(text: string): ClassificationResult {
 
   for (const [category, keywords] of Object.entries(KEYWORDS)) {
     const matched = keywords.filter((keyword) => {
-      const pattern = new RegExp(
-        `\\b${escapeRegex(keyword)}\\b`
-      );
+      const pattern = new RegExp(`\\b${escapeRegex(keyword)}\\b`);
 
       return pattern.test(normalized);
     });
@@ -303,11 +295,11 @@ export function classify(text: string): ClassificationResult {
   }
 
   const maxScore = Math.max(
-    ...Object.values(hits).map((matches) => matches.length)
+    ...Object.values(hits).map((matches) => matches.length),
   );
 
   const tiedCategories = Object.keys(hits).filter(
-    (category) => hits[category].length === maxScore
+    (category) => hits[category].length === maxScore,
   );
 
   // A unique highest-scoring category wins directly.

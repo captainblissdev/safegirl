@@ -66,9 +66,7 @@ export default function App() {
         setTurns((prev) => [...prev, botTurn]);
       }
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Something went wrong."
-      );
+      setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
       setIsLoading(false);
     }
@@ -85,8 +83,8 @@ export default function App() {
     <div className="app-shell">
       {isOffline && (
         <div className="offline-banner" role="status">
-          You&apos;re offline — answers come from information stored on
-          this device and may be more limited.
+          You&apos;re offline — answers come from information stored on this
+          device and may be more limited.
         </div>
       )}
 
@@ -125,9 +123,7 @@ export default function App() {
         />
       )}
 
-      {screen === "sessionEnd" && (
-        <SessionEnd onStartNew={handleStartNew} />
-      )}
+      {screen === "sessionEnd" && <SessionEnd onStartNew={handleStartNew} />}
     </div>
   );
 }

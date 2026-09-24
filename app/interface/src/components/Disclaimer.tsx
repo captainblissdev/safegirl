@@ -41,11 +41,7 @@ export default function Disclaimer({ onContinue }: Props) {
         </ul>
       </section>
 
-      <button
-        className="btn-primary"
-        type="button"
-        onClick={onContinue}
-      >
+      <button className="btn-primary" type="button" onClick={onContinue}>
         Continue &rarr;
       </button>
     </main>
