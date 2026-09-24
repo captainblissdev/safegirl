@@ -2,7 +2,7 @@
 
 Source: expert-verified spreadsheet, `SafeGirl_independent_test_set_verification.xlsx`.
 34 questions submitted for verification; 31 make up the final scored test
-set (`dataset/test/independent_test_set.csv`). This document is the
+set (`resources/test/independent_test_set.csv`). This document is the
 record of what was excluded, why, and every expert note — nothing from
 the source file is silently dropped, even where it didn't make it into
 the final CSV.
@@ -11,7 +11,7 @@ the final CSV.
 
 The expert's `expert_verified_class` values used inconsistent
 capitalization and abbreviations (`STI`, `PG`, `Contraception`,
-`General`) that would not exact-match `train_distilbert.py`'s
+`General`) that would not exact-match `train_classifier.py`'s
 `CATEGORIES` list. Verified directly: **22 of the 34 rows (65%) would
 have been silently dropped** by `load_test_set()` if used unnormalized,
 with no error — the function skips non-matching rows silently. Mapped
@@ -35,7 +35,7 @@ for the record:
 
 ## Included, with scope explicitly limited — abortion-boundary questions (2 rows)
 
-`knowledge-base/pregnancy.md` holds abortion/PAC content pending
+`resources/knowledge_base/pregnancy.md` holds abortion/PAC content pending
 authoritative legal sourcing (same standing project rule as GBV content).
 These two questions were **kept in the test set for intent-classification
 testing only** — the system's classifier is being tested on whether it
