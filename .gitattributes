@@ -1,0 +1,12 @@
+# Store text files with LF line endings regardless of platform, so
+# formatters and CI see the same bytes on Windows, macOS and Linux.
+* text=auto eol=lf
+
+# Binary files: never normalise.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.woff binary
+*.woff2 binary
