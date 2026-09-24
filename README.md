@@ -222,28 +222,27 @@ The privacy architecture is a core design constraint rather than an optional fea
 ```text
 SafeGirl/
 ├── app/
-│   ├── backend/
+│   ├── gateway/
 │   │   └── # Express API, safety, classification, retrieval orchestration
 │   │
-│   └── frontend/
+│   └── interface/
 │       └── # React PWA and offline-capable frontend
 │
-├── dataset/
+├── resources/
 │   ├── seeds/
 │   │   └── # 182 seed questions + fold assignments
 │   ├── reviewed/
 │   │   └── # Manually reviewed training paraphrases
 │   ├── generated/
 │   │   └── # AI-generated paraphrases before review
-│   └── test/
-│       └── # Independent expert-verified test set (DR-04)
+│   ├── test/
+│   │   └── # Independent expert-verified test set (DR-04)
+│   └── knowledge_base/
+│       └── # Source-grounded SRH content
 │
-├── knowledge-base/
-│   └── # Source-grounded SRH content
-│
-├── notebooks/
-│   └── classifier/
-│       └── # V2 training notebook and supporting scripts
+├── research/
+│   └── experiments/
+│       └── # Training notebook, scripts, and logs/
 │
 └── docs/
     ├── diagrams/
@@ -256,7 +255,7 @@ SafeGirl/
     └── dr04-test-set-verification-record.md
 ```
 
-The `dataset/generated/` directory is retained for provenance but is **not accepted as direct training data**. The training pipeline enforces the requirement that training data come from the reviewed dataset.
+The `resources/generated/` directory is retained for provenance but is **not accepted as direct training data**. The training pipeline enforces the requirement that training data come from the reviewed dataset.
 
 ---
 
@@ -275,7 +274,7 @@ The `dataset/generated/` directory is retained for provenance but is **not accep
 ### Backend
 
 ```bash
-cd app/backend
+cd app/gateway
 
 npm install
 npm test
@@ -289,11 +288,11 @@ The backend test suite currently contains 5 tests.
 ### Frontend
 
 ```bash
-cd app/frontend
+cd app/interface
 
 npm install
 npx tsc --noEmit
-npx tsx src/offline/pipeline.test.ts
+npx tsx src/offline/offlinePipeline.test.ts
 npm run dev
 ```
 
@@ -304,7 +303,7 @@ The frontend currently contains 4 offline pipeline tests.
 ### Production Build
 
 ```bash
-cd app/frontend
+cd app/interface
 
 npx vite build
 ```
@@ -348,21 +347,21 @@ V2 training can be performed in Google Colab or locally using a CUDA-capable GPU
 Primary resources:
 
 ```text
-notebooks/classifier/
+research/experiments/
 ├── SafeGirl_V2_Training.ipynb
-└── train_distilbert.py
+└── train_classifier.py
 ```
 
 The training pipeline intentionally refuses to train directly from:
 
 ```text
-dataset/generated/
+resources/generated/
 ```
 
 Training data must come from:
 
 ```text
-dataset/reviewed/
+resources/reviewed/
 ```
 
 This prevents unreviewed AI-generated paraphrases from silently entering the evaluated training pipeline.
