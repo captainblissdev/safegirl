@@ -52,7 +52,7 @@ type KbCategory = keyof typeof kbData;
  * prototype architecture.
  */
 function tokenize(text: string): string[] {
-  return text.toLowerCase().match(/[a-z']+/g) || [];
+  return text.toLowerCase().match(/[a-z']+/g) ?? [];
 }
 
 /**
@@ -141,14 +141,14 @@ export function handleQueryOffline(queryText: string): QueryResponse {
 
   return {
     outcome: "grounded_answer",
-    message: retrieved.answer || "",
+    message: retrieved.answer ?? "",
     category: classification.label,
     generated: false,
     generationInvoked: false,
     note:
       "Offline mode: answer provided from the locally stored " +
       "knowledge base, not live-generated.",
-    source: retrieved.source || undefined,
-    safetyNotes: retrieved.safetyNotes || undefined,
+    source: retrieved.source ?? undefined,
+    safetyNotes: retrieved.safetyNotes ?? undefined,
   };
 }

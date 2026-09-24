@@ -98,7 +98,7 @@ export default function App() {
         <>
           <ChatInterface
             turns={turns}
-            onSend={handleSend}
+            onSend={(text) => void handleSend(text)}
             isLoading={isLoading}
           />
 
