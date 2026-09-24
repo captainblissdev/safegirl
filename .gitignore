@@ -8,8 +8,11 @@ __pycache__/
 
 app/interface/dist/
 
-safegirl-classifier-checkpoints/
+safegirl-classifier-checkpoints*/
 checkpoints/
+
+# Python virtual environments
+.venv*/
 node_modules/
 app/gateway/firebase-service-account.json
 **/firebase-service-account*.json
