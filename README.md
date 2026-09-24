@@ -292,7 +292,7 @@ cd app/interface
 
 npm install
 npx tsc --noEmit
-npx tsx src/offline/pipeline.test.ts
+npx tsx src/offline/offlinePipeline.test.ts
 npm run dev
 ```
 
