@@ -19,11 +19,7 @@ interface Props {
   isLoading: boolean;
 }
 
-export default function ChatInterface({
-  turns,
-  onSend,
-  isLoading,
-}: Props) {
+export default function ChatInterface({ turns, onSend, isLoading }: Props) {
   const [draft, setDraft] = useState("");
 
   const handleSend = () => {
@@ -57,19 +53,14 @@ export default function ChatInterface({
         {turns.map((turn) => (
           <div
             key={turn.id}
-            className={
-              turn.role === "user" ? "user-bubble" : "bot-bubble"
-            }
+            className={turn.role === "user" ? "user-bubble" : "bot-bubble"}
           >
             {turn.text}
           </div>
         ))}
 
         {isLoading && (
-          <div
-            className="bot-bubble bot-bubble--loading"
-            role="status"
-          >
+          <div className="bot-bubble bot-bubble--loading" role="status">
             Thinking…
           </div>
         )}

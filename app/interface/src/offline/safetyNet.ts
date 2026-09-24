@@ -66,10 +66,7 @@ export function checkSafety(text: string): SafetyResult {
   const normalized = text.toLowerCase();
 
   const matchedKeywords = DISTRESS_KEYWORDS.filter((keyword) => {
-    const escapedKeyword = keyword.replace(
-      /[.*+?^${}()|[\]\\]/g,
-      "\\$&"
-    );
+    const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
     return new RegExp(`\\b${escapedKeyword}\\b`).test(normalized);
   });

@@ -1,5 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInAnonymously, onAuthStateChanged, type User } from "firebase/auth";
+import {
+  getAuth,
+  signInAnonymously,
+  onAuthStateChanged,
+  type User,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -20,18 +25,17 @@ const auth = getAuth(app);
  */
 export function ensureSession(): Promise<User> {
   return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       unsubscribe();
       if (user) {
         resolve(user);
         return;
       }
-      try {
-        const result = await signInAnonymously(auth);
-        resolve(result.user);
-      } catch (err) {
-        reject(err);
-      }
+      signInAnonymously(auth).then(
+        (result) => resolve(result.user),
+        (err: unknown) =>
+          reject(err instanceof Error ? err : new Error(String(err))),
+      );
     });
   });
 }
