@@ -33,8 +33,4 @@ export interface ChatTurn {
   outcome?: QueryOutcome;
 }
 
-export type Screen =
-  | "disclaimer"
-  | "chat"
-  | "referral"
-  | "sessionEnd";
+export type Screen = "disclaimer" | "chat" | "referral" | "sessionEnd";

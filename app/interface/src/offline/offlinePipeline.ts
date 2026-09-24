@@ -5,8 +5,7 @@ import { checkSafety } from "./safetyNet";
 const OFFLINE_ANSWERS: Record<string, string> = {
   contraception:
     "You can ask a youth-friendly health worker about contraception, including which methods are available and any costs or requirements.",
-  sti:
-    "A health worker can provide confidential STI information and testing. Seek care promptly if you have symptoms or think you may have been exposed.",
+  sti: "A health worker can provide confidential STI information and testing. Seek care promptly if you have symptoms or think you may have been exposed.",
   pregnancy:
     "A health worker can provide confidential pregnancy information and care. You can ask questions about testing and your options.",
   general:
