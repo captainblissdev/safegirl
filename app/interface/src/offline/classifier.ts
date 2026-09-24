@@ -1,6 +1,6 @@
 /**
  * Client-side port of the KeywordBaselineClassifier from
- * app/backend/src/classifier.js.
+ * app/gateway/src/fallback/keywordClassifier.js.
  *
  * This classifier is used by the offline pipeline when the backend
  * cannot be reached. The keyword rules are intentionally duplicated

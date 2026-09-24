@@ -1,7 +1,7 @@
 /**
  * Client-side safety check used by the offline pipeline.
  *
- * This mirrors app/backend/src/safetyNet.js so that queries flagged
+ * This mirrors app/gateway/src/safetyNet.js so that queries flagged
  * offline follow the same safety path as queries processed online.
  *
  * The keyword list is intentionally duplicated for now. It must be

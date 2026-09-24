@@ -1,5 +1,5 @@
-import type { QueryResponse } from "./types";
-import { handleQueryOffline } from "./offlinePipeline";
+import type { QueryResponse } from "../types";
+import { handleQueryOffline } from "../offline/offlinePipeline";
 
 /**
  * Calls the real backend when online and falls back to the fully

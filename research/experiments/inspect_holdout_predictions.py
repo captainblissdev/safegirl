@@ -28,7 +28,7 @@ from transformers import (
 # ----------------------------------------------------------------
 # Config -- must match train_distilbert_v3.py
 # ----------------------------------------------------------------
-DATA_DIR = Path("./dataset")
+DATA_DIR = Path("./resources")
 CHECKPOINT_DIR = Path("./safegirl-classifier-checkpoints-v3") / "final_v3"
 MAX_LENGTH = 64
 
@@ -94,7 +94,7 @@ print(f"Model id2label: {id2label}\n")
 # Build holdout set and predict, one example at a time
 # ----------------------------------------------------------------
 seeds_path = DATA_DIR / "seeds" / "seeds.csv"
-fold_path = DATA_DIR / "seeds" / "seed_split_assignment_v3.csv"
+fold_path = DATA_DIR / "seeds" / "fold_assignment_v3.csv"
 reviewed_dir = DATA_DIR / "reviewed"
 
 holdout_examples = build_holdout_examples(seeds_path, reviewed_dir, fold_path)

@@ -9,12 +9,12 @@ from sklearn.model_selection import StratifiedGroupKFold
 # -------------------------------------------------------------------
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-SEEDS_FILE = PROJECT_ROOT / "dataset" / "seeds" / "seeds.csv"
+SEEDS_FILE = PROJECT_ROOT / "resources" / "seeds" / "seeds.csv"
 OUTPUT_FILE = (
     PROJECT_ROOT
-    / "dataset"
+    / "resources"
     / "seeds"
-    / "seed_split_assignment_v2.csv"
+    / "fold_assignment_v2.csv"
 )
 
 # Reproducibility

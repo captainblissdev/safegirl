@@ -1,6 +1,6 @@
 /**
  * Shared frontend types matching the current backend response shape
- * returned by app/backend/src/responseOrchestrator.js.
+ * returned by app/gateway/src/responseOrchestrator.js.
  */
 
 export type QueryOutcome = "grounded_answer" | "referral";
