@@ -90,10 +90,7 @@ function checkSafety(text) {
    * as part of an unrelated word.
    */
   const matched = DISTRESS_KEYWORDS.filter((keyword) => {
-    const escapedKeyword = keyword.replace(
-      /[.*+?^${}()|[\]\\]/g,
-      "\\$&"
-    );
+    const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
     const pattern = new RegExp(`\\b${escapedKeyword}\\b`);
 

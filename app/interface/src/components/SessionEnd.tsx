@@ -31,11 +31,7 @@ export default function SessionEnd({ onStartNew }: Props) {
         </p>
       </section>
 
-      <button
-        className="btn-primary"
-        type="button"
-        onClick={onStartNew}
-      >
+      <button className="btn-primary" type="button" onClick={onStartNew}>
         Start new session &#8635;
       </button>
     </main>

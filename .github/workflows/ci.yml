@@ -24,15 +24,21 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
           cache-dependency-path: app/gateway/package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
       - name: Run backend tests
-        run: node test/backend.test.js
+        run: npm test
 
   frontend-checks:
     name: Frontend Checks
@@ -49,18 +55,24 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
           cache-dependency-path: app/interface/package-lock.json
 
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
       - name: Type-check
-        run: npx tsc --noEmit
+        run: npm run typecheck
 
       - name: Run offline pipeline tests
-        run: npx tsx src/offline/offlinePipeline.test.ts
+        run: npm test
 
       - name: Build production application
         run: npx vite build

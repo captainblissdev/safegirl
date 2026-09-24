@@ -17,16 +17,10 @@ interface Props {
   onContinueChat: () => void;
 }
 
-export default function ReferralScreen({
-  message,
-  onContinueChat,
-}: Props) {
+export default function ReferralScreen({ message, onContinueChat }: Props) {
   return (
     <main className="screen">
-      <section
-        className="card card--referral"
-        aria-labelledby="referral-title"
-      >
+      <section className="card card--referral" aria-labelledby="referral-title">
         <div className="referral-icon" aria-hidden="true">
           &#9825;
         </div>
@@ -39,11 +33,7 @@ export default function ReferralScreen({
         </div>
       </section>
 
-      <button
-        className="btn-outline"
-        type="button"
-        onClick={onContinueChat}
-      >
+      <button className="btn-outline" type="button" onClick={onContinueChat}>
         Continue chat
       </button>
     </main>

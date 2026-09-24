@@ -59,9 +59,7 @@ async function verifyFirebaseToken(req, res, next) {
 
     return next();
   } catch (error) {
-    console.error(
-      `[sessionAuth] Token verification failed: ${error.message}`
-    );
+    console.error(`[sessionAuth] Token verification failed: ${error.message}`);
 
     return res.status(401).json({
       error: "Invalid or expired session token",

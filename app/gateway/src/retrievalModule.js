@@ -33,7 +33,14 @@ const path = require("path");
  *          ↓
  * resources/knowledge_base/
  */
-const KB_DIR = path.join(__dirname, "..", "..", "..", "resources", "knowledge_base");
+const KB_DIR = path.join(
+  __dirname,
+  "..",
+  "..",
+  "..",
+  "resources",
+  "knowledge_base",
+);
 
 /**
  * The four active SRH categories supported by SafeGirl.
@@ -42,12 +49,7 @@ const KB_DIR = path.join(__dirname, "..", "..", "..", "resources", "knowledge_ba
  * handled by the independent Safety Net rather than retrieved as normal
  * health information.
  */
-const ACTIVE_CATEGORIES = [
-  "contraception",
-  "sti",
-  "pregnancy",
-  "general",
-];
+const ACTIVE_CATEGORIES = ["contraception", "sti", "pregnancy", "general"];
 
 /**
  * Parse active knowledge-base entries from a Markdown file.
@@ -84,9 +86,7 @@ function parseKbFile(filePath) {
      * @returns {string|null} Extracted value or null if unavailable.
      */
     const get = (field) => {
-      const match = block.match(
-        new RegExp(`\\*\\*${field}:\\*\\*\\s*(.+)`)
-      );
+      const match = block.match(new RegExp(`\\*\\*${field}:\\*\\*\\s*(.+)`));
 
       return match ? match[1].trim() : null;
     };
@@ -121,9 +121,7 @@ function loadKnowledgeBase() {
   for (const category of ACTIVE_CATEGORIES) {
     const filePath = path.join(KB_DIR, `${category}.md`);
 
-    kb[category] = fs.existsSync(filePath)
-      ? parseKbFile(filePath)
-      : [];
+    kb[category] = fs.existsSync(filePath) ? parseKbFile(filePath) : [];
   }
 
   return kb;

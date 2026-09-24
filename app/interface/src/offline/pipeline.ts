@@ -52,7 +52,7 @@ type KbCategory = keyof typeof kbData;
  * prototype architecture.
  */
 function tokenize(text: string): string[] {
-  return text.toLowerCase().match(/[a-z']+/g) || [];
+  return text.toLowerCase().match(/[a-z']+/g) ?? [];
 }
 
 /**
@@ -62,10 +62,7 @@ function tokenize(text: string): string[] {
  * This is the same interim retrieval concept currently used by the
  * backend. It is not semantic/vector retrieval.
  */
-function retrieveOffline(
-  category: string,
-  queryText: string
-): KbEntry | null {
+function retrieveOffline(category: string, queryText: string): KbEntry | null {
   if (!(category in kbData)) {
     return null;
   }
@@ -85,9 +82,7 @@ function retrieveOffline(
     const entryText = `${entry.question || ""} ${entry.answer || ""}`;
     const entryTokens = new Set(tokenize(entryText));
 
-    const score = queryTokens.filter((token) =>
-      entryTokens.has(token)
-    ).length;
+    const score = queryTokens.filter((token) => entryTokens.has(token)).length;
 
     if (score > bestScore) {
       bestScore = score;
@@ -121,10 +116,7 @@ export function handleQueryOffline(queryText: string): QueryResponse {
     };
   }
 
-  const retrieved = retrieveOffline(
-    classification.label,
-    queryText
-  );
+  const retrieved = retrieveOffline(classification.label, queryText);
 
   if (!retrieved) {
     return {
@@ -141,14 +133,14 @@ export function handleQueryOffline(queryText: string): QueryResponse {
 
   return {
     outcome: "grounded_answer",
-    message: retrieved.answer || "",
+    message: retrieved.answer ?? "",
     category: classification.label,
     generated: false,
     generationInvoked: false,
     note:
       "Offline mode: answer provided from the locally stored " +
       "knowledge base, not live-generated.",
-    source: retrieved.source || undefined,
-    safetyNotes: retrieved.safetyNotes || undefined,
+    source: retrieved.source ?? undefined,
+    safetyNotes: retrieved.safetyNotes ?? undefined,
   };
 }
