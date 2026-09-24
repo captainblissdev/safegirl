@@ -23,6 +23,7 @@ KB_DIR = os.path.join(
     "..",
     "..",
     "..",
+    "..",
     "resources",
     "knowledge_base",
 )
@@ -30,9 +31,8 @@ KB_DIR = os.path.join(
 OUT_PATH = os.path.join(
     os.path.dirname(__file__),
     "..",
-    "src",
     "offline",
-    "kbData.json",
+    "Kbdata.json",
 )
 
 ACTIVE_CATEGORIES = [
@@ -84,7 +84,7 @@ def parse_kb_file(path):
 
 
 def main():
-    """Build kbData.json from the active knowledge-base files."""
+    """Build Kbdata.json from the active knowledge-base files."""
     kb = {}
 
     for category in ACTIVE_CATEGORIES:
