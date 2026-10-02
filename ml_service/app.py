@@ -75,7 +75,7 @@ from typing import Optional
 
 import torch
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
@@ -97,6 +97,9 @@ MODEL_VERSION = os.environ.get("MODEL_VERSION", "v3")
 MAX_LENGTH = 64
 
 MAX_INPUT_CHARS = 2_000
+
+# Upper bound on /retrieve's top_k.
+MAX_TOP_K = 10
 
 EXPECTED_LABELS = {
     "contraception",
@@ -179,6 +182,7 @@ class RetrieveRequest(BaseModel):
     top_k: int = Field(
         default=3,
         ge=1,
+        le=MAX_TOP_K,
         description="Maximum number of passages to return.",
     )
 
@@ -191,19 +195,35 @@ class RetrieveRequest(BaseModel):
         ),
     )
 
+    @field_validator("intent")
+    @classmethod
+    def validate_intent(cls, value: Optional[str]) -> Optional[str]:
+        """Reject unknown classes instead of silently returning no results."""
+        if value is None:
+            return None
+
+        normalized = value.strip().lower()
+
+        if normalized not in EXPECTED_LABELS:
+            raise ValueError(
+                f"intent must be one of {sorted(EXPECTED_LABELS)}."
+            )
+
+        return normalized
+
 
 class RetrieveResult(BaseModel):
     """A single ranked knowledge-base passage."""
 
+    # 'class' is a reserved word in Python; serialized under its alias.
+    model_config = ConfigDict(populate_by_name=True)
+
     id: str
-    class_: str = Field(alias="class")  # 'class' is a reserved word in Python
+    class_: str = Field(alias="class")
     title: str
     content: str
     source: str
     score: float
-
-    class Config:
-        populate_by_name = True
 
 
 class RetrieveResponse(BaseModel):
@@ -304,9 +324,11 @@ def load_retriever() -> None:
     Load the knowledge-base retriever into memory.
 
     This function is called once when the FastAPI application starts,
-    alongside load_model(). A failure here does not fall back to
-    partial retriever state — the retriever is left as None so /retrieve
-    fails loudly (503) rather than silently returning nothing.
+    alongside load_model(). A failure here is logged but not fatal:
+    classification does not depend on the knowledge base, so /classify
+    stays available while the retriever is left as None and /retrieve
+    fails loudly (503) rather than silently returning nothing. /health
+    reports the service as "degraded" in that state.
     """
 
     global retriever
@@ -318,12 +340,16 @@ def load_retriever() -> None:
 
     try:
         retriever = KnowledgeBaseRetriever(KB_PATH)
-    except Exception as exc:
+    except Exception:
         retriever = None
 
-        raise RuntimeError(
-            f"Failed to load SafeGirl knowledge base from '{KB_PATH}'."
-        ) from exc
+        logger.exception(
+            "Failed to load SafeGirl knowledge base from '%s'. /retrieve "
+            "will return 503 until the service is restarted with a valid "
+            "knowledge base (generate it with build_kb.py).",
+            KB_PATH,
+        )
+        return
 
     logger.info(
         "SafeGirl knowledge-base retriever loaded successfully."
@@ -373,25 +399,33 @@ app = FastAPI(
 # ============================================================================
 
 @app.get("/health")
-def health() -> dict[str, str]:
+def health() -> dict[str, str | int]:
     """
     Return service health and model information.
 
     This endpoint can be used by the Express backend or deployment
     tooling to determine whether the classifier service is available.
+
+    status:
+        "ok"               classifier and retriever loaded
+        "degraded"         classifier loaded, retriever unavailable
+                           (/classify works, /retrieve returns 503)
+        "model_not_loaded" classifier unavailable
     """
 
     if model is None:
-        return {
-            "status": "model_not_loaded",
-            "device": str(DEVICE),
-            "model_version": MODEL_VERSION,
-        }
+        status = "model_not_loaded"
+    elif retriever is None:
+        status = "degraded"
+    else:
+        status = "ok"
 
     return {
-        "status": "ok",
+        "status": status,
         "device": str(DEVICE),
         "model_version": MODEL_VERSION,
+        "retriever": "ok" if retriever is not None else "not_loaded",
+        "kb_entries": len(retriever.entries) if retriever is not None else 0,
     }
 
 
