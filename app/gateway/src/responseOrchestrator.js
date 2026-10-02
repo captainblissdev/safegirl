@@ -18,7 +18,20 @@
  *
  * The referral content is currently a placeholder pending authoritative
  * sourcing and review.
+ *
+ * A clear query never returns a null message: when no knowledge-base
+ * answer is available for any reason (unknown or empty category, missing
+ * KB file, blank answer), NO_ANSWER_MESSAGE is returned instead.
  */
+
+/**
+ * Returned when the Safety Net is clear but no knowledge-base answer is
+ * available. It makes no health claims of its own.
+ */
+const NO_ANSWER_MESSAGE =
+  "I don't have a specific answer for that yet. A health worker at a " +
+  "youth-friendly clinic, or another adult you trust, can help you with " +
+  "this question.";
 
 /**
  * Combine Safety Net, classification, and generation results.
@@ -54,6 +67,31 @@ function orchestrate({ safety, classification, generation }) {
     };
   }
 
+  const category = classification ? classification.label : null;
+
+  /**
+   * No-answer path:
+   * The Safety Net is clear but there is no knowledge-base answer to
+   * return. The outcome stays "grounded_answer" because that is the only
+   * non-referral outcome the interface handles; answerFound tells the
+   * two cases apart.
+   */
+  if (!generation || !generation.text) {
+    return {
+      outcome: "grounded_answer",
+      message: NO_ANSWER_MESSAGE,
+      category,
+      answerFound: false,
+      generated: false,
+      note:
+        (generation && generation.note) ||
+        "No knowledge-base answer was available for this query.",
+      source: null,
+      safetyNotes: null,
+      generationInvoked: true,
+    };
+  }
+
   /**
    * Normal path:
    * The Safety Net is clear, so the retrieved/generation result can
@@ -61,14 +99,15 @@ function orchestrate({ safety, classification, generation }) {
    */
   return {
     outcome: "grounded_answer",
-    message: generation ? generation.text : null,
-    category: classification ? classification.label : null,
-    generated: generation ? generation.generated : false,
-    note: generation ? generation.note : null,
-    source: generation ? generation.source : null,
-    safetyNotes: generation ? generation.safetyNotes : null,
+    message: generation.text,
+    category,
+    answerFound: true,
+    generated: generation.generated,
+    note: generation.note,
+    source: generation.source,
+    safetyNotes: generation.safetyNotes,
     generationInvoked: true,
   };
 }
 
-module.exports = { orchestrate };
+module.exports = { orchestrate, NO_ANSWER_MESSAGE };
