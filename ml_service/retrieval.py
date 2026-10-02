@@ -71,7 +71,10 @@ class KnowledgeBaseRetriever:
         logger.info(f"Loading embedding model: {EMBEDDING_MODEL_NAME}")
         self.model = SentenceTransformer(EMBEDDING_MODEL_NAME)
 
-        passages = [PASSAGE_PREFIX + e["content"] for e in self.entries]
+        passages = [
+            PASSAGE_PREFIX + e["title"] + ". " + e["content"]
+            for e in self.entries
+        ]
         self.embeddings = self.model.encode(
             passages, convert_to_numpy=True, normalize_embeddings=True
         )
