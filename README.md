@@ -291,7 +291,7 @@ node server.js
 
 #### Authentication
 
-`POST /api/query` requires a Firebase Anonymous Authentication ID token in an `Authorization: Bearer <token>` header; `/health` does not. Every failure returns `401 {"error":"Authentication required."}`. Only a fixed reason category (such as `expired` or `invalid`) is logged, never the token or the user ID.
+`POST /api/query` requires a Firebase Anonymous Authentication ID token in an `Authorization: Bearer <token>` header; `/health` does not. A missing, malformed, invalid, expired or revoked token returns `401 {"error":"Authentication required."}`. If tokens cannot be checked at all (for example Google's public keys cannot be fetched, or the verifier is misconfigured), the gateway returns `503 {"error":"Service temporarily unavailable."}` instead, so an outage never looks like a bad token. Only a fixed reason category (such as `expired` or `invalid`) or an error code is logged, never the token, the error message or the user ID.
 
 The gateway verifies tokens against Google's public keys and needs only the Firebase project ID (`FIREBASE_PROJECT_ID`, in the table below). **It no longer needs the service-account JSON.**
 

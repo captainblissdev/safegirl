@@ -14,6 +14,8 @@ const {
   createFirebaseVerifier,
   resolveAuthConfig,
   AUTH_REQUIRED,
+  SERVICE_UNAVAILABLE,
+  VERIFIER_UNAVAILABLE,
   DISABLED_WARNING,
 } = require("../src/middleware/sessionAuth");
 const { captureOutput } = require("./support");
@@ -101,10 +103,9 @@ describe("createAuthMiddleware()", () => {
     ["auth/id-token-revoked", "revoked"],
     ["auth/user-disabled", "disabled"],
     ["auth/argument-error", "invalid"],
-    ["auth/internal-error", "verifier_error"],
-    [undefined, "verifier_error"],
+    ["auth/some-future-code", "unrecognized_code"],
   ]) {
-    it(`maps verifier error ${code ?? "(no code)"} to the "${reason}" category with the same body`, async () => {
+    it(`treats token failure ${code} as 401 "${reason}" with the shared body`, async () => {
       const middleware = createAuthMiddleware({
         verifyIdToken: fakeVerifier(firebaseError(code)),
       });
@@ -118,6 +119,70 @@ describe("createAuthMiddleware()", () => {
       assert.equal(output.trim(), `[auth] rejected request: ${reason}`);
     });
   }
+
+  for (const [name, error, loggedCode] of [
+    [
+      "a key-fetch outage",
+      firebaseError(VERIFIER_UNAVAILABLE),
+      VERIFIER_UNAVAILABLE,
+    ],
+    [
+      "auth/internal-error",
+      firebaseError("auth/internal-error"),
+      "auth/internal-error",
+    ],
+    [
+      "auth/invalid-credential (misconfiguration)",
+      firebaseError("auth/invalid-credential"),
+      "auth/invalid-credential",
+    ],
+    ["a network error code", firebaseError("ECONNRESET"), "ECONNRESET"],
+    ["an error with no code", new Error("boom"), "unknown"],
+    [
+      "an error with an unloggable code",
+      firebaseError("weird code with spaces and a token eyJ"),
+      "unknown",
+    ],
+  ]) {
+    it(`treats ${name} as 503, logging only "verifier_error" and the code`, async () => {
+      const middleware = createAuthMiddleware({
+        verifyIdToken: fakeVerifier(error),
+      });
+      const { res, nextCalled, output } = await run(middleware, {
+        authorization: "Bearer some-token",
+      });
+
+      assert.equal(res.statusCode, 503);
+      assert.deepEqual(res.body, SERVICE_UNAVAILABLE);
+      assert.deepEqual(res.body, { error: "Service temporarily unavailable." });
+      assert.equal(nextCalled, false);
+      assert.equal(
+        output.trim(),
+        `[auth] verifier_error (code: ${loggedCode})`,
+      );
+    });
+  }
+
+  it("never logs the message or token of a verifier failure either", async () => {
+    const error = firebaseError(
+      "auth/internal-error",
+      `upstream said ${TOKEN_MARKER} while fetching`,
+    );
+    const middleware = createAuthMiddleware({
+      verifyIdToken: fakeVerifier(error),
+    });
+    const token = `${TOKEN_MARKER}.payload.MARKER-sig`;
+
+    const { res, output } = await run(middleware, {
+      authorization: `Bearer ${token}`,
+    });
+
+    assert.equal(res.statusCode, 503);
+    for (const fragment of [TOKEN_MARKER, "MARKER", "upstream said"]) {
+      assert.ok(!JSON.stringify(res.body).includes(fragment));
+      assert.ok(!output.includes(fragment), `logs contain ${fragment}`);
+    }
+  });
 
   it("accepts a valid token: calls next() with req.uid set, and logs nothing", async () => {
     const middleware = createAuthMiddleware({ verifyIdToken: fakeVerifier() });
@@ -174,14 +239,89 @@ describe("createAuthMiddleware()", () => {
   });
 });
 
-describe("createFirebaseVerifier()", () => {
+describe("createFirebaseVerifier() with the real firebase-admin", () => {
+  const b64 = (value) =>
+    Buffer.from(JSON.stringify(value)).toString("base64url");
+  const now = Math.floor(Date.now() / 1000);
+  // Well-formed but unsigned token; verification needs Google's keys.
+  const wellFormedToken = [
+    b64({ alg: "RS256", kid: "probe-kid", typ: "JWT" }),
+    b64({
+      aud: "demo-safegirl-test",
+      iss: "https://securetoken.google.com/demo-safegirl-test",
+      sub: "probe-user",
+      iat: now - 60,
+      auth_time: now - 60,
+      exp: now + 3600,
+    }),
+    Buffer.from("not-a-signature").toString("base64url"),
+  ].join(".");
+
+  const resetFirebaseApp = async () => {
+    const { deleteApp, getApps } = require("firebase-admin/app");
+    for (const app of getApps()) {
+      await deleteApp(app);
+    }
+  };
+
   it("needs only a project ID: a malformed token is rejected as invalid, not a credential error", async () => {
+    await resetFirebaseApp();
     const verify = createFirebaseVerifier({ projectId: "demo-safegirl-test" });
 
     await assert.rejects(verify("not.a.jwt"), (error) => {
       assert.equal(error.code, "auth/argument-error");
       return true;
     });
+  });
+
+  it("reports a key-fetch outage as verifier-unavailable, so the middleware returns 503", async () => {
+    // Simulate the network being down for firebase-admin's key fetch.
+    const https = require("node:https");
+    const http2 = require("node:http2");
+    const original = {
+      request: https.request,
+      get: https.get,
+      connect: http2.connect,
+    };
+    const fail = () => {
+      throw Object.assign(
+        new Error("getaddrinfo ENOTFOUND www.googleapis.com"),
+        {
+          code: "ENOTFOUND",
+        },
+      );
+    };
+    https.request = fail;
+    https.get = fail;
+    http2.connect = fail;
+
+    try {
+      await resetFirebaseApp();
+      const verify = createFirebaseVerifier({
+        projectId: "demo-safegirl-test",
+      });
+
+      await assert.rejects(verify(wellFormedToken), (error) => {
+        assert.equal(error.code, VERIFIER_UNAVAILABLE);
+        return true;
+      });
+
+      const middleware = createAuthMiddleware({ verifyIdToken: verify });
+      const { res, output } = await run(middleware, {
+        authorization: `Bearer ${wellFormedToken}`,
+      });
+      assert.equal(res.statusCode, 503);
+      assert.deepEqual(res.body, SERVICE_UNAVAILABLE);
+      assert.equal(
+        output.trim(),
+        `[auth] verifier_error (code: ${VERIFIER_UNAVAILABLE})`,
+      );
+      assert.ok(!output.includes("ENOTFOUND"));
+    } finally {
+      Object.assign(https, { request: original.request, get: original.get });
+      http2.connect = original.connect;
+      await resetFirebaseApp();
+    }
   });
 });
 

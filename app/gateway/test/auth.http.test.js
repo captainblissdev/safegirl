@@ -22,9 +22,16 @@ const { startApp, captureOutput, request } = require("./support");
 const VALID_TOKEN = "valid-token-123";
 const UID = "anon-uid-SECRET-42";
 
+const OUTAGE_TOKEN = "token-during-outage";
+
 const fakeVerifier = async (token) => {
   if (token === VALID_TOKEN) {
     return { uid: UID };
+  }
+  if (token === OUTAGE_TOKEN) {
+    throw Object.assign(new Error("keys unavailable"), {
+      code: "gateway/verifier-unavailable",
+    });
   }
   throw Object.assign(new Error("bad token"), { code: "auth/argument-error" });
 };
@@ -36,7 +43,7 @@ function buildApp(env) {
   const calls = [];
   const authMiddleware = createAuthFromEnv(env, {
     verifyIdToken: fakeVerifier,
-    logger: { warn() {} },
+    logger: { warn() {}, error() {} },
   });
   const app = createApp({
     handleQuery: async (...args) => {
@@ -94,6 +101,15 @@ describe("authentication enabled (FIREBASE_PROJECT_ID set)", () => {
     assert.deepEqual(res.json(), okResult);
     assert.deepEqual(calls, [["hello"]]);
     assert.ok(!res.text.includes(UID));
+  });
+
+  it("returns 503, not 401, when tokens cannot be verified (verifier outage)", async () => {
+    calls.length = 0;
+    const res = await query(server.url, { token: OUTAGE_TOKEN });
+
+    assert.equal(res.status, 503);
+    assert.deepEqual(res.json(), { error: "Service temporarily unavailable." });
+    assert.equal(calls.length, 0);
   });
 
   it("serves /health without a token", async () => {
