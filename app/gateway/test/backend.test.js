@@ -9,6 +9,7 @@
  * 3. General youth-friendly query and category-scoped retrieval.
  * 4. Pregnancy query while ensuring HELD content is excluded.
  * 5. Input validation for an empty query.
+ * 6. A clear query with no KB answer never returns a null message.
  *
  * These tests validate the interim pipeline and do not represent
  * final evaluation of the DistilBERT classifier, semantic retrieval,
@@ -17,6 +18,12 @@
 
 const assert = require("assert");
 const { handleQuery } = require("../src/backend");
+const { generate } = require("../src/generationModule");
+const { retrieve } = require("../src/retrievalModule");
+const {
+  orchestrate,
+  NO_ANSWER_MESSAGE,
+} = require("../src/responseOrchestrator");
 
 async function run() {
   /**
@@ -126,6 +133,39 @@ async function run() {
     console.log("  correctly threw:", err.message);
     console.log("  PASS\n");
   }
+
+  /**
+   * Test 6 — No knowledge-base answer
+   *
+   * Verifies that a clear query whose label has no KB entries (e.g. a
+   * future classifier label, or "gbv", which is never loaded) gets a
+   * safe fallback message rather than message: null.
+   */
+  console.log("Test 6: no KB answer — should never return a null message");
+
+  const clear = { flagged: false, matchedKeywords: [] };
+  const noAnswerCases = {
+    "label with no KB entries": generate(retrieve("gbv", "what is consent")),
+    "generation skipped (null)": null,
+    "blank answer text": { generated: false, text: "", note: null },
+  };
+
+  for (const [name, generation] of Object.entries(noAnswerCases)) {
+    const r6 = orchestrate({
+      safety: clear,
+      classification: { label: "gbv" },
+      generation,
+    });
+
+    assert.strictEqual(r6.outcome, "grounded_answer", name);
+    assert.strictEqual(r6.message, NO_ANSWER_MESSAGE, name);
+    assert.strictEqual(r6.answerFound, false, name);
+    assert.strictEqual(r6.source, null, name);
+    console.log(`  ${name}: fallback message returned`);
+  }
+
+  assert.strictEqual(r1.answerFound, true);
+  console.log("  PASS\n");
 
   console.log("All tests passed.");
 }
