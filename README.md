@@ -278,12 +278,26 @@ cd app/gateway
 
 npm install
 npm test
+```
+
+The gateway refuses to start until authentication is configured. For local development (PowerShell):
+
+```powershell
+$env:AUTH_DISABLED = "true"   # local development only, see below
 node server.js
 ```
 
-`npm test` runs the backend integration checks plus the `node:test` unit tests for the classifier client and the backend wiring. None of them need `ml_service` running.
+`npm test` runs the backend integration checks plus the `node:test` tests for the classifier client, the backend wiring, error handling and authentication. None of them need `ml_service`, a Firebase project or any credentials.
 
-#### Classifier service configuration
+#### Authentication
+
+`POST /api/query` requires a Firebase Anonymous Authentication ID token in an `Authorization: Bearer <token>` header; `/health` does not. Every failure returns `401 {"error":"Authentication required."}`. Only a fixed reason category (such as `expired` or `invalid`) is logged, never the token or the user ID.
+
+The gateway verifies tokens against Google's public keys and needs only the Firebase project ID (`FIREBASE_PROJECT_ID`, in the table below). **It no longer needs the service-account JSON.**
+
+`AUTH_DISABLED` is for **local development only. Never set it on a deployed host.**
+
+#### Configuration
 
 The gateway classifies queries and retrieves knowledge-base entries through `ml_service` (DistilBERT classifier and semantic retrieval). If `ml_service` is unreachable, times out or returns an error, the gateway falls back to the keyword classifier and local keyword retrieval, so it keeps answering without it.
 
@@ -291,6 +305,8 @@ The gateway reads these environment variables (it does not load `.env` files):
 
 | Variable | Default | Purpose |
 |---|---|---|
+| `FIREBASE_PROJECT_ID` | none | Firebase project whose ID tokens are accepted. Required while authentication is enabled; without it the gateway refuses to start |
+| `AUTH_DISABLED` | unset | **Local development only.** Exactly `true` disables authentication when `NODE_ENV` is not `production`, and logs a warning at startup. With `NODE_ENV=production` the gateway refuses to start. Any other value leaves authentication on |
 | `CLASSIFIER_SERVICE_URL` | `http://127.0.0.1:8001` | Base URL of `ml_service` |
 | `CLASSIFIER_CONFIDENCE_THRESHOLD` | `0.5` | At or above this confidence, retrieval is scoped to the predicted category; below it, retrieval searches all categories |
 | `CLASSIFIER_ABSTAIN_THRESHOLD` | `0.35` | Below this confidence, no retrieval is attempted and the gateway returns its standard "no specific answer" message instead of a likely irrelevant entry. Must be strictly below `CLASSIFIER_CONFIDENCE_THRESHOLD` |
@@ -301,6 +317,8 @@ Empty or invalid values fall back to the defaults, with a logged warning. Each r
 Both thresholds are provisional. They were chosen from a handful of test queries and will be calibrated in the retrieval evaluation.
 
 When `ml_service` is unavailable, the keyword fallback still answers, but its retrieval is weaker. For example, it answers "when should I start antenatal visits" with KB-P1 (pelvic exams at the first visit) instead of KB-P2 (antenatal checkups), which `ml_service` returns.
+
+`ml_service` has **no authentication** of its own. Bind it to `127.0.0.1` (as below) or otherwise make it unreachable from anywhere except the gateway; if it is exposed, it bypasses the gateway's authentication.
 
 To start `ml_service` locally (PowerShell, from the repository root):
 
