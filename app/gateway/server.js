@@ -16,6 +16,38 @@
 const express = require("express");
 
 /**
+ * Maximum accepted JSON body size. A query is a single chat message;
+ * even 2,000 characters of multi-byte text stays well under this, and
+ * ml_service rejects text over 2,000 characters anyway.
+ */
+const BODY_LIMIT = "10kb";
+
+/**
+ * Error responses. Fixed strings only: no error message, stack or
+ * request content is ever echoed to the client.
+ */
+const ERRORS = Object.freeze({
+  malformedBody: "Malformed request body.",
+  tooLarge: "Request too large.",
+  notFound: "Not found.",
+  internal: "Unable to process query.",
+});
+
+/**
+ * True for errors raised by body-parser (express.json) while reading or
+ * parsing a request body: malformed JSON, unsupported charset/encoding,
+ * aborted requests and similar client errors.
+ */
+function isBodyParserError(err) {
+  return (
+    typeof err.type === "string" &&
+    Number.isInteger(err.status) &&
+    err.status >= 400 &&
+    err.status < 500
+  );
+}
+
+/**
  * Build the SafeGirl Express application.
  *
  * @param {object} deps
@@ -23,15 +55,25 @@ const express = require("express");
  *        processing pipeline.
  * @param {Function} deps.authMiddleware - Express middleware run before
  *        POST /api/query.
+ * @param {object} [deps.logger] - Logger with an error() method.
  * @returns {import("express").Express} The configured application.
  */
-function createApp({ handleQuery, authMiddleware }) {
+function createApp({ handleQuery, authMiddleware, logger = console }) {
   const app = express();
 
   /**
-   * Parse incoming JSON request bodies.
+   * Log a fixed event string plus the error's class name only. The error
+   * message, stack, request body and any user text are never logged:
+   * body-parser messages, for example, can quote the start of the body.
    */
-  app.use(express.json());
+  const logFailure = (event, err) => {
+    logger.error(`[gateway] ${event} (${err && err.name})`);
+  };
+
+  /**
+   * Parse incoming JSON request bodies, up to BODY_LIMIT.
+   */
+  app.use(express.json({ limit: BODY_LIMIT }));
 
   /**
    * POST /api/query
@@ -43,7 +85,7 @@ function createApp({ handleQuery, authMiddleware }) {
    * intent classification, retrieval, generation, and response
    * orchestration.
    */
-  app.post("/api/query", authMiddleware, async (req, res) => {
+  app.post("/api/query", authMiddleware, async (req, res, next) => {
     try {
       const { text } = req.body;
 
@@ -59,12 +101,8 @@ function createApp({ handleQuery, authMiddleware }) {
 
       return res.json(result);
     } catch (err) {
-      // Log processing errors for development and debugging.
-      console.error("Query processing error:", err);
-
-      return res.status(400).json({
-        error: err.message || "Unable to process query.",
-      });
+      // Handled by the error middleware below: 500 with a fixed message.
+      return next(err);
     }
   });
 
@@ -76,6 +114,39 @@ function createApp({ handleQuery, authMiddleware }) {
    */
   app.get("/health", (req, res) => {
     res.json({ status: "ok" });
+  });
+
+  /**
+   * Unknown routes: JSON 404 instead of Express's HTML page.
+   */
+  app.use((req, res) => {
+    res.status(404).json({ error: ERRORS.notFound });
+  });
+
+  /**
+   * Error handler. Replaces Express's default handler, which logs the
+   * full error (including body-parser messages that quote the request
+   * body) and returns an HTML page with a stack trace.
+   */
+  // eslint-disable-next-line no-unused-vars -- Express needs 4 arguments.
+  app.use((err, req, res, next) => {
+    if (res.headersSent) {
+      logFailure("response failed after headers were sent", err);
+      return res.end();
+    }
+
+    if (err.type === "entity.too.large") {
+      logFailure("rejected request body: too large", err);
+      return res.status(413).json({ error: ERRORS.tooLarge });
+    }
+
+    if (isBodyParserError(err)) {
+      logFailure("rejected request body: malformed", err);
+      return res.status(400).json({ error: ERRORS.malformedBody });
+    }
+
+    logFailure("request failed", err);
+    return res.status(500).json({ error: ERRORS.internal });
   });
 
   return app;
@@ -103,4 +174,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { createApp };
+module.exports = { createApp, BODY_LIMIT };
