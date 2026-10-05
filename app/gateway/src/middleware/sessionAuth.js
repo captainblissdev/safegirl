@@ -174,7 +174,46 @@ function resolveAuthConfig(env) {
   return { authEnabled: true, projectId, warnings };
 }
 
+/**
+ * Pass-through used only when AUTH_DISABLED=true in development.
+ */
+function allowUnauthenticated(req, res, next) {
+  return next();
+}
+
+/**
+ * Build the auth middleware for POST /api/query from environment
+ * variables. Run once at startup: it logs resolveAuthConfig's warnings
+ * (including the AUTH DISABLED warning) once and throws when the gateway
+ * must refuse to start.
+ *
+ * @param {object} env - Environment variables.
+ * @param {object} [deps]
+ * @param {Function} [deps.verifyIdToken] - Overrides the Firebase
+ *        verifier (tests).
+ * @param {object} [deps.logger] - Logger with a warn() method.
+ * @returns {Function} Express middleware.
+ */
+function createAuthFromEnv(env, { verifyIdToken, logger = console } = {}) {
+  const config = resolveAuthConfig(env);
+
+  for (const warning of config.warnings) {
+    logger.warn(warning);
+  }
+
+  if (!config.authEnabled) {
+    return allowUnauthenticated;
+  }
+
+  return createAuthMiddleware({
+    verifyIdToken:
+      verifyIdToken || createFirebaseVerifier({ projectId: config.projectId }),
+    logger,
+  });
+}
+
 module.exports = {
+  createAuthFromEnv,
   createAuthMiddleware,
   createFirebaseVerifier,
   resolveAuthConfig,
