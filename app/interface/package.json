@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
-    "test": "tsx src/offline/offlinePipeline.test.ts",
+    "test": "tsx src/offline/offlinePipeline.test.ts && tsx src/api/client.test.ts && tsx src/auth/session.test.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
