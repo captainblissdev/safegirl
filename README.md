@@ -293,9 +293,16 @@ The gateway reads these environment variables (it does not load `.env` files):
 |---|---|---|
 | `CLASSIFIER_SERVICE_URL` | `http://127.0.0.1:8001` | Base URL of `ml_service` |
 | `CLASSIFIER_CONFIDENCE_THRESHOLD` | `0.5` | At or above this confidence, retrieval is scoped to the predicted category; below it, retrieval searches all categories |
+| `CLASSIFIER_ABSTAIN_THRESHOLD` | `0.35` | Below this confidence, no retrieval is attempted and the gateway returns its standard "no specific answer" message instead of a likely irrelevant entry. Must be strictly below `CLASSIFIER_CONFIDENCE_THRESHOLD` |
 | `CLASSIFIER_TIMEOUT_MS` | `3000` | Timeout for each request to `ml_service`, in milliseconds |
 
-Empty or invalid values fall back to the defaults. To start `ml_service` locally (PowerShell, from the repository root):
+Empty or invalid values fall back to the defaults, with a logged warning. Each response reports how its answer was found in `retrievalScope`: `scoped`, `unscoped`, `abstained`, or `local` (keyword retrieval).
+
+Both thresholds are provisional. They were chosen from a handful of test queries and will be calibrated in the retrieval evaluation.
+
+When `ml_service` is unavailable, the keyword fallback still answers, but its retrieval is weaker. For example, it answers "when should I start antenatal visits" with KB-P1 (pelvic exams at the first visit) instead of KB-P2 (antenatal checkups), which `ml_service` returns.
+
+To start `ml_service` locally (PowerShell, from the repository root):
 
 ```powershell
 cd ml_service
