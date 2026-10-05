@@ -190,7 +190,32 @@ function retrieve(category, queryText) {
   return best;
 }
 
+/**
+ * Look up an active knowledge-base entry by its id (e.g. "KB-C1").
+ *
+ * Used when ranking happens elsewhere (the ml_service /retrieve endpoint)
+ * so the caller still receives the gateway's own entry shape. Only active
+ * entries are searched, so an id from HELD content never resolves.
+ *
+ * @param {string} kbId - Knowledge-base entry id.
+ * @returns {object|null} The matching entry, or null if not found.
+ */
+function getEntryById(kbId) {
+  const kb = loadKnowledgeBase();
+
+  for (const entries of Object.values(kb)) {
+    const entry = entries.find((candidate) => candidate.kbId === kbId);
+
+    if (entry) {
+      return entry;
+    }
+  }
+
+  return null;
+}
+
 module.exports = {
   loadKnowledgeBase,
   retrieve,
+  getEntryById,
 };
