@@ -13,8 +13,10 @@
  * retrieve(text, classification)
  *   keyword_fallback: local keyword-overlap retrieve(label, text); ml_service
  *   is not contacted.
- *   distilbert: POST /retrieve, scoped to the predicted label when
- *   confidence >= threshold and unscoped otherwise. The top result's id is
+ *   distilbert: confidence < abstain threshold returns no entry (the
+ *   no-answer fallback) without contacting ml_service. Otherwise POST
+ *   /retrieve, scoped to the predicted label when confidence >= confidence
+ *   threshold and unscoped in between. The top result's id is
  *   resolved against the gateway's own knowledge base, so callers receive
  *   the same entry shape as local retrieval. On any failure, an empty result
  *   or an unknown id, local retrieve(label, text) is used instead.
@@ -29,24 +31,64 @@ const {
   getEntryById: localGetEntryById,
 } = require("./retrievalModule");
 
+// Both thresholds are provisional, pending calibration in the retrieval
+// evaluation.
 const DEFAULT_CONFIG = Object.freeze({
   serviceUrl: "http://127.0.0.1:8001",
   confidenceThreshold: 0.5,
+  abstainThreshold: 0.35,
   timeoutMs: 3000,
 });
 
 const RETRIEVE_TOP_K = 3;
 
+const isProbability = (value) =>
+  typeof value === "number" &&
+  Number.isFinite(value) &&
+  value >= 0 &&
+  value <= 1;
+
+/**
+ * Ensure abstainThreshold < confidenceThreshold, so no confidence is
+ * both "abstain" and "scoped". An invalid abstain threshold is replaced
+ * by the default; if the default is not below the confidence threshold
+ * either, abstaining is disabled (0).
+ */
+function enforceThresholdOrder(config, logger) {
+  const { abstainThreshold, confidenceThreshold } = config;
+
+  if (abstainThreshold < confidenceThreshold) {
+    return config;
+  }
+
+  const fallback =
+    DEFAULT_CONFIG.abstainThreshold < confidenceThreshold
+      ? DEFAULT_CONFIG.abstainThreshold
+      : 0;
+
+  logger.warn(
+    `[classifierClient] abstain threshold ${abstainThreshold} must be below ` +
+      `the confidence threshold ${confidenceThreshold}; using ${fallback}` +
+      (fallback === 0 ? " (abstaining disabled)" : ""),
+  );
+
+  return { ...config, abstainThreshold: fallback };
+}
+
 /**
  * Read client configuration from environment variables.
  *
- * Invalid values fall back to the defaults rather than, for example,
- * turning a typo into a threshold that scopes every query or none.
+ * Invalid values fall back to the defaults, with a logged warning, rather
+ * than, for example, turning a typo into a threshold that scopes every
+ * query or none. CLASSIFIER_ABSTAIN_THRESHOLD must also be strictly below
+ * CLASSIFIER_CONFIDENCE_THRESHOLD.
  *
- * @param {object} env - Environment variables (defaults to process.env).
- * @returns {{serviceUrl: string, confidenceThreshold: number, timeoutMs: number}}
+ * @param {object} [env] - Environment variables (defaults to process.env).
+ * @param {object} [logger] - Logger with a warn() method.
+ * @returns {{serviceUrl: string, confidenceThreshold: number,
+ *            abstainThreshold: number, timeoutMs: number}}
  */
-function configFromEnv(env = process.env) {
+function configFromEnv(env = process.env, logger = console) {
   // Unset, empty and whitespace-only values all mean "use the default"
   // (Number("") is 0, which would otherwise be a valid threshold).
   const read = (name) => {
@@ -56,27 +98,45 @@ function configFromEnv(env = process.env) {
       : undefined;
   };
 
-  const rawThreshold = read("CLASSIFIER_CONFIDENCE_THRESHOLD");
-  const rawTimeout = read("CLASSIFIER_TIMEOUT_MS");
-  const threshold = Number(rawThreshold);
-  const timeoutMs = Number(rawTimeout);
+  const parse = (name, isValid, fallback) => {
+    const raw = read(name);
+    if (raw === undefined) {
+      return fallback;
+    }
 
-  return {
+    const value = Number(raw);
+    if (isValid(value)) {
+      return value;
+    }
+
+    logger.warn(
+      `[classifierClient] ignoring invalid ${name}=${JSON.stringify(raw)}; using ${fallback}`,
+    );
+    return fallback;
+  };
+
+  const config = {
     serviceUrl: (
       read("CLASSIFIER_SERVICE_URL") || DEFAULT_CONFIG.serviceUrl
     ).replace(/\/+$/, ""),
-    confidenceThreshold:
-      rawThreshold !== undefined &&
-      Number.isFinite(threshold) &&
-      threshold >= 0 &&
-      threshold <= 1
-        ? threshold
-        : DEFAULT_CONFIG.confidenceThreshold,
-    timeoutMs:
-      rawTimeout !== undefined && Number.isInteger(timeoutMs) && timeoutMs > 0
-        ? timeoutMs
-        : DEFAULT_CONFIG.timeoutMs,
+    confidenceThreshold: parse(
+      "CLASSIFIER_CONFIDENCE_THRESHOLD",
+      isProbability,
+      DEFAULT_CONFIG.confidenceThreshold,
+    ),
+    abstainThreshold: parse(
+      "CLASSIFIER_ABSTAIN_THRESHOLD",
+      isProbability,
+      DEFAULT_CONFIG.abstainThreshold,
+    ),
+    timeoutMs: parse(
+      "CLASSIFIER_TIMEOUT_MS",
+      (value) => Number.isInteger(value) && value > 0,
+      DEFAULT_CONFIG.timeoutMs,
+    ),
   };
+
+  return enforceThresholdOrder(config, logger);
 }
 
 /**
@@ -101,10 +161,12 @@ function createClassifierClient({
   getEntryById = localGetEntryById,
   logger = console,
 } = {}) {
-  const { serviceUrl, confidenceThreshold, timeoutMs } = {
-    ...configFromEnv(),
-    ...config,
-  };
+  // Overrides could break the threshold order, so it is enforced again.
+  const { serviceUrl, confidenceThreshold, abstainThreshold, timeoutMs } =
+    enforceThresholdOrder(
+      { ...configFromEnv(process.env, logger), ...config },
+      logger,
+    );
 
   /**
    * POST a JSON body to ml_service and return the parsed response body.
@@ -159,6 +221,17 @@ function createClassifierClient({
 
     if (source === "keyword_fallback") {
       return retrieve(label, text);
+    }
+
+    // Abstain zone: the prediction is too uncertain to trust any entry,
+    // even unscoped. Returning no entry produces the no-answer fallback.
+    // A confidence exactly at the threshold is not abstained.
+    if (typeof confidence === "number" && confidence < abstainThreshold) {
+      logger.warn(
+        `[classifierClient] abstaining from retrieval: confidence ` +
+          `${confidence.toFixed(3)} is below the abstain threshold ${abstainThreshold}`,
+      );
+      return null;
     }
 
     const scoped =
