@@ -61,6 +61,7 @@ function createHandleQuery({ classifierClient }) {
 
     let generation = null;
     let retrievedEntry = null;
+    let retrievalScope = null;
 
     /**
      * Clear-query path:
@@ -72,10 +73,8 @@ function createHandleQuery({ classifierClient }) {
      * stage.
      */
     if (!safety.flagged) {
-      retrievedEntry = await classifierClient.retrieve(
-        queryText,
-        classification,
-      );
+      ({ entry: retrievedEntry, retrievalScope } =
+        await classifierClient.retrieve(queryText, classification));
       generation = generate(retrievedEntry);
     }
 
@@ -92,6 +91,7 @@ function createHandleQuery({ classifierClient }) {
       classification,
       generation,
       retrievedEntry,
+      retrievalScope,
     });
   };
 }

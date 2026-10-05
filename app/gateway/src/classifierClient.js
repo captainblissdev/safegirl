@@ -21,6 +21,9 @@
  *   the same entry shape as local retrieval. On any failure, an empty result
  *   or an unknown id, local retrieve(label, text) is used instead.
  *
+ *   Returns { entry, retrievalScope }: "scoped", "unscoped", "abstained" or
+ *   "local".
+ *
  * The Safety Net is deliberately not involved: it stays independent of
  * classification.
  */
@@ -216,11 +219,19 @@ function createClassifierClient({
     }
   }
 
+  /**
+   * Find the knowledge-base entry for a classified query.
+   *
+   * @returns {Promise<{entry: object|null, retrievalScope: string}>}
+   *   retrievalScope is "scoped" or "unscoped" (ml_service /retrieve),
+   *   "abstained" (no retrieval attempted) or "local" (keyword retrieval,
+   *   after a keyword fallback or an unusable /retrieve).
+   */
   async function retrieveEntry(text, classification) {
     const { label, confidence, source } = classification;
 
     if (source === "keyword_fallback") {
-      return retrieve(label, text);
+      return { entry: retrieve(label, text), retrievalScope: "local" };
     }
 
     // Abstain zone: the prediction is too uncertain to trust any entry,
@@ -231,7 +242,7 @@ function createClassifierClient({
         `[classifierClient] abstaining from retrieval: confidence ` +
           `${confidence.toFixed(3)} is below the abstain threshold ${abstainThreshold}`,
       );
-      return null;
+      return { entry: null, retrievalScope: "abstained" };
     }
 
     const scoped =
@@ -258,13 +269,13 @@ function createClassifierClient({
         );
       }
 
-      return entry;
+      return { entry, retrievalScope: scoped ? "scoped" : "unscoped" };
     } catch (error) {
       logger.warn(
         `[classifierClient] /retrieve unusable, using local retrieval: ${error.message}`,
       );
 
-      return retrieve(label, text);
+      return { entry: retrieve(label, text), retrievalScope: "local" };
     }
   }
 
