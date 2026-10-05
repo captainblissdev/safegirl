@@ -1,0 +1,58 @@
+[
+  {
+    "id": "KB-C1",
+    "class": "contraception",
+    "title": "Can I get birth control even though I'm a teenager?",
+    "content": "WHO guidance recommends that adolescents should be able to access contraceptive information and services without mandatory parental or guardian authorization or notification. Specific service or legal requirements may vary by setting.\n\nEvidence: WHO recommends adolescent SRH services, including contraceptive information and services, without mandatory parental/guardian authorization or notification.",
+    "source": "WHO Recommendations (2018), Ch. 3 §3.3.2, p. 12"
+  },
+  {
+    "id": "KB-C2",
+    "class": "contraception",
+    "title": "Do I need my parents' permission to get contraception?",
+    "content": "WHO guidance recommends that adolescents should be able to access contraceptive information and services without mandatory parental or guardian authorization or notification. This is WHO guidance and should not be interpreted as a statement of current Kenyan law.\n\nEvidence: Same as KB-C1.\n\nConditions: Exact legal age of consent under current Kenyan law not established by available sources — flagged, not stated.",
+    "source": "WHO Recommendations (2018), Ch. 3 §3.3.2, p. 12"
+  },
+  {
+    "id": "KB-S2",
+    "class": "sti",
+    "title": "Can teenagers access HIV testing without their parents?",
+    "content": "WHO guidance recommends that HIV testing services, including HIV self-testing, be accessible to adolescents without mandatory parental or guardian authorization or notification.\n\nEvidence: HIV testing services must be accessible to adolescents without mandatory parental authorization.\n\nConditions: Partner notification (if relevant) is handled separately with IPV-risk sensitivity — not covered in this entry.",
+    "source": "WHO Recommendations (2018), Ch. 7 §7.4, pp. 47–48"
+  },
+  {
+    "id": "KB-S3",
+    "class": "sti",
+    "title": "I might have been exposed to HIV. Is there something I can take to stop it?",
+    "content": "Yes — post-exposure prophylaxis (PEP) is a course of medication started as soon as possible after exposure. Both Kenyan and WHO guidance agree it should be started within 72 hours, since it becomes less effective the longer you wait.\n\nEvidence: PEP (28-day ARV regimen) must be initiated within 72 hours of exposure per both sources — this is one of the few points of full agreement between MoH and WHO.\n\nConditions: Specific drug names/dosing not established by sources — do not include in the answer.\n\nSafety notes: Must direct to immediate facility-based care — this is time-critical.",
+    "source": "Kenya MoH YFS Guidelines (2005), Annex 1, pp. 26–28 and WHO (2018), Ch. 7 §7.3.5/7.3.14, pp. 43, 46"
+  },
+  {
+    "id": "KB-P1",
+    "class": "pregnancy",
+    "title": "Do I have to get a pelvic exam right away at my first visit?",
+    "content": "No — youth-friendly facilities should let you delay pelvic exams and blood tests until you're ready, while still addressing your immediate needs another way.\n\nEvidence: YFS facilities must offer options to delay pelvic exams and blood tests until the client is psychologically/emotionally prepared, alongside alternative ways to meet immediate needs.\n\nConditions: 2005 document — flag for domain expert to confirm still standard practice.",
+    "source": "Kenya MoH YFS Guidelines (2005), Ch. 3 §3.3, p. 18"
+  },
+  {
+    "id": "KB-P2",
+    "class": "pregnancy",
+    "title": "Do I have to pay for antenatal checkups as a teenager?",
+    "content": "Maternal healthcare is expected to be free, confidential, and accessible without needing a third party's permission.\n\nEvidence: Maternal health care must be free, confidential, adolescent-responsive, and accessible without third-party authorization.",
+    "source": "WHO Recommendations (2018), Ch. 4 §4.2, p. 18"
+  },
+  {
+    "id": "KB-G1",
+    "class": "general",
+    "title": "Will the clinic tell my parents what I talked to them about?",
+    "content": "Youth-friendly health services are expected to keep what you share confidential, including from parents — except in specific situations where the law requires disclosure, which staff should explain to you clearly.\n\nEvidence: Providers must maintain confidentiality and not leak information to parents; legal exceptions exist but aren't specified in this source.\n\nConditions: Exact legal exceptions not established by this source — flag if a user's question implies a specific legal scenario.",
+    "source": "Kenya MoH YFS Guidelines (2005), Ch. 3 §3.2–3.3, pp. 16–17"
+  },
+  {
+    "id": "KB-G2",
+    "class": "general",
+    "title": "What age counts as \"youth\" or \"adolescent\" for these services?",
+    "content": "Kenyan services define adolescents as 10–19, youth as 15–24, and young people as 10–24 — these terms are often used interchangeably.\n\nEvidence: Age range definitions for target populations in Kenya.",
+    "source": "Kenya MoH YFS Guidelines (2005), Ch. 1 §1.1.2, p. 2"
+  }
+]

@@ -41,6 +41,16 @@ const DISTRESS_KEYWORDS = [
   "did not consent",
   "without my consent",
   "no consent",
+  // Consent-violation phrasing. The bare word "consent" is deliberately
+  // excluded: it also appears in legitimate questions (parental consent
+  // for contraception, consenting to an HIV test, age of consent).
+  "without consent",
+  "couldn't consent",
+  "could not consent",
+  "wouldn't consent",
+  "would not consent",
+  "didn't want to but",
+  "did not want to but",
   "assault",
   "sexual assault",
   "sexually assaulted",

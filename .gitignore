@@ -16,3 +16,6 @@ checkpoints/
 node_modules/
 app/gateway/firebase-service-account.json
 **/firebase-service-account*.json
+ml_service/final/
+ml_service/final/
+ml_service/venv/
