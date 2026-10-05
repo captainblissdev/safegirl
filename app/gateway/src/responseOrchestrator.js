@@ -36,14 +36,28 @@ const NO_ANSWER_MESSAGE =
 /**
  * Combine Safety Net, classification, and generation results.
  *
+ * category is the category of the knowledge-base entry actually served
+ * (null when no entry was found). It can differ from predictedCategory,
+ * the classifier's label, when low-confidence retrieval runs unscoped.
+ *
  * @param {object} params
  * @param {object} params.safety - Result from the Safety Net.
- * @param {object} params.classification - Result from the classifier.
+ * @param {object} params.classification - Result from the classifier:
+ *        { label, confidence, source }.
  * @param {object|null} params.generation - Generation result, or null
  *        when the normal generation pipeline was skipped.
+ * @param {object|null} [params.retrievedEntry] - The KB entry the answer
+ *        came from, or null/undefined when none was found.
  * @returns {object} Final response payload.
  */
-function orchestrate({ safety, classification, generation }) {
+function orchestrate({ safety, classification, generation, retrievedEntry }) {
+  // Which classifier ran and what it predicted, reported on every path.
+  const classifierInfo = {
+    predictedCategory: classification?.label ?? null,
+    classifierSource: classification?.source ?? null,
+    confidence: classification?.confidence ?? null,
+  };
+
   /**
    * Safety takes precedence over the normal answer-generation path.
    *
@@ -64,10 +78,11 @@ function orchestrate({ safety, classification, generation }) {
 
       // The generation pipeline is not continued after a safety flag.
       generationInvoked: false,
+      ...classifierInfo,
     };
   }
 
-  const category = classification ? classification.label : null;
+  const category = retrievedEntry?.category ?? null;
 
   /**
    * No-answer path:
@@ -89,6 +104,7 @@ function orchestrate({ safety, classification, generation }) {
       source: null,
       safetyNotes: null,
       generationInvoked: true,
+      ...classifierInfo,
     };
   }
 
@@ -107,6 +123,7 @@ function orchestrate({ safety, classification, generation }) {
     source: generation.source,
     safetyNotes: generation.safetyNotes,
     generationInvoked: true,
+    ...classifierInfo,
   };
 }
 

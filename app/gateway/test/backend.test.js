@@ -17,7 +17,23 @@
  */
 
 const assert = require("assert");
-const { handleQuery } = require("../src/backend");
+const { createHandleQuery } = require("../src/backend");
+const { createClassifierClient } = require("../src/classifierClient");
+
+/**
+ * These tests exercise the keyword pipeline, so ml_service is made
+ * unreachable: every request fails and the client falls back to the
+ * keyword classifier and local retrieval. Results therefore do not
+ * depend on whether ml_service happens to be running locally.
+ */
+const handleQuery = createHandleQuery({
+  classifierClient: createClassifierClient({
+    fetch: async () => {
+      throw new TypeError("ml_service disabled in these tests");
+    },
+    logger: { warn() {} },
+  }),
+});
 const { generate } = require("../src/generationModule");
 const { retrieve } = require("../src/retrievalModule");
 const {

@@ -113,6 +113,10 @@ function parseKbFile(filePath) {
  * Missing files are handled by returning an empty category rather than
  * causing the entire backend to fail.
  *
+ * Every entry is tagged with the category key of the file it came from
+ * (e.g. "sti"), so callers know an entry's category however it was
+ * found. The "intent" field holds the display name ("STIs") instead.
+ *
  * @returns {object} Knowledge base grouped by category.
  */
 function loadKnowledgeBase() {
@@ -120,8 +124,9 @@ function loadKnowledgeBase() {
 
   for (const category of ACTIVE_CATEGORIES) {
     const filePath = path.join(KB_DIR, `${category}.md`);
+    const entries = fs.existsSync(filePath) ? parseKbFile(filePath) : [];
 
-    kb[category] = fs.existsSync(filePath) ? parseKbFile(filePath) : [];
+    kb[category] = entries.map((entry) => ({ ...entry, category }));
   }
 
   return kb;
