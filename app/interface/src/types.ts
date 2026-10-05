@@ -26,6 +26,8 @@ export interface QueryResponse {
   predictedCategory?: string | null;
   classifierSource?: "distilbert" | "keyword_fallback" | null;
   confidence?: number | null;
+  // How the answer was retrieved; null on referrals (no retrieval).
+  retrievalScope?: "scoped" | "unscoped" | "abstained" | "local" | null;
 
   generationInvoked: boolean;
 }
