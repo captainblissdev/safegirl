@@ -13,70 +13,92 @@
  * the independence of the safety and classification components while
  * preventing the flagged query from continuing through the normal
  * response-generation pipeline.
+ *
+ * Classification and retrieval go through the classifier client: the
+ * DistilBERT classifier and semantic retrieval in ml_service, with the
+ * keyword classifier and local keyword retrieval as fallbacks.
  */
 
 const { checkSafety } = require("./safetyNet");
-const { KeywordBaselineClassifier } = require("./fallback/keywordClassifier");
-const { retrieve } = require("./retrievalModule");
+const { createClassifierClient } = require("./classifierClient");
 const { generate } = require("./generationModule");
 const { orchestrate } = require("./responseOrchestrator");
 
-// The keyword classifier is the frozen baseline used for comparison.
-const classifier = new KeywordBaselineClassifier();
-
 /**
- * Process a SafeGirl user query.
+ * Build a query handler around a classifier client.
  *
- * @param {string} queryText - User's SRH question.
- * @returns {Promise<object>} Final response produced by the orchestrator.
+ * The client is injectable so tests can replace ml_service.
+ *
+ * @param {object} deps
+ * @param {object} deps.classifierClient - Object with classify(text) and
+ *        retrieve(text, classification), as createClassifierClient returns.
+ * @returns {(queryText: string) => Promise<object>} Query handler.
  */
-async function handleQuery(queryText) {
-  // Validate the query before entering the processing pipeline.
-  if (typeof queryText !== "string" || queryText.trim().length === 0) {
-    throw new TypeError("queryText must be a non-empty string");
-  }
-
+function createHandleQuery({ classifierClient }) {
   /**
-   * Parallel dispatch:
-   * SafetyNet and the classifier run independently and concurrently.
+   * Process a SafeGirl user query.
    *
-   * Promise.resolve() allows the current synchronous scaffold
-   * implementations to work alongside future asynchronous versions.
+   * @param {string} queryText - User's SRH question.
+   * @returns {Promise<object>} Final response produced by the orchestrator.
    */
-  const [safety, classification] = await Promise.all([
-    Promise.resolve(checkSafety(queryText)),
-    Promise.resolve(classifier.classify(queryText)),
-  ]);
+  return async function handleQuery(queryText) {
+    // Validate the query before entering the processing pipeline.
+    if (typeof queryText !== "string" || queryText.trim().length === 0) {
+      throw new TypeError("queryText must be a non-empty string");
+    }
 
-  let generation = null;
+    /**
+     * Parallel dispatch:
+     * SafetyNet and the classifier run independently and concurrently.
+     *
+     * Promise.resolve() allows the current synchronous scaffold
+     * implementations to work alongside future asynchronous versions.
+     */
+    const [safety, classification] = await Promise.all([
+      Promise.resolve(checkSafety(queryText)),
+      Promise.resolve(classifierClient.classify(queryText)),
+    ]);
 
-  /**
-   * Clear-query path:
-   * Only queries that pass the Safety Net proceed to retrieval
-   * and response generation.
-   *
-   * Flagged queries therefore short-circuit the normal pipeline,
-   * preventing their content from being sent to the generation
-   * stage.
-   */
-  if (!safety.flagged) {
-    const retrievedEntry = retrieve(classification.label, queryText);
-    generation = generate(retrievedEntry);
-  }
+    let generation = null;
+    let retrievedEntry = null;
+    let retrievalScope = null;
 
-  /**
-   * Response orchestration combines the safety result,
-   * classification result, and generation result.
-   *
-   * When safety.flagged is true, generation remains null and
-   * the orchestrator is responsible for returning the appropriate
-   * referral or escalation guidance.
-   */
-  return orchestrate({
-    safety,
-    classification,
-    generation,
-  });
+    /**
+     * Clear-query path:
+     * Only queries that pass the Safety Net proceed to retrieval
+     * and response generation.
+     *
+     * Flagged queries therefore short-circuit the normal pipeline,
+     * preventing their content from being sent to the generation
+     * stage.
+     */
+    if (!safety.flagged) {
+      ({ entry: retrievedEntry, retrievalScope } =
+        await classifierClient.retrieve(queryText, classification));
+      generation = generate(retrievedEntry);
+    }
+
+    /**
+     * Response orchestration combines the safety result,
+     * classification result, and generation result.
+     *
+     * When safety.flagged is true, generation remains null and
+     * the orchestrator is responsible for returning the appropriate
+     * referral or escalation guidance.
+     */
+    return orchestrate({
+      safety,
+      classification,
+      generation,
+      retrievedEntry,
+      retrievalScope,
+    });
+  };
 }
 
-module.exports = { handleQuery };
+// Created once at module load, as the keyword classifier was before.
+const handleQuery = createHandleQuery({
+  classifierClient: createClassifierClient(),
+});
+
+module.exports = { handleQuery, createHandleQuery };

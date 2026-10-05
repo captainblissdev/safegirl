@@ -10,11 +10,24 @@ export interface QueryResponse {
   message: string;
 
   // Present on grounded_answer responses.
-  category?: string;
+  // Category of the knowledge-base entry actually served; null when no
+  // entry was found. May differ from predictedCategory.
+  category?: string | null;
+  // False when no knowledge-base answer was available and the message is
+  // the standard no-answer fallback.
+  answerFound?: boolean;
   generated?: boolean;
   note?: string;
   source?: string;
   safetyNotes?: string;
+
+  // Present on all gateway responses: which classifier ran and what it
+  // predicted. confidence is null for the keyword fallback.
+  predictedCategory?: string | null;
+  classifierSource?: "distilbert" | "keyword_fallback" | null;
+  confidence?: number | null;
+  // How the answer was retrieved; null on referrals (no retrieval).
+  retrievalScope?: "scoped" | "unscoped" | "abstained" | "local" | null;
 
   generationInvoked: boolean;
 }
