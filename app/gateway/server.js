@@ -9,8 +9,9 @@
  * dependencies so it can be tested in-process. The server only listens
  * when this file is executed directly.
  *
- * Firebase Anonymous Authentication and persistent data storage
- * are not implemented in this entry point.
+ * POST /api/query requires a Firebase Anonymous Authentication ID token
+ * (see src/middleware/sessionAuth.js). /health is unauthenticated.
+ * Persistent data storage is not implemented.
  */
 
 const express = require("express");
@@ -54,11 +55,16 @@ function isBodyParserError(err) {
  * @param {(text: string) => Promise<object>} deps.handleQuery - Query
  *        processing pipeline.
  * @param {Function} deps.authMiddleware - Express middleware run before
- *        POST /api/query.
+ *        POST /api/query. Required, so a missing middleware can never
+ *        leave the route silently unprotected.
  * @param {object} [deps.logger] - Logger with an error() method.
  * @returns {import("express").Express} The configured application.
  */
 function createApp({ handleQuery, authMiddleware, logger = console }) {
+  if (typeof authMiddleware !== "function") {
+    throw new TypeError("createApp requires an authMiddleware function");
+  }
+
   const app = express();
 
   /**
@@ -71,9 +77,11 @@ function createApp({ handleQuery, authMiddleware, logger = console }) {
   };
 
   /**
-   * Parse incoming JSON request bodies, up to BODY_LIMIT.
+   * JSON body parser, up to BODY_LIMIT. Mounted on POST /api/query after
+   * the auth middleware, so an unauthenticated request's body is never
+   * read or parsed.
    */
-  app.use(express.json({ limit: BODY_LIMIT }));
+  const parseJson = express.json({ limit: BODY_LIMIT });
 
   /**
    * POST /api/query
@@ -84,10 +92,13 @@ function createApp({ handleQuery, authMiddleware, logger = console }) {
    * The application layer is responsible for safety checking,
    * intent classification, retrieval, generation, and response
    * orchestration.
+   *
+   * Only the query text is passed on: req.uid stays in the gateway and
+   * is never sent to the pipeline or ml_service, or put in a response.
    */
-  app.post("/api/query", authMiddleware, async (req, res, next) => {
+  app.post("/api/query", authMiddleware, parseJson, async (req, res, next) => {
     try {
-      const { text } = req.body;
+      const { text } = req.body || {};
 
       // Reject missing or empty queries before processing.
       if (typeof text !== "string" || text.trim() === "") {
@@ -159,6 +170,7 @@ function createApp({ handleQuery, authMiddleware, logger = console }) {
  */
 if (require.main === module) {
   const { handleQuery } = require("./src/backend");
+  const { createAuthFromEnv } = require("./src/middleware/sessionAuth");
 
   /**
    * Use the PORT environment variable when available;
@@ -166,10 +178,17 @@ if (require.main === module) {
    */
   const PORT = process.env.PORT || 3001;
 
-  // Authentication is not mounted yet; requests pass straight through.
-  const allowAll = (req, res, next) => next();
+  let authMiddleware;
+  try {
+    // Logs any startup warning once; throws when the configuration
+    // must be refused. The message is our own and contains no secrets.
+    authMiddleware = createAuthFromEnv(process.env);
+  } catch (err) {
+    console.error(`[auth] ${err.message}`);
+    process.exit(1);
+  }
 
-  createApp({ handleQuery, authMiddleware: allowAll }).listen(PORT, () => {
+  createApp({ handleQuery, authMiddleware }).listen(PORT, () => {
     console.log(`SafeGirl backend listening on :${PORT}`);
   });
 }
