@@ -281,7 +281,27 @@ npm test
 node server.js
 ```
 
-The backend test suite currently contains 5 tests.
+`npm test` runs the backend integration checks plus the `node:test` unit tests for the classifier client and the backend wiring. None of them need `ml_service` running.
+
+#### Classifier service configuration
+
+The gateway classifies queries and retrieves knowledge-base entries through `ml_service` (DistilBERT classifier and semantic retrieval). If `ml_service` is unreachable, times out or returns an error, the gateway falls back to the keyword classifier and local keyword retrieval, so it keeps answering without it.
+
+The gateway reads these environment variables (it does not load `.env` files):
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `CLASSIFIER_SERVICE_URL` | `http://127.0.0.1:8001` | Base URL of `ml_service` |
+| `CLASSIFIER_CONFIDENCE_THRESHOLD` | `0.5` | At or above this confidence, retrieval is scoped to the predicted category; below it, retrieval searches all categories |
+| `CLASSIFIER_TIMEOUT_MS` | `3000` | Timeout for each request to `ml_service`, in milliseconds |
+
+Empty or invalid values fall back to the defaults. To start `ml_service` locally (PowerShell, from the repository root):
+
+```powershell
+cd ml_service
+$env:MODEL_DIR = "./final"
+..\.venv\Scripts\python.exe -m uvicorn app:app --host 127.0.0.1 --port 8001
+```
 
 ---
 
