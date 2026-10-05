@@ -48,14 +48,25 @@ const NO_ANSWER_MESSAGE =
  *        when the normal generation pipeline was skipped.
  * @param {object|null} [params.retrievedEntry] - The KB entry the answer
  *        came from, or null/undefined when none was found.
+ * @param {string|null} [params.retrievalScope] - How retrieval ran:
+ *        "scoped", "unscoped", "abstained" or "local"; null when retrieval
+ *        did not run (flagged queries).
  * @returns {object} Final response payload.
  */
-function orchestrate({ safety, classification, generation, retrievedEntry }) {
-  // Which classifier ran and what it predicted, reported on every path.
+function orchestrate({
+  safety,
+  classification,
+  generation,
+  retrievedEntry,
+  retrievalScope,
+}) {
+  // Which classifier ran, what it predicted and how retrieval ran,
+  // reported on every path.
   const classifierInfo = {
     predictedCategory: classification?.label ?? null,
     classifierSource: classification?.source ?? null,
     confidence: classification?.confidence ?? null,
+    retrievalScope: retrievalScope ?? null,
   };
 
   /**

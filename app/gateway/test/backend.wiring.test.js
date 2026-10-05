@@ -10,6 +10,7 @@ const { describe, it } = require("node:test");
 const assert = require("node:assert/strict");
 
 const { createHandleQuery } = require("../src/backend");
+const { createClassifierClient } = require("../src/classifierClient");
 const { NO_ANSWER_MESSAGE } = require("../src/responseOrchestrator");
 const {
   retrieve: localRetrieve,
@@ -21,7 +22,7 @@ const {
  * A classifier client whose classify() and retrieve() return fixed
  * values and record every call.
  */
-function mockClient({ classification, entry }) {
+function mockClient({ classification, entry, retrievalScope = "scoped" }) {
   const calls = { classify: [], retrieve: [] };
 
   return {
@@ -33,7 +34,7 @@ function mockClient({ classification, entry }) {
       },
       retrieve: async (text, cls) => {
         calls.retrieve.push({ text, classification: cls });
-        return entry;
+        return { entry, retrievalScope };
       },
     },
   };
@@ -63,6 +64,7 @@ describe("handleQuery() with a classifier client", () => {
     const { client, calls } = mockClient({
       classification: { label: "sti", confidence: 0.42, source: "distilbert" },
       entry: pregnancyEntry,
+      retrievalScope: "unscoped",
     });
     const handleQuery = createHandleQuery({ classifierClient: client });
 
@@ -76,6 +78,7 @@ describe("handleQuery() with a classifier client", () => {
     assert.equal(response.classifierSource, "distilbert");
     assert.equal(response.confidence, 0.42);
     assert.equal(response.answerFound, true);
+    assert.equal(response.retrievalScope, "unscoped");
 
     // retrieve() receives the query and the full classification.
     assert.deepEqual(calls.retrieve, [
@@ -106,6 +109,7 @@ describe("handleQuery() with a classifier client", () => {
     assert.equal(response.outcome, "referral");
     assert.equal(response.generationInvoked, false);
     assert.equal(calls.retrieve.length, 0);
+    assert.equal(response.retrievalScope, null);
 
     // The classifier still runs in parallel with the Safety Net.
     assert.equal(calls.classify.length, 1);
@@ -120,6 +124,7 @@ describe("handleQuery() with a classifier client", () => {
         source: "distilbert",
       },
       entry: null,
+      retrievalScope: "scoped",
     });
     const handleQuery = createHandleQuery({ classifierClient: client });
 
@@ -131,6 +136,7 @@ describe("handleQuery() with a classifier client", () => {
     assert.equal(response.category, null);
     assert.equal(response.predictedCategory, "contraception");
     assert.equal(response.confidence, 0.77);
+    assert.equal(response.retrievalScope, "scoped");
   });
 
   it("passes a keyword-fallback classification through with null confidence", async () => {
@@ -141,6 +147,7 @@ describe("handleQuery() with a classifier client", () => {
         source: "keyword_fallback",
       },
       entry: getEntryById("KB-C1"),
+      retrievalScope: "local",
     });
     const handleQuery = createHandleQuery({ classifierClient: client });
 
@@ -150,5 +157,49 @@ describe("handleQuery() with a classifier client", () => {
     assert.equal(response.predictedCategory, "contraception");
     assert.equal(response.classifierSource, "keyword_fallback");
     assert.equal(response.confidence, null);
+    assert.equal(response.retrievalScope, "local");
+  });
+});
+
+describe("handleQuery() with the real classifier client and a mocked ml_service", () => {
+  it("abstains below the abstain threshold: no /retrieve call, fallback message", async () => {
+    const requests = [];
+    const client = createClassifierClient({
+      fetch: async (url) => {
+        const endpoint = new URL(url).pathname;
+        requests.push(endpoint);
+        if (endpoint !== "/classify") {
+          throw new Error(`unexpected request to ${endpoint}`);
+        }
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            intent: "pregnancy",
+            confidence: 0.333,
+            scores: {},
+          }),
+        };
+      },
+      config: {
+        serviceUrl: "http://ml.test",
+        confidenceThreshold: 0.5,
+        abstainThreshold: 0.35,
+      },
+      logger: { warn() {} },
+    });
+    const handleQuery = createHandleQuery({ classifierClient: client });
+
+    const response = await handleQuery("what is consent");
+
+    assert.deepEqual(requests, ["/classify"]);
+    assert.equal(response.outcome, "grounded_answer");
+    assert.equal(response.message, NO_ANSWER_MESSAGE);
+    assert.equal(response.answerFound, false);
+    assert.equal(response.category, null);
+    assert.equal(response.predictedCategory, "pregnancy");
+    assert.equal(response.classifierSource, "distilbert");
+    assert.equal(response.confidence, 0.333);
+    assert.equal(response.retrievalScope, "abstained");
   });
 });

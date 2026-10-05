@@ -180,7 +180,10 @@ describe("retrieve()", () => {
         jsonResponse({ results: [{ id: "KB-C2", class: "contraception" }] }),
     });
 
-    const entry = await client.retrieve(QUERY, highConfidence);
+    const { entry, retrievalScope } = await client.retrieve(
+      QUERY,
+      highConfidence,
+    );
 
     assert.deepEqual(calls[0].body, {
       query: QUERY,
@@ -190,6 +193,7 @@ describe("retrieve()", () => {
     // Same entry object shape local retrieval returns.
     assert.deepEqual(entry, getEntryById("KB-C2"));
     assert.equal(entry.kbId, "KB-C2");
+    assert.equal(retrievalScope, "scoped");
     assert.equal(localCalls.length, 0);
   });
 
@@ -198,9 +202,13 @@ describe("retrieve()", () => {
       "/retrieve": () => jsonResponse({ results: [{ id: "KB-S2" }] }),
     });
 
-    await client.retrieve(QUERY, { ...lowConfidence, confidence: 0.5 });
+    const { retrievalScope } = await client.retrieve(QUERY, {
+      ...lowConfidence,
+      confidence: 0.5,
+    });
 
     assert.equal(calls[0].body.intent, "sti");
+    assert.equal(retrievalScope, "scoped");
   });
 
   it("omits intent (unscoped) when confidence < threshold", async () => {
@@ -209,18 +217,22 @@ describe("retrieve()", () => {
         jsonResponse({ results: [{ id: "KB-P2", class: "pregnancy" }] }),
     });
 
-    const entry = await client.retrieve(QUERY, lowConfidence);
+    const { entry, retrievalScope } = await client.retrieve(
+      QUERY,
+      lowConfidence,
+    );
 
     assert.deepEqual(calls[0].body, { query: QUERY, top_k: 3 });
     assert.ok(!("intent" in calls[0].body));
     assert.equal(entry.kbId, "KB-P2");
+    assert.equal(retrievalScope, "unscoped");
     assert.equal(localCalls.length, 0);
   });
 
   it("uses local retrieval without contacting ml_service after a keyword fallback", async () => {
     const { client, calls, localCalls } = setup({});
 
-    const entry = await client.retrieve(QUERY, {
+    const { entry, retrievalScope } = await client.retrieve(QUERY, {
       label: "contraception",
       confidence: null,
       source: "keyword_fallback",
@@ -229,6 +241,7 @@ describe("retrieve()", () => {
     assert.equal(calls.length, 0);
     assert.deepEqual(localCalls, [{ label: "contraception", text: QUERY }]);
     assert.deepEqual(entry, { kbId: "LOCAL" });
+    assert.equal(retrievalScope, "local");
   });
 
   const failures = {
@@ -244,10 +257,14 @@ describe("retrieve()", () => {
     it(`falls back to local retrieval on ${name}`, TEST_LIMIT, async () => {
       const { client, localCalls, warnings } = setup({ "/retrieve": handler });
 
-      const entry = await client.retrieve(QUERY, highConfidence);
+      const { entry, retrievalScope } = await client.retrieve(
+        QUERY,
+        highConfidence,
+      );
 
       assert.deepEqual(localCalls, [{ label: "contraception", text: QUERY }]);
       assert.deepEqual(entry, { kbId: "LOCAL" });
+      assert.equal(retrievalScope, "local");
       assert.equal(warnings.length, 1);
       assert.match(warnings[0], /local retrieval/);
       assert.match(warnings[0], EXPECTED_REASON[name]);
@@ -267,9 +284,13 @@ describe("abstain zone", () => {
       "/retrieve": () => jsonResponse({ results: [{ id: "KB-C2" }] }),
     });
 
-    const entry = await client.retrieve("what is consent", distilbert(0.333));
+    const { entry, retrievalScope } = await client.retrieve(
+      "what is consent",
+      distilbert(0.333),
+    );
 
     assert.equal(entry, null);
+    assert.equal(retrievalScope, "abstained");
     assert.equal(calls.length, 0);
     assert.equal(localCalls.length, 0);
     assert.equal(warnings.length, 1);
@@ -286,24 +307,29 @@ describe("abstain zone", () => {
         "/retrieve": () => jsonResponse({ results: [{ id: "KB-P2" }] }),
       });
 
-      const entry = await client.retrieve(QUERY, distilbert(confidence));
+      const { entry, retrievalScope } = await client.retrieve(
+        QUERY,
+        distilbert(confidence),
+      );
 
       assert.equal(calls.length, 1);
       assert.deepEqual(calls[0].body, { query: QUERY, top_k: 3 });
       assert.equal(entry.kbId, "KB-P2");
+      assert.equal(retrievalScope, "unscoped");
     });
   }
 
   it("never abstains after a keyword fallback (confidence is null)", async () => {
     const { client, localCalls } = setup({});
 
-    const entry = await client.retrieve(QUERY, {
+    const { entry, retrievalScope } = await client.retrieve(QUERY, {
       label: "contraception",
       confidence: null,
       source: "keyword_fallback",
     });
 
     assert.deepEqual(entry, { kbId: "LOCAL" });
+    assert.equal(retrievalScope, "local");
     assert.equal(localCalls.length, 1);
   });
 });
