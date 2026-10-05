@@ -54,7 +54,7 @@ The surrounding safety and privacy architecture is kept separate from the classi
 | Frontend                          | ✅ Working and tested (4/4), builds cleanly                          |
 | RAG generation (Gemini)           | ⛔ Not implemented — currently stubbed                               |
 | Semantic retrieval (LlamaIndex)   | ⛔ Not implemented — interim keyword-overlap retrieval is used       |
-| Firebase Anonymous Authentication | ⛔ Not implemented                                                   |
+| Firebase Anonymous Authentication | ✅ Gateway token verification and in-memory anonymous sign-in        |
 | GBV informational content         | ⛔ Deliberately held pending authoritative legal/clinical sourcing   |
 | CI                                | ✅ GitHub Actions — backend and frontend checks                      |
 
@@ -417,11 +417,13 @@ This prevents unreviewed AI-generated paraphrases from silently entering the eva
 
 ### Firebase Anonymous Authentication
 
-Firebase Anonymous Authentication is **not yet implemented**.
+Gateway token verification and the frontend's anonymous sign-in are implemented. The frontend signs in on the first query, not on page load, and keeps the session in memory only (`inMemoryPersistence`), so a page reload or a new tab starts a new anonymous identity.
 
-When introduced, authentication persistence must be explicitly configured so that anonymous session identity does not survive beyond the intended session lifetime.
+What this means for privacy:
 
-The implementation must therefore avoid the Firebase SDK's default persistent browser behavior where it conflicts with the project's privacy requirements.
+* There are no user-visible accounts, and no conversation content is stored.
+* Firebase keeps one anonymous user record (a uid) per sign-in. Automatic cleanup of old anonymous records may require upgrading the project to Identity Platform.
+* The Firebase JS SDK also records a small usage "heartbeat" in the browser's IndexedDB: at most one entry per day, containing a date and the SDK's version string. It contains no uid and no conversation content, and the SDK provides no option to disable it.
 
 ---
 
