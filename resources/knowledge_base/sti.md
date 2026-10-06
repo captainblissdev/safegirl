@@ -3,10 +3,10 @@
 ## KB-S2
 - **Intent:** STIs
 - **User question:** Can teenagers access HIV testing without their parents?
-- **Answer:** WHO guidance recommends that HIV testing services, including HIV self-testing, be accessible to adolescents without mandatory parental or guardian authorization or notification.
+- **Answer:** Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you.
 - **Evidence/claim:** HIV testing services must be accessible to adolescents without mandatory parental authorization.
 - **Source:** WHO Recommendations (2018), Ch. 7 §7.4, pp. 47–48
-- **Conditions/limitations:** Partner notification (if relevant) is handled separately with IPV-risk sensitivity — not covered in this entry.
+- **Conditions/limitations:** Partner notification (if relevant) is handled separately with IPV-risk sensitivity — not covered in this entry. Consent wording is interim pending legal review (Children Act 2022 s.16(1)).
 - **Safety/referral notes:** None required.
 
 ## KB-S3
