@@ -119,36 +119,51 @@ See [`docs/decision-log.md`](docs/decision-log.md) for the full comparison and e
                              │
                              ▼
                     ┌─────────────────┐
-                    │     Backend     │
+                    │     Gateway     │
+                    └────────┬────────┘
+                             ▼
+                    ┌─────────────────┐
+                    │ 1. Safety Net   │  independent safety path
+                    └────────┬────────┘
+                             ▼
+                    ┌─────────────────┐  generic help request
+                    │ 2. Help rule    │──(not flagged)──► Signposting
+                    └────────┬────────┘  (no classifier, no retrieval)
+                             ▼
+                    ┌─────────────────┐
+                    │ 3. Intent       │  DistilBERT V3 (ml_service),
+                    │    classifier   │  keyword fallback
                     └────────┬────────┘
                              │
-                    ┌────────┴────────┐
-                    ▼                 ▼
-             ┌─────────────┐   ┌───────────────┐
-             │ Safety Net  │   │ Intent Router │
-             │             │   │               │
-             │ Independent │   │ Keyword /     │
-             │ safety path │   │ DistilBERT V2 │
-             └──────┬──────┘   └───────┬───────┘
-                    │                  │
-              Safety event?            ▼
-                    │           ┌─────────────┐
-                    │           │  Retrieval  │
-                    │           └──────┬──────┘
-                    │                  │
-                    │                  ▼
-                    │           ┌─────────────┐
-                    │           │ Generation  │
-                    │           │   (stubbed) │
-                    │           └──────┬──────┘
-                    │                  │
-                    └────────┬─────────┘
+             flagged by the Safety Net? ──yes──► Referral
+                             │ no                (classifier result not used)
+                             ▼
+                    ┌─────────────────┐
+                    │    Retrieval    │
+                    └────────┬────────┘
+                             ▼
+                    ┌─────────────────┐
+                    │   Generation    │
+                    │    (stubbed)    │
+                    └────────┬────────┘
                              ▼
                     Response Orchestrator
                              │
                              ▼
                          Response
 ```
+
+### Request order
+
+Every query is handled in this order:
+
+1. **Safety Net.** Checks for distress, GBV and crisis language.
+2. **Help rule.** If the query was not flagged and the whole message is a generic help request that names no topic (for example "Where can I get help?"), the gateway returns help information (`outcome: "signposting"`). The classifier and retrieval do not run, and `ml_service` is not called.
+3. **Intent classifier.** Runs for every other query, including flagged ones.
+4. **If the Safety Net flagged the query,** the gateway returns the referral message. The classifier has already run, and its prediction is reported in the response (`predictedCategory`) but is not used to answer; retrieval and generation do not run.
+5. **Otherwise,** retrieval and generation produce the answer.
+
+The Safety Net is synchronous, so it has always finished before the classifier starts; earlier versions of this README and the architecture diagram described the two as dispatched in parallel.
 
 The Safety Net is not part of the intent classifier's training or evaluation scope.
 

@@ -47,7 +47,7 @@
         </mxCell>
 
         <!-- Backend Orchestrator -->
-        <mxCell id="cmp_backend" value="«component»&#10;&lt;b&gt;Node/Express Backend&lt;/b&gt;&#10;&lt;i&gt;Parallel Orchestrator&lt;/i&gt;" style="shape=component;align=center;verticalAlign=middle;spacing=4;html=1;fontSize=11;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
+        <mxCell id="cmp_backend" value="«component»&#10;&lt;b&gt;Node/Express Backend&lt;/b&gt;&#10;&lt;i&gt;Sequential Orchestrator&lt;/i&gt;" style="shape=component;align=center;verticalAlign=middle;spacing=4;html=1;fontSize=11;fillColor=#f0fdf4;strokeColor=#16a34a;strokeWidth=2;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="310" y="385" width="200" height="80" as="geometry" />
         </mxCell>
 
@@ -105,8 +105,8 @@
           </mxGeometry>
         </mxCell>
 
-        <!-- Backend -> Safety Net (Parallel Dispatch) -->
-        <mxCell id="conn_bg_safetynet" value="Parallel Dispatch" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.8;strokeColor=#e11d48;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_backend" target="cmp_safetynet">
+        <!-- Backend -> Safety Net (runs first) -->
+        <mxCell id="conn_bg_safetynet" value="Runs first" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.8;strokeColor=#e11d48;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_backend" target="cmp_safetynet">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="410" y="125" />
@@ -114,8 +114,8 @@
           </mxGeometry>
         </mxCell>
 
-        <!-- Backend -> Intent Classifier (Parallel Dispatch) -->
-        <mxCell id="conn_bg_classifier" value="Parallel Dispatch" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.8;strokeColor=#d97706;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_backend" target="cmp_classifier">
+        <!-- Backend -> Intent Classifier (after the Safety Net and help rule) -->
+        <mxCell id="conn_bg_classifier" value="After Safety Net" style="endArrow=classic;html=1;rounded=0;strokeWidth=1.8;strokeColor=#d97706;fontSize=10;fontStyle=1;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="cmp_backend" target="cmp_classifier">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="460" y="262" />
