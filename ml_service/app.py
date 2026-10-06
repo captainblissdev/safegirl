@@ -62,7 +62,7 @@ Notes
 - Retrieval is class-scoped: the classifier's predicted intent narrows
   which KB entries are eligible, so a pregnancy-classified query can't
   retrieve contraception passages. Retrieval degrading gracefully on a
-  thin KB (currently 8 entries) is expected, not a bug.
+  thin KB is expected, not a bug.
 """
 
 from __future__ import annotations
