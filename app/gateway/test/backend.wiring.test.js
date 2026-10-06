@@ -51,7 +51,7 @@ describe("knowledge-base entries carry their category", () => {
 
   it("from local retrieve() and getEntryById()", () => {
     assert.equal(localRetrieve("sti", "HIV test").category, "sti");
-    assert.equal(getEntryById("KB-P2").category, "pregnancy");
+    assert.equal(getEntryById("KB-P1").category, "pregnancy");
     assert.equal(getEntryById("KB-G1").category, "general");
   });
 });
@@ -60,7 +60,7 @@ describe("handleQuery() with a classifier client", () => {
   it("reports the served entry's category and keeps the prediction separately", async () => {
     // Low-confidence "sti" prediction; unscoped retrieval found a
     // pregnancy entry.
-    const pregnancyEntry = getEntryById("KB-P2");
+    const pregnancyEntry = getEntryById("KB-P1");
     const { client, calls } = mockClient({
       classification: { label: "sti", confidence: 0.42, source: "distilbert" },
       entry: pregnancyEntry,

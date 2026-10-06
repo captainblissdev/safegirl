@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node test/backend.test.js && node --test test/classifierClient.test.js test/backend.wiring.test.js test/server.test.js test/sessionAuth.test.js test/auth.http.test.js",
+    "test": "node test/backend.test.js && node --test test/classifierClient.test.js test/backend.wiring.test.js test/server.test.js test/sessionAuth.test.js test/auth.http.test.js test/helpSignposting.test.js test/heldEntries.test.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",

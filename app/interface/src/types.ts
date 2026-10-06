@@ -3,7 +3,9 @@
  * returned by app/gateway/src/responseOrchestrator.js.
  */
 
-export type QueryOutcome = "grounded_answer" | "referral";
+// "signposting": a generic help request answered with help information,
+// without classification or retrieval. Displayed like a normal answer.
+export type QueryOutcome = "grounded_answer" | "referral" | "signposting";
 
 export interface QueryResponse {
   outcome: QueryOutcome;
@@ -26,8 +28,10 @@ export interface QueryResponse {
   predictedCategory?: string | null;
   classifierSource?: "distilbert" | "keyword_fallback" | null;
   confidence?: number | null;
-  // How the answer was retrieved; null on referrals (no retrieval).
-  retrievalScope?: "scoped" | "unscoped" | "abstained" | "local" | null;
+  // How the answer was retrieved; "none" for signposting and null on
+  // referrals (no retrieval in either case).
+  retrievalScope?:
+    "scoped" | "unscoped" | "abstained" | "local" | "none" | null;
 
   generationInvoked: boolean;
 }

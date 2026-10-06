@@ -4,10 +4,10 @@
  * Provides independent, rule-based detection of distress, gender-based
  * violence (GBV), and crisis-related language.
  *
- * SafetyNet operates independently from the Intent Classifier and is
- * dispatched in parallel with it. Its result can short-circuit the
- * normal retrieval and generation pipeline when safety-related language
- * is detected.
+ * SafetyNet operates independently from the Intent Classifier and runs
+ * before it (and before the help-seeking rule; see backend.js). Its
+ * result can short-circuit the normal retrieval and generation pipeline
+ * when safety-related language is detected.
  *
  * The rule-based approach is intentionally deterministic and
  * interpretable: a flagged query can be traced to the keyword(s)
