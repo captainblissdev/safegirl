@@ -9,15 +9,6 @@
 - **Conditions/limitations:** 2005 document — flag for domain expert to confirm still standard practice.
 - **Safety/referral notes:** None required.
 
-## KB-P2
-- **Intent:** Pregnancy
-- **User question:** Do I have to pay for antenatal checkups as a teenager?
-- **Answer:** Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you.
-- **Evidence/claim:** Maternal health care must be free, confidential, adolescent-responsive, and accessible without third-party authorization.
-- **Source:** WHO Recommendations (2018), Ch. 4 §4.2, p. 18
-- **Conditions/limitations:** Consent wording is interim pending legal review (Children Act 2022 s.16(1)).
-- **Safety/referral notes:** None required.
-
 ---
 
 ## HELD — pending supervisor/legal review
@@ -27,3 +18,12 @@
 - **Evidence:** WHO (2018) — post-abortion care (PAC) must be provided free of charge and free of coercion regardless of whether the abortion was legal. Kenya MoH (2005) — termination legally permitted in Kenya specifically where conception results from rape, subject to psychiatric evaluation.
 - **Source:** WHO (2018) Ch. 5 §5.3.2/5.4, pp. 27, 29 + Kenya MoH (2005) Annex 1, p. 28
 - **Status:** 🔴 HOLD. Most legally/politically sensitive topic in the KB. Do not finalize wording without supervisor and domain-expert sign-off, and possibly legal review given the sourcing gap (both sources predate the 2010 Constitution's abortion provisions).
+
+### KB-P2 (antenatal checkups / consent wording)
+- **User question:** Do I have to pay for antenatal checkups as a teenager?
+- **Answer:** Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you.
+- **Original answer (pre-interim):** Maternal healthcare is expected to be free, confidential, and accessible without needing a third party's permission.
+- **Evidence:** Maternal health care must be free, confidential, adolescent-responsive, and accessible without third-party authorization.
+- **Source:** WHO Recommendations (2018), Ch. 4 §4.2, p. 18
+- **Conditions/limitations:** Consent wording is interim pending legal review (Children Act 2022 s.16(1)).
+- **Status:** 🟡 HOLD. Held: the whole answer was a consent claim; needs a rewrite after legal review.
