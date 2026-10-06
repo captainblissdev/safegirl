@@ -71,6 +71,28 @@ const POSITIVE = [
   ["a man keeps asking me for nudes", "abuse"],
   // Normalisation: "@" between letters.
   ["he r@ped me", "abuse"],
+  // Self-harm: others happier without me.
+  ["my family would be happier if I was gone", "self_harm"],
+  ["they would be better off if I didnt exist", "self_harm"],
+  ["people would be happier without me", "self_harm"],
+  ["everyone would be better if I died", "self_harm"],
+  // Abuse: secrecy about what we do.
+  ["he says it is our secret", "abuse"],
+  ["he tells me not to tell anyone what we do", "abuse"],
+  ["I hate what we do at night", "abuse"],
+  // Abuse: violence against others in the home.
+  ["my dad hits us when he is drunk", "abuse"],
+  ["he beats my mum", "abuse"],
+  ["my father slaps my little sister", "abuse"],
+  ["he hits them with a belt", "abuse"],
+  // Abuse: threats to show photos.
+  ["he says he will post my photos", "abuse"],
+  ["she threatened to share my pictures online", "abuse"],
+  ["he is going to send everyone my videos", "abuse"],
+  // Abuse: not safe at home.
+  ["I dont feel safe at home", "abuse"],
+  ["I do not feel safe in my house", "abuse"],
+  ["I am scared to go home", "abuse"],
 ];
 
 /** Queries that must not be flagged, including idioms. */
@@ -105,6 +127,22 @@ const NEGATIVE = [
   "can you keep a secret",
   "my teacher said not to tell the answers",
   "my email is mary@school",
+  // Laughter idioms must not match "want to die".
+  "I want to die laughing",
+  "I was dying laughing at that",
+  "I want to die of laughter at this",
+  // Games and sport.
+  "she beat us in the match",
+  "he beat them at football",
+  "our team beat them during the game",
+  "he hit us with the ball by accident",
+  // Ordinary photo, home and secret questions.
+  "can I send my photos to the clinic",
+  "how do I share my pictures safely",
+  "I feel safe at home",
+  "I am excited to go home",
+  "what we do in biology class is boring",
+  "the secret to clear skin",
 ];
 
 module.exports = { POSITIVE, NEGATIVE };

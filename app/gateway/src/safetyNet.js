@@ -100,7 +100,13 @@ const SELF_HARM_PATTERNS = [
     // "kil" covers a common one-letter typo.
     new RegExp(`\\bkill?(?:s|ing|ed)? ?(?:${MYSELF}|${THEMSELF})\\b`),
   ],
-  ["want to die", new RegExp(`\\b${WANT_TO} die\\b(?! (?:my|her|their) hair)`)],
+  [
+    "want to die",
+    // Excludes "die my hair" (a misspelling of dye) and laughter idioms.
+    new RegExp(
+      `\\b${WANT_TO} die\\b(?! (?:my|her|their) hair| laughing\\b| of laughter\\b| from laughing\\b)`,
+    ),
+  ],
   ["wish I was dead", /\bwish (?:i|she|he) (?:was|were) dead\b/],
   [
     "don't want to be alive / live",
@@ -142,6 +148,10 @@ const SELF_HARM_PATTERNS = [
     /\bbetter off if i (?:wasn'?t|was not|weren'?t|were not) (?:here|around|alive)\b/,
   ],
   [
+    "others happier without me",
+    /\b(?:would|will|'d) be (?:happier|better(?: off)?) (?:if i (?:wasn'?t|was not|weren'?t|were not) (?:here|around|alive)|if i (?:was|were) (?:gone|dead|not here|not around)|if i (?:didn'?t|did not|never) exist(?:ed)?|if i (?:died|disappeared)|without me)\b/,
+  ],
+  [
     "thinking about how to end it",
     /\b(?:think|thinks|thinking|thought) (?:about|of) (?:how to |ways to )?end(?:ing)? (?:it|things|my life)\b(?! with)/,
   ],
@@ -154,6 +164,9 @@ const SECRECY =
 // Touch or sexual words, for secrecy demands that accompany them.
 const TOUCH_OR_SEX =
   "\\b(?:touch\\w*|sex\\w*|private parts?|kiss\\w*|naked|nudes?|undress\\w*|my body|bedroom)\\b";
+// Objects of violence other than "me": us, him, her, them, family members.
+const VICTIM =
+  "(?:me|us|him|her|them|my (?:mum|mom|mother|mama|sister|brother|siblings|dad|father|wife|girlfriend|baby|child|children|kids|family|little (?:sister|brother)))";
 // People who may threaten to kill.
 const PERSON =
   "(?:dad|daddy|father|mother|mum|mom|mama|uncle|aunt|auntie|brother|sister|boyfriend|husband|parents|stepfather|stepmother|step ?dad|step ?mum|step ?mom|he|she|they|him|her)";
@@ -165,8 +178,12 @@ const PERSON =
  */
 const ABUSE_PATTERNS = [
   [
-    "hits / beats / slaps me",
-    /\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) me\b(?! (?:at|in|to it|why)\b)/,
+    "hits / beats / slaps me or others",
+    // Excludes games and idioms: "beat me at chess", "... in the match",
+    // "beat me to it", "beats me why", "... during the game".
+    new RegExp(
+      `\\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) ${VICTIM}\\b(?! (?:at|in|to it|why|during|with the ball)\\b)`,
+    ),
   ],
   [
     "beaten (up)",
@@ -185,6 +202,14 @@ const ABUSE_PATTERNS = [
   [
     "secrecy + touch or sex",
     new RegExp(`^(?=.*(?:${SECRECY}))(?=.*${TOUCH_OR_SEX})`),
+  ],
+  [
+    "secret about what we do",
+    /\b(?:don'?t|do not|dont|not (?:to|2)) tell (?:anyone|anybody|my \w+) (?:about )?what we do\b|\bwhat we do (?:at night|together|in (?:the|my|his|her) (?:room|bed|bedroom))\b|\bour (?:little )?secret\b/,
+  ],
+  [
+    "not safe at home",
+    /\b(?:don'?t|do not|dont|doesn'?t|does not) feel safe (?:at|in) (?:home|my house|our house|my home)\b|\b(?:scared|afraid|frightened|terrified) (?:to|of) (?:go|going|come|coming|be|being) (?:back )?home\b/,
   ],
   [
     "<person> will kill me",
@@ -215,6 +240,10 @@ const BLACKMAIL_PATTERNS = [
   [
     "threat to share photos",
     /\b(?:post|share|leak|send|show|spread|release|expose)(?:s|ed|ing)? (?:my|our|the) (?:nudes?|naked|private|intimate|sexy)\b/,
+  ],
+  [
+    "threat to show photos",
+    /\b(?:will|would|going to|gonna|threaten(?:s|ed|ing)? to|wants? to|'ll) (?:show|post|share|send|leak|spread|upload|forward|put up) (?:(?:everyone|everybody|people|them|it to everyone|the whole school|online) )?(?:my|our|her|his|their) (?:\w+ )?(?:photos?|pictures?|pics?|videos?|images?)\b/,
   ],
   [
     "sex or photos under threat",
