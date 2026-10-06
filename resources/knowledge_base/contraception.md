@@ -18,6 +18,33 @@
 - **Conditions/limitations:** Exact legal age of consent under current Kenyan law not established by available sources — flagged, not stated. Consent wording is interim pending legal review (Children Act 2022 s.16(1)).
 - **Safety/referral notes:** None required.
 
+## KB-C3
+- **Intent:** Contraception
+- **User question:** Which birth control methods can a teenager use?
+- **Answer:** Kenya's national family planning guidelines say adolescents can safely use any contraceptive method, following the guidelines and the WHO eligibility criteria. A health worker will help you choose, and some medical conditions can change which method suits you. Using condoms as well gives extra protection against STIs.
+- **Evidence/claim:** Kenyan guidance states that adolescents and youth can safely use any contraceptive method, applying the national guidelines and WHO medical eligibility criteria.
+- **Source:** Kenya MoH, National Family Planning Guidelines for Service Providers, 6th ed., p. 39; WHO, Family Planning: A Global Handbook for Providers (2022), Ch. 1, p. 5
+- **Conditions/limitations:** Individual medical conditions change eligibility. Per-method eligibility categories are not stated because they could not be verified. The 7th edition (2025) of the Kenyan guidelines could not be read and may differ.
+- **Safety/referral notes:** A health worker should confirm the choice, especially if she has a medical condition or might already be pregnant.
+
+## KB-C4
+- **Intent:** Contraception
+- **User question:** Do I still need a condom if I'm on the pill or the implant?
+- **Answer:** Yes, if you want protection from STIs. Condoms are the only contraceptive method that prevents both pregnancy and sexually transmitted infections, including HIV. Other methods prevent pregnancy only, so Kenyan guidance strongly encourages young people to use condoms as well, for dual protection.
+- **Evidence/claim:** Condoms are the only method that prevents both pregnancy and STIs including HIV; Kenyan guidance urges adolescents to use condoms for dual protection.
+- **Source:** WHO, Family planning/contraception methods fact sheet (3 July 2025); Kenya MoH, National Family Planning Guidelines, 6th ed., p. 39
+- **Conditions/limitations:** Protection depends on using condoms consistently and correctly. Step-by-step use instructions are not included because no verified source text was reached.
+- **Safety/referral notes:** If a condom breaks or slips, or she has had unprotected sex, she should see a health worker promptly. Emergency contraception timing is held for expert review. She should also go for any STI symptoms.
+
+## KB-C5
+- **Intent:** Contraception
+- **User question:** Will contraception make me infertile or stop me having babies later?
+- **Answer:** No. WHO states that modern contraceptive methods do not cause infertility. After you stop a method your fertility comes back, though Kenya's guidelines say that for most methods it can take 3 to 6 months on average. Getting pregnant later is still possible.
+- **Evidence/claim:** WHO: modern contraceptive methods do not cause infertility. Kenya: average 3 to 6 months delay in return to fertility for most methods.
+- **Source:** WHO, Family planning/contraception methods fact sheet (2025); Kenya MoH, National Family Planning Guidelines, 6th ed., p. 45; WHO, Family Planning Handbook (2022), Ch. 1, p. 3
+- **Conditions/limitations:** The delay before fertility returns varies by method and person. No method-specific figure (for example for injectables) was found in a source, so none is given. This does not address infertility caused by untreated STIs.
+- **Safety/referral notes:** If she is worried about her fertility, or has pelvic pain or unusual discharge, she should see a health worker.
+
 ---
 
 ## HELD — pending supervisor/domain-expert review
