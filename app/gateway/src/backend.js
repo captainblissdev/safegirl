@@ -3,11 +3,16 @@
  *
  * Coordinates the main SafeGirl query-processing pipeline.
  *
- * The Safety Net and Intent Classifier are dispatched concurrently,
- * reflecting the parallel processing defined in the UML sequence
- * and activity diagrams. If the Safety Net flags the query, the
- * retrieval and generation stages are skipped and referral guidance
- * is returned instead.
+ * Order:
+ * 1. Safety Net. It is synchronous, so it always completed before the
+ *    classifier started, even when both were dispatched together.
+ * 2. Help-seeking rule: a generic help request that names no topic
+ *    ("Where can I get help?") gets signposting, without classification
+ *    or retrieval, so ml_service is not called. It never overrides the
+ *    Safety Net: a flagged query always gets the referral.
+ * 3. Intent Classifier, then (for clear queries) retrieval and
+ *    generation. If the Safety Net flags the query, the retrieval and
+ *    generation stages are skipped and referral guidance is returned.
  *
  * The classifier still runs when a query is flagged. This preserves
  * the independence of the safety and classification components while
@@ -19,22 +24,30 @@
  * keyword classifier and local keyword retrieval as fallbacks.
  */
 
-const { checkSafety } = require("./safetyNet");
+const { checkSafety: defaultCheckSafety } = require("./safetyNet");
+const { isGenericHelpRequest } = require("./helpSignposting");
 const { createClassifierClient } = require("./classifierClient");
 const { generate } = require("./generationModule");
-const { orchestrate } = require("./responseOrchestrator");
+const { orchestrate, signpost } = require("./responseOrchestrator");
 
 /**
  * Build a query handler around a classifier client.
  *
- * The client is injectable so tests can replace ml_service.
+ * Dependencies are injectable so tests can replace ml_service and check
+ * the order of the Safety Net and the help rule.
  *
  * @param {object} deps
  * @param {object} deps.classifierClient - Object with classify(text) and
  *        retrieve(text, classification), as createClassifierClient returns.
+ * @param {Function} [deps.checkSafety] - Safety Net check.
+ * @param {Function} [deps.isHelpRequest] - Generic help-request rule.
  * @returns {(queryText: string) => Promise<object>} Query handler.
  */
-function createHandleQuery({ classifierClient }) {
+function createHandleQuery({
+  classifierClient,
+  checkSafety = defaultCheckSafety,
+  isHelpRequest = isGenericHelpRequest,
+}) {
   /**
    * Process a SafeGirl user query.
    *
@@ -47,17 +60,18 @@ function createHandleQuery({ classifierClient }) {
       throw new TypeError("queryText must be a non-empty string");
     }
 
-    /**
-     * Parallel dispatch:
-     * SafetyNet and the classifier run independently and concurrently.
-     *
-     * Promise.resolve() allows the current synchronous scaffold
-     * implementations to work alongside future asynchronous versions.
-     */
-    const [safety, classification] = await Promise.all([
-      Promise.resolve(checkSafety(queryText)),
-      Promise.resolve(classifierClient.classify(queryText)),
-    ]);
+    // 1. Safety Net first.
+    const safety = await Promise.resolve(checkSafety(queryText));
+
+    // 2. Generic help request: signpost without classifying or retrieving.
+    if (!safety.flagged && isHelpRequest(queryText)) {
+      return signpost();
+    }
+
+    // 3. Classification (also for flagged queries, as before).
+    const classification = await Promise.resolve(
+      classifierClient.classify(queryText),
+    );
 
     let generation = null;
     let retrievedEntry = null;

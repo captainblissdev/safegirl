@@ -24,14 +24,10 @@
  * KB file, blank answer), NO_ANSWER_MESSAGE is returned instead.
  */
 
-/**
- * Returned when the Safety Net is clear but no knowledge-base answer is
- * available. It makes no health claims of its own.
- */
-const NO_ANSWER_MESSAGE =
-  "I don't have a specific answer for that yet. A health worker at a " +
-  "youth-friendly clinic, or another adult you trust, can help you with " +
-  "this question.";
+const {
+  NO_ANSWER_MESSAGE,
+  SIGNPOSTING_MESSAGE,
+} = require("./content/helpContent");
 
 /**
  * Combine Safety Net, classification, and generation results.
@@ -138,4 +134,33 @@ function orchestrate({
   };
 }
 
-module.exports = { orchestrate, NO_ANSWER_MESSAGE };
+/**
+ * Response to a generic help request that names no topic. Classification
+ * and retrieval did not run, so there is no category or classifier output.
+ *
+ * @returns {object} Final response payload.
+ */
+function signpost() {
+  return {
+    outcome: "signposting",
+    message: SIGNPOSTING_MESSAGE,
+    category: null,
+    answerFound: false,
+    generated: false,
+    note: "Generic help request: help information returned without classification or retrieval.",
+    source: null,
+    safetyNotes: null,
+    generationInvoked: false,
+    predictedCategory: null,
+    classifierSource: null,
+    confidence: null,
+    retrievalScope: "none",
+  };
+}
+
+module.exports = {
+  orchestrate,
+  signpost,
+  NO_ANSWER_MESSAGE,
+  SIGNPOSTING_MESSAGE,
+};
