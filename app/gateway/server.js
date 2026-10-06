@@ -5,70 +5,163 @@
  * The Express layer handles request validation and delegates
  * application processing to the backend service layer.
  *
- * Firebase Anonymous Authentication and persistent data storage
- * are not implemented in this entry point.
+ * createApp() builds the Express application from injected
+ * dependencies so it can be tested in-process. The server only listens
+ * when this file is executed directly.
+ *
+ * POST /api/query requires a Firebase Anonymous Authentication ID token
+ * (see src/middleware/sessionAuth.js). /health is unauthenticated.
+ * Persistent data storage is not implemented.
  */
 
 const express = require("express");
-const { handleQuery } = require("./src/backend");
-
-const app = express();
 
 /**
- * Parse incoming JSON request bodies.
+ * Maximum accepted JSON body size. A query is a single chat message;
+ * even 2,000 characters of multi-byte text stays well under this, and
+ * ml_service rejects text over 2,000 characters anyway.
  */
-app.use(express.json());
+const BODY_LIMIT = "10kb";
 
 /**
- * POST /api/query
- *
- * Accepts an adolescent SRH query and passes it to the
- * SafeGirl processing pipeline.
- *
- * The application layer is responsible for safety checking,
- * intent classification, retrieval, generation, and response
- * orchestration.
+ * Error responses. Fixed strings only: no error message, stack or
+ * request content is ever echoed to the client.
  */
-app.post("/api/query", async (req, res) => {
-  try {
-    const { text } = req.body;
+const ERRORS = Object.freeze({
+  malformedBody: "Malformed request body.",
+  tooLarge: "Request too large.",
+  notFound: "Not found.",
+  internal: "Unable to process query.",
+});
 
-    // Reject missing or empty queries before processing.
-    if (typeof text !== "string" || text.trim() === "") {
-      return res.status(400).json({
-        error: "Query text is required.",
-      });
+/**
+ * True for errors raised by body-parser (express.json) while reading or
+ * parsing a request body: malformed JSON, unsupported charset/encoding,
+ * aborted requests and similar client errors.
+ */
+function isBodyParserError(err) {
+  return (
+    typeof err.type === "string" &&
+    Number.isInteger(err.status) &&
+    err.status >= 400 &&
+    err.status < 500
+  );
+}
+
+/**
+ * Build the SafeGirl Express application.
+ *
+ * @param {object} deps
+ * @param {(text: string) => Promise<object>} deps.handleQuery - Query
+ *        processing pipeline.
+ * @param {Function} deps.authMiddleware - Express middleware run before
+ *        POST /api/query. Required, so a missing middleware can never
+ *        leave the route silently unprotected.
+ * @param {object} [deps.logger] - Logger with an error() method.
+ * @returns {import("express").Express} The configured application.
+ */
+function createApp({ handleQuery, authMiddleware, logger = console }) {
+  if (typeof authMiddleware !== "function") {
+    throw new TypeError("createApp requires an authMiddleware function");
+  }
+
+  const app = express();
+
+  /**
+   * Log a fixed event string plus the error's class name only. The error
+   * message, stack, request body and any user text are never logged:
+   * body-parser messages, for example, can quote the start of the body.
+   */
+  const logFailure = (event, err) => {
+    logger.error(`[gateway] ${event} (${err && err.name})`);
+  };
+
+  /**
+   * JSON body parser, up to BODY_LIMIT. Mounted on POST /api/query after
+   * the auth middleware, so an unauthenticated request's body is never
+   * read or parsed.
+   */
+  const parseJson = express.json({ limit: BODY_LIMIT });
+
+  /**
+   * POST /api/query
+   *
+   * Accepts an adolescent SRH query and passes it to the
+   * SafeGirl processing pipeline.
+   *
+   * The application layer is responsible for safety checking,
+   * intent classification, retrieval, generation, and response
+   * orchestration.
+   *
+   * Only the query text is passed on: req.uid stays in the gateway and
+   * is never sent to the pipeline or ml_service, or put in a response.
+   */
+  app.post("/api/query", authMiddleware, parseJson, async (req, res, next) => {
+    try {
+      const { text } = req.body || {};
+
+      // Reject missing or empty queries before processing.
+      if (typeof text !== "string" || text.trim() === "") {
+        return res.status(400).json({
+          error: "Query text is required.",
+        });
+      }
+
+      // Delegate query processing to the application layer.
+      const result = await handleQuery(text.trim());
+
+      return res.json(result);
+    } catch (err) {
+      // Handled by the error middleware below: 500 with a fixed message.
+      return next(err);
+    }
+  });
+
+  /**
+   * GET /health
+   *
+   * Provides a simple endpoint for confirming that the
+   * backend server is running and responding to requests.
+   */
+  app.get("/health", (req, res) => {
+    res.json({ status: "ok" });
+  });
+
+  /**
+   * Unknown routes: JSON 404 instead of Express's HTML page.
+   */
+  app.use((req, res) => {
+    res.status(404).json({ error: ERRORS.notFound });
+  });
+
+  /**
+   * Error handler. Replaces Express's default handler, which logs the
+   * full error (including body-parser messages that quote the request
+   * body) and returns an HTML page with a stack trace.
+   */
+  // eslint-disable-next-line no-unused-vars -- Express needs 4 arguments.
+  app.use((err, req, res, next) => {
+    if (res.headersSent) {
+      logFailure("response failed after headers were sent", err);
+      return res.end();
     }
 
-    // Delegate query processing to the application layer.
-    const result = await handleQuery(text.trim());
+    if (err.type === "entity.too.large") {
+      logFailure("rejected request body: too large", err);
+      return res.status(413).json({ error: ERRORS.tooLarge });
+    }
 
-    return res.json(result);
-  } catch (err) {
-    // Log processing errors for development and debugging.
-    console.error("Query processing error:", err);
+    if (isBodyParserError(err)) {
+      logFailure("rejected request body: malformed", err);
+      return res.status(400).json({ error: ERRORS.malformedBody });
+    }
 
-    return res.status(400).json({
-      error: err.message || "Unable to process query.",
-    });
-  }
-});
+    logFailure("request failed", err);
+    return res.status(500).json({ error: ERRORS.internal });
+  });
 
-/**
- * GET /health
- *
- * Provides a simple endpoint for confirming that the
- * backend server is running and responding to requests.
- */
-app.get("/health", (req, res) => {
-  res.json({ status: "ok" });
-});
-
-/**
- * Use the PORT environment variable when available;
- * otherwise default to port 3001 for local development.
- */
-const PORT = process.env.PORT || 3001;
+  return app;
+}
 
 /**
  * Start the server only when this file is executed directly.
@@ -76,12 +169,28 @@ const PORT = process.env.PORT || 3001;
  * for testing without automatically starting a server.
  */
 if (require.main === module) {
-  app.listen(PORT, () => {
+  const { handleQuery } = require("./src/backend");
+  const { createAuthFromEnv } = require("./src/middleware/sessionAuth");
+
+  /**
+   * Use the PORT environment variable when available;
+   * otherwise default to port 3001 for local development.
+   */
+  const PORT = process.env.PORT || 3001;
+
+  let authMiddleware;
+  try {
+    // Logs any startup warning once; throws when the configuration
+    // must be refused. The message is our own and contains no secrets.
+    authMiddleware = createAuthFromEnv(process.env);
+  } catch (err) {
+    console.error(`[auth] ${err.message}`);
+    process.exit(1);
+  }
+
+  createApp({ handleQuery, authMiddleware }).listen(PORT, () => {
     console.log(`SafeGirl backend listening on :${PORT}`);
   });
 }
 
-/**
- * Export the application for testing and reuse.
- */
-module.exports = app;
+module.exports = { createApp, BODY_LIMIT };

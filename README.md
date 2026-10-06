@@ -54,7 +54,7 @@ The surrounding safety and privacy architecture is kept separate from the classi
 | Frontend                          | ✅ Working and tested (4/4), builds cleanly                          |
 | RAG generation (Gemini)           | ⛔ Not implemented — currently stubbed                               |
 | Semantic retrieval (LlamaIndex)   | ⛔ Not implemented — interim keyword-overlap retrieval is used       |
-| Firebase Anonymous Authentication | ⛔ Not implemented                                                   |
+| Firebase Anonymous Authentication | ✅ Gateway token verification and in-memory anonymous sign-in        |
 | GBV informational content         | ⛔ Deliberately held pending authoritative legal/clinical sourcing   |
 | CI                                | ✅ GitHub Actions — backend and frontend checks                      |
 
@@ -278,12 +278,26 @@ cd app/gateway
 
 npm install
 npm test
+```
+
+The gateway refuses to start until authentication is configured. For local development (PowerShell):
+
+```powershell
+$env:AUTH_DISABLED = "true"   # local development only, see below
 node server.js
 ```
 
-`npm test` runs the backend integration checks plus the `node:test` unit tests for the classifier client and the backend wiring. None of them need `ml_service` running.
+`npm test` runs the backend integration checks plus the `node:test` tests for the classifier client, the backend wiring, error handling and authentication. None of them need `ml_service`, a Firebase project or any credentials.
 
-#### Classifier service configuration
+#### Authentication
+
+`POST /api/query` requires a Firebase Anonymous Authentication ID token in an `Authorization: Bearer <token>` header; `/health` does not. A missing, malformed, invalid, expired or revoked token returns `401 {"error":"Authentication required."}`. If tokens cannot be checked at all (for example Google's public keys cannot be fetched, or the verifier is misconfigured), the gateway returns `503 {"error":"Service temporarily unavailable."}` instead, so an outage never looks like a bad token. Only a fixed reason category (such as `expired` or `invalid`) or an error code is logged, never the token, the error message or the user ID.
+
+The gateway verifies tokens against Google's public keys and needs only the Firebase project ID (`FIREBASE_PROJECT_ID`, in the table below). **It no longer needs the service-account JSON.**
+
+`AUTH_DISABLED` is for **local development only. Never set it on a deployed host.**
+
+#### Configuration
 
 The gateway classifies queries and retrieves knowledge-base entries through `ml_service` (DistilBERT classifier and semantic retrieval). If `ml_service` is unreachable, times out or returns an error, the gateway falls back to the keyword classifier and local keyword retrieval, so it keeps answering without it.
 
@@ -291,6 +305,8 @@ The gateway reads these environment variables (it does not load `.env` files):
 
 | Variable | Default | Purpose |
 |---|---|---|
+| `FIREBASE_PROJECT_ID` | none | Firebase project whose ID tokens are accepted. Required while authentication is enabled; without it the gateway refuses to start |
+| `AUTH_DISABLED` | unset | **Local development only.** Exactly `true` disables authentication when `NODE_ENV` is not `production`, and logs a warning at startup. With `NODE_ENV=production` the gateway refuses to start. Any other value leaves authentication on |
 | `CLASSIFIER_SERVICE_URL` | `http://127.0.0.1:8001` | Base URL of `ml_service` |
 | `CLASSIFIER_CONFIDENCE_THRESHOLD` | `0.5` | At or above this confidence, retrieval is scoped to the predicted category; below it, retrieval searches all categories |
 | `CLASSIFIER_ABSTAIN_THRESHOLD` | `0.35` | Below this confidence, no retrieval is attempted and the gateway returns its standard "no specific answer" message instead of a likely irrelevant entry. Must be strictly below `CLASSIFIER_CONFIDENCE_THRESHOLD` |
@@ -301,6 +317,8 @@ Empty or invalid values fall back to the defaults, with a logged warning. Each r
 Both thresholds are provisional. They were chosen from a handful of test queries and will be calibrated in the retrieval evaluation.
 
 When `ml_service` is unavailable, the keyword fallback still answers, but its retrieval is weaker. For example, it answers "when should I start antenatal visits" with KB-P1 (pelvic exams at the first visit) instead of KB-P2 (antenatal checkups), which `ml_service` returns.
+
+`ml_service` has **no authentication** of its own. Bind it to `127.0.0.1` (as below) or otherwise make it unreachable from anywhere except the gateway; if it is exposed, it bypasses the gateway's authentication.
 
 To start `ml_service` locally (PowerShell, from the repository root):
 
@@ -399,11 +417,13 @@ This prevents unreviewed AI-generated paraphrases from silently entering the eva
 
 ### Firebase Anonymous Authentication
 
-Firebase Anonymous Authentication is **not yet implemented**.
+Gateway token verification and the frontend's anonymous sign-in are implemented. The frontend signs in on the first query, not on page load, and keeps the session in memory only (`inMemoryPersistence`), so a page reload or a new tab starts a new anonymous identity.
 
-When introduced, authentication persistence must be explicitly configured so that anonymous session identity does not survive beyond the intended session lifetime.
+What this means for privacy:
 
-The implementation must therefore avoid the Firebase SDK's default persistent browser behavior where it conflicts with the project's privacy requirements.
+* There are no user-visible accounts, and no conversation content is stored.
+* Firebase keeps one anonymous user record (a uid) per sign-in. Automatic cleanup of old anonymous records may require upgrading the project to Identity Platform.
+* The Firebase JS SDK also records a small usage "heartbeat" in the browser's IndexedDB: at most one entry per day, containing a date and the SDK's version string. It contains no uid and no conversation content, and the SDK provides no option to disable it.
 
 ---
 
