@@ -3,19 +3,19 @@
 ## KB-C1
 - **Intent:** Contraception
 - **User question:** Can I get birth control even though I'm a teenager?
-- **Answer:** WHO guidance recommends that adolescents should be able to access contraceptive information and services without mandatory parental or guardian authorization or notification. Specific service or legal requirements may vary by setting.
+- **Answer:** Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you. Specific service or legal requirements may vary by setting.
 - **Evidence/claim:** WHO recommends adolescent SRH services, including contraceptive information and services, without mandatory parental/guardian authorization or notification.
 - **Source:** WHO Recommendations (2018), Ch. 3 §3.3.2, p. 12
-- **Conditions/limitations:** None significant.
+- **Conditions/limitations:** Consent wording is interim pending legal review (Children Act 2022 s.16(1)).
 - **Safety/referral notes:** None required.
 
 ## KB-C2
 - **Intent:** Contraception
 - **User question:** Do I need my parents' permission to get contraception?
-- **Answer:** WHO guidance recommends that adolescents should be able to access contraceptive information and services without mandatory parental or guardian authorization or notification. This is WHO guidance and should not be interpreted as a statement of current Kenyan law.
+- **Answer:** Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you.
 - **Evidence/claim:** Same as KB-C1.
 - **Source:** WHO Recommendations (2018), Ch. 3 §3.3.2, p. 12
-- **Conditions/limitations:** Exact legal age of consent under current Kenyan law not established by available sources — flagged, not stated.
+- **Conditions/limitations:** Exact legal age of consent under current Kenyan law not established by available sources — flagged, not stated. Consent wording is interim pending legal review (Children Act 2022 s.16(1)).
 - **Safety/referral notes:** None required.
 
 ---

@@ -97,7 +97,9 @@ def main():
 
     os.makedirs(os.path.dirname(OUT_PATH), exist_ok=True)
 
-    with open(OUT_PATH, "w", encoding="utf-8") as file:
+    # newline="\n": write LF on every platform (text mode would write CRLF
+    # on Windows).
+    with open(OUT_PATH, "w", encoding="utf-8", newline="\n") as file:
         json.dump(kb, file, indent=2, ensure_ascii=False)
         file.write("\n")
 

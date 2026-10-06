@@ -3,22 +3,15 @@
     "id": "KB-C1",
     "class": "contraception",
     "title": "Can I get birth control even though I'm a teenager?",
-    "content": "WHO guidance recommends that adolescents should be able to access contraceptive information and services without mandatory parental or guardian authorization or notification. Specific service or legal requirements may vary by setting.\n\nEvidence: WHO recommends adolescent SRH services, including contraceptive information and services, without mandatory parental/guardian authorization or notification.",
+    "content": "Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you. Specific service or legal requirements may vary by setting.\n\nEvidence: WHO recommends adolescent SRH services, including contraceptive information and services, without mandatory parental/guardian authorization or notification.\n\nConditions: Consent wording is interim pending legal review (Children Act 2022 s.16(1)).",
     "source": "WHO Recommendations (2018), Ch. 3 §3.3.2, p. 12"
   },
   {
     "id": "KB-C2",
     "class": "contraception",
     "title": "Do I need my parents' permission to get contraception?",
-    "content": "WHO guidance recommends that adolescents should be able to access contraceptive information and services without mandatory parental or guardian authorization or notification. This is WHO guidance and should not be interpreted as a statement of current Kenyan law.\n\nEvidence: Same as KB-C1.\n\nConditions: Exact legal age of consent under current Kenyan law not established by available sources — flagged, not stated.",
+    "content": "Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you.\n\nEvidence: Same as KB-C1.\n\nConditions: Exact legal age of consent under current Kenyan law not established by available sources — flagged, not stated. Consent wording is interim pending legal review (Children Act 2022 s.16(1)).",
     "source": "WHO Recommendations (2018), Ch. 3 §3.3.2, p. 12"
-  },
-  {
-    "id": "KB-S2",
-    "class": "sti",
-    "title": "Can teenagers access HIV testing without their parents?",
-    "content": "WHO guidance recommends that HIV testing services, including HIV self-testing, be accessible to adolescents without mandatory parental or guardian authorization or notification.\n\nEvidence: HIV testing services must be accessible to adolescents without mandatory parental authorization.\n\nConditions: Partner notification (if relevant) is handled separately with IPV-risk sensitivity — not covered in this entry.",
-    "source": "WHO Recommendations (2018), Ch. 7 §7.4, pp. 47–48"
   },
   {
     "id": "KB-S3",
@@ -33,13 +26,6 @@
     "title": "Do I have to get a pelvic exam right away at my first visit?",
     "content": "No — youth-friendly facilities should let you delay pelvic exams and blood tests until you're ready, while still addressing your immediate needs another way.\n\nEvidence: YFS facilities must offer options to delay pelvic exams and blood tests until the client is psychologically/emotionally prepared, alongside alternative ways to meet immediate needs.\n\nConditions: 2005 document — flag for domain expert to confirm still standard practice.",
     "source": "Kenya MoH YFS Guidelines (2005), Ch. 3 §3.3, p. 18"
-  },
-  {
-    "id": "KB-P2",
-    "class": "pregnancy",
-    "title": "Do I have to pay for antenatal checkups as a teenager?",
-    "content": "Maternal healthcare is expected to be free, confidential, and accessible without needing a third party's permission.\n\nEvidence: Maternal health care must be free, confidential, adolescent-responsive, and accessible without third-party authorization.",
-    "source": "WHO Recommendations (2018), Ch. 4 §4.2, p. 18"
   },
   {
     "id": "KB-G1",
