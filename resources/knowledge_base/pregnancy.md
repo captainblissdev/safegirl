@@ -12,10 +12,10 @@
 ## KB-P2
 - **Intent:** Pregnancy
 - **User question:** Do I have to pay for antenatal checkups as a teenager?
-- **Answer:** Maternal healthcare is expected to be free, confidential, and accessible without needing a third party's permission.
+- **Answer:** Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you.
 - **Evidence/claim:** Maternal health care must be free, confidential, adolescent-responsive, and accessible without third-party authorization.
 - **Source:** WHO Recommendations (2018), Ch. 4 §4.2, p. 18
-- **Conditions/limitations:** None significant.
+- **Conditions/limitations:** Consent wording is interim pending legal review (Children Act 2022 s.16(1)).
 - **Safety/referral notes:** None required.
 
 ---
