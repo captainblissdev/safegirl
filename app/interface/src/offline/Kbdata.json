@@ -14,7 +14,7 @@
       "kbId": "KB-C2",
       "intent": "Contraception",
       "question": "Do I need my parents' permission to get contraception?",
-      "answer": "Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you. This is WHO guidance and should not be interpreted as a statement of current Kenyan law.",
+      "answer": "Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you.",
       "evidenceClaim": "Same as KB-C1.",
       "source": "WHO Recommendations (2018), Ch. 3 §3.3.2, p. 12",
       "conditions": "Exact legal age of consent under current Kenyan law not established by available sources — flagged, not stated. Consent wording is interim pending legal review (Children Act 2022 s.16(1)).",
