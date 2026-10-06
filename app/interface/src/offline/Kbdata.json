@@ -19,6 +19,36 @@
       "source": "WHO Recommendations (2018), Ch. 3 §3.3.2, p. 12",
       "conditions": "Exact legal age of consent under current Kenyan law not established by available sources — flagged, not stated. Consent wording is interim pending legal review (Children Act 2022 s.16(1)).",
       "safetyNotes": "None required."
+    },
+    {
+      "kbId": "KB-C3",
+      "intent": "Contraception",
+      "question": "Which birth control methods can a teenager use?",
+      "answer": "Kenya's national family planning guidelines say adolescents can safely use any contraceptive method, following the guidelines and the WHO eligibility criteria. A health worker will help you choose, and some medical conditions can change which method suits you. Using condoms as well gives extra protection against STIs.",
+      "evidenceClaim": "Kenyan guidance states that adolescents and youth can safely use any contraceptive method, applying the national guidelines and WHO medical eligibility criteria.",
+      "source": "Kenya MoH, National Family Planning Guidelines for Service Providers, 6th ed., p. 39; WHO, Family Planning: A Global Handbook for Providers (2022), Ch. 1, p. 5",
+      "conditions": "Individual medical conditions change eligibility. Per-method eligibility categories are not stated because they could not be verified. The 7th edition (2025) of the Kenyan guidelines could not be read and may differ.",
+      "safetyNotes": "A health worker should confirm the choice, especially if she has a medical condition or might already be pregnant."
+    },
+    {
+      "kbId": "KB-C4",
+      "intent": "Contraception",
+      "question": "Do I still need a condom if I'm on the pill or the implant?",
+      "answer": "Yes, if you want protection from STIs. Condoms are the only contraceptive method that prevents both pregnancy and sexually transmitted infections, including HIV. Other methods prevent pregnancy only, so Kenyan guidance strongly encourages young people to use condoms as well, for dual protection.",
+      "evidenceClaim": "Condoms are the only method that prevents both pregnancy and STIs including HIV; Kenyan guidance urges adolescents to use condoms for dual protection.",
+      "source": "WHO, Family planning/contraception methods fact sheet (3 July 2025); Kenya MoH, National Family Planning Guidelines, 6th ed., p. 39",
+      "conditions": "Protection depends on using condoms consistently and correctly. Step-by-step use instructions are not included because no verified source text was reached.",
+      "safetyNotes": "If a condom breaks or slips, or she has had unprotected sex, she should see a health worker promptly. Emergency contraception timing is held for expert review. She should also go for any STI symptoms."
+    },
+    {
+      "kbId": "KB-C5",
+      "intent": "Contraception",
+      "question": "Will contraception make me infertile or stop me having babies later?",
+      "answer": "No. WHO states that modern contraceptive methods do not cause infertility. After you stop a method your fertility comes back, though Kenya's guidelines say that for most methods it can take 3 to 6 months on average. Getting pregnant later is still possible.",
+      "evidenceClaim": "WHO: modern contraceptive methods do not cause infertility. Kenya: average 3 to 6 months delay in return to fertility for most methods.",
+      "source": "WHO, Family planning/contraception methods fact sheet (2025); Kenya MoH, National Family Planning Guidelines, 6th ed., p. 45; WHO, Family Planning Handbook (2022), Ch. 1, p. 3",
+      "conditions": "The delay before fertility returns varies by method and person. No method-specific figure (for example for injectables) was found in a source, so none is given. This does not address infertility caused by untreated STIs.",
+      "safetyNotes": "If she is worried about her fertility, or has pelvic pain or unusual discharge, she should see a health worker."
     }
   ],
   "sti": [
@@ -31,6 +61,46 @@
       "source": "Kenya MoH YFS Guidelines (2005), Annex 1, pp. 26–28 and WHO (2018), Ch. 7 §7.3.5/7.3.14, pp. 43, 46",
       "conditions": "Specific drug names/dosing not established by sources — do not include in the answer.",
       "safetyNotes": "Must direct to immediate facility-based care — this is time-critical."
+    },
+    {
+      "kbId": "KB-S4",
+      "intent": "STIs",
+      "question": "I have unusual discharge, itching, burning or lower belly pain. Could it be an STI?",
+      "answer": "It could be. Unusual discharge, genital sores or lower belly pain can be signs of an STI, but many STIs cause no symptoms at all, so only a test can tell. A health worker can examine you and give treatment, and Kenya's guidelines say providers must ensure privacy and confidentiality when serving adolescents.",
+      "evidenceClaim": "Lower abdominal pain, pain during sex, bleeding between periods and fever may indicate pelvic inflammatory disease; most STIs have no symptoms; providers must ensure privacy and confidentiality for adolescents.",
+      "source": "Kenya MoH, National Guidelines for Prevention, Management and Control of STIs (2018), s. 4.3 p. 39 and s. 4.5.4 p. 44; WHO, Sexually transmitted infections fact sheet",
+      "conditions": "2018 is the only Kenyan STI guideline edition found, read through a third-party copy. No treatment or drug advice is given.",
+      "safetyNotes": "Lower belly pain with fever, or pain during sex, needs a clinic visit soon. She should not self-treat."
+    },
+    {
+      "kbId": "KB-S5",
+      "intent": "STIs",
+      "question": "Can STIs be cured, and can they harm me if I leave them?",
+      "answer": "Four common STIs (syphilis, gonorrhoea, chlamydia and trichomoniasis) can be cured with antibiotics. HIV and herpes cannot be cured, but medicine can keep them under control. Some untreated infections can spread and cause pelvic inflammatory disease, so it is better to get tested and treated early.",
+      "evidenceClaim": "Syphilis, gonorrhoea, chlamydia and trichomoniasis are curable; HIV and herpes are not but can be managed; untreated infection can lead to pelvic inflammatory disease.",
+      "source": "WHO, Sexually transmitted infections fact sheet; Kenya MoH, STI guidelines (2018), s. 4.3 p. 39",
+      "conditions": "Being cured does not protect against catching the infection again. Partner treatment and finish-the-course advice are not included because no verbatim source text was seen.",
+      "safetyNotes": "She should go to a clinic for testing and treatment rather than self-treating."
+    },
+    {
+      "kbId": "KB-S6",
+      "intent": "STIs",
+      "question": "Is the HPV vaccine available to me, and am I old enough?",
+      "answer": "Kenya's national HPV vaccine programme targets girls from age 10, and since November 2025 it is given as a single dose. If you are older than that, ask at a government health facility whether you can still get it.",
+      "evidenceClaim": "Kenya's HPV programme targets 10-year-old girls and moved from a two-dose to a single-dose schedule in November 2025.",
+      "source": "WHO AFRO, Kenya transitions to single-dose HPV vaccination schedule (page dated 1 November 2025)",
+      "conditions": "Sources disagree on the target age (WHO AFRO: 10-year-olds; news reports: 10 to 14). Whether it is free, and whether catch-up is offered for older girls, was not stated in any primary source.",
+      "safetyNotes": "Do not tell a girl over 14 she is ineligible. She should ask at a clinic."
+    },
+    {
+      "kbId": "KB-S7",
+      "intent": "STIs",
+      "question": "Can I take PrEP to prevent HIV? I'm a teenager.",
+      "answer": "PrEP is medicine that HIV-negative people take to lower their risk of getting HIV. Kenya's 2022 guidelines say it is for sexually active people aged 15 and over who test HIV-negative, and it is available across all 47 counties. A health worker will test you and check it is right for you. PrEP does not protect against other STIs, so condoms still matter.",
+      "evidenceClaim": "Kenya's 2022 guideline: PrEP should only be offered to clients aged 15 and over who are sexually active and HIV-negative; PrEP is available across the 47 counties.",
+      "source": "Kenya MoH/NASCOP, Kenya HIV Prevention and Treatment Guidelines (2022), s. 11.1.3; Kenya MoH, Framework for the Implementation of PrEP of HIV in Kenya (2022); WHO, HIV fact sheet",
+      "conditions": "A weight criterion (30 kg in the Kenyan guideline, as reported) is not in the answer. Whether 15- to 17-year-olds need parental consent was not found. Eligibility for the dapivirine ring was not found. Check whether Children Act 2022 s. 16(1) affects this.",
+      "safetyNotes": "Girls under 15, or at ongoing risk, should go to a clinic or youth-friendly service. PrEP needs an HIV test first and regular follow-up testing."
     }
   ],
   "pregnancy": [
@@ -43,6 +113,36 @@
       "source": "Kenya MoH YFS Guidelines (2005), Ch. 3 §3.3, p. 18",
       "conditions": "2005 document — flag for domain expert to confirm still standard practice.",
       "safetyNotes": "None required."
+    },
+    {
+      "kbId": "KB-P5",
+      "intent": "Pregnancy",
+      "question": "Can I stay in school if I'm pregnant, and can I go back after the baby?",
+      "answer": "Under Kenya's 2020 national school re-entry guidelines, a pregnant learner is allowed to stay in school for as long as possible and to sit national exams if her health allows. After delivery she is re-admitted to the same class she was in before. The guidelines give the return time as six months after delivery and also as the start of the next calendar year, so ask your school's guidance and counselling teacher what applies to you.",
+      "evidenceClaim": "A pregnant learner shall be allowed to remain in school as long as possible and to sit national exams if her health permits; after delivery she is re-admitted to the same class unconditionally.",
+      "source": "Ministry of Education, Kenya, National Guidelines for School Re-Entry in Early Learning and Basic Education (2020), Section 3.2",
+      "conditions": "The guidelines state the return both as six months after delivery and as the start of the next calendar year, which can differ. These are national guidelines; practice in schools varies.",
+      "safetyNotes": "If a school refuses, she can ask the guidance and counselling teacher. A verified escalation route (for example the sub-county education office) was not found."
+    },
+    {
+      "kbId": "KB-P6",
+      "intent": "Pregnancy",
+      "question": "What warning signs in pregnancy mean I should go to hospital right away?",
+      "answer": "Kenya's Mother and Child Health Handbook lists these warning signs: vaginal bleeding, severe stomach pain, the baby moving less or not at all, fits, fever, a severe headache, waters breaking, and swelling of the face and hands. If you have any of them, go to a health facility straight away.",
+      "evidenceClaim": "The handbook lists these danger signs and advises being prepared to seek skilled care at a health facility for any of them.",
+      "source": "Kenya MoH, Mother & Child Health Handbook (Afya ya Mama na Mtoto), revised 2020",
+      "conditions": "A lay list from the handbook, not a clinical triage protocol. An earlier (2016) copy lists a different set of signs, so use the 2020 edition.",
+      "safetyNotes": "Any of these signs means going to the nearest health facility immediately. She should not wait or treat at home."
+    },
+    {
+      "kbId": "KB-P7",
+      "intent": "Pregnancy",
+      "question": "Do I need iron and folic acid tablets in pregnancy, and what should I eat?",
+      "answer": "Kenya's Mother and Child Health Handbook says to take iron and folic acid supplements every day throughout pregnancy and to eat at least 5 of the 10 food groups each day. The clinic gives you the tablets. If you feel very tired, look pale or get breathless, tell the clinic.",
+      "evidenceClaim": "Take iron and folic acid supplements every day throughout pregnancy and eat at least 5 of the 10 food groups every day.",
+      "source": "Kenya MoH, Mother & Child Health Handbook (2020); Kenya MoH, Basic Obstetric Protocols, 1st ed. (2026)",
+      "conditions": "The dose is for clinicians to prescribe and is not given here. Side effects were not found in a source. The WHO iron and folic acid guideline (2012) could not be opened.",
+      "safetyNotes": "Tiredness with a pale look or breathlessness may be anaemia and needs a clinic visit."
     }
   ],
   "general": [
@@ -65,6 +165,56 @@
       "source": "Kenya MoH YFS Guidelines (2005), Ch. 1 §1.1.2, p. 2",
       "conditions": "None significant.",
       "safetyNotes": "None required."
+    },
+    {
+      "kbId": "KB-G3",
+      "intent": "General",
+      "question": "Is my period normal, and when should I see a health worker?",
+      "answer": "In the first years after periods start they are often irregular. WHO says bleeding that is unpredictable, infrequent, very painful or heavy, or that stops you doing normal activities, could point to an underlying health condition, so see a health worker. A late period can have many causes, including pregnancy.",
+      "evidenceClaim": "WHO: menstrual bleeding that is unpredictable, infrequent, very painful, heavy, or disrupts normal activities could suggest an underlying health condition. NHS: periods are more likely to be irregular when they first start in puberty.",
+      "source": "WHO, Menstrual health fact sheet; NHS, Irregular periods (UK)",
+      "conditions": "No numeric cycle-length range is given: the figures found (an NHS adult definition of under 21 or over 35 days) are not adolescent- or Kenya-specific, and no Kenyan source gave a range.",
+      "safetyNotes": "Very heavy bleeding, or pain that stops usual activities, needs a facility visit. A late period should be routed to a health worker or a pregnancy test, not diagnosed."
+    },
+    {
+      "kbId": "KB-G4",
+      "intent": "General",
+      "question": "What can I do about period pain?",
+      "answer": "Many girls have period pain: WHO says more than 2 in 3 women and girls do. A warm bath or shower, or a warm heat pad on your tummy, can help. Ask a pharmacist or health worker which painkiller and dose is safe for you. See a health worker if the pain stops your usual activities, or is new or worse than usual.",
+      "evidenceClaim": "WHO: more than 2 out of 3 women and girls have pain with menstrual bleeding. NHS: warm bath or shower and a heat pad can help; see a GP if pain stops usual daily activities.",
+      "source": "WHO, Menstrual health fact sheet; NHS, Period pain (UK)",
+      "conditions": "The self-care advice comes from a UK source; no Kenyan source on period pain was found. No doses are given. Some painkillers are unsuitable for some people (for example with stomach ulcers or asthma), which was not verified in these sources.",
+      "safetyNotes": "Severe or worsening pelvic pain needs a facility visit. Pain with a late period could be pregnancy-related, so it should not be called just a period."
+    },
+    {
+      "kbId": "KB-G5",
+      "intent": "General",
+      "question": "How do I manage my period hygienically?",
+      "answer": "Kenya's national policy aims for every girl to manage her period hygienically, with dignity and without stigma. It says girls should learn which safe menstrual products to use, how to use and care for them, and how to dispose of them. Practical tips such as how often to change a pad are not covered here, so a nurse, teacher or pharmacist can advise.",
+      "evidenceClaim": "Kenya's policy mission: all women and girls can manage menstruation hygienically, freely, with dignity and without stigma; Objective 3 covers knowledge of safe products, proper use and care, and disposal.",
+      "source": "Kenya MoH, Menstrual Hygiene Management Policy 2019-2030 (copy hosted by wesnetwork.org), p. vi and p. 13",
+      "conditions": "The policy is high level and gives no practical steps (how often to change, washing, maximum wear time). A third-party copy was read, so check it against the MoH original.",
+      "safetyNotes": "None specific."
+    },
+    {
+      "kbId": "KB-G6",
+      "intent": "General",
+      "question": "What changes happen to my body at puberty, and when does my first period come?",
+      "answer": "The first sign of puberty in most girls is breast 'buds', followed by body hair and a growth spurt. Most girls get their first period within 2 to 3 years after breast development starts. Timing varies from girl to girl, so if you are worried about your development, talk to a health worker.",
+      "evidenceClaim": "AAP: breast buds are the earliest sign of puberty; most girls get their first period within 2 to 3 years after breast buds develop.",
+      "source": "American Academy of Pediatrics, HealthyChildren.org, Physical Development in Girls: What to Expect During Puberty (2019)",
+      "conditions": "The source is American. Its average first-period age (about 12) differs from the median in Kenya's MHM policy (14.4 years, reported as a paraphrase), so no ages are given. KDHS 2022 was not opened.",
+      "safetyNotes": "If there are no signs of puberty, or no period well past typical ages, talk to a health worker. No verified age thresholds were found."
+    },
+    {
+      "kbId": "KB-G7",
+      "intent": "General",
+      "question": "What does a youth-friendly health service offer, and what should I expect?",
+      "answer": "Kenya's national guidelines say youth-friendly services should be accessible, acceptable, appropriate, effective and equitable: free or affordable, with providers who do not judge you. They should offer counselling on growth and development, relationships and sexuality, and services such as contraception counselling, pregnancy testing, and STI and HIV care. These can be found at health facilities, pharmacies, mobile clinics and help lines.",
+      "evidenceClaim": "Youth-friendly services are defined as accessible, acceptable, appropriate, effective and equitable; the package includes counselling on growth and development, relationships and sexuality; delivery points include facilities, pharmacies, mobile clinics and help lines.",
+      "source": "Kenya MoH, National Guidelines for Provision of Adolescent and Youth Friendly Services in Kenya (2016), pp. 8, 18-19, 28-29, 34; Kenya MoH, National Adolescent Sexual and Reproductive Health Policy (2015), s. 6.2.3.6, p. 24",
+      "conditions": "Written as what services 'should' offer: practice varies and a given facility may not offer everything. No verified facility directory, helpline or hours were found. The 2016 edition may have been superseded. Post-abortion care and sexual violence content in the guidelines is held and not used here.",
+      "safetyNotes": "Urgent symptoms (heavy bleeding, severe pain, possible pregnancy) need prompt care."
     }
   ]
 }
