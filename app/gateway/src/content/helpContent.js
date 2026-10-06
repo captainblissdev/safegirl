@@ -17,8 +17,8 @@ const GBV_HELPLINE = "1195";
 // UNVERIFIED: confirm before real users.
 const CHILDLINE_KENYA = "116";
 
-// UNVERIFIED: confirm before real users. Emergency numbers, used only in
-// the self-harm referral.
+// UNVERIFIED: confirm before real users. Emergency numbers, used in the
+// self-harm and abuse referrals.
 const EMERGENCY_NUMBERS = ["999", "112"];
 
 /** Where to get help, shared by the signposting and no-answer messages. */
@@ -44,6 +44,18 @@ const SELF_HARM_REFERRAL_MESSAGE =
   "trust, or go to a health facility today. If you are in immediate " +
   `danger, call ${EMERGENCY_NUMBERS[0]} or ${EMERGENCY_NUMBERS[1]}.`;
 
+/**
+ * Referral for violence, abuse, blackmail and threats (Safety Net
+ * category "abuse"). Interim wording, not clinically reviewed.
+ */
+const ABUSE_REFERRAL_MESSAGE =
+  "I'm sorry this is happening, and it is not your fault. You deserve to " +
+  "be safe. Please tell someone you trust, or go to a health facility, " +
+  "where you can get care and support. If you are in danger now, call " +
+  `${EMERGENCY_NUMBERS[0]} or ${EMERGENCY_NUMBERS[1]}. The GBV helpline ` +
+  `${GBV_HELPLINE} and Childline Kenya ${CHILDLINE_KENYA} (for anyone ` +
+  "under 18) can also help.";
+
 const UNVERIFIED_CONTACTS_WARNING =
   "[content] Help contact numbers are UNVERIFIED: confirm before real users " +
   "(app/gateway/src/content/helpContent.js)";
@@ -65,6 +77,7 @@ module.exports = {
   EMERGENCY_NUMBERS,
   SIGNPOSTING_MESSAGE,
   SELF_HARM_REFERRAL_MESSAGE,
+  ABUSE_REFERRAL_MESSAGE,
   NO_ANSWER_MESSAGE,
   UNVERIFIED_CONTACTS_WARNING,
   warnIfContactsUnverified,

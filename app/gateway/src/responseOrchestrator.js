@@ -28,17 +28,8 @@ const {
   NO_ANSWER_MESSAGE,
   SIGNPOSTING_MESSAGE,
   SELF_HARM_REFERRAL_MESSAGE,
+  ABUSE_REFERRAL_MESSAGE,
 } = require("./content/helpContent");
-
-/**
- * Referral for violence, abuse, blackmail and threats (Safety Net
- * category "abuse"). Placeholder pending authoritative sourcing.
- */
-const ABUSE_REFERRAL_MESSAGE =
-  "We hear you. We want to help. Please reach out to a trusted " +
-  "adult, health worker, or local support service as soon as you " +
-  "can. [Referral/escalation content pending authoritative " +
-  "sourcing — R1/R2/R8, not yet finalized.]";
 
 /**
  * Combine Safety Net, classification, and generation results.
