@@ -6,7 +6,7 @@
  */
 
 /**
- * Set to true only after both numbers below have been confirmed with the
+ * Set to true only after every number below has been confirmed with the
  * services themselves. While false, the gateway logs a warning at startup.
  */
 const HELP_CONTACTS_VERIFIED = false;
@@ -16,6 +16,10 @@ const GBV_HELPLINE = "1195";
 
 // UNVERIFIED: confirm before real users.
 const CHILDLINE_KENYA = "116";
+
+// UNVERIFIED: confirm before real users. Emergency numbers, used only in
+// the self-harm referral.
+const EMERGENCY_NUMBERS = ["999", "112"];
 
 /** Where to get help, shared by the signposting and no-answer messages. */
 const HELP_GUIDANCE =
@@ -29,6 +33,16 @@ const SIGNPOSTING_MESSAGE = `I don't have information on that yet. ${HELP_GUIDAN
 
 /** Reply when no knowledge-base answer is available (including abstained). */
 const NO_ANSWER_MESSAGE = HELP_GUIDANCE;
+
+/**
+ * Referral for self-harm or suicidal statements (Safety Net category
+ * "self_harm"). Interim wording, not clinically reviewed.
+ */
+const SELF_HARM_REFERRAL_MESSAGE =
+  "I'm really sorry you are feeling this way, and I'm glad you said " +
+  "something. You deserve support right now. Please tell someone you " +
+  "trust, or go to a health facility today. If you are in immediate " +
+  `danger, call ${EMERGENCY_NUMBERS[0]} or ${EMERGENCY_NUMBERS[1]}.`;
 
 const UNVERIFIED_CONTACTS_WARNING =
   "[content] Help contact numbers are UNVERIFIED: confirm before real users " +
@@ -48,7 +62,9 @@ module.exports = {
   HELP_CONTACTS_VERIFIED,
   GBV_HELPLINE,
   CHILDLINE_KENYA,
+  EMERGENCY_NUMBERS,
   SIGNPOSTING_MESSAGE,
+  SELF_HARM_REFERRAL_MESSAGE,
   NO_ANSWER_MESSAGE,
   UNVERIFIED_CONTACTS_WARNING,
   warnIfContactsUnverified,

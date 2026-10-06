@@ -167,3 +167,72 @@ describe("flagged queries in the pipeline", () => {
     });
   }
 });
+
+describe("referral messages by category", () => {
+  const {
+    SELF_HARM_REFERRAL_MESSAGE,
+    EMERGENCY_NUMBERS,
+    GBV_HELPLINE,
+    CHILDLINE_KENYA,
+    UNVERIFIED_CONTACTS_WARNING,
+    warnIfContactsUnverified,
+  } = require("../src/content/helpContent");
+  const { ABUSE_REFERRAL_MESSAGE } = require("../src/responseOrchestrator");
+
+  const handleQuery = createHandleQuery({
+    classifierClient: {
+      classify: async () => ({
+        label: "general",
+        confidence: 0.9,
+        source: "distilbert",
+      }),
+      retrieve: async () => ({ entry: null, retrievalScope: "scoped" }),
+    },
+  });
+
+  it("uses the interim self-harm wording exactly", () => {
+    assert.equal(
+      SELF_HARM_REFERRAL_MESSAGE,
+      "I'm really sorry you are feeling this way, and I'm glad you said " +
+        "something. You deserve support right now. Please tell someone you " +
+        "trust, or go to a health facility today. If you are in immediate " +
+        "danger, call 999 or 112.",
+    );
+    assert.deepEqual(EMERGENCY_NUMBERS, ["999", "112"]);
+  });
+
+  it("contains no phone number other than 999 and 112", () => {
+    const numbers = SELF_HARM_REFERRAL_MESSAGE.match(/\d{3,}/g);
+    assert.deepEqual(numbers, ["999", "112"]);
+    for (const other of [GBV_HELPLINE, CHILDLINE_KENYA]) {
+      assert.ok(!SELF_HARM_REFERRAL_MESSAGE.includes(other));
+    }
+  });
+
+  for (const text of ["I want to kill myself", "my friend wants to die"]) {
+    it(`sends the self-harm referral for ${JSON.stringify(text)}`, async () => {
+      const result = await handleQuery(text);
+      assert.equal(result.outcome, "referral");
+      assert.equal(result.message, SELF_HARM_REFERRAL_MESSAGE);
+    });
+  }
+
+  for (const text of ["my uncle touches me", "he threatened to kill me"]) {
+    it(`sends the abuse referral for ${JSON.stringify(text)}`, async () => {
+      const result = await handleQuery(text);
+      assert.equal(result.outcome, "referral");
+      assert.equal(result.message, ABUSE_REFERRAL_MESSAGE);
+    });
+  }
+
+  it("sends the self-harm referral when abuse and self-harm both match", async () => {
+    const result = await handleQuery("he beats me and I want to die");
+    assert.equal(result.message, SELF_HARM_REFERRAL_MESSAGE);
+  });
+
+  it("warns once at startup while the numbers, emergency numbers included, are unverified", () => {
+    const warnings = [];
+    warnIfContactsUnverified({ warn: (message) => warnings.push(message) });
+    assert.deepEqual(warnings, [UNVERIFIED_CONTACTS_WARNING]);
+  });
+});
