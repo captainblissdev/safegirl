@@ -148,6 +148,28 @@ describe("referral messages by category", () => {
     }
   });
 
+  it("uses the interim abuse wording exactly", () => {
+    assert.equal(
+      ABUSE_REFERRAL_MESSAGE,
+      "I'm sorry this is happening, and it is not your fault. You deserve " +
+        "to be safe. Please tell someone you trust, or go to a health " +
+        "facility, where you can get care and support. If you are in danger " +
+        "now, call 999 or 112. The GBV helpline 1195 and Childline Kenya 116 " +
+        "(for anyone under 18) can also help.",
+    );
+  });
+
+  it("gives only 999, 112, 1195 and 116 in the abuse referral, with no placeholder note", () => {
+    assert.deepEqual(ABUSE_REFERRAL_MESSAGE.match(/\d{3,}/g), [
+      "999",
+      "112",
+      "1195",
+      "116",
+    ]);
+    assert.deepEqual([GBV_HELPLINE, CHILDLINE_KENYA], ["1195", "116"]);
+    assert.ok(!ABUSE_REFERRAL_MESSAGE.includes("["));
+  });
+
   for (const text of ["I want to kill myself", "my friend wants to die"]) {
     it(`sends the self-harm referral for ${JSON.stringify(text)}`, async () => {
       const result = await handleQuery(text);
