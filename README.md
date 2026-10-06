@@ -398,6 +398,18 @@ The workflow is defined in:
 
 `main` is intended to remain the stable branch, with changes introduced through pull requests.
 
+### Retrieval evaluation (development set)
+
+`research/eval/run_eval.js` runs every query in `resources/eval/retrieval_eval_set.csv` through the gateway and `ml_service` and reports how the system behaves. The set is a **development set** written by the project owner; it is **not** the independent DR-04 test set, and the two must not be mixed.
+
+It needs `ml_service` and a gateway started with `AUTH_DISABLED=true` (local development only). From the repository root:
+
+```bash
+node research/eval/run_eval.js --gateway http://127.0.0.1:3016 --ml http://127.0.0.1:8002
+```
+
+For each query it records the gateway's response, the `ml_service` classification, the top 3 retrieved entries scoped to the predicted class and unscoped, the frozen keyword baseline's class and the keyword fallback's entry. It writes them to `research/eval/results/retrieval_eval_<UTC timestamp>.csv` and prints a summary (also saved as `.summary.md`): results by group, safety-net recall and false referrals, classifier accuracy, retrieval hit@1/hit@3, failures, and an offline sweep of the abstain and scoped thresholds replayed from the recorded confidences. The sweep only reports; it never changes the live thresholds. The harness changes no gateway code or configuration.
+
 ---
 
 ## Model Training
