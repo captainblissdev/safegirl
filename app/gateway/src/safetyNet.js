@@ -35,8 +35,9 @@ const DISTRESS_KEYWORDS = [
   "made me do it",
   "didn't stop",
   "did not stop",
-  "said no",
-  "i said no",
+  // Bare "said no" is deliberately excluded: it also matches ordinary
+  // sentences such as "my parents said no to the party". A refusal is
+  // flagged by the "say no + violence or sex" rule below.
   "didn't consent",
   "did not consent",
   "without my consent",
@@ -120,12 +121,42 @@ const SELF_HARM_PATTERNS = [
   ],
   ["self-harm", /\bself[- ]?harm(?:ing)?\b/],
   [
-    "no reason to live",
-    /\b(?:no reason|nothing) (?:to|2) live for\b|\bno reason (?:to|2) live\b/,
+    "no point / no reason in living",
+    /\b(?:no|not any|not a) (?:point|reason)s? (?:in|to|2) (?:living|live|going on|go on|carrying on|carry on|keep going|keeping going)\b|\b(?:no reason|nothing) (?:to|2) live for\b/,
   ],
+  [
+    "don't see a reason to keep going",
+    new RegExp(
+      `\\b(?:${DONT}|can'?t|cannot|can not) see (?:a|any|the) (?:reason|point) (?:to|in|2) (?:keep going|keeping going|go on|going on|carry on|carrying on|live|living)\\b`,
+    ),
+  ],
+  [
+    "want it to end",
+    /\bwants? (?:it|this|everything|it all|all this|all of this|my life) (?:to|2) end\b|\bwish (?:it|everything|my life) would end\b/,
+  ],
+  ["hate my life", /\bhate (?:my life|being alive|living)\b/],
+  ["tired of being alive", /\b(?:tired|sick) of (?:being alive|living|life)\b/],
   ["better off dead", /\b(?:better off dead|better off without me)\b/],
+  [
+    "better off if I wasn't here",
+    /\bbetter off if i (?:wasn'?t|was not|weren'?t|were not) (?:here|around|alive)\b/,
+  ],
+  [
+    "thinking about how to end it",
+    /\b(?:think|thinks|thinking|thought) (?:about|of) (?:how to |ways to )?end(?:ing)? (?:it|things|my life)\b(?! with)/,
+  ],
   ["suicide", /\bsuicid(?:e|al)\b/],
 ];
+
+// Secrecy demands ("he told me not to tell", "keep it a secret").
+const SECRECY =
+  "\\b(?:told|tells|tell|said|says|asked|asks|made) (?:me )?(?:not (?:to|2) tell|to keep (?:it|this|quiet))|\\bkeep (?:it|this) (?:a |our )?secret\\b|\\bour (?:little )?secret\\b|\\bnot (?:to|2) tell (?:anyone|anybody|my)\\b";
+// Touch or sexual words, for secrecy demands that accompany them.
+const TOUCH_OR_SEX =
+  "\\b(?:touch\\w*|sex\\w*|private parts?|kiss\\w*|naked|nudes?|undress\\w*|my body|bedroom)\\b";
+// People who may threaten to kill.
+const PERSON =
+  "(?:dad|daddy|father|mother|mum|mom|mama|uncle|aunt|auntie|brother|sister|boyfriend|husband|parents|stepfather|stepmother|step ?dad|step ?mum|step ?mom|he|she|they|him|her)";
 
 /**
  * Ongoing or past physical or sexual violence, in common verb forms.
@@ -150,6 +181,24 @@ const ABUSE_PATTERNS = [
   [
     "pressures me into sex",
     /\bpressur(?:es|ed|ing|e) me (?:into|to have|to) sex\b/,
+  ],
+  [
+    "secrecy + touch or sex",
+    new RegExp(`^(?=.*(?:${SECRECY}))(?=.*${TOUCH_OR_SEX})`),
+  ],
+  [
+    "<person> will kill me",
+    new RegExp(
+      `\\b${PERSON}(?:'ll| (?:will|would|is going to|are going to|is gonna|are gonna|gonna)) kill me\\b`,
+    ),
+  ],
+  [
+    "taken to be cut (FGM)",
+    /\b(?:take|takes|taking|taken|took|send|sends|sent|sending|bring|brought) (?:me|her|us) (?:to be|to get|for) (?:cut|circumcised|circumcision|cutting)\b|\b(?:taken|going|want|wants|plan|plans|planning) (?:me |her )?to be (?:cut|circumcised)\b|\b(?:i|she) (?:will|is going to|am going to) be (?:cut|circumcised)\b/,
+  ],
+  [
+    "asks me to send nudes",
+    /\b(?:ask|asks|asked|asking|want|wants|wanted|keeps asking|begs|begged|pressur\w*|forc\w*|tells|told) me (?:to |for )?(?:send |sending )?(?:him |her |them )?(?:nudes?|naked (?:pictures|photos|pics|selfies)|nude (?:pictures|photos|pics|selfies)|pictures of my body)\b/,
   ],
   ["molested", /\bmolest(?:s|ed|ing|er)?\b/],
   ["abused (verb forms)", /\babus(?:ed|es|ing)\b/],
@@ -193,13 +242,15 @@ const RULES = [
 ];
 
 /**
- * Lowercase, straighten curly apostrophes and collapse whitespace, so
- * patterns see one spelling of "don't" whatever keyboard was used.
+ * Lowercase, straighten curly apostrophes, read "@" between letters as
+ * "a" (r@ped) and collapse whitespace, so patterns see one spelling
+ * whatever keyboard was used.
  */
 function normalize(text) {
   return text
     .toLowerCase()
     .replace(/[‘’ʼ`]/g, "'")
+    .replace(/(?<=[a-z])@(?=[a-z])/g, "a")
     .replace(/\s+/g, " ")
     .trim();
 }
