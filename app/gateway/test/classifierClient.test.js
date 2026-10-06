@@ -199,7 +199,7 @@ describe("retrieve()", () => {
 
   it("treats confidence exactly at the threshold as scoped", async () => {
     const { client, calls } = setup({
-      "/retrieve": () => jsonResponse({ results: [{ id: "KB-S2" }] }),
+      "/retrieve": () => jsonResponse({ results: [{ id: "KB-S3" }] }),
     });
 
     const { retrievalScope } = await client.retrieve(QUERY, {
@@ -214,7 +214,7 @@ describe("retrieve()", () => {
   it("omits intent (unscoped) when confidence < threshold", async () => {
     const { client, calls, localCalls } = setup({
       "/retrieve": () =>
-        jsonResponse({ results: [{ id: "KB-P2", class: "pregnancy" }] }),
+        jsonResponse({ results: [{ id: "KB-P1", class: "pregnancy" }] }),
     });
 
     const { entry, retrievalScope } = await client.retrieve(
@@ -224,7 +224,7 @@ describe("retrieve()", () => {
 
     assert.deepEqual(calls[0].body, { query: QUERY, top_k: 3 });
     assert.ok(!("intent" in calls[0].body));
-    assert.equal(entry.kbId, "KB-P2");
+    assert.equal(entry.kbId, "KB-P1");
     assert.equal(retrievalScope, "unscoped");
     assert.equal(localCalls.length, 0);
   });
@@ -304,7 +304,7 @@ describe("abstain zone", () => {
   ]) {
     it(`retrieves unscoped ${name}`, async () => {
       const { client, calls } = setup({
-        "/retrieve": () => jsonResponse({ results: [{ id: "KB-P2" }] }),
+        "/retrieve": () => jsonResponse({ results: [{ id: "KB-P1" }] }),
       });
 
       const { entry, retrievalScope } = await client.retrieve(
@@ -314,7 +314,7 @@ describe("abstain zone", () => {
 
       assert.equal(calls.length, 1);
       assert.deepEqual(calls[0].body, { query: QUERY, top_k: 3 });
-      assert.equal(entry.kbId, "KB-P2");
+      assert.equal(entry.kbId, "KB-P1");
       assert.equal(retrievalScope, "unscoped");
     });
   }

@@ -23,16 +23,6 @@
   ],
   "sti": [
     {
-      "kbId": "KB-S2",
-      "intent": "STIs",
-      "question": "Can teenagers access HIV testing without their parents?",
-      "answer": "Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you.",
-      "evidenceClaim": "HIV testing services must be accessible to adolescents without mandatory parental authorization.",
-      "source": "WHO Recommendations (2018), Ch. 7 §7.4, pp. 47–48",
-      "conditions": "Partner notification (if relevant) is handled separately with IPV-risk sensitivity — not covered in this entry. Consent wording is interim pending legal review (Children Act 2022 s.16(1)).",
-      "safetyNotes": "None required."
-    },
-    {
       "kbId": "KB-S3",
       "intent": "STIs",
       "question": "I might have been exposed to HIV. Is there something I can take to stop it?",
@@ -52,16 +42,6 @@
       "evidenceClaim": "YFS facilities must offer options to delay pelvic exams and blood tests until the client is psychologically/emotionally prepared, alongside alternative ways to meet immediate needs.",
       "source": "Kenya MoH YFS Guidelines (2005), Ch. 3 §3.3, p. 18",
       "conditions": "2005 document — flag for domain expert to confirm still standard practice.",
-      "safetyNotes": "None required."
-    },
-    {
-      "kbId": "KB-P2",
-      "intent": "Pregnancy",
-      "question": "Do I have to pay for antenatal checkups as a teenager?",
-      "answer": "Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you.",
-      "evidenceClaim": "Maternal health care must be free, confidential, adolescent-responsive, and accessible without third-party authorization.",
-      "source": "WHO Recommendations (2018), Ch. 4 §4.2, p. 18",
-      "conditions": "Consent wording is interim pending legal review (Children Act 2022 s.16(1)).",
       "safetyNotes": "None required."
     }
   ],

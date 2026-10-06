@@ -1,14 +1,5 @@
 # Knowledge Base — STIs
 
-## KB-S2
-- **Intent:** STIs
-- **User question:** Can teenagers access HIV testing without their parents?
-- **Answer:** Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you.
-- **Evidence/claim:** HIV testing services must be accessible to adolescents without mandatory parental authorization.
-- **Source:** WHO Recommendations (2018), Ch. 7 §7.4, pp. 47–48
-- **Conditions/limitations:** Partner notification (if relevant) is handled separately with IPV-risk sensitivity — not covered in this entry. Consent wording is interim pending legal review (Children Act 2022 s.16(1)).
-- **Safety/referral notes:** None required.
-
 ## KB-S3
 - **Intent:** STIs
 - **User question:** I might have been exposed to HIV. Is there something I can take to stop it?
@@ -26,3 +17,14 @@
 - **User question:** How soon after exposure can I get an accurate HIV test?
 - **Evidence:** MoH Kenya (2005) states the HIV window period is approximately six weeks.
 - **Status:** 🟡 HOLD. Source-supported claim, but currency (whether this figure is still correct in 2026) has not been clinically verified. Do not present as a universal current diagnostic rule.
+
+## HELD — pending legal review
+
+### KB-S2 (HIV testing without parents / consent wording)
+- **User question:** Can teenagers access HIV testing without their parents?
+- **Answer:** Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you.
+- **Original answer (pre-interim):** WHO guidance recommends that HIV testing services, including HIV self-testing, be accessible to adolescents without mandatory parental or guardian authorization or notification.
+- **Evidence:** HIV testing services must be accessible to adolescents without mandatory parental authorization.
+- **Source:** WHO Recommendations (2018), Ch. 7 §7.4, pp. 47–48
+- **Conditions/limitations:** Partner notification (if relevant) is handled separately with IPV-risk sensitivity — not covered in this entry. Consent wording is interim pending legal review (Children Act 2022 s.16(1)).
+- **Status:** 🟡 HOLD. Held: the whole answer was a consent claim; needs a rewrite after legal review.
