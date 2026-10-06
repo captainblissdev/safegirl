@@ -17,7 +17,19 @@ const path = require("node:path");
 const { pathToFileURL } = require("node:url");
 
 const gateway = require("../src/safetyNet");
+const gatewayContent = require("../src/content/helpContent");
+const { orchestrate } = require("../src/responseOrchestrator");
 const { POSITIVE, NEGATIVE } = require("./fixtures/safetyCases");
+
+const OFFLINE_CONTENT_FILE = path.join(
+  __dirname,
+  "..",
+  "..",
+  "interface",
+  "src",
+  "offline",
+  "helpContent.ts",
+);
 
 const OFFLINE_FILE = path.join(
   __dirname,
@@ -98,6 +110,68 @@ describe("gateway and offline Safety Net parity", () => {
         a.matchedKeywords.join("|") !== b.matchedKeywords.join("|")
       );
     });
+    assert.deepEqual(differences, []);
+  });
+});
+
+describe("gateway and offline referral message parity", () => {
+  let offlineContent;
+
+  before(async () => {
+    offlineContent = await import(pathToFileURL(OFFLINE_CONTENT_FILE).href);
+  });
+
+  it("has the same self-harm and abuse messages", () => {
+    assert.equal(
+      offlineContent.SELF_HARM_REFERRAL_MESSAGE,
+      gatewayContent.SELF_HARM_REFERRAL_MESSAGE,
+    );
+    assert.equal(
+      offlineContent.ABUSE_REFERRAL_MESSAGE,
+      gatewayContent.ABUSE_REFERRAL_MESSAGE,
+    );
+  });
+
+  it("has the same numbers and the same verified flag", () => {
+    assert.deepEqual(
+      [...offlineContent.EMERGENCY_NUMBERS],
+      gatewayContent.EMERGENCY_NUMBERS,
+    );
+    assert.equal(offlineContent.GBV_HELPLINE, gatewayContent.GBV_HELPLINE);
+    assert.equal(
+      offlineContent.CHILDLINE_KENYA,
+      gatewayContent.CHILDLINE_KENYA,
+    );
+    assert.equal(
+      offlineContent.HELP_CONTACTS_VERIFIED,
+      gatewayContent.HELP_CONTACTS_VERIFIED,
+    );
+  });
+
+  it("warns offline exactly when the gateway warns", () => {
+    const offlineWarnings = [];
+    const gatewayWarnings = [];
+    offlineContent.warnIfContactsUnverified({
+      warn: (message) => offlineWarnings.push(message),
+    });
+    gatewayContent.warnIfContactsUnverified({
+      warn: (message) => gatewayWarnings.push(message),
+    });
+    assert.equal(offlineWarnings.length, gatewayWarnings.length);
+    assert.equal(offlineWarnings.length, 1);
+    assert.match(offlineWarnings[0], /UNVERIFIED: confirm before real users/);
+  });
+
+  it("gives the same referral message per category for every positive case", () => {
+    const differences = POSITIVE.filter(([text]) => {
+      const safety = gateway.checkSafety(text);
+      const online = orchestrate({
+        safety,
+        classification: null,
+        generation: null,
+      }).message;
+      return online !== offlineContent.referralMessage(safety.category);
+    }).map(([text]) => text);
     assert.deepEqual(differences, []);
   });
 });
