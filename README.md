@@ -157,7 +157,7 @@ See [`docs/decision-log.md`](docs/decision-log.md) for the full comparison and e
 
 Every query is handled in this order:
 
-1. **Safety Net.** Checks for distress, GBV and crisis language.
+1. **Safety Net.** Checks for self-harm and suicidal statements, and for violence, abuse, blackmail and threats. Self-harm gets its own referral message.
 2. **Help rule.** If the query was not flagged and the whole message is a generic help request that names no topic (for example "Where can I get help?"), the gateway returns help information (`outcome: "signposting"`). The classifier and retrieval do not run, and `ml_service` is not called.
 3. **Intent classifier.** Runs for every other query, including flagged ones.
 4. **If the Safety Net flagged the query,** the gateway returns the referral message. The classifier has already run, and its prediction is reported in the response (`predictedCategory`) but is not used to answer; retrieval and generation do not run.
@@ -227,6 +227,13 @@ The privacy architecture is a core design constraint rather than an optional fea
 * Safety detection is independent of intent classification.
 * A change to the classifier cannot directly suppress or alter Safety Net outcomes.
 * GBV/crisis language is handled through the independent safety path rather than being treated as an ordinary intent-classification category.
+* The Safety Net (`app/gateway/src/safetyNet.js`) has two categories, each with its own referral message:
+  * **Self-harm and suicidal statements**, first or third person ("I want to die", "my friend wants to kill herself"). The message acknowledges how the person feels and gives the emergency numbers 999 and 112.
+  * **Violence, abuse, blackmail and threats** ("he hits me", "my uncle touches me", threats to share nude photos, "threatened to kill me"). This uses the existing abuse referral.
+
+  If both match, the self-harm message is used. Detection is rule-based: text is lowercased and apostrophes are normalised, and the patterns cover common verb forms, SMS spellings and typos while excluding idioms such as "this exam is killing me". A flagged query skips retrieval and generation.
+* **The referral wording is interim and not clinically reviewed. The emergency numbers (999, 112) and the helpline numbers (1195, 116) are unverified**: they live in `app/gateway/src/content/helpContent.js`, and the gateway logs a warning at startup until `HELP_CONTACTS_VERIFIED` is set to true. The abuse referral still contains a bracketed placeholder note pending authoritative sourcing.
+* The offline interface (`app/interface/src/offline/safetyNet.ts`) has its own copy of the keyword list and a single referral message, and has not yet been updated to match.
 * GBV informational content is deliberately held until authoritative legal/clinical sources and appropriate review are available.
 * Sheng and English-Swahili code-switched terms are also held from active training until competent review is available rather than being generated speculatively.
 
