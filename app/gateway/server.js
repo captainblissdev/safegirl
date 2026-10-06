@@ -171,6 +171,7 @@ function createApp({ handleQuery, authMiddleware, logger = console }) {
 if (require.main === module) {
   const { handleQuery } = require("./src/backend");
   const { createAuthFromEnv } = require("./src/middleware/sessionAuth");
+  const { warnIfContactsUnverified } = require("./src/content/helpContent");
 
   /**
    * Use the PORT environment variable when available;
@@ -187,6 +188,9 @@ if (require.main === module) {
     console.error(`[auth] ${err.message}`);
     process.exit(1);
   }
+
+  // Once at startup, while the help numbers are unverified.
+  warnIfContactsUnverified();
 
   createApp({ handleQuery, authMiddleware }).listen(PORT, () => {
     console.log(`SafeGirl backend listening on :${PORT}`);
