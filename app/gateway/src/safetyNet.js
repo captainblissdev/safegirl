@@ -115,10 +115,35 @@ const SELF_HARM_PATTERNS = [
     ),
   ],
   [
+    "don't want to be here",
+    // "Here" alone only at the end of the text, so "I don't want to be
+    // here at this school" stays clear.
+    new RegExp(
+      `\\bi ${DONT} (?:${WANT_TO}|want) be (?:here|around) (?:any ?more|no more)\\b|\\bi ${DONT} (?:${WANT_TO}|want) be (?:here|around)[.!?]*$|\\bi ${DONT} (?:${WANT_TO}|want) be (?:on|in) this (?:earth|world)\\b`,
+    ),
+  ],
+  [
+    "want to be dead",
+    // Requires a first-person cue, so "my phone battery is dead" stays
+    // clear.
+    /\b(?:i'd|i'm|i|me)(?: \w+){0,2}? (?:wants? (?:to|2)|wanna|wish (?:to|i could)|would rather|'d rather|rather|would like to|'d like to|prefer to|deserve to|ready to) be dead\b/,
+  ],
+  [
     "end my life",
     /\b(?:end(?:s|ing|ed)?|take|taking|took) (?:my|his|her|their) (?:own )?life\b/,
   ],
   ["end it all", /\bend(?:ing)? it all\b/],
+  [
+    "ending everything",
+    // Requires a first-person cue earlier in the same sentence.
+    /\b(?:i|i'm|i'd|i'll|me)\b[^.!?]*\bend(?:s|ing)? everything\b/,
+  ],
+  [
+    "can't take this life anymore",
+    // Not bare "can't take ... anymore": "I can't take the pill anymore"
+    // must stay clear.
+    /\bi (?:\w+ )?(?:can'?t|cannot|can not|couldn'?t|could not) (?:take|stand|bear|handle) (?:this|my) life\b|\bi (?:\w+ )?(?:can'?t|cannot|can not|couldn'?t|could not) (?:take|stand|bear|handle) (?:it|this) any ?more\b|\bi (?:\w+ )?(?:can'?t|cannot|can not|couldn'?t|could not) go on (?:with (?:this|my) life|any ?more|living|like this)\b/,
+  ],
   [
     "hurt myself",
     new RegExp(
@@ -167,6 +192,9 @@ const TOUCH_OR_SEX =
 // Objects of violence other than "me": us, him, her, them, family members.
 const VICTIM =
   "(?:me|us|him|her|them|my (?:mum|mom|mother|mama|sister|brother|siblings|dad|father|wife|girlfriend|baby|child|children|kids|family|little (?:sister|brother)))";
+// Games, sport and school contests, for "beat us in the match".
+const GAME =
+  "(?:(?:the|a|an|our|their|his|her|my|this|that|every) )?(?:\\w+ )?(?:match(?:es)?|games?|football|soccer|netball|volleyball|basketball|rugby|hockey|tennis|chess|cards|draughts|team|class|race|races|exams?|tests?|competitions?|tournaments?|finals?|sports?|pe|quiz|debate|league|round)";
 // People who may threaten to kill.
 const PERSON =
   "(?:dad|daddy|father|mother|mum|mom|mama|uncle|aunt|auntie|brother|sister|boyfriend|husband|parents|stepfather|stepmother|step ?dad|step ?mum|step ?mom|he|she|they|him|her)";
@@ -180,9 +208,11 @@ const ABUSE_PATTERNS = [
   [
     "hits / beats / slaps me or others",
     // Excludes games and idioms: "beat me at chess", "... in the match",
-    // "beat me to it", "beats me why", "... during the game".
+    // "beat me to it", "beats me why", "... during the game". Only
+    // game-like "in ..." phrases are excluded, so "hits me in the face"
+    // is flagged.
     new RegExp(
-      `\\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) ${VICTIM}\\b(?! (?:at|in|to it|why|during|with the ball)\\b)`,
+      `\\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) ${VICTIM}\\b(?! (?:at|to it|why|during|with the ball|in ${GAME})\\b)`,
     ),
   ],
   [
@@ -205,7 +235,9 @@ const ABUSE_PATTERNS = [
   ],
   [
     "secret about what we do",
-    /\b(?:don'?t|do not|dont|not (?:to|2)) tell (?:anyone|anybody|my \w+) (?:about )?what we do\b|\bwhat we do (?:at night|together|in (?:the|my|his|her) (?:room|bed|bedroom))\b|\bour (?:little )?secret\b/,
+    // "What we do" only with a secrecy cue in the same sentence, so
+    // "what we do together on weekends" stays clear.
+    /\bwhat we do\b[^.!?]*\b(?:secret|(?:don'?t|do not|dont|not (?:to|2)) tell|no ?one (?:else )?knows|nobody (?:else )?knows|hidden|hide)\b|\b(?:secret|(?:don'?t|do not|dont|not (?:to|2)) tell|no ?one (?:else )?knows|nobody (?:else )?knows|hidden|hide)\b[^.!?]*\bwhat we do\b|\bour (?:little )?secret\b/,
   ],
   [
     "not safe at home",
@@ -243,7 +275,10 @@ const BLACKMAIL_PATTERNS = [
   ],
   [
     "threat to show photos",
-    /\b(?:will|would|going to|gonna|threaten(?:s|ed|ing)? to|wants? to|'ll) (?:show|post|share|send|leak|spread|upload|forward|put up) (?:(?:everyone|everybody|people|them|it to everyone|the whole school|online) )?(?:my|our|her|his|their) (?:\w+ )?(?:photos?|pictures?|pics?|videos?|images?)\b/,
+    // Requires a threat cue ("will", "going to", "threatens to", or
+    // "if I" / "or else" / "unless" after it), so "my mum wants to post my
+    // photos" stays clear.
+    /\b(?:will|going to|gonna|threaten(?:s|ed|ing)? to|'ll) (?:show|post|share|send|leak|spread|upload|forward|put up) (?:(?:everyone|everybody|people|them|it to everyone|the whole school|online) )?(?:my|our|her|his|their) (?:\w+ )?(?:photos?|pictures?|pics?|videos?|images?)\b|\b(?:show|post|share|send|leak|spread|upload|forward|put up)(?:s|ed|ing)? (?:(?:everyone|everybody|people|them|it to everyone|the whole school|online) )?(?:my|our|her|his|their) (?:\w+ )?(?:photos?|pictures?|pics?|videos?|images?)\b[^.!?]*\b(?:if i|or else|unless)\b/,
   ],
   [
     "sex or photos under threat",

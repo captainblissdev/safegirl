@@ -79,7 +79,10 @@ const POSITIVE = [
   // Abuse: secrecy about what we do.
   ["he says it is our secret", "abuse"],
   ["he tells me not to tell anyone what we do", "abuse"],
-  ["I hate what we do at night", "abuse"],
+  // "I hate what we do at night" is no longer flagged: "what we do" now
+  // needs a secrecy cue in the same sentence. A known miss.
+  ["what we do at night is our secret", "abuse"],
+  ["nobody knows what we do in his room", "abuse"],
   // Abuse: violence against others in the home.
   ["my dad hits us when he is drunk", "abuse"],
   ["he beats my mum", "abuse"],
@@ -93,6 +96,24 @@ const POSITIVE = [
   ["I dont feel safe at home", "abuse"],
   ["I do not feel safe in my house", "abuse"],
   ["I am scared to go home", "abuse"],
+  // Self-harm: "be dead", ending everything, can't go on, not being here.
+  ["I want to be dead", "self_harm"],
+  ["I just want to be dead", "self_harm"],
+  ["I would rather be dead", "self_harm"],
+  ["I want to end it all", "self_harm"],
+  ["I feel like ending everything", "self_harm"],
+  ["I cannot take this life anymore", "self_harm"],
+  ["I cant take it anymore", "self_harm"],
+  ["I cant go on like this", "self_harm"],
+  ["I dont want to be here anymore", "self_harm"],
+  ["I do not want to be on this earth", "self_harm"],
+  // Abuse: violence with a body part or place after "in".
+  ["he hits me in the face", "abuse"],
+  ["he slaps me in front of people", "abuse"],
+  ["he kicks me in the stomach", "abuse"],
+  // Abuse: photo threats with a condition after them.
+  ["he will share my photos if I leave", "abuse"],
+  ["post my pictures or else, he says", "abuse"],
 ];
 
 /** Queries that must not be flagged, including idioms. */
@@ -143,6 +164,19 @@ const NEGATIVE = [
   "I am excited to go home",
   "what we do in biology class is boring",
   "the secret to clear skin",
+  // "Be dead" without a first-person wish.
+  "my phone battery is dead",
+  "I was dead tired after school",
+  // "Can't take" with an ordinary object.
+  "I cant take the pill anymore",
+  "I cannot take this heat anymore",
+  "I dont want to be here at this school",
+  // Games after "in".
+  "our team beat us in the football match",
+  "she beat me in the exam",
+  // "What we do" without a secrecy cue; photos without a threat cue.
+  "my friends and I, what we do together on weekends",
+  "my mum wants to post my photos",
 ];
 
 module.exports = { POSITIVE, NEGATIVE };
