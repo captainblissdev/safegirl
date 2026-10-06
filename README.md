@@ -454,11 +454,11 @@ No live Gemini generation is currently part of the implemented pipeline.
 
 ### Retrieval
 
-Retrieval is currently interim.
+Retrieval is semantic, in `ml_service`: knowledge-base entries are embedded with `intfloat/multilingual-e5-small` (sentence-transformers) and the gateway asks `ml_service` for the closest entry. Retrieval is scoped to the predicted category when the classifier's confidence is at or above `CLASSIFIER_CONFIDENCE_THRESHOLD`, searches all categories below it, and is skipped below `CLASSIFIER_ABSTAIN_THRESHOLD`.
 
-The implemented system uses category-scoped keyword-overlap matching over the current knowledge base.
+Keyword-overlap matching over the knowledge base is used only as the fallback, when `ml_service` is unavailable or returns an unusable result.
 
-The semantic retrieval pipeline described in the methodology — including LlamaIndex and sentence-transformers — has not yet been implemented.
+LlamaIndex, described in the methodology, is not used.
 
 ---
 
@@ -475,6 +475,12 @@ The `general` category contains only 3 examples in this set, meaning category-sp
 The V2 classifier continues to exhibit General ↔ STI boundary confusion in cross-validation.
 
 This issue is documented rather than patched after evaluation, in accordance with the project's standing rule against retuning the model based on observed evaluation results.
+
+---
+
+### Knowledge Base Review
+
+The 15 new entries were ratified by the project owner on 6 Oct 2026 (all 15 entries) and have not been through independent clinical review. These are KB-C3 to KB-C5, KB-S4 to KB-S7, KB-P5 to KB-P7 and KB-G3 to KB-G7.
 
 ---
 
