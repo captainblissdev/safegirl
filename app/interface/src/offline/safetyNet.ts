@@ -84,7 +84,8 @@ export const RULES: readonly SafetyRule[] = [
   {
     category: "self_harm",
     name: "want to die",
-    pattern: /\b(?:wants? (?:to|2)|wanna) die\b(?! (?:my|her|their) hair)/,
+    pattern:
+      /\b(?:wants? (?:to|2)|wanna) die\b(?! (?:my|her|their) hair| laughing\b| of laughter\b| from laughing\b)/,
   },
   {
     category: "self_harm",
@@ -160,6 +161,12 @@ export const RULES: readonly SafetyRule[] = [
   },
   {
     category: "self_harm",
+    name: "others happier without me",
+    pattern:
+      /\b(?:would|will|'d) be (?:happier|better(?: off)?) (?:if i (?:wasn'?t|was not|weren'?t|were not) (?:here|around|alive)|if i (?:was|were) (?:gone|dead|not here|not around)|if i (?:didn'?t|did not|never) exist(?:ed)?|if i (?:died|disappeared)|without me)\b/,
+  },
+  {
+    category: "self_harm",
     name: "thinking about how to end it",
     pattern:
       /\b(?:think|thinks|thinking|thought) (?:about|of) (?:how to |ways to )?end(?:ing)? (?:it|things|my life)\b(?! with)/,
@@ -171,9 +178,9 @@ export const RULES: readonly SafetyRule[] = [
   },
   {
     category: "abuse",
-    name: "hits / beats / slaps me",
+    name: "hits / beats / slaps me or others",
     pattern:
-      /\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) me\b(?! (?:at|in|to it|why)\b)/,
+      /\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) (?:me|us|him|her|them|my (?:mum|mom|mother|mama|sister|brother|siblings|dad|father|wife|girlfriend|baby|child|children|kids|family|little (?:sister|brother)))\b(?! (?:at|in|to it|why|during|with the ball)\b)/,
   },
   {
     category: "abuse",
@@ -207,6 +214,18 @@ export const RULES: readonly SafetyRule[] = [
     name: "secrecy + touch or sex",
     pattern:
       /^(?=.*(?:\b(?:told|tells|tell|said|says|asked|asks|made) (?:me )?(?:not (?:to|2) tell|to keep (?:it|this|quiet))|\bkeep (?:it|this) (?:a |our )?secret\b|\bour (?:little )?secret\b|\bnot (?:to|2) tell (?:anyone|anybody|my)\b))(?=.*\b(?:touch\w*|sex\w*|private parts?|kiss\w*|naked|nudes?|undress\w*|my body|bedroom)\b)/,
+  },
+  {
+    category: "abuse",
+    name: "secret about what we do",
+    pattern:
+      /\b(?:don'?t|do not|dont|not (?:to|2)) tell (?:anyone|anybody|my \w+) (?:about )?what we do\b|\bwhat we do (?:at night|together|in (?:the|my|his|her) (?:room|bed|bedroom))\b|\bour (?:little )?secret\b/,
+  },
+  {
+    category: "abuse",
+    name: "not safe at home",
+    pattern:
+      /\b(?:don'?t|do not|dont|doesn'?t|does not) feel safe (?:at|in) (?:home|my house|our house|my home)\b|\b(?:scared|afraid|frightened|terrified) (?:to|of) (?:go|going|come|coming|be|being) (?:back )?home\b/,
   },
   {
     category: "abuse",
@@ -257,6 +276,12 @@ export const RULES: readonly SafetyRule[] = [
     name: "threat to share photos",
     pattern:
       /\b(?:post|share|leak|send|show|spread|release|expose)(?:s|ed|ing)? (?:my|our|the) (?:nudes?|naked|private|intimate|sexy)\b/,
+  },
+  {
+    category: "abuse",
+    name: "threat to show photos",
+    pattern:
+      /\b(?:will|would|going to|gonna|threaten(?:s|ed|ing)? to|wants? to|'ll) (?:show|post|share|send|leak|spread|upload|forward|put up) (?:(?:everyone|everybody|people|them|it to everyone|the whole school|online) )?(?:my|our|her|his|their) (?:\w+ )?(?:photos?|pictures?|pics?|videos?|images?)\b/,
   },
   {
     category: "abuse",
