@@ -100,6 +100,18 @@ export const RULES: readonly SafetyRule[] = [
   },
   {
     category: "self_harm",
+    name: "don't want to be here",
+    pattern:
+      /\bi (?:don'?t|do not|dnt|doesn'?t|does not) (?:(?:wants? (?:to|2)|wanna)|want) be (?:here|around) (?:any ?more|no more)\b|\bi (?:don'?t|do not|dnt|doesn'?t|does not) (?:(?:wants? (?:to|2)|wanna)|want) be (?:here|around)[.!?]*$|\bi (?:don'?t|do not|dnt|doesn'?t|does not) (?:(?:wants? (?:to|2)|wanna)|want) be (?:on|in) this (?:earth|world)\b/,
+  },
+  {
+    category: "self_harm",
+    name: "want to be dead",
+    pattern:
+      /\b(?:i'd|i'm|i|me)(?: \w+){0,2}? (?:wants? (?:to|2)|wanna|wish (?:to|i could)|would rather|'d rather|rather|would like to|'d like to|prefer to|deserve to|ready to) be dead\b/,
+  },
+  {
+    category: "self_harm",
     name: "end my life",
     pattern:
       /\b(?:end(?:s|ing|ed)?|take|taking|took) (?:my|his|her|their) (?:own )?life\b/,
@@ -108,6 +120,17 @@ export const RULES: readonly SafetyRule[] = [
     category: "self_harm",
     name: "end it all",
     pattern: /\bend(?:ing)? it all\b/,
+  },
+  {
+    category: "self_harm",
+    name: "ending everything",
+    pattern: /\b(?:i|i'm|i'd|i'll|me)\b[^.!?]*\bend(?:s|ing)? everything\b/,
+  },
+  {
+    category: "self_harm",
+    name: "can't take this life anymore",
+    pattern:
+      /\bi (?:\w+ )?(?:can'?t|cannot|can not|couldn'?t|could not) (?:take|stand|bear|handle) (?:this|my) life\b|\bi (?:\w+ )?(?:can'?t|cannot|can not|couldn'?t|could not) (?:take|stand|bear|handle) (?:it|this) any ?more\b|\bi (?:\w+ )?(?:can'?t|cannot|can not|couldn'?t|could not) go on (?:with (?:this|my) life|any ?more|living|like this)\b/,
   },
   {
     category: "self_harm",
@@ -180,7 +203,7 @@ export const RULES: readonly SafetyRule[] = [
     category: "abuse",
     name: "hits / beats / slaps me or others",
     pattern:
-      /\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) (?:me|us|him|her|them|my (?:mum|mom|mother|mama|sister|brother|siblings|dad|father|wife|girlfriend|baby|child|children|kids|family|little (?:sister|brother)))\b(?! (?:at|in|to it|why|during|with the ball)\b)/,
+      /\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) (?:me|us|him|her|them|my (?:mum|mom|mother|mama|sister|brother|siblings|dad|father|wife|girlfriend|baby|child|children|kids|family|little (?:sister|brother)))\b(?! (?:at|to it|why|during|with the ball|in (?:(?:the|a|an|our|their|his|her|my|this|that|every) )?(?:\w+ )?(?:match(?:es)?|games?|football|soccer|netball|volleyball|basketball|rugby|hockey|tennis|chess|cards|draughts|team|class|race|races|exams?|tests?|competitions?|tournaments?|finals?|sports?|pe|quiz|debate|league|round))\b)/,
   },
   {
     category: "abuse",
@@ -219,7 +242,7 @@ export const RULES: readonly SafetyRule[] = [
     category: "abuse",
     name: "secret about what we do",
     pattern:
-      /\b(?:don'?t|do not|dont|not (?:to|2)) tell (?:anyone|anybody|my \w+) (?:about )?what we do\b|\bwhat we do (?:at night|together|in (?:the|my|his|her) (?:room|bed|bedroom))\b|\bour (?:little )?secret\b/,
+      /\bwhat we do\b[^.!?]*\b(?:secret|(?:don'?t|do not|dont|not (?:to|2)) tell|no ?one (?:else )?knows|nobody (?:else )?knows|hidden|hide)\b|\b(?:secret|(?:don'?t|do not|dont|not (?:to|2)) tell|no ?one (?:else )?knows|nobody (?:else )?knows|hidden|hide)\b[^.!?]*\bwhat we do\b|\bour (?:little )?secret\b/,
   },
   {
     category: "abuse",
@@ -281,7 +304,7 @@ export const RULES: readonly SafetyRule[] = [
     category: "abuse",
     name: "threat to show photos",
     pattern:
-      /\b(?:will|would|going to|gonna|threaten(?:s|ed|ing)? to|wants? to|'ll) (?:show|post|share|send|leak|spread|upload|forward|put up) (?:(?:everyone|everybody|people|them|it to everyone|the whole school|online) )?(?:my|our|her|his|their) (?:\w+ )?(?:photos?|pictures?|pics?|videos?|images?)\b/,
+      /\b(?:will|going to|gonna|threaten(?:s|ed|ing)? to|'ll) (?:show|post|share|send|leak|spread|upload|forward|put up) (?:(?:everyone|everybody|people|them|it to everyone|the whole school|online) )?(?:my|our|her|his|their) (?:\w+ )?(?:photos?|pictures?|pics?|videos?|images?)\b|\b(?:show|post|share|send|leak|spread|upload|forward|put up)(?:s|ed|ing)? (?:(?:everyone|everybody|people|them|it to everyone|the whole school|online) )?(?:my|our|her|his|their) (?:\w+ )?(?:photos?|pictures?|pics?|videos?|images?)\b[^.!?]*\b(?:if i|or else|unless)\b/,
   },
   {
     category: "abuse",
