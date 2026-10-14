@@ -252,6 +252,9 @@
 }
 
 .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   min-height: 44px;
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -263,8 +266,28 @@
   cursor: pointer;
 }
 
+.chip svg {
+  color: var(--primary);
+}
+
+.chip--contraception {
+  background: var(--tint-sky);
+}
+
+.chip--sti {
+  background: var(--tint-mint);
+}
+
+.chip--pregnancy {
+  background: var(--tint-peach);
+}
+
+.chip--periods {
+  background: var(--tint-pink);
+}
+
 .chip:hover {
-  background: var(--lilac-strong);
+  border-color: var(--primary);
 }
 
 .chip:disabled {

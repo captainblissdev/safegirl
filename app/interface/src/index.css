@@ -8,6 +8,10 @@
   --card: #ffffff; /* cards, bubbles, inputs */
   --lilac: #efe6fc; /* tints: icon circles, chips, tiles, notices */
   --lilac-strong: #e2d3f8; /* hover on lilac */
+  --tint-sky: #e2ecfd; /* topic chip: contraception */
+  --tint-mint: #dcf3ea; /* topic chip: STI */
+  --tint-peach: #ffe8dc; /* topic chip: pregnancy */
+  --tint-pink: #fde4f2; /* topic chip: periods */
   --border: #d9c9f3; /* decorative borders and dividers */
   --control-border: #8570b8; /* input outlines (3:1 or more) */
   --ink: #2a1457; /* body text */

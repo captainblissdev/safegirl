@@ -8,6 +8,8 @@ export const LIMITED_MODE_NOTICE =
 
 /** A topic chip and the example question it puts in the input box. */
 export interface TopicExample {
+  /** Picks the chip's icon and colour. */
+  topic: "contraception" | "sti" | "pregnancy" | "periods";
   label: string;
   question: string;
   /** The query's id in resources/eval/retrieval_eval_set.csv. */
@@ -22,12 +24,19 @@ export interface TopicExample {
  */
 export const TOPIC_EXAMPLES: readonly TopicExample[] = [
   {
+    topic: "contraception",
     label: "Contraception",
     question: "Which birth control methods can a teenager use?",
     evalId: "Q01",
   },
-  { label: "STI", question: "can chlamydia be cured", evalId: "Q05" },
   {
+    topic: "sti",
+    label: "STI",
+    question: "can chlamydia be cured",
+    evalId: "Q05",
+  },
+  {
+    topic: "pregnancy",
     label: "Pregnancy",
     question: "what are the danger signs in pregnancy",
     evalId: "Q09",
@@ -35,6 +44,7 @@ export const TOPIC_EXAMPLES: readonly TopicExample[] = [
   {
     // Was "General": the question is about periods, which the greeting's
     // scope line names (see docs/decision-log.md, 2026-10-14).
+    topic: "periods",
     label: "Periods",
     question: "is it normal for my period to be irregular",
     evalId: "Q11",

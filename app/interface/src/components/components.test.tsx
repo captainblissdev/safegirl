@@ -168,14 +168,18 @@ console.log("\nTest 6: the privacy wording on the disclaimer and session end");
 console.log("\nTest 7: the topic chips are real buttons");
 {
   const html = renderChat([]);
-  const chips = html.match(/<button class="chip"[^>]*>[^<]*<\/button>/g) ?? [];
+  const chips = html.match(/<button class="chip[ "][^>]*>.*?<\/button>/g) ?? [];
 
   assert(chips.length === 4, "four chip buttons");
   assert(!html.includes('aria-hidden="true">'), "no chip is aria-hidden");
   for (const example of TOPIC_EXAMPLES) {
     assert(
-      chips.some((chip) => chip.endsWith(`>${example.label}</button>`)),
-      `a "${example.label}" chip`,
+      chips.some((chip) => chip.endsWith(`</svg>${example.label}</button>`)),
+      `a "${example.label}" chip with an icon`,
+    );
+    assert(
+      chips.some((chip) => chip.includes(`chip--${example.topic}`)),
+      `the "${example.label}" chip has its own colour`,
     );
   }
 }
