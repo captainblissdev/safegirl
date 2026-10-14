@@ -34,6 +34,10 @@ export interface QueryResponse {
     "scoped" | "unscoped" | "abstained" | "local" | "none" | null;
 
   generationInvoked: boolean;
+
+  // Set by the client, never by the gateway: true when the online request
+  // failed and the answer came from the offline pipeline.
+  limitedMode?: boolean;
 }
 
 /**
@@ -43,11 +47,18 @@ export interface QueryResponse {
  * Firestore. The state is cleared when the page is refreshed or
  * when the user starts a new session.
  */
+import type { AnswerDetails } from "./details";
+
 export interface ChatTurn {
   id: string;
   role: "user" | "assistant";
   text: string;
   outcome?: QueryOutcome;
+  // The answer came from the offline pipeline because the online request
+  // failed; the chat shows the limited-mode notice above it.
+  limitedMode?: boolean;
+  // How the answer was produced, for the demo details view.
+  details?: AnswerDetails;
 }
 
 export type Screen = "disclaimer" | "chat" | "referral" | "sessionEnd";

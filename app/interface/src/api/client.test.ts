@@ -1,3 +1,5 @@
+import { SELF_HARM_REFERRAL_MESSAGE } from "../offline/helpContent";
+import { handleQueryOffline } from "../offline/offlinePipeline";
 import type { QueryResponse } from "../types";
 import {
   AUTH_ERROR_MESSAGES,
@@ -102,6 +104,15 @@ function setup({
   return { submit: createQueryClient(deps), recorded };
 }
 
+/** The offline pipeline's answer, marked as limited mode. */
+function assertLimited(result: QueryResponse) {
+  assert(
+    result.message === OFFLINE_ANSWER.message,
+    "the offline answer is returned",
+  );
+  assert(result.limitedMode === true, "it is marked as limited mode");
+}
+
 async function expectAuthError(
   promise: Promise<QueryResponse>,
 ): Promise<AuthError | null> {
@@ -119,6 +130,7 @@ console.log("Test 1: the ID token is sent in the Authorization header");
   const result = await submit("can I get birth control");
 
   assert(result === ONLINE_ANSWER, "returns the gateway's answer");
+  assert(result.limitedMode !== true, "it is not marked as limited mode");
   assert(recorded.requests.length === 1, "one request was sent");
   assert(
     recorded.requests[0]?.token === "Bearer token-1",
@@ -188,7 +200,7 @@ console.log(
   });
   const result = await submit("hello");
 
-  assert(result === OFFLINE_ANSWER, "the offline answer is returned");
+  assertLimited(result);
   assert(
     recorded.offlineCalls.length === 1 && recorded.offlineCalls[0] === "hello",
     "the offline pipeline got the query",
@@ -204,7 +216,7 @@ console.log(
   });
   const result = await submit("hello");
 
-  assert(result === OFFLINE_ANSWER, "the offline answer is returned");
+  assertLimited(result);
   assert(recorded.requests.length === 0, "no request was sent");
 }
 
@@ -231,7 +243,7 @@ console.log("\nTest 7: a 503 still uses the offline pipeline (unchanged)");
   const { submit, recorded } = setup({ responses: [respond(503)] });
   const result = await submit("hello");
 
-  assert(result === OFFLINE_ANSWER, "the offline answer is returned");
+  assertLimited(result);
   assert(
     recorded.tokenCalls.length === 1,
     "the token was not refreshed for a 503",
@@ -243,9 +255,50 @@ console.log("\nTest 8: when the browser is offline, nothing is sent");
   const { submit, recorded } = setup({ online: false });
   const result = await submit("hello");
 
-  assert(result === OFFLINE_ANSWER, "the offline answer is returned");
+  assertLimited(result);
   assert(recorded.tokenCalls.length === 0, "no sign-in was attempted");
   assert(recorded.requests.length === 0, "no request was sent");
+}
+
+console.log(
+  "\nTest 9: a 500 uses the offline pipeline, marked as limited mode",
+);
+{
+  const { submit } = setup({ responses: [respond(500)] });
+  assertLimited(await submit("hello"));
+}
+
+console.log(
+  "\nTest 10: an unreadable body uses the offline pipeline, marked as limited mode",
+);
+{
+  const unreadable: HttpResponse = {
+    ok: true,
+    status: 200,
+    json: () => Promise.reject(new SyntaxError("Unexpected token")),
+  };
+  const { submit } = setup({ responses: [unreadable] });
+  assertLimited(await submit("hello"));
+}
+
+console.log(
+  "\nTest 11: offline, the Safety Net still refers (offline pipeline unchanged)",
+);
+{
+  const submit = createQueryClient({
+    fetch: () => Promise.reject(new Error("unexpected request")),
+    getToken: () => Promise.reject(new Error("unexpected sign-in")),
+    isOnline: () => false,
+    offline: handleQueryOffline,
+    isNetworkError: () => false,
+  });
+  const result = await submit("I want to kill myself");
+
+  assert(result.outcome === "referral", "the outcome is referral");
+  assert(
+    result.message === SELF_HARM_REFERRAL_MESSAGE,
+    "with the self-harm referral message",
+  );
 }
 
 console.log("\nAll query client tests passed.");

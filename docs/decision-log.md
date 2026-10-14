@@ -172,3 +172,39 @@ Final V2 dataset: 182 seeds + 728 total paraphrases (220 existing +
 
 Breakdown of 127 new seeds by current class: contraception 28,
 STI 29, pregnancy 28, general 42.
+## Interface wording differs from the wireframe (2026-10-14)
+
+The greeting and two privacy lines in the interface no longer use the
+wireframe's wording. The old strings quoted below are the ones the
+interface implemented from the wireframe before this change.
+
+**Greeting.** The previous "Hi, I'm here to listen. Ask me anything
+about your body, your health, or what's on your mind." invites topics
+SafeGirl cannot handle (emotional support, anything at all) and suggests
+a listener rather than an information service. It is now "Hi, I'm here to
+help. Ask me a question about your body or your health.", followed by a
+scope line: "I can answer questions about contraception, STIs, pregnancy
+and periods. I'm not a doctor or a counsellor." The scope line sets
+expectations before the first question, so an off-topic or crisis
+message is less likely to be met by a confident but irrelevant answer
+(see the hold-out 3 missed-query results in
+research/eval/results/holdout3_missed_pipeline.csv).
+
+**Privacy lines.** "We don't keep anything after you leave" (disclaimer)
+and "Nothing was saved on this device" (session end) were not literally
+true, because some data does exist (below). They now read "We don't save
+your questions or your answers." and "Your questions and answers were
+not saved." Each claim was checked against what is actually stored:
+
+| Where | What is stored | Contains questions or answers? |
+|---|---|---|
+| Firebase Authentication (Google) | One anonymous user record per sign-in: a uid with creation and last sign-in times. Google also receives the device's IP address with each sign-in and token request. | No |
+| Browser IndexedDB | The Firebase SDK's usage heartbeat: at most one entry per day, a date and the SDK version string. No uid. | No |
+| Browser Cache Storage | The PWA service worker's copy of the app shell (HTML, JS, CSS). `/api` responses are deliberately not cached. | No |
+| Browser localStorage / sessionStorage / cookies | Nothing. Firebase Auth uses in-memory persistence. | No |
+| Browser memory | The chat log, until the page is reloaded or the session is ended. | Yes, until cleared |
+| Gateway logs | Startup messages, authentication rejection reasons (a fixed category, never the token or uid), error names, classifier fallback warnings with the confidence score. The query text and answers are never logged. | No |
+| ml_service logs | Startup messages and uvicorn access lines (method, path, status, the gateway's local address). Request bodies are not logged. | No |
+
+Hosting-provider and network logs on a future deployment are outside this
+table and must be checked before real users.

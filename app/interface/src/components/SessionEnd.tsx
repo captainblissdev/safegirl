@@ -15,14 +15,14 @@ interface Props {
 export default function SessionEnd({ onStartNew }: Props) {
   return (
     <main className="screen">
-      <section className="card" aria-labelledby="session-end-title">
+      <section className="card card--end" aria-labelledby="session-end-title">
         <div className="end-icon" aria-hidden="true">
           &#127793;
         </div>
 
         <h2 id="session-end-title">Session ended.</h2>
 
-        <p>Nothing was saved on this device.</p>
+        <p>Your questions and answers were not saved.</p>
 
         <p className="soft-note">
           Take care of yourself.

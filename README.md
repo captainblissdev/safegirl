@@ -363,12 +363,21 @@ $env:MODEL_DIR = "./final"
 cd app/interface
 
 npm install
-npx tsc --noEmit
-npx tsx src/offline/offlinePipeline.test.ts
+npm run typecheck
+npm test
 npm run dev
 ```
 
-The frontend currently contains 4 offline pipeline tests.
+`npm test` runs four suites: the offline pipeline, the query client (including limited mode), the anonymous session, and the component render tests (help panel, limited-mode notice, greeting and privacy wording, topic chips, details view). The component tests use `react-dom/server`, so they need no browser.
+
+#### Demo details view
+
+For demonstrations and reviews, the chat can show a small grey line under each answer with the response's `category`, `predictedCategory`, `confidence`, `classifierSource`, `retrievalScope` and `source`. It is **off by default**. Turn it on with either:
+
+* `?details=1` in the page URL (for example `http://localhost:5173/?details=1`), or
+* `VITE_SHOW_DETAILS=true` in `app/interface/.env` before `npm run dev` or `npm run build` (a build made this way shows the line to everyone).
+
+The line is never shown on the referral screen, which only ever receives the referral message.
 
 ---
 
@@ -397,8 +406,9 @@ Backend
 
 Frontend
 ├── Install dependencies
+├── Lint and format check
 ├── Type-check
-├── Run offline pipeline tests
+├── Run interface tests (npm test)
 └── Production build
 ```
 
