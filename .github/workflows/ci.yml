@@ -71,7 +71,7 @@ jobs:
       - name: Type-check
         run: npm run typecheck
 
-      - name: Run offline pipeline tests
+      - name: Run interface tests
         run: npm test
 
       - name: Build production application

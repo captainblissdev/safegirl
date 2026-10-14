@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { LIMITED_MODE_NOTICE, TOPIC_EXAMPLES } from "../content/uiText";
+import { formatDetails } from "../details";
 import type { ChatTurn } from "../types";
 
 /**
@@ -7,20 +9,27 @@ import type { ChatTurn } from "../types";
  * Satisfies FR-01 by sending user queries to the backend for classification
  * and FR-03 by displaying responses returned from retrieval and generation.
  *
- * Category chips are display-only. They do not bypass classification.
- * The category used by the system always comes from the backend.
+ * Topic chips put an example question into the input box; they never send
+ * it and never choose the category. The category used by the system always
+ * comes from the backend.
  */
-
-const CATEGORIES = ["Contraception", "STI", "Pregnancy", "General"];
 
 interface Props {
   turns: ChatTurn[];
   onSend: (text: string) => void;
   isLoading: boolean;
+  /** Show the demo details line under each answer. */
+  showDetails?: boolean;
 }
 
-export default function ChatInterface({ turns, onSend, isLoading }: Props) {
+export default function ChatInterface({
+  turns,
+  onSend,
+  isLoading,
+  showDetails = false,
+}: Props) {
   const [draft, setDraft] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSend = () => {
     const trimmed = draft.trim();
@@ -41,23 +50,33 @@ export default function ChatInterface({ turns, onSend, isLoading }: Props) {
         {turns.length === 0 && (
           <div className="bot-bubble">
             <p>
-              <strong>Hi, I&apos;m here to listen.</strong>
+              <strong>Hi, I&apos;m here to help.</strong> Ask me a question
+              about your body or your health.
             </p>
-            <p>
-              Ask me anything about your body, your health, or what&apos;s on
-              your mind.
+            <p className="scope-line">
+              I can answer questions about contraception, STIs, pregnancy and
+              periods. I&apos;m not a doctor or a counsellor.
             </p>
           </div>
         )}
 
-        {turns.map((turn) => (
-          <div
-            key={turn.id}
-            className={turn.role === "user" ? "user-bubble" : "bot-bubble"}
-          >
-            {turn.text}
-          </div>
-        ))}
+        {turns.map((turn) =>
+          turn.role === "user" ? (
+            <div key={turn.id} className="user-bubble">
+              {turn.text}
+            </div>
+          ) : (
+            <div key={turn.id} className="bot-turn">
+              {turn.limitedMode && (
+                <p className="limited-notice">{LIMITED_MODE_NOTICE}</p>
+              )}
+              <div className="bot-bubble">{turn.text}</div>
+              {showDetails && turn.details && (
+                <p className="answer-details">{formatDetails(turn.details)}</p>
+              )}
+            </div>
+          ),
+        )}
 
         {isLoading && (
           <div className="bot-bubble bot-bubble--loading" role="status">
@@ -66,11 +85,24 @@ export default function ChatInterface({ turns, onSend, isLoading }: Props) {
         )}
       </section>
 
-      <div className="category-chips" aria-hidden="true">
-        {CATEGORIES.map((category) => (
-          <span key={category} className="chip">
-            {category}
-          </span>
+      <div
+        className="category-chips"
+        role="group"
+        aria-label="Example questions by topic"
+      >
+        {TOPIC_EXAMPLES.map((example) => (
+          <button
+            key={example.label}
+            className="chip"
+            type="button"
+            onClick={() => {
+              setDraft(example.question);
+              inputRef.current?.focus();
+            }}
+            disabled={isLoading}
+          >
+            {example.label}
+          </button>
         ))}
       </div>
 
@@ -80,6 +112,7 @@ export default function ChatInterface({ turns, onSend, isLoading }: Props) {
         </label>
 
         <input
+          ref={inputRef}
           id="chat-input"
           type="text"
           value={draft}

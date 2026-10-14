@@ -13,6 +13,8 @@ import { getIdToken, isNetworkError } from "../auth/session";
  * Outcomes:
  * - offline, a failed request, or sign-in that cannot reach Firebase:
  *   the offline pipeline answers.
+ * - no reply within QUERY_TIMEOUT_MS, or no sign-in within
+ *   SIGN_IN_TIMEOUT_MS: the offline pipeline answers.
  * - 401: the token is refreshed and the request retried once. A second
  *   401 throws AuthError; it never falls back to the offline pipeline,
  *   so an authentication problem is never disguised as offline mode.
@@ -20,6 +22,13 @@ import { getIdToken, isNetworkError } from "../auth/session";
  *   provider is disabled): AuthError, with no fallback.
  * - 503 and other non-OK statuses: the offline pipeline answers, as
  *   before authentication was added.
+ * - the caller aborts options.signal (for example "New chat" while a
+ *   query is in flight): QueryCancelledError, with no answer and no
+ *   fallback.
+ *
+ * Every answer from the offline pipeline is marked limitedMode: true, so
+ * the chat can say the answer is general rather than pass it off as the
+ * full service's answer. The offline pipeline runs its Safety Net first.
  */
 
 export const AUTH_ERROR_MESSAGES = {
@@ -29,11 +38,32 @@ export const AUTH_ERROR_MESSAGES = {
     "Your secure session couldn't be confirmed. Please refresh the page and try again.",
 } as const;
 
+/**
+ * How long to wait for /api/query, per attempt, including reading the
+ * reply. On timeout the offline pipeline answers in limited mode.
+ */
+export const QUERY_TIMEOUT_MS = 20_000;
+
+/**
+ * How long to wait for anonymous sign-in (or a token refresh). On timeout
+ * the offline pipeline answers in limited mode. Firebase sign-in cannot be
+ * aborted, so it is raced against this timer instead.
+ */
+export const SIGN_IN_TIMEOUT_MS = 10_000;
+
 /** Authentication failed in a way the offline pipeline must not hide. */
 export class AuthError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "AuthError";
+  }
+}
+
+/** The caller cancelled the request; no answer should be shown. */
+export class QueryCancelledError extends Error {
+  constructor() {
+    super("The request was cancelled.");
+    this.name = "QueryCancelledError";
   }
 }
 
@@ -44,6 +74,18 @@ export interface HttpResponse {
   json(): Promise<unknown>;
 }
 
+/** Timer functions, injectable so tests can use fake timers. */
+export interface Timers {
+  setTimeout: (callback: () => void, ms: number) => unknown;
+  clearTimeout: (id: unknown) => void;
+}
+
+const REAL_TIMERS: Timers = {
+  setTimeout: (callback, ms) => globalThis.setTimeout(callback, ms),
+  clearTimeout: (id) =>
+    globalThis.clearTimeout(id as ReturnType<typeof setTimeout>),
+};
+
 export interface QueryClientDeps {
   fetch: (url: string, init: RequestInit) => Promise<HttpResponse>;
   /** ID token for the current session; true forces a refresh. */
@@ -52,88 +94,193 @@ export interface QueryClientDeps {
   offline: (text: string) => QueryResponse;
   /** True when a sign-in/token error means Firebase was unreachable. */
   isNetworkError: (error: unknown) => boolean;
+  /** Defaults to the real setTimeout and clearTimeout. */
+  timers?: Timers;
 }
 
-/** Marker: no token because the network is down; answer offline. */
+export interface SubmitOptions {
+  /** Aborting it cancels the request: see QueryCancelledError. */
+  signal?: AbortSignal;
+}
+
+/** Marker: no token because the network is down or too slow. */
 const OFFLINE = Symbol("offline");
+
+/** One /api/query attempt; null means a network failure or a timeout. */
+type Attempt =
+  | { status: number; ok: false }
+  | { status: number; ok: true; body: unknown; readable: boolean }
+  | null;
 
 export function createQueryClient(
   deps: QueryClientDeps,
-): (text: string) => Promise<QueryResponse> {
-  async function tokenOrOffline(
-    forceRefresh: boolean,
-  ): Promise<string | typeof OFFLINE> {
-    try {
-      return await deps.getToken(forceRefresh);
-    } catch (error) {
-      if (deps.isNetworkError(error)) {
-        return OFFLINE;
-      }
-      throw new AuthError(AUTH_ERROR_MESSAGES.signInFailed);
-    }
+): (text: string, options?: SubmitOptions) => Promise<QueryResponse> {
+  const timers = deps.timers ?? REAL_TIMERS;
+
+  /** Settles like promise, or rejects as soon as the signal aborts. */
+  function unlessCancelled<T>(
+    promise: Promise<T>,
+    signal: AbortSignal | undefined,
+  ): Promise<T> {
+    if (!signal) return promise;
+    if (signal.aborted) return Promise.reject(new QueryCancelledError());
+
+    return new Promise<T>((resolve, reject) => {
+      const onAbort = () => reject(new QueryCancelledError());
+      signal.addEventListener("abort", onAbort, { once: true });
+      promise.then(
+        (value) => {
+          signal.removeEventListener("abort", onAbort);
+          resolve(value);
+        },
+        (error: unknown) => {
+          signal.removeEventListener("abort", onAbort);
+          reject(error instanceof Error ? error : new Error(String(error)));
+        },
+      );
+    });
   }
 
-  /** POST the query; null means the request itself failed (network). */
-  async function post(
+  /** A token, or OFFLINE if Firebase is unreachable or too slow. */
+  function tokenOrOffline(
+    forceRefresh: boolean,
+    signal: AbortSignal | undefined,
+  ): Promise<string | typeof OFFLINE> {
+    const token = new Promise<string | typeof OFFLINE>((resolve, reject) => {
+      const timer = timers.setTimeout(
+        () => resolve(OFFLINE),
+        SIGN_IN_TIMEOUT_MS,
+      );
+      deps.getToken(forceRefresh).then(
+        (value) => {
+          timers.clearTimeout(timer);
+          resolve(value);
+        },
+        (error: unknown) => {
+          timers.clearTimeout(timer);
+          if (deps.isNetworkError(error)) {
+            resolve(OFFLINE);
+          } else {
+            reject(new AuthError(AUTH_ERROR_MESSAGES.signInFailed));
+          }
+        },
+      );
+    });
+    return unlessCancelled(token, signal);
+  }
+
+  /** POST the query and read the reply, within QUERY_TIMEOUT_MS. */
+  async function attempt(
     text: string,
     token: string,
-  ): Promise<HttpResponse | null> {
+    signal: AbortSignal | undefined,
+  ): Promise<Attempt> {
+    const controller = new AbortController();
+    const onCancel = () => controller.abort();
+    signal?.addEventListener("abort", onCancel, { once: true });
+    const timer = timers.setTimeout(() => controller.abort(), QUERY_TIMEOUT_MS);
+
     try {
-      return await deps.fetch("/api/query", {
+      const response = await deps.fetch("/api/query", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ text }),
+        signal: controller.signal,
       });
+
+      if (!response.ok) {
+        return { status: response.status, ok: false };
+      }
+
+      try {
+        const body = await response.json();
+        return { status: response.status, ok: true, body, readable: true };
+      } catch {
+        if (signal?.aborted) throw new QueryCancelledError();
+        if (controller.signal.aborted) return null; // timed out
+        return {
+          status: response.status,
+          ok: true,
+          body: null,
+          readable: false,
+        };
+      }
     } catch {
-      return null;
+      if (signal?.aborted) throw new QueryCancelledError();
+      return null; // network failure or timeout
+    } finally {
+      timers.clearTimeout(timer);
+      signal?.removeEventListener("abort", onCancel);
     }
   }
 
-  return async function submitQuery(text: string): Promise<QueryResponse> {
+  /** The offline pipeline's answer, marked as limited mode. */
+  function fallback(text: string): QueryResponse {
+    return { ...deps.offline(text), limitedMode: true };
+  }
+
+  async function run(
+    text: string,
+    signal: AbortSignal | undefined,
+  ): Promise<QueryResponse> {
     if (!deps.isOnline()) {
-      return deps.offline(text);
+      return fallback(text);
     }
 
-    const token = await tokenOrOffline(false);
+    const token = await tokenOrOffline(false, signal);
     if (token === OFFLINE) {
-      return deps.offline(text);
+      return fallback(text);
     }
 
-    let response = await post(text, token);
-    if (response === null) {
-      return deps.offline(text);
+    let result = await attempt(text, token, signal);
+    if (result === null) {
+      return fallback(text);
     }
 
-    if (response.status === 401) {
-      const freshToken = await tokenOrOffline(true);
+    if (result.status === 401) {
+      const freshToken = await tokenOrOffline(true, signal);
       if (freshToken === OFFLINE) {
-        return deps.offline(text);
+        return fallback(text);
       }
 
-      response = await post(text, freshToken);
-      if (response === null) {
-        return deps.offline(text);
+      result = await attempt(text, freshToken, signal);
+      if (result === null) {
+        return fallback(text);
       }
 
-      if (response.status === 401) {
+      if (result.status === 401) {
         throw new AuthError(AUTH_ERROR_MESSAGES.sessionRejected);
       }
     }
 
     // Unchanged from before authentication: other non-OK statuses
     // (including 503) and an unreadable body use the offline pipeline.
-    if (!response.ok) {
-      return deps.offline(text);
+    if (!result.ok || !result.readable) {
+      return fallback(text);
     }
 
-    try {
-      return (await response.json()) as QueryResponse;
-    } catch {
-      return deps.offline(text);
+    return result.body as QueryResponse;
+  }
+
+  return async function submitQuery(
+    text: string,
+    options: SubmitOptions = {},
+  ): Promise<QueryResponse> {
+    if (options.signal?.aborted) {
+      throw new QueryCancelledError();
     }
+
+    const response = await run(text, options.signal);
+
+    // A request cancelled while it was finishing is still cancelled: its
+    // answer, and any limited-mode notice, must not be shown.
+    if (options.signal?.aborted) {
+      throw new QueryCancelledError();
+    }
+    return response;
   };
 }
 

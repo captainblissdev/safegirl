@@ -29,7 +29,7 @@ export default function Disclaimer({ onContinue }: Props) {
             <span className="icon" aria-hidden="true">
               &#127793;
             </span>
-            We don&apos;t keep anything after you leave
+            We don&apos;t save your questions or your answers.
           </li>
 
           <li>
