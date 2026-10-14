@@ -20,7 +20,17 @@
  *
  * Usage (ml_service and a gateway with AUTH_DISABLED=true must be running):
  *   node research/eval/run_eval.js [--gateway URL] [--ml URL] [--set FILE] [--out DIR]
+ *                                  [--analysis FILE] [--extra FILE]
  * Defaults: --gateway http://127.0.0.1:3016  --ml http://127.0.0.1:8002
+ *
+ * --analysis FILE also writes one row per query with the inputs for the
+ * classifier and relevance analysis: the softmax probability of every
+ * class, the predicted class and confidence, the top-1 and top-2 entry ids
+ * and scores and the top-1/top-2 margin for scoped and unscoped retrieval,
+ * and the frozen keyword baseline's class. --extra FILE adds queries (an
+ * id and a query column; repeated ids are read once) to the analysis file
+ * only, through ml_service and the baseline; they are not sent to the
+ * gateway and do not change the summary.
  */
 
 "use strict";
@@ -55,6 +65,8 @@ function parseArgs(argv) {
     ml: "http://127.0.0.1:8002",
     set: path.join(ROOT, "resources", "eval", "retrieval_eval_set.csv"),
     out: path.join(__dirname, "results"),
+    analysis: "",
+    extra: "",
   };
   for (let i = 2; i < argv.length; i += 2) {
     const key = argv[i].replace(/^--/, "");
@@ -168,6 +180,45 @@ const firstSentence = (text) =>
 const formatTop = (results) =>
   results.map((r) => `${r.id}:${r.score.toFixed(4)}`).join(";");
 
+const CLASSES = ["contraception", "sti", "pregnancy", "general"];
+
+/** Classifier and retrieval signals for the analysis file. */
+async function analysisSignals(ml, text, keyword) {
+  const classified = await postJson(`${ml}/classify`, { text });
+  const scoped = await postJson(`${ml}/retrieve`, {
+    query: text,
+    top_k: 3,
+    intent: classified.intent,
+  });
+  const unscoped = await postJson(`${ml}/retrieve`, { query: text, top_k: 3 });
+  const signals = {
+    ml_class: classified.intent,
+    ml_conf: classified.confidence,
+    kw_class: keyword.classify(text).label,
+  };
+  for (const c of CLASSES) {
+    signals[`p_${c}`] = classified.scores?.[c] ?? null;
+  }
+  for (const [name, list] of [["scoped", scoped.results], ["unscoped", unscoped.results]]) {
+    const [first, second] = list;
+    signals[`${name}_top1`] = first?.id ?? null;
+    signals[`${name}_top1_score`] = first?.score ?? null;
+    signals[`${name}_top2`] = second?.id ?? null;
+    signals[`${name}_top2_score`] = second?.score ?? null;
+    signals[`${name}_margin`] = first && second ? first.score - second.score : null;
+  }
+  return signals;
+}
+
+const ANALYSIS_COLUMNS = [
+  "source", "id", "query", "group", "expected_behavior", "acceptable_entry_ids",
+  "expected_class", "label_status", "ml_class", "ml_conf",
+  ...CLASSES.map((c) => `p_${c}`),
+  "scoped_top1", "scoped_top1_score", "scoped_top2", "scoped_top2_score", "scoped_margin",
+  "unscoped_top1", "unscoped_top1_score", "unscoped_top2", "unscoped_top2_score",
+  "unscoped_margin", "kw_class", "safety_flagged", "gw_behavior", "gw_entry", "verdict",
+];
+
 // ---------------------------------------------------------------- scoring
 
 /**
@@ -277,6 +328,38 @@ async function main() {
       help_rule: !checkSafety(text).flagged && isGenericHelpRequest(text),
       verdict: verdict(row, observed),
     });
+  }
+
+  // ------------------------------------------------------------ analysis CSV
+  if (args.analysis) {
+    const analysisRows = [];
+    for (const r of records) {
+      analysisRows.push({
+        ...r,
+        source: "eval_set",
+        ...(await analysisSignals(args.ml, r.query, keyword)),
+      });
+    }
+    if (args.extra) {
+      const seen = new Set();
+      for (const row of parseCsv(fs.readFileSync(args.extra, "utf8"))) {
+        if (seen.has(row.id)) continue;
+        seen.add(row.id);
+        analysisRows.push({
+          source: path.basename(args.extra),
+          id: row.id,
+          query: row.query,
+          group: "missed_disclosure",
+          expected_behavior: "REFERRAL",
+          expected_class: "none",
+          safety_flagged: checkSafety(row.query).flagged,
+          ...(await analysisSignals(args.ml, row.query, keyword)),
+        });
+      }
+    }
+    fs.mkdirSync(path.dirname(args.analysis), { recursive: true });
+    fs.writeFileSync(args.analysis, toCsv(analysisRows, ANALYSIS_COLUMNS));
+    console.log(`Analysis inputs: ${path.relative(ROOT, args.analysis)} (${analysisRows.length} rows)`);
   }
 
   // ------------------------------------------------------------ raw CSV
