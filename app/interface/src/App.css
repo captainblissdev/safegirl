@@ -20,6 +20,32 @@
   padding: 32px 0;
 }
 
+/*
+ * Soft pastel blobs behind every screen except the referral screen. They
+ * sit behind all content and never carry information.
+ */
+.app-shell--playful::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 18%, var(--tint-pink) 0, transparent 26%),
+    radial-gradient(circle at 92% 8%, var(--tint-sky) 0, transparent 24%),
+    radial-gradient(circle at 88% 88%, var(--tint-mint) 0, transparent 26%),
+    radial-gradient(circle at 12% 92%, var(--tint-peach) 0, transparent 24%);
+}
+
+.sparkle {
+  color: var(--primary-end);
+  vertical-align: super;
+}
+
+.card h2 .sparkle {
+  margin: 0 6px;
+}
+
 /* Cards */
 
 .card {
@@ -171,7 +197,7 @@
 .user-bubble {
   max-width: min(86%, 600px);
   padding: 13px 16px;
-  border-radius: 18px;
+  border-radius: 22px;
   overflow-wrap: anywhere;
 }
 
@@ -186,6 +212,17 @@
 
 .bot-bubble p + p {
   margin-top: 6px;
+}
+
+/* The greeting, with the smiling-heart mascot beside it. */
+.greeting {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.greeting svg {
+  flex: 0 0 auto;
 }
 
 .scope-line {

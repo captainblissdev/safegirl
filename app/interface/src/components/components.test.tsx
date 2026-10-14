@@ -403,8 +403,9 @@ console.log("\nTest 16: follow-ups appear under the latest answer only");
     "only once, not under earlier answers",
   );
   assert(
-    suggestions.length === 1 && suggestions[0]?.endsWith(">what is PrEP<"),
-    "the question just asked is left out (case-insensitive)",
+    suggestions.length === 2 &&
+      !suggestions.some((s) => s.toLowerCase().includes("chlamydia")),
+    "two follow-ups, leaving out the question just asked (case-insensitive)",
   );
   assert(
     !renderToStaticMarkup(

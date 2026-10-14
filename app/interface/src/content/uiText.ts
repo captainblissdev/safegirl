@@ -79,6 +79,7 @@ export const SUGGESTIONS: Readonly<Record<string, readonly Suggestion[]>> = {
   sti: [
     { question: "what is PrEP", evalId: "Q07" },
     { question: "can chlamydia be cured", evalId: "Q05" },
+    { question: "is the HPV vaccine free for girls my age", evalId: "Q06" },
   ],
   pregnancy: [
     { question: "what are the danger signs in pregnancy", evalId: "Q09" },
