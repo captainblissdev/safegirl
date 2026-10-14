@@ -307,4 +307,23 @@ console.log(
   );
 }
 
+console.log(
+  "\nTest 14: the typing indicator still tells screen readers it is thinking",
+);
+{
+  const html = renderToStaticMarkup(
+    <ChatInterface turns={[]} onSend={() => undefined} isLoading />,
+  );
+
+  assert(html.includes('role="status"'), "the indicator is a status");
+  assert(
+    html.includes('<span class="sr-only">Thinking…</span>'),
+    "with 'Thinking…' for screen readers",
+  );
+  assert(
+    html.includes('class="typing-dots" aria-hidden="true"'),
+    "the dots are hidden from screen readers",
+  );
+}
+
 console.log("\nAll component tests passed.");
