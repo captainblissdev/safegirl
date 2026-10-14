@@ -35,9 +35,28 @@ body,
   min-height: 100%;
 }
 
-/* System fonts only: no web-font download. Body text is 16px or larger. */
+/*
+ * Nunito, a rounded and friendly typeface, self-hosted with the app (never
+ * loaded from Google), so no third party sees who opens SafeGirl. One
+ * variable file covers every weight; Latin only. Licence: SIL OFL 1.1
+ * (assets/fonts/Nunito-OFL.txt). It is precached for offline use.
+ */
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 1000;
+  src: url("./assets/fonts/nunito-latin-wght-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+/* Body text is 16px or larger. System fonts are the fallback. */
 body {
   font-family:
+    "Nunito",
     system-ui,
     -apple-system,
     "Segoe UI",
