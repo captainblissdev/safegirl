@@ -325,6 +325,10 @@ console.log(
 
   assert(html.includes('role="status"'), "the indicator is a status");
   assert(
+    html.includes('aria-live="polite"><span class="typing-dots"'),
+    "announced politely (aria-live)",
+  );
+  assert(
     html.includes('<span class="sr-only">Thinking…</span>'),
     "with 'Thinking…' for screen readers",
   );
