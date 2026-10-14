@@ -7,6 +7,7 @@ import {
 import { formatDetails } from "../details";
 import {
   FlowerIcon,
+  MascotHeart,
   PillIcon,
   SendIcon,
   ShieldIcon,
@@ -82,15 +83,18 @@ export default function ChatInterface({
         aria-label="Conversation"
       >
         {turns.length === 0 && (
-          <div className="bot-bubble">
-            <p>
-              <strong>Hi, I&apos;m here to help.</strong> Ask me a question
-              about your body or your health.
-            </p>
-            <p className="scope-line">
-              I can answer questions about contraception, STIs, pregnancy and
-              periods. I&apos;m not a doctor or a counsellor.
-            </p>
+          <div className="greeting">
+            <MascotHeart />
+            <div className="bot-bubble">
+              <p>
+                <strong>Hi, I&apos;m here to help.</strong> Ask me a question
+                about your body or your health.
+              </p>
+              <p className="scope-line">
+                I can answer questions about contraception, STIs, pregnancy and
+                periods. I&apos;m not a doctor or a counsellor.
+              </p>
+            </div>
           </div>
         )}
 
