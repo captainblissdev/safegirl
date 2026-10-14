@@ -1,8 +1,10 @@
+/* Layout and components. Colours come from the tokens in index.css. */
+
 .app-shell {
   width: min(100%, 1120px);
   min-height: 100vh;
   margin: 0 auto;
-  padding: 24px;
+  padding: 16px 24px 24px;
   display: flex;
   flex-direction: column;
 }
@@ -18,88 +20,108 @@
   padding: 32px 0;
 }
 
+/* Cards */
+
 .card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: clamp(28px, 6vw, 56px);
+  border-radius: 20px;
+  padding: clamp(24px, 6vw, 48px);
   box-shadow: var(--shadow);
-  flex: 0 1 auto;
 }
 
 .card h2 {
   color: var(--primary-deep);
-  font-size: clamp(1.55rem, 3vw, 2.35rem);
-  line-height: 1.12;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.2;
   text-align: center;
 }
+
+.card--referral,
+.card--end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.card--end p {
+  margin-top: 10px;
+}
+
+.soft-note {
+  margin-top: 16px;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+/* Icons in lilac circles */
+
+.icon-circle {
+  display: grid;
+  flex: 0 0 44px;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--lilac);
+  color: var(--primary);
+}
+
+.icon-circle--large {
+  flex-basis: 72px;
+  width: 72px;
+  height: 72px;
+  margin-bottom: 16px;
+}
+
+/* Disclaimer */
 
 .principle-list {
   list-style: none;
   max-width: 460px;
-  margin: 28px auto 0;
+  margin: 24px auto 0;
 }
 
 .principle-list li {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 15px 0;
+  padding: 14px 0;
   border-top: 1px solid var(--border);
-  color: var(--ink);
-  font-size: 1rem;
 }
 
 .principle-list li:last-child {
   border-bottom: 1px solid var(--border);
 }
 
-.icon {
-  display: grid;
-  flex: 0 0 36px;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--lilac);
-  font-size: 1.05rem;
-}
+/* Buttons */
 
 .btn-primary,
 .btn-outline {
-  min-height: 50px;
-  border-radius: 6px;
-  padding: 13px 22px;
-  font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 0.92rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  border-radius: 999px;
+  padding: 12px 24px;
+  font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    background 160ms ease;
 }
 
 .btn-primary {
-  background: var(--primary);
+  border: 0;
+  background: var(--gradient);
   color: var(--on-primary);
-  border: 1px solid var(--primary);
   box-shadow: var(--shadow-soft);
 }
 
 .btn-outline {
-  background: transparent;
+  border: 2px solid var(--primary);
+  background: var(--card);
   color: var(--primary-deep);
-  border: 1px solid var(--primary);
-}
-
-.btn-primary:hover,
-.btn-outline:hover {
-  transform: translateY(-2px);
-}
-
-.btn-primary:hover {
-  background: var(--primary-deep);
 }
 
 .btn-outline:hover {
@@ -111,7 +133,6 @@
 .btn-send:disabled {
   cursor: not-allowed;
   opacity: 0.5;
-  transform: none;
 }
 
 .btn-primary:focus-visible,
@@ -128,12 +149,13 @@
   background: none;
   border: none;
   color: var(--ink-soft);
-  font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 0.82rem;
+  font-size: 0.9rem;
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+/* Chat */
 
 .chat-screen {
   min-height: calc(100vh - 140px);
@@ -156,14 +178,15 @@
 .user-bubble {
   max-width: min(86%, 600px);
   padding: 13px 16px;
-  border-radius: 10px;
+  border-radius: 18px;
   overflow-wrap: anywhere;
 }
 
 .bot-bubble {
   align-self: flex-start;
-  background: var(--card);
   border: 1px solid var(--border);
+  border-bottom-left-radius: 6px;
+  background: var(--card);
   color: var(--ink);
   box-shadow: var(--shadow-soft);
 }
@@ -174,7 +197,6 @@
 
 .scope-line {
   color: var(--ink-soft);
-  font-size: 0.92rem;
 }
 
 .bot-bubble--loading {
@@ -194,27 +216,26 @@
   max-width: 100%;
 }
 
+.user-bubble {
+  align-self: flex-end;
+  border-bottom-right-radius: 6px;
+  background: var(--gradient);
+  color: var(--on-primary);
+}
+
 .limited-notice {
   padding: 8px 12px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 12px;
   background: var(--lilac);
   color: var(--ink);
-  font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
 }
 
 .answer-details {
   color: var(--ink-soft);
-  font-family: "Trebuchet MS", Arial, sans-serif;
   font-size: 0.72rem;
   overflow-wrap: anywhere;
-}
-
-.user-bubble {
-  align-self: flex-end;
-  background: var(--primary);
-  color: var(--on-primary);
 }
 
 .category-chips {
@@ -224,15 +245,14 @@
 }
 
 .chip {
-  background: var(--lilac);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 5px 10px;
-  color: var(--primary-deep);
-  font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
   min-height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  background: var(--lilac);
+  color: var(--primary-deep);
+  font-size: 0.85rem;
+  font-weight: 700;
   cursor: pointer;
 }
 
@@ -253,13 +273,14 @@
 
 .input-row input {
   min-width: 0;
+  min-height: 52px;
   flex: 1;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 13px 15px;
+  border: 1px solid var(--control-border);
+  border-radius: 999px;
+  padding: 12px 20px;
   background: var(--card);
   color: var(--ink);
-  font-size: 0.98rem;
+  font-size: 1rem;
 }
 
 .input-row input::placeholder {
@@ -268,83 +289,81 @@
 
 .btn-send {
   display: grid;
-  flex: 0 0 48px;
+  flex: 0 0 52px;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   border: 0;
-  border-radius: 6px;
-  background: var(--primary);
+  border-radius: 50%;
+  background: var(--gradient);
   color: var(--on-primary);
-  font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 1.25rem;
   cursor: pointer;
 }
 
-.btn-send:hover {
-  background: var(--primary-deep);
-}
-
-.card--referral {
-  text-align: center;
-}
-
-.referral-icon,
-.end-icon {
-  margin-bottom: 14px;
-  color: var(--primary);
-  font-size: 2.5rem;
-  line-height: 1;
-  text-align: center;
-}
+/* Referral */
 
 .referral-box {
+  width: 100%;
   margin-top: 22px;
-  padding: 17px;
-  border: 1px solid var(--border);
-  border-left: 4px solid var(--primary);
-  border-radius: 6px;
-  background: var(--lilac);
+  padding: 18px;
+  border: 2px solid var(--primary);
+  border-radius: 16px;
+  background: var(--card);
   color: var(--ink);
-  font-size: 0.95rem;
   text-align: left;
 }
 
-.card--end p {
-  text-align: center;
+.support-panel {
+  width: 100%;
+  margin-top: 20px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: var(--lilac);
+  text-align: left;
 }
 
-.soft-note {
-  margin-top: 18px;
-  color: var(--ink-soft);
-  font-style: italic;
-  text-align: center;
+.support-panel > h3 {
+  color: var(--primary-deep);
+  font-size: 1.05rem;
 }
+
+/* Notices */
 
 .error-banner {
   padding: 11px 14px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-left: 4px solid var(--primary-deep);
+  border-radius: 12px;
   background: var(--card);
-  color: var(--primary-deep);
-  font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 0.82rem;
-  text-align: center;
+  color: var(--ink);
+  font-size: 0.9rem;
 }
 
 .offline-banner {
-  margin: 0 0 16px;
+  margin: 12px 0 0;
   padding: 10px 14px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 12px;
   background: var(--lilac);
   color: var(--ink);
-  font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   text-align: center;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Header with the standing "Need help now?" button. */
+
 .app-header {
   display: flex;
   align-items: center;
@@ -355,26 +374,28 @@
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   color: var(--primary-deep);
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
 }
 
 .btn-help {
   min-height: 44px;
-  border: 1px solid var(--primary);
+  border: 2px solid var(--primary);
   border-radius: 999px;
-  padding: 9px 16px;
-  background: var(--lilac);
+  padding: 8px 16px;
+  background: var(--card);
   color: var(--primary-deep);
-  font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 0.86rem;
+  font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
 }
 
 .btn-help:hover {
-  background: var(--lilac-strong);
+  background: var(--lilac);
 }
 
 .btn-help:focus-visible,
@@ -400,7 +421,7 @@
 .help-dialog {
   width: min(100%, 440px);
   margin-top: 48px;
-  border-radius: 10px;
+  border-radius: 20px;
   padding: 22px;
   background: var(--card);
   box-shadow: var(--shadow);
@@ -424,14 +445,15 @@
   height: 44px;
   border: 1px solid var(--border);
   border-radius: 50%;
-  background: transparent;
+  background: var(--card);
   color: var(--ink);
   font-size: 1.4rem;
   line-height: 1;
   cursor: pointer;
 }
 
-/* Help options, shared by the dialog and the wide-screen panel. */
+/* Help options, shared by the dialog, the referral and the side panel. */
+
 .support-section {
   padding: 12px 0;
   border-top: 1px solid var(--border);
@@ -444,7 +466,6 @@
 .support-section h3 {
   margin-bottom: 6px;
   color: var(--primary-deep);
-  font-family: "Trebuchet MS", Arial, sans-serif;
   font-size: 0.8rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -466,17 +487,18 @@
 }
 
 .support-numbers a {
-  color: var(--primary-deep);
+  color: var(--primary);
   font-size: 1.1rem;
   font-weight: 700;
 }
 
 .support-note {
   color: var(--ink-soft);
-  font-size: 0.88rem;
+  font-size: 0.9rem;
 }
 
-/* Chat plus, on wide screens, the "Need more support?" panel. */
+/* Chat plus, on wide screens, the sidebar and the support panel. */
+
 .chat-layout {
   display: flex;
   flex: 1;
@@ -503,15 +525,19 @@
     align-self: flex-start;
     margin-top: 32px;
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 20px;
     padding: 20px;
-    background: var(--card);
+    background: var(--lilac);
   }
 
   .support-aside h2 {
     margin-bottom: 6px;
     color: var(--primary-deep);
     font-size: 1.2rem;
+  }
+
+  .support-aside .support-section {
+    border-top-color: var(--lilac-strong);
   }
 }
 
@@ -527,7 +553,7 @@
 
   .anon-card {
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 20px;
     padding: 16px;
     background: var(--lilac);
   }
@@ -540,20 +566,8 @@
 
   .anon-card p {
     color: var(--ink-soft);
-    font-size: 0.86rem;
+    font-size: 0.9rem;
   }
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
 }
 
 @media (max-width: 600px) {

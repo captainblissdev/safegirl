@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { LIMITED_MODE_NOTICE, TOPIC_EXAMPLES } from "../content/uiText";
 import { formatDetails } from "../details";
+import { SendIcon } from "./Icons";
 import type { ChatTurn } from "../types";
 
 /**
@@ -134,7 +135,7 @@ export default function ChatInterface({
           disabled={isLoading || !draft.trim()}
           aria-label="Send question"
         >
-          &rarr;
+          <SendIcon />
         </button>
       </div>
     </main>

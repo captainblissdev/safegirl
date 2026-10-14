@@ -33,7 +33,9 @@ export const TOPIC_EXAMPLES: readonly TopicExample[] = [
     evalId: "Q09",
   },
   {
-    label: "General",
+    // Was "General": the question is about periods, which the greeting's
+    // scope line names (see docs/decision-log.md, 2026-10-14).
+    label: "Periods",
     question: "is it normal for my period to be irregular",
     evalId: "Q11",
   },

@@ -208,3 +208,12 @@ not saved." Each claim was checked against what is actually stored:
 
 Hosting-provider and network logs on a future deployment are outside this
 table and must be checked before real users.
+
+## "General" topic chip renamed "Periods" (2026-10-14)
+
+The fourth topic chip in the chat was labelled "General", but the example
+question it fills in is "is it normal for my period to be irregular"
+(Q11 in the retrieval development set), and the greeting's scope line
+names periods, not "general" topics. The chip is now labelled "Periods".
+Only the label changed: the question, the fact that tapping a chip only
+fills the input box, and the backend's category (`general`) are the same.
