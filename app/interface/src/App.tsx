@@ -63,6 +63,7 @@ export default function App() {
           role: "assistant",
           text: response.message,
           outcome: response.outcome,
+          limitedMode: response.limitedMode === true,
         };
 
         setTurns((prev) => [...prev, botTurn]);
