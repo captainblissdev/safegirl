@@ -1,10 +1,13 @@
+import { ArrowRightIcon, LockIcon, PlusIcon, ShieldIcon } from "./Icons";
+
 /**
  * Session Start / Disclaimer screen.
  *
  * Satisfies FR-05 by appearing before any query is processed and
  * NFR-04 by providing no login or account-creation option.
  *
- * The wording matches the current UI wireframe specification.
+ * Layout follows the approved wireframe; the privacy line differs on
+ * purpose (see docs/design/ui-comparison.md).
  */
 
 interface Props {
@@ -19,30 +22,30 @@ export default function Disclaimer({ onContinue }: Props) {
 
         <ul className="principle-list">
           <li>
-            <span className="icon" aria-hidden="true">
-              &#128274;
+            <span className="icon-circle">
+              <ShieldIcon />
             </span>
-            You&apos;re safe here — no login needed
+            You&apos;re safe here, no login needed
           </li>
 
           <li>
-            <span className="icon" aria-hidden="true">
-              &#127793;
+            <span className="icon-circle">
+              <LockIcon />
             </span>
             We don&apos;t save your questions or your answers.
           </li>
 
           <li>
-            <span className="icon" aria-hidden="true">
-              &#10010;
+            <span className="icon-circle">
+              <PlusIcon />
             </span>
-            We&apos;re here to help, but a doctor or nurse can too
+            We&apos;re here to help, but a doctor or nurse can too.
           </li>
         </ul>
       </section>
 
       <button className="btn-primary" type="button" onClick={onContinue}>
-        Continue &rarr;
+        Continue <ArrowRightIcon size={20} />
       </button>
     </main>
   );

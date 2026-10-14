@@ -1,3 +1,5 @@
+import { LeafIcon, RefreshIcon } from "./Icons";
+
 /**
  * Session End screen.
  *
@@ -16,9 +18,9 @@ export default function SessionEnd({ onStartNew }: Props) {
   return (
     <main className="screen">
       <section className="card card--end" aria-labelledby="session-end-title">
-        <div className="end-icon" aria-hidden="true">
-          &#127793;
-        </div>
+        <span className="icon-circle icon-circle--large">
+          <LeafIcon size={32} />
+        </span>
 
         <h2 id="session-end-title">Session ended.</h2>
 
@@ -32,7 +34,7 @@ export default function SessionEnd({ onStartNew }: Props) {
       </section>
 
       <button className="btn-primary" type="button" onClick={onStartNew}>
-        Start new session &#8635;
+        Start new session <RefreshIcon size={20} />
       </button>
     </main>
   );
