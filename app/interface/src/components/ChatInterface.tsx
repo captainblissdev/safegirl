@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import {
   LIMITED_MODE_NOTICE,
   TOPIC_EXAMPLES,
+  offersFollowUps,
   suggestionsFor,
 } from "../content/uiText";
 import { formatDetails } from "../details";
@@ -62,8 +63,8 @@ export default function ChatInterface({
   const lastQuestion =
     [...turns].reverse().find((turn) => turn.role === "user")?.text ?? "";
   const suggestions =
-    !isLoading && lastTurn?.role === "assistant"
-      ? suggestionsFor(lastTurn.details?.category, lastQuestion)
+    !isLoading && offersFollowUps(lastTurn)
+      ? suggestionsFor(lastTurn?.details?.category, lastQuestion)
       : [];
 
   const handleSend = () => {
