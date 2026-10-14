@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="SafeGirl">
-  <circle cx="50" cy="50" r="50" fill="#176b68"/>
-  <path fill="#fffdf8" d="M50 75 C31 62 24 52 24 41 C24 32 31 26 38.5 26 C44 26 48 29.5 50 34 C52 29.5 56 26 61.5 26 C69 26 76 32 76 41 C76 52 69 62 50 75 Z"/>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5b2fc7"/>
+      <stop offset="1" stop-color="#8b3fe0"/>
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="50" fill="url(#g)"/>
+  <path fill="#ffffff" d="M50 75 C31 62 24 52 24 41 C24 32 31 26 38.5 26 C44 26 48 29.5 50 34 C52 29.5 56 26 61.5 26 C69 26 76 32 76 41 C76 52 69 62 50 75 Z"/>
 </svg>
