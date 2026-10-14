@@ -77,6 +77,7 @@ export default function App() {
           text: response.message,
           outcome: response.outcome,
           limitedMode: response.limitedMode === true,
+          answerFound: response.answerFound,
           details: answerDetails(response),
         };
 

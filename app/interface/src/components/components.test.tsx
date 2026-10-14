@@ -437,4 +437,60 @@ console.log("\nTest 17: a hint above the chips before the first question");
   );
 }
 
+console.log(
+  "\nTest 18: no follow-ups after a referral, limited mode, no-answer, signposting or an error",
+);
+{
+  const question: ChatTurn = { id: "q", role: "user", text: "what is PrEP" };
+  const answer = (extra: Partial<ChatTurn>): ChatTurn => ({
+    id: "a",
+    role: "assistant",
+    text: "reply",
+    outcome: "grounded_answer",
+    answerFound: true,
+    details: { category: "sti" },
+    ...extra,
+  });
+  const follows = (turns: ChatTurn[]) =>
+    renderChat(turns).includes("You could also ask:");
+
+  assert(follows([question, answer({})]), "shown after a full answer");
+  // A referral and an error never add an answer turn: the chat ends with
+  // the user's question, even after an earlier full answer.
+  assert(
+    !follows([
+      question,
+      answer({}),
+      { id: "q2", role: "user", text: "my boyfriend hits me" },
+    ]),
+    "not after a referral or an error (the last turn is the question)",
+  );
+  assert(
+    !follows([question, answer({ limitedMode: true })]),
+    "not after a limited-mode answer",
+  );
+  assert(
+    !follows([
+      question,
+      answer({ answerFound: false, details: { category: null } }),
+    ]),
+    "not after the no-answer reply",
+  );
+  assert(
+    !follows([
+      question,
+      answer({
+        outcome: "signposting",
+        answerFound: false,
+        details: { category: null },
+      }),
+    ]),
+    "not after signposting",
+  );
+  assert(
+    !follows([question, answer({ answerFound: false })]),
+    "not after a no-answer reply even if it names a category",
+  );
+}
+
 console.log("\nAll component tests passed.");

@@ -2,6 +2,8 @@
  * Interface text that tests check or that more than one component uses.
  */
 
+import type { ChatTurn } from "../types";
+
 /** Shown above an answer that came from the offline pipeline. */
 export const LIMITED_MODE_NOTICE =
   "Limited mode: I can't reach the full service right now, so this answer is general.";
@@ -92,6 +94,23 @@ export const SUGGESTIONS: Readonly<Record<string, readonly Suggestion[]>> = {
     { question: "is the clinic confidential", evalId: "Q16" },
   ],
 };
+
+/**
+ * Whether "You could also ask" may follow this turn: only a real answer
+ * from the full service. Never after a referral or an error (neither adds
+ * an answer turn, so the last turn is the user's question), a limited-mode
+ * answer, a no-answer reply, signposting, or an answer of unknown topic.
+ */
+export function offersFollowUps(turn: ChatTurn | undefined): boolean {
+  return (
+    turn?.role === "assistant" &&
+    turn.outcome === "grounded_answer" &&
+    turn.answerFound !== false &&
+    turn.limitedMode !== true &&
+    typeof turn.details?.category === "string" &&
+    turn.details.category !== ""
+  );
+}
 
 /**
  * Up to two follow-ups for an answer's category, leaving out the question
