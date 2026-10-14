@@ -20,6 +20,11 @@ export default defineConfig({
         // Do not add runtime caching for /api because responses may
         // contain sensitive health-related conversation content.
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
+
+        // Page loads (navigations) are answered with the cached app
+        // shell, except the gateway's own paths: /api and /health always
+        // go to the network and are never answered with index.html.
+        navigateFallbackDenylist: [/^\/api(?:\/|$)/, /^\/health(?:\/|$)/],
       },
 
       manifest: {
