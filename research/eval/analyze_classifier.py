@@ -328,6 +328,75 @@ def part_c(rows: list[dict]) -> tuple[str, dict, list[dict]]:
     return "\n".join(out), headline, sweep_rows
 
 
+# ----------------------------------------------------------------- figures
+
+FIGURES = RESULTS / "figures"
+
+
+def figures(headline_b: dict, headline_c: dict) -> list[Path]:
+    """Reliability diagram and relevance-signal distributions, if matplotlib is installed."""
+    try:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+    except ImportError:
+        print("matplotlib not installed: figures skipped (tables only)")
+        return []
+
+    FIGURES.mkdir(parents=True, exist_ok=True)
+    written = []
+
+    # Reliability diagram.
+    fig, ax = plt.subplots(figsize=(5.5, 5))
+    ax.plot([0, 1], [0, 1], linestyle="--", color="#999999", label="perfect calibration")
+    xs, ys, ns = [], [], []
+    for _, members in headline_b["bins"]:
+        if not members:
+            continue
+        xs.append(statistics.fmean(r["ml_conf"] for r in members))
+        ys.append(statistics.fmean(r["ml_class"] == r["expected_class"] for r in members))
+        ns.append(len(members))
+    ax.plot(xs, ys, marker="o", color="#5b2fc7", label="V3 (one point per bin)")
+    for x, y, k in zip(xs, ys, ns):
+        ax.annotate(f"n={k}", (x, y), textcoords="offset points", xytext=(6, -12), fontsize=8)
+    ax.set_xlim(0.25, 1.0)
+    ax.set_ylim(-0.02, 1.05)
+    ax.set_xlabel("mean confidence in bin")
+    ax.set_ylabel("accuracy in bin")
+    ax.set_title(f"V3 reliability, n={headline_b['n']} (ECE {headline_b['ece']:.3f})")
+    ax.legend(loc="upper left", fontsize=8)
+    fig.tight_layout()
+    path = FIGURES / "reliability_diagram.png"
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+    written.append(path)
+
+    # Relevance signals: one strip per set, for the three primary signals.
+    fig, axes = plt.subplots(1, PRIMARY, figsize=(12, 4))
+    for ax, (key, _) in zip(axes, SIGNALS[:PRIMARY]):
+        h = headline_c[key]
+        for y, values, colour, name in [
+            (1, h["answer"], "#5b2fc7", f"should answer (n={len(h['answer'])})"),
+            (0, h["not_answer"], "#d9822b", f"should not answer (n={len(h['not_answer'])})"),
+        ]:
+            jitter = [y + 0.08 * ((i % 5) - 2) / 2 for i in range(len(values))]
+            ax.scatter(values, jitter, s=18, alpha=0.75, color=colour, label=name)
+        if h["best"] is not None:
+            t = h["points"][h["best"]]["threshold"]
+            ax.axvline(t, color="#2a1457", linestyle=":", label=f"keeps 90%: {t:.4f}")
+        ax.set_yticks([0, 1])
+        ax.set_yticklabels(["should not", "should"])
+        ax.set_title(f"{h['label']}\nAUC {h['auc']:.3f}", fontsize=9)
+        ax.legend(fontsize=7, loc="center")
+    fig.tight_layout()
+    path = FIGURES / "relevance_signals.png"
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+    written.append(path)
+    return written
+
+
 # ----------------------------------------------------------------- main
 
 def main() -> None:
@@ -375,6 +444,9 @@ def main() -> None:
         print(f"{key:20s} AUC {h['auc']:.3f}" + (
             f" | best t={b['threshold']:.3f} keeps {pct(b['answer_kept'])} of should-answer, "
             f"wrongly keeps {pct(b['not_answer_kept'])} of should-not" if b else ""))
+
+    for path in figures(headline_b, headline_c):
+        print(f"wrote {path.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
