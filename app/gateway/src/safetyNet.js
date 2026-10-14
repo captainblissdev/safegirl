@@ -192,9 +192,10 @@ const TOUCH_OR_SEX =
 // Objects of violence other than "me": us, him, her, them, family members.
 const VICTIM =
   "(?:me|us|him|her|them|my (?:mum|mom|mother|mama|sister|brother|siblings|dad|father|wife|girlfriend|baby|child|children|kids|family|little (?:sister|brother)))";
-// Games, sport and school contests, for "beat us in the match".
+// Games, sport and school contests, for "beat us in the match". "Class"
+// is deliberately not listed: "he beats me in class" is flagged.
 const GAME =
-  "(?:(?:the|a|an|our|their|his|her|my|this|that|every) )?(?:\\w+ )?(?:match(?:es)?|games?|football|soccer|netball|volleyball|basketball|rugby|hockey|tennis|chess|cards|draughts|team|class|race|races|exams?|tests?|competitions?|tournaments?|finals?|sports?|pe|quiz|debate|league|round)";
+  "(?:(?:the|a|an|our|their|his|her|my|this|that|every) )?(?:\\w+ )?(?:match(?:es)?|games?|football|soccer|netball|volleyball|basketball|rugby|hockey|tennis|chess|cards|draughts|team|race|races|exams?|tests?|competitions?|tournaments?|finals?|sports?|pe|quiz|debate|league|round)";
 // People who may threaten to kill.
 const PERSON =
   "(?:dad|daddy|father|mother|mum|mom|mama|uncle|aunt|auntie|brother|sister|boyfriend|husband|parents|stepfather|stepmother|step ?dad|step ?mum|step ?mom|he|she|they|him|her)";
@@ -238,6 +239,13 @@ const ABUSE_PATTERNS = [
     // "What we do" only with a secrecy cue in the same sentence, so
     // "what we do together on weekends" stays clear.
     /\bwhat we do\b[^.!?]*\b(?:secret|(?:don'?t|do not|dont|not (?:to|2)) tell|no ?one (?:else )?knows|nobody (?:else )?knows|hidden|hide)\b|\b(?:secret|(?:don'?t|do not|dont|not (?:to|2)) tell|no ?one (?:else )?knows|nobody (?:else )?knows|hidden|hide)\b[^.!?]*\bwhat we do\b|\bour (?:little )?secret\b/,
+  ],
+  [
+    "unwanted 'what we do' at night",
+    // "What we do at night / in bed / in the dark / in his room" only with
+    // a negative cue in the same sentence, so "I love what we do at night,
+    // we study together" stays clear.
+    /\b(?:hate|scared|afraid|(?:don'?t|dont|do not) like|wish he would stop|makes me uncomfortable)\b[^.!?]*\bwhat we do (?:at night|in bed|in the dark|in (?:his|her) room)\b|\bwhat we do (?:at night|in bed|in the dark|in (?:his|her) room)\b[^.!?]*\b(?:hate|scared|afraid|(?:don'?t|dont|do not) like|wish he would stop|makes me uncomfortable)\b/,
   ],
   [
     "not safe at home",
