@@ -370,6 +370,15 @@ npm run dev
 
 The frontend currently contains 4 offline pipeline tests.
 
+#### Demo details view
+
+For demonstrations and reviews, the chat can show a small grey line under each answer with the response's `category`, `predictedCategory`, `confidence`, `classifierSource`, `retrievalScope` and `source`. It is **off by default**. Turn it on with either:
+
+* `?details=1` in the page URL (for example `http://localhost:5173/?details=1`), or
+* `VITE_SHOW_DETAILS=true` in `app/interface/.env` before `npm run dev` or `npm run build` (a build made this way shows the line to everyone).
+
+The line is never shown on the referral screen, which only ever receives the referral message.
+
 ---
 
 ### Production Build

@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { LIMITED_MODE_NOTICE, TOPIC_EXAMPLES } from "../content/uiText";
+import { formatDetails } from "../details";
 import type { ChatTurn } from "../types";
 
 /**
@@ -17,9 +18,16 @@ interface Props {
   turns: ChatTurn[];
   onSend: (text: string) => void;
   isLoading: boolean;
+  /** Show the demo details line under each answer. */
+  showDetails?: boolean;
 }
 
-export default function ChatInterface({ turns, onSend, isLoading }: Props) {
+export default function ChatInterface({
+  turns,
+  onSend,
+  isLoading,
+  showDetails = false,
+}: Props) {
   const [draft, setDraft] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -63,6 +71,9 @@ export default function ChatInterface({ turns, onSend, isLoading }: Props) {
                 <p className="limited-notice">{LIMITED_MODE_NOTICE}</p>
               )}
               <div className="bot-bubble">{turn.text}</div>
+              {showDetails && turn.details && (
+                <p className="answer-details">{formatDetails(turn.details)}</p>
+              )}
             </div>
           ),
         )}

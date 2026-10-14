@@ -217,6 +217,13 @@
   font-size: 0.8rem;
 }
 
+.answer-details {
+  color: #7d8f8a;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.72rem;
+  overflow-wrap: anywhere;
+}
+
 .user-bubble {
   align-self: flex-end;
   background: var(--teal);

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { ChatTurn, Screen } from "./types";
 import { submitQuery } from "./api/client";
+import { answerDetails, isDetailsEnabled } from "./details";
 import AppHeader from "./components/AppHeader";
 import Disclaimer from "./components/Disclaimer";
 import ChatInterface from "./components/ChatInterface";
@@ -19,6 +20,12 @@ import "./App.css";
  * falls back to the local offline pipeline when the device has no
  * network connection.
  */
+// The demo details view: off unless ?details=1 or VITE_SHOW_DETAILS=true.
+const SHOW_DETAILS = isDetailsEnabled(
+  window.location.search,
+  import.meta.env.VITE_SHOW_DETAILS,
+);
+
 export default function App() {
   const [screen, setScreen] = useState<Screen>("disclaimer");
   const [turns, setTurns] = useState<ChatTurn[]>([]);
@@ -64,6 +71,7 @@ export default function App() {
           text: response.message,
           outcome: response.outcome,
           limitedMode: response.limitedMode === true,
+          details: answerDetails(response),
         };
 
         setTurns((prev) => [...prev, botTurn]);
@@ -104,6 +112,7 @@ export default function App() {
               turns={turns}
               onSend={(text) => void handleSend(text)}
               isLoading={isLoading}
+              showDetails={SHOW_DETAILS}
             />
 
             {error && (
