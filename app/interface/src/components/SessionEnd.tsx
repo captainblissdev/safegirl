@@ -15,7 +15,7 @@ interface Props {
 export default function SessionEnd({ onStartNew }: Props) {
   return (
     <main className="screen">
-      <section className="card" aria-labelledby="session-end-title">
+      <section className="card card--end" aria-labelledby="session-end-title">
         <div className="end-icon" aria-hidden="true">
           &#127793;
         </div>

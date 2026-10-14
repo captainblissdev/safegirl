@@ -323,6 +323,10 @@
   text-align: left;
 }
 
+.card--end p {
+  text-align: center;
+}
+
 .soft-note {
   margin-top: 18px;
   color: var(--ink-soft);
