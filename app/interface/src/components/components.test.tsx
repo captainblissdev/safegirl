@@ -5,7 +5,11 @@ import {
   EMERGENCY_NUMBERS,
   GBV_HELPLINE,
 } from "../offline/helpContent";
-import { LIMITED_MODE_NOTICE, TOPIC_EXAMPLES } from "../content/uiText";
+import {
+  LIMITED_MODE_NOTICE,
+  SUGGESTIONS,
+  TOPIC_EXAMPLES,
+} from "../content/uiText";
 import {
   answerDetails,
   formatDetails,
@@ -327,6 +331,108 @@ console.log(
   assert(
     html.includes('class="typing-dots" aria-hidden="true"'),
     "the dots are hidden from screen readers",
+  );
+}
+
+console.log(
+  "\nTest 15: every suggestion is a 'clear' development-set query on its topic",
+);
+{
+  const csv = readFileSync(
+    new URL(
+      "../../../../resources/eval/retrieval_eval_set.csv",
+      import.meta.url,
+    ),
+    "utf8",
+  );
+  const rows = new Map(
+    csv
+      .replace(/\r/g, "")
+      .split("\n")
+      .map((line) => line.split(","))
+      .map((cells) => [cells[0], cells] as const),
+  );
+  const prefix: Record<string, string> = {
+    contraception: "KB-C",
+    sti: "KB-S",
+    pregnancy: "KB-P",
+    general: "KB-G",
+  };
+
+  for (const [category, list] of Object.entries(SUGGESTIONS)) {
+    for (const suggestion of list) {
+      const row = rows.get(suggestion.evalId);
+      assert(
+        row?.[1] === suggestion.question && row[2] === "clear",
+        `${suggestion.evalId} is a verbatim "clear" query`,
+      );
+      assert(
+        row?.[4]?.startsWith(prefix[category] ?? "?") === true,
+        `${suggestion.evalId} is answered from the ${category} entries`,
+      );
+    }
+  }
+}
+
+console.log("\nTest 16: follow-ups appear under the latest answer only");
+{
+  const answer = (id: string, category: string): ChatTurn => ({
+    id,
+    role: "assistant",
+    text: `answer ${id}`,
+    outcome: "grounded_answer",
+    details: { category },
+  });
+  const turns: ChatTurn[] = [
+    { id: "1", role: "user", text: "what is PrEP" },
+    answer("2", "sti"),
+    { id: "3", role: "user", text: "Can chlamydia be cured" },
+    answer("4", "sti"),
+  ];
+  const html = renderChat(turns);
+  const suggestions =
+    html.match(/<button class="suggestion"[^>]*>[^<]*</g) ?? [];
+
+  assert(html.includes("You could also ask:"), "the label is shown");
+  assert(
+    html.indexOf("You could also ask:") > html.indexOf("answer 4"),
+    "under the latest answer",
+  );
+  assert(
+    html.split("You could also ask:").length === 2,
+    "only once, not under earlier answers",
+  );
+  assert(
+    suggestions.length === 1 && suggestions[0]?.endsWith(">what is PrEP<"),
+    "the question just asked is left out (case-insensitive)",
+  );
+  assert(
+    !renderToStaticMarkup(
+      <ChatInterface turns={turns} onSend={() => undefined} isLoading />,
+    ).includes("You could also ask:"),
+    "hidden while the next answer is loading",
+  );
+  assert(
+    !renderChat([turns[0], answer("2", "")]).includes("You could also ask:"),
+    "none when the category is unknown",
+  );
+}
+
+console.log("\nTest 17: a hint above the chips before the first question");
+{
+  assert(
+    renderChat([]).includes("Not sure where to start? Try one:"),
+    "shown on an empty chat",
+  );
+  assert(
+    !renderChat([{ id: "1", role: "user", text: "hi" }]).includes(
+      "Not sure where to start?",
+    ),
+    "hidden once the chat has started",
+  );
+  assert(
+    renderChat([]).includes('placeholder="Ask about your body or health…"'),
+    "the input has the friendlier placeholder",
   );
 }
 
