@@ -1,5 +1,6 @@
 import kbData from "../../src/offline/Kbdata.json";
 import { checkSafety } from "./safetyNet";
+import { referralMessage } from "./helpContent";
 import { classify } from "./classifier";
 
 interface QueryResponse {
@@ -107,11 +108,7 @@ export function handleQueryOffline(queryText: string): QueryResponse {
   if (safety.flagged) {
     return {
       outcome: "referral",
-      message:
-        "We hear you. We want to help. Please reach out to a trusted " +
-        "adult, health worker, or local support service as soon as you " +
-        "can. [Referral/escalation content pending authoritative sourcing " +
-        "— R1/R2/R8, not yet finalized.]",
+      message: referralMessage(safety.category),
       generationInvoked: false,
     };
   }

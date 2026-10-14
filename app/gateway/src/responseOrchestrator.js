@@ -27,6 +27,8 @@
 const {
   NO_ANSWER_MESSAGE,
   SIGNPOSTING_MESSAGE,
+  SELF_HARM_REFERRAL_MESSAGE,
+  ABUSE_REFERRAL_MESSAGE,
 } = require("./content/helpContent");
 
 /**
@@ -74,11 +76,12 @@ function orchestrate({
   if (safety.flagged) {
     return {
       outcome: "referral",
+      // Self-harm gets its own message; everything else flagged gets the
+      // violence/abuse referral.
       message:
-        "We hear you. We want to help. Please reach out to a trusted " +
-        "adult, health worker, or local support service as soon as you " +
-        "can. [Referral/escalation content pending authoritative " +
-        "sourcing — R1/R2/R8, not yet finalized.]",
+        safety.category === "self_harm"
+          ? SELF_HARM_REFERRAL_MESSAGE
+          : ABUSE_REFERRAL_MESSAGE,
 
       // The classifier is still dispatched independently.
       classificationSkipped: false,
@@ -159,6 +162,7 @@ function signpost() {
 }
 
 module.exports = {
+  ABUSE_REFERRAL_MESSAGE,
   orchestrate,
   signpost,
   NO_ANSWER_MESSAGE,
