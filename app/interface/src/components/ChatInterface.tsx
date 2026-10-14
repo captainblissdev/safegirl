@@ -1,5 +1,9 @@
 import { useRef, useState } from "react";
-import { LIMITED_MODE_NOTICE, TOPIC_EXAMPLES } from "../content/uiText";
+import {
+  LIMITED_MODE_NOTICE,
+  TOPIC_EXAMPLES,
+  suggestionsFor,
+} from "../content/uiText";
 import { formatDetails } from "../details";
 import {
   FlowerIcon,
@@ -46,6 +50,21 @@ export default function ChatInterface({
   const [draft, setDraft] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
+  /** Put a question in the input box, ready to send or edit. */
+  const fillInput = (question: string) => {
+    setDraft(question);
+    inputRef.current?.focus();
+  };
+
+  // Follow-ups appear under the latest answer only, once it has arrived.
+  const lastTurn = turns.length > 0 ? turns[turns.length - 1] : undefined;
+  const lastQuestion =
+    [...turns].reverse().find((turn) => turn.role === "user")?.text ?? "";
+  const suggestions =
+    !isLoading && lastTurn?.role === "assistant"
+      ? suggestionsFor(lastTurn.details?.category, lastQuestion)
+      : [];
+
   const handleSend = () => {
     const trimmed = draft.trim();
 
@@ -89,6 +108,27 @@ export default function ChatInterface({
               {showDetails && turn.details && (
                 <p className="answer-details">{formatDetails(turn.details)}</p>
               )}
+              {turn === lastTurn && suggestions.length > 0 && (
+                <div
+                  className="suggestions"
+                  role="group"
+                  aria-labelledby={`suggest-${turn.id}`}
+                >
+                  <p id={`suggest-${turn.id}`} className="suggestions-label">
+                    You could also ask:
+                  </p>
+                  {suggestions.map((suggestion) => (
+                    <button
+                      key={suggestion.evalId}
+                      className="suggestion"
+                      type="button"
+                      onClick={() => fillInput(suggestion.question)}
+                    >
+                      {suggestion.question}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           ),
         )}
@@ -105,6 +145,10 @@ export default function ChatInterface({
         )}
       </section>
 
+      {turns.length === 0 && (
+        <p className="chips-hint">Not sure where to start? Try one:</p>
+      )}
+
       <div
         className="category-chips"
         role="group"
@@ -117,10 +161,7 @@ export default function ChatInterface({
               key={example.label}
               className={`chip chip--${example.topic}`}
               type="button"
-              onClick={() => {
-                setDraft(example.question);
-                inputRef.current?.focus();
-              }}
+              onClick={() => fillInput(example.question)}
               disabled={isLoading}
             >
               <Icon size={18} />
@@ -140,7 +181,7 @@ export default function ChatInterface({
           id="chat-input"
           type="text"
           value={draft}
-          placeholder="Type a question…"
+          placeholder="Ask about your body or health…"
           onChange={(event) => setDraft(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === "Enter") {

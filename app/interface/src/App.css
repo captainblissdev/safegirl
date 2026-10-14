@@ -245,6 +245,40 @@
   overflow-wrap: anywhere;
 }
 
+.chips-hint {
+  color: var(--ink-soft);
+}
+
+/* "You could also ask…" follow-ups under the latest answer. */
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.suggestions-label {
+  width: 100%;
+  color: var(--ink-soft);
+}
+
+.suggestion {
+  min-height: 44px;
+  border: 1px dashed var(--control-border);
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: var(--card);
+  color: var(--primary-deep);
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.suggestion:hover {
+  border-style: solid;
+  background: var(--lilac);
+}
+
 .category-chips {
   display: flex;
   flex-wrap: wrap;
