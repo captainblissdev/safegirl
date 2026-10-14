@@ -71,6 +71,44 @@ export function ShieldIcon(props: IconProps) {
   );
 }
 
+export function PillIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <rect
+        x="3"
+        y="8.5"
+        width="18"
+        height="7"
+        rx="3.5"
+        transform="rotate(-45 12 12)"
+      />
+      <path d="M9.5 9.5l5 5" />
+    </Svg>
+  );
+}
+
+export function SproutIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 21v-9" />
+      <path d="M12 12c0-4-3-6-7-6 0 4 3 6 7 6z" />
+      <path d="M12 14c0-4 3-6 7-6 0 4-3 6-7 6z" />
+    </Svg>
+  );
+}
+
+export function FlowerIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="12" cy="12" r="2.5" />
+      <path d="M12 9.5c-1.5-2-1.5-4.5 0-6 1.5 1.5 1.5 4 0 6z" />
+      <path d="M14.5 12c2-1.5 4.5-1.5 6 0-1.5 1.5-4 1.5-6 0z" />
+      <path d="M12 14.5c1.5 2 1.5 4.5 0 6-1.5-1.5-1.5-4 0-6z" />
+      <path d="M9.5 12c-2 1.5-4.5 1.5-6 0 1.5-1.5 4-1.5 6 0z" />
+    </Svg>
+  );
+}
+
 export function LockIcon(props: IconProps) {
   return (
     <Svg {...props}>

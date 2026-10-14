@@ -1,7 +1,21 @@
 import { useRef, useState } from "react";
 import { LIMITED_MODE_NOTICE, TOPIC_EXAMPLES } from "../content/uiText";
 import { formatDetails } from "../details";
-import { SendIcon } from "./Icons";
+import {
+  FlowerIcon,
+  PillIcon,
+  SendIcon,
+  ShieldIcon,
+  SproutIcon,
+} from "./Icons";
+
+/** Each topic chip's icon; its colour comes from .chip--<topic> in CSS. */
+const TOPIC_ICONS = {
+  contraception: PillIcon,
+  sti: ShieldIcon,
+  pregnancy: SproutIcon,
+  periods: FlowerIcon,
+} as const;
 import type { ChatTurn } from "../types";
 
 /**
@@ -96,20 +110,24 @@ export default function ChatInterface({
         role="group"
         aria-label="Example questions by topic"
       >
-        {TOPIC_EXAMPLES.map((example) => (
-          <button
-            key={example.label}
-            className="chip"
-            type="button"
-            onClick={() => {
-              setDraft(example.question);
-              inputRef.current?.focus();
-            }}
-            disabled={isLoading}
-          >
-            {example.label}
-          </button>
-        ))}
+        {TOPIC_EXAMPLES.map((example) => {
+          const Icon = TOPIC_ICONS[example.topic];
+          return (
+            <button
+              key={example.label}
+              className={`chip chip--${example.topic}`}
+              type="button"
+              onClick={() => {
+                setDraft(example.question);
+                inputRef.current?.focus();
+              }}
+              disabled={isLoading}
+            >
+              <Icon size={18} />
+              {example.label}
+            </button>
+          );
+        })}
       </div>
 
       <div className="input-row">
