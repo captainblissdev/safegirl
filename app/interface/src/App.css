@@ -135,21 +135,14 @@
   opacity: 0.5;
 }
 
-.btn-primary:focus-visible,
-.btn-outline:focus-visible,
-.btn-send:focus-visible,
-.link-button:focus-visible,
-.input-row input:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 3px;
-}
-
 .link-button {
   align-self: center;
+  min-height: 44px;
+  padding: 0 12px;
   background: none;
   border: none;
   color: var(--ink-soft);
-  font-size: 0.9rem;
+  font-size: 1rem;
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -229,12 +222,13 @@
   border-radius: 12px;
   background: var(--lilac);
   color: var(--ink);
-  font-size: 0.85rem;
+  font-size: 1rem;
 }
 
+/* The one text under 16px: the demo-only details line, off by default. */
 .answer-details {
   color: var(--ink-soft);
-  font-size: 0.72rem;
+  font-size: 0.875rem;
   overflow-wrap: anywhere;
 }
 
@@ -245,13 +239,13 @@
 }
 
 .chip {
-  min-height: 36px;
+  min-height: 44px;
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 6px 14px;
   background: var(--lilac);
   color: var(--primary-deep);
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
 }
@@ -336,7 +330,7 @@
   border-radius: 12px;
   background: var(--card);
   color: var(--ink);
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .offline-banner {
@@ -346,7 +340,7 @@
   border-radius: 12px;
   background: var(--lilac);
   color: var(--ink);
-  font-size: 0.85rem;
+  font-size: 1rem;
   text-align: center;
 }
 
@@ -389,21 +383,13 @@
   padding: 8px 16px;
   background: var(--card);
   color: var(--primary-deep);
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
 }
 
 .btn-help:hover {
   background: var(--lilac);
-}
-
-.btn-help:focus-visible,
-.btn-close:focus-visible,
-.chip:focus-visible,
-.support-content a:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 3px;
 }
 
 .help-overlay {
@@ -441,14 +427,14 @@
 }
 
 .btn-close {
+  display: grid;
+  place-items: center;
   width: 44px;
   height: 44px;
   border: 1px solid var(--border);
   border-radius: 50%;
   background: var(--card);
   color: var(--ink);
-  font-size: 1.4rem;
-  line-height: 1;
   cursor: pointer;
 }
 
@@ -464,11 +450,9 @@
 }
 
 .support-section h3 {
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   color: var(--primary-deep);
-  font-size: 0.8rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 1rem;
 }
 
 .support-section ul {
@@ -486,15 +470,20 @@
   font-weight: 700;
 }
 
+/* Phone numbers are tap targets: at least 44 x 44px. */
 .support-numbers a {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
   color: var(--primary);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
 }
 
 .support-note {
   color: var(--ink-soft);
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 /* Chat plus, on wide screens, the sidebar and the support panel. */
@@ -566,7 +555,7 @@
 
   .anon-card p {
     color: var(--ink-soft);
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 }
 
