@@ -217,3 +217,41 @@ question it fills in is "is it normal for my period to be irregular"
 names periods, not "general" topics. The chip is now labelled "Periods".
 Only the label changed: the question, the fact that tapping a chip only
 fills the input box, and the backend's category (`general`) are the same.
+
+## Interface re-themed to the approved wireframes (2026-10-14)
+
+The interface's teal, cream and coral palette was replaced with the
+purple and lavender of the approved wireframes, to make it calm and
+warm, with no alarm colours: coral and amber are gone from every screen,
+including the referral and error states, which use deep purple for
+emphasis. All colours are CSS variables in `app/interface/src/index.css`.
+The screens follow the wireframes: a heart-in-circle logo, icons in lilac
+circles, gradient primary buttons, pill-shaped chips and a rounded input.
+The app icons and the manifest colours were regenerated to match. The
+wireframe image was not yet in the repository, so the palette uses the
+agreed starting values, refined by eye.
+
+Rules: system fonts only (no web fonts), inline SVG icons, CSS
+gradients, no new runtime dependency, text 16px or larger (the demo-only
+details line is 14px), tap targets at least 44 x 44px, one visible 3px
+focus ring, and no animation (a `prefers-reduced-motion` guard is in
+place). The deliberate differences from the wireframe are listed in
+`docs/design/ui-comparison.md`.
+
+Contrast (WCAG 2.1 AA: 4.5:1 for body text, 3:1 for large text and UI):
+
+| Foreground | Background | Ratio | Use |
+|---|---|---|---|
+| ink `#2a1457` | page `#f7f2ff` / white / lilac `#efe6fc` / lilac-strong `#e2d3f8` | 14.29 / 15.72 / 13.02 / 11.16 | body text |
+| ink-soft `#5b4a80` | page / white / lilac | 6.98 / 7.68 / 6.36 | secondary text, placeholder, details line |
+| primary-deep `#3f1d96` | page / white / lilac / lilac-strong | 10.45 / 11.49 / 9.52 / 8.16 | headings, chip and button labels |
+| primary `#5b2fc7` | page / white / lilac | 7.14 / 7.85 / 6.50 | phone-number links, icons, outline buttons, focus ring |
+| white | gradient `#5b2fc7` to `#8b3fe0` | 7.85 to 5.41 | gradient buttons, user bubbles, send button |
+| control-border `#8570b8` | white / page | 4.19 / 3.81 | input outline (UI, 3:1) |
+| border `#d9c9f3` | white | 1.54 | decorative card borders and dividers only (no contrast requirement) |
+
+Size: the production JS grew from 87.05 kB to 87.82 kB gzipped (+0.77 kB,
+mostly the inline SVG icons) and the CSS from 2.30 kB to 2.31 kB, both
+measured with the same build environment. Lighthouse (mobile) was the same
+before and after: Performance 99, Accessibility 100, Best Practices 100,
+SEO 91.
