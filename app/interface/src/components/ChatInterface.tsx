@@ -139,7 +139,12 @@ export default function ChatInterface({
         )}
 
         {isLoading && (
-          <div className="bot-bubble bot-bubble--loading" role="status">
+          // Screen readers hear "Thinking…"; the dots are decoration.
+          <div
+            className="bot-bubble bot-bubble--loading"
+            role="status"
+            aria-live="polite"
+          >
             <span className="typing-dots" aria-hidden="true">
               <span />
               <span />
