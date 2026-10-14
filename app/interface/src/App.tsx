@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ChatTurn, Screen } from "./types";
-import { submitQuery } from "./api/client";
+import { QueryCancelledError, submitQuery } from "./api/client";
 import { answerDetails, isDetailsEnabled } from "./details";
 import AppHeader from "./components/AppHeader";
 import Disclaimer from "./components/Disclaimer";
@@ -34,6 +34,8 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  // The query in flight, so leaving the chat can cancel it.
+  const pendingRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     const goOnline = () => setIsOffline(false);
@@ -59,8 +61,11 @@ export default function App() {
     setIsLoading(true);
     setError(null);
 
+    const request = new AbortController();
+    pendingRef.current = request;
+
     try {
-      const response = await submitQuery(text);
+      const response = await submitQuery(text, { signal: request.signal });
 
       if (response.outcome === "referral") {
         setReferralMessage(response.message);
@@ -78,18 +83,38 @@ export default function App() {
         setTurns((prev) => [...prev, botTurn]);
       }
     } catch (err) {
+      // A cancelled query was superseded by "New chat" or the end of the
+      // session: show nothing for it.
+      if (err instanceof QueryCancelledError) return;
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
-      setIsLoading(false);
+      if (pendingRef.current === request) {
+        pendingRef.current = null;
+        setIsLoading(false);
+      }
     }
   };
 
+  /** Cancel the query in flight, if any; its answer is never shown. */
+  const cancelPending = () => {
+    pendingRef.current?.abort();
+    pendingRef.current = null;
+    setIsLoading(false);
+  };
+
   const handleNewChat = () => {
+    cancelPending();
     setTurns([]);
     setError(null);
   };
 
+  const handleEndSession = () => {
+    cancelPending();
+    setScreen("sessionEnd");
+  };
+
   const handleStartNew = () => {
+    cancelPending();
     setTurns([]);
     setReferralMessage("");
     setError(null);
@@ -132,7 +157,7 @@ export default function App() {
             <button
               className="link-button"
               type="button"
-              onClick={() => setScreen("sessionEnd")}
+              onClick={handleEndSession}
             >
               End session
             </button>
