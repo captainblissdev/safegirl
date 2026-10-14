@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { LogoMark } from "./Icons";
+import { CloseIcon, LogoMark } from "./Icons";
 import SupportContent from "./SupportContent";
 
 /**
@@ -68,7 +68,7 @@ export default function AppHeader() {
                 onClick={close}
                 aria-label="Close help"
               >
-                &times;
+                <CloseIcon size={20} />
               </button>
             </div>
 
