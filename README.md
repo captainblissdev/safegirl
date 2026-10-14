@@ -363,12 +363,12 @@ $env:MODEL_DIR = "./final"
 cd app/interface
 
 npm install
-npx tsc --noEmit
-npx tsx src/offline/offlinePipeline.test.ts
+npm run typecheck
+npm test
 npm run dev
 ```
 
-The frontend currently contains 4 offline pipeline tests.
+`npm test` runs four suites: the offline pipeline, the query client (including limited mode), the anonymous session, and the component render tests (help panel, limited-mode notice, greeting and privacy wording, topic chips, details view). The component tests use `react-dom/server`, so they need no browser.
 
 #### Demo details view
 
@@ -406,8 +406,9 @@ Backend
 
 Frontend
 ├── Install dependencies
+├── Lint and format check
 ├── Type-check
-├── Run offline pipeline tests
+├── Run interface tests (npm test)
 └── Production build
 ```
 
