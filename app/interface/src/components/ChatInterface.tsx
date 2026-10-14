@@ -81,7 +81,12 @@ export default function ChatInterface({
 
         {isLoading && (
           <div className="bot-bubble bot-bubble--loading" role="status">
-            Thinking…
+            <span className="typing-dots" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
+            <span className="sr-only">Thinking…</span>
           </div>
         )}
       </section>

@@ -76,7 +76,7 @@ body {
   outline-offset: 3px;
 }
 
-/* No animation is used; this guards against any being added later. */
+/* Motion is off for anyone who asks their device for reduced motion. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
