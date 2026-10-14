@@ -42,11 +42,12 @@ export default function ChatInterface({ turns, onSend, isLoading }: Props) {
         {turns.length === 0 && (
           <div className="bot-bubble">
             <p>
-              <strong>Hi, I&apos;m here to listen.</strong>
+              <strong>Hi, I&apos;m here to help.</strong> Ask me a question
+              about your body or your health.
             </p>
-            <p>
-              Ask me anything about your body, your health, or what&apos;s on
-              your mind.
+            <p className="scope-line">
+              I can answer questions about contraception, STIs, pregnancy and
+              periods. I&apos;m not a doctor or a counsellor.
             </p>
           </div>
         )}

@@ -8,6 +8,8 @@ import { LIMITED_MODE_NOTICE } from "../content/uiText";
 import type { ChatTurn } from "../types";
 import AppHeader from "./AppHeader";
 import ChatInterface from "./ChatInterface";
+import Disclaimer from "./Disclaimer";
+import SessionEnd from "./SessionEnd";
 import SupportContent from "./SupportContent";
 
 /**
@@ -104,6 +106,54 @@ console.log("\nTest 4: a full-service answer has no notice");
   ]);
 
   assert(!html.includes("Limited mode"), "no notice");
+}
+
+console.log("\nTest 5: the greeting states what SafeGirl can and cannot do");
+{
+  const html = renderChat([]);
+
+  assert(
+    html.includes(escapeHtml("Hi, I'm here to help.")) &&
+      html.includes("Ask me a question about your body or your health."),
+    "the greeting is shown",
+  );
+  assert(
+    html.includes(
+      escapeHtml(
+        "I can answer questions about contraception, STIs, pregnancy and periods. I'm not a doctor or a counsellor.",
+      ),
+    ),
+    "the scope line is shown",
+  );
+}
+
+console.log("\nTest 6: the privacy wording on the disclaimer and session end");
+{
+  const disclaimer = renderToStaticMarkup(
+    <Disclaimer onContinue={() => undefined} />,
+  );
+  const sessionEnd = renderToStaticMarkup(
+    <SessionEnd onStartNew={() => undefined} />,
+  );
+
+  assert(
+    disclaimer.includes(
+      escapeHtml("We don't save your questions or your answers."),
+    ),
+    "the disclaimer says questions and answers are not saved",
+  );
+  assert(
+    !disclaimer.includes("keep anything"),
+    "the old 'anything' wording is gone",
+  );
+  assert(
+    sessionEnd.includes("Your questions and answers were not saved."),
+    "the session end says questions and answers were not saved",
+  );
+  assert(
+    !sessionEnd.includes("Nothing was saved"),
+    "the old 'Nothing was saved' wording is gone",
+  );
 }
 
 console.log("\nAll component tests passed.");

@@ -22,7 +22,7 @@ export default function SessionEnd({ onStartNew }: Props) {
 
         <h2 id="session-end-title">Session ended.</h2>
 
-        <p>Nothing was saved on this device.</p>
+        <p>Your questions and answers were not saved.</p>
 
         <p className="soft-note">
           Take care of yourself.
