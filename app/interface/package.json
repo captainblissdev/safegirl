@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "generate-icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "firebase": "^12.19.0",
