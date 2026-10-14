@@ -62,3 +62,45 @@ girl may see them at a hard moment.
 | Prompts | Input placeholder "Ask about your body or health…"; "Not sure where to start? Try one:" above the chips on an empty chat | Tells a first-time user what to do. Stays within SafeGirl's scope (it does not say "ask me anything"). |
 | Follow-ups | "You could also ask:" with two questions on the same topic under the latest answer | Always a next step. Every follow-up is a verified "clear" development-set query, and tapping one only fills the input box. |
 | Decoration | Soft pastel blobs, small sparkles by the disclaimer title, rounder bubbles, a smiling-heart mascot by the greeting | Playful and warm. The blobs are switched off on the referral screen. |
+
+## Colour contrast
+
+WCAG 2.1 AA needs 4.5:1 for body text, and 3:1 for large text and for
+the boundaries of controls. Every text pairing used in the interface
+passes; the ratios below are for the tokens in
+`app/interface/src/index.css`.
+
+| Foreground | Page `#f7f2ff` | White | Lilac `#efe6fc` | Lilac-strong `#e2d3f8` | Sky `#e2ecfd` | Mint `#dcf3ea` | Peach `#ffe8dc` | Pink `#fde4f2` | Used for |
+|---|---|---|---|---|---|---|---|---|---|
+| Ink `#2a1457` | 14.29 | 15.72 | 13.02 | 11.16 | 13.21 | 13.51 | 13.34 | 13.14 | body text |
+| Ink-soft `#5b4a80` | 6.98 | 7.68 | 6.36 | 5.45 | 6.45 | 6.60 | 6.52 | 6.42 | secondary text, placeholder, hints, details line |
+| Primary-deep `#3f1d96` | 10.45 | 11.49 | 9.52 | 8.16 | 9.66 | 9.88 | 9.76 | 9.61 | headings, chip, button and follow-up labels |
+| Primary `#5b2fc7` | 7.14 | 7.85 | 6.50 | 5.57 | 6.60 | 6.75 | 6.66 | 6.56 | phone-number links, icons, outline buttons, focus ring |
+| Control-border `#8570b8` | 3.81 | 4.19 | 3.47 | – | – | – | – | – | input outline and follow-up outline (3:1 for controls) |
+| Primary-end `#8b3fe0` | 4.92 | 5.41 | 4.48 | – | – | – | – | – | sparkles and typing dots (decorative) |
+| Border `#d9c9f3` | 1.40 | 1.54 | 1.28 | – | – | – | – | – | decorative card borders and dividers (no requirement) |
+
+White text on the primary gradient runs from 7.85:1 (`#5b2fc7`) to
+5.41:1 (`#8b3fe0`), for gradient buttons, user bubbles and the send
+button. The pastel background blobs use the sky, mint, peach and pink
+tints, so the columns above also cover text drawn over them.
+
+## Lighthouse
+
+Lighthouse 13.5, mobile profile, default (simulated) throttling, against
+the production build served from `localhost`, so the Performance figures
+say little about real phones on mobile networks.
+
+| Build | Performance | Accessibility | Best Practices | SEO |
+|---|---|---|---|---|
+| Before the re-theme (`feature/pwa-hardening`, d3d4464) | 99 | 100 | 100 | 91 |
+| After the re-theme (`feature/ui-theme`, f793af7) | 99 | 100 | 100 | 91 |
+| After the playful update (`feature/ui-playful`) | 99 | 100 | 100 | 91 |
+
+The playful build's first contentful paint is 1.7 s, against 1.5 s
+before, while Nunito loads, with no layout shift. An earlier run of the
+playful build scored Performance 98; the 98/99 difference is run-to-run
+variation. SEO loses points only because `vite preview` answers
+`/robots.txt` with `index.html`. Reports:
+`research/eval/results/lighthouse_mobile_2026-10-14_theme.report.html`
+and `research/eval/results/lighthouse_mobile_2026-10-14_playful.report.html`.
