@@ -203,7 +203,7 @@ export const RULES: readonly SafetyRule[] = [
     category: "abuse",
     name: "hits / beats / slaps me or others",
     pattern:
-      /\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) (?:me|us|him|her|them|my (?:mum|mom|mother|mama|sister|brother|siblings|dad|father|wife|girlfriend|baby|child|children|kids|family|little (?:sister|brother)))\b(?! (?:at|to it|why|during|with the ball|in (?:(?:the|a|an|our|their|his|her|my|this|that|every) )?(?:\w+ )?(?:match(?:es)?|games?|football|soccer|netball|volleyball|basketball|rugby|hockey|tennis|chess|cards|draughts|team|class|race|races|exams?|tests?|competitions?|tournaments?|finals?|sports?|pe|quiz|debate|league|round))\b)/,
+      /\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) (?:me|us|him|her|them|my (?:mum|mom|mother|mama|sister|brother|siblings|dad|father|wife|girlfriend|baby|child|children|kids|family|little (?:sister|brother)))\b(?! (?:at|to it|why|during|with the ball|in (?:(?:the|a|an|our|their|his|her|my|this|that|every) )?(?:\w+ )?(?:match(?:es)?|games?|football|soccer|netball|volleyball|basketball|rugby|hockey|tennis|chess|cards|draughts|team|race|races|exams?|tests?|competitions?|tournaments?|finals?|sports?|pe|quiz|debate|league|round))\b)/,
   },
   {
     category: "abuse",
@@ -243,6 +243,12 @@ export const RULES: readonly SafetyRule[] = [
     name: "secret about what we do",
     pattern:
       /\bwhat we do\b[^.!?]*\b(?:secret|(?:don'?t|do not|dont|not (?:to|2)) tell|no ?one (?:else )?knows|nobody (?:else )?knows|hidden|hide)\b|\b(?:secret|(?:don'?t|do not|dont|not (?:to|2)) tell|no ?one (?:else )?knows|nobody (?:else )?knows|hidden|hide)\b[^.!?]*\bwhat we do\b|\bour (?:little )?secret\b/,
+  },
+  {
+    category: "abuse",
+    name: "unwanted 'what we do' at night",
+    pattern:
+      /\b(?:hate|scared|afraid|(?:don'?t|dont|do not) like|wish he would stop|makes me uncomfortable)\b[^.!?]*\bwhat we do (?:at night|in bed|in the dark|in (?:his|her) room)\b|\bwhat we do (?:at night|in bed|in the dark|in (?:his|her) room)\b[^.!?]*\b(?:hate|scared|afraid|(?:don'?t|dont|do not) like|wish he would stop|makes me uncomfortable)\b/,
   },
   {
     category: "abuse",

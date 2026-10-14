@@ -79,8 +79,9 @@ const POSITIVE = [
   // Abuse: secrecy about what we do.
   ["he says it is our secret", "abuse"],
   ["he tells me not to tell anyone what we do", "abuse"],
-  // "I hate what we do at night" is no longer flagged: "what we do" now
-  // needs a secrecy cue in the same sentence. A known miss.
+  // Abuse: "what we do at night / in the dark" with a negative cue.
+  ["I hate what we do at night", "abuse"],
+  ["I am scared of what we do in the dark", "abuse"],
   ["what we do at night is our secret", "abuse"],
   ["nobody knows what we do in his room", "abuse"],
   // Abuse: violence against others in the home.
@@ -111,6 +112,7 @@ const POSITIVE = [
   ["he hits me in the face", "abuse"],
   ["he slaps me in front of people", "abuse"],
   ["he kicks me in the stomach", "abuse"],
+  ["he beats me in class", "abuse"],
   // Abuse: photo threats with a condition after them.
   ["he will share my photos if I leave", "abuse"],
   ["post my pictures or else, he says", "abuse"],
@@ -176,6 +178,8 @@ const NEGATIVE = [
   "she beat me in the exam",
   // "What we do" without a secrecy cue; photos without a threat cue.
   "my friends and I, what we do together on weekends",
+  "what we do at night",
+  "I love what we do at night, we study together",
   "my mum wants to post my photos",
 ];
 
