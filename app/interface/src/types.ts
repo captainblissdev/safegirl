@@ -34,6 +34,10 @@ export interface QueryResponse {
     "scoped" | "unscoped" | "abstained" | "local" | "none" | null;
 
   generationInvoked: boolean;
+
+  // Set by the client, never by the gateway: true when the online request
+  // failed and the answer came from the offline pipeline.
+  limitedMode?: boolean;
 }
 
 /**
@@ -48,6 +52,9 @@ export interface ChatTurn {
   role: "user" | "assistant";
   text: string;
   outcome?: QueryOutcome;
+  // The answer came from the offline pipeline because the online request
+  // failed; the chat shows the limited-mode notice above it.
+  limitedMode?: boolean;
 }
 
 export type Screen = "disclaimer" | "chat" | "referral" | "sessionEnd";

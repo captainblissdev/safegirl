@@ -4,7 +4,10 @@ import {
   EMERGENCY_NUMBERS,
   GBV_HELPLINE,
 } from "../offline/helpContent";
+import { LIMITED_MODE_NOTICE } from "../content/uiText";
+import type { ChatTurn } from "../types";
 import AppHeader from "./AppHeader";
+import ChatInterface from "./ChatInterface";
 import SupportContent from "./SupportContent";
 
 /**
@@ -57,6 +60,50 @@ console.log("\nTest 2: the header has a standing 'Need help now?' button");
     "it is announced as opening a dialog",
   );
   assert(!html.includes('role="dialog"'), "the panel starts closed");
+}
+
+const renderChat = (turns: ChatTurn[]) =>
+  renderToStaticMarkup(
+    <ChatInterface turns={turns} onSend={() => undefined} isLoading={false} />,
+  );
+
+// renderToStaticMarkup escapes the apostrophe in "can't".
+const escapeHtml = (text: string) => text.replace(/'/g, "&#x27;");
+
+console.log("\nTest 3: a limited-mode answer has the notice above it");
+{
+  const html = renderChat([
+    { id: "1", role: "user", text: "what is PrEP" },
+    {
+      id: "2",
+      role: "assistant",
+      text: "general answer",
+      outcome: "grounded_answer",
+      limitedMode: true,
+    },
+  ]);
+  const notice = html.indexOf(escapeHtml(LIMITED_MODE_NOTICE));
+
+  assert(notice !== -1, "the notice is shown");
+  assert(
+    notice < html.indexOf("general answer"),
+    "the notice comes before the answer",
+  );
+}
+
+console.log("\nTest 4: a full-service answer has no notice");
+{
+  const html = renderChat([
+    {
+      id: "2",
+      role: "assistant",
+      text: "full answer",
+      outcome: "grounded_answer",
+      limitedMode: false,
+    },
+  ]);
+
+  assert(!html.includes("Limited mode"), "no notice");
 }
 
 console.log("\nAll component tests passed.");

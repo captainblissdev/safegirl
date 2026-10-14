@@ -20,6 +20,10 @@ import { getIdToken, isNetworkError } from "../auth/session";
  *   provider is disabled): AuthError, with no fallback.
  * - 503 and other non-OK statuses: the offline pipeline answers, as
  *   before authentication was added.
+ *
+ * Every answer from the offline pipeline is marked limitedMode: true, so
+ * the chat can say the answer is general rather than pass it off as the
+ * full service's answer.
  */
 
 export const AUTH_ERROR_MESSAGES = {
@@ -92,30 +96,35 @@ export function createQueryClient(
     }
   }
 
+  /** The offline pipeline's answer, marked as limited mode. */
+  function fallback(text: string): QueryResponse {
+    return { ...deps.offline(text), limitedMode: true };
+  }
+
   return async function submitQuery(text: string): Promise<QueryResponse> {
     if (!deps.isOnline()) {
-      return deps.offline(text);
+      return fallback(text);
     }
 
     const token = await tokenOrOffline(false);
     if (token === OFFLINE) {
-      return deps.offline(text);
+      return fallback(text);
     }
 
     let response = await post(text, token);
     if (response === null) {
-      return deps.offline(text);
+      return fallback(text);
     }
 
     if (response.status === 401) {
       const freshToken = await tokenOrOffline(true);
       if (freshToken === OFFLINE) {
-        return deps.offline(text);
+        return fallback(text);
       }
 
       response = await post(text, freshToken);
       if (response === null) {
-        return deps.offline(text);
+        return fallback(text);
       }
 
       if (response.status === 401) {
@@ -126,13 +135,13 @@ export function createQueryClient(
     // Unchanged from before authentication: other non-OK statuses
     // (including 503) and an unreadable body use the offline pipeline.
     if (!response.ok) {
-      return deps.offline(text);
+      return fallback(text);
     }
 
     try {
       return (await response.json()) as QueryResponse;
     } catch {
-      return deps.offline(text);
+      return fallback(text);
     }
   };
 }

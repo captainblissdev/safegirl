@@ -190,6 +190,28 @@
   font-style: italic;
 }
 
+.bot-turn {
+  display: flex;
+  max-width: min(86%, 600px);
+  flex-direction: column;
+  align-self: flex-start;
+  gap: 6px;
+}
+
+.bot-turn .bot-bubble {
+  max-width: 100%;
+}
+
+.limited-notice {
+  padding: 8px 12px;
+  border: 1px solid #e5c57a;
+  border-radius: 6px;
+  background: #fff6d8;
+  color: #775217;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.8rem;
+}
+
 .user-bubble {
   align-self: flex-end;
   background: var(--teal);

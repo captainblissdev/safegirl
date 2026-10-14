@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { LIMITED_MODE_NOTICE } from "../content/uiText";
 import type { ChatTurn } from "../types";
 
 /**
@@ -50,14 +51,20 @@ export default function ChatInterface({ turns, onSend, isLoading }: Props) {
           </div>
         )}
 
-        {turns.map((turn) => (
-          <div
-            key={turn.id}
-            className={turn.role === "user" ? "user-bubble" : "bot-bubble"}
-          >
-            {turn.text}
-          </div>
-        ))}
+        {turns.map((turn) =>
+          turn.role === "user" ? (
+            <div key={turn.id} className="user-bubble">
+              {turn.text}
+            </div>
+          ) : (
+            <div key={turn.id} className="bot-turn">
+              {turn.limitedMode && (
+                <p className="limited-notice">{LIMITED_MODE_NOTICE}</p>
+              )}
+              <div className="bot-bubble">{turn.text}</div>
+            </div>
+          ),
+        )}
 
         {isLoading && (
           <div className="bot-bubble bot-bubble--loading" role="status">
