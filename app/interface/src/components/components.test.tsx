@@ -6,10 +6,17 @@ import {
   GBV_HELPLINE,
 } from "../offline/helpContent";
 import { LIMITED_MODE_NOTICE, TOPIC_EXAMPLES } from "../content/uiText";
+import {
+  answerDetails,
+  formatDetails,
+  isDetailsEnabled,
+  type AnswerDetails,
+} from "../details";
 import type { ChatTurn } from "../types";
 import AppHeader from "./AppHeader";
 import ChatInterface from "./ChatInterface";
 import Disclaimer from "./Disclaimer";
+import ReferralScreen from "./ReferralScreen";
 import SessionEnd from "./SessionEnd";
 import SupportContent from "./SupportContent";
 
@@ -206,6 +213,81 @@ console.log(
     [...topics].sort().join(",") === "KB-C,KB-G,KB-P,KB-S",
     "the four questions cover the four topics",
   );
+}
+
+console.log("\nTest 9: the details view is off unless asked for");
+{
+  assert(!isDetailsEnabled("", undefined), "off by default");
+  assert(!isDetailsEnabled("?details=0", "false"), "off for details=0");
+  assert(isDetailsEnabled("?details=1", undefined), "on with ?details=1");
+  assert(
+    isDetailsEnabled("?a=b&details=1", undefined),
+    "on with details=1 among other parameters",
+  );
+  assert(isDetailsEnabled("", "true"), "on with VITE_SHOW_DETAILS=true");
+}
+
+const DETAILS: AnswerDetails = answerDetails({
+  outcome: "grounded_answer",
+  message: "full answer",
+  category: "sti",
+  predictedCategory: "sti",
+  confidence: 0.8234,
+  classifierSource: "distilbert",
+  retrievalScope: "scoped",
+  source: "WHO (2018)",
+  generationInvoked: true,
+});
+const EXPECTED_LINE =
+  "category: sti · predicted: sti · confidence: 0.82 · classifier: distilbert · retrieval: scoped · source: WHO (2018)";
+
+console.log("\nTest 10: the details line shows the six fields");
+{
+  assert(formatDetails(DETAILS) === EXPECTED_LINE, "formatted in order");
+  assert(
+    formatDetails({ category: "general" }) ===
+      "category: general · predicted: none · confidence: none · classifier: none · retrieval: none · source: none",
+    "missing fields read 'none'",
+  );
+}
+
+console.log("\nTest 11: the line is shown under answers only when enabled");
+{
+  const turns: ChatTurn[] = [
+    {
+      id: "1",
+      role: "assistant",
+      text: "full answer",
+      outcome: "grounded_answer",
+      details: DETAILS,
+    },
+  ];
+  const on = renderToStaticMarkup(
+    <ChatInterface
+      turns={turns}
+      onSend={() => undefined}
+      isLoading={false}
+      showDetails
+    />,
+  );
+  const off = renderChat(turns);
+
+  assert(on.includes("classifier: distilbert"), "shown when enabled");
+  assert(
+    on.indexOf("full answer") < on.indexOf("classifier: distilbert"),
+    "under the answer",
+  );
+  assert(!off.includes("classifier:"), "hidden by default");
+}
+
+console.log("\nTest 12: the referral screen never shows details");
+{
+  const html = renderToStaticMarkup(
+    <ReferralScreen message="referral" onContinueChat={() => undefined} />,
+  );
+
+  assert(!html.includes("classifier:"), "no details line");
+  assert(!html.includes("category:"), "no category");
 }
 
 console.log("\nAll component tests passed.");

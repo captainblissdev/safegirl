@@ -47,6 +47,8 @@ export interface QueryResponse {
  * Firestore. The state is cleared when the page is refreshed or
  * when the user starts a new session.
  */
+import type { AnswerDetails } from "./details";
+
 export interface ChatTurn {
   id: string;
   role: "user" | "assistant";
@@ -55,6 +57,8 @@ export interface ChatTurn {
   // The answer came from the offline pipeline because the online request
   // failed; the chat shows the limited-mode notice above it.
   limitedMode?: boolean;
+  // How the answer was produced, for the demo details view.
+  details?: AnswerDetails;
 }
 
 export type Screen = "disclaimer" | "chat" | "referral" | "sessionEnd";
