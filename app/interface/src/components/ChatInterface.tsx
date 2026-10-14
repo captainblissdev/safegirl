@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { LIMITED_MODE_NOTICE } from "../content/uiText";
+import { useRef, useState } from "react";
+import { LIMITED_MODE_NOTICE, TOPIC_EXAMPLES } from "../content/uiText";
 import type { ChatTurn } from "../types";
 
 /**
@@ -8,11 +8,10 @@ import type { ChatTurn } from "../types";
  * Satisfies FR-01 by sending user queries to the backend for classification
  * and FR-03 by displaying responses returned from retrieval and generation.
  *
- * Category chips are display-only. They do not bypass classification.
- * The category used by the system always comes from the backend.
+ * Topic chips put an example question into the input box; they never send
+ * it and never choose the category. The category used by the system always
+ * comes from the backend.
  */
-
-const CATEGORIES = ["Contraception", "STI", "Pregnancy", "General"];
 
 interface Props {
   turns: ChatTurn[];
@@ -22,6 +21,7 @@ interface Props {
 
 export default function ChatInterface({ turns, onSend, isLoading }: Props) {
   const [draft, setDraft] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSend = () => {
     const trimmed = draft.trim();
@@ -74,11 +74,24 @@ export default function ChatInterface({ turns, onSend, isLoading }: Props) {
         )}
       </section>
 
-      <div className="category-chips" aria-hidden="true">
-        {CATEGORIES.map((category) => (
-          <span key={category} className="chip">
-            {category}
-          </span>
+      <div
+        className="category-chips"
+        role="group"
+        aria-label="Example questions by topic"
+      >
+        {TOPIC_EXAMPLES.map((example) => (
+          <button
+            key={example.label}
+            className="chip"
+            type="button"
+            onClick={() => {
+              setDraft(example.question);
+              inputRef.current?.focus();
+            }}
+            disabled={isLoading}
+          >
+            {example.label}
+          </button>
         ))}
       </div>
 
@@ -88,6 +101,7 @@ export default function ChatInterface({ turns, onSend, isLoading }: Props) {
         </label>
 
         <input
+          ref={inputRef}
           id="chat-input"
           type="text"
           value={draft}
