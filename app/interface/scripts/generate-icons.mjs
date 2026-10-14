@@ -5,14 +5,15 @@
  *
  *   npm run generate-icons
  *
- * The design matches public/safegirl-icon.svg: a cream heart (--paper) in
- * a teal circle (--teal). Shapes are drawn in a 100 x 100 unit space and
+ * The design matches public/safegirl-icon.svg: a white heart in a circle
+ * filled with the primary gradient (--primary to --primary-end, top left
+ * to bottom right). Shapes are drawn in a 100 x 100 unit space and
  * rasterised with 4 x 4 supersampling for smooth edges.
  *
  * Output:
  *   pwa-192x192.png, pwa-512x512.png  transparent corners, purpose "any"
- *   maskable-512x512.png              full-bleed teal, heart in the safe zone
- *   apple-touch-icon.png (180)        full-bleed teal (iOS shows no alpha)
+ *   maskable-512x512.png              full-bleed purple, heart in the safe zone
+ *   apple-touch-icon.png (180)        full-bleed purple (iOS shows no alpha)
  *   favicon.ico                       16, 32 and 48 px PNGs in one ICO
  */
 
@@ -27,8 +28,18 @@ const PUBLIC_DIR = join(
   "public",
 );
 
-const TEAL = [0x17, 0x6b, 0x68];
-const PAPER = [0xff, 0xfd, 0xf8];
+// --primary and --primary-end in src/index.css, and white for the heart.
+const GRADIENT_START = [0x5b, 0x2f, 0xc7];
+const GRADIENT_END = [0x8b, 0x3f, 0xe0];
+const WHITE = [0xff, 0xff, 0xff];
+
+/** The diagonal gradient's colour at pixel i of a size x size image. */
+function gradientAt(i, size) {
+  const x = i % size;
+  const y = Math.floor(i / size);
+  const t = (x + y) / (2 * (size - 1));
+  return GRADIENT_START.map((c, k) => c + (GRADIENT_END[k] - c) * t);
+}
 const SUPERSAMPLE = 4;
 
 // The heart from safegirl-icon.svg: a start point and cubic Bezier segments.
@@ -118,6 +129,7 @@ function coverage(size, scale, spansAt) {
 }
 
 /** RGBA pixels: optional background, then the circle, then the heart. */
+/** background: null (transparent) or "gradient" (full-bleed). */
 function render(size, { background = null, scale = 1 } = {}) {
   const circle = coverage(size, scale, circleSpans);
   const heart = coverage(size, scale, heartSpans);
@@ -125,13 +137,14 @@ function render(size, { background = null, scale = 1 } = {}) {
 
   for (let i = 0; i < size * size; i++) {
     // Premultiplied "over" compositing, back to front.
-    let [r, g, b, a] = background ? [...background, 1] : [0, 0, 0, 0];
+    const fill = gradientAt(i, size);
+    let [r, g, b, a] = background ? [...fill, 1] : [0, 0, 0, 0];
     r *= a;
     g *= a;
     b *= a;
     for (const [color, alpha] of [
-      [TEAL, Math.min(1, circle[i])],
-      [PAPER, Math.min(1, heart[i])],
+      [fill, Math.min(1, circle[i])],
+      [WHITE, Math.min(1, heart[i])],
     ]) {
       r = color[0] * alpha + r * (1 - alpha);
       g = color[1] * alpha + g * (1 - alpha);
@@ -215,9 +228,9 @@ const write = (name, data) => {
 write("pwa-192x192.png", png(192));
 write("pwa-512x512.png", png(512));
 // Maskable: the platform may crop to a circle of 80% diameter, so the
-// heart is drawn at 80% scale on a full-bleed teal background.
-write("maskable-512x512.png", png(512, { background: TEAL, scale: 0.8 }));
-write("apple-touch-icon.png", png(180, { background: TEAL }));
+// heart is drawn at 80% scale on a full-bleed purple background.
+write("maskable-512x512.png", png(512, { background: "gradient", scale: 0.8 }));
+write("apple-touch-icon.png", png(180, { background: "gradient" }));
 write(
   "favicon.ico",
   encodeIco([16, 32, 48].map((size) => ({ size, png: png(size) }))),
