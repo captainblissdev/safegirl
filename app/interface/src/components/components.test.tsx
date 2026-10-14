@@ -15,6 +15,7 @@ import {
 import type { ChatTurn } from "../types";
 import AppHeader from "./AppHeader";
 import ChatInterface from "./ChatInterface";
+import ChatSidebar from "./ChatSidebar";
 import Disclaimer from "./Disclaimer";
 import ReferralScreen from "./ReferralScreen";
 import SessionEnd from "./SessionEnd";
@@ -288,6 +289,22 @@ console.log("\nTest 12: the referral screen never shows details");
 
   assert(!html.includes("classifier:"), "no details line");
   assert(!html.includes("category:"), "no category");
+}
+
+console.log(
+  "\nTest 13: the wide-screen sidebar has New chat and the anonymous card",
+);
+{
+  const html = renderToStaticMarkup(
+    <ChatSidebar onNewChat={() => undefined} />,
+  );
+
+  assert(html.includes(">New chat</button>"), "a New chat button");
+  assert(html.includes("re anonymous"), "the anonymous card");
+  assert(
+    html.includes(escapeHtml("We don't save your questions or your answers.")),
+    "the same privacy wording as the disclaimer",
+  );
 }
 
 console.log("\nAll component tests passed.");

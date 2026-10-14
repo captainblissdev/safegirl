@@ -5,6 +5,7 @@ import { answerDetails, isDetailsEnabled } from "./details";
 import AppHeader from "./components/AppHeader";
 import Disclaimer from "./components/Disclaimer";
 import ChatInterface from "./components/ChatInterface";
+import ChatSidebar from "./components/ChatSidebar";
 import ReferralScreen from "./components/ReferralScreen";
 import SessionEnd from "./components/SessionEnd";
 import SupportContent from "./components/SupportContent";
@@ -83,6 +84,11 @@ export default function App() {
     }
   };
 
+  const handleNewChat = () => {
+    setTurns([]);
+    setError(null);
+  };
+
   const handleStartNew = () => {
     setTurns([]);
     setReferralMessage("");
@@ -107,6 +113,8 @@ export default function App() {
 
       {screen === "chat" && (
         <div className="chat-layout">
+          <ChatSidebar onNewChat={handleNewChat} />
+
           <div className="chat-column">
             <ChatInterface
               turns={turns}
