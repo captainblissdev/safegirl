@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import type { ChatTurn, Screen } from "./types";
 import { submitQuery } from "./api/client";
+import AppHeader from "./components/AppHeader";
 import Disclaimer from "./components/Disclaimer";
 import ChatInterface from "./components/ChatInterface";
 import ReferralScreen from "./components/ReferralScreen";
 import SessionEnd from "./components/SessionEnd";
+import SupportContent from "./components/SupportContent";
 import "./App.css";
 
 /**
@@ -81,6 +83,8 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      <AppHeader />
+
       {isOffline && (
         <div className="offline-banner" role="status">
           You&apos;re offline — answers come from information stored on this
@@ -93,27 +97,38 @@ export default function App() {
       )}
 
       {screen === "chat" && (
-        <>
-          <ChatInterface
-            turns={turns}
-            onSend={(text) => void handleSend(text)}
-            isLoading={isLoading}
-          />
+        <div className="chat-layout">
+          <div className="chat-column">
+            <ChatInterface
+              turns={turns}
+              onSend={(text) => void handleSend(text)}
+              isLoading={isLoading}
+            />
 
-          {error && (
-            <div className="error-banner" role="alert">
-              {error}
-            </div>
-          )}
+            {error && (
+              <div className="error-banner" role="alert">
+                {error}
+              </div>
+            )}
 
-          <button
-            className="link-button"
-            type="button"
-            onClick={() => setScreen("sessionEnd")}
+            <button
+              className="link-button"
+              type="button"
+              onClick={() => setScreen("sessionEnd")}
+            >
+              End session
+            </button>
+          </div>
+
+          {/* Wide screens only (CSS): always-visible help options. */}
+          <aside
+            className="support-aside"
+            aria-labelledby="support-aside-title"
           >
-            End session
-          </button>
-        </>
+            <h2 id="support-aside-title">Need more support?</h2>
+            <SupportContent />
+          </aside>
+        </div>
       )}
 
       {screen === "referral" && (

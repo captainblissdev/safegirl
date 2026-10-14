@@ -43,6 +43,63 @@ export const ABUSE_REFERRAL_MESSAGE =
   `${GBV_HELPLINE} and Childline Kenya ${CHILDLINE_KENYA} (for anyone ` +
   "under 18) can also help.";
 
+/** One way to get help, shown in the "Need help now?" panel. */
+export interface SupportContact {
+  label: string;
+  /** Numbers to call; empty for advice with no number. */
+  numbers: readonly string[];
+  note: string;
+}
+
+export interface SupportSection {
+  title: string;
+  contacts: readonly SupportContact[];
+}
+
+/**
+ * The standing help panel's content, in the wireframe's order. Built from
+ * the same numbers as the referral messages above, so the panel and the
+ * referrals can never disagree. Nothing here says the numbers are
+ * verified (see HELP_CONTACTS_VERIFIED).
+ */
+export const SUPPORT_SECTIONS: readonly SupportSection[] = [
+  {
+    title: "Local health services",
+    contacts: [
+      {
+        label: "Go to a health facility",
+        numbers: [],
+        note: "A clinic or hospital can give you care and support.",
+      },
+    ],
+  },
+  {
+    title: "Confidential helplines",
+    contacts: [
+      {
+        label: "GBV helpline",
+        numbers: [GBV_HELPLINE],
+        note: "For violence or abuse.",
+      },
+      {
+        label: "Childline Kenya",
+        numbers: [CHILDLINE_KENYA],
+        note: "For anyone under 18.",
+      },
+    ],
+  },
+  {
+    title: "Emergency guidance",
+    contacts: [
+      {
+        label: "Emergency",
+        numbers: EMERGENCY_NUMBERS,
+        note: "If you are in danger now.",
+      },
+    ],
+  },
+];
+
 /** The referral message for a Safety Net category. */
 export function referralMessage(category: SafetyCategory | null): string {
   return category === "self_harm"
