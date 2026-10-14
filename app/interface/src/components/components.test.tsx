@@ -1,10 +1,11 @@
+import { readFileSync } from "node:fs";
 import { renderToStaticMarkup } from "react-dom/server";
 import {
   CHILDLINE_KENYA,
   EMERGENCY_NUMBERS,
   GBV_HELPLINE,
 } from "../offline/helpContent";
-import { LIMITED_MODE_NOTICE } from "../content/uiText";
+import { LIMITED_MODE_NOTICE, TOPIC_EXAMPLES } from "../content/uiText";
 import type { ChatTurn } from "../types";
 import AppHeader from "./AppHeader";
 import ChatInterface from "./ChatInterface";
@@ -153,6 +154,57 @@ console.log("\nTest 6: the privacy wording on the disclaimer and session end");
   assert(
     !sessionEnd.includes("Nothing was saved"),
     "the old 'Nothing was saved' wording is gone",
+  );
+}
+
+console.log("\nTest 7: the topic chips are real buttons");
+{
+  const html = renderChat([]);
+  const chips = html.match(/<button class="chip"[^>]*>[^<]*<\/button>/g) ?? [];
+
+  assert(chips.length === 4, "four chip buttons");
+  assert(!html.includes('aria-hidden="true">'), "no chip is aria-hidden");
+  for (const example of TOPIC_EXAMPLES) {
+    assert(
+      chips.some((chip) => chip.endsWith(`>${example.label}</button>`)),
+      `a "${example.label}" chip`,
+    );
+  }
+}
+
+console.log(
+  "\nTest 8: each chip's question is a 'clear' development-set query, one per topic",
+);
+{
+  const csv = readFileSync(
+    new URL(
+      "../../../../resources/eval/retrieval_eval_set.csv",
+      import.meta.url,
+    ),
+    "utf8",
+  );
+  // id,query,group,expected_behavior,acceptable_entry_ids,...
+  const rows = new Map(
+    csv
+      .replace(/\r/g, "")
+      .split("\n")
+      .map((line) => line.split(","))
+      .map((cells) => [cells[0], cells] as const),
+  );
+  const topics = new Set<string>();
+
+  for (const example of TOPIC_EXAMPLES) {
+    const row = rows.get(example.evalId);
+    assert(
+      row?.[1] === example.question,
+      `${example.evalId} is "${example.question}", verbatim`,
+    );
+    assert(row?.[2] === "clear", `${example.evalId} is in the "clear" group`);
+    topics.add(row?.[4]?.slice(0, 4) ?? "");
+  }
+  assert(
+    [...topics].sort().join(",") === "KB-C,KB-G,KB-P,KB-S",
+    "the four questions cover the four topics",
   );
 }
 

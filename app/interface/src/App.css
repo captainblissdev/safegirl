@@ -236,8 +236,19 @@
   padding: 5px 10px;
   color: var(--teal-dark);
   font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   font-weight: 700;
+  min-height: 36px;
+  cursor: pointer;
+}
+
+.chip:hover {
+  background: #c8e6da;
+}
+
+.chip:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .input-row {
