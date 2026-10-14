@@ -1,6 +1,7 @@
 import type { QueryResponse } from "../types";
 import { classify } from "./classifier";
 import { checkSafety } from "./safetyNet";
+import { referralMessage } from "./helpContent";
 
 const OFFLINE_ANSWERS: Record<string, string> = {
   contraception:
@@ -19,8 +20,7 @@ export function handleQueryOffline(queryText: string): QueryResponse {
   if (safety.flagged) {
     return {
       outcome: "referral",
-      message:
-        "We hear you. Please reach out to a trusted adult, health worker, or local support service as soon as you can.",
+      message: referralMessage(safety.category),
       generationInvoked: false,
     };
   }
