@@ -1,3 +1,28 @@
+:root {
+  /*
+   * The SafeGirl theme: every colour in the interface comes from these
+   * tokens. Calm purple and lavender, no alarm colours. Contrast ratios
+   * (WCAG AA) are recorded in docs/decision-log.md.
+   */
+  --page: #f7f2ff; /* page background */
+  --card: #ffffff; /* cards, bubbles, inputs */
+  --lilac: #efe6fc; /* tints: icon circles, chips, tiles, notices */
+  --lilac-strong: #e2d3f8; /* hover on lilac */
+  --border: #d9c9f3; /* decorative borders and dividers */
+  --control-border: #8570b8; /* input outlines (3:1 or more) */
+  --ink: #2a1457; /* body text */
+  --ink-soft: #5b4a80; /* secondary text */
+  --primary: #5b2fc7; /* buttons, links, icons, focus rings */
+  --primary-end: #8b3fe0; /* end of the primary gradient */
+  --primary-deep: #3f1d96; /* headings and emphasis */
+  --on-primary: #ffffff; /* text on the primary gradient */
+  --gradient: linear-gradient(135deg, var(--primary), var(--primary-end));
+  --focus: var(--primary);
+  --overlay: rgba(42, 20, 87, 0.5);
+  --shadow: 0 18px 48px rgba(42, 20, 87, 0.12);
+  --shadow-soft: 0 4px 14px rgba(42, 20, 87, 0.06);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -12,8 +37,8 @@ body,
 
 body {
   font-family: Georgia, "Times New Roman", serif;
-  background: #f3efe7;
-  color: #183b39;
+  background: var(--page);
+  color: var(--ink);
   line-height: 1.5;
 }
 
