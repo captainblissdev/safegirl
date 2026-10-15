@@ -90,7 +90,14 @@ export const SUGGESTIONS: Readonly<Record<string, readonly Suggestion[]>> = {
   ],
   general: [
     { question: "how do I deal with period cramps", evalId: "Q12" },
-    { question: "when do girls get their first period", evalId: "Q14" },
+    // Q15 replaced Q14 ("when do girls get their first period"), which V3
+    // misclassifies at 0.368, only 0.018 above the 0.35 no-answer cut-off.
+    // Q15 is classified correctly at 0.531 (0.181 above 0.35) and gets KB-G7
+    // both scoped and unscoped, so the 0.5 threshold cannot change its answer.
+    {
+      question: "what services can I get at a youth friendly clinic",
+      evalId: "Q15",
+    },
     { question: "is the clinic confidential", evalId: "Q16" },
   ],
 };
