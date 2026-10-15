@@ -8,17 +8,19 @@ not be read as a measured recall rate for real users.
 ## Sealed result (hold-out 3)
 
 Hold-out 3 was run **once, sealed, before any rule was changed in response
-to it**, at commit `8a083cf`:
+to it**, at commit `8a083cf` (before history cleanup; now `be91073`):
 
-| Hold-out 3 (sealed, at `8a083cf`) | Result |
+| Hold-out 3 (sealed, at `8a083cf` (before history cleanup; now `be91073`)) | Result |
 |---|---|
 | Recall on disclosures | **6/14** |
 | False referrals on non-disclosures | **2/10** |
 | Gateway vs offline disagreements | 0 |
 
 This is the only independent number in this document. It was reproduced on
-14 October 2026 from a clean checkout of `8a083cf`
-(`research/eval/results/safety_holdout_3_SEALED_8a083cf.csv`). Every later
+14 October 2026 from a clean checkout of `8a083cf` (before history cleanup; now `be91073`)
+(`research/eval/results/safety_holdout_3_SEALED_8a083cf.csv`; the file name
+keeps the old hash, which is `be91073` since the history cleanup, see
+`docs/history-rewrite-map.md`). Every later
 number is **post-patch, not independent**, because the rules were then
 changed with hold-out 3 in view.
 

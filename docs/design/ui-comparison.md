@@ -93,8 +93,8 @@ say little about real phones on mobile networks.
 
 | Build | Performance | Accessibility | Best Practices | SEO |
 |---|---|---|---|---|
-| Before the re-theme (`feature/pwa-hardening`, d3d4464) | 99 | 100 | 100 | 91 |
-| After the re-theme (`feature/ui-theme`, f793af7) | 99 | 100 | 100 | 91 |
+| Before the re-theme (`feature/pwa-hardening`, d3d4464 (before history cleanup; now d75677b)) | 99 | 100 | 100 | 91 |
+| After the re-theme (`feature/ui-theme`, f793af7 (before history cleanup; now 7071232)) | 99 | 100 | 100 | 91 |
 | After the playful update (`feature/ui-playful`) | 99 | 100 | 100 | 91 |
 
 The playful build's first contentful paint is 1.7 s, against 1.5 s

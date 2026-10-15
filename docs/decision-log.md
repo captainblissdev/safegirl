@@ -294,7 +294,7 @@ tints keep labels at 9:1 or more and icons at 6:1 or more.
 Safety Net patterns frozen on 2026-10-15; no pattern changes before
 Milestone 2 except a verified defect.
 
-The frozen state is `app/gateway/src/safetyNet.js` as of commit `525b41c`:
+The frozen state is `app/gateway/src/safetyNet.js` as of commit `525b41c` (before history cleanup; now `b4c4d29`):
 43 keyword phrases and 44 pattern rules (22 self-harm, 22 abuse), with the
 offline copy in parity. The sealed hold-out 3 result (6/14 recall, 2/10
 false referrals) and the post-patch numbers are in
@@ -315,8 +315,8 @@ reproducible:
 |---|---|
 | Classifier checkpoint | DistilBERT V3, `ml_service/final/` (gitignored); `model.safetensors` SHA-256 `e8bf2e3aa01c920197b51071e736ef6a3d1f16a57dd8d3bdb1565f75152cfb30`; labels contraception, sti, pregnancy, general |
 | Thresholds | abstain 0.35, scoped 0.5 (`app/gateway/src/classifierClient.js` defaults; `CLASSIFIER_ABSTAIN_THRESHOLD` and `CLASSIFIER_CONFIDENCE_THRESHOLD` not set) |
-| Knowledge base | `ml_service/knowledge_base.json` as of commit `42366d6` (21 entries), SHA-256 `e78a82afd10491fdc81d98bb2fca43119312be6908af7c4372ee2778d9dc1e30`; the gateway's local copy from the same markdown sources |
-| Safety Net patterns | As frozen above (`safetyNet.js` at `525b41c`) |
+| Knowledge base | `ml_service/knowledge_base.json` as of commit `42366d6` (before history cleanup; now `f27db1f`) (21 entries), SHA-256 `e78a82afd10491fdc81d98bb2fca43119312be6908af7c4372ee2778d9dc1e30`; the gateway's local copy from the same markdown sources |
+| Safety Net patterns | As frozen above (`safetyNet.js` at `525b41c` (before history cleanup; now `b4c4d29`)) |
 | Python packages (working `.venv`) | torch 2.9.0, transformers 5.0.0, sentence-transformers 6.1.0, pydantic 2.12.5 |
 
 The working `.venv` versions are the ones that produced every result in
