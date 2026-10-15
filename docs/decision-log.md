@@ -404,3 +404,29 @@ Gateway and offline agree on every row. The sealed hold-out 3 result
 (6/14, 2/10) is unchanged and its file was not touched. The per-row
 files already in `research/eval/results/` were not rewritten, so
 `safety_holdout_2_postpatch.csv` still shows J08 as missed.
+
+## Scoring rule for expert test sets (2026-10-15)
+
+Fixed before any further expert-test evaluation, for DR-04 and for the
+fresh expert test still to be run (R5).
+
+**Rule.**
+- **Primary result:** the single-label questions only. A prediction is
+  correct if it matches the expert's class.
+- **Secondary result:** every question the experts gave two categories
+  (in DR-04: TEST-014, TEST-015 and TEST-030) is reported separately. A
+  prediction counts as correct if it matches either category.
+- The primary and secondary results are **never pooled** into one
+  figure.
+
+**DR-04 is not an independent set for V3.** V2 was evaluated on it once,
+blind, on 17 September 2026. V3.1 was then run on it as a disclosed
+non-blind reuse (`research/experiments/logs/v3_1_training_log.txt`), so
+any V3 figure on DR-04 is a sanity check, not an independent result.
+No keyword-baseline result on DR-04 was found. See
+`docs/requirements-traceability.md`, DR-04.
+
+**The fresh expert test (R5)** is to be run once, after the demo freeze,
+for V3 and the frozen keyword baseline under identical conditions (same
+questions, same labels, same scoring rule), with the primary and
+secondary results reported separately.
