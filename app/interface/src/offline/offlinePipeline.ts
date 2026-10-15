@@ -15,8 +15,9 @@ const OFFLINE_ANSWERS: Record<string, string> = {
 
 export function handleQueryOffline(queryText: string): QueryResponse {
   const safety = checkSafety(queryText);
-  const classification = classify(queryText);
 
+  // A flagged query gets the referral without being classified, as in
+  // the gateway: the Safety Net never reads the classifier's result.
   if (safety.flagged) {
     return {
       outcome: "referral",
@@ -24,6 +25,8 @@ export function handleQueryOffline(queryText: string): QueryResponse {
       generationInvoked: false,
     };
   }
+
+  const classification = classify(queryText);
 
   return {
     outcome: "grounded_answer",

@@ -111,9 +111,10 @@ describe("handleQuery() with a classifier client", () => {
     assert.equal(calls.retrieve.length, 0);
     assert.equal(response.retrievalScope, null);
 
-    // The classifier still runs in parallel with the Safety Net.
-    assert.equal(calls.classify.length, 1);
-    assert.equal(response.classificationSkipped, false);
+    // The classifier is skipped on flagged queries.
+    assert.equal(calls.classify.length, 0);
+    assert.equal(response.classificationSkipped, true);
+    assert.equal(response.predictedCategory, null);
   });
 
   it("returns the no-answer fallback, never null, when retrieval finds nothing", async () => {

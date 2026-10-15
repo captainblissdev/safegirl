@@ -191,8 +191,10 @@ describe("relevance gate in handleQuery (flag on)", () => {
     const response = await handleQuery("I want to kill myself");
 
     assert.equal(response.outcome, "referral");
+    assert.equal(response.classificationSkipped, true);
     assert.ok(!("relevanceGate" in response));
-    assert.ok(!endpoints(requests).includes("/retrieve"));
+    // Neither the classifier nor retrieval runs for a flagged query.
+    assert.deepEqual(requests, []);
   });
 
   it("never reaches help signposting", async () => {

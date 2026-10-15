@@ -405,6 +405,45 @@ Gateway and offline agree on every row. The sealed hold-out 3 result
 files already in `research/eval/results/` were not rewritten, so
 `safety_holdout_2_postpatch.csv` still shows J08 as missed.
 
+## Classifier skipped on flagged queries: a freeze exception (2026-10-15)
+
+**This is an explicit exception to the demo freeze above, for the
+pipeline order only.** No model, threshold, knowledge-base entry or
+Safety Net pattern changed.
+
+**What was wrong.** The gateway sent every flagged query to the
+classifier (`ml_service` `/classify`, or the keyword fallback) before
+returning the referral, and reported the prediction in the response.
+Nothing used it: the Safety Net never reads the classifier's result.
+The call was inherited from the parallel safety and classification
+design in the proposal diagrams (`Promise.all` since commit `4a532a2`,
+2026-09-04). Commit `ae6f2f1` (2026-10-06) made the Safety-Net-first
+order explicit but kept the call ("flagged queries still run the
+classifier as before"). The code comment said this "preserves the
+independence" of the two components, but there was no independent
+reason: the Safety Net result is computed first and never depends on
+the classifier.
+
+**What changed.** Flagged queries are no longer classified, in the
+gateway (`app/gateway/src/backend.js`) and in the offline pipeline
+(`app/interface/src/offline/offlinePipeline.ts`). A referral now
+reports `classificationSkipped: true` and null `predictedCategory`,
+`classifierSource` and `confidence`.
+
+**Why.** A referral no longer waits on `ml_service`, which could take up
+to the 3 s classifier timeout when it was slow or down, and a
+disclosure's text is no longer sent to another process. FR-04 ("the
+system suppresses the classification-retrieval-generation pipeline and
+returns referral guidance instead") is now met.
+
+**Effect on results.** Outcomes are unchanged: a flagged query got the
+referral before and gets it now, so no Safety Net, hold-out or
+retrieval figure changes. In evaluation runs made after this date,
+the `gw_predicted_category`, `gw_classifier_source` and `gw_confidence`
+columns are empty for flagged rows; earlier result files keep the old
+values. The classifier's prediction for any query can still be read
+from `ml_service` directly.
+
 ## Scoring rule for expert test sets (2026-10-15)
 
 Fixed before any further expert-test evaluation, for DR-04 and for the
