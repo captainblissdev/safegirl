@@ -1,0 +1,73 @@
+# Labels by rule, retrieval conditions and relevance gate (2026-10-15)
+
+Analysis only. No threshold, model, knowledge-base entry or Safety Net rule was changed, and no existing results file was edited. Development-set figures are **not independent**: the queries and labels were written by the project owner, who also built the system. Produced by `research/eval/labels_and_gate.js`.
+
+## 1. Labels by rule
+
+**Rule.** The expected class is the class of the knowledge-base entry that best answers the query (its acceptable entries). Where a second entry plausibly answers it, both classes are accepted; a second entry counts only when its own question covers the query's question. Rows with no answering entry are labelled none and not scored. The labels were fixed from the entry text before any prediction was collected for this analysis. The labeller had seen the 14 October predictions for some rows (`label_review.md`); every decision touching those rows is listed below with its reason.
+
+Source: `resources/eval/retrieval_eval_set_labels_2026-10-15.csv` (applied labels; the provisional file is unchanged).
+
+### Rows whose label or status changes
+
+| ID | Query | Old label (status) | New label | Accepted | Reason |
+|---|---|---|---|---|---|
+| Q18 | can I get birth control without my parents knowing | contraception (provisional) | contraception | contraception;general | KB-G1 "Will the clinic tell my parents what I talked to them about?" answers the "without my parents knowing" part; KB-C1/KB-C2 answer the contraception part |
+| Q27 | why is my period late | general (provisional; ambiguous, excluded from calibration) | general | general | Label unchanged; the rule gives one class, so the row is no longer excluded as ambiguous |
+| Q28 | I fear that I am pregnant | general (provisional; ambiguous, excluded from calibration) | general | general | Label unchanged; the rule gives one class, so the row is no longer excluded as ambiguous |
+| Q29 | I missed my period | general (provisional; ambiguous, excluded from calibration) | general | general | Label unchanged; the rule gives one class, so the row is no longer excluded as ambiguous |
+| Q30 | Where can I get a pregnancy test | general (provisional; ambiguous, excluded from calibration) | general | general | Label unchanged; the rule gives one class, so the row is no longer excluded as ambiguous |
+| Q50 | I am scared to ask my mother about periods | none (provisional) | general | general | Has acceptable entries (KB-G3, KB-G6), so the rule gives the class of the entry that answers it |
+| Q58 | cn i get preg if i use a condom | contraception (provisional; ambiguous, excluded from calibration) | contraception | contraception | Label unchanged; the rule gives one class, so the row is no longer excluded as ambiguous |
+
+### Candidates considered and not accepted
+
+| ID | Query | Label kept | Why not |
+|---|---|---|---|
+| Q16 | is the clinic confidential | general | KB-C1/KB-C2 open with "Health services for young people are meant to be confidential", but their question is contraception access and consent, not clinic confidentiality; not accepted (accepting them would favour V3, which predicts contraception) |
+| Q17 | do I need my parents permission to get contraception | contraception | KB-G1 is about the clinic telling parents, not about needing their permission; not accepted |
+| Q28 | I fear that I am pregnant | general | KB-P6 (pregnancy danger signs) is listed as partial: on-topic but does not answer a fear of pregnancy; not accepted. By intent the query is pregnancy, but the rule labels the class of the answering entry (KB-G7) |
+| Q30 | Where can I get a pregnancy test | general | No pregnancy entry covers where to get a pregnancy test; KB-G7 does. By intent the query is pregnancy, but the rule labels the class of the answering entry |
+| Q43 | when should I start antenatal visits | none | No entry answers antenatal timing; KB-P6 is partial only, so the label stays none |
+| Q53 | When should I start antenatal visits? | none | As Q43 |
+
+Labelled rows: 35 (contraception 9, sti 8, pregnancy 5, general 13); none: 23.
+
+### Classifier accuracy on the rule labels (development set, not independent)
+
+On the 35 labelled queries. Strict: the prediction equals the single label. Lenient: the prediction is any accepted label. Intervals are 95% Wilson; p is the exact McNemar test on the discordant pairs.
+
+| Scoring | DistilBERT V3 | Keyword baseline | Paired | McNemar p |
+|---|---|---|---|---|
+| strict | 21/35 (60.0%; 43.6% to 74.4%) | 30/35 (85.7%; 70.6% to 93.7%) | both 20, only V3 1, only baseline 10 | 0.0117 |
+| lenient | 21/35 (60.0%; 43.6% to 74.4%) | 30/35 (85.7%; 70.6% to 93.7%) | both 20, only V3 1, only baseline 10 | 0.0117 |
+
+Source: `research/eval/results/labels_and_gate_queries_2026-10-15.csv`. For comparison, the 14 October analysis on its 29 non-ambiguous provisional labels gave V3 20/29 and the baseline 28/29, p = 0.021 (`research/eval/results/classifier_analysis.md`).
+
+Recall by class (strict):
+
+| Class | n | V3 | Baseline |
+|---|---|---|---|
+| contraception | 9 | 8/9 | 9/9 |
+| sti | 8 | 6/8 | 8/8 |
+| pregnancy | 5 | 5/5 | 4/5 |
+| general | 13 | 2/13 | 9/13 |
+
+V3 errors (lenient), with confidence:
+
+| ID | Query | Label | V3 (conf.) | Baseline |
+|---|---|---|---|---|
+| Q11 | is it normal for my period to be irregular | general | sti (0.441) | general |
+| Q13 | how often should I change my pad | general | pregnancy (0.381) | general |
+| Q14 | when do girls get their first period | general | sti (0.368) | general |
+| Q16 | is the clinic confidential | general | contraception (0.414) | general |
+| Q20 | which family planning method is safe for someone my age | contraception | general (0.357) | contraception |
+| Q23 | my private parts are burning, what could it be | sti | pregnancy (0.441) | sti |
+| Q27 | why is my period late | general | pregnancy (0.523) | pregnancy |
+| Q28 | I fear that I am pregnant | general | pregnancy (0.815) | pregnancy |
+| Q29 | I missed my period | general | pregnancy (0.488) | pregnancy |
+| Q30 | Where can I get a pregnancy test | general | pregnancy (0.804) | pregnancy |
+| Q50 | I am scared to ask my mother about periods | general | pregnancy (0.637) | general |
+| Q54 | What is PrEP? | sti | contraception (0.424) | sti |
+| Q55 | IS MY PERIOD NORMAL | general | sti (0.384) | general |
+| Q56 | is my period normal | general | pregnancy (0.451) | general |
