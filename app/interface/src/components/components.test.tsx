@@ -376,6 +376,13 @@ console.log(
       );
     }
   }
+  // Q14 is too close to the 0.35 no-answer cut-off (confidence 0.368 in
+  // research/eval/results/suggested_questions_2026-10-14.csv) to offer.
+  const offered = Object.values(SUGGESTIONS)
+    .flat()
+    .map((s) => s.evalId);
+  assert(!offered.includes("Q14"), "Q14 (fragile, 0.368) is not offered");
+  assert(offered.includes("Q15"), "Q15 replaces it in the general follow-ups");
 }
 
 console.log("\nTest 16: follow-ups appear under the latest answer only");
