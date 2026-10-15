@@ -6,7 +6,7 @@
 | R2 | Age-of-consent / "defilement" claim sourced only to 2005 MoH doc, predates 2006 Sexual Offences Act | Legal accuracy | Open — awaiting supervisor/legal input | KB entry held, not finalized |
 | R3 | Safe abortion / PAC wording | Legal + political sensitivity | Open — awaiting supervisor sign-off | Most sensitive topic in KB; hold until reviewed |
 | R4 | Domain expert for content/safety-net review | Process | Open | Outreach sent [date] |
-| R5 | Independent test-set reviewer (separate from LLM-paraphrase process) | Methodology/leakage prevention | Open | Outreach pending |
+| R5 | Independent test-set reviewer (separate from LLM-paraphrase process) | Methodology/leakage prevention | Partly resolved: DR-04 expert review complete; fresh expert test of V3 open | DR-04 expert review is complete: the set was written and labelled by an external expert team and added on 17 September 2026 (see `docs/DR04_record.md` and `docs/requirements-traceability.md`, DR-04). The open item is a fresh independent expert test of V3, since V3's DR-04 run was a disclosed non-blind reuse (updated 15 October 2026) |
 | R6 | Ethics sign-off needed for adult-reviewer involvement | Ethics/compliance | Open | Question sent to supervisor [date] |
 
 | R8 | GBV-specific authoritative source material — current sourcing (2005 MoH) 
