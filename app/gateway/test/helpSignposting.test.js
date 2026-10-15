@@ -160,9 +160,8 @@ describe("handleQuery() with the help rule", () => {
 
     assert.equal(result.outcome, "referral");
     assert.equal(helpRuleConsulted, false, "the help rule is never reached");
-    // The classifier still runs for flagged queries, as before; retrieval
-    // does not.
-    assert.deepEqual(requests, ["/classify"]);
+    // Neither the classifier nor retrieval runs for flagged queries.
+    assert.deepEqual(requests, []);
   });
 
   it("returns the referral for a real flagged query that asks for help", async () => {

@@ -40,8 +40,9 @@ const {
  *
  * @param {object} params
  * @param {object} params.safety - Result from the Safety Net.
- * @param {object} params.classification - Result from the classifier:
- *        { label, confidence, source }.
+ * @param {object|null} params.classification - Result from the
+ *        classifier: { label, confidence, source }; null for flagged
+ *        queries, which are not classified.
  * @param {object|null} params.generation - Generation result, or null
  *        when the normal generation pipeline was skipped.
  * @param {object|null} [params.retrievedEntry] - The KB entry the answer
@@ -59,7 +60,7 @@ function orchestrate({
   retrievalScope,
 }) {
   // Which classifier ran, what it predicted and how retrieval ran,
-  // reported on every path.
+  // reported on every path (all null for flagged queries).
   const classifierInfo = {
     predictedCategory: classification?.label ?? null,
     classifierSource: classification?.source ?? null,
@@ -83,8 +84,10 @@ function orchestrate({
           ? SELF_HARM_REFERRAL_MESSAGE
           : ABUSE_REFERRAL_MESSAGE,
 
-      // The classifier is still dispatched independently.
-      classificationSkipped: false,
+      // The classifier is not run on flagged queries: the Safety Net
+      // never reads its result. predictedCategory, classifierSource and
+      // confidence are therefore null here.
+      classificationSkipped: true,
 
       // The generation pipeline is not continued after a safety flag.
       generationInvoked: false,

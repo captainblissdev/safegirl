@@ -4,20 +4,20 @@
  * Coordinates the main SafeGirl query-processing pipeline.
  *
  * Order:
- * 1. Safety Net. It is synchronous, so it always completed before the
- *    classifier started, even when both were dispatched together.
+ * 1. Safety Net. It runs first and synchronously; the parallel safety
+ *    and classification design in the proposal was replaced by this
+ *    Safety-Net-first order.
  * 2. Help-seeking rule: a generic help request that names no topic
  *    ("Where can I get help?") gets signposting, without classification
  *    or retrieval, so ml_service is not called. It never overrides the
  *    Safety Net: a flagged query always gets the referral.
- * 3. Intent Classifier, then (for clear queries) retrieval and
- *    generation. If the Safety Net flags the query, the retrieval and
- *    generation stages are skipped and referral guidance is returned.
+ * 3. For clear queries only: Intent Classifier, then retrieval and
+ *    generation.
  *
- * The classifier still runs when a query is flagged. This preserves
- * the independence of the safety and classification components while
- * preventing the flagged query from continuing through the normal
- * response-generation pipeline.
+ * A flagged query gets referral guidance without classification,
+ * retrieval or generation. The classifier is skipped because the Safety
+ * Net never reads its result, so running it would only make the
+ * referral wait on ml_service.
  *
  * Classification and retrieval go through the classifier client: the
  * DistilBERT classifier and semantic retrieval in ml_service, with the
@@ -68,25 +68,24 @@ function createHandleQuery({
       return signpost();
     }
 
-    // 3. Classification (also for flagged queries, as before).
-    const classification = await Promise.resolve(
-      classifierClient.classify(queryText),
-    );
-
+    let classification = null;
     let generation = null;
     let retrievedEntry = null;
     let retrievalScope = null;
 
     /**
-     * Clear-query path:
-     * Only queries that pass the Safety Net proceed to retrieval
-     * and response generation.
+     * 3. Clear-query path:
+     * Only queries that pass the Safety Net are classified, then go on
+     * to retrieval and response generation.
      *
-     * Flagged queries therefore short-circuit the normal pipeline,
-     * preventing their content from being sent to the generation
-     * stage.
+     * Flagged queries therefore skip the classifier and the rest of the
+     * pipeline: their text is not sent to ml_service, and the referral
+     * never waits on it.
      */
     if (!safety.flagged) {
+      classification = await Promise.resolve(
+        classifierClient.classify(queryText),
+      );
       ({ entry: retrievedEntry, retrievalScope } =
         await classifierClient.retrieve(queryText, classification));
       generation = generate(retrievedEntry);
@@ -96,9 +95,9 @@ function createHandleQuery({
      * Response orchestration combines the safety result,
      * classification result, and generation result.
      *
-     * When safety.flagged is true, generation remains null and
-     * the orchestrator is responsible for returning the appropriate
-     * referral or escalation guidance.
+     * When safety.flagged is true, classification and generation remain
+     * null and the orchestrator is responsible for returning the
+     * appropriate referral or escalation guidance.
      */
     return orchestrate({
       safety,

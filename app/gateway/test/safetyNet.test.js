@@ -101,8 +101,51 @@ describe("flagged queries in the pipeline", () => {
 
       assert.equal(result.outcome, "referral");
       assert.equal(result.generationInvoked, false);
+      assert.equal(calls.classify, 0);
       assert.equal(calls.retrieve, 0);
       assert.ok(!output.toLowerCase().includes(text.toLowerCase()));
+    });
+  }
+
+  // Regression: the referral must not wait on, or depend on, the
+  // classifier. A classifier that hangs or throws is never called.
+  const broken = {
+    hangs: () => new Promise(() => {}),
+    throws: () => {
+      throw new Error("classifier down");
+    },
+  };
+  for (const [name, classify] of Object.entries(broken)) {
+    it(`returns the referral at once, never calling a classifier that ${name}`, async () => {
+      let classifyCalls = 0;
+      const handleQuery = createHandleQuery({
+        classifierClient: {
+          classify: (...args) => {
+            classifyCalls += 1;
+            return classify(...args);
+          },
+          retrieve: () => {
+            throw new Error("retrieve must not be called");
+          },
+        },
+      });
+
+      const started = Date.now();
+      let timer;
+      const result = await Promise.race([
+        handleQuery("I want to kill myself"),
+        new Promise((_, reject) => {
+          timer = setTimeout(
+            () => reject(new Error("referral waited on the classifier")),
+            500,
+          );
+        }),
+      ]).finally(() => clearTimeout(timer));
+
+      assert.equal(result.outcome, "referral");
+      assert.equal(result.classificationSkipped, true);
+      assert.equal(classifyCalls, 0);
+      assert.ok(Date.now() - started < 500);
     });
   }
 });

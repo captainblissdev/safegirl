@@ -81,8 +81,8 @@ async function run() {
   assert.strictEqual(r2.outcome, "referral");
   assert.strictEqual(r2.generationInvoked, false);
 
-  // The classifier is still dispatched independently.
-  assert.strictEqual(r2.classificationSkipped, false);
+  // The classifier is skipped on flagged queries.
+  assert.strictEqual(r2.classificationSkipped, true);
 
   console.log("  message:", r2.message);
   console.log("  PASS\n");
