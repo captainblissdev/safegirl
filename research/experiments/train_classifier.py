@@ -61,6 +61,7 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import statistics
 from pathlib import Path
 
@@ -400,6 +401,13 @@ def train_one_fold(fold_num, train_examples, val_examples, tokenizer):
 
     fold_output_dir = OUTPUT_DIR / f"fold_{fold_num}"
 
+    # transformers v5 removed logging_dir as a TrainingArguments
+    # constructor kwarg -- TensorBoard log location is now set via this
+    # environment variable instead (confirmed against the official
+    # MIGRATION_GUIDE_V5.md). Must be set before each TrainingArguments
+    # call, since each fold needs its own separate log directory.
+    os.environ["TENSORBOARD_LOGGING_DIR"] = str(fold_output_dir / "logs")
+
     training_args = TrainingArguments(
         output_dir=str(fold_output_dir),
         num_train_epochs=MAX_EPOCHS,
@@ -412,7 +420,6 @@ def train_one_fold(fold_num, train_examples, val_examples, tokenizer):
         metric_for_best_model=MODEL_SELECTION_METRIC,
         greater_is_better=True,
         seed=SEED,
-        logging_dir=str(fold_output_dir / "logs"),
         logging_steps=10,
         report_to="tensorboard",
     )
@@ -610,6 +617,9 @@ def train_final_model(all_folds, tokenizer, fixed_epochs: int):
     train_dataset = SafeGirlDataset(all_examples, tokenizer, MAX_LENGTH)
 
     final_output_dir = OUTPUT_DIR / "final_training_run"
+
+    os.environ["TENSORBOARD_LOGGING_DIR"] = str(final_output_dir / "logs")
+
     training_args = TrainingArguments(
         output_dir=str(final_output_dir),
         num_train_epochs=fixed_epochs,
@@ -617,7 +627,6 @@ def train_final_model(all_folds, tokenizer, fixed_epochs: int):
         learning_rate=LEARNING_RATE,
         save_strategy="epoch",
         seed=SEED,
-        logging_dir=str(final_output_dir / "logs"),
         logging_steps=10,
         report_to="tensorboard",
     )
