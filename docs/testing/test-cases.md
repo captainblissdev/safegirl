@@ -174,8 +174,19 @@ result:
 - **DR-02:** no automated leakage test; the evidence is the training
   script and its log.
 - **DR-03:** no seed-to-source record.
-- **DR-04:** how the test questions were written is not recorded; V3's
-  fresh independent expert test is pending.
+- **DR-04:** V3's fresh independent expert test is pending. The set's
+  provenance is now recorded, as a statement from the project owner (15
+  October 2026), not as a test: "The DR-04 set of 34 questions was
+  written, and its category labels assigned, by a licensed medical
+  doctor in Siaya County and her team, through a process separate from
+  the training-data generation. The team had seen the initial training
+  data before writing the questions, so overlap in style or topic with
+  the training data cannot be excluded; this is recorded as a
+  limitation. The verification_status field is blank on all 34 rows
+  because the labels were assigned at source by the doctors and no
+  separate verification step was run. The set was added to the
+  repository on 17 September 2026." (First commit of
+  `resources/test/independent_test_set.csv`: `40319e7`.)
 - **DR-05:** the per-batch paraphrase review records are not in the
   repository.
 - **DR-07:** no recorded check of the data for Sheng or code-switched

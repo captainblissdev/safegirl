@@ -181,6 +181,17 @@ Source: [`classifier_analysis.md`](../research/eval/results/classifier_analysis.
 - Small samples: DR-04 n = 31 (general 3); development-set calibration
   on 29 queries; relevance on 34 against 20. Sources above.
 - No independent test of V3 yet; its DR-04 result is a non-blind reuse.
+- DR-04 provenance: the 34 questions were written, and their labels
+  assigned, by a licensed medical doctor in Siaya County and her team,
+  separately from the training-data generation. The team had seen the
+  initial training data before writing them, so overlap in style or
+  topic with the training data cannot be excluded. The
+  `verification_status` field is blank on all 34 rows because the
+  labels were assigned at source and no separate verification step was
+  run. Source: the project owner's statement, recorded in
+  [`docs/requirements-traceability.md`](requirements-traceability.md)
+  (DR-04); the set was added to the repository on 17 September 2026
+  (`40319e7`).
 - The development set and its provisional labels were written by the
   project owner, who also built the system.
 - The Safety Net is a keyword net with low independent recall (6/14),

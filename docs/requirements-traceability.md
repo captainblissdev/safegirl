@@ -20,6 +20,8 @@ writing; its requirement text is quoted from the working copy.
   practice; what differs is stated.
 - **Not verified:** no test or recorded result in this repository shows
   it, even where the code suggests it is implemented.
+- **Met, with limitation:** counted as Met; the row states the
+  limitation.
 
 For every Partly met or Deviated row, the justification is a link to the
 decision log, the supervisor guidance or the feedback matrix, or
@@ -35,10 +37,10 @@ Gateway tests are in `app/gateway/test/`, interface tests in
 
 | Status | Count | Requirements |
 |---|---|---|
-| Met | 9 | FR-06, NFR-01, NFR-04, DR-01, DR-02, DR-06, IR-01, IR-02, IR-05 |
+| Met | 10 | FR-06, NFR-01, NFR-04, DR-01, DR-02, DR-04 (with limitation), DR-06, IR-01, IR-02, IR-05 |
 | Partly met | 6 | FR-01, FR-02, FR-04, NFR-05, DR-03, DR-05 |
 | Deviated | 4 | FR-03, NFR-02, IR-03, IR-04 |
-| Not verified | 5 | FR-05, NFR-03, DR-04, DR-07, DR-08 |
+| Not verified | 4 | FR-05, NFR-03, DR-07, DR-08 |
 
 ## Functional requirements
 
@@ -68,7 +70,7 @@ Gateway tests are in `app/gateway/test/`, interface tests in
 | DR-01 | `resources/seeds/seeds.csv`; `resources/reviewed/*_v3_paraphrases.csv` | `seeds.csv`: 211 seeds, contraception 48, sti 56, pregnancy 49, general 58; one reviewed paraphrase file per class; per-class supports in `research/experiments/logs/v3_1_training_log.txt` | Met | Labelled examples cover all four classes |
 | DR-02 | `research/experiments/train_distilbert_v3.py` (StratifiedGroupKFold with `seed_id` as the group; frozen `resources/seeds/fold_assignment_v3.csv`; euphemism hold-out by seed) | [DL V2 evaluation methodology](decision-log.md#v2-evaluation-methodology-2026-09-16); `v3_1_training_log.txt` ("Euphemism holdout examples (excluded from CV and training): 13") | Met | Splits are made by seed, so paraphrases of one seed never cross folds. No automated leakage test in the suites |
 | DR-03 | Knowledge-base entries carry sources (`ml_service/knowledge_base.json`, `source` field) | `seeds.csv` has only `seed_id`, `class`, `text`; [`docs/safegirl_seed_questions.md`](safegirl_seed_questions.md) is a draft "not yet reviewed by domain expert"; FRM item 2 (seeds grounded in, not copied from, sources) | Partly met | Answers are traceable to sources; seed questions are not, since no seed-to-source record exists. No recorded justification |
-| DR-04 | `resources/test/independent_test_set.csv` (31 scored of 34) | [`docs/DR04_record.md`](DR04_record.md) (expert-verified labels, exclusions); V2 one-time blind result ([`docs/development-log.md`](development-log.md)) | Not verified | The record shows expert verification of the labels, but not how the questions were written, so "a process distinct from training-data generation" cannot be confirmed; `verification_status` was blank for all 34 rows. V3's DR-04 run is a disclosed non-blind reuse, and a fresh expert test is pending |
+| DR-04 | `resources/test/independent_test_set.csv` (31 scored of 34) | Provenance statement from the project owner, recorded on 15 October 2026: "The DR-04 set of 34 questions was written, and its category labels assigned, by a licensed medical doctor in Siaya County and her team, through a process separate from the training-data generation. The team had seen the initial training data before writing the questions, so overlap in style or topic with the training data cannot be excluded; this is recorded as a limitation. The verification_status field is blank on all 34 rows because the labels were assigned at source by the doctors and no separate verification step was run. The set was added to the repository on 17 September 2026." First commit of the file: `40319e7` (feat(dataset): resolve DR-04 with expert-verified independent test set), 2026-09-17. [`docs/DR04_record.md`](DR04_record.md) (labels, exclusions); V2 one-time blind result ([`docs/development-log.md`](development-log.md)) | Met, with limitation | The questions and labels came from a process separate from training-data generation. Limitation: the team had seen the initial training data, so overlap in style or topic cannot be excluded. V3's DR-04 run is a disclosed non-blind reuse, and a fresh expert test is pending |
 | DR-05 | Seed → paraphrase → review pipeline ([DL protocol](decision-log.md#v2-paraphrasing-protocol-frozen-2026-09-18)); training refuses `resources/generated/` (`train_distilbert_v3.py`); label review of the eval set | [`research/eval/results/label_review.md`](../research/eval/results/label_review.md); [`DR04_record.md`](DR04_record.md) (exclusions of dual-label rows) | Partly met | The protocol defines structural and manual checks, but the per-batch records it promises in `docs/ai-use-log.md` (requested, accepted, rejected counts) are not there, so the review cannot be confirmed from the repository. No recorded justification |
 | DR-06 | `resources/knowledge_base/gbv.md` ("STATUS: HELD. No finalized entries."); `app/gateway/src/retrievalModule.js` (GBV not a retrievable category) | `ml_service/knowledge_base.json`: 21 entries, all contraception, STI, pregnancy or general; FRM item 3 (supervisor sign-off holding GBV content) | Met | No GBV content is in the knowledge base |
 | DR-07 | Paraphrase protocol: "English only, no Sheng or code-switching" and an automated "no Swahili/Sheng markers" check ([DL](decision-log.md#v2-paraphrasing-protocol-frozen-2026-09-18)) | No recorded result of that check | Not verified | The exclusion is stated policy, but no recorded check of the dataset files shows it was applied |
@@ -93,7 +95,9 @@ Gateway tests are in `app/gateway/test/`, interface tests in
   `gbv`.
 - **NFR-05 "Likely met."** Met only on the development set; there is no
   baseline result on DR-04 or the CV folds.
-- **DR-04.** The record does not show how the questions were written.
+- **DR-04.** The repository did not record how the questions were
+  written; the project owner's provenance statement now does (see the
+  DR-04 row).
 - **IR-03 "Extractive answers approved by the supervisor on 12 October
   2026."** Confirmed in the decision log; the probe is on a local branch
   only.
