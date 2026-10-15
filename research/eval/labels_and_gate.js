@@ -540,8 +540,21 @@ function sectionConditions(lines) {
     differ.map((r) => [r.id, r.query, r.acceptable_entry_ids, `${r.v3_class} (${fmt(r.v3_conf)})`,
       ...conds.map(([, f]) => `${ok(f(r), r) ? "✓" : "✗"} ${f(r) || "no answer"}`)])));
   lines.push("");
-  const unscopedWrong = q.filter((r) => !ok(r.unscoped_top1, r));
-  lines.push(`Queries that even unscoped retrieval gets wrong: ${unscopedWrong.length ? unscopedWrong.map((r) => `${r.id} (${r.unscoped_top1})`).join(", ") : "none"}.\n`);
+  const allWrong = q.filter((r) => conds.every(([, f]) => !ok(f(r), r)));
+  lines.push(`Queries that no condition answers correctly (${allWrong.length}):\n`);
+  lines.push(table(["ID", "Query", "Acceptable", "V3 (conf.)", ...conds.map(([name]) => name)],
+    allWrong.map((r) => [r.id, r.query, r.acceptable_entry_ids, `${r.v3_class} (${fmt(r.v3_conf)})`,
+      ...conds.map(([, f]) => f(r) || "no answer")])));
+  lines.push("");
+  const [base, ...others] = conds;
+  lines.push(`Paired comparison with ${base[0].toLowerCase()} on the same queries (exact McNemar):\n`);
+  lines.push(table(["Condition", "Only unscoped right", "Only this condition right", "p"],
+    others.map(([name, f]) => {
+      const b = q.filter((r) => ok(base[1](r), r) && !ok(f(r), r)).length;
+      const c = q.filter((r) => !ok(base[1](r), r) && ok(f(r), r)).length;
+      return [name, b, c, mcnemarExact(b, c).toFixed(4)];
+    })));
+  lines.push("");
 }
 
 function sectionGate(lines) {

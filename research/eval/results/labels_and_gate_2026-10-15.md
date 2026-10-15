@@ -71,3 +71,49 @@ V3 errors (lenient), with confidence:
 | Q54 | What is PrEP? | sti | contraception (0.424) | sti |
 | Q55 | IS MY PERIOD NORMAL | general | sti (0.384) | general |
 | Q56 | is my period normal | general | pregnancy (0.451) | general |
+
+## 2. Retrieval under four conditions (development set, not independent)
+
+Top-1 entry correct (one of the query's acceptable entries) on the same 35 labelled queries. Hybrid is what the live gateway returned (scoped at V3 confidence 0.5 or above, unscoped from 0.35, no answer below 0.35); a referral or no answer counts as not correct. Oracle scopes retrieval to the strict rule label. Intervals are 95% Wilson.
+
+| Condition | Correct | Rate | 95% CI |
+|---|---|---|---|
+| Always unscoped | 32/35 | 91.4% | 77.6% to 97.0% |
+| Always scoped (V3 class) | 21/35 | 60.0% | 43.6% to 74.4% |
+| Hybrid (live gateway) | 30/35 | 85.7% | 70.6% to 93.7% |
+| Oracle scoped (rule label) | 32/35 | 91.4% | 77.6% to 97.0% |
+
+Self-check: the hybrid replayed from the recorded V3 confidence and top-1 ids matches the live gateway on 35/35 queries. Source: `research/eval/results/labels_and_gate_queries_2026-10-15.csv`.
+
+Queries whose result differs between conditions (12); ✓ correct, ✗ not:
+
+| ID | Query | Acceptable | V3 (conf.) | Always unscoped | Always scoped (V3 class) | Hybrid (live gateway) | Oracle scoped (rule label) |
+|---|---|---|---|---|---|---|---|
+| Q11 | is it normal for my period to be irregular | KB-G3 | sti (0.441) | ✓ KB-G3 | ✗ KB-S4 | ✓ KB-G3 | ✓ KB-G3 |
+| Q13 | how often should I change my pad | KB-G5 | pregnancy (0.381) | ✓ KB-G5 | ✗ KB-P7 | ✓ KB-G5 | ✓ KB-G5 |
+| Q14 | when do girls get their first period | KB-G6 | sti (0.368) | ✓ KB-G6 | ✗ KB-S6 | ✓ KB-G6 | ✓ KB-G6 |
+| Q16 | is the clinic confidential | KB-G1 | contraception (0.414) | ✓ KB-G1 | ✗ KB-C1 | ✓ KB-G1 | ✓ KB-G1 |
+| Q20 | which family planning method is safe for someone my age | KB-C3 | general (0.357) | ✓ KB-C3 | ✗ KB-G7 | ✓ KB-C3 | ✓ KB-C3 |
+| Q23 | my private parts are burning, what could it be | KB-S4 | pregnancy (0.441) | ✓ KB-S4 | ✗ KB-P6 | ✓ KB-S4 | ✓ KB-S4 |
+| Q27 | why is my period late | KB-G3 | pregnancy (0.523) | ✓ KB-G3 | ✗ KB-P1 | ✗ KB-P1 | ✓ KB-G3 |
+| Q29 | I missed my period | KB-G3;KB-G7 | pregnancy (0.488) | ✓ KB-G3 | ✗ KB-P1 | ✓ KB-G3 | ✓ KB-G3 |
+| Q54 | What is PrEP? | KB-S7 | contraception (0.424) | ✓ KB-S7 | ✗ KB-C4 | ✓ KB-S7 | ✓ KB-S7 |
+| Q55 | IS MY PERIOD NORMAL | KB-G3 | sti (0.384) | ✓ KB-G3 | ✗ KB-S4 | ✓ KB-G3 | ✓ KB-G3 |
+| Q56 | is my period normal | KB-G3 | pregnancy (0.451) | ✓ KB-G3 | ✗ KB-P7 | ✓ KB-G3 | ✓ KB-G3 |
+| Q57 | wat is prep | KB-S7 | sti (0.306) | ✓ KB-S7 | ✓ KB-S7 | ✗ no answer | ✓ KB-S7 |
+
+Queries that no condition answers correctly (3):
+
+| ID | Query | Acceptable | V3 (conf.) | Always unscoped | Always scoped (V3 class) | Hybrid (live gateway) | Oracle scoped (rule label) |
+|---|---|---|---|---|---|---|---|
+| Q28 | I fear that I am pregnant | KB-G7 | pregnancy (0.815) | KB-P6 | KB-P6 | KB-P6 | KB-G3 |
+| Q30 | Where can I get a pregnancy test | KB-G7 | pregnancy (0.804) | KB-P5 | KB-P5 | KB-P5 | KB-G3 |
+| Q50 | I am scared to ask my mother about periods | KB-G3;KB-G6 | pregnancy (0.637) | KB-G4 | KB-P6 | KB-P6 | KB-G4 |
+
+Paired comparison with always unscoped on the same queries (exact McNemar):
+
+| Condition | Only unscoped right | Only this condition right | p |
+|---|---|---|---|
+| Always scoped (V3 class) | 11 | 0 | 0.0010 |
+| Hybrid (live gateway) | 2 | 0 | 0.5000 |
+| Oracle scoped (rule label) | 0 | 0 | 1.0000 |
