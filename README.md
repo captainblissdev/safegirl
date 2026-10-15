@@ -50,10 +50,11 @@ The surrounding safety and privacy architecture is kept separate from the classi
 | --------------------------------- | ------------------------------------------------------------------- |
 | Keyword baseline classifier       | ✅ Frozen (2026-08-27)                                               |
 | DistilBERT classifier (V3)        | ✅ Trained — 5-fold CV, final retrain, and independent test complete |
-| Backend                           | ✅ Working and tested (5/5)                                          |
-| Frontend                          | ✅ Working and tested (4/4), builds cleanly                          |
+| Backend (gateway)                 | ✅ Working and tested: 334 `node:test` tests plus 6 integration check groups |
+| Frontend                          | ✅ Working and tested: 6 test suites; typecheck, lint and build pass |
+| `ml_service` (FastAPI)            | ✅ `/health`, `/classify` (V3), `/retrieve` (semantic, 21 KB entries); runs as a separate local process |
 | RAG generation (Gemini)           | ⛔ Not implemented — currently stubbed                               |
-| Semantic retrieval (LlamaIndex)   | ⛔ Not implemented — interim keyword-overlap retrieval is used       |
+| Semantic retrieval                | ✅ `intfloat/multilingual-e5-small` (sentence-transformers) in `ml_service`; scoped to the predicted class at confidence 0.5 or above; keyword overlap only as fallback; LlamaIndex not used |
 | Firebase Anonymous Authentication | ✅ Gateway token verification and in-memory anonymous sign-in        |
 | GBV informational content         | ⛔ Deliberately held pending authoritative legal/clinical sourcing   |
 | CI                                | ✅ GitHub Actions — backend and frontend checks                      |
@@ -167,7 +168,7 @@ The Safety Net is synchronous, so it has always finished before the classifier s
 
 The Safety Net is not part of the intent classifier's training or evaluation scope.
 
-Full diagrams — including use case, activity, sequence, class, system architecture, and Firestore data design — are available in [`docs/diagrams/`](docs/diagrams/).
+Full diagrams — including use case, activity, sequence, class, system architecture, and Firestore data design — are available in [`docs/diagrams/`](docs/diagrams/). They show the request order but not the separate `ml_service` process: the classifier and semantic retrieval appear as gateway modules, although they run in `ml_service`.
 
 ---
 
@@ -221,6 +222,7 @@ The privacy architecture is a core design constraint rather than an optional fea
 * The frontend does not use `localStorage` or `sessionStorage` for conversation persistence.
 * Firestore does not contain `sessions`, `queries`, or `conversations` collections.
 * The system avoids requiring personally identifiable information for core interaction.
+* In the current pipeline, query text goes only to the local `ml_service` process. No external API receives it, because generation is stubbed. Adding Gemini would change this and must be assessed as a privacy decision.
 
 ### Safety
 
@@ -418,6 +420,8 @@ The workflow is defined in:
 .github/workflows/ci.yml
 ```
 
+`ml_service` has no CI job yet. Its behaviour is checked through the gateway tests (with a mocked service) and manual end-to-end runs.
+
 `main` is intended to remain the stable branch, with changes introduced through pull requests.
 
 ### Retrieval evaluation (development set)
@@ -493,6 +497,10 @@ Retrieval is semantic, in `ml_service`: knowledge-base entries are embedded with
 Keyword-overlap matching over the knowledge base is used only as the fallback, when `ml_service` is unavailable or returns an unusable result.
 
 LlamaIndex, described in the methodology, is not used.
+
+* Retrieval is class-scoped when the classifier is confident, so a wrong classification can hide the right entry.
+* The classifier has no GBV class. GBV-adjacent queries that the Safety Net does not flag go through ordinary classification and retrieval: in testing they received unrelated answers, and the 0.35 abstain cut-off never fired (see [`docs/safety-net-evaluation.md`](docs/safety-net-evaluation.md)).
+* `ml_service` has no hosted deployment. It runs locally, so a remote demo needs a decision on where it runs.
 
 ---
 
