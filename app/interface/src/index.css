@@ -1,0 +1,103 @@
+:root {
+  /*
+   * The SafeGirl theme: every colour in the interface comes from these
+   * tokens. Calm purple and lavender, no alarm colours. Contrast ratios
+   * (WCAG AA) are recorded in docs/decision-log.md.
+   */
+  --page: #f7f2ff; /* page background */
+  --card: #ffffff; /* cards, bubbles, inputs */
+  --lilac: #efe6fc; /* tints: icon circles, chips, tiles, notices */
+  --lilac-strong: #e2d3f8; /* hover on lilac */
+  --tint-sky: #e2ecfd; /* topic chip: contraception */
+  --tint-mint: #dcf3ea; /* topic chip: STI */
+  --tint-peach: #ffe8dc; /* topic chip: pregnancy */
+  --tint-pink: #fde4f2; /* topic chip: periods */
+  --border: #d9c9f3; /* decorative borders and dividers */
+  --control-border: #8570b8; /* input outlines (3:1 or more) */
+  --ink: #2a1457; /* body text */
+  --ink-soft: #5b4a80; /* secondary text */
+  --primary: #5b2fc7; /* buttons, links, icons, focus rings */
+  --primary-end: #8b3fe0; /* end of the primary gradient */
+  --primary-deep: #3f1d96; /* headings and emphasis */
+  --on-primary: #ffffff; /* text on the primary gradient */
+  --gradient: linear-gradient(135deg, var(--primary), var(--primary-end));
+  --focus: var(--primary);
+  --overlay: rgba(42, 20, 87, 0.5);
+  --shadow: 0 18px 48px rgba(42, 20, 87, 0.12);
+  --shadow-soft: 0 4px 14px rgba(42, 20, 87, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+/*
+ * Nunito, a rounded and friendly typeface, self-hosted with the app (never
+ * loaded from Google), so no third party sees who opens SafeGirl. One
+ * variable file covers every weight; Latin only. Licence: SIL OFL 1.1
+ * (assets/fonts/Nunito-OFL.txt). It is precached for offline use.
+ */
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 1000;
+  src: url("./assets/fonts/nunito-latin-wght-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+
+/* Body text is 16px or larger. System fonts are the fallback. */
+body {
+  font-family:
+    "Nunito",
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  font-size: 1rem;
+  background: var(--page);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+/* One visible focus ring for every control (3:1 or more on every background). */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Motion is off for anyone who asks their device for reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button,
+input {
+  -webkit-tap-highlight-color: transparent;
+}

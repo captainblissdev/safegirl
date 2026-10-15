@@ -1,0 +1,25 @@
+{
+  "name": "safegirl-backend",
+  "version": "0.1.0",
+  "description": "SafeGirl backend — parallel-dispatch orchestration, interim retrieval, stubbed generation. Not yet connected to Firebase or Gemini.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/backend.test.js && node --test test/classifierClient.test.js test/backend.wiring.test.js test/server.test.js test/sessionAuth.test.js test/auth.http.test.js test/helpSignposting.test.js test/heldEntries.test.js test/safetyNet.test.js test/offlineSafetyParity.test.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
+  },
+  "dependencies": {
+    "express": "^4.22.2",
+    "firebase-admin": "^14.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.11.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.9"
+  }
+}

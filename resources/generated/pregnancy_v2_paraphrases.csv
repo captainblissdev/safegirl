@@ -1,0 +1,113 @@
+seed_id,paraphrase_id,class,text
+SEED-PREG-17,SEED-PREG-17-P1,pregnancy,My test came back negative but I still haven't gotten my period; should I take another test?
+SEED-PREG-17,SEED-PREG-17-P2,pregnancy,Even though my pregnancy test was negative my period hasn't come; is it worth testing again?
+SEED-PREG-17,SEED-PREG-17-P3,pregnancy,I got a negative result but my period is still missing; do I need to retest?
+SEED-PREG-17,SEED-PREG-17-P4,pregnancy,The pregnancy test was negative yet my period still hasn't shown up; should I test once more?
+SEED-PREG-18,SEED-PREG-18-P1,pregnancy,Is it possible to get pregnant if he pulled out before finishing?
+SEED-PREG-18,SEED-PREG-18-P2,pregnancy,Could I still end up pregnant even though he pulled out before ejaculating?
+SEED-PREG-18,SEED-PREG-18-P3,pregnancy,If he pulled out before ejaculating is pregnancy still possible?
+SEED-PREG-18,SEED-PREG-18-P4,pregnancy,Is there a chance of pregnancy if he pulled out before ejaculation?
+SEED-PREG-19,SEED-PREG-19-P1,pregnancy,What early symptoms could indicate that I'm pregnant?
+SEED-PREG-19,SEED-PREG-19-P2,pregnancy,What are the first signs that might suggest pregnancy?
+SEED-PREG-19,SEED-PREG-19-P3,pregnancy,Which early signs point toward possibly being pregnant?
+SEED-PREG-19,SEED-PREG-19-P4,pregnancy,What sort of early indicators might mean I'm pregnant?
+SEED-PREG-20,SEED-PREG-20-P1,pregnancy,What does it mean if a pregnancy test shows a faint line?
+SEED-PREG-20,SEED-PREG-20-P2,pregnancy,If the line on my pregnancy test is faint what does that indicate?
+SEED-PREG-20,SEED-PREG-20-P3,pregnancy,What's the meaning behind a faint line appearing on a pregnancy test?
+SEED-PREG-20,SEED-PREG-20-P4,pregnancy,What should I understand from a faint line on a pregnancy test?
+SEED-PREG-21,SEED-PREG-21-P1,pregnancy,Is pregnancy possible from genital contact that doesn't involve penetration?
+SEED-PREG-21,SEED-PREG-21-P2,pregnancy,Could genital contact without penetration still lead to pregnancy?
+SEED-PREG-21,SEED-PREG-21-P3,pregnancy,Is there a chance of getting pregnant from genital contact alone without penetration?
+SEED-PREG-21,SEED-PREG-21-P4,pregnancy,Can pregnancy happen from genital contact even without penetration?
+SEED-PREG-22,SEED-PREG-22-P1,pregnancy,Does drinking a lot of water change how accurate a pregnancy test is?
+SEED-PREG-22,SEED-PREG-22-P2,pregnancy,Could a pregnancy test be less accurate if I've had a lot of water to drink?
+SEED-PREG-22,SEED-PREG-22-P3,pregnancy,Is the accuracy of a pregnancy test affected by drinking lots of water beforehand?
+SEED-PREG-22,SEED-PREG-22-P4,pregnancy,Would drinking a large amount of water throw off a pregnancy test's accuracy?
+SEED-PREG-23,SEED-PREG-23-P1,pregnancy,After taking emergency contraception how do I confirm if I'm pregnant?
+SEED-PREG-23,SEED-PREG-23-P2,pregnancy,What's the best way to check if I'm pregnant after using emergency contraception?
+SEED-PREG-23,SEED-PREG-23-P3,pregnancy,How do I find out for sure whether I'm pregnant after taking emergency contraception?
+SEED-PREG-23,SEED-PREG-23-P4,pregnancy,Following emergency contraception how can I confirm a pregnancy one way or another?
+SEED-PREG-25,SEED-PREG-25-P1,pregnancy,My pregnancy test was positive and I have pain on one side of my abdomen; should I get help?
+SEED-PREG-25,SEED-PREG-25-P2,pregnancy,I tested positive for pregnancy and I'm having one-sided abdominal pain; is that something to seek help for?
+SEED-PREG-25,SEED-PREG-25-P3,pregnancy,With a positive pregnancy test and pain on one side of my belly should I go get checked out?
+SEED-PREG-25,SEED-PREG-25-P4,pregnancy,I got a positive pregnancy result and now have abdominal pain on one side; should I seek medical help?
+SEED-PREG-26,SEED-PREG-26-P1,pregnancy,Which foods should I stay away from if I might be pregnant?
+SEED-PREG-26,SEED-PREG-26-P2,pregnancy,What foods are best avoided if there's a chance I'm pregnant?
+SEED-PREG-26,SEED-PREG-26-P3,pregnancy,If I think I could be pregnant what foods should I steer clear of?
+SEED-PREG-26,SEED-PREG-26-P4,pregnancy,What types of food should I avoid in case I'm pregnant?
+SEED-PREG-27,SEED-PREG-27-P1,pregnancy,Is constant extreme tiredness normal during early pregnancy?
+SEED-PREG-27,SEED-PREG-27-P2,pregnancy,Is it typical to feel exhausted all the time in the early stages of pregnancy?
+SEED-PREG-27,SEED-PREG-27-P3,pregnancy,Is it common to be extremely tired throughout early pregnancy?
+SEED-PREG-27,SEED-PREG-27-P4,pregnancy,Is feeling very fatigued all the time normal early on in pregnancy?
+SEED-PREG-28,SEED-PREG-28-P1,pregnancy,What's a normal amount of weight to gain while pregnant?
+SEED-PREG-28,SEED-PREG-28-P2,pregnancy,How much weight gain is considered typical during pregnancy?
+SEED-PREG-28,SEED-PREG-28-P3,pregnancy,What amount of weight gain is usual over the course of a pregnancy?
+SEED-PREG-28,SEED-PREG-28-P4,pregnancy,How much weight should I expect to gain during pregnancy?
+SEED-PREG-29,SEED-PREG-29-P1,pregnancy,What can I expect during each month of pregnancy?
+SEED-PREG-29,SEED-PREG-29-P2,pregnancy,What happens during pregnancy as it progresses month by month?
+SEED-PREG-29,SEED-PREG-29-P3,pregnancy,Can you explain what occurs at each monthly stage of pregnancy?
+SEED-PREG-29,SEED-PREG-29-P4,pregnancy,What changes happen at each stage of pregnancy going month by month?
+SEED-PREG-30,SEED-PREG-30-P1,pregnancy,Is it okay to keep exercising while pregnant?
+SEED-PREG-30,SEED-PREG-30-P2,pregnancy,Is continuing to exercise safe during pregnancy?
+SEED-PREG-30,SEED-PREG-30-P3,pregnancy,Can I safely keep working out if I'm pregnant?
+SEED-PREG-30,SEED-PREG-30-P4,pregnancy,Is it fine to carry on exercising throughout pregnancy?
+SEED-PREG-31,SEED-PREG-31-P1,pregnancy,Is it safe to keep taking my usual medications while pregnant?
+SEED-PREG-31,SEED-PREG-31-P2,pregnancy,Can I continue with my regular medications during pregnancy?
+SEED-PREG-31,SEED-PREG-31-P3,pregnancy,Is it okay to still use my normal medications if I'm pregnant?
+SEED-PREG-31,SEED-PREG-31-P4,pregnancy,Am I able to keep taking my regular medicine while pregnant?
+SEED-PREG-32,SEED-PREG-32-P1,pregnancy,What does labor really feel like and how do I know when it's beginning?
+SEED-PREG-32,SEED-PREG-32-P2,pregnancy,How does labor actually feel and what tells me it's starting?
+SEED-PREG-32,SEED-PREG-32-P3,pregnancy,What's labor actually like and how can I tell when it's starting?
+SEED-PREG-32,SEED-PREG-32-P4,pregnancy,What sensations come with labor and how will I recognize it starting?
+SEED-PREG-33,SEED-PREG-33-P1,pregnancy,Is it normal to feel scared or overwhelmed at the thought of becoming a parent?
+SEED-PREG-33,SEED-PREG-33-P2,pregnancy,Is feeling overwhelmed or afraid about becoming a parent normal?
+SEED-PREG-33,SEED-PREG-33-P3,pregnancy,Is it common to feel scared or overwhelmed about the idea of being a parent?
+SEED-PREG-33,SEED-PREG-33-P4,pregnancy,Is it okay to feel overwhelmed or frightened about becoming a parent?
+SEED-PREG-34,SEED-PREG-34-P1,pregnancy,Is my partner allowed to come along to antenatal appointments?
+SEED-PREG-34,SEED-PREG-34-P2,pregnancy,Can my partner attend antenatal appointments with me?
+SEED-PREG-34,SEED-PREG-34-P3,pregnancy,Am I able to bring my partner to antenatal appointments?
+SEED-PREG-34,SEED-PREG-34-P4,pregnancy,Is it possible for my partner to join me at antenatal appointments?
+SEED-PREG-35,SEED-PREG-35-P1,pregnancy,What kinds of tests or scans should I expect during pregnancy?
+SEED-PREG-35,SEED-PREG-35-P2,pregnancy,Which tests or scans happen over the course of pregnancy?
+SEED-PREG-35,SEED-PREG-35-P3,pregnancy,What tests and scans are typically done throughout pregnancy?
+SEED-PREG-35,SEED-PREG-35-P4,pregnancy,What sort of scans or tests will be part of my pregnancy?
+SEED-PREG-36,SEED-PREG-36-P1,pregnancy,Can I have twins even if twins have never run in my family?
+SEED-PREG-36,SEED-PREG-36-P2,pregnancy,Is having twins possible if there's no history of twins in my family?
+SEED-PREG-36,SEED-PREG-36-P3,pregnancy,Could I have twins even though no one in my family ever has?
+SEED-PREG-36,SEED-PREG-36-P4,pregnancy,Is it possible to have twins without any family history of them?
+SEED-PREG-37,SEED-PREG-37-P1,pregnancy,Are mood swings normal during pregnancy?
+SEED-PREG-37,SEED-PREG-37-P2,pregnancy,Is it common to experience mood swings while pregnant?
+SEED-PREG-37,SEED-PREG-37-P3,pregnancy,Is it typical to have mood swings throughout pregnancy?
+SEED-PREG-37,SEED-PREG-37-P4,pregnancy,Are mood swings something to expect during pregnancy?
+SEED-PREG-38,SEED-PREG-38-P1,pregnancy,Is it okay to swim or bathe as usual while pregnant?
+SEED-PREG-38,SEED-PREG-38-P2,pregnancy,Can I keep swimming and bathing normally during pregnancy?
+SEED-PREG-38,SEED-PREG-38-P3,pregnancy,Is swimming or normal bathing still fine while pregnant?
+SEED-PREG-38,SEED-PREG-38-P4,pregnancy,Am I able to continue swimming and bathing as normal while pregnant?
+SEED-PREG-39,SEED-PREG-39-P1,pregnancy,What should I do if the baby isn't moving as much as I expected?
+SEED-PREG-39,SEED-PREG-39-P2,pregnancy,What does it mean if I feel less baby movement than expected?
+SEED-PREG-39,SEED-PREG-39-P3,pregnancy,What if the baby's movements feel less frequent than I expected?
+SEED-PREG-39,SEED-PREG-39-P4,pregnancy,What should I think if I'm not feeling as much baby movement as expected?
+SEED-PREG-40,SEED-PREG-40-P1,pregnancy,How do I know if my morning sickness is normal or something more serious?
+SEED-PREG-40,SEED-PREG-40-P2,pregnancy,What tells me whether my morning sickness is ordinary or more serious?
+SEED-PREG-40,SEED-PREG-40-P3,pregnancy,How can I distinguish normal morning sickness from something more serious?
+SEED-PREG-40,SEED-PREG-40-P4,pregnancy,What's the way to tell if morning sickness is typical or a bigger concern?
+SEED-PREG-41,SEED-PREG-41-P1,pregnancy,Should I be worried about spotting or light bleeding early in pregnancy?
+SEED-PREG-41,SEED-PREG-41-P2,pregnancy,Is early spotting or light bleeding during pregnancy a cause for concern?
+SEED-PREG-41,SEED-PREG-41-P3,pregnancy,Is light bleeding or spotting in early pregnancy something to be concerned about?
+SEED-PREG-41,SEED-PREG-41-P4,pregnancy,Does spotting or light bleeding early on in pregnancy warrant worry?
+SEED-PREG-42,SEED-PREG-42-P1,pregnancy,Am I required to inform my school or workplace about my pregnancy?
+SEED-PREG-42,SEED-PREG-42-P2,pregnancy,Do I have to let my school or workplace know that I'm pregnant?
+SEED-PREG-42,SEED-PREG-42-P3,pregnancy,Is it necessary to tell my school or workplace I'm pregnant?
+SEED-PREG-42,SEED-PREG-42-P4,pregnancy,Should I inform my school or workplace about being pregnant?
+SEED-PREG-43,SEED-PREG-43-P1,pregnancy,What rights do I have if I want to keep studying while pregnant?
+SEED-PREG-43,SEED-PREG-43-P2,pregnancy,What are my rights regarding continuing my education during pregnancy?
+SEED-PREG-43,SEED-PREG-43-P3,pregnancy,What rights protect me if I want to stay in school while pregnant?
+SEED-PREG-43,SEED-PREG-43-P4,pregnancy,What rights do I have to continue my education if I'm pregnant?
+SEED-PREG-44,SEED-PREG-44-P1,pregnancy,Is it actually true that how you're carrying can reveal the baby's sex?
+SEED-PREG-44,SEED-PREG-44-P2,pregnancy,Can you really tell the baby's sex just from how you're carrying?
+SEED-PREG-44,SEED-PREG-44-P3,pregnancy,Is it accurate that the way you carry shows the baby's sex?
+SEED-PREG-44,SEED-PREG-44-P4,pregnancy,Does how you carry actually reveal whether the baby is a boy or girl?
+SEED-PREG-45,SEED-PREG-45-P1,pregnancy,What counts as a high-risk pregnancy and does being a teenager put mine in that category?
+SEED-PREG-45,SEED-PREG-45-P2,pregnancy,What defines a high-risk pregnancy and would being a teenager make mine one?
+SEED-PREG-45,SEED-PREG-45-P3,pregnancy,What makes a pregnancy high-risk and does my being a teenager count toward that?
+SEED-PREG-45,SEED-PREG-45-P4,pregnancy,How is a high-risk pregnancy defined and does teenage pregnancy automatically qualify?

@@ -1,0 +1,117 @@
+seed_id,paraphrase_id,class,text
+SEED-STI-17,SEED-STI-17-P1,sti,I've noticed a few tiny painless bumps around my vulva that don't itch; how can I tell if it's razor burn or an infection?
+SEED-STI-17,SEED-STI-17-P2,sti,There are a few small painless bumps near my vulva that aren't itchy; how do I know if that's razor burn or an infection?
+SEED-STI-17,SEED-STI-17-P3,sti,I found a few tiny bumps around my vulva that don't itch or hurt; how can I tell whether it's razor burn or an infection?
+SEED-STI-17,SEED-STI-17-P4,sti,A few painless little bumps showed up around my vulva without any itching; how do I figure out if that's razor burn or an infection?
+SEED-STI-18,SEED-STI-18-P1,sti,Is it possible to catch an STI by sharing a towel or from a toilet seat that someone with an STI used before you?
+SEED-STI-18,SEED-STI-18-P2,sti,Is it possible to get an STI from sharing a towel or from a public toilet seat if someone with an STI used it before you?
+SEED-STI-18,SEED-STI-18-P3,sti,Could sharing a towel or sitting where someone with an STI sat on a public toilet seat pass the infection to you?
+SEED-STI-18,SEED-STI-18-P4,sti,If the person before you on a public toilet seat or sharing a towel had an STI can that spread it to you?
+SEED-STI-19,SEED-STI-19-P1,sti,My partner had cold sores as a child; can giving oral sex cause an infection around my genitals?
+SEED-STI-19,SEED-STI-19-P2,sti,Since my partner had cold sores when they were a child could oral sex give me an infection around my genitals?
+SEED-STI-19,SEED-STI-19-P3,sti,My partner used to get cold sores as a kid; does that mean giving oral sex could infect my genital area?
+SEED-STI-19,SEED-STI-19-P4,sti,Given that my partner had cold sores in childhood can performing oral sex cause a genital infection for me?
+SEED-STI-20,SEED-STI-20-P1,sti,I have yellowish discharge that smells different but no itching or bumps; could this mean I have an STI?
+SEED-STI-20,SEED-STI-20-P2,sti,My discharge is yellowish and smells unusual with no itching or bumps; could that indicate an STI?
+SEED-STI-20,SEED-STI-20-P3,sti,There's a yellowish discharge with a different smell but no itching or bumps; does that suggest an STI?
+SEED-STI-20,SEED-STI-20-P4,sti,I noticed yellowish oddly-smelling discharge without any itching or bumps; could this be a sign of an STI?
+SEED-STI-21,SEED-STI-21-P1,sti,If both me and my partner have never had sex before do we still need to get tested for STIs?
+SEED-STI-21,SEED-STI-21-P2,sti,Since neither my partner nor I have ever had sex before is STI testing still necessary for us?
+SEED-STI-21,SEED-STI-21-P3,sti,My partner and I have both never had sex before; do we still need STI tests?
+SEED-STI-21,SEED-STI-21-P4,sti,Given that neither of us has had sex before is it still important for me and my partner to get tested for STIs?
+SEED-STI-22,SEED-STI-22-P1,sti,I tested negative last week but my partner was just diagnosed with trichomoniasis; do I need treatment anyway?
+SEED-STI-22,SEED-STI-22-P2,sti,My test came back negative last week but my partner was just diagnosed with trichomoniasis; should I still get treated?
+SEED-STI-22,SEED-STI-22-P3,sti,Last week I tested negative though my partner has now been diagnosed with trichomoniasis; do I still need treatment?
+SEED-STI-22,SEED-STI-22-P4,sti,I got a negative result last week but since my partner was just diagnosed with trichomoniasis do I need treatment regardless?
+SEED-STI-23,SEED-STI-23-P1,sti,Does a Pap smear check for all STIs or do I need to ask the nurse for specific tests?
+SEED-STI-23,SEED-STI-23-P2,sti,Will a Pap smear cover all STIs or should I request specific tests from the nurse?
+SEED-STI-23,SEED-STI-23-P3,sti,Is a Pap smear enough to test for every STI or do I need to ask for particular tests separately?
+SEED-STI-23,SEED-STI-23-P4,sti,Does getting a Pap smear test for all STIs or do I have to specifically request other tests from the nurse?
+SEED-STI-24,SEED-STI-24-P1,sti,My ex tested positive for syphilis; if I don't have any sores or other symptoms could I still have it?
+SEED-STI-24,SEED-STI-24-P2,sti,Since my ex tested positive for syphilis could I still have it even without sores or other symptoms?
+SEED-STI-24,SEED-STI-24-P3,sti,My ex was diagnosed with syphilis; is it possible I have it too even with no sores or symptoms?
+SEED-STI-24,SEED-STI-24-P4,sti,Given that my ex tested positive for syphilis could I be infected even without any sores or symptoms showing?
+SEED-STI-25,SEED-STI-25-P1,sti,If my partner never took their treatment could I get the same STI again after I finish my antibiotics?
+SEED-STI-25,SEED-STI-25-P2,sti,If my partner skipped their treatment could I get the same STI again after I finish my antibiotics?
+SEED-STI-25,SEED-STI-25-P3,sti,After completing antibiotics can I catch the same STI again if my partner never took their medication?
+SEED-STI-25,SEED-STI-25-P4,sti,Is it possible to get reinfected with the same STI after finishing antibiotics if my partner didn't get treated?
+SEED-STI-26,SEED-STI-26-P1,sti,The clinic said my STI test result was indeterminate; does that mean I have an infection or not?
+SEED-STI-26,SEED-STI-26-P2,sti,My STI test came back indeterminate according to the clinic; does that mean I'm infected or not?
+SEED-STI-26,SEED-STI-26-P3,sti,I was told my STI test result was indeterminate; does that indicate I have an infection or that I don't?
+SEED-STI-26,SEED-STI-26-P4,sti,The clinic gave me an indeterminate result for my STI test; what does that mean about whether I'm infected?
+SEED-STI-27,SEED-STI-27-P1,sti,My partner says they are clean but have never been tested; should I still be worried about STIs?
+SEED-STI-27,SEED-STI-27-P2,sti,Even though my partner claims to be clean but has never actually been tested should I still worry about STIs?
+SEED-STI-27,SEED-STI-27-P3,sti,My partner insists they're clean despite never getting tested; is that still a reason to be concerned about STIs?
+SEED-STI-27,SEED-STI-27-P4,sti,Should I be concerned about STIs if my partner says they're clean but has never had a test?
+SEED-STI-28,SEED-STI-28-P1,sti,Can someone go years with an STI and never realize they have it?
+SEED-STI-28,SEED-STI-28-P2,sti,Can someone carry an STI for years without ever realizing it?
+SEED-STI-28,SEED-STI-28-P3,sti,Is it possible to be infected with an STI for years and not know?
+SEED-STI-28,SEED-STI-28-P4,sti,Could a person have an STI for years without being aware of it?
+SEED-GEN-46,SEED-GEN-46-P1,sti,What's the recommended age for teens to begin the HPV vaccine series?
+SEED-GEN-46,SEED-GEN-46-P2,sti,What age is recommended for teenagers to start the HPV vaccine series?
+SEED-GEN-46,SEED-GEN-46-P3,sti,At what age should teens begin getting the HPV vaccine series?
+SEED-GEN-46,SEED-GEN-46-P4,sti,What's the recommended age for teenagers to receive the HPV vaccine series?
+SEED-STI-29,SEED-STI-29-P1,sti,Is it possible for genital skin-to-skin contact alone to spread an STI without penetration?
+SEED-STI-29,SEED-STI-29-P2,sti,Is it possible for an STI to spread through genital skin-to-skin contact without penetration?
+SEED-STI-29,SEED-STI-29-P3,sti,Could an STI be passed on through skin-to-skin genital contact even if there's no penetration?
+SEED-STI-29,SEED-STI-29-P4,sti,Does skin-to-skin genital contact alone without penetration carry a risk of spreading an STI?
+SEED-STI-30,SEED-STI-30-P1,sti,Can condoms protect against every STI or are some STIs spread by skin-to-skin contact?
+SEED-STI-30,SEED-STI-30-P2,sti,Do condoms protect against all STIs or can some still spread through skin-to-skin contact?
+SEED-STI-30,SEED-STI-30-P3,sti,Are condoms effective against every STI or are there some spread by skin-to-skin contact instead?
+SEED-STI-30,SEED-STI-30-P4,sti,Is it true condoms cover every STI or do some spread through skin-to-skin contact regardless?
+SEED-STI-31,SEED-STI-31-P1,sti,If I have no symptoms how long after a new sexual partner should I wait before getting an STI test?
+SEED-STI-31,SEED-STI-31-P2,sti,With no symptoms present how long should I wait after a new sexual partner before testing for STIs?
+SEED-STI-31,SEED-STI-31-P3,sti,Even without symptoms how much time should pass after a new sexual partner before I get tested for STIs?
+SEED-STI-31,SEED-STI-31-P4,sti,If I'm not showing symptoms what's the wait time after a new sexual partner before an STI test?
+SEED-STI-32,SEED-STI-32-P1,sti,Is it possible to have an STI even though I consistently use condoms?
+SEED-STI-32,SEED-STI-32-P2,sti,Is it possible to have an STI despite always using condoms?
+SEED-STI-32,SEED-STI-32-P3,sti,Could I still have an STI even though I consistently use condoms?
+SEED-STI-32,SEED-STI-32-P4,sti,Can someone get an STI even when they always use condoms?
+SEED-STI-33,SEED-STI-33-P1,sti,Is it possible to be infected with more than one STI at once?
+SEED-STI-33,SEED-STI-33-P2,sti,Is it possible to have more than one STI at once?
+SEED-STI-33,SEED-STI-33-P3,sti,Can someone be infected with more than one STI simultaneously?
+SEED-STI-33,SEED-STI-33-P4,sti,Is having multiple STIs at the same time something that can happen?
+SEED-STI-34,SEED-STI-34-P1,sti,Can already having one STI make you more likely to catch another?
+SEED-STI-34,SEED-STI-34-P2,sti,If you already have one STI does that make catching another one easier?
+SEED-STI-34,SEED-STI-34-P3,sti,Can having an existing STI increase the chance of getting a different one?
+SEED-STI-34,SEED-STI-34-P4,sti,Does already having one STI raise the risk of getting another?
+SEED-STI-35,SEED-STI-35-P1,sti,Is it possible for an STI to pass between partners when neither one is showing symptoms?
+SEED-STI-35,SEED-STI-35-P2,sti,Is it possible for an STI to pass between partners when neither one has symptoms?
+SEED-STI-35,SEED-STI-35-P3,sti,Could an STI be transmitted between partners even without either person showing symptoms?
+SEED-STI-35,SEED-STI-35-P4,sti,Can partners spread an STI to each other even if neither is symptomatic?
+SEED-STI-36,SEED-STI-36-P1,sti,If I suspect I was exposed to an STI but feel totally fine what steps should I take?
+SEED-STI-36,SEED-STI-36-P2,sti,If I feel completely fine but think I was exposed to an STI what should I do?
+SEED-STI-36,SEED-STI-36-P3,sti,I feel totally fine but suspect I was exposed to an STI; what's the right thing to do?
+SEED-STI-36,SEED-STI-36-P4,sti,What steps should I take if I suspect STI exposure even though I feel completely fine?
+SEED-STI-37,SEED-STI-37-P1,sti,Can someone have chlamydia or gonorrhea and show absolutely no symptoms?
+SEED-STI-37,SEED-STI-37-P2,sti,Is it common to show no symptoms at all with chlamydia or gonorrhea?
+SEED-STI-37,SEED-STI-37-P3,sti,Can chlamydia or gonorrhea be present with absolutely no symptoms?
+SEED-STI-37,SEED-STI-37-P4,sti,Is it normal to be completely asymptomatic even with chlamydia or gonorrhea?
+SEED-STI-38,SEED-STI-38-P1,sti,What's the best way to let a partner know I tested positive for an STI?
+SEED-STI-38,SEED-STI-38-P2,sti,What's the best way to tell a partner I tested positive for an STI?
+SEED-STI-38,SEED-STI-38-P3,sti,How should I go about telling a partner about my positive STI test?
+SEED-STI-38,SEED-STI-38-P4,sti,How can I let a partner know that I tested positive for an STI?
+SEED-STI-39,SEED-STI-39-P1,sti,Are some STIs curable and others not or are they all treated the same way?
+SEED-STI-39,SEED-STI-39-P2,sti,Is it true some STIs are curable while others aren't or is treatment the same for all of them?
+SEED-STI-39,SEED-STI-39-P3,sti,Do some STIs get cured while others don't or are they all handled the same way?
+SEED-STI-39,SEED-STI-39-P4,sti,Are certain STIs curable and others not or does treatment work the same across all of them?
+SEED-STI-40,SEED-STI-40-P1,sti,Is STI testing free at a public clinic or is there a cost?
+SEED-STI-40,SEED-STI-40-P2,sti,Is STI testing free at a public clinic or do I have to pay?
+SEED-STI-40,SEED-STI-40-P3,sti,Will I be charged for STI testing at a public clinic?
+SEED-STI-40,SEED-STI-40-P4,sti,Is there a cost for getting tested for STIs at a public clinic?
+SEED-STI-41,SEED-STI-41-P1,sti,Is there a way to get tested for STIs without the results reaching anyone else?
+SEED-STI-41,SEED-STI-41-P2,sti,Is it possible to get STI testing without anyone else learning the results?
+SEED-STI-41,SEED-STI-41-P3,sti,Can I have an STI test done without other people finding out what it shows?
+SEED-STI-41,SEED-STI-41-P4,sti,Is STI testing available in a way that keeps the results from anyone else?
+SEED-STI-42,SEED-STI-42-P1,sti,What do genital warts look like and are they the same thing as herpes sores?
+SEED-STI-42,SEED-STI-42-P2,sti,What's the appearance of genital warts and are they the same as herpes sores?
+SEED-STI-42,SEED-STI-42-P3,sti,How do genital warts look and is that the same condition as herpes sores?
+SEED-STI-42,SEED-STI-42-P4,sti,What do genital warts typically look like and do they count as the same thing as herpes sores?
+SEED-STI-43,SEED-STI-43-P1,sti,If I test positive for an STI will that stay on my medical record forever?
+SEED-STI-43,SEED-STI-43-P2,sti,Will a positive STI test result remain on my medical record permanently?
+SEED-STI-43,SEED-STI-43-P3,sti,If my STI test is positive does that stay on my medical record for good?
+SEED-STI-43,SEED-STI-43-P4,sti,Does testing positive for an STI mean it's on my medical record forever?
+SEED-STI-44,SEED-STI-44-P1,sti,If I don't get treated right away is there a risk an untreated STI causes long-term problems?
+SEED-STI-44,SEED-STI-44-P2,sti,If I don't get treated right away could an untreated STI lead to long-term problems?
+SEED-STI-44,SEED-STI-44-P3,sti,Could leaving an STI untreated right away cause long-term issues?
+SEED-STI-44,SEED-STI-44-P4,sti,Does not treating an STI right away risk causing long-term problems?

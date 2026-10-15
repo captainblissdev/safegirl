@@ -1,0 +1,7 @@
+# Formatting-only commits skipped by `git blame`.
+# Enable locally: git config blame.ignoreRevsFile .git-blame-ignore-revs
+# (GitHub applies this file automatically.)
+
+# style: apply Prettier formatting to gateway and interface
+# (837ab02 before the 2026-10-15 history cleanup; see docs/history-rewrite-map.md)
+d9d65acd8d64b205b9a63d0318640dde60d6e52d

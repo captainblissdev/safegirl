@@ -1,0 +1,15 @@
+# Suggested questions (topic chips and follow-ups) through the full stack on 2026-10-14: ml_service V3 and the gateway at default thresholds (scoped 0.5, abstain 0.35). These queries are from the retrieval development set; not independent.
+id,query,shown_as,expected_entry,predicted_class,confidence,scoped_top1,unscoped_top1,gateway_entry,gateway_scope,live_match,scoped_match,unscoped_match,note
+Q01,Which birth control methods can a teenager use?,chip (Contraception); follow-up (contraception),KB-C3,contraception,0.870,KB-C3,KB-C3,KB-C3,scoped,yes,yes,yes,
+Q02,Do I need a condom if I am on the pill?,follow-up (contraception),KB-C4,contraception,0.907,KB-C4,KB-C4,KB-C4,scoped,yes,yes,yes,
+Q03,will the injection make me unable to have kids,follow-up (contraception),KB-C5,contraception,0.555,KB-C5,KB-C5,KB-C5,scoped,yes,yes,yes,
+Q05,can chlamydia be cured,chip (STI); follow-up (sti),KB-S5,sti,0.741,KB-S5,KB-S5,KB-S5,scoped,yes,yes,yes,
+Q06,is the HPV vaccine free for girls my age,follow-up (sti),KB-S6,sti,0.876,KB-S6,KB-S6,KB-S6,scoped,yes,yes,yes,
+Q07,what is PrEP,follow-up (sti),KB-S7,sti,0.425,KB-S7,KB-S7,KB-S7,unscoped,yes,yes,yes,
+Q08,can I go back to school after having a baby,follow-up (pregnancy),KB-P5,pregnancy,0.737,KB-P5,KB-P5,KB-P5,scoped,yes,yes,yes,
+Q09,what are the danger signs in pregnancy,chip (Pregnancy); follow-up (pregnancy),KB-P6,pregnancy,0.820,KB-P6,KB-P6,KB-P6,scoped,yes,yes,yes,
+Q10,should I take iron tablets when pregnant,follow-up (pregnancy),KB-P7,pregnancy,0.840,KB-P7,KB-P7,KB-P7,scoped,yes,yes,yes,
+Q11,is it normal for my period to be irregular,chip (Periods),KB-G3,sti,0.441,KB-S4,KB-G3,KB-G3,unscoped,yes,NO,yes,near miss: correct only because confidence 0.441 is below the 0.5 scoping threshold
+Q12,how do I deal with period cramps,follow-up (general),KB-G4,general,0.567,KB-G4,KB-G4,KB-G4,scoped,yes,yes,yes,
+Q14,when do girls get their first period,follow-up (general),KB-G6,sti,0.368,KB-S6,KB-G6,KB-G6,unscoped,yes,NO,yes,near miss: correct only because confidence 0.368 is below the 0.5 scoping threshold; 0.018 above the 0.35 abstain threshold
+Q16,is the clinic confidential,follow-up (general),KB-G1,contraception,0.414,KB-C1,KB-G1,KB-G1,unscoped,yes,NO,yes,near miss: correct only because confidence 0.414 is below the 0.5 scoping threshold

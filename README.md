@@ -6,7 +6,7 @@ SafeGirl is an academic research prototype investigating whether a fine-tuned mu
 
 The system is designed around an anonymous, session-based privacy architecture with **no user accounts, no login for core functionality, and no persisted conversation data**.
 
-> **Research prototype:** SafeGirl is not a deployed healthcare service, diagnostic system, or replacement for professional medical or crisis support. Its knowledge base is an unreviewed draft.
+> **Research prototype:** SafeGirl is not a deployed healthcare service, diagnostic system, or replacement for professional medical or crisis support.
 
 ---
 
@@ -31,7 +31,7 @@ Frozen Keyword Baseline
 versus:
 
 ```text
-Fine-tuned DistilBERT
+Fine-tuned DistilBERT V2
         │
         ▼
    Category Routing
@@ -46,21 +46,18 @@ The surrounding safety and privacy architecture is kept separate from the classi
 
 ## Status at a Glance
 
-| Component                         | Status                                                                                  |
-| --------------------------------- | --------------------------------------------------------------------------------------- |
-| Keyword baseline classifier       | ✅ Frozen (2026-08-27); also the runtime fallback when `ml_service` is unreachable       |
-| DistilBERT classifier (V3)        | ✅ Trained: 5-fold CV, final retrain, and independent test complete                      |
-| `ml_service` (FastAPI)            | ✅ `/health`, `/classify` (V3), `/retrieve` (semantic); runs as a separate local process |
-| Semantic retrieval                | ✅ `intfloat/multilingual-e5-small`, class-scoped; retrieval evaluation not yet done     |
-| Gateway wiring to `ml_service`    | ✅ Implemented with confidence zones and fallback; merge into `development` pending      |
-| Backend (gateway)                 | ✅ Working and tested (34 tests)                                                         |
-| Frontend                          | ✅ Offline pipeline tests 4/4, builds cleanly; chat interface connected to the gateway is not finished |
-| RAG generation (Gemini)           | ⛔ Not implemented: currently stubbed                                                    |
-| Firebase Anonymous Authentication | ⛔ Not mounted on the query route                                                        |
-| Knowledge base                    | ⚠️ 8 active entries, unreviewed draft; expansion and expert review pending              |
-| GBV informational content         | ⛔ Deliberately held pending authoritative legal/clinical sourcing                       |
-| Confidence thresholds             | ⚠️ Provisional (0.5 and 0.35); calibration pending in the retrieval evaluation           |
-| CI                                | ✅ GitHub Actions: gateway and interface checks (`ml_service` is not covered)            |
+| Component                         | Status                                                              |
+| --------------------------------- | ------------------------------------------------------------------- |
+| Keyword baseline classifier       | ✅ Frozen (2026-08-27)                                               |
+| DistilBERT classifier (V3)        | ✅ Trained — 5-fold CV, final retrain, and independent test complete |
+| Backend (gateway)                 | ✅ Working and tested: 334 `node:test` tests plus 6 integration check groups |
+| Frontend                          | ✅ Working and tested: 6 test suites; typecheck, lint and build pass |
+| `ml_service` (FastAPI)            | ✅ `/health`, `/classify` (V3), `/retrieve` (semantic, 21 KB entries); runs as a separate local process |
+| RAG generation (Gemini)           | ⛔ Not implemented — currently stubbed                               |
+| Semantic retrieval                | ✅ `intfloat/multilingual-e5-small` (sentence-transformers) in `ml_service`; scoped to the predicted class at confidence 0.5 or above; keyword overlap only as fallback; LlamaIndex not used |
+| Firebase Anonymous Authentication | ✅ Gateway token verification and in-memory anonymous sign-in        |
+| GBV informational content         | ⛔ Deliberately held pending authoritative legal/clinical sourcing   |
+| CI                                | ✅ GitHub Actions — backend and frontend checks                      |
 
 ---
 
@@ -94,17 +91,13 @@ This separation is intentional and forms part of the system's safety architectur
 
 ---
 
-## Model Results
-
-### V2 (evaluated comparison)
+## Model Results — V2
 
 | Evaluation                   |     Accuracy |        Macro-F1 | Notes                             |
 | ---------------------------- | -----------: | --------------: | --------------------------------- |
-| V1: single split             |        80.0% |          0.7677 | 55 seeds; historical baseline     |
-| V2: 5-fold CV                | 82.9% ± 7.0% | 0.8274 ± 0.0726 | 182 seeds; 910 examples           |
-| V2: independent expert test  |        90.3% |          0.8832 | n=31; one-time evaluation (DR-04) |
-
-V3 is the checkpoint served by `ml_service`. Its results and the V2 to V3 comparison are recorded in [`docs/decision-log.md`](docs/decision-log.md).
+| V1 — single split            |        80.0% |          0.7677 | 55 seeds; historical baseline     |
+| V2 — 5-fold CV               | 82.9% ± 7.0% | 0.8274 ± 0.0726 | 182 seeds; 910 examples           |
+| V2 — independent expert test |        90.3% |          0.8832 | n=31; one-time evaluation (DR-04) |
 
 ### Known evaluation weakness
 
@@ -127,36 +120,33 @@ See [`docs/decision-log.md`](docs/decision-log.md) for the full comparison and e
                              │
                              ▼
                     ┌─────────────────┐
-                    │ Gateway (Node)  │
+                    │     Gateway     │
+                    └────────┬────────┘
+                             ▼
+                    ┌─────────────────┐
+                    │ 1. Safety Net   │  independent safety path
+                    └────────┬────────┘
+                             ▼
+                    ┌─────────────────┐  generic help request
+                    │ 2. Help rule    │──(not flagged)──► Signposting
+                    └────────┬────────┘  (no classifier, no retrieval)
+                             ▼
+                    ┌─────────────────┐
+                    │ 3. Intent       │  DistilBERT V3 (ml_service),
+                    │    classifier   │  keyword fallback
                     └────────┬────────┘
                              │
-                    ┌────────┴────────┐
-                    ▼                 ▼
-             ┌─────────────┐   ┌───────────────────────┐
-             │ Safety Net  │   │ Intent Router         │
-             │             │   │ ml_service /classify  │
-             │ Independent │   │ (DistilBERT V3)       │
-             │ safety path │   │ fallback: keyword     │
-             └──────┬──────┘   └───────────┬───────────┘
-                    │                      ▼
-              Safety event?     Confidence zones
-                    │            >= 0.5        scoped retrieval
-                    │            0.35 to 0.5   unscoped retrieval
-                    │            < 0.35        abstain (no-answer message)
-                    │                      │
-                    │                      ▼
-                    │           ┌───────────────────────┐
-                    │           │ Retrieval             │
-                    │           │ ml_service /retrieve  │
-                    │           │ (e5 embeddings)       │
-                    │           └───────────┬───────────┘
-                    │                       ▼
-                    │           ┌─────────────┐
-                    │           │ Generation  │
-                    │           │  (stubbed)  │
-                    │           └──────┬──────┘
-                    │                  │
-                    └────────┬─────────┘
+             flagged by the Safety Net? ──yes──► Referral
+                             │ no                (classifier result not used)
+                             ▼
+                    ┌─────────────────┐
+                    │    Retrieval    │
+                    └────────┬────────┘
+                             ▼
+                    ┌─────────────────┐
+                    │   Generation    │
+                    │    (stubbed)    │
+                    └────────┬────────┘
                              ▼
                     Response Orchestrator
                              │
@@ -164,43 +154,38 @@ See [`docs/decision-log.md`](docs/decision-log.md) for the full comparison and e
                          Response
 ```
 
-The Safety Net runs in parallel with classification. A flagged query returns a fixed referral message and skips retrieval and generation.
+### Request order
+
+Every query is handled in this order:
+
+1. **Safety Net.** Checks for self-harm and suicidal statements, and for violence, abuse, blackmail and threats. Self-harm gets its own referral message.
+2. **Help rule.** If the query was not flagged and the whole message is a generic help request that names no topic (for example "Where can I get help?"), the gateway returns help information (`outcome: "signposting"`). The classifier and retrieval do not run, and `ml_service` is not called.
+3. **Intent classifier.** Runs for every other query, including flagged ones.
+4. **If the Safety Net flagged the query,** the gateway returns the referral message. The classifier has already run, and its prediction is reported in the response (`predictedCategory`) but is not used to answer; retrieval and generation do not run.
+5. **Otherwise,** retrieval and generation produce the answer.
+
+The Safety Net is synchronous, so it has always finished before the classifier starts; earlier versions of this README and the architecture diagram described the two as dispatched in parallel.
 
 The Safety Net is not part of the intent classifier's training or evaluation scope.
 
-If `ml_service` is unreachable, the gateway falls back to the keyword classifier and local keyword retrieval, and the request still returns a response.
-
-### Response fields
-
-| Field              | Meaning                                                                                     |
-| ------------------ | ------------------------------------------------------------------------------------------- |
-| `category`         | Category of the entry actually served                                                       |
-| `predictedCategory`| Category the classifier predicted (can differ when retrieval ran unscoped)                  |
-| `classifierSource` | `distilbert` or `keyword_fallback`                                                          |
-| `confidence`       | Classifier confidence; `null` in keyword fallback                                           |
-| `retrievalScope`   | `scoped`, `unscoped`, `abstained`, or `local` (keyword fallback)                            |
-
-Full diagrams, including use case, activity, sequence, class, system architecture, and Firestore data design, are available in [`docs/diagrams/`](docs/diagrams/). Some predate the `ml_service` wiring and have not yet been updated.
+Full diagrams — including use case, activity, sequence, class, system architecture, and Firestore data design — are available in [`docs/diagrams/`](docs/diagrams/). They show the request order but not the separate `ml_service` process: the classifier and semantic retrieval appear as gateway modules, although they run in `ml_service`.
 
 ---
 
 ## Tech Stack
 
-| Layer              | Technology                                              |
-| ------------------ | ------------------------------------------------------- |
-| Gateway            | Node.js, Express                                        |
-| Frontend           | React, TypeScript, Vite                                 |
-| PWA                | `vite-plugin-pwa`                                       |
-| ML service         | Python, FastAPI                                         |
-| Classifier         | `distilbert-base-multilingual-cased`                    |
-| Retrieval          | `intfloat/multilingual-e5-small` via sentence-transformers |
-| ML framework       | Hugging Face Transformers, PyTorch                      |
-| Evaluation         | scikit-learn                                            |
-| Data               | Firestore (`knowledge_base` collection)                 |
-| Planned generation | Gemini                                                  |
-| CI                 | GitHub Actions                                          |
-
-Semantic retrieval is implemented directly with sentence-transformers rather than LlamaIndex, which the methodology originally named. This deviation is recorded in the decision log.
+| Layer              | Technology                           |
+| ------------------ | ------------------------------------ |
+| Backend            | Node.js, Express                     |
+| Frontend           | React, TypeScript, Vite              |
+| PWA                | `vite-plugin-pwa`                    |
+| Classifier         | `distilbert-base-multilingual-cased` |
+| ML framework       | Hugging Face Transformers, PyTorch   |
+| Evaluation         | scikit-learn                         |
+| Data               | Firestore                            |
+| Planned retrieval  | LlamaIndex, sentence-transformers    |
+| Planned generation | Gemini                               |
+| CI                 | GitHub Actions                       |
 
 Firestore currently uses a single `knowledge_base` collection by design. See [`docs/diagrams/firestore-data-design-specification.md`](docs/diagrams/firestore-data-design-specification.md).
 
@@ -244,6 +229,18 @@ The privacy architecture is a core design constraint rather than an optional fea
 * Safety detection is independent of intent classification.
 * A change to the classifier cannot directly suppress or alter Safety Net outcomes.
 * GBV/crisis language is handled through the independent safety path rather than being treated as an ordinary intent-classification category.
+* The Safety Net (`app/gateway/src/safetyNet.js`) has two categories, each with its own referral message:
+  * **Self-harm and suicidal statements**, first or third person: wanting to die or not be alive, ending one's life, no point or reason in living, wanting it all to end, hating one's life, hurting or cutting oneself, others being happier or better off without them, suicide. The message acknowledges how the person feels and gives the emergency numbers 999 and 112.
+  * **Violence, abuse, blackmail and threats**: being hit, beaten, touched, forced or pressured into sex, including violence against siblings or a parent ("hits us", "beats my mum"); secrecy ("our secret", "don't tell anyone what we do", or "told me not to tell" with touch or sexual words); not feeling safe at home or being afraid to go home; "<family member or partner> will kill me"; being taken to be cut (FGM); requests for nude photos or threats to show or share someone's photos; threats to kill or hurt. The message says it is not the person's fault and gives 999, 112, the GBV helpline 1195 and Childline Kenya 116.
+
+  If both match, the self-harm message is used. Detection is rule-based: text is lowercased, apostrophes are normalised and "@" between letters is read as "a"; the patterns cover common verb forms, SMS spellings and typos, and exclude idioms such as "this exam is killing me", "I am dying to know" and "I want to die laughing". A flagged query skips retrieval and generation.
+* **Known limits.** This is a keyword and pattern net, not an understanding of meaning:
+  * It misses indirect disclosures that use no recognisable phrase, such as "my stepfather comes to my room at night", and new phrasings, slang, other languages (including Swahili and Sheng) and heavier obfuscation.
+  * It can over-trigger on idioms that resemble its phrases. For example, "my mum will kill me" is referred even when it is said lightly, and bare "abuse", "forced" and "circumcision" still flag ordinary questions.
+  * To avoid flagging games ("she beat me in the match"), violence followed by "in" is not flagged, which also misses phrasings such as "he hits me in the face".
+  * Results on the development set and hold-out sets should not be read as a measured recall rate for real users.
+* **The referral wording is interim and not clinically reviewed. All the numbers it gives (999, 112, 1195, 116) are unverified**: they live in `app/gateway/src/content/helpContent.js`, and the gateway logs a warning at startup until `HELP_CONTACTS_VERIFIED` is set to true.
+* The offline interface uses a port of the same rules (`app/interface/src/offline/safetyNet.ts`) and the same two referral messages and numbers (`app/interface/src/offline/helpContent.ts`), and logs the same unverified-numbers warning at startup. A parity test (`app/gateway/test/offlineSafetyParity.test.js`) fails if the rules, messages, numbers or verified flag drift apart.
 * GBV informational content is deliberately held until authoritative legal/clinical sources and appropriate review are available.
 * Sheng and English-Swahili code-switched terms are also held from active training until competent review is available rather than being generated speculatively.
 
@@ -255,13 +252,10 @@ The privacy architecture is a core design constraint rather than an optional fea
 SafeGirl/
 ├── app/
 │   ├── gateway/
-│   │   └── # Express API, safety, classification client, retrieval orchestration
+│   │   └── # Express API, safety, classification, retrieval orchestration
 │   │
 │   └── interface/
 │       └── # React PWA and offline-capable frontend
-│
-├── ml_service/
-│   └── # FastAPI service: /classify, /retrieve, /health; build_kb.py
 │
 ├── resources/
 │   ├── seeds/
@@ -273,7 +267,7 @@ SafeGirl/
 │   ├── test/
 │   │   └── # Independent expert-verified test set (DR-04)
 │   └── knowledge_base/
-│       └── # Source-grounded SRH content (markdown is the single source of truth)
+│       └── # Source-grounded SRH content
 │
 ├── research/
 │   └── experiments/
@@ -301,26 +295,8 @@ The `resources/generated/` directory is retained for provenance but is **not acc
 * Node.js 20+
 * npm
 * Git
-* Python 3.10+ for `ml_service` and classifier development/training
+* Python 3.10+ for classifier development/training
 * CUDA-capable GPU for local model training, or Google Colab for GPU training
-
----
-
-### ML service
-
-`ml_service` listens on port 8001. It loads the V3 classifier and the retrieval index at startup.
-
-The knowledge base is built from the markdown files, not edited by hand:
-
-```bash
-cd ml_service
-
-python build_kb.py          # writes knowledge_base.json from resources/knowledge_base/*.md
-```
-
-<!-- KEEP: the exact PowerShell start command and checkpoint settings already documented on feature/gateway-classifier-wiring -->
-
-Check that it is up with `GET /health`.
 
 ---
 
@@ -331,14 +307,55 @@ cd app/gateway
 
 npm install
 npm test
+```
+
+The gateway refuses to start until authentication is configured. For local development (PowerShell):
+
+```powershell
+$env:AUTH_DISABLED = "true"   # local development only, see below
 node server.js
 ```
 
-The gateway test suite currently contains 34 tests.
+`npm test` runs the backend integration checks plus the `node:test` tests for the classifier client, the backend wiring, error handling and authentication. None of them need `ml_service`, a Firebase project or any credentials.
 
-<!-- KEEP: the environment-variable table (ml_service URL, scoped threshold, abstain threshold, timeouts) already documented on feature/gateway-classifier-wiring -->
+#### Authentication
 
-`CLASSIFIER_ABSTAIN_THRESHOLD` (default 0.35) is the confidence below which the gateway returns the no-answer message without calling `/retrieve`. Invalid values fall back to the default. Both thresholds are provisional.
+`POST /api/query` requires a Firebase Anonymous Authentication ID token in an `Authorization: Bearer <token>` header; `/health` does not. A missing, malformed, invalid, expired or revoked token returns `401 {"error":"Authentication required."}`. If tokens cannot be checked at all (for example Google's public keys cannot be fetched, or the verifier is misconfigured), the gateway returns `503 {"error":"Service temporarily unavailable."}` instead, so an outage never looks like a bad token. Only a fixed reason category (such as `expired` or `invalid`) or an error code is logged, never the token, the error message or the user ID.
+
+The gateway verifies tokens against Google's public keys and needs only the Firebase project ID (`FIREBASE_PROJECT_ID`, in the table below). **It no longer needs the service-account JSON.**
+
+`AUTH_DISABLED` is for **local development only. Never set it on a deployed host.**
+
+#### Configuration
+
+The gateway classifies queries and retrieves knowledge-base entries through `ml_service` (DistilBERT classifier and semantic retrieval). If `ml_service` is unreachable, times out or returns an error, the gateway falls back to the keyword classifier and local keyword retrieval, so it keeps answering without it.
+
+The gateway reads these environment variables (it does not load `.env` files):
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `FIREBASE_PROJECT_ID` | none | Firebase project whose ID tokens are accepted. Required while authentication is enabled; without it the gateway refuses to start |
+| `AUTH_DISABLED` | unset | **Local development only.** Exactly `true` disables authentication when `NODE_ENV` is not `production`, and logs a warning at startup. With `NODE_ENV=production` the gateway refuses to start. Any other value leaves authentication on |
+| `CLASSIFIER_SERVICE_URL` | `http://127.0.0.1:8001` | Base URL of `ml_service` |
+| `CLASSIFIER_CONFIDENCE_THRESHOLD` | `0.5` | At or above this confidence, retrieval is scoped to the predicted category; below it, retrieval searches all categories |
+| `CLASSIFIER_ABSTAIN_THRESHOLD` | `0.35` | Below this confidence, no retrieval is attempted and the gateway returns its standard "no specific answer" message instead of a likely irrelevant entry. Must be strictly below `CLASSIFIER_CONFIDENCE_THRESHOLD` |
+| `CLASSIFIER_TIMEOUT_MS` | `3000` | Timeout for each request to `ml_service`, in milliseconds |
+
+Empty or invalid values fall back to the defaults, with a logged warning. Each response reports how its answer was found in `retrievalScope`: `scoped`, `unscoped`, `abstained`, or `local` (keyword retrieval).
+
+Both thresholds are provisional. They were chosen from a handful of test queries and will be calibrated in the retrieval evaluation.
+
+When `ml_service` is unavailable, the keyword fallback still answers, but its retrieval is weaker. For example, it answers "when should I start antenatal visits" with KB-P1 (pelvic exams at the first visit) instead of KB-P2 (antenatal checkups), which `ml_service` returns.
+
+`ml_service` has **no authentication** of its own. Bind it to `127.0.0.1` (as below) or otherwise make it unreachable from anywhere except the gateway; if it is exposed, it bypasses the gateway's authentication.
+
+To start `ml_service` locally (PowerShell, from the repository root):
+
+```powershell
+cd ml_service
+$env:MODEL_DIR = "./final"
+..\.venv\Scripts\python.exe -m uvicorn app:app --host 127.0.0.1 --port 8001
+```
 
 ---
 
@@ -348,12 +365,21 @@ The gateway test suite currently contains 34 tests.
 cd app/interface
 
 npm install
-npx tsc --noEmit
-npx tsx src/offline/offlinePipeline.test.ts
+npm run typecheck
+npm test
 npm run dev
 ```
 
-The frontend currently contains 4 offline pipeline tests.
+`npm test` runs four suites: the offline pipeline, the query client (including limited mode), the anonymous session, and the component render tests (help panel, limited-mode notice, greeting and privacy wording, topic chips, details view). The component tests use `react-dom/server`, so they need no browser.
+
+#### Demo details view
+
+For demonstrations and reviews, the chat can show a small grey line under each answer with the response's `category`, `predictedCategory`, `confidence`, `classifierSource`, `retrievalScope` and `source`. It is **off by default**. Turn it on with either:
+
+* `?details=1` in the page URL (for example `http://localhost:5173/?details=1`), or
+* `VITE_SHOW_DETAILS=true` in `app/interface/.env` before `npm run dev` or `npm run build` (a build made this way shows the line to everyone).
+
+The line is never shown on the referral screen, which only ever receives the referral message.
 
 ---
 
@@ -382,8 +408,9 @@ Backend
 
 Frontend
 ├── Install dependencies
+├── Lint and format check
 ├── Type-check
-├── Run offline pipeline tests
+├── Run interface tests (npm test)
 └── Production build
 ```
 
@@ -397,11 +424,23 @@ The workflow is defined in:
 
 `main` is intended to remain the stable branch, with changes introduced through pull requests.
 
+### Retrieval evaluation (development set)
+
+`research/eval/run_eval.js` runs every query in `resources/eval/retrieval_eval_set.csv` through the gateway and `ml_service` and reports how the system behaves. The set is a **development set** written by the project owner; it is **not** the independent DR-04 test set, and the two must not be mixed.
+
+It needs `ml_service` and a gateway started with `AUTH_DISABLED=true` (local development only). From the repository root:
+
+```bash
+node research/eval/run_eval.js --gateway http://127.0.0.1:3016 --ml http://127.0.0.1:8002
+```
+
+For each query it records the gateway's response, the `ml_service` classification, the top 3 retrieved entries scoped to the predicted class and unscoped, the frozen keyword baseline's class and the keyword fallback's entry. It writes them to `research/eval/results/retrieval_eval_<UTC timestamp>.csv` and prints a summary (also saved as `.summary.md`): results by group, safety-net recall and false referrals, classifier accuracy, retrieval hit@1/hit@3, failures, and an offline sweep of the abstain and scoped thresholds replayed from the recorded confidences. The sweep only reports; it never changes the live thresholds. The harness changes no gateway code or configuration.
+
 ---
 
 ## Model Training
 
-Training can be performed in Google Colab or locally using a CUDA-capable GPU.
+V2 training can be performed in Google Colab or locally using a CUDA-capable GPU.
 
 Primary resources:
 
@@ -431,11 +470,13 @@ This prevents unreviewed AI-generated paraphrases from silently entering the eva
 
 ### Firebase Anonymous Authentication
 
-Firebase Anonymous Authentication is **not yet mounted** on the query route.
+Gateway token verification and the frontend's anonymous sign-in are implemented. The frontend signs in on the first query, not on page load, and keeps the session in memory only (`inMemoryPersistence`), so a page reload or a new tab starts a new anonymous identity.
 
-When introduced, authentication persistence must be explicitly configured so that anonymous session identity does not survive beyond the intended session lifetime.
+What this means for privacy:
 
-The implementation must therefore avoid the Firebase SDK's default persistent browser behavior where it conflicts with the project's privacy requirements.
+* There are no user-visible accounts, and no conversation content is stored.
+* Firebase keeps one anonymous user record (a uid) per sign-in. Automatic cleanup of old anonymous records may require upgrading the project to Identity Platform.
+* The Firebase JS SDK also records a small usage "heartbeat" in the browser's IndexedDB: at most one entry per day, containing a date and the SDK's version string. It contains no uid and no conversation content, and the SDK provides no option to disable it.
 
 ---
 
@@ -451,20 +492,15 @@ No live Gemini generation is currently part of the implemented pipeline.
 
 ### Retrieval
 
-Retrieval is semantic but not yet evaluated.
+Retrieval is semantic, in `ml_service`: knowledge-base entries are embedded with `intfloat/multilingual-e5-small` (sentence-transformers) and the gateway asks `ml_service` for the closest entry. Retrieval is scoped to the predicted category when the classifier's confidence is at or above `CLASSIFIER_CONFIDENCE_THRESHOLD`, searches all categories below it, and is skipped below `CLASSIFIER_ABSTAIN_THRESHOLD`.
+
+Keyword-overlap matching over the knowledge base is used only as the fallback, when `ml_service` is unavailable or returns an unusable result.
+
+LlamaIndex, described in the methodology, is not used.
 
 * Retrieval is class-scoped when the classifier is confident, so a wrong classification can hide the right entry.
-* Similarity scores cluster in a narrow band (about 0.75 to 0.87), so a score threshold cannot separate relevant from irrelevant entries. The confidence zones use classifier confidence instead.
-* The thresholds (0.5 scoped, 0.35 abstain) are provisional and sit close to real queries. In a five-query run, one correct answer was about 0.06 above the abstain line. Calibration needs a labelled evaluation set that includes off-topic queries.
-* The classifier has no GBV class. GBV-adjacent queries that the Safety Net does not flag are handled by the abstain zone, not by a dedicated path.
-* In keyword fallback mode, retrieval ranks some queries differently (for example, "when should I start antenatal visits" returns the pelvic exam entry rather than the antenatal entry).
+* The classifier has no GBV class. GBV-adjacent queries that the Safety Net does not flag go through ordinary classification and retrieval: in testing they received unrelated answers, and the 0.35 abstain cut-off never fired (see [`docs/safety-net-evaluation.md`](docs/safety-net-evaluation.md)).
 * `ml_service` has no hosted deployment. It runs locally, so a remote demo needs a decision on where it runs.
-
----
-
-### Knowledge Base
-
-The knowledge base has 8 active entries and has not been reviewed by a clinician or subject-matter expert. Some live entries may be out of date or may overstate the legal position on parental consent for adolescents. Candidate additions are being verified and are not part of the active set.
 
 ---
 
@@ -481,6 +517,12 @@ The `general` category contains only 3 examples in this set, meaning category-sp
 The V2 classifier continues to exhibit General ↔ STI boundary confusion in cross-validation.
 
 This issue is documented rather than patched after evaluation, in accordance with the project's standing rule against retuning the model based on observed evaluation results.
+
+---
+
+### Knowledge Base Review
+
+The 15 new entries were ratified by the project owner on 6 Oct 2026 (all 15 entries) and have not been through independent clinical review. These are KB-C3 to KB-C5, KB-S4 to KB-S7, KB-P5 to KB-P7 and KB-G3 to KB-G7.
 
 ---
 
@@ -515,9 +557,9 @@ Chapters 5–6 will incorporate the final results and discussion once the remain
 
 ### Decision and development records
 
-* [`docs/decision-log.md`](docs/decision-log.md): research and implementation decisions, including rationale and evaluation caveats
-* [`docs/development-log.md`](docs/development-log.md): chronological development record
-* [`docs/dr04-test-set-verification-record.md`](docs/dr04-test-set-verification-record.md): independent test-set provenance and expert review record
+* [`docs/decision-log.md`](docs/decision-log.md) — research and implementation decisions, including rationale and evaluation caveats
+* [`docs/development-log.md`](docs/development-log.md) — chronological development record
+* [`docs/dr04-test-set-verification-record.md`](docs/dr04-test-set-verification-record.md) — independent test-set provenance and expert review record
 
 ### Diagrams
 
@@ -559,7 +601,7 @@ main
 | `refactor/*`  | Code restructuring                     |
 | `chore/*`     | Tooling, dependencies, and maintenance |
 
-Feature branches are merged into `development` through pull requests. Changes intended for `main` are introduced through pull requests as well.
+Changes intended for `main` should be introduced through pull requests.
 
 Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/).
 
@@ -583,3 +625,11 @@ SafeGirl is a final-year Computer Science capstone project.
 The repository accompanies the project's dissertation, and chapter references throughout the documentation correspond to the academic research and implementation process.
 
 The project is maintained as a **research prototype**, with implementation status, experimental limitations, and unresolved findings intentionally documented rather than concealed.
+
+---
+
+## Project Principle
+
+> **Build what can be justified. Measure what can be tested. Document what remains uncertain.**
+
+SafeGirl treats privacy, safety separation, reproducibility, and methodological transparency as first-class engineering requirements.

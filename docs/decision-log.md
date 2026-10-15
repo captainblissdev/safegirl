@@ -110,3 +110,232 @@ Current status:
   compliance-consent framework).
 - **Not resolved, deliberately deferred:** production-readiness question. 
   This decision applies to the academic research prototype scope only.
+
+## V2 Evaluation Methodology (2026-09-16)
+
+V2 evaluation methodology changed from a single seed-level train/validation
+split to 5-fold StratifiedGroupKFold cross-validation. The change was made
+because the expanded V2 dataset and the small V1 validation set make a
+single validation split less stable. seed_id is used as the grouping
+variable to prevent paraphrase leakage, while stratification preserves
+class proportions across folds. V1 results remain reported under their
+original single-split methodology and are not retroactively re-evaluated.
+
+V1 (55 seeds, single train/val split, 80% accuracy / macro-F1 0.7677) is
+locked as a historical baseline -- not merged into the 182-seed set, not
+redistributed into folds, not retrained.
+
+The V1-to-V2 comparison reflects overall development improvement (more/
+better data AND a more robust evaluation protocol), not a claim that
+cross-validation itself improved the model. A controlled ablation
+isolating the data effect alone is a possible future-work item, not part
+of the current comparison.
+
+Final V2 model definition: the 5-fold CV estimates expected performance
+and validates configuration; the deployed/tested V2 model is a fresh
+retrain on all 182 seeds using that validated configuration, not simply
+the best-performing individual fold.
+
+## V2 Paraphrasing Protocol Frozen (2026-09-18)
+
+V2 paraphrasing protocol frozen. The 127 new seeds will each receive
+exactly four English paraphrases, producing 508 new paraphrases.
+Existing V1 paraphrases (220, covering the original 55 seeds) are
+untouched. Generation uses a fixed prompt and category-level batching.
+
+Fixed prompt: "Generate exactly 4 paraphrases for each seed question
+below. Vary phrasing and register naturally, as if different people
+asked the same question differently. Do not use back-translation
+through any other language -- English only, no Sheng or code-switching.
+Do not introduce new medical claims, recommendations, numbers,
+timeframes, diagnoses, treatment details, eligibility criteria, or
+other substantive specifics beyond the semantic scope of the seed
+question. Keep a respectful, non-judgmental tone throughout, especially
+for sensitive or embarrassing topics. Output as CSV:
+seed_id,paraphrase_id,class,text."
+
+Generation metadata recorded contemporaneously in ai-use-log.md per
+batch: tool, model/version, temperature (N/A where not exposed --
+never inferred), prompt, generation date, seed IDs covered,
+number requested/generated/accepted/rejected/replaced.
+
+All paraphrases undergo automated structural checks (no exact
+duplicates, no entries under 10 characters, none identical to source
+seed, exactly 4 per seed, valid seed_id references, no Swahili/Sheng
+markers) and manual semantic/safety review (no scope drift, tone,
+no held-content leakage, no overclaiming on boundary-sensitive topics).
+Rejected paraphrases are regenerated until each seed has exactly four
+accepted paraphrases.
+
+Final V2 dataset: 182 seeds + 728 total paraphrases (220 existing +
+508 new) = 910 examples.
+
+Breakdown of 127 new seeds by current class: contraception 28,
+STI 29, pregnancy 28, general 42.
+## Interface wording differs from the wireframe (2026-10-14)
+
+The greeting and two privacy lines in the interface no longer use the
+wireframe's wording. The old strings quoted below are the ones the
+interface implemented from the wireframe before this change.
+
+**Greeting.** The previous "Hi, I'm here to listen. Ask me anything
+about your body, your health, or what's on your mind." invites topics
+SafeGirl cannot handle (emotional support, anything at all) and suggests
+a listener rather than an information service. It is now "Hi, I'm here to
+help. Ask me a question about your body or your health.", followed by a
+scope line: "I can answer questions about contraception, STIs, pregnancy
+and periods. I'm not a doctor or a counsellor." The scope line sets
+expectations before the first question, so an off-topic or crisis
+message is less likely to be met by a confident but irrelevant answer
+(see the hold-out 3 missed-query results in
+research/eval/results/holdout3_missed_pipeline.csv).
+
+**Privacy lines.** "We don't keep anything after you leave" (disclaimer)
+and "Nothing was saved on this device" (session end) were not literally
+true, because some data does exist (below). They now read "We don't save
+your questions or your answers." and "Your questions and answers were
+not saved." Each claim was checked against what is actually stored:
+
+| Where | What is stored | Contains questions or answers? |
+|---|---|---|
+| Firebase Authentication (Google) | One anonymous user record per sign-in: a uid with creation and last sign-in times. Google also receives the device's IP address with each sign-in and token request. | No |
+| Browser IndexedDB | The Firebase SDK's usage heartbeat: at most one entry per day, a date and the SDK version string. No uid. | No |
+| Browser Cache Storage | The PWA service worker's copy of the app shell (HTML, JS, CSS). `/api` responses are deliberately not cached. | No |
+| Browser localStorage / sessionStorage / cookies | Nothing. Firebase Auth uses in-memory persistence. | No |
+| Browser memory | The chat log, until the page is reloaded or the session is ended. | Yes, until cleared |
+| Gateway logs | Startup messages, authentication rejection reasons (a fixed category, never the token or uid), error names, classifier fallback warnings with the confidence score. The query text and answers are never logged. | No |
+| ml_service logs | Startup messages and uvicorn access lines (method, path, status, the gateway's local address). Request bodies are not logged. | No |
+
+Hosting-provider and network logs on a future deployment are outside this
+table and must be checked before real users.
+
+## "General" topic chip renamed "Periods" (2026-10-14)
+
+The fourth topic chip in the chat was labelled "General", but the example
+question it fills in is "is it normal for my period to be irregular"
+(Q11 in the retrieval development set), and the greeting's scope line
+names periods, not "general" topics. The chip is now labelled "Periods".
+Only the label changed: the question, the fact that tapping a chip only
+fills the input box, and the backend's category (`general`) are the same.
+
+## Interface re-themed to the approved wireframes (2026-10-14)
+
+The interface's teal, cream and coral palette was replaced with the
+purple and lavender of the approved wireframes, to make it calm and
+warm, with no alarm colours: coral and amber are gone from every screen,
+including the referral and error states, which use deep purple for
+emphasis. All colours are CSS variables in `app/interface/src/index.css`.
+The screens follow the wireframes: a heart-in-circle logo, icons in lilac
+circles, gradient primary buttons, pill-shaped chips and a rounded input.
+The app icons and the manifest colours were regenerated to match. The
+wireframe image was not yet in the repository, so the palette uses the
+agreed starting values, refined by eye.
+
+Rules: system fonts only (no web fonts), inline SVG icons, CSS
+gradients, no new runtime dependency, text 16px or larger (the demo-only
+details line is 14px), tap targets at least 44 x 44px, one visible 3px
+focus ring, and no animation (a `prefers-reduced-motion` guard is in
+place). The deliberate differences from the wireframe are listed in
+`docs/design/ui-comparison.md`.
+
+Contrast (WCAG 2.1 AA: 4.5:1 for body text, 3:1 for large text and UI):
+
+| Foreground | Background | Ratio | Use |
+|---|---|---|---|
+| ink `#2a1457` | page `#f7f2ff` / white / lilac `#efe6fc` / lilac-strong `#e2d3f8` | 14.29 / 15.72 / 13.02 / 11.16 | body text |
+| ink-soft `#5b4a80` | page / white / lilac | 6.98 / 7.68 / 6.36 | secondary text, placeholder, details line |
+| primary-deep `#3f1d96` | page / white / lilac / lilac-strong | 10.45 / 11.49 / 9.52 / 8.16 | headings, chip and button labels |
+| primary `#5b2fc7` | page / white / lilac | 7.14 / 7.85 / 6.50 | phone-number links, icons, outline buttons, focus ring |
+| white | gradient `#5b2fc7` to `#8b3fe0` | 7.85 to 5.41 | gradient buttons, user bubbles, send button |
+| control-border `#8570b8` | white / page | 4.19 / 3.81 | input outline (UI, 3:1) |
+| border `#d9c9f3` | white | 1.54 | decorative card borders and dividers only (no contrast requirement) |
+
+Size: the production JS grew from 87.05 kB to 87.82 kB gzipped (+0.77 kB,
+mostly the inline SVG icons) and the CSS from 2.30 kB to 2.31 kB, both
+measured with the same build environment. Lighthouse (mobile) was the same
+before and after: Performance 99, Accessibility 100, Best Practices 100,
+SEO 91.
+
+## Friendlier, more playful chat; Nunito font and gentle motion (2026-10-14)
+
+The project owner asked for a more "girly", intuitive and fun interface.
+This reverses two rules from the re-theme earlier the same day (system
+fonts only; no animation):
+
+- **Font.** Nunito, a rounded typeface chosen over Quicksand (thin
+  strokes, harder to read in long answers) and Baloo 2 (too heavy for
+  answer text). It is self-hosted in the app bundle (39 kB variable
+  woff2, Latin, SIL OFL 1.1), never loaded from Google, so the privacy
+  design is unchanged, and it is precached for offline use.
+- **Motion.** Gentle only: bubbles slide in, controls press in, typing
+  dots bounce. It runs only when the device does not ask for reduced
+  motion.
+
+Also added: icons and pastel colours on the topic chips, a "Not sure
+where to start?" hint, a friendlier placeholder, "You could also ask"
+follow-ups (verbatim "clear" development-set queries on the answer's
+topic, which only fill the input box), pastel background blobs, sparkles
+and a smiling-heart mascot.
+
+**The help panel, the referral screen and error messages stay calm**:
+they keep the font and colours but get no motion, decoration or playful
+wording, because a girl may see them at a hard moment. The placeholder
+does not say "ask me anything", for the same scope reason as the
+greeting.
+
+Cost: JS +1.09 kB and CSS +0.79 kB gzipped, plus the 39 kB font
+(downloaded once, then cached). Lighthouse (mobile, localhost):
+Performance 98 (first paint 1.5 s to 1.8 s while the font loads, no
+layout shift), Accessibility 100, Best Practices 100, SEO 91. The chip
+tints keep labels at 9:1 or more and icons at 6:1 or more.
+
+## Safety Net patterns frozen (2026-10-15)
+
+Safety Net patterns frozen on 2026-10-15; no pattern changes before
+Milestone 2 except a verified defect.
+
+The frozen state is `app/gateway/src/safetyNet.js` as of commit `525b41c` (before history cleanup; now `b4c4d29`):
+43 keyword phrases and 44 pattern rules (22 self-harm, 22 abuse), with the
+offline copy in parity. The sealed hold-out 3 result (6/14 recall, 2/10
+false referrals) and the post-patch numbers are in
+`docs/safety-net-evaluation.md`.
+
+The known misses and over-triggers listed there are accepted limits, not
+defects. One is a candidate for "verified defect": J08 "my uncle drinks
+and hits us at home" is missed because the "hits ... at" idiom exclusion
+(meant for "beat me at chess") also covers "at home". Fixing it would
+need an explicit decision under this freeze.
+
+## Demo freeze until after Milestone 2 (2026-10-15)
+
+Frozen until after Milestone 2, so the demo and the reported results stay
+reproducible:
+
+| Component | Frozen state |
+|---|---|
+| Classifier checkpoint | DistilBERT V3, `ml_service/final/` (gitignored); `model.safetensors` SHA-256 `e8bf2e3aa01c920197b51071e736ef6a3d1f16a57dd8d3bdb1565f75152cfb30`; labels contraception, sti, pregnancy, general |
+| Thresholds | abstain 0.35, scoped 0.5 (`app/gateway/src/classifierClient.js` defaults; `CLASSIFIER_ABSTAIN_THRESHOLD` and `CLASSIFIER_CONFIDENCE_THRESHOLD` not set) |
+| Knowledge base | `ml_service/knowledge_base.json` as of commit `42366d6` (before history cleanup; now `f27db1f`) (21 entries), SHA-256 `e78a82afd10491fdc81d98bb2fca43119312be6908af7c4372ee2778d9dc1e30`; the gateway's local copy from the same markdown sources |
+| Safety Net patterns | As frozen above (`safetyNet.js` at `525b41c` (before history cleanup; now `b4c4d29`)) |
+| Python packages (working `.venv`) | torch 2.9.0, transformers 5.0.0, sentence-transformers 6.1.0, pydantic 2.12.5 |
+
+The working `.venv` versions are the ones that produced every result in
+`research/eval/results/`. `ml_service/requirements.txt` still pins torch
+2.4.1 and pydantic 2.9.2, which differ. It must be brought into line, or a
+fresh install will not reproduce this state.
+
+**Known fragile answers.** Three development-set questions are
+misclassified by V3. They get the right answer only because their
+confidence is below the 0.5 scoping threshold, so retrieval runs unscoped
+(`research/eval/results/suggested_questions_2026-10-14.csv`):
+
+| Question | V3 prediction (confidence) | Scoped answer | Unscoped (live) answer |
+|---|---|---|---|
+| Q11 "is it normal for my period to be irregular" | sti (0.441) | KB-S4 (wrong) | KB-G3 (right) |
+| Q14 "when do girls get their first period" | sti (0.368) | KB-S6 (wrong) | KB-G6 (right) |
+| Q16 "is the clinic confidential" | contraception (0.414) | KB-C1 (wrong) | KB-G1 (right) |
+
+Any change to the thresholds, the model or the knowledge base can flip
+these. Q14 is also only 0.018 above the 0.35 no-answer cut-off. Q11 is the
+"Periods" topic chip and Q16 a "You could also ask" follow-up on
+`feature/ui-playful`; Q14 has been replaced there by Q15.

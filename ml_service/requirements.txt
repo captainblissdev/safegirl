@@ -1,0 +1,9 @@
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+torch==2.4.1
+transformers==5.0.0
+pydantic==2.9.2
+
+# Knowledge-base retrieval (retrieval.py)
+sentence-transformers==6.1.0
+numpy==2.5.3
