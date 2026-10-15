@@ -192,7 +192,17 @@ result:
   verification_status column was never filled. Source workbook: held by
   the project owner; not yet in the repository. The set was added to the
   repository on 17 September 2026." (First commit of
-  `resources/test/independent_test_set.csv`: `40319e7`.)
+  `resources/test/independent_test_set.csv`: `40319e7`.) How the set has
+  been used: V2 was evaluated on it once, blind, on 17 September 2026
+  (accuracy 90.3%, macro-F1 0.8832; `docs/development-log.md`). V3.1 was
+  then run on it as a disclosed non-blind reuse ("SECONDARY, NON-BLIND
+  SANITY CHECK" in `research/experiments/logs/v3_1_training_log.txt`,
+  committed 24 September 2026; 27/31, derived from its confusion
+  matrix), so DR-04 figures for V3 are not independent. The first V3
+  attempt's log (`v3_training_log.txt`) stops during fold 4, so whether
+  that run also reached DR-04 is not recorded. No keyword-baseline
+  result on this set was found in the repository, the results folders,
+  git history or the stashes.
 - **DR-05:** the per-batch paraphrase review records are not in the
   repository.
 - **DR-07:** no recorded check of the data for Sheng or code-switched

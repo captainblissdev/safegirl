@@ -204,6 +204,16 @@ Source: [`classifier_analysis.md`](../research/eval/results/classifier_analysis.
   this set is used for evaluation.
 - DR-04 reviewer agreement: no per-reviewer labels exist, so reviewer
   agreement cannot be computed.
+- DR-04 usage: V2 was evaluated on it once, blind, on 17 September 2026
+  (accuracy 90.3%, macro-F1 0.8832; `docs/development-log.md`). V3.1 was
+  then run on it as a disclosed non-blind reuse ("SECONDARY, NON-BLIND
+  SANITY CHECK" in `research/experiments/logs/v3_1_training_log.txt`,
+  committed 24 September 2026; 27/31, derived from its confusion
+  matrix), so DR-04 figures for V3 are not independent. The first V3
+  attempt's log (`v3_training_log.txt`) stops during fold 4, so whether
+  that run also reached DR-04 is not recorded. No keyword-baseline
+  result on this set was found in the repository, the results folders,
+  git history or the stashes.
 - The development set and its provisional labels were written by the
   project owner, who also built the system.
 - The Safety Net is a keyword net with low independent recall (6/14),
