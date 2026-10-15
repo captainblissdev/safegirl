@@ -49,6 +49,9 @@ const {
  * @param {string|null} [params.retrievalScope] - How retrieval ran:
  *        "scoped", "unscoped", "abstained" or "local"; null when retrieval
  *        did not run (flagged queries).
+ * @param {string} [params.relevanceGate] - The relevance gate's decision
+ *        ("passed", "abstained" or "not_applied") when the gate is on;
+ *        undefined, and left out of the response, when it is off.
  * @returns {object} Final response payload.
  */
 function orchestrate({
@@ -57,6 +60,7 @@ function orchestrate({
   generation,
   retrievedEntry,
   retrievalScope,
+  relevanceGate,
 }) {
   // Which classifier ran, what it predicted and how retrieval ran,
   // reported on every path.
@@ -65,6 +69,9 @@ function orchestrate({
     classifierSource: classification?.source ?? null,
     confidence: classification?.confidence ?? null,
     retrievalScope: retrievalScope ?? null,
+    // Only when the relevance gate is on, so responses are unchanged
+    // when it is off. Never set on referrals.
+    ...(relevanceGate === undefined ? {} : { relevanceGate }),
   };
 
   /**

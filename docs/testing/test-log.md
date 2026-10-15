@@ -97,3 +97,9 @@ not the independent DR-04 test set.
 Lighthouse ran against `localhost`, so its Performance score says little
 about real phones on mobile networks. SEO loses points only because
 `vite preview` answers `/robots.txt` with `index.html`.
+
+## Corrections made
+
+| Date | What changed | Why | Tests updated | Source |
+|---|---|---|---|---|
+| 2026-10-15 | A relevance gate in the gateway, behind `RELEVANCE_GATE` (off by default): below a top-1 unscoped retrieval score of 0.8439, a clear query gets the standard no-answer message instead of the retrieved entry | Low-relevance queries got unrelated answers; the gate was validated once on 15 October (in-scope 18/20 answered, off-topic 8/8 and out-of-scope health 4/6 rejected) | New `app/gateway/test/relevanceGate.test.js` (10 tests: flag parsing; just below, at and just above the threshold; scoped gating; no score; flagged and signposting paths; no entry text in abstain responses; flag off unchanged). Gateway tests: 352 (342 + 10), all passing. Interface: unchanged, 6 suites passing; it already renders the no-answer reply | [`docs/decision-log.md`](../decision-log.md#relevance-gate-behind-a-flag-2026-10-15) |
