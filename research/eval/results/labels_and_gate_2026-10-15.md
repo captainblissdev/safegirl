@@ -2,6 +2,58 @@
 
 Analysis only. No threshold, model, knowledge-base entry or Safety Net rule was changed, and no existing results file was edited. Development-set figures are **not independent**: the queries and labels were written by the project owner, who also built the system. Produced by `research/eval/labels_and_gate.js`.
 
+## Summary
+
+All figures below are from the 58-query development set
+(`resources/eval/retrieval_eval_set.csv`) and are **not independent**,
+except the gate validation, which is the first run of a fixed gate on
+queries it had not seen. Per-query data:
+`labels_and_gate_queries_2026-10-15.csv`,
+`relevance_gate_validation_2026-10-15.csv` and
+`coverage_gap_examples_2026-10-15.csv`, all in `research/eval/results/`.
+
+- **Labels by rule.** 35 queries get a class from the entry that answers
+  them. Two labels change (Q18 also accepts general; Q50 becomes general)
+  and five rows are no longer excluded as ambiguous. Strict and lenient
+  scoring give the same result. (Source: `labels_and_gate_queries_2026-10-15.csv`; not independent.)
+- **V3 classifies worse than the keyword baseline.** V3 21/35 (60.0%,
+  95% CI 43.6% to 74.4%); baseline 30/35 (85.7%, 70.6% to 93.7%); exact
+  McNemar p = 0.0117. V3 recognises 2 of 13 general questions (periods,
+  puberty, clinic confidentiality, services). Four of its errors (Q27 to
+  Q30) predict pregnancy where the worry is plausibly pregnancy but the
+  answering entry is general; the rule counts these as errors, and no
+  label was changed to favour V3. (Source: `labels_and_gate_queries_2026-10-15.csv`; not independent.)
+- **Classifier scoping does not help retrieval on this set.** Top-1
+  correct: always unscoped 32/35 (91.4%, 77.6% to 97.0%); oracle scoped to
+  the correct class 32/35 (91.4%); live hybrid 30/35 (85.7%, 70.6% to
+  93.7%); always scoped to the V3 class 21/35 (60.0%, 43.6% to 74.4%).
+  Scoping to V3's class loses 11 queries and gains none (p = 0.0010). Even
+  a perfect classifier (oracle) gains nothing over unscoped. The hybrid
+  loses two queries to unscoped (Q27, Q57; p = 0.50, not significant).
+  Q28, Q30 and Q50 fail under every condition: they are retrieval
+  failures. (Source: `labels_and_gate_queries_2026-10-15.csv`; not independent.)
+- **The relevance gate holds on the validation set, only just.** At the
+  fixed 0.8439, run once: in-scope answered 18/20 (90.0%, 95% CI 69.9% to
+  97.2%), exactly at the pre-set 90% bar, so one more miss would have
+  failed it; off-topic rejected 8/8; out-of-scope health rejected 4/6
+  (sleep and weight gain were answered with KB-C1 and KB-P7). Overall
+  12/14 should-not-answer rejected (85.7%), against 15/20 (75.0%) on the
+  development set. Caveats: 12 of the 20 in-scope rows are noted in the
+  file as paraphrases of development-set questions, the samples are small,
+  and the file's provenance is not recorded in git. (Source: `relevance_gate_validation_2026-10-15.csv`.)
+- **Distress is mostly missed.** Of the 6 distress rows, the Safety Net
+  referred 2 and signposted none. The live pipeline answers the other 4
+  (including "my teacher ... touches my leg") with unrelated entries. The
+  gate would reject those 4, which gives a "no specific answer" message,
+  not a referral. (Source: `relevance_gate_validation_2026-10-15.csv`.)
+- **An in-domain gap is answered confidently and wrongly.** "Can I get
+  pregnant from precum?" has no entry. V3 says pregnancy (0.863), and the
+  user is shown the school re-entry entry (KB-P5). Its unscoped score
+  (0.8440) is just above the gate, so the gate would not stop it. (Source: `coverage_gap_examples_2026-10-15.csv`.)
+
+No threshold, model, knowledge-base entry or Safety Net rule was changed,
+no gate is implemented, and no existing results file was edited.
+
 ## 1. Labels by rule
 
 **Rule.** The expected class is the class of the knowledge-base entry that best answers the query (its acceptable entries). Where a second entry plausibly answers it, both classes are accepted; a second entry counts only when its own question covers the query's question. Rows with no answering entry are labelled none and not scored. The labels were fixed from the entry text before any prediction was collected for this analysis. The labeller had seen the 14 October predictions for some rows (`label_review.md`); every decision touching those rows is listed below with its reason.
