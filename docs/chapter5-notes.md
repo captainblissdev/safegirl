@@ -202,9 +202,42 @@ Source: [`classifier_analysis.md`](../research/eval/results/classifier_analysis.
 
 ## 7. Decisions to cite
 
-The decision log records these decisions. **It does not say which were
-made or approved by the supervisor**, so that attribution needs to be
-confirmed before the chapter states it.
+### Supervisor guidance, 12 October 2026
+
+Given by the supervisor, Kelvin, on 12 October 2026, and recorded in
+[`docs/decision-log.md`](decision-log.md#supervisor-guidance-12-october-2026):
+
+- **Reviewers.** Consult the industry mentor and the lecturer to find
+  clinical and legal reviewers.
+- **Retrieval.** Keep classifier-scoped retrieval experimental, and
+  report unscoped retrieval as a finding, with the reason (section 4).
+- **V3.** Document V3's weaknesses on period and puberty questions.
+  Retrain only after the planned evaluation; V4 is future work.
+- **Answers.** Keep extractive answers, not an LLM.
+- **Safety Net.** The keyword Safety Net is acceptable for a supervised
+  prototype demo if its limits are stated and the referral numbers are
+  verified.
+- **Demo.** A rehearsed local demo of about six predefined queries, with
+  no real adolescent users.
+- **Pilot.** Consult the data protection officer and the ethics committee
+  before any pilot with minors.
+- **Milestone 2 must show:**
+  - an integrated prototype;
+  - completed authentication and privacy checks;
+  - a keyword baseline against V3 comparison with metrics and error
+    analysis;
+  - cross-validation, independent expert test and development-set results
+    reported separately;
+  - a scoped against unscoped retrieval analysis;
+  - updated diagrams;
+  - documented limitations;
+  - a rehearsed demo.
+
+### Other logged decisions
+
+Apart from the guidance above, the decision log does **not** say which
+decisions were made or approved by the supervisor, so that attribution
+needs to be confirmed before the chapter states it.
 
 | Date | Decision | Link |
 |---|---|---|
