@@ -5,7 +5,11 @@ import {
   EMERGENCY_NUMBERS,
   GBV_HELPLINE,
 } from "../offline/helpContent";
-import { LIMITED_MODE_NOTICE, TOPIC_EXAMPLES } from "../content/uiText";
+import {
+  LIMITED_MODE_NOTICE,
+  SUGGESTIONS,
+  TOPIC_EXAMPLES,
+} from "../content/uiText";
 import {
   answerDetails,
   formatDetails,
@@ -168,14 +172,18 @@ console.log("\nTest 6: the privacy wording on the disclaimer and session end");
 console.log("\nTest 7: the topic chips are real buttons");
 {
   const html = renderChat([]);
-  const chips = html.match(/<button class="chip"[^>]*>[^<]*<\/button>/g) ?? [];
+  const chips = html.match(/<button class="chip[ "][^>]*>.*?<\/button>/g) ?? [];
 
   assert(chips.length === 4, "four chip buttons");
   assert(!html.includes('aria-hidden="true">'), "no chip is aria-hidden");
   for (const example of TOPIC_EXAMPLES) {
     assert(
-      chips.some((chip) => chip.endsWith(`>${example.label}</button>`)),
-      `a "${example.label}" chip`,
+      chips.some((chip) => chip.endsWith(`</svg>${example.label}</button>`)),
+      `a "${example.label}" chip with an icon`,
+    );
+    assert(
+      chips.some((chip) => chip.includes(`chip--${example.topic}`)),
+      `the "${example.label}" chip has its own colour`,
     );
   }
 }
@@ -304,6 +312,195 @@ console.log(
   assert(
     html.includes(escapeHtml("We don't save your questions or your answers.")),
     "the same privacy wording as the disclaimer",
+  );
+}
+
+console.log(
+  "\nTest 14: the typing indicator still tells screen readers it is thinking",
+);
+{
+  const html = renderToStaticMarkup(
+    <ChatInterface turns={[]} onSend={() => undefined} isLoading />,
+  );
+
+  assert(html.includes('role="status"'), "the indicator is a status");
+  assert(
+    html.includes('aria-live="polite"><span class="typing-dots"'),
+    "announced politely (aria-live)",
+  );
+  assert(
+    html.includes('<span class="sr-only">Thinking…</span>'),
+    "with 'Thinking…' for screen readers",
+  );
+  assert(
+    html.includes('class="typing-dots" aria-hidden="true"'),
+    "the dots are hidden from screen readers",
+  );
+}
+
+console.log(
+  "\nTest 15: every suggestion is a 'clear' development-set query on its topic",
+);
+{
+  const csv = readFileSync(
+    new URL(
+      "../../../../resources/eval/retrieval_eval_set.csv",
+      import.meta.url,
+    ),
+    "utf8",
+  );
+  const rows = new Map(
+    csv
+      .replace(/\r/g, "")
+      .split("\n")
+      .map((line) => line.split(","))
+      .map((cells) => [cells[0], cells] as const),
+  );
+  const prefix: Record<string, string> = {
+    contraception: "KB-C",
+    sti: "KB-S",
+    pregnancy: "KB-P",
+    general: "KB-G",
+  };
+
+  for (const [category, list] of Object.entries(SUGGESTIONS)) {
+    for (const suggestion of list) {
+      const row = rows.get(suggestion.evalId);
+      assert(
+        row?.[1] === suggestion.question && row[2] === "clear",
+        `${suggestion.evalId} is a verbatim "clear" query`,
+      );
+      assert(
+        row?.[4]?.startsWith(prefix[category] ?? "?") === true,
+        `${suggestion.evalId} is answered from the ${category} entries`,
+      );
+    }
+  }
+  // Q14 is too close to the 0.35 no-answer cut-off (confidence 0.368 in
+  // research/eval/results/suggested_questions_2026-10-14.csv) to offer.
+  const offered = Object.values(SUGGESTIONS)
+    .flat()
+    .map((s) => s.evalId);
+  assert(!offered.includes("Q14"), "Q14 (fragile, 0.368) is not offered");
+  assert(offered.includes("Q15"), "Q15 replaces it in the general follow-ups");
+}
+
+console.log("\nTest 16: follow-ups appear under the latest answer only");
+{
+  const answer = (id: string, category: string): ChatTurn => ({
+    id,
+    role: "assistant",
+    text: `answer ${id}`,
+    outcome: "grounded_answer",
+    details: { category },
+  });
+  const turns: ChatTurn[] = [
+    { id: "1", role: "user", text: "what is PrEP" },
+    answer("2", "sti"),
+    { id: "3", role: "user", text: "Can chlamydia be cured" },
+    answer("4", "sti"),
+  ];
+  const html = renderChat(turns);
+  const suggestions =
+    html.match(/<button class="suggestion"[^>]*>[^<]*</g) ?? [];
+
+  assert(html.includes("You could also ask:"), "the label is shown");
+  assert(
+    html.indexOf("You could also ask:") > html.indexOf("answer 4"),
+    "under the latest answer",
+  );
+  assert(
+    html.split("You could also ask:").length === 2,
+    "only once, not under earlier answers",
+  );
+  assert(
+    suggestions.length === 2 &&
+      !suggestions.some((s) => s.toLowerCase().includes("chlamydia")),
+    "two follow-ups, leaving out the question just asked (case-insensitive)",
+  );
+  assert(
+    !renderToStaticMarkup(
+      <ChatInterface turns={turns} onSend={() => undefined} isLoading />,
+    ).includes("You could also ask:"),
+    "hidden while the next answer is loading",
+  );
+  assert(
+    !renderChat([turns[0], answer("2", "")]).includes("You could also ask:"),
+    "none when the category is unknown",
+  );
+}
+
+console.log("\nTest 17: a hint above the chips before the first question");
+{
+  assert(
+    renderChat([]).includes("Not sure where to start? Try one:"),
+    "shown on an empty chat",
+  );
+  assert(
+    !renderChat([{ id: "1", role: "user", text: "hi" }]).includes(
+      "Not sure where to start?",
+    ),
+    "hidden once the chat has started",
+  );
+  assert(
+    renderChat([]).includes('placeholder="Ask about your body or health…"'),
+    "the input has the friendlier placeholder",
+  );
+}
+
+console.log(
+  "\nTest 18: no follow-ups after a referral, limited mode, no-answer, signposting or an error",
+);
+{
+  const question: ChatTurn = { id: "q", role: "user", text: "what is PrEP" };
+  const answer = (extra: Partial<ChatTurn>): ChatTurn => ({
+    id: "a",
+    role: "assistant",
+    text: "reply",
+    outcome: "grounded_answer",
+    answerFound: true,
+    details: { category: "sti" },
+    ...extra,
+  });
+  const follows = (turns: ChatTurn[]) =>
+    renderChat(turns).includes("You could also ask:");
+
+  assert(follows([question, answer({})]), "shown after a full answer");
+  // A referral and an error never add an answer turn: the chat ends with
+  // the user's question, even after an earlier full answer.
+  assert(
+    !follows([
+      question,
+      answer({}),
+      { id: "q2", role: "user", text: "my boyfriend hits me" },
+    ]),
+    "not after a referral or an error (the last turn is the question)",
+  );
+  assert(
+    !follows([question, answer({ limitedMode: true })]),
+    "not after a limited-mode answer",
+  );
+  assert(
+    !follows([
+      question,
+      answer({ answerFound: false, details: { category: null } }),
+    ]),
+    "not after the no-answer reply",
+  );
+  assert(
+    !follows([
+      question,
+      answer({
+        outcome: "signposting",
+        answerFound: false,
+        details: { category: null },
+      }),
+    ]),
+    "not after signposting",
+  );
+  assert(
+    !follows([question, answer({ answerFound: false })]),
+    "not after a no-answer reply even if it names a category",
   );
 }
 

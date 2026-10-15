@@ -1,4 +1,10 @@
-import { ArrowRightIcon, LockIcon, PlusIcon, ShieldIcon } from "./Icons";
+import {
+  ArrowRightIcon,
+  LockIcon,
+  PlusIcon,
+  ShieldIcon,
+  Sparkle,
+} from "./Icons";
 
 /**
  * Session Start / Disclaimer screen.
@@ -18,7 +24,11 @@ export default function Disclaimer({ onContinue }: Props) {
   return (
     <main className="screen">
       <section className="card" aria-labelledby="disclaimer-title">
-        <h2 id="disclaimer-title">You&apos;re in a safe space</h2>
+        <h2 id="disclaimer-title">
+          <Sparkle />
+          You&apos;re in a safe space
+          <Sparkle size={12} />
+        </h2>
 
         <ul className="principle-list">
           <li>

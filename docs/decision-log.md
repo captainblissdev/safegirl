@@ -255,3 +255,36 @@ mostly the inline SVG icons) and the CSS from 2.30 kB to 2.31 kB, both
 measured with the same build environment. Lighthouse (mobile) was the same
 before and after: Performance 99, Accessibility 100, Best Practices 100,
 SEO 91.
+
+## Friendlier, more playful chat; Nunito font and gentle motion (2026-10-14)
+
+The project owner asked for a more "girly", intuitive and fun interface.
+This reverses two rules from the re-theme earlier the same day (system
+fonts only; no animation):
+
+- **Font.** Nunito, a rounded typeface chosen over Quicksand (thin
+  strokes, harder to read in long answers) and Baloo 2 (too heavy for
+  answer text). It is self-hosted in the app bundle (39 kB variable
+  woff2, Latin, SIL OFL 1.1), never loaded from Google, so the privacy
+  design is unchanged, and it is precached for offline use.
+- **Motion.** Gentle only: bubbles slide in, controls press in, typing
+  dots bounce. It runs only when the device does not ask for reduced
+  motion.
+
+Also added: icons and pastel colours on the topic chips, a "Not sure
+where to start?" hint, a friendlier placeholder, "You could also ask"
+follow-ups (verbatim "clear" development-set queries on the answer's
+topic, which only fill the input box), pastel background blobs, sparkles
+and a smiling-heart mascot.
+
+**The help panel, the referral screen and error messages stay calm**:
+they keep the font and colours but get no motion, decoration or playful
+wording, because a girl may see them at a hard moment. The placeholder
+does not say "ask me anything", for the same scope reason as the
+greeting.
+
+Cost: JS +1.09 kB and CSS +0.79 kB gzipped, plus the 39 kB font
+(downloaded once, then cached). Lighthouse (mobile, localhost):
+Performance 98 (first paint 1.5 s to 1.8 s while the font loads, no
+layout shift), Accessibility 100, Best Practices 100, SEO 91. The chip
+tints keep labels at 9:1 or more and icons at 6:1 or more.
