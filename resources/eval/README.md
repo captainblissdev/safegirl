@@ -39,3 +39,9 @@ its fixed threshold of 0.8439 (results:
 `research/eval/results/labels_and_gate_2026-10-15.md`). **It must not be
 used to tune anything**: no threshold, rule, model or knowledge-base
 entry may be chosen or changed with it in view.
+
+From 15 October 2026, flagged queries are not classified, so in
+evaluation runs made after that date the `gw_predicted_category`,
+`gw_classifier_source` and `gw_confidence` columns are empty for flagged
+rows (see `docs/decision-log.md`, "Classifier skipped on flagged
+queries").

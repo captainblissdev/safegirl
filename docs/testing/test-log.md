@@ -97,3 +97,9 @@ not the independent DR-04 test set.
 Lighthouse ran against `localhost`, so its Performance score says little
 about real phones on mobile networks. SEO loses points only because
 `vite preview` answers `/robots.txt` with `index.html`.
+
+## Corrections made
+
+| Date | What changed | Why | Tests updated | Source |
+|---|---|---|---|---|
+| 2026-10-15 | Flagged queries are no longer classified, in the gateway and in the offline pipeline. Referrals now report `classificationSkipped: true` and null `predictedCategory`, `classifierSource` and `confidence` | The Safety Net never reads the classifier's result; the call was left over from the proposal's parallel design and made referrals wait on `ml_service`. FR-04 is now met | `backend.wiring.test.js`, `backend.test.js` (Test 2) and `helpSignposting.test.js` now expect no `/classify` call and `classificationSkipped: true`; `safetyNet.test.js` asserts zero classify calls on flagged queries and adds a regression test (a classifier that hangs or throws is never called, and the referral returns at once). Gateway tests: 344 (was 342), all passing; interface: 6 suites passing | [`docs/decision-log.md`](../decision-log.md#classifier-skipped-on-flagged-queries-a-freeze-exception-2026-10-15) |
