@@ -1,0 +1,220 @@
+/**
+ * Inline SVG icons: no icon font or image requests. Each icon is
+ * decorative (aria-hidden) and draws in currentColor, so its colour comes
+ * from the CSS around it.
+ */
+
+import type { ReactNode } from "react";
+
+interface IconProps {
+  size?: number;
+}
+
+function Svg({ size = 24, children }: IconProps & { children: ReactNode }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {children}
+    </svg>
+  );
+}
+
+/** The SafeGirl mark: a white heart in a purple-gradient circle. */
+export function LogoMark({ size = 32 }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <linearGradient id="sg-logo-gradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" style={{ stopColor: "var(--primary)" }} />
+          <stop offset="1" style={{ stopColor: "var(--primary-end)" }} />
+        </linearGradient>
+      </defs>
+      <circle cx="50" cy="50" r="50" fill="url(#sg-logo-gradient)" />
+      <path
+        style={{ fill: "var(--on-primary)" }}
+        d="M50 75 C31 62 24 52 24 41 C24 32 31 26 38.5 26 C44 26 48 29.5 50 34 C52 29.5 56 26 61.5 26 C69 26 76 32 76 41 C76 52 69 62 50 75 Z"
+      />
+    </svg>
+  );
+}
+
+/** The greeting's mascot: a smiling heart in the primary gradient. */
+export function MascotHeart({ size = 44 }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <linearGradient id="sg-mascot-gradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" style={{ stopColor: "var(--primary)" }} />
+          <stop offset="1" style={{ stopColor: "var(--primary-end)" }} />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#sg-mascot-gradient)"
+        d="M50 90 C18 68 6 52 6 33 C6 17 18 7 31 7 C40 7 46 12 50 19 C54 12 60 7 69 7 C82 7 94 17 94 33 C94 52 82 68 50 90 Z"
+      />
+      <circle cx="36" cy="38" r="5" style={{ fill: "var(--on-primary)" }} />
+      <circle cx="64" cy="38" r="5" style={{ fill: "var(--on-primary)" }} />
+      <path
+        d="M37 52 Q50 64 63 52"
+        fill="none"
+        strokeWidth="5"
+        strokeLinecap="round"
+        style={{ stroke: "var(--on-primary)" }}
+      />
+    </svg>
+  );
+}
+
+/** A small four-pointed sparkle, for decoration. */
+export function Sparkle({ size = 16 }: IconProps) {
+  return (
+    <svg
+      className="sparkle"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        fill="currentColor"
+        d="M12 0 C13 7 17 11 24 12 C17 13 13 17 12 24 C11 17 7 13 0 12 C7 11 11 7 12 0 Z"
+      />
+    </svg>
+  );
+}
+
+export function HeartIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 20s-7-4.35-7-10a4 4 0 0 1 7-2.65A4 4 0 0 1 19 10c0 5.65-7 10-7 10z" />
+    </Svg>
+  );
+}
+
+export function ShieldIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" />
+      <path d="M9 12l2 2 4-4" />
+    </Svg>
+  );
+}
+
+export function PillIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path
+        d="M12 8H7a4 4 0 0 0 0 8h5z"
+        fill="currentColor"
+        fillOpacity="0.3"
+      />
+      <rect x="3" y="8" width="18" height="8" rx="4" />
+      <path d="M12 8v8" />
+    </Svg>
+  );
+}
+
+export function SproutIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 21v-9" />
+      <path d="M12 12c0-4-3-6-7-6 0 4 3 6 7 6z" />
+      <path d="M12 14c0-4 3-6 7-6 0 4-3 6-7 6z" />
+    </Svg>
+  );
+}
+
+export function FlowerIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="12" cy="6.6" r="3.2" />
+      <circle cx="17.1" cy="10.3" r="3.2" />
+      <circle cx="15.2" cy="16.4" r="3.2" />
+      <circle cx="8.8" cy="16.4" r="3.2" />
+      <circle cx="6.9" cy="10.3" r="3.2" />
+      <circle cx="12" cy="12" r="2" fill="currentColor" />
+    </Svg>
+  );
+}
+
+export function LockIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <rect x="5" y="11" width="14" height="10" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </Svg>
+  );
+}
+
+export function PlusIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 5v14M5 12h14" />
+    </Svg>
+  );
+}
+
+export function LeafIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14" />
+      <path d="M5 19c3-4 6-6 9-8" />
+    </Svg>
+  );
+}
+
+export function ArrowRightIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </Svg>
+  );
+}
+
+export function SendIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 19V5M6 11l6-6 6 6" />
+    </Svg>
+  );
+}
+
+export function CloseIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M6 6l12 12M18 6L6 18" />
+    </Svg>
+  );
+}
+
+export function RefreshIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M20 12a8 8 0 1 1-2.34-5.66" />
+      <path d="M20 4v5h-5" />
+    </Svg>
+  );
+}

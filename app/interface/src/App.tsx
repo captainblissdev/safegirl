@@ -77,6 +77,7 @@ export default function App() {
           text: response.message,
           outcome: response.outcome,
           limitedMode: response.limitedMode === true,
+          answerFound: response.answerFound,
           details: answerDetails(response),
         };
 
@@ -122,7 +123,13 @@ export default function App() {
   };
 
   return (
-    <div className="app-shell">
+    // The playful background is left off the referral screen, which stays
+    // calm; the help dialog has its own plain panel.
+    <div
+      className={
+        screen === "referral" ? "app-shell" : "app-shell app-shell--playful"
+      }
+    >
       <AppHeader />
 
       {isOffline && (

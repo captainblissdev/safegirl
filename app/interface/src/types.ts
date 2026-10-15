@@ -57,6 +57,9 @@ export interface ChatTurn {
   // The answer came from the offline pipeline because the online request
   // failed; the chat shows the limited-mode notice above it.
   limitedMode?: boolean;
+  // False when the gateway found no knowledge-base answer and sent its
+  // standard no-answer message.
+  answerFound?: boolean;
   // How the answer was produced, for the demo details view.
   details?: AnswerDetails;
 }

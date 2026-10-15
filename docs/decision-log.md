@@ -209,6 +209,86 @@ not saved." Each claim was checked against what is actually stored:
 Hosting-provider and network logs on a future deployment are outside this
 table and must be checked before real users.
 
+## "General" topic chip renamed "Periods" (2026-10-14)
+
+The fourth topic chip in the chat was labelled "General", but the example
+question it fills in is "is it normal for my period to be irregular"
+(Q11 in the retrieval development set), and the greeting's scope line
+names periods, not "general" topics. The chip is now labelled "Periods".
+Only the label changed: the question, the fact that tapping a chip only
+fills the input box, and the backend's category (`general`) are the same.
+
+## Interface re-themed to the approved wireframes (2026-10-14)
+
+The interface's teal, cream and coral palette was replaced with the
+purple and lavender of the approved wireframes, to make it calm and
+warm, with no alarm colours: coral and amber are gone from every screen,
+including the referral and error states, which use deep purple for
+emphasis. All colours are CSS variables in `app/interface/src/index.css`.
+The screens follow the wireframes: a heart-in-circle logo, icons in lilac
+circles, gradient primary buttons, pill-shaped chips and a rounded input.
+The app icons and the manifest colours were regenerated to match. The
+wireframe image was not yet in the repository, so the palette uses the
+agreed starting values, refined by eye.
+
+Rules: system fonts only (no web fonts), inline SVG icons, CSS
+gradients, no new runtime dependency, text 16px or larger (the demo-only
+details line is 14px), tap targets at least 44 x 44px, one visible 3px
+focus ring, and no animation (a `prefers-reduced-motion` guard is in
+place). The deliberate differences from the wireframe are listed in
+`docs/design/ui-comparison.md`.
+
+Contrast (WCAG 2.1 AA: 4.5:1 for body text, 3:1 for large text and UI):
+
+| Foreground | Background | Ratio | Use |
+|---|---|---|---|
+| ink `#2a1457` | page `#f7f2ff` / white / lilac `#efe6fc` / lilac-strong `#e2d3f8` | 14.29 / 15.72 / 13.02 / 11.16 | body text |
+| ink-soft `#5b4a80` | page / white / lilac | 6.98 / 7.68 / 6.36 | secondary text, placeholder, details line |
+| primary-deep `#3f1d96` | page / white / lilac / lilac-strong | 10.45 / 11.49 / 9.52 / 8.16 | headings, chip and button labels |
+| primary `#5b2fc7` | page / white / lilac | 7.14 / 7.85 / 6.50 | phone-number links, icons, outline buttons, focus ring |
+| white | gradient `#5b2fc7` to `#8b3fe0` | 7.85 to 5.41 | gradient buttons, user bubbles, send button |
+| control-border `#8570b8` | white / page | 4.19 / 3.81 | input outline (UI, 3:1) |
+| border `#d9c9f3` | white | 1.54 | decorative card borders and dividers only (no contrast requirement) |
+
+Size: the production JS grew from 87.05 kB to 87.82 kB gzipped (+0.77 kB,
+mostly the inline SVG icons) and the CSS from 2.30 kB to 2.31 kB, both
+measured with the same build environment. Lighthouse (mobile) was the same
+before and after: Performance 99, Accessibility 100, Best Practices 100,
+SEO 91.
+
+## Friendlier, more playful chat; Nunito font and gentle motion (2026-10-14)
+
+The project owner asked for a more "girly", intuitive and fun interface.
+This reverses two rules from the re-theme earlier the same day (system
+fonts only; no animation):
+
+- **Font.** Nunito, a rounded typeface chosen over Quicksand (thin
+  strokes, harder to read in long answers) and Baloo 2 (too heavy for
+  answer text). It is self-hosted in the app bundle (39 kB variable
+  woff2, Latin, SIL OFL 1.1), never loaded from Google, so the privacy
+  design is unchanged, and it is precached for offline use.
+- **Motion.** Gentle only: bubbles slide in, controls press in, typing
+  dots bounce. It runs only when the device does not ask for reduced
+  motion.
+
+Also added: icons and pastel colours on the topic chips, a "Not sure
+where to start?" hint, a friendlier placeholder, "You could also ask"
+follow-ups (verbatim "clear" development-set queries on the answer's
+topic, which only fill the input box), pastel background blobs, sparkles
+and a smiling-heart mascot.
+
+**The help panel, the referral screen and error messages stay calm**:
+they keep the font and colours but get no motion, decoration or playful
+wording, because a girl may see them at a hard moment. The placeholder
+does not say "ask me anything", for the same scope reason as the
+greeting.
+
+Cost: JS +1.09 kB and CSS +0.79 kB gzipped, plus the 39 kB font
+(downloaded once, then cached). Lighthouse (mobile, localhost):
+Performance 98 (first paint 1.5 s to 1.8 s while the font loads, no
+layout shift), Accessibility 100, Best Practices 100, SEO 91. The chip
+tints keep labels at 9:1 or more and icons at 6:1 or more.
+
 ## Safety Net patterns frozen (2026-10-15)
 
 Safety Net patterns frozen on 2026-10-15; no pattern changes before
