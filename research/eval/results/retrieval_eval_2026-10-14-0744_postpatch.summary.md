@@ -1,4 +1,4 @@
-> **post-patch, not independent.** Run on 14 Oct 2026 at commit 7a2a15f (Safety Net after the final patch round). The hold-out sets are development sets.
+> **post-patch, not independent.** Run on 14 Oct 2026 at commit 7a2a15f (before history cleanup; now ef4fbee) (Safety Net after the final patch round). The hold-out sets are development sets.
 
 # Retrieval evaluation (development set): 2026-10-14-0744
 

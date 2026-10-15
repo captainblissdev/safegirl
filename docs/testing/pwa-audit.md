@@ -212,6 +212,6 @@ either. Not changed in this round.
 
 | Item | Commit |
 |---|---|
-| Icons, favicon, manifest colours | `756d46e` |
-| Query and sign-in timeouts, cancellation | `a537f1e` |
-| `/api` and `/health` navigation denylist | `a916627` |
+| Icons, favicon, manifest colours | `756d46e` (before history cleanup; now `d1256af`) |
+| Query and sign-in timeouts, cancellation | `a537f1e` (before history cleanup; now `5db1f88`) |
+| `/api` and `/health` navigation denylist | `a916627` (before history cleanup; now `aa279ec`) |
