@@ -61,8 +61,9 @@ pooled.
   excludes a euphemism hold-out, so the sources do not support reading
   this as a like-for-like comparison either way.
 - V3's euphemism hold-out (4 seeds and their paraphrases, 13 examples,
-  never seen in CV or training): 9/13 correct, read off the log's
-  confusion matrix; general 1/3. Source:
+  never seen in CV or training): 9/13 correct (derived from the
+  confusion matrix in the training log; the log gives no totals);
+  general 1/3. Source:
   [`v3_1_training_log.txt`](../research/experiments/logs/v3_1_training_log.txt).
 
 ### 2b. Independent expert test
@@ -70,7 +71,7 @@ pooled.
 | Model | Set | Result | Status | Source |
 |---|---|---|---|---|
 | V2 | DR-04, n = 31 | Accuracy 90.3%, macro-F1 0.8832 | Independent, blind, one-time | [`docs/development-log.md`](development-log.md), [`docs/DR04_record.md`](DR04_record.md) |
-| V3 | DR-04, n = 31 | 27/31 correct (from the log's confusion matrix); general 1/3 | **Not independent:** the log calls it a "disclosed reuse, not a fresh blind evaluation" | [`v3_1_training_log.txt`](../research/experiments/logs/v3_1_training_log.txt) |
+| V3 | DR-04, n = 31 | 27/31 correct (derived from the confusion matrix in the training log; the log gives no totals); general 1/3 | **Not independent:** the log calls it a "disclosed reuse, not a fresh blind evaluation" | [`v3_1_training_log.txt`](../research/experiments/logs/v3_1_training_log.txt) |
 | V3 | Fresh independent expert test | – | **Pending** | – |
 
 - DR-04 has no examples on the General ↔ STI boundary, so it does not
