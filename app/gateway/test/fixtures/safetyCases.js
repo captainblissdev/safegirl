@@ -113,6 +113,12 @@ const POSITIVE = [
   ["he slaps me in front of people", "abuse"],
   ["he kicks me in the stomach", "abuse"],
   ["he beats me in class", "abuse"],
+  // Abuse: violence "at home" (only games and skills after "at" are
+  // excluded).
+  ["my uncle drinks and hits us at home", "abuse"],
+  ["he hits me at home", "abuse"],
+  ["my father beats us at home", "abuse"],
+  ["she hits my mum at home", "abuse"],
   // Abuse: photo threats with a condition after them.
   ["he will share my photos if I leave", "abuse"],
   ["post my pictures or else, he says", "abuse"],
@@ -176,6 +182,11 @@ const NEGATIVE = [
   // Games after "in".
   "our team beat us in the football match",
   "she beat me in the exam",
+  // Games and skills after "at".
+  "he hits the ball well at practice",
+  "she beats me at chess",
+  "my brother beats me at maths",
+  "he hits me at football every time",
   // "What we do" without a secrecy cue; photos without a threat cue.
   "my friends and I, what we do together on weekends",
   "what we do at night",

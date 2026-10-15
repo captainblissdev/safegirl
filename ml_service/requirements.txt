@@ -1,8 +1,15 @@
+# ml_service dependencies: direct dependencies only, pinned to the
+# versions in the working local environment (pip freeze, 15 Oct 2026).
+#
+# Supported Python: 3.12 (a fresh venv from this file installs and
+# starts ml_service). Create the venv with Python 3.12, for example
+# "py -3.12 -m venv .venv" on Windows.
+
 fastapi==0.115.0
 uvicorn[standard]==0.32.0
-torch==2.4.1
+torch==2.9.0
 transformers==5.0.0
-pydantic==2.9.2
+pydantic==2.12.5
 
 # Knowledge-base retrieval (retrieval.py)
 sentence-transformers==6.1.0

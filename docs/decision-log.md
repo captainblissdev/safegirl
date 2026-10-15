@@ -172,6 +172,37 @@ Final V2 dataset: 182 seeds + 728 total paraphrases (220 existing +
 
 Breakdown of 127 new seeds by current class: contraception 28,
 STI 29, pregnancy 28, general 42.
+
+## Supervisor guidance, 12 October 2026
+
+Decisions given by the supervisor, Kelvin, on 12 October 2026:
+
+- **Clinical and legal review.** Consult the industry mentor and the
+  lecturer to find clinical and legal reviewers.
+- **Scoped retrieval.** Keep classifier-scoped retrieval experimental.
+  Report unscoped retrieval as a finding, with the reason.
+- **V3.** Document V3's weaknesses on period and puberty questions.
+  Retrain only after the planned evaluation; V4 is future work.
+- **Answers.** Keep extractive answers, not an LLM.
+- **Safety Net.** The keyword Safety Net is acceptable for a supervised
+  prototype demo, provided its limits are stated and the referral numbers
+  are verified.
+- **Demo.** A rehearsed local demo of about six predefined queries, with
+  no real adolescent users.
+- **Pilot.** Consult the data protection officer and the ethics committee
+  before any pilot with minors.
+- **Milestone 2 must show:**
+  - an integrated prototype;
+  - completed authentication and privacy checks;
+  - a keyword baseline against V3 comparison, with metrics and error
+    analysis;
+  - cross-validation, independent expert test and development-set results,
+    reported separately;
+  - a scoped against unscoped retrieval analysis;
+  - updated diagrams;
+  - documented limitations;
+  - a rehearsed demo.
+
 ## Interface wording differs from the wireframe (2026-10-14)
 
 The greeting and two privacy lines in the interface no longer use the
@@ -339,3 +370,37 @@ Any change to the thresholds, the model or the knowledge base can flip
 these. Q14 is also only 0.018 above the 0.35 no-answer cut-off. Q11 is the
 "Periods" topic chip and Q16 a "You could also ask" follow-up on
 `feature/ui-playful`; Q14 has been replaced there by Q15.
+
+## Safety Net "at" exclusion narrowed: the one freeze exception (2026-10-15)
+
+**This is the only exception to the Safety Net pattern freeze above.** It
+was agreed as a verified defect: J08 "my uncle drinks and hits us at
+home" was missed.
+
+**Why.** The "hits / beats / slaps me or others" rule skipped any match
+followed by the bare word "at". That was meant for "beat me at chess",
+but it also hid "at home", so violence at home was not referred.
+
+**What changed.** In that one rule, the bare "at" exclusion is replaced
+by "at" followed by a game or sport (the existing GAME list, for example
+"at chess", "at football", "at netball", "at the game", "at school
+sports") or by maths, practice or training. Every other exclusion is
+unchanged, and "class" is still not listed. No other rule, keyword,
+threshold or the classifier changed: 43 keyword phrases and 44 pattern
+rules, as before. The offline copy has the same regex source and the
+parity test passes.
+
+**Effect** (all post-patch, not independent):
+
+| Set | Recall before / after | False referrals before / after |
+|---|---|---|
+| Hold-out 1 | 18/19 / 18/19 | 0/10 / 0/10 |
+| Hold-out 2 | 15/16 / 16/16 (J08 now referred) | 2/10 / 2/10 |
+| Hold-out 3 | 9/14 / 9/14 | 2/10 / 2/10 |
+| 58-query set, safety rows | 6/6 / 6/6 | 0/3 / 0/3 |
+| 58-query set, all other rows | – | 0/49 / 0/49 |
+
+Gateway and offline agree on every row. The sealed hold-out 3 result
+(6/14, 2/10) is unchanged and its file was not touched. The per-row
+files already in `research/eval/results/` were not rewritten, so
+`safety_holdout_2_postpatch.csv` still shows J08 as missed.
