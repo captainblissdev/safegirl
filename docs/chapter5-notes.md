@@ -181,19 +181,29 @@ Source: [`classifier_analysis.md`](../research/eval/results/classifier_analysis.
 - Small samples: DR-04 n = 31 (general 3); development-set calibration
   on 29 queries; relevance on 34 against 20. Sources above.
 - No independent test of V3 yet; its DR-04 result is a non-blind reuse.
-- DR-04 provenance: the 34 questions were written, and their labels
-  assigned, by a licensed medical doctor in Siaya County and her team,
-  separately from the training-data generation. The team had seen the
-  initial training data before writing them, so overlap in style or
-  topic with the training data cannot be excluded. Each question was
-  labelled independently by a team of three reviewers, who each gave a
-  category label and a reason. [FINAL LABEL RULE]. The
-  verification_status field was never filled in the dataset file; the
-  review record is held [LOCATION]. Source: the project owner's
-  statement, recorded in
-  [`docs/requirements-traceability.md`](requirements-traceability.md)
-  (DR-04); the set was added to the repository on 17 September 2026
-  (`40319e7`).
+- DR-04 provenance (the project owner's statement, recorded in
+  [`docs/requirements-traceability.md`](requirements-traceability.md),
+  DR-04): "The DR-04 set of 34 questions comes from an external expert
+  source: a licensed medical doctor in Siaya County and her team,
+  through a process separate from the training-data generation. The team
+  had seen the initial training data before the set was written, so
+  overlap in style or topic with the training data cannot be excluded;
+  this is recorded as a limitation. The project proposed an intended
+  class for 29 questions; the expert team confirmed 26, amended 1
+  (TEST-025, pregnancy to STI), and gave two-category answers on 2
+  (TEST-014, TEST-030). For the 5 questions with no proposal (TEST-001,
+  005, 006, 013, 015) the team supplied the class, with a two-category
+  answer on TEST-015. Six questions carry expert notes. The team of
+  three reviewers completed the verification sheet together; individual
+  reviewer labels were not recorded. The verification_status column was
+  never filled. Source workbook: held by the project owner; not yet in
+  the repository. The set was added to the repository on 17 September
+  2026."
+- DR-04 scoring: three questions (TEST-014, TEST-015, TEST-030) have
+  two-category expert labels, so the scoring rule must be fixed before
+  this set is used for evaluation.
+- DR-04 reviewer agreement: no per-reviewer labels exist, so reviewer
+  agreement cannot be computed.
 - The development set and its provisional labels were written by the
   project owner, who also built the system.
 - The Safety Net is a keyword net with low independent recall (6/14),
