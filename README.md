@@ -89,7 +89,7 @@ This separation is intentional and forms part of the system's safety architectur
 | Evaluation | Accuracy | Macro-F1 | Notes |
 | --- | ---: | ---: | --- |
 | V1, single split | 80.0% | 0.7677 | 55 seeds; historical baseline |
-| V2, 5-fold CV | 82.9% ± 7.0% | 0.8274 ± 0.0726 | 182 seeds; 910 examples |
+| V2, 5-fold CV | 82.9% | 0.8274 ± 0.0726 | 182 seeds; 910 examples |
 | V2, independent expert test | 90.3% | 0.8832 | n=31; one-time blind evaluation (DR-04) |
 
 Source: [`docs/decision-log.md`](docs/decision-log.md) and [`docs/development-log.md`](docs/development-log.md). The V2 cross-validation showed a persistent **General ↔ STI boundary confusion** (46 misclassifications across the pooled 910-example CV set), which the 31-question test set does not exercise. It is documented, not patched.

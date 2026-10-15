@@ -73,7 +73,7 @@ not the independent DR-04 test set.
 
 | Evaluation | What it checks | Command | Count | Date | Result | Label | Source |
 |---|---|---|---|---|---|---|---|
-| V2, 5-fold CV | Accuracy and macro-F1 across folds | Training notebook | 910 examples, 182 seeds | 2026-09-17 | Accuracy 82.9% ± 7.0%; macro-F1 0.8274 ± 0.0726 | Cross-validation | [`docs/development-log.md`](../development-log.md) |
+| V2, 5-fold CV | Accuracy and macro-F1 across folds | Training notebook | 910 examples, 182 seeds | 2026-09-17 | Accuracy 82.9% (mean; no SD recorded); macro-F1 0.8274 ± 0.0726 | Cross-validation | [`docs/development-log.md`](../development-log.md) |
 | V2, DR-04 test | Expert-verified test set, run once | Training notebook | 31 | 2026-09-17 | Accuracy 90.3%; macro-F1 0.8832 | **Independent** (blind) | [`docs/development-log.md`](../development-log.md), [`docs/DR04_record.md`](../DR04_record.md) |
 | V3, 5-fold CV | Accuracy and macro-F1 across folds | `train_distilbert_v3.py` | 776 examples | Log committed 2026-09-24 | Accuracy 0.8041 ± 0.0427; macro-F1 0.7965 ± 0.0482 | Cross-validation | [`v3_1_training_log.txt`](../../research/experiments/logs/v3_1_training_log.txt) (UTF-16) |
 | V3, euphemism hold-out | 4 seeds and their paraphrases, held out of CV and training | As above | 13 | As above | 9/13 correct (diagonal of the log's confusion matrix) | Held out | [`v3_1_training_log.txt`](../../research/experiments/logs/v3_1_training_log.txt) |
