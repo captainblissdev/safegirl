@@ -13,6 +13,11 @@
  * 3. Intent Classifier, then (for clear queries) retrieval and
  *    generation. If the Safety Net flags the query, the retrieval and
  *    generation stages are skipped and referral guidance is returned.
+ * 4. Relevance gate (only when RELEVANCE_GATE is "true"; see
+ *    relevanceGate.js): after retrieval, a clear query whose top-1
+ *    unscoped retrieval score is below the threshold gets the standard
+ *    no-answer message instead of the retrieved entry. Flagged queries
+ *    and help signposting never reach it.
  *
  * The classifier still runs when a query is flagged. This preserves
  * the independence of the safety and classification components while
@@ -29,6 +34,15 @@ const { isGenericHelpRequest } = require("./helpSignposting");
 const { createClassifierClient } = require("./classifierClient");
 const { generate } = require("./generationModule");
 const { orchestrate, signpost } = require("./responseOrchestrator");
+const {
+  isRelevanceGateEnabled,
+  relevanceGateDecision,
+} = require("./relevanceGate");
+
+// Note returned when the relevance gate abstains. The user sees the
+// standard no-answer help message, not this note.
+const RELEVANCE_GATE_NOTE =
+  "No knowledge-base entry was relevant enough to answer this query.";
 
 /**
  * Build a query handler around a classifier client.
@@ -41,12 +55,15 @@ const { orchestrate, signpost } = require("./responseOrchestrator");
  *        retrieve(text, classification), as createClassifierClient returns.
  * @param {Function} [deps.checkSafety] - Safety Net check.
  * @param {Function} [deps.isHelpRequest] - Generic help-request rule.
+ * @param {boolean} [deps.relevanceGate] - Whether the relevance gate is
+ *        on; defaults to the RELEVANCE_GATE environment variable.
  * @returns {(queryText: string) => Promise<object>} Query handler.
  */
 function createHandleQuery({
   classifierClient,
   checkSafety = defaultCheckSafety,
   isHelpRequest = isGenericHelpRequest,
+  relevanceGate = isRelevanceGateEnabled(),
 }) {
   /**
    * Process a SafeGirl user query.
@@ -76,6 +93,7 @@ function createHandleQuery({
     let generation = null;
     let retrievedEntry = null;
     let retrievalScope = null;
+    let gateResult;
 
     /**
      * Clear-query path:
@@ -87,9 +105,32 @@ function createHandleQuery({
      * stage.
      */
     if (!safety.flagged) {
-      ({ entry: retrievedEntry, retrievalScope } =
-        await classifierClient.retrieve(queryText, classification));
-      generation = generate(retrievedEntry);
+      if (!relevanceGate) {
+        ({ entry: retrievedEntry, retrievalScope } =
+          await classifierClient.retrieve(queryText, classification));
+        generation = generate(retrievedEntry);
+      } else {
+        // 4. Relevance gate, after retrieval: abstain with the standard
+        // no-answer message when the top-1 unscoped score is too low.
+        let unscopedScore;
+        ({
+          entry: retrievedEntry,
+          retrievalScope,
+          unscopedScore,
+        } = await classifierClient.retrieve(queryText, classification, {
+          withUnscopedScore: true,
+        }));
+        gateResult = retrievedEntry
+          ? relevanceGateDecision(unscopedScore)
+          : "not_applied";
+
+        if (gateResult === "abstained") {
+          retrievedEntry = null;
+          generation = { text: null, note: RELEVANCE_GATE_NOTE };
+        } else {
+          generation = generate(retrievedEntry);
+        }
+      }
     }
 
     /**
@@ -106,6 +147,7 @@ function createHandleQuery({
       generation,
       retrievedEntry,
       retrievalScope,
+      relevanceGate: gateResult,
     });
   };
 }

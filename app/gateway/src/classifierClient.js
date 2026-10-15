@@ -222,16 +222,31 @@ function createClassifierClient({
   /**
    * Find the knowledge-base entry for a classified query.
    *
-   * @returns {Promise<{entry: object|null, retrievalScope: string}>}
+   * @param {string} text - The query.
+   * @param {object} classification - Result of classify().
+   * @param {object} [options]
+   * @param {boolean} [options.withUnscopedScore] - Also return
+   *        unscopedScore, the top-1 unscoped retrieval score, for the
+   *        relevance gate. When retrieval was scoped this costs one extra
+   *        unscoped /retrieve call. Without this option nothing changes.
+   * @returns {Promise<{entry: object|null, retrievalScope: string,
+   *            unscopedScore?: number|null}>}
    *   retrievalScope is "scoped" or "unscoped" (ml_service /retrieve),
    *   "abstained" (no retrieval attempted) or "local" (keyword retrieval,
-   *   after a keyword fallback or an unusable /retrieve).
+   *   after a keyword fallback or an unusable /retrieve). unscopedScore is
+   *   null when no ml_service score was obtained.
    */
-  async function retrieveEntry(text, classification) {
+  async function retrieveEntry(text, classification, options = {}) {
     const { label, confidence, source } = classification;
+    const { withUnscopedScore = false } = options;
+    const withScore = (result, unscopedScore = null) =>
+      withUnscopedScore ? { ...result, unscopedScore } : result;
 
     if (source === "keyword_fallback") {
-      return { entry: retrieve(label, text), retrievalScope: "local" };
+      return withScore({
+        entry: retrieve(label, text),
+        retrievalScope: "local",
+      });
     }
 
     // Abstain zone: the prediction is too uncertain to trust any entry,
@@ -242,7 +257,7 @@ function createClassifierClient({
         `[classifierClient] abstaining from retrieval: confidence ` +
           `${confidence.toFixed(3)} is below the abstain threshold ${abstainThreshold}`,
       );
-      return { entry: null, retrievalScope: "abstained" };
+      return withScore({ entry: null, retrievalScope: "abstained" });
     }
 
     const scoped =
@@ -269,13 +284,41 @@ function createClassifierClient({
         );
       }
 
-      return { entry, retrievalScope: scoped ? "scoped" : "unscoped" };
+      const result = { entry, retrievalScope: scoped ? "scoped" : "unscoped" };
+
+      if (!withUnscopedScore) {
+        return result;
+      }
+
+      return withScore(
+        result,
+        scoped ? await unscopedTopScore(text) : scoreOf(topResult),
+      );
     } catch (error) {
       logger.warn(
         `[classifierClient] /retrieve unusable, using local retrieval: ${error.message}`,
       );
 
-      return { entry: retrieve(label, text), retrievalScope: "local" };
+      return withScore({
+        entry: retrieve(label, text),
+        retrievalScope: "local",
+      });
+    }
+  }
+
+  const scoreOf = (result) =>
+    result && typeof result.score === "number" ? result.score : null;
+
+  /** Top-1 unscoped retrieval score, or null if it cannot be obtained. */
+  async function unscopedTopScore(text) {
+    try {
+      const body = await postJson("/retrieve", { query: text, top_k: 1 });
+      return scoreOf(body && Array.isArray(body.results) && body.results[0]);
+    } catch (error) {
+      logger.warn(
+        `[classifierClient] unscoped score unavailable for the relevance gate: ${error.message}`,
+      );
+      return null;
     }
   }
 
