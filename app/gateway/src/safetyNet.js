@@ -196,6 +196,8 @@ const VICTIM =
 // is deliberately not listed: "he beats me in class" is flagged.
 const GAME =
   "(?:(?:the|a|an|our|their|his|her|my|this|that|every) )?(?:\\w+ )?(?:match(?:es)?|games?|football|soccer|netball|volleyball|basketball|rugby|hockey|tennis|chess|cards|draughts|team|race|races|exams?|tests?|competitions?|tournaments?|finals?|sports?|pe|quiz|debate|league|round)";
+// Skills and training, for "beats me at maths" and "at practice".
+const SKILL = "(?:maths?|practice|training)";
 // People who may threaten to kill.
 const PERSON =
   "(?:dad|daddy|father|mother|mum|mom|mama|uncle|aunt|auntie|brother|sister|boyfriend|husband|parents|stepfather|stepmother|step ?dad|step ?mum|step ?mom|he|she|they|him|her)";
@@ -210,10 +212,10 @@ const ABUSE_PATTERNS = [
     "hits / beats / slaps me or others",
     // Excludes games and idioms: "beat me at chess", "... in the match",
     // "beat me to it", "beats me why", "... during the game". Only
-    // game-like "in ..." phrases are excluded, so "hits me in the face"
-    // is flagged.
+    // game- or skill-like "at ..." and "in ..." phrases are excluded, so
+    // "hits us at home" and "hits me in the face" are flagged.
     new RegExp(
-      `\\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) ${VICTIM}\\b(?! (?:at|to it|why|during|with the ball|in ${GAME})\\b)`,
+      `\\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) ${VICTIM}\\b(?! (?:at (?:${GAME}|${SKILL})|to it|why|during|with the ball|in ${GAME})\\b)`,
     ),
   ],
   [

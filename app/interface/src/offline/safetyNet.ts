@@ -203,7 +203,7 @@ export const RULES: readonly SafetyRule[] = [
     category: "abuse",
     name: "hits / beats / slaps me or others",
     pattern:
-      /\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) (?:me|us|him|her|them|my (?:mum|mom|mother|mama|sister|brother|siblings|dad|father|wife|girlfriend|baby|child|children|kids|family|little (?:sister|brother)))\b(?! (?:at|to it|why|during|with the ball|in (?:(?:the|a|an|our|their|his|her|my|this|that|every) )?(?:\w+ )?(?:match(?:es)?|games?|football|soccer|netball|volleyball|basketball|rugby|hockey|tennis|chess|cards|draughts|team|race|races|exams?|tests?|competitions?|tournaments?|finals?|sports?|pe|quiz|debate|league|round))\b)/,
+      /\b(?:hits?|hitting|beats?|beating|beaten|slaps?|slapped|slapping|kicks?|kicked|kicking|punch(?:es|ed|ing)?|chok(?:es|ed|ing)|strangl(?:es|ed|ing)) (?:me|us|him|her|them|my (?:mum|mom|mother|mama|sister|brother|siblings|dad|father|wife|girlfriend|baby|child|children|kids|family|little (?:sister|brother)))\b(?! (?:at (?:(?:(?:the|a|an|our|their|his|her|my|this|that|every) )?(?:\w+ )?(?:match(?:es)?|games?|football|soccer|netball|volleyball|basketball|rugby|hockey|tennis|chess|cards|draughts|team|race|races|exams?|tests?|competitions?|tournaments?|finals?|sports?|pe|quiz|debate|league|round)|(?:maths?|practice|training))|to it|why|during|with the ball|in (?:(?:the|a|an|our|their|his|her|my|this|that|every) )?(?:\w+ )?(?:match(?:es)?|games?|football|soccer|netball|volleyball|basketball|rugby|hockey|tennis|chess|cards|draughts|team|race|races|exams?|tests?|competitions?|tournaments?|finals?|sports?|pe|quiz|debate|league|round))\b)/,
   },
   {
     category: "abuse",
