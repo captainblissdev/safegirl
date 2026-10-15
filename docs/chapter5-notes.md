@@ -157,6 +157,19 @@ Source: [`classifier_analysis.md`](../research/eval/results/classifier_analysis.
   [`relevance_signal.md`](../research/eval/results/relevance_signal.md),
   [`classifier_analysis.md`](../research/eval/results/classifier_analysis.md#c-relevance-signal-when-should-the-system-not-answer).
 
+**Relevance gate (added after this analysis, off by default).** The
+unscoped retrieval-score signal above was turned into a gate behind the
+`RELEVANCE_GATE` flag: below 0.8439 the gateway gives the standard
+no-answer message instead of the retrieved entry. Its one validation
+run answered 18/20 in-scope questions (wrongly rejecting V03 and V19),
+rejected 8/8 off-topic and 4/6 out-of-scope health questions. That set
+partly paraphrases development questions, so the result is not
+independent. It does not catch every gap: "Can I get pregnant from
+precum?" scores 0.8440 and is still answered with the wrong entry
+(KB-P5). The offline pipeline is not gated. Sources:
+[`docs/decision-log.md`](decision-log.md#relevance-gate-behind-a-flag-2026-10-15),
+[`labels_and_gate_2026-10-15.md`](../research/eval/results/labels_and_gate_2026-10-15.md).
+
 ## 5. Safety Net results
 
 - **Independent:** the sealed hold-out 3 run, once, before any rule was

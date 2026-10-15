@@ -430,3 +430,50 @@ No keyword-baseline result on DR-04 was found. See
 for V3 and the frozen keyword baseline under identical conditions (same
 questions, same labels, same scoring rule), with the primary and
 secondary results reported separately.
+
+## Relevance gate behind a flag (2026-10-15)
+
+**This is an explicit exception to the demo freeze: a new component,
+not a change to any frozen item.** No model, threshold, knowledge-base
+entry or Safety Net pattern changed. The gate is **off by default** and
+on only when `RELEVANCE_GATE` is exactly `true`, so the frozen demo
+behaves as before unless it is switched on.
+
+**What it does.** After retrieval, the gateway compares the top-1
+unscoped retrieval score from `ml_service` with 0.8439. Below it, the
+query gets the existing no-answer response (the standard help message,
+with no medical claim, no score and no entry text) instead of the
+retrieved entry; at or above it, the answer is unchanged. The order is
+Safety Net, help signposting, classifier, retrieval, then the gate, so a
+flagged query or a signposting response never reaches it. When
+retrieval was scoped, one extra unscoped `/retrieve` call gets the score.
+Without an `ml_service` score (keyword fallback, local retrieval or a
+classifier abstain) the gate is not applied. The offline pipeline is not
+gated, because it has no semantic retrieval scores. Code:
+`app/gateway/src/relevanceGate.js` (the threshold is one constant there).
+
+**Where the threshold came from.** 0.8439 was the highest unscoped
+score threshold that kept at least 90% of the development set's
+answerable queries (`research/eval/results/classifier_analysis.md`). It
+was then run once, unchanged, on `resources/eval/relevance_validation.csv`
+with a pass criterion fixed beforehand
+(`research/eval/results/labels_and_gate_2026-10-15.md`):
+- in-scope answered 18/20 (90.0%, exactly the 90% bar), wrongly
+  rejecting V03 and V19;
+- off-topic rejected 8/8;
+- out-of-scope health rejected 4/6 (V33 and V34 were answered with
+  unrelated entries).
+
+It is not to be tuned, and the validation file is not to be re-run to
+adjust it.
+
+**Not independent.** 12 of the 20 in-scope validation questions
+paraphrase development-set questions, so the validation set is not
+independent of the data the threshold was chosen on, and the samples are
+small.
+
+**Known failure.** "Can I get pregnant from precum?" has no
+knowledge-base entry. Its unscoped score is 0.8440, just above the
+threshold, so the gate lets it through and it is still answered with the
+wrong entry, KB-P5 (school re-entry)
+(`research/eval/results/coverage_gap_examples_2026-10-15.csv`).
