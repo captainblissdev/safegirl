@@ -77,3 +77,22 @@ silence here as equivalent to an explicit "Verified."
 ## Final test set composition
 
 31 questions: STI 11, pregnancy 9, contraception 8, general 3.
+
+## Addendum, 15 October 2026
+
+Added after the 17 September record above, which is left unchanged.
+
+- The verification sheet was completed together by a team of three
+  reviewers. Individual reviewer labels were not recorded.
+- `verification_status` was left blank by the reviewers; that is why it
+  is empty on all 34 rows (see "Still open" above). No separate
+  verification step was run.
+- The labels in `resources/test/independent_test_set.csv` come from the
+  `expert_verified_class` column, normalised as described under
+  "Normalization applied" (for example `STI` to `sti`, `PG` to
+  `pregnancy`). A comparison on 15 October 2026 found no label that
+  differs other than in case or abbreviation. The three two-category
+  questions (TEST-014, TEST-015, TEST-030) are not in the CSV, as
+  recorded above.
+
+Provenance and limitations: `docs/requirements-traceability.md`, DR-04.
