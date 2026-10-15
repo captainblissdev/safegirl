@@ -646,6 +646,10 @@ function sectionGap(lines) {
       [`Gate at ${GATE_THRESHOLD}`, r.gate_decision],
     ]));
     lines.push(`\nAnswer text shown to the user:\n\n> ${r.gw_message.replace(/\n/g, "\n> ")}\n`);
+    lines.push("The gate only decides whether to answer; it does not choose the entry. At " +
+      `${GATE_THRESHOLD} it would ${r.gate_decision === "answered" ? "let this query through" : "reject this query"} ` +
+      `(unscoped top-1 score ${fmt(r.unscoped_score, 4)}). The live pipeline shows ${r.gw_entry || "no entry"}; ` +
+      `with unscoped retrieval it would show ${r.unscoped_top1}. Neither entry answers the question.\n`);
   }
 }
 
