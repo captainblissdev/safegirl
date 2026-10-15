@@ -54,6 +54,58 @@ export function LogoMark({ size = 32 }: IconProps) {
   );
 }
 
+/** The greeting's mascot: a smiling heart in the primary gradient. */
+export function MascotHeart({ size = 44 }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <linearGradient id="sg-mascot-gradient" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" style={{ stopColor: "var(--primary)" }} />
+          <stop offset="1" style={{ stopColor: "var(--primary-end)" }} />
+        </linearGradient>
+      </defs>
+      <path
+        fill="url(#sg-mascot-gradient)"
+        d="M50 90 C18 68 6 52 6 33 C6 17 18 7 31 7 C40 7 46 12 50 19 C54 12 60 7 69 7 C82 7 94 17 94 33 C94 52 82 68 50 90 Z"
+      />
+      <circle cx="36" cy="38" r="5" style={{ fill: "var(--on-primary)" }} />
+      <circle cx="64" cy="38" r="5" style={{ fill: "var(--on-primary)" }} />
+      <path
+        d="M37 52 Q50 64 63 52"
+        fill="none"
+        strokeWidth="5"
+        strokeLinecap="round"
+        style={{ stroke: "var(--on-primary)" }}
+      />
+    </svg>
+  );
+}
+
+/** A small four-pointed sparkle, for decoration. */
+export function Sparkle({ size = 16 }: IconProps) {
+  return (
+    <svg
+      className="sparkle"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        fill="currentColor"
+        d="M12 0 C13 7 17 11 24 12 C17 13 13 17 12 24 C11 17 7 13 0 12 C7 11 11 7 12 0 Z"
+      />
+    </svg>
+  );
+}
+
 export function HeartIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -67,6 +119,43 @@ export function ShieldIcon(props: IconProps) {
     <Svg {...props}>
       <path d="M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z" />
       <path d="M9 12l2 2 4-4" />
+    </Svg>
+  );
+}
+
+export function PillIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path
+        d="M12 8H7a4 4 0 0 0 0 8h5z"
+        fill="currentColor"
+        fillOpacity="0.3"
+      />
+      <rect x="3" y="8" width="18" height="8" rx="4" />
+      <path d="M12 8v8" />
+    </Svg>
+  );
+}
+
+export function SproutIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 21v-9" />
+      <path d="M12 12c0-4-3-6-7-6 0 4 3 6 7 6z" />
+      <path d="M12 14c0-4 3-6 7-6 0 4-3 6-7 6z" />
+    </Svg>
+  );
+}
+
+export function FlowerIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="12" cy="6.6" r="3.2" />
+      <circle cx="17.1" cy="10.3" r="3.2" />
+      <circle cx="15.2" cy="16.4" r="3.2" />
+      <circle cx="8.8" cy="16.4" r="3.2" />
+      <circle cx="6.9" cy="10.3" r="3.2" />
+      <circle cx="12" cy="12" r="2" fill="currentColor" />
     </Svg>
   );
 }
