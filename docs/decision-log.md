@@ -172,6 +172,37 @@ Final V2 dataset: 182 seeds + 728 total paraphrases (220 existing +
 
 Breakdown of 127 new seeds by current class: contraception 28,
 STI 29, pregnancy 28, general 42.
+
+## Supervisor guidance, 12 October 2026
+
+Decisions given by the supervisor, Kelvin, on 12 October 2026:
+
+- **Clinical and legal review.** Consult the industry mentor and the
+  lecturer to find clinical and legal reviewers.
+- **Scoped retrieval.** Keep classifier-scoped retrieval experimental.
+  Report unscoped retrieval as a finding, with the reason.
+- **V3.** Document V3's weaknesses on period and puberty questions.
+  Retrain only after the planned evaluation; V4 is future work.
+- **Answers.** Keep extractive answers, not an LLM.
+- **Safety Net.** The keyword Safety Net is acceptable for a supervised
+  prototype demo, provided its limits are stated and the referral numbers
+  are verified.
+- **Demo.** A rehearsed local demo of about six predefined queries, with
+  no real adolescent users.
+- **Pilot.** Consult the data protection officer and the ethics committee
+  before any pilot with minors.
+- **Milestone 2 must show:**
+  - an integrated prototype;
+  - completed authentication and privacy checks;
+  - a keyword baseline against V3 comparison, with metrics and error
+    analysis;
+  - cross-validation, independent expert test and development-set results,
+    reported separately;
+  - a scoped against unscoped retrieval analysis;
+  - updated diagrams;
+  - documented limitations;
+  - a rehearsed demo.
+
 ## Interface wording differs from the wireframe (2026-10-14)
 
 The greeting and two privacy lines in the interface no longer use the

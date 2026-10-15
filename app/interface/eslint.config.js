@@ -7,7 +7,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-  globalIgnores(["dist/", "dev-dist/", "node_modules/"]),
+  globalIgnores(["dist/", "dev-dist/", "node_modules/", ".vite/"]),
   {
     linterOptions: {
       reportUnusedDisableDirectives: "error",

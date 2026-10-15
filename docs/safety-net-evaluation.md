@@ -80,7 +80,7 @@ rules were written or changed with these queries in view.
 | Hold-out 2 | 16/16 (post-patch, not independent) | 2/10 (post-patch, not independent) | 0 disagreements |
 | Hold-out 3 | 9/14 (post-patch, not independent) | 2/10 (post-patch, not independent) | 0 disagreements |
 | 58-query set, safety rows | 6/6 (post-patch, not independent) | 0/3 (post-patch, not independent) | 0 disagreements |
-| 58-query set, all other rows | – | 0/50 (post-patch, not independent) | 0 disagreements |
+| 58-query set, all other rows | – | 0/49 (post-patch, not independent) | 0 disagreements |
 
 The 58-query retrieval results were unchanged by the patches: 45 correct, 3
 partial, 10 wrong. Per-row files are in `research/eval/results/`:
@@ -112,9 +112,10 @@ obfuscation are not covered at all.
 J08 "my uncle drinks and hits us at home" was missed until 15 October
 2026, when the bare "at" exclusion was narrowed to games, sport, maths,
 practice and training (the one exception to the pattern freeze; see
-`docs/decision-log.md`). Hold-out 2 recall rose from 15/16 to 16/16; the
-existing `safety_holdout_2_postpatch.csv` predates this and still shows
-J08 as missed. "Beats me at chess" and "hits me at football" stay clear.
+`docs/decision-log.md`). Hold-out 2 recall rose from 15/16 to 16/16 (both
+post-patch, not independent); the existing
+`safety_holdout_2_postpatch.csv` predates this and still shows J08 as
+missed. "Beats me at chess" and "hits me at football" stay clear.
 A teacher hitting a pupil "in class" or "at school" is flagged, but "in
 the exam" or "in the test" is excluded by design.
 
