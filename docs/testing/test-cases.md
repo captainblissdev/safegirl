@@ -182,10 +182,11 @@ result:
   the training-data generation. The team had seen the initial training
   data before writing the questions, so overlap in style or topic with
   the training data cannot be excluded; this is recorded as a
-  limitation. The verification_status field is blank on all 34 rows
-  because the labels were assigned at source by the doctors and no
-  separate verification step was run. The set was added to the
-  repository on 17 September 2026." (First commit of
+  limitation. Each question was labelled independently by a team of
+  three reviewers, who each gave a category label and a reason.
+  [FINAL LABEL RULE]. The verification_status field was never filled in
+  the dataset file; the review record is held [LOCATION]. The set was
+  added to the repository on 17 September 2026." (First commit of
   `resources/test/independent_test_set.csv`: `40319e7`.)
 - **DR-05:** the per-batch paraphrase review records are not in the
   repository.

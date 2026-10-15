@@ -185,10 +185,12 @@ Source: [`classifier_analysis.md`](../research/eval/results/classifier_analysis.
   assigned, by a licensed medical doctor in Siaya County and her team,
   separately from the training-data generation. The team had seen the
   initial training data before writing them, so overlap in style or
-  topic with the training data cannot be excluded. The
-  `verification_status` field is blank on all 34 rows because the
-  labels were assigned at source and no separate verification step was
-  run. Source: the project owner's statement, recorded in
+  topic with the training data cannot be excluded. Each question was
+  labelled independently by a team of three reviewers, who each gave a
+  category label and a reason. [FINAL LABEL RULE]. The
+  verification_status field was never filled in the dataset file; the
+  review record is held [LOCATION]. Source: the project owner's
+  statement, recorded in
   [`docs/requirements-traceability.md`](requirements-traceability.md)
   (DR-04); the set was added to the repository on 17 September 2026
   (`40319e7`).
