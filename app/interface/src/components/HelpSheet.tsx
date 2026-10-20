@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
-import { telHref } from "../content/telHref";
+import { telHref, telName } from "../content/telHref";
 import type { Topic } from "../content/topics";
 import { SOURCES_LINE } from "../content/uiText";
 import { trapTab } from "../focusTrap";
@@ -116,13 +116,21 @@ export default function HelpSheet({ onClose, onExit, onTopic }: Props) {
           <h3 id="help-talk">Need to talk to someone?</h3>
           <ul className="help-calls">
             <li>
-              <a className="btn-call" href={telHref(GBV_HELPLINE)}>
+              <a
+                className="btn-call"
+                href={telHref(GBV_HELPLINE)}
+                aria-label={telName(GBV_HELPLINE, `Call ${GBV_HELPLINE}`)}
+              >
                 Call {GBV_HELPLINE}
               </a>
               <span>GBV helpline. Free, 24 hours, English and Kiswahili.</span>
             </li>
             <li>
-              <a className="btn-call" href={telHref(CHILDLINE_KENYA)}>
+              <a
+                className="btn-call"
+                href={telHref(CHILDLINE_KENYA)}
+                aria-label={telName(CHILDLINE_KENYA, `Call ${CHILDLINE_KENYA}`)}
+              >
                 Call {CHILDLINE_KENYA}
               </a>
               <span>Childline Kenya, for children and young people.</span>
@@ -130,8 +138,14 @@ export default function HelpSheet({ onClose, onExit, onTopic }: Props) {
           </ul>
           <p className="help-emergency">
             In immediate danger? Call{" "}
-            <a href={telHref(emergencyA)}>{emergencyA}</a> or{" "}
-            <a href={telHref(emergencyB)}>{emergencyB}</a>.
+            <a href={telHref(emergencyA)} aria-label={telName(emergencyA)}>
+              {emergencyA}
+            </a>{" "}
+            or{" "}
+            <a href={telHref(emergencyB)} aria-label={telName(emergencyB)}>
+              {emergencyB}
+            </a>
+            .
           </p>
         </section>
 

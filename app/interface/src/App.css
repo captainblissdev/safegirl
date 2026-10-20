@@ -358,11 +358,14 @@
 
 /* Header with the standing "Need help now?" button. */
 
+/* On a narrow or zoomed screen Help and Exit wrap to a second row
+   instead of pushing the page sideways. */
 .app-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px 12px;
   padding-bottom: 14px;
   border-bottom: 1px solid var(--border);
 }
@@ -722,8 +725,10 @@
 
 .header-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
+  margin-left: auto;
 }
 
 /* Exit: a solid plum fill, so its edge is far above 3:1 on any light page. */
@@ -903,8 +908,9 @@
   gap: 14px;
 }
 
+/* Never wider than a narrow or zoomed screen (it was clipped at 200%). */
 .splash-wordmark {
-  font-size: 44px;
+  font-size: min(44px, 16vw);
   font-weight: var(--weight-black);
   line-height: 1;
 }
@@ -1104,8 +1110,12 @@
 
 .topic-tiles {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+}
+
+.topic-tiles > * {
+  min-width: 0;
 }
 
 .topic-tile {
@@ -1135,6 +1145,7 @@
   font-size: 16px;
   font-weight: var(--weight-black);
   line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .topic-tile-sub {
@@ -1796,4 +1807,12 @@
   font-size: 1rem;
   font-weight: var(--weight-black);
   cursor: pointer;
+}
+
+/* While the docked footer line and ask bar are on screen, scrolling to
+   a focused control leaves room for them, so keyboard focus is never
+   hidden under the dock (WCAG 2.4.11). 40vh covers the dock even at
+   200% zoom, where it takes up to 39% of the screen. */
+html:has(.answer-dock) {
+  scroll-padding-bottom: 40vh;
 }

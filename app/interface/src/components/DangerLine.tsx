@@ -1,4 +1,4 @@
-import { telHref } from "../content/telHref";
+import { telHref, telName } from "../content/telHref";
 import { DANGER_LINE_CALL_ABOVE } from "../content/uiText";
 import { GBV_HELPLINE } from "../offline/helpContent";
 
@@ -19,8 +19,11 @@ export default function DangerLine({
   }
   return (
     <p className="danger-line">
-      In danger? Call <a href={telHref(GBV_HELPLINE)}>{GBV_HELPLINE}</a>, free
-      and open 24 hours.
+      In danger? Call{" "}
+      <a href={telHref(GBV_HELPLINE)} aria-label={telName(GBV_HELPLINE)}>
+        {GBV_HELPLINE}
+      </a>
+      , free and open 24 hours.
     </p>
   );
 }

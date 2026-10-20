@@ -30,7 +30,7 @@ import {
   type AnswerDetails,
 } from "../details";
 import type { ChatTurn } from "../types";
-import { telHref } from "../content/telHref";
+import { telHref, telName } from "../content/telHref";
 import { TOPICS } from "../content/topics";
 import {
   KB_QUESTIONS,
@@ -555,7 +555,7 @@ console.log(
     } else {
       assert(
         html.includes(
-          `${line}<a ${href}>${GBV_HELPLINE}</a>, free and open 24 hours.`,
+          `${line}<a ${href} aria-label="${telName(GBV_HELPLINE)}">${GBV_HELPLINE}</a>, free and open 24 hours.`,
         ),
         `${name}: its tap-to-call link is built from GBV_HELPLINE`,
       );
@@ -758,13 +758,13 @@ console.log("\nTest 23: the Help sheet");
   }
   assert(
     html.includes(
-      `<a class="btn-call" href="${telHref(GBV_HELPLINE)}">Call ${GBV_HELPLINE}</a><span>GBV helpline. Free, 24 hours, English and Kiswahili.</span>`,
+      `<a class="btn-call" href="${telHref(GBV_HELPLINE)}" aria-label="${telName(GBV_HELPLINE, `Call ${GBV_HELPLINE}`)}">Call ${GBV_HELPLINE}</a><span>GBV helpline. Free, 24 hours, English and Kiswahili.</span>`,
     ),
     "1195: tap-to-call from the constant, with the checked wording",
   );
   assert(
     html.includes(
-      `<a class="btn-call" href="${telHref(CHILDLINE_KENYA)}">Call ${CHILDLINE_KENYA}</a><span>Childline Kenya, for children and young people.</span>`,
+      `<a class="btn-call" href="${telHref(CHILDLINE_KENYA)}" aria-label="${telName(CHILDLINE_KENYA, `Call ${CHILDLINE_KENYA}`)}">Call ${CHILDLINE_KENYA}</a><span>Childline Kenya, for children and young people.</span>`,
     ),
     "116: tap-to-call from the constant",
   );
@@ -779,7 +779,7 @@ console.log("\nTest 23: the Help sheet");
   const [a, b] = EMERGENCY_NUMBERS;
   assert(
     html.includes(
-      `In immediate danger? Call <a href="${telHref(a)}">${a}</a> or <a href="${telHref(b)}">${b}</a>.`,
+      `In immediate danger? Call <a href="${telHref(a)}" aria-label="${telName(a)}">${a}</a> or <a href="${telHref(b)}" aria-label="${telName(b)}">${b}</a>.`,
     ),
     "999 and 112 from the constants",
   );
@@ -1626,7 +1626,7 @@ console.log(
     const [first, second] = EMERGENCY_NUMBERS;
     assert(
       html.includes(
-        `<p class="emergency-line">In immediate danger? Call <a href="${telHref(first)}">${first}</a> or <a href="${telHref(second)}">${second}</a>.</p>`,
+        `<p class="emergency-line">In immediate danger? Call <a href="${telHref(first)}" aria-label="${telName(first)}">${first}</a> or <a href="${telHref(second)}" aria-label="${telName(second)}">${second}</a>.</p>`,
       ),
       `${name}: "In immediate danger? Call ${first} or ${second}." from the constants`,
     );
@@ -2038,6 +2038,78 @@ console.log("\nTest 45: the Talk to a person screen");
     chat.includes("onOpenHelp={onOpenHelp}") &&
       app.includes("onOpenHelp={openHelp}"),
     '"See who can help" opens the Help sheet',
+  );
+}
+
+console.log("\nTest 46: every phone link's name says which service it calls");
+{
+  assert(
+    telName(GBV_HELPLINE) === `${GBV_HELPLINE}, GBV helpline` &&
+      telName(CHILDLINE_KENYA, `Call ${CHILDLINE_KENYA}`) ===
+        `Call ${CHILDLINE_KENYA}, Childline Kenya` &&
+      telName(EMERGENCY_NUMBERS[0]) === `${EMERGENCY_NUMBERS[0]}, Emergency`,
+    "names: the visible text first, then the service label from SUPPORT_SECTIONS",
+  );
+  const noop = () => undefined;
+  const pages = [
+    renderToStaticMarkup(
+      <HelpSheet onClose={noop} onExit={noop} onTopic={noop} />,
+    ),
+    renderToStaticMarkup(<SupportContent />),
+    renderToStaticMarkup(
+      <ReferralScreen message={ABUSE_REFERRAL_MESSAGE} onContinueChat={noop} />,
+    ),
+    renderChat([]),
+  ];
+  const services = ["GBV helpline", "Childline Kenya", "Emergency"];
+  for (const html of pages) {
+    for (const link of html.match(
+      /<a [^>]*href="tel:[^"]*"[^>]*>[\s\S]*?<\/a>/g,
+    ) ?? []) {
+      const label = /aria-label="([^"]*)"/.exec(link)?.[1];
+      const text = link.replace(/<[^>]*>/g, "");
+      const name = label ?? text;
+      const visible = text.replace(/\s+/g, " ").trim();
+      assert(
+        services.some((service) => name.includes(service)) &&
+          (label === undefined ||
+            label.startsWith(visible.split(/(?<=\d)(?=[A-Z])/)[0])),
+        `"${visible.slice(0, 40)}": named "${name.slice(0, 50)}", which starts with the visible text`,
+      );
+    }
+  }
+}
+
+console.log(
+  "\nTest 47: reflow at 200% zoom: header, Home tiles and the wordmark",
+);
+{
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  assert(
+    rule(".app-header").includes("flex-wrap: wrap;") &&
+      rule(".header-actions").includes("flex-wrap: wrap;") &&
+      rule(".header-actions").includes("margin-left: auto;"),
+    "the header wraps: Help and Exit move to a second row instead of scrolling",
+  );
+  assert(
+    rule(".topic-tiles").includes(
+      "grid-template-columns: repeat(2, minmax(0, 1fr));",
+    ) &&
+      rule(".topic-tiles > *").includes("min-width: 0;") &&
+      rule(".topic-tile-label").includes("overflow-wrap: anywhere;"),
+    "Home's tiles: two shrinkable columns, labels that wrap",
+  );
+  assert(
+    rule(".splash-wordmark").includes("font-size: min(44px, 16vw);"),
+    "the splash wordmark is never wider than the screen",
+  );
+  assert(
+    css.includes("html:has(.answer-dock) {\n  scroll-padding-bottom: 40vh;\n}"),
+    "a focused control scrolls clear of the docked ask bar (WCAG 2.4.11)",
   );
 }
 

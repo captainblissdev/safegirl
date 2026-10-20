@@ -1,4 +1,4 @@
-import { telHref } from "../content/telHref";
+import { telHref, telName } from "../content/telHref";
 import {
   CHILDLINE_KENYA,
   EMERGENCY_NUMBERS,
@@ -53,8 +53,15 @@ export function EmergencyLine() {
   const [first, second] = EMERGENCY_NUMBERS;
   return (
     <p className="emergency-line">
-      In immediate danger? Call <a href={telHref(first)}>{first}</a> or{" "}
-      <a href={telHref(second)}>{second}</a>.
+      In immediate danger? Call{" "}
+      <a href={telHref(first)} aria-label={telName(first)}>
+        {first}
+      </a>{" "}
+      or{" "}
+      <a href={telHref(second)} aria-label={telName(second)}>
+        {second}
+      </a>
+      .
     </p>
   );
 }
