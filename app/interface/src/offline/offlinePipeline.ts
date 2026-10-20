@@ -1,7 +1,12 @@
 import type { QueryResponse } from "../types";
 import { classify } from "./classifier";
 import { checkSafety } from "./safetyNet";
-import { referralMessage } from "./helpContent";
+import {
+  referralMessage,
+  SIGNPOSTING_MESSAGE,
+  VAGUE_QUERY_MESSAGE,
+} from "./helpContent";
+import { isGenericHelpRequest, isVagueQuery } from "./queryRules";
 
 const OFFLINE_ANSWERS: Record<string, string> = {
   contraception:
@@ -13,6 +18,13 @@ const OFFLINE_ANSWERS: Record<string, string> = {
     "Youth-friendly health services should provide respectful, confidential information and care. Ask a health worker what services are available.",
 };
 
+/**
+ * The offline pipeline, in the gateway's order: Safety Net, help rule,
+ * vague-query rule, then the keyword classifier and a general answer for
+ * its category. The two rules are ports of the gateway's
+ * (offline/queryRules.ts), so "Help" and vague queries get the same reply
+ * offline as online.
+ */
 export function handleQueryOffline(queryText: string): QueryResponse {
   const safety = checkSafety(queryText);
 
@@ -21,8 +33,40 @@ export function handleQueryOffline(queryText: string): QueryResponse {
   if (safety.flagged) {
     return {
       outcome: "referral",
+      kind: "referral",
+      matchedQuestion: null,
       message: referralMessage(safety.category),
       generationInvoked: false,
+    };
+  }
+
+  // A generic help request gets the help information.
+  if (isGenericHelpRequest(queryText)) {
+    return {
+      outcome: "signposting",
+      kind: "help",
+      matchedQuestion: null,
+      message: SIGNPOSTING_MESSAGE,
+      category: null,
+      answerFound: false,
+      generated: false,
+      generationInvoked: false,
+      note: "Offline mode: generic help request, help information returned.",
+    };
+  }
+
+  // A short query naming no health topic gets a clarifying question.
+  if (isVagueQuery(queryText)) {
+    return {
+      outcome: "clarification",
+      kind: "vague",
+      matchedQuestion: null,
+      message: VAGUE_QUERY_MESSAGE,
+      category: null,
+      answerFound: false,
+      generated: false,
+      generationInvoked: false,
+      note: "Offline mode: vague query, clarifying question returned.",
     };
   }
 

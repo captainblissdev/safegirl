@@ -17,7 +17,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 84 cases: 69 Pass, 14 Fail, 1 Not run. Two of the
+**Totals:** 88 cases: 73 Pass, 14 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -166,6 +166,10 @@ entry.
 | TC-082 | FR-03 | The help reply's wording | Starts "You're not alone. These people can help right now.", then the help text; never "I don't have information" | As expected (`helpSignposting.test.js`, "opens the help reply plainly, then gives the help information") | Pass |
 | TC-083 | FR-03 | The no-answer reply's wording | Starts "I couldn't find a good answer to that.", then the help text; both messages keep 1195 and 116 | As expected ("says no answer was found before the help information"; "keeps the help numbers in both messages") | Pass |
 | TC-084 | NFR (offline) | The offline copy of the help, signposting and no-answer messages | Identical to the gateway's | As expected (`offlineSafetyParity.test.js`, "has the same help, signposting and no-answer messages") | Pass |
+| TC-085 | NFR (offline) | Offline (`offlinePipeline.ts`, the pipeline the app ships): "Help" | The signposting message, `kind: "help"` | As expected (`offlinePipeline.test.ts`, Test 5) | Pass |
+| TC-086 | NFR (offline) | Offline: the 8 vague test queries | Each gets the clarifying question (`outcome: "clarification"`, `kind: "vague"`) | 8/8 (`offlinePipeline.test.ts`, Test 6) | Pass |
+| TC-087 | FR-02, NFR (offline) | Offline: a safety phrase ("someone touched me") and a health question ("what is PrEP") | The abuse referral (`kind: "referral"`); a general limited-mode answer | As expected (`offlinePipeline.test.ts`, Tests 7 and 8) | Pass |
+| TC-088 | NFR (offline) | Gateway and offline copies of the help and vague-query rules: patterns, function words, word limit, health terms, clarifying question, and every shared case (help cases, vague queries, example questions, 58 development-set and 31 DR-04 queries, Safety Net cases) | Identical tables and identical results; the 9 earlier parity tests still pass | As expected (`offlineSafetyParity.test.js`, "gateway and offline help and vague-query rule parity", 4 tests; the file's 14 tests all pass); the offline health-term block is up to date (`vagueQuery.test.js`) | Pass |
 
 ## Defects and retests
 

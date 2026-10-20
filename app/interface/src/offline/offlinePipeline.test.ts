@@ -1,4 +1,10 @@
 import { handleQueryOffline } from "./pipeline";
+import { handleQueryOffline as handleShippedOffline } from "./offlinePipeline";
+import {
+  ABUSE_REFERRAL_MESSAGE,
+  SIGNPOSTING_MESSAGE,
+  VAGUE_QUERY_MESSAGE,
+} from "./helpContent";
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
@@ -54,5 +60,53 @@ const r4 = handleQueryOffline(
 assert(r4.outcome === "grounded_answer", "outcome is grounded_answer");
 assert(r4.category === "general", `category is general (got ${r4.category})`);
 console.log("  message:", r4.message);
+
+// Tests 5 to 8 run the pipeline the app uses offline
+// (offlinePipeline.ts, imported by api/client.ts); tests 1 to 4 above
+// run pipeline.ts.
+
+console.log("\nTest 5: shipped offline pipeline, 'Help' gets the help reply");
+const r5 = handleShippedOffline("Help");
+
+assert(r5.outcome === "signposting", "outcome is signposting");
+assert(r5.kind === "help", "kind is help");
+assert(r5.message === SIGNPOSTING_MESSAGE, "the signposting message");
+
+console.log(
+  "\nTest 6: shipped offline pipeline, vague queries get the question",
+);
+for (const query of [
+  "Am I okay?",
+  "Is this normal?",
+  "I feel strange",
+  "Can I ask you something?",
+  "I'm worried",
+  "What should I do?",
+  "Do I have it?",
+  "hmm",
+]) {
+  const response = handleShippedOffline(query);
+  assert(
+    response.outcome === "clarification" &&
+      response.kind === "vague" &&
+      response.message === VAGUE_QUERY_MESSAGE,
+    `"${query}" gets the clarifying question`,
+  );
+}
+
+console.log("\nTest 7: shipped offline pipeline, the Safety Net still wins");
+const r7 = handleShippedOffline("someone touched me");
+
+assert(r7.outcome === "referral", "outcome is referral");
+assert(r7.kind === "referral", "kind is referral");
+assert(r7.message === ABUSE_REFERRAL_MESSAGE, "the abuse referral message");
+
+console.log(
+  "\nTest 8: shipped offline pipeline, a health question still gets an answer",
+);
+const r8 = handleShippedOffline("what is PrEP");
+
+assert(r8.outcome === "grounded_answer", "outcome is grounded_answer");
+assert(r8.kind === undefined, "no kind on a general limited-mode answer");
 
 console.log("\nAll offline pipeline tests passed.");

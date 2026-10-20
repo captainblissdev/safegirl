@@ -1,6 +1,9 @@
 /**
  * Parity between the gateway Safety Net (src/safetyNet.js) and the
- * offline interface copy (app/interface/src/offline/safetyNet.ts).
+ * offline interface copy (app/interface/src/offline/safetyNet.ts); the
+ * help and vague-query rules (src/helpSignposting.js, src/vagueQuery.js)
+ * and their offline copy (app/interface/src/offline/queryRules.ts); and
+ * the messages in src/content/helpContent.js and their offline copy.
  *
  * The offline file is a port, not a shared module, because the gateway
  * is CommonJS on Node and the interface is browser ESM built by Vite.
@@ -20,6 +23,15 @@ const gateway = require("../src/safetyNet");
 const gatewayContent = require("../src/content/helpContent");
 const { orchestrate } = require("../src/responseOrchestrator");
 const { POSITIVE, NEGATIVE } = require("./fixtures/safetyCases");
+const helpRule = require("../src/helpSignposting");
+const vagueRule = require("../src/vagueQuery");
+const { HELP_POSITIVE, HELP_NEGATIVE } = require("./fixtures/helpCases");
+const {
+  DEV_ALL,
+  DR04,
+  VAGUE_QUERIES,
+  loadExampleQuestions,
+} = require("./fixtures/querySets");
 
 const OFFLINE_CONTENT_FILE = path.join(
   __dirname,
@@ -182,6 +194,75 @@ describe("gateway and offline referral message parity", () => {
       }).message;
       return online !== offlineContent.referralMessage(safety.category);
     }).map(([text]) => text);
+    assert.deepEqual(differences, []);
+  });
+});
+
+describe("gateway and offline help and vague-query rule parity", () => {
+  const OFFLINE_RULES_FILE = path.join(
+    __dirname,
+    "..",
+    "..",
+    "interface",
+    "src",
+    "offline",
+    "queryRules.ts",
+  );
+  let offlineRules;
+  let offlineContent;
+  let ruleCases;
+
+  before(async () => {
+    offlineRules = await import(pathToFileURL(OFFLINE_RULES_FILE).href);
+    offlineContent = await import(pathToFileURL(OFFLINE_CONTENT_FILE).href);
+    ruleCases = [
+      ...HELP_POSITIVE,
+      ...HELP_NEGATIVE,
+      ...VAGUE_QUERIES,
+      ...(await loadExampleQuestions()),
+      ...DEV_ALL,
+      ...DR04,
+      ...CASES,
+    ];
+  });
+
+  it("has the same help patterns, in order", () => {
+    const describePatterns = (patterns) =>
+      patterns.map((pattern) => `${pattern.source}/${pattern.flags}`);
+    assert.deepEqual(
+      describePatterns(offlineRules.GENERIC_HELP_PATTERNS),
+      describePatterns(helpRule.GENERIC_HELP_PATTERNS),
+    );
+  });
+
+  it("has the same function words, word limit and health terms", () => {
+    assert.deepEqual(
+      [...offlineRules.FUNCTION_WORDS].sort(),
+      [...vagueRule.FUNCTION_WORDS].sort(),
+    );
+    assert.equal(offlineRules.MAX_CONTENT_WORDS, vagueRule.MAX_CONTENT_WORDS);
+    assert.deepEqual(
+      [...offlineRules.HEALTH_TERMS],
+      [...vagueRule.getHealthTerms()].sort(),
+    );
+  });
+
+  it("has the same clarifying question", () => {
+    assert.equal(
+      offlineContent.VAGUE_QUERY_MESSAGE,
+      gatewayContent.VAGUE_QUERY_MESSAGE,
+    );
+  });
+
+  it("gives the same help-rule and vague-rule results on every shared case", () => {
+    assert.ok(ruleCases.length >= 250, `only ${ruleCases.length} cases`);
+    const differences = ruleCases.filter(
+      (text) =>
+        offlineRules.normalize(text) !== helpRule.normalize(text) ||
+        offlineRules.isGenericHelpRequest(text) !==
+          helpRule.isGenericHelpRequest(text) ||
+        offlineRules.isVagueQuery(text) !== vagueRule.isVagueQuery(text),
+    );
     assert.deepEqual(differences, []);
   });
 });

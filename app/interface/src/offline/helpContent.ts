@@ -53,6 +53,10 @@ export const HELP_GUIDANCE =
 /** Reply to a generic help request that names no topic. */
 export const SIGNPOSTING_MESSAGE = `You're not alone. These people can help right now. ${HELP_GUIDANCE}`;
 
+/** Reply to a short query that names no health topic (queryRules.ts). */
+export const VAGUE_QUERY_MESSAGE =
+  "I'm not sure what you mean. Is your question about periods, pregnancy, contraception or STIs?";
+
 /** Reply when no answer is available. */
 export const NO_ANSWER_MESSAGE = `I couldn't find a good answer to that. ${HELP_GUIDANCE}`;
 

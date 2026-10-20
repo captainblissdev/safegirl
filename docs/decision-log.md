@@ -710,3 +710,43 @@ now has the same `HELP_GUIDANCE`, `SIGNPOSTING_MESSAGE` and
 evaluation scripts (`research/eval/run_eval.js`, `labels_and_gate.js`)
 import `NO_ANSWER_MESSAGE` rather than copying it, so they follow the
 change.
+
+## Offline parity for the help and vague-query rules (2026-10-20)
+
+Approved by Cindy on 20 October 2026 (`fix/response-clarity`). **No
+frozen item changed.** The offline pipeline the app uses
+(`app/interface/src/offline/offlinePipeline.ts`) now runs the gateway's
+order: Safety Net, **help rule, vague-query rule**, then the keyword
+classifier and a general answer.
+
+**Why.** Offline, "Help" got the general sentence "Youth-friendly health
+services should provide respectful, confidential information and
+care…", and vague queries got one of the four category sentences (UI
+audit UI-07, section 7).
+
+**What changed.**
+- `app/interface/src/offline/queryRules.ts`: ports of the help rule
+  (`helpSignposting.js`) and the vague-query rule (`vagueQuery.js`) in
+  one file with no imports, so Node can load it in the parity test, as
+  it does `safetyNet.ts`. Its health terms are a generated block written
+  by `app/gateway/scripts/build-health-terms.js` with the gateway's
+  list, so both copies change together.
+- `offlinePipeline.ts`: "Help" gets the signposting message
+  (`outcome: "signposting"`, `kind: "help"`); a vague query gets the
+  clarifying question (`outcome: "clarification"`, `kind: "vague"`); a
+  referral now carries `kind: "referral"`. The general limited-mode
+  answers carry no `kind`: they come from no knowledge-base entry.
+- `offline/helpContent.ts` gains `VAGUE_QUERY_MESSAGE`.
+
+**Tests.** The gateway parity test (`offlineSafetyParity.test.js`) now
+also compares the help patterns, the function words, the word limit, the
+health terms and the clarifying question, and runs every shared case
+(help cases, the vague queries, the example questions, all 58
+development-set queries, the 31 DR-04 queries and the Safety Net cases)
+through both copies of both rules. The original 9 parity tests still
+pass; with the message test added on 20 October the file has 14. The
+interface's offline test now also runs the pipeline the app ships
+(`offlinePipeline.ts`): until now it ran only `pipeline.ts`, which the
+app does not use.
+
+`offline/pipeline.ts` is unchanged and still unused by the app.

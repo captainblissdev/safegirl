@@ -472,7 +472,7 @@ It writes per-query results to `research/eval/results/retrieval_eval_<UTC timest
 
 ## Offline and PWA Behaviour
 
-The interface is an installable PWA. The service worker precaches only the app shell (HTML, JS, CSS, icons); `/api` responses are never cached. When the network or the gateway is unavailable, or a query or sign-in times out (20 s and 10 s), the interface answers from its offline pipeline: the same Safety Net rules and referral messages, then a short general answer marked as limited mode. A first visit while offline shows the browser's own error page, because nothing is cached yet. After a session, browser storage holds no query or answer text. Details: [`docs/testing/pwa-audit.md`](docs/testing/pwa-audit.md).
+The interface is an installable PWA. The service worker precaches only the app shell (HTML, JS, CSS, icons); `/api` responses are never cached. When the network or the gateway is unavailable, or a query or sign-in times out (20 s and 10 s), the interface answers from its offline pipeline: the same Safety Net rules and referral messages, the same help rule and vague-query rule with the same replies (since 20 October 2026), then a short general answer marked as limited mode. A first visit while offline shows the browser's own error page, because nothing is cached yet. After a session, browser storage holds no query or answer text. Details: [`docs/testing/pwa-audit.md`](docs/testing/pwa-audit.md).
 
 ---
 
