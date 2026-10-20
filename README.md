@@ -441,11 +441,11 @@ npm run preview
 
 ## Testing
 
-None of the automated tests need `ml_service`, a Firebase project or any credentials. Counts were verified on 15 October 2026 on a fresh clone of `development`.
+None of the automated tests need `ml_service`, a Firebase project or any credentials. Counts were verified on 20 October 2026 on `fix/response-clarity`.
 
 | Suite | Command (from) | Count |
 | --- | --- | --- |
-| Gateway integration checks and unit tests | `npm test` (`app/gateway`) | 6 integration check groups, then 342 `node:test` tests |
+| Gateway integration checks and unit tests | `npm test` (`app/gateway`) | 6 integration check groups, then 390 `node:test` tests |
 | Gateway lint | `npm run lint` (`app/gateway`) | – |
 | Interface tests | `npm test` (`app/interface`) | 6 suites: offline pipeline, query client, timeouts, session, components, font setup |
 | Interface typecheck | `npm run typecheck` (`app/interface`) | – |

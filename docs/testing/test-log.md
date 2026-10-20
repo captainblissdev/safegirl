@@ -38,6 +38,24 @@ npm 12.0.2). None needs `ml_service`, Firebase or credentials.
 | Interface build | Production build with the PWA service worker | `npx vite build` (`app/interface`) | 12 precache entries | 2026-10-15 | Pass | [`app/interface/vite.config.ts`](../../app/interface/vite.config.ts) |
 | CI | Gateway tests; interface lint, format, typecheck, tests, build. No `ml_service` job | GitHub Actions on push | – | every push | See the Actions tab | [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) |
 
+## Automated suites (re-run 20 October 2026)
+
+Re-run on `fix/response-clarity` at `3a066fa` (Node 24.18.1), after the
+response-clarity changes. The gateway and interface suites need no
+`ml_service`, Firebase or credentials.
+
+| Suite | Command (directory) | Count | Date | Result |
+|---|---|---|---|---|
+| Gateway tests | `npm test` (`app/gateway`) | 6 integration check groups + 390 `node:test` tests in 37 suites (was 354 on 15 Oct) | 2026-10-20 | Pass: 390/390, 0 failed |
+| of which: reply kind and matched question | `test/responseKind.test.js` | 10 tests | 2026-10-20 | Pass |
+| of which: vague-query rule and health terms | `test/vagueQuery.test.js` | 17 tests (DR-04 interception pinned at the recorded 3/31, TC-079) | 2026-10-20 | Pass |
+| of which: offline parity | `test/offlineSafetyParity.test.js` | 14 tests (the 9 of 15 Oct, 1 message test, 4 help and vague-rule tests) | 2026-10-20 | Pass |
+| Gateway lint | `npm run lint` (`app/gateway`) | – | 2026-10-20 | Pass |
+| Interface tests | `npm test` (`app/interface`) | 6 suites, 212 checks | 2026-10-20 | Pass: all 6, 0 failed |
+| Interface typecheck, lint, format | `npm run typecheck`, `npm run lint`, `npm run format:check` (`app/interface`) | – | 2026-10-20 | Pass |
+| Interface build | `npm run build` (`app/interface`) | 12 precache entries | 2026-10-20 | Pass |
+| `ml_service` | – | No automated test suite exists | 2026-10-20 | Not run (none to run). `python ml_service/build_kb.py --check`: `knowledge_base.json` up to date, 21 entries. The live checks TC-073, TC-074 and TC-081 ran against `ml_service` v3 |
+
 ## Setup checks (15 October 2026)
 
 | Check | What it checks | Command | Date | Result | Source |

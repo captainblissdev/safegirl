@@ -9,6 +9,9 @@ No new test was written and no evaluation was re-run for this file.
 - **Automated suites:** re-run on 15 October 2026 on `docs/traceability`
   at `cb0b2fb`. Gateway `npm test`: 342/342 pass, plus the 6 integration
   check groups. Interface `npm test`: all 6 suites pass.
+  Re-run on 20 October 2026 on `fix/response-clarity` at `3a066fa`:
+  gateway 390/390 pass plus the 6 integration check groups; interface
+  all 6 suites pass (TC-066 onwards).
 - **Manual and evaluation results** are taken from the files cited, with
   their own dates.
 
