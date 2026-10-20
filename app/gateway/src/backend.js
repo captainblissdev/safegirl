@@ -13,7 +13,7 @@
  *    Safety Net: a flagged query always gets the referral.
  * 3. For clear queries only: Intent Classifier, then retrieval and
  *    generation.
- * 4. Relevance gate (only when RELEVANCE_GATE is "true"; see
+ * 4. Relevance gate (on unless RELEVANCE_GATE is "false"; see
  *    relevanceGate.js): after retrieval, a clear query whose top-1
  *    unscoped retrieval score is below the threshold gets the standard
  *    no-answer message instead of the retrieved entry. Flagged queries

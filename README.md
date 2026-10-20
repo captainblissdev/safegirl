@@ -159,6 +159,7 @@ Every query is handled in this order:
 3. **Intent classifier.** Runs for every other query, including flagged ones.
 4. **If the Safety Net flagged the query,** the gateway returns the referral message. The classifier has already run, and its prediction is reported in the response (`predictedCategory`) but is not used to answer; retrieval and generation do not run.
 5. **Otherwise,** retrieval and generation produce the answer.
+6. **Relevance gate** (on by default; off with `RELEVANCE_GATE=false`). If the top-1 unscoped retrieval score is below 0.8439, the gateway returns the standard no-answer message instead of the retrieved entry. A scoped query costs one extra unscoped `/retrieve` call for the score. Without an `ml_service` score (keyword fallback, local retrieval or a classifier abstain) the gate is not applied.
 
 The Safety Net is synchronous, so it has always finished before the classifier starts; earlier versions of this README and the architecture diagram described the two as dispatched in parallel.
 
@@ -340,6 +341,7 @@ Or, to test the gateway without Firebase (for example with `curl` or the evaluat
 | `CLASSIFIER_CONFIDENCE_THRESHOLD` | `0.5` | At or above this confidence, retrieval is scoped to the predicted category; below it, retrieval searches all categories. Frozen; leave unset |
 | `CLASSIFIER_ABSTAIN_THRESHOLD` | `0.35` | Below this confidence, no retrieval is attempted and the gateway returns its standard "no specific answer" message. Must be below the confidence threshold. Frozen; leave unset |
 | `CLASSIFIER_TIMEOUT_MS` | `3000` | Timeout for each request to `ml_service`, in milliseconds |
+| `RELEVANCE_GATE` | on | The relevance gate: a clear query whose top-1 unscoped retrieval score is below 0.8439 gets the standard no-answer message instead of the retrieved entry. On unless the value is exactly `false`; `RELEVANCE_GATE=false` restores the behaviour before 20 October 2026. The threshold is frozen and is not configurable |
 
 Empty or invalid values fall back to the defaults, with a logged warning. Each response reports how its answer was found in `retrievalScope`: `scoped`, `unscoped`, `abstained`, or `local` (keyword retrieval).
 
@@ -405,6 +407,8 @@ node --env-file=.env server.js
 ```
 
 It should print `SafeGirl backend listening on :3001`, plus the unverified help numbers warning.
+
+The relevance gate is on by default. To run the gateway as it was before 20 October 2026, without the gate, add `RELEVANCE_GATE=false` to `.env`.
 
 **Terminal 3, interface:**
 

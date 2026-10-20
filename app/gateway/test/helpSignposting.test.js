@@ -138,7 +138,9 @@ describe("handleQuery() with the help rule", () => {
 
     const { result, output } = await captureOutput(() => handleQuery(query));
 
-    assert.deepEqual(requests, ["/classify", "/retrieve"]);
+    // The second /retrieve is the relevance gate's unscoped score: the
+    // gate is on by default and retrieval here was scoped.
+    assert.deepEqual(requests, ["/classify", "/retrieve", "/retrieve"]);
     assert.equal(result.outcome, "grounded_answer");
     assert.equal(result.retrievalScope, "scoped");
     assert.ok(!output.toLowerCase().includes("birth control"));

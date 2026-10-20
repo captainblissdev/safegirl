@@ -549,3 +549,49 @@ matched question because the response did not carry it.
 The interface type (`QueryResponse` in `app/interface/src/types.ts`) has
 the same two fields and a `ReplyKind` union; a gateway test checks the
 union against `REPLY_KINDS`. The interface does not use the fields yet.
+
+## Relevance gate on by default (2026-10-20)
+
+Approved by Cindy on 20 October 2026 (`fix/response-clarity`). The gate
+added on 15 October ("Relevance gate behind a flag", above) is now **on
+by default**. `RELEVANCE_GATE=false` turns it off and restores the
+earlier behaviour; any other value, or none, leaves it on, so a typo
+cannot switch it off. **The threshold stays 0.8439** and was not
+re-examined; no model, threshold, knowledge-base entry or Safety Net
+pattern changed. Code: `isRelevanceGateEnabled` in
+`app/gateway/src/relevanceGate.js`.
+
+**Why.** With the gate off, vague queries got unrelated entries stated
+as answers: "Am I okay?", "I feel strange" and "Do I have it?" all got
+KB-S4 ("It could be. Unusual discharge…"), and "I'm worried" got the
+pregnancy warning signs (UI audit, UI-01).
+
+**Validation result (unchanged, from the one run on 15 October).** 2 of
+20 in-scope validation questions are wrongly rejected: V03 "is it true
+that family planning makes you barren" (0.8285) and V19 "is clinic
+private" (0.8259). Off-topic 8/8 and out-of-scope health 4/6 are
+rejected (`research/eval/results/labels_and_gate_2026-10-15.md`).
+
+**Example questions.** All 13 example questions the interface offers (4
+topic chips and the "You could also ask" follow-ups) pass the gate.
+Checked on 20 October 2026 against the live gateway and `ml_service`,
+with the gate on by default: each was answered with the same entry as
+before, `relevanceGate: "passed"`. Their top-1 unscoped scores run from
+0.8570 ("will the injection make me unable to have kids", KB-C5; 0.013
+above the threshold) to 0.9239. This is a check, not a tuning step: the
+threshold was not changed with these scores in view.
+
+**Vague queries.** In the same run, 7 of the 8 vague test queries got
+the standard no-answer message from the gate ("Am I okay?", "Is this
+normal?", "I feel strange", "Can I ask you something?", "I'm worried",
+"What should I do?", "Do I have it?"); "hmm" was already a classifier
+abstain (confidence 0.302).
+
+**Costs and limits.**
+- A scoped query makes one extra unscoped `/retrieve` call for the
+  gate's score.
+- V03 and V19 type questions (in scope, but worded unlike any entry) now
+  get the no-answer message.
+- The known failure stands: "Can I get pregnant from precum?" (0.8440)
+  still passes the gate and gets KB-P5.
+- The offline pipeline is still not gated; it has no retrieval scores.

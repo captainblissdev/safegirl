@@ -17,7 +17,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 70 cases: 56 Pass, 13 Fail, 1 Not run. Two of the
+**Totals:** 74 cases: 60 Pass, 13 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -152,6 +152,10 @@ entry.
 | TC-068 | FR-03 | Negative. Classifier abstain (confidence 0.2), and relevance gate abstain (unscoped score 0.80, gate on) | `kind: "abstain"`; `matchedQuestion: null`; no entry text in the response | As expected ("classifier abstain: …"; "relevance gate abstain: …") | Pass |
 | TC-069 | FR-04, FR-03 | Generic help request and a flagged query | `kind: "help"` and `kind: "referral"`, both with `matchedQuestion: null` | As expected ("help request: …"; "flagged query: …") | Pass |
 | TC-070 | FR-03 | Every active knowledge-base entry served through the orchestrator; the interface's `ReplyKind` type | Each response's `matchedQuestion` is that entry's own question, unchanged; the interface union lists the six gateway kinds in order | As expected ("matchedQuestion is each active entry's own question, unchanged"; "the interface's ReplyKind type lists the same kinds") | Pass |
+| TC-071 | FR-03 | Boundary. `RELEVANCE_GATE` unset; unscoped score 0.50, then exactly 0.8439 (mocked `ml_service`) | Gate on by default: 0.50 gets the no-answer message with no entry text; 0.8439 is answered (`relevanceGate: "passed"`) | As expected (`relevanceGate.test.js`, "abstains below the threshold with RELEVANCE_GATE unset"; "answers at or above the threshold with RELEVANCE_GATE unset") | Pass |
+| TC-072 | FR-03 | Exception. `RELEVANCE_GATE=false`, and other values ("", "true", "FALSE", "0", "no", " false") | Off only for exactly `false`: the response and the `ml_service` calls are as before the gate (no `relevanceGate` field, no extra `/retrieve`); every other value leaves it on | As expected ("is off only for RELEVANCE_GATE exactly 'false', and on otherwise"; "leaves the response and the ml_service calls as before the gate") | Pass |
+| TC-073 | FR-03 | Positive, live. The 13 example questions (chips and follow-ups) through the gateway with the gate on by default, `ml_service` v3 (20 Oct) | All 13 answered, gate passed | 13/13 answered with the same entry as before, `relevanceGate: "passed"`; lowest unscoped score 0.8570 ([DL, Relevance gate on by default](../decision-log.md#relevance-gate-on-by-default-2026-10-20)) | Pass |
+| TC-074 | FR-03 | Negative, live. The 8 vague queries ("Am I okay?" … "hmm") with the gate on by default (20 Oct) | None gets a knowledge-base entry | 8/8 get the no-answer message: 7 by the gate, "hmm" by the classifier abstain (same source) | Pass |
 
 ## Defects and retests
 
