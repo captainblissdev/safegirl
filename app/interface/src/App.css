@@ -60,6 +60,7 @@
   box-shadow: var(--shadow);
 }
 
+.card h1,
 .card h2 {
   color: var(--primary-deep);
   font-size: clamp(1.5rem, 3vw, 2rem);
@@ -67,7 +68,6 @@
   text-align: center;
 }
 
-.card--referral,
 .card--end {
   display: flex;
   flex-direction: column;
@@ -319,33 +319,6 @@
   background: var(--gradient);
   color: var(--on-primary);
   cursor: pointer;
-}
-
-/* Referral */
-
-.referral-box {
-  width: 100%;
-  margin-top: 22px;
-  padding: 18px;
-  border: 2px solid var(--primary);
-  border-radius: 16px;
-  background: var(--card);
-  color: var(--ink);
-  text-align: left;
-}
-
-.support-panel {
-  width: 100%;
-  margin-top: 20px;
-  padding: 16px 18px;
-  border-radius: 16px;
-  background: var(--lilac);
-  text-align: left;
-}
-
-.support-panel > h3 {
-  color: var(--primary-deep);
-  font-size: 1.05rem;
 }
 
 /* Notices */
@@ -1483,4 +1456,328 @@
   padding: 10px 12px 12px;
   background: var(--color-card);
   box-shadow: var(--shadow-dock);
+}
+
+/* Reply screens (redesign Step 7): clarify, held, help and referral,
+   no answer. */
+
+.reply-screen {
+  justify-content: flex-start;
+  gap: 14px;
+  min-height: 0;
+  padding: 8px 8px 0;
+}
+
+/* "You asked" and her question, as plain text. */
+.you-asked-label {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: var(--weight-black);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.you-asked-text {
+  color: var(--color-ink);
+  font-size: 18px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.reply-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
+  padding: 18px 16px;
+}
+
+.reply-decor {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  pointer-events: none;
+}
+
+.reply-pill {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: var(--reply-pill-bg);
+  font-size: 14px;
+  font-weight: var(--weight-black);
+}
+
+.reply-title {
+  font-size: 17px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.reply-subtitle {
+  color: var(--noanswer-text);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+.reply-note {
+  color: var(--color-muted);
+  font-size: 15px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.45;
+}
+
+/* Clarify */
+
+.reply-card--clarify {
+  border-radius: 26px;
+  background: linear-gradient(
+    135deg,
+    var(--clarify-bg-start),
+    var(--clarify-bg-end)
+  );
+  box-shadow: var(--shadow-soft);
+  color: var(--color-ink);
+}
+
+.reply-card--clarify .reply-decor {
+  color: var(--clarify-sparkle);
+}
+
+.reply-card--clarify .reply-pill {
+  color: var(--clarify-text);
+}
+
+.reply-card--clarify .reply-title {
+  font-size: 19px;
+  line-height: 1.35;
+}
+
+/* Held topic */
+
+.reply-card--held {
+  border: 1.5px solid var(--held-border);
+  border-radius: 24px;
+  background: var(--held-bg);
+  color: var(--held-text);
+}
+
+.reply-card--held .reply-pill {
+  color: var(--held-text);
+}
+
+.reply-link {
+  align-self: flex-start;
+  min-height: var(--tap-target);
+  border: 0;
+  padding: 0 4px;
+  background: none;
+  color: var(--color-violet);
+  font-size: 1rem;
+  font-weight: var(--weight-extrabold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* Help and referral: the dark card. */
+
+.reply-card--support {
+  border-radius: 28px;
+  background: linear-gradient(
+    160deg,
+    var(--support-bg-start),
+    var(--support-bg-end)
+  );
+  box-shadow: var(--shadow);
+  color: var(--support-text);
+}
+
+.reply-card--support .reply-decor {
+  color: var(--support-sparkle);
+}
+
+.reply-card--support .reply-pill {
+  background: var(--support-pill-bg);
+  color: var(--support-text);
+}
+
+.emergency-line {
+  font-size: 15px;
+  font-weight: var(--weight-bold);
+}
+
+.emergency-line a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  color: var(--support-text);
+  font-weight: var(--weight-black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Call buttons: tap-to-call links from the helpline constants. */
+
+.call-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+}
+
+.call-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  border: 1.5px solid transparent;
+  border-radius: 18px;
+  padding: 10px 14px;
+  text-decoration: none;
+}
+
+.call-button-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.call-button-number {
+  font-size: 17px;
+  font-weight: var(--weight-black);
+}
+
+.call-button-note {
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+}
+
+.call-buttons--light .call-button--main {
+  border-color: var(--color-plum);
+  background: var(--color-plum);
+  color: var(--color-on-dark);
+}
+
+.call-buttons--light .call-button--second {
+  border-color: var(--color-control-border);
+  background: var(--color-card);
+  color: var(--held-text);
+}
+
+.call-buttons--dark .call-button--main {
+  border-color: var(--color-card);
+  background: var(--color-card);
+  color: var(--color-plum);
+}
+
+.call-buttons--dark .call-button--second {
+  border-color: var(--support-glass-border);
+  background: var(--support-glass-bg);
+  color: var(--support-text);
+}
+
+/* No answer */
+
+.reply-card--noanswer {
+  border: 1.5px solid var(--noanswer-border);
+  border-radius: 24px;
+  background: var(--noanswer-bg);
+  color: var(--noanswer-text);
+}
+
+.reply-card--noanswer .reply-pill {
+  color: var(--noanswer-text);
+}
+
+/* The four topics: a 2x2 grid of buttons (clarify) or pills (no answer). */
+
+.topic-choices {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+
+.topic-choices--grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+.topic-choices--pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.topic-choice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  border: 1.5px solid var(--color-control-border);
+  background: var(--color-card);
+  color: var(--color-ink);
+  font-weight: var(--weight-black);
+  text-align: left;
+  cursor: pointer;
+}
+
+.topic-choices--grid .topic-choice {
+  min-height: 58px;
+  border-radius: 18px;
+  padding: 10px 12px;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.topic-choices--pills .topic-choice {
+  min-height: var(--tap-target);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 15px;
+}
+
+.topic-choice-icon {
+  display: grid;
+  flex: 0 0 32px;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+}
+
+.topic-choice--general .topic-choice-icon {
+  background: var(--topic-periods-bg);
+  color: var(--topic-periods-text);
+}
+
+.topic-choice--pregnancy .topic-choice-icon {
+  background: var(--topic-pregnancy-bg);
+  color: var(--topic-pregnancy-text);
+}
+
+.topic-choice--contraception .topic-choice-icon {
+  background: var(--topic-contraception-bg);
+  color: var(--topic-contraception-text);
+}
+
+.topic-choice--sti .topic-choice-icon {
+  background: var(--topic-sti-bg);
+  color: var(--topic-sti-text);
+}
+
+/* The plain reply's text is its h1, in the bubble's own type. */
+.plain-reply {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+/* The decoration takes its card's faint colour, not the global sparkle's. */
+.reply-decor .sparkle {
+  color: inherit;
 }

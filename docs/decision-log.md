@@ -1259,3 +1259,64 @@ knowledge-base questions in `kbQuestions.json` (what the Topic list and
 the related questions offer); the vague rule intercepts none of them,
 and the help and vague parity cases now also include the held-topic
 test inputs. No DR-04 or demo-risk query was used.
+
+## Reply screens (2026-10-20)
+
+Stage B2 step 7 (`fix/ui-redesign`), on Cindy's brief. **Restyle only**:
+no reply, knowledge-base, held-topic or help text changed, nor any
+helpline constant, `HELP_CONTACTS_VERIFIED`, gate, threshold or Safety
+Net pattern.
+
+**One screen per reply kind** (`components/ReplyViews.tsx`, chosen by
+`replyViewOf` in `replyView.ts` from the reply kind): clarify (vague),
+held topic (groups A, B, C), help, no answer (abstain), and the referral
+(`ReferralScreen.tsx`, the same dark card as help). On each, the reply
+text exactly as sent is the screen's only h1 and takes focus when it
+arrives; a pill with an icon tops the card. A reply with no kind (the
+offline pipeline's limited-mode answer) keeps the plain view, with its
+text as the h1. The session end's heading is now its h1.
+
+**Her question shown back only on clarify and no answer**, as plain
+text under "You asked" (React escapes it; `<b>x</b>` shows as typed).
+Never on held, help or referral. Her question is also no longer shown
+while a reply loads or after an error, and after a referral it is
+dropped, so "Continue chat" goes to Home.
+
+**Call buttons** on held, help and referral: the GBV helpline, then
+Childline Kenya, as `tel:` links built from the constants, each
+described by its own `SUPPORT_SECTIONS` label and note ("GBV helpline.
+For violence or abuse."; "Childline Kenya. For anyone under 18."). Help
+and referral also carry "In immediate danger? Call …" built from
+`EMERGENCY_NUMBERS`.
+
+**Footer line beside a call button.** Where the GBV call button is
+already on screen (held, help, referral), the footer line points to it
+instead of repeating the number: "In danger? Use the GBV helpline call
+button above. It is free and open 24 hours." (`DANGER_LINE_CALL_ABOVE`).
+On a phone (390 by 844) the line and the button share the first view on
+all three, so moving the line lower would not have avoided it. The
+reply texts of held A and B, help and the abuse referral name the
+number themselves, unchanged.
+
+**Announcements.** App's one polite live region now sits outside the
+screens (so it also covers the referral) and names the reply once ("New
+reply: Tell me a bit more." and so on; "New answer." for answers). No
+reply text is in a live region; the referral's `role="alert"` box is
+gone, so its text is read once, from the h1.
+
+**Interface wording added** (constants in `content/uiText.ts`): the pill
+labels ("Tell me a bit more", "Talk to a nurse" for held topics, which
+had no label, "Support" for help, "We hear you" for the referral, kept
+from the old referral heading, "No answer yet"); `CLARIFY_FALLBACK`;
+`NO_ANSWER_RETRY`; "Try a topic instead"; `DANGER_LINE_CALL_ABOVE`.
+
+**Removed from the referral screen:** the "We hear you. We want to
+help." heading (now the pill) and the full support-options list (still
+in the Help sheet and the wide-screen aside); the call buttons and the
+emergency line replace it on the card.
+
+**The unconfirmed Childline sentence** ("Childline Kenya, 116, is free
+for anyone under 18", in `HELP_GUIDANCE` and the held A and B texts)
+appears on the help, no-answer, held A and held B screens. Not on
+clarify, held C or the referrals (the abuse referral says "(for anyone
+under 18)" without "free"). Unchanged, as briefed.

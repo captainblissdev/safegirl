@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 157 cases: 141 Pass, 15 Fail, 1 Not run. Two of the
+**Totals:** 165 cases: 149 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -248,6 +248,14 @@ entry.
 | TC-155 | NFR (accessibility) | Answer screen contrast | Text 4.5:1 or more; focus ring 3:1 or more | Label 7.35; matched question 13.52; ring on its card 5.81; "Answer" pill 7.54; answer 16.52; source and disclaimer 6.80; "Related questions" 10.59; dock line 16.52 and link 7.10 (`styles/tokens.test.ts`, Test 11) | Pass |
 | TC-156 | FR-03 | The rule tests' example-question set, rebuilt from the 21 knowledge-base questions | The vague rule intercepts none; the help, vague and held rules agree offline and online on every case, held-topic inputs included | 0/21 intercepted (`vagueQuery.test.js`); parity tests pass | Pass |
 | TC-157 | NFR (usability) | Layout at 390 by 844 | KB-S5's whole card fits above the dock; the longest entry (KB-G7, 443 characters) scrolls with the footer line and ask bar in view, nothing hidden at the end; no sideways scroll | As expected (browser check; `answer-after.png`, `answer-long-after.png`) | Pass |
+| TC-158 | NFR (accessibility) | Each reply kind: clarify, held A, B and C, help, no answer, referral (abuse and self-harm), the limited-mode plain view, the session end | Exactly one h1, the reply text exactly; focus moves to it on arrival | As expected (`components.test.tsx`, Test 37; browser check, live gateway) | Pass |
+| TC-159 | NFR (privacy) | Her question on each reply, tested with `<b>x</b>` | Shown as plain text under "You asked" on clarify and no answer only; not on held, help or referral, nor while loading, after an error or after a referral | As expected (Test 38; browser check: shown as typed, no `<b>` element) | Pass |
+| TC-160 | FR-04 | Call buttons on held, help and referral | GBV helpline then Childline Kenya; `tel:` hrefs equal the constants; descriptions from `SUPPORT_SECTIONS`; 44px or taller (58px minimum, 69px measured); help and referral add the emergency line from `EMERGENCY_NUMBERS` | As expected (Test 39; browser check) | Pass |
+| TC-161 | FR-03 | The four topic buttons (clarify) and pills (no answer) | Each opens its own Topic list; back returns to the reply with focus on that button | As expected for all eight (Test 40; browser check) | Pass |
+| TC-162 | FR-05 | Exit and the footer line on every reply screen | Exit in the header; the footer line once, directly above the ask bar (after "Continue chat" on the referral); beside a call button it points to the button without repeating the number | As expected (Tests 19 and 41; browser check) | Pass |
+| TC-163 | NFR (safety) | Score, confidence and the details line on the reply screens, `?details=1` off and on | None on any reply screen; the details line only in the plain view, only with `?details=1` | As expected (Test 42; browser check with `?details=1`) | Pass |
+| TC-164 | NFR (accessibility) | Announcements | One polite live region outside the screens names each reply once; no reply text in a live region; the referral's alert removed | As expected (Test 43; browser check) | Pass |
+| TC-165 | NFR (accessibility) | Reply screen contrast | Text 4.5:1 or more; edges and focus rings 3:1 or more | Clarify text 13.60, pill 8.24, button edge 3.45; held text 7.15, 116 edge 3.80; white on the lightest dark stop 8.24, 116 glass text 6.43, its edge 4.31 and 5.52; no-answer text 8.41, pill edge 3.68 (`styles/tokens.test.ts`, Test 12) | Pass |
 
 ## Defects and retests
 

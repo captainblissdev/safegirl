@@ -42,3 +42,32 @@ export const LIMITED_MODE_NOTICE =
  */
 export const ANSWER_DISCLAIMER =
   "General information, not a diagnosis. A nurse or clinic can test and treat you.";
+
+/**
+ * The label in each reply's pill. The held-topic and support labels are
+ * interface wording (the gateway sends no label); the reply text itself
+ * always comes from the gateway or the offline copy, unchanged.
+ */
+export const REPLY_PILLS = {
+  clarify: "Tell me a bit more",
+  held: "Talk to a nurse",
+  help: "Support",
+  referral: "We hear you",
+  noAnswer: "No answer yet",
+} as const;
+
+/** Under the clarifying question, for anything outside the four topics. */
+export const CLARIFY_FALLBACK =
+  "Something else? A nurse or counsellor at a health facility can help, and you do not have to give a reason.";
+
+/** Under the no-answer reply's topic pills. */
+export const NO_ANSWER_RETRY =
+  "You can also try the question again in different words.";
+
+/**
+ * The footer line on a reply that already shows the GBV call button
+ * (held topic, help, referral): it points to the button instead of
+ * repeating the number beside it.
+ */
+export const DANGER_LINE_CALL_ABOVE =
+  "In danger? Use the GBV helpline call button above. It is free and open 24 hours.";

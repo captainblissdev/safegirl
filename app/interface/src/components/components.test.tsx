@@ -5,7 +5,23 @@ import {
   EMERGENCY_NUMBERS,
   GBV_HELPLINE,
 } from "../offline/helpContent";
-import { ANSWER_DISCLAIMER, LIMITED_MODE_NOTICE } from "../content/uiText";
+import {
+  ANSWER_DISCLAIMER,
+  CLARIFY_FALLBACK,
+  DANGER_LINE_CALL_ABOVE,
+  LIMITED_MODE_NOTICE,
+  NO_ANSWER_RETRY,
+  REPLY_PILLS,
+} from "../content/uiText";
+import {
+  HELD_TOPIC_MESSAGES,
+  NO_ANSWER_MESSAGE,
+  SIGNPOSTING_MESSAGE,
+  SUPPORT_SECTIONS,
+  VAGUE_QUERY_MESSAGE,
+  ABUSE_REFERRAL_MESSAGE,
+  SELF_HARM_REFERRAL_MESSAGE,
+} from "../offline/helpContent";
 import {
   answerDetails,
   formatDetails,
@@ -22,6 +38,7 @@ import {
 } from "../content/kbQuestions";
 import TopicList from "./TopicList";
 import AnswerView from "./AnswerView";
+import { announcementFor, replyViewOf } from "../replyView";
 import { PLACEHOLDER_EXAMPLES, SOURCES_LINE } from "../content/uiText";
 import AppHeader from "./AppHeader";
 import AppShell from "./AppShell";
@@ -487,18 +504,24 @@ console.log(
     ],
     [
       "chat, no answer",
-      chat(reply({ outcome: "grounded_answer", answerFound: false })),
+      chat(
+        reply({
+          outcome: "grounded_answer",
+          answerFound: false,
+          kind: "abstain",
+        }),
+      ),
     ],
-    ["chat, help", chat(reply({ outcome: "signposting" }))],
-    ["chat, vague", chat(reply({ outcome: "clarification" }))],
-    ["chat, held", chat(reply({ outcome: "held" }))],
+    ["chat, help", chat(reply({ outcome: "signposting", kind: "help" }))],
+    ["chat, vague", chat(reply({ outcome: "clarification", kind: "vague" }))],
+    ["chat, held", chat(reply({ outcome: "held", kind: "held-topic" }))],
     [
       "chat, limited mode",
       chat(reply({ outcome: "grounded_answer", limitedMode: true })),
     ],
     [
       "referral",
-      <AppShell onExit={noop} help={closedHelp} calm>
+      <AppShell onExit={noop} help={closedHelp} calm footerInContent>
         <ReferralScreen message="referral" onContinueChat={noop} />
       </AppShell>,
     ],
@@ -512,23 +535,35 @@ console.log(
   const line = "In danger? Call ";
   const href = `href="${telHref(GBV_HELPLINE)}"`;
 
+  // These replies show the GBV call button: the footer line points to it
+  // instead of repeating the number.
+  const callAbove = ["chat, help", "chat, held", "referral"];
   for (const [name, element] of screens) {
     const html = renderToStaticMarkup(element);
     assert(
-      html.split(line).length === 2,
+      html.split('class="danger-line"').length === 2,
       `${name}: the footer line appears once`,
     );
-    assert(
-      html.includes(
-        `${line}<a ${href}>${GBV_HELPLINE}</a>, free and open 24 hours.`,
-      ),
-      `${name}: its tap-to-call link is built from GBV_HELPLINE`,
-    );
+    if (callAbove.includes(name)) {
+      assert(
+        html.includes(`<p class="danger-line">${DANGER_LINE_CALL_ABOVE}</p>`) &&
+          !DANGER_LINE_CALL_ABOVE.includes(GBV_HELPLINE) &&
+          html.includes(`class="call-button call-button--main" ${href}`),
+        `${name}: the line points to the call button, without repeating the number`,
+      );
+    } else {
+      assert(
+        html.includes(
+          `${line}<a ${href}>${GBV_HELPLINE}</a>, free and open 24 hours.`,
+        ),
+        `${name}: its tap-to-call link is built from GBV_HELPLINE`,
+      );
+    }
     const exitAt = html.search(
       /<button class="btn-exit(-pill)?" type="button">Exit<\/button>/,
     );
     assert(
-      exitAt > -1 && exitAt < html.indexOf(line),
+      exitAt > -1 && exitAt < html.indexOf('class="danger-line"'),
       `${name}: an Exit button is present, before the content`,
     );
     if (name === "chat, empty") {
@@ -570,6 +605,9 @@ console.log(
     "./AskBar.tsx",
     "./TopicList.tsx",
     "./AnswerView.tsx",
+    "./ReplyViews.tsx",
+    "./CallButtons.tsx",
+    "./ReferralScreen.tsx",
   ]) {
     const source = readFileSync(new URL(file, import.meta.url), "utf8");
     assert(!/\d{3}/.test(source), `${file} types no phone number`);
@@ -1069,8 +1107,8 @@ console.log(
   assert(
     renderToStaticMarkup(
       <ReferralScreen message="m" onContinueChat={() => undefined} />,
-    ).includes('<h2 tabindex="-1" id="referral-title">'),
-    "the referral heading can take focus when it appears",
+    ).includes('<h1 tabindex="-1" class="reply-title">m</h1>'),
+    "the referral heading (its message) can take focus when it appears",
   );
 }
 
@@ -1355,13 +1393,470 @@ console.log("\nTest 36: focus moves to the closest question; announced once");
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
     app.includes('<p className="sr-only" role="status" aria-live="polite">') &&
-      app.includes('!isLoading && isAnswerTurn(lastTurn) ? "New answer." : ""'),
+      app.includes("announcementFor(replyViewOf(lastTurn))") &&
+      announcementFor("answer") === "New answer.",
     'one polite live region, outside the screen, says "New answer." once',
   );
   const h2s = [...html.matchAll(/<h([1-6])/g)].map((m) => m[1]);
   assert(
     JSON.stringify(h2s) === JSON.stringify(["1", "2", "2"]),
     "heading order: h1 (closest question), h2 Answer, h2 Related questions",
+  );
+}
+
+const ECHO = "<b>x</b>";
+const replyTurns = (text: string, extra: Partial<ChatTurn>): ChatTurn[] => [
+  { id: "u7", role: "user", text: ECHO },
+  {
+    id: "r7",
+    role: "assistant",
+    text,
+    outcome: "grounded_answer",
+    details: DETAILS,
+    ...extra,
+  },
+];
+const renderReply = (
+  text: string,
+  extra: Partial<ChatTurn>,
+  showDetails = false,
+) =>
+  renderToStaticMarkup(
+    <ChatInterface
+      turns={replyTurns(text, extra)}
+      onSend={() => undefined}
+      isLoading={false}
+      showDetails={showDetails}
+    />,
+  );
+const KINDS: [string, string, Partial<ChatTurn>][] = [
+  ["clarify", VAGUE_QUERY_MESSAGE, { outcome: "clarification", kind: "vague" }],
+  ["held A", HELD_TOPIC_MESSAGES.A, { outcome: "held", kind: "held-topic" }],
+  ["held B", HELD_TOPIC_MESSAGES.B, { outcome: "held", kind: "held-topic" }],
+  ["held C", HELD_TOPIC_MESSAGES.C, { outcome: "held", kind: "held-topic" }],
+  ["help", SIGNPOSTING_MESSAGE, { outcome: "signposting", kind: "help" }],
+  ["no answer", NO_ANSWER_MESSAGE, { answerFound: false, kind: "abstain" }],
+];
+const referral = (message: string) =>
+  renderToStaticMarkup(
+    <ReferralScreen message={message} onContinueChat={() => undefined} />,
+  );
+
+console.log("\nTest 37: each reply kind has one h1, its reply text, focusable");
+{
+  const screens: [string, string, string][] = [
+    ...KINDS.map(
+      ([name, text, extra]) =>
+        [name, text, renderReply(text, extra)] as [string, string, string],
+    ),
+    [
+      "referral, abuse",
+      ABUSE_REFERRAL_MESSAGE,
+      referral(ABUSE_REFERRAL_MESSAGE),
+    ],
+    [
+      "referral, self-harm",
+      SELF_HARM_REFERRAL_MESSAGE,
+      referral(SELF_HARM_REFERRAL_MESSAGE),
+    ],
+  ];
+  for (const [name, text, html] of screens) {
+    assert(html.split("<h1").length === 2, `${name}: one h1`);
+    assert(
+      html.includes(
+        `<h1 tabindex="-1" class="reply-title">${escapeHtml(text)}</h1>`,
+      ),
+      `${name}: the h1 is the reply text exactly, and can take focus`,
+    );
+    const pillAt = html.indexOf('class="reply-pill"');
+    assert(
+      pillAt > -1 && pillAt < html.indexOf("<h1"),
+      `${name}: a pill with an icon at the top of the card`,
+    );
+  }
+  const views = readFileSync(
+    new URL("./ReplyViews.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    /useEffect\(\(\) => \{\s*ref\.current\?\.focus\(\);\s*\}, \[key\]\);/.test(
+      views,
+    ) && views.split("useFocusOnArrival(id)").length === 5,
+    "focus moves to the h1 on arrival, on all four reply screens",
+  );
+  const plain = renderChat([
+    { id: "u", role: "user", text: "q" },
+    {
+      id: "p",
+      role: "assistant",
+      text: "limited answer",
+      outcome: "grounded_answer",
+      limitedMode: true,
+    },
+  ]);
+  assert(
+    plain.split("<h1").length === 2 &&
+      plain.includes(
+        '<h1 tabindex="-1" class="plain-reply">limited answer</h1>',
+      ),
+    "a reply with no kind (limited mode): its text is the one h1",
+  );
+  const waiting = renderToStaticMarkup(
+    <ChatInterface
+      turns={[{ id: "u", role: "user", text: "q" }]}
+      onSend={() => undefined}
+      isLoading
+    />,
+  );
+  assert(
+    waiting.split("<h1").length === 2 &&
+      waiting.includes('<h1 class="sr-only">SafeGirl</h1>'),
+    "waiting for a reply, or after an error: one (visually hidden) h1",
+  );
+  assert(
+    renderToStaticMarkup(<SessionEnd onStartNew={() => undefined} />).includes(
+      '<h1 id="session-end-title">Session ended.</h1>',
+    ),
+    "the session end has its h1",
+  );
+  const pills = [
+    [KINDS[0], REPLY_PILLS.clarify],
+    [KINDS[1], REPLY_PILLS.held],
+    [KINDS[4], REPLY_PILLS.help],
+    [KINDS[5], REPLY_PILLS.noAnswer],
+  ] as const;
+  for (const [[name, text, extra], label] of pills) {
+    assert(
+      /<p class="reply-pill"><svg[^>]*>[\s\S]*?<\/svg> ([^<]*)<\/p>/.exec(
+        renderReply(text, extra),
+      )?.[1] === label,
+      `${name}: the pill reads "${label}"`,
+    );
+  }
+  assert(
+    referral("m").includes(`</svg> ${REPLY_PILLS.referral}</p>`),
+    `referral: the pill reads "${REPLY_PILLS.referral}"`,
+  );
+}
+
+console.log(
+  "\nTest 38: her question shown back on clarify and no answer only, escaped",
+);
+{
+  for (const [name, text, extra] of KINDS) {
+    const html = renderReply(text, extra);
+    const echoes = name === "clarify" || name === "no answer";
+    assert(!html.includes(ECHO), `${name}: never rendered as HTML`);
+    if (echoes) {
+      assert(
+        html.includes(
+          '<p class="you-asked-label">You asked</p><p class="you-asked-text">&lt;b&gt;x&lt;/b&gt;</p>',
+        ),
+        `${name}: "You asked" and her text, as plain text`,
+      );
+    } else {
+      assert(
+        !html.includes("&lt;b&gt;") && !html.includes("You asked"),
+        `${name}: her text is not shown`,
+      );
+    }
+  }
+  assert(
+    !referral(ABUSE_REFERRAL_MESSAGE).includes("You asked"),
+    "referral: her text is not shown (the screen gets the message only)",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    /setReferralMessage\(response\.message\);[\s\S]{0,200}setTurns\(\[\]\);/.test(
+      app,
+    ),
+    "after a referral her question is dropped, so Continue chat never shows it",
+  );
+  const waiting = renderToStaticMarkup(
+    <ChatInterface
+      turns={[{ id: "u", role: "user", text: ECHO }]}
+      onSend={() => undefined}
+      isLoading
+    />,
+  );
+  assert(
+    !waiting.includes("&lt;b&gt;") && !waiting.includes("user-bubble"),
+    "while the reply loads (or after an error), her text is not shown",
+  );
+}
+
+console.log(
+  "\nTest 39: call buttons from the constants on held, help and referral",
+);
+{
+  const contacts = SUPPORT_SECTIONS.flatMap((section) => section.contacts);
+  const note = (number: string) => {
+    const contact = contacts.find((item) => item.numbers.includes(number));
+    return `${contact?.label}. ${contact?.note}`;
+  };
+  const button = (kind: string, number: string) =>
+    `<a class="call-button call-button--${kind}" href="${telHref(number)}"><svg`;
+  const withCalls: [string, string][] = [
+    ["held A", renderReply(HELD_TOPIC_MESSAGES.A, KINDS[1][2])],
+    ["held C", renderReply(HELD_TOPIC_MESSAGES.C, KINDS[3][2])],
+    ["help", renderReply(SIGNPOSTING_MESSAGE, KINDS[4][2])],
+    ["referral", referral(ABUSE_REFERRAL_MESSAGE)],
+  ];
+  for (const [name, html] of withCalls) {
+    const mainAt = html.indexOf(button("main", GBV_HELPLINE));
+    const secondAt = html.indexOf(button("second", CHILDLINE_KENYA));
+    assert(
+      mainAt > -1 && secondAt > mainAt,
+      `${name}: Call ${GBV_HELPLINE} then Call ${CHILDLINE_KENYA}, tel: hrefs from the constants`,
+    );
+    for (const number of [GBV_HELPLINE, CHILDLINE_KENYA]) {
+      assert(
+        html.includes(
+          `<span class="call-button-number">Call ${number}</span><span class="call-button-note">${note(number)}</span>`,
+        ),
+        `${name}: ${number}'s description is its constant label and note`,
+      );
+    }
+  }
+  for (const [name, html] of withCalls.slice(2)) {
+    const [first, second] = EMERGENCY_NUMBERS;
+    assert(
+      html.includes(
+        `<p class="emergency-line">In immediate danger? Call <a href="${telHref(first)}">${first}</a> or <a href="${telHref(second)}">${second}</a>.</p>`,
+      ),
+      `${name}: "In immediate danger? Call ${first} or ${second}." from the constants`,
+    );
+    assert(
+      html.includes('class="reply-card reply-card--support surface-dark"'),
+      `${name}: the dark card, with the white focus ring (surface-dark)`,
+    );
+  }
+  for (const [name, text, extra] of [KINDS[0], KINDS[5]]) {
+    assert(
+      !renderReply(text, extra).includes("call-button"),
+      `${name}: no call buttons`,
+    );
+  }
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  assert(
+    /\.call-button \{[^}]*min-height: 58px;[^}]*border: 1\.5px solid/.test(css),
+    "call buttons are 58px tall (44px minimum) with a 1.5px edge",
+  );
+}
+
+console.log(
+  "\nTest 40: the four topic buttons and pills open their Topic lists",
+);
+{
+  for (const [name, text, extra, variant] of [
+    [...KINDS[0], "grid"],
+    [...KINDS[5], "pills"],
+  ] as const) {
+    const html = renderReply(text, extra);
+    const buttons = [
+      ...html.matchAll(
+        /<button class="topic-choice topic-choice--(\w+)" type="button" data-topic="(\w+)">([\s\S]*?)<\/button>/g,
+      ),
+    ];
+    assert(
+      buttons.length === 4 &&
+        buttons.every(
+          (b, i) =>
+            b[1] === TOPICS[i].topicClass &&
+            b[2] === TOPICS[i].topicClass &&
+            b[3].endsWith(TOPICS[i].label),
+        ),
+      `${name}: the four topics, in order, each carrying its class`,
+    );
+    assert(
+      html.includes(`topic-choices topic-choices--${variant}`) &&
+        (variant === "grid") === html.includes("topic-choice-icon"),
+      `${name}: ${variant === "grid" ? "a 2x2 grid with icon tiles" : "pills"}`,
+    );
+  }
+  const views = readFileSync(
+    new URL("./ReplyViews.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    views.includes("onClick={() => onTopic(topic)}"),
+    "tapping one hands its topic to onTopic",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes('onTopic={(next) => openTopic(next, "tile")}'),
+    "App opens that Topic list (and back returns focus to the button)",
+  );
+  const clarify = renderReply(
+    ...(KINDS[0].slice(1) as [string, Partial<ChatTurn>]),
+  );
+  assert(
+    clarify.indexOf(`<p class="reply-note">${CLARIFY_FALLBACK}</p>`) >
+      clarify.indexOf("</section>"),
+    "clarify: the fallback line below the card",
+  );
+  const none = renderReply(
+    ...(KINDS[5].slice(1) as [string, Partial<ChatTurn>]),
+  );
+  assert(
+    none.includes('<h2 class="reply-subtitle">Try a topic instead</h2>') &&
+      none.indexOf(`<p class="reply-note">${NO_ANSWER_RETRY}</p>`) >
+        none.indexOf("</section>"),
+    'no answer: "Try a topic instead", then the retry line below the card',
+  );
+  const held = renderReply(HELD_TOPIC_MESSAGES.A, KINDS[1][2]);
+  assert(
+    held.includes(
+      '<button class="reply-link" type="button">Ask a different question</button>',
+    ) && app.includes("onHome={handleNewChat}"),
+    'held: "Ask a different question" returns to Home (whose h1 takes focus)',
+  );
+}
+
+console.log("\nTest 41: Exit, the footer line and the ask bar on every reply");
+{
+  const noop = () => undefined;
+  const framed: [string, string][] = [
+    ...KINDS.map(
+      ([name, text, extra]) =>
+        [
+          name,
+          renderToStaticMarkup(
+            <AppShell onExit={noop} help={closedHelp} footerInContent>
+              <ChatInterface
+                turns={replyTurns(text, extra)}
+                onSend={noop}
+                isLoading={false}
+              />
+            </AppShell>,
+          ),
+        ] as [string, string],
+    ),
+    [
+      "referral",
+      renderToStaticMarkup(
+        <AppShell onExit={noop} help={closedHelp} calm footerInContent>
+          <ReferralScreen
+            message={ABUSE_REFERRAL_MESSAGE}
+            onContinueChat={noop}
+          />
+        </AppShell>,
+      ),
+    ],
+  ];
+  for (const [name, html] of framed) {
+    assert(
+      html.includes('<button class="btn-exit" type="button">Exit</button>'),
+      `${name}: Exit in the header`,
+    );
+    assert(
+      html.split('class="danger-line"').length === 2,
+      `${name}: the footer line once`,
+    );
+    if (name !== "referral") {
+      assert(
+        html.includes(
+          '<label class="sr-only" for="chat-input">Ask something else</label>',
+        ),
+        `${name}: the ask bar, "Ask something else"`,
+      );
+    }
+  }
+}
+
+console.log(
+  "\nTest 42: no score or confidence; details only in the plain view, when asked",
+);
+{
+  for (const [name, text, extra] of KINDS) {
+    for (const showDetails of [false, true]) {
+      const html = renderReply(text, extra, showDetails);
+      assert(
+        !/confidence|similarity|score|strong match|classifier:|answer-details/i.test(
+          html,
+        ),
+        `${name}, details ${showDetails ? "on" : "off"}: no score, confidence or details line`,
+      );
+    }
+  }
+  assert(
+    !/confidence|score|classifier:/.test(referral(ABUSE_REFERRAL_MESSAGE)),
+    "referral: none either",
+  );
+  const plain = (showDetails: boolean) =>
+    renderToStaticMarkup(
+      <ChatInterface
+        turns={[
+          {
+            id: "p",
+            role: "assistant",
+            text: "limited answer",
+            outcome: "grounded_answer",
+            details: DETAILS,
+          },
+        ]}
+        onSend={() => undefined}
+        isLoading={false}
+        showDetails={showDetails}
+      />,
+    );
+  assert(
+    !plain(false).includes("classifier:") &&
+      plain(true).includes("classifier:"),
+    "the ?details=1 line: hidden by default, shown only when asked for",
+  );
+}
+
+console.log(
+  "\nTest 43: one polite announcement per reply; no reply text in a live region",
+);
+{
+  const turn = (extra: Partial<ChatTurn>): ChatTurn => ({
+    id: "t",
+    role: "assistant",
+    text: "t",
+    ...extra,
+  });
+  const expected: [string, string][] = [
+    [
+      announcementFor(replyViewOf(turn({ kind: "vague" }))),
+      `New reply: ${REPLY_PILLS.clarify}.`,
+    ],
+    [
+      announcementFor(replyViewOf(turn({ kind: "held-topic" }))),
+      `New reply: ${REPLY_PILLS.held}.`,
+    ],
+    [
+      announcementFor(replyViewOf(turn({ kind: "help" }))),
+      `New reply: ${REPLY_PILLS.help}.`,
+    ],
+    [
+      announcementFor(replyViewOf(turn({ kind: "abstain" }))),
+      `New reply: ${REPLY_PILLS.noAnswer}.`,
+    ],
+    [announcementFor("referral"), `New reply: ${REPLY_PILLS.referral}.`],
+    [announcementFor(replyViewOf(turn({ limitedMode: true }))), "New reply."],
+    [announcementFor(replyViewOf({ id: "u", role: "user", text: "q" })), ""],
+  ];
+  for (const [actual, wanted] of expected) {
+    assert(actual === wanted, `announces "${wanted}"`);
+  }
+  for (const [name, text, extra] of KINDS) {
+    const html = renderReply(text, extra);
+    assert(
+      !html.includes("aria-live") && !html.includes('role="alert"'),
+      `${name}: the reply text is in no live region`,
+    );
+  }
+  assert(
+    !referral(ABUSE_REFERRAL_MESSAGE).includes('role="alert"'),
+    "referral: no alert re-reading the message",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.split('aria-live="polite"').length === 2 &&
+      app.indexOf('aria-live="polite"') < app.indexOf('screen === "chat" &&'),
+    "App's one live region sits outside the screens, so it survives a screen change (the referral)",
   );
 }
 

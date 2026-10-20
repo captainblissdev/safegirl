@@ -643,4 +643,192 @@ console.log("\nTest 11: the answer screen");
   );
 }
 
+console.log(
+  "\nTest 12: the reply screens (clarify, held, help and referral, no answer)",
+);
+{
+  const over = (rgba: string, hex: string) => {
+    const [r, g, b, a] = rgba
+      .replace(/[^0-9.,]/g, "")
+      .split(",")
+      .map(Number);
+    const base = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    return (
+      "#" +
+      [r, g, b]
+        .map((c, i) => Math.round(c * a + base[i] * (1 - a)))
+        .map((c) => c.toString(16).padStart(2, "0"))
+        .join("")
+    );
+  };
+  const page = [
+    token("--color-page"),
+    token("--color-card"),
+    token("--glow-pink"),
+    token("--glow-lilac"),
+  ];
+  const worst = (fg: string, backgrounds: string[]) =>
+    Math.min(...backgrounds.map((bg) => contrast(fg, bg)));
+  const check = (ratio: number, min: number, what: string) =>
+    assert(ratio >= min, `${what}: ${ratio.toFixed(2)}:1`);
+
+  // Clarify.
+  const clarify = [token("--clarify-bg-start"), token("--clarify-bg-end")];
+  check(
+    worst(token("--color-muted"), page),
+    4.5,
+    '"You asked", muted on the page',
+  );
+  check(
+    worst(token("--color-ink"), page),
+    4.5,
+    "her question, ink on the page",
+  );
+  check(
+    worst(token("--color-ink"), clarify),
+    4.5,
+    "clarify text on its gradient (worst end)",
+  );
+  check(
+    contrast(token("--clarify-text"), token("--reply-pill-bg")),
+    4.5,
+    '"Tell me a bit more" on the white pill',
+  );
+  check(
+    worst(token("--color-control-border"), clarify),
+    3,
+    "topic button edge on the clarify gradient",
+  );
+  check(
+    contrast(token("--color-ink"), token("--color-card")),
+    4.5,
+    "topic button label on white",
+  );
+  check(
+    worst(token("--color-violet"), clarify),
+    3,
+    "focus ring on the clarify gradient",
+  );
+  check(
+    worst(token("--color-muted"), page),
+    4.5,
+    "the fallback line, muted on the page",
+  );
+
+  // Held.
+  const held = token("--held-bg");
+  check(contrast(token("--held-text"), held), 4.5, "held text on its card");
+  check(
+    contrast(token("--held-text"), token("--reply-pill-bg")),
+    4.5,
+    "held pill text on white",
+  );
+  check(
+    contrast(token("--color-on-dark"), token("--color-plum")),
+    4.5,
+    "1195 button: white on plum",
+  );
+  check(
+    contrast(token("--color-plum"), held),
+    3,
+    "1195 button edge on the held card",
+  );
+  check(
+    contrast(token("--held-text"), token("--color-card")),
+    4.5,
+    "116 button text on white",
+  );
+  check(
+    contrast(token("--color-control-border"), held),
+    3,
+    "116 button edge on the held card",
+  );
+  check(
+    contrast(token("--color-violet"), held),
+    3,
+    "focus ring on the held card",
+  );
+  check(
+    worst(token("--color-violet"), page),
+    4.5,
+    '"Ask a different question" on the page',
+  );
+
+  // Help and referral: checked over the lightest stop.
+  const light = token("--support-bg-end");
+  const white = token("--support-text");
+  check(contrast(white, light), 4.5, "white text on the lightest stop");
+  check(
+    contrast(white, token("--support-bg-start")),
+    4.5,
+    "white text on the darkest stop",
+  );
+  check(
+    contrast(white, over(token("--support-pill-bg"), light)),
+    4.5,
+    "pill text on its glass, over the lightest stop",
+  );
+  check(
+    contrast(token("--color-plum"), token("--color-card")),
+    4.5,
+    "1195 button: plum on white",
+  );
+  check(
+    contrast(token("--color-card"), light),
+    3,
+    "1195 button edge (white) on the lightest stop",
+  );
+  check(
+    contrast(white, over(token("--support-glass-bg"), light)),
+    4.5,
+    "116 button text on its glass, over the lightest stop",
+  );
+  check(
+    contrast(
+      over(token("--support-glass-border"), light),
+      over(token("--support-glass-bg"), light),
+    ),
+    3,
+    "116 button edge against its own glass",
+  );
+  check(
+    contrast(over(token("--support-glass-border"), light), light),
+    3,
+    "116 button edge on the lightest stop",
+  );
+  check(
+    contrast(token("--focus-ring-on-dark"), light),
+    3,
+    "white focus ring on the lightest stop",
+  );
+
+  // No answer.
+  const none = token("--noanswer-bg");
+  check(
+    contrast(token("--noanswer-text"), none),
+    4.5,
+    "no-answer text on its card",
+  );
+  check(
+    contrast(token("--noanswer-text"), token("--reply-pill-bg")),
+    4.5,
+    '"No answer yet" on the white pill',
+  );
+  check(
+    contrast(token("--color-control-border"), none),
+    3,
+    "topic pill edge on the no-answer card",
+  );
+  check(
+    contrast(token("--color-violet"), none),
+    3,
+    "focus ring on the no-answer card",
+  );
+
+  // Decorative only, for the record.
+  console.log(
+    `  INFO: decorative: held card border ${contrast(token("--held-border"), held).toFixed(2)}:1, no-answer card border ${contrast(token("--noanswer-border"), none).toFixed(2)}:1`,
+  );
+}
+
 console.log("\nAll design token tests passed.");

@@ -13,7 +13,14 @@ import AnswerView from "./AnswerView";
 import AskBar from "./AskBar";
 import DangerLine from "./DangerLine";
 import Home from "./Home";
-import { isAnswerTurn, type ChatTurn } from "../types";
+import {
+  ClarifyReply,
+  HeldReply,
+  NoAnswerReply,
+  SupportReply,
+} from "./ReplyViews";
+import { replyViewOf } from "../replyView";
+import type { ChatTurn } from "../types";
 import type { Topic } from "../content/topics";
 
 /**
@@ -22,10 +29,11 @@ import type { Topic } from "../content/topics";
  * Satisfies FR-01 by sending user queries to the backend for classification
  * and FR-03 by displaying responses returned from retrieval and generation.
  *
- * It shows the latest exchange only (App keeps no history). A
- * knowledge-base answer gets the answer screen (AnswerView); the other
- * reply kinds are shown as a reply under the question. The category used
- * by the system always comes from the backend.
+ * It shows the latest exchange only (App keeps no history). Each reply
+ * kind has its own screen: a knowledge-base answer (AnswerView), clarify,
+ * held topic, help and no answer (ReplyViews). A reply with no kind (a
+ * limited-mode answer from the offline pipeline) keeps the plain view.
+ * The category used by the system always comes from the backend.
  */
 
 interface Props {
@@ -38,6 +46,8 @@ interface Props {
   onTopic?: (topic: Topic) => void;
   /** The answer screen's back link: "Back to <topic>" or "Back to home". */
   back?: { label: string; onBack: () => void };
+  /** "Ask a different question" on a held-topic reply: back to Home. */
+  onHome?: () => void;
 }
 
 export default function ChatInterface({
@@ -47,6 +57,7 @@ export default function ChatInterface({
   showDetails = false,
   onTopic = () => undefined,
   back = { label: "Back to home", onBack: () => undefined },
+  onHome = () => undefined,
 }: Props) {
   const [draft, setDraft] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -73,7 +84,10 @@ export default function ChatInterface({
   }, [isHome]);
 
   const lastTurn = turns.length > 0 ? turns[turns.length - 1] : undefined;
-  const showAnswer = !isLoading && isAnswerTurn(lastTurn);
+  // The reply's screen; while the next reply loads, the plain view.
+  const view = isLoading ? null : replyViewOf(lastTurn);
+  const asked = turns.find((turn) => turn.role === "user")?.text ?? "";
+  const ownScreen = view !== null && view !== "plain";
 
   const handleSend = () => {
     const trimmed = draft.trim();
@@ -94,12 +108,12 @@ export default function ChatInterface({
       placeholder={
         isHome
           ? PLACEHOLDER_EXAMPLES[placeholderIndex]
-          : showAnswer
+          : ownScreen
             ? "Ask something else…"
             : "Ask about your body or health…"
       }
       inputRef={inputRef}
-      label={showAnswer ? "Ask something else" : undefined}
+      label={ownScreen ? "Ask something else" : undefined}
     />
   );
 
@@ -111,7 +125,7 @@ export default function ChatInterface({
     );
   }
 
-  if (showAnswer && lastTurn) {
+  if (lastTurn && view === "answer") {
     return (
       <AnswerView
         key={lastTurn.id}
@@ -122,30 +136,70 @@ export default function ChatInterface({
       />
     );
   }
+  if (lastTurn && view === "clarify") {
+    return (
+      <ClarifyReply
+        id={lastTurn.id}
+        text={lastTurn.text}
+        asked={asked}
+        askBar={askBar}
+        onTopic={onTopic}
+      />
+    );
+  }
+  if (lastTurn && view === "held") {
+    return (
+      <HeldReply
+        id={lastTurn.id}
+        text={lastTurn.text}
+        askBar={askBar}
+        onAskDifferent={onHome}
+      />
+    );
+  }
+  if (lastTurn && view === "help") {
+    return (
+      <SupportReply id={lastTurn.id} text={lastTurn.text} variant="help">
+        <div className="answer-dock">
+          <DangerLine callButtonAbove />
+          {askBar}
+        </div>
+      </SupportReply>
+    );
+  }
+  if (lastTurn && view === "noAnswer") {
+    return (
+      <NoAnswerReply
+        id={lastTurn.id}
+        text={lastTurn.text}
+        asked={asked}
+        askBar={askBar}
+        onTopic={onTopic}
+      />
+    );
+  }
+
+  // The plain view: while a reply loads, after an error, or for a reply
+  // with no kind. Her question is not shown back here.
+  const reply = lastTurn?.role === "assistant" ? lastTurn : undefined;
 
   return (
     <main className="screen chat-screen">
-      <section
-        className="chat-log"
-        aria-live="polite"
-        aria-label="Conversation"
-      >
-        {turns.map((turn) =>
-          turn.role === "user" ? (
-            <div key={turn.id} className="user-bubble">
-              {turn.text}
+      <section className="chat-log" aria-label="Conversation">
+        {reply ? (
+          <div className="bot-turn">
+            {reply.limitedMode && (
+              <p className="limited-notice">{LIMITED_MODE_NOTICE}</p>
+            )}
+            <div className="bot-bubble">
+              <PlainTitle id={reply.id} text={reply.text} />
             </div>
-          ) : (
-            <div key={turn.id} className="bot-turn">
-              {turn.limitedMode && (
-                <p className="limited-notice">{LIMITED_MODE_NOTICE}</p>
-              )}
-              <div className="bot-bubble">{turn.text}</div>
-              {showDetails && turn.details && (
-                <p className="answer-details">{formatDetails(turn.details)}</p>
-              )}
-            </div>
-          ),
+            {showDetails && reply.details && (
+              <p className="answer-details">{formatDetails(reply.details)}</p>
+            )}
+          </div>
+        ) : (
+          <h1 className="sr-only">SafeGirl</h1>
         )}
 
         {isLoading && (
@@ -170,5 +224,18 @@ export default function ChatInterface({
 
       {askBar}
     </main>
+  );
+}
+
+/** The plain reply's text as its h1, focused when it arrives. */
+function PlainTitle({ id, text }: { id: string; text: string }) {
+  const ref = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    ref.current?.focus();
+  }, [id]);
+  return (
+    <h1 ref={ref} tabIndex={-1} className="plain-reply">
+      {text}
+    </h1>
   );
 }

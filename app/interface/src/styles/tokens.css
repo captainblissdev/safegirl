@@ -129,6 +129,15 @@
   --shadow-violet: 0 10px 28px rgba(109, 40, 217, 0.14);
   --shadow-dock: 0 -6px 18px rgba(42, 18, 69, 0.08);
 
+  /* Reply screens (clarify, held, help and referral, no answer): pills,
+     decoration and the support card's buttons. */
+  --reply-pill-bg: #ffffff;
+  --clarify-sparkle: rgba(192, 38, 211, 0.3);
+  --support-sparkle: rgba(255, 255, 255, 0.32);
+  --support-pill-bg: rgba(255, 255, 255, 0.16);
+  --support-glass-bg: rgba(255, 255, 255, 0.12);
+  --support-glass-border: rgba(255, 255, 255, 0.78);
+
   /* Topic tints: background and text. */
   --topic-periods-bg: #ffddee;
   --topic-periods-text: #be185d;

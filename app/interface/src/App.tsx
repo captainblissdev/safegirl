@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { isAnswerTurn, type ChatTurn, type Screen } from "./types";
+import type { ChatTurn, Screen } from "./types";
+import { announcementFor, replyViewOf } from "./replyView";
 import { QueryCancelledError, submitQuery } from "./api/client";
 import { answerDetails, isDetailsEnabled } from "./details";
 import AppShell from "./components/AppShell";
@@ -107,6 +108,9 @@ export default function App() {
 
       if (response.outcome === "referral") {
         setReferralMessage(response.message);
+        // Her question is not kept: "Continue chat" goes to Home, and
+        // nothing she typed is shown back after a referral.
+        setTurns([]);
         setScreen("referral");
       } else {
         const botTurn: ChatTurn = {
@@ -232,11 +236,17 @@ export default function App() {
       }
     : { label: "Back to home", onBack: handleNewChat };
 
-  // Announced once when a new answer arrives (focus moves to its h1). The
-  // answer text itself is not in a live region, so it is not read twice.
+  // Announced once when a reply arrives: only its kind, since focus moves
+  // to its h1, which reads the reply. No reply text is in a live region,
+  // so nothing is read twice.
   const lastTurn = turns.length > 0 ? turns[turns.length - 1] : undefined;
+  const onChatScreen = screen === "chat";
   const announcement =
-    !isLoading && isAnswerTurn(lastTurn) ? "New answer." : "";
+    screen === "referral"
+      ? announcementFor("referral")
+      : onChatScreen && !isLoading
+        ? announcementFor(replyViewOf(lastTurn))
+        : "";
 
   /** Quick exit: clear everything, then leave (see quickExit.ts). */
   const handleExit = () =>
@@ -306,8 +316,13 @@ export default function App() {
         buttonRef: helpButtonRef,
       }}
       calm={screen === "referral"}
-      footerInContent={screen === "chat" || screen === "topic"}
+      footerInContent={
+        screen === "chat" || screen === "topic" || screen === "referral"
+      }
     >
+      <p className="sr-only" role="status" aria-live="polite">
+        {announcement}
+      </p>
       {isOffline && (
         <div className="offline-banner" role="status">
           You&apos;re offline — answers come from information stored on this
@@ -320,9 +335,6 @@ export default function App() {
           <ChatSidebar onNewChat={handleNewChat} />
 
           <div className="chat-column">
-            <p className="sr-only" role="status" aria-live="polite">
-              {announcement}
-            </p>
             <ChatInterface
               turns={turns}
               onSend={askFromChat}
@@ -330,6 +342,7 @@ export default function App() {
               showDetails={SHOW_DETAILS}
               onTopic={(next) => openTopic(next, "tile")}
               back={answerBack}
+              onHome={handleNewChat}
             />
 
             {error && (
