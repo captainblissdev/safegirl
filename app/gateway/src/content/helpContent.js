@@ -34,6 +34,29 @@ const SIGNPOSTING_MESSAGE = `You're not alone. These people can help right now. 
 /** Reply when no knowledge-base answer is available (including abstained). */
 const NO_ANSWER_MESSAGE = `I couldn't find a good answer to that. ${HELP_GUIDANCE}`;
 
+/**
+ * Replies to a held topic (heldTopics.js), by group. Provisional wording,
+ * pending clinician sign-off.
+ */
+const HELD_TOPIC_MESSAGES = Object.freeze({
+  // A: after sex or contraception failure.
+  A:
+    "This is an important question, and I can't answer it safely here yet. " +
+    "A nurse, a pharmacist or a clinic can help, and you do not have to " +
+    "give a reason. If something happened recently, do not wait: some " +
+    "options work best soon after sex. If you are in danger or someone " +
+    `has hurt you, call the GBV helpline ${GBV_HELPLINE}. Childline Kenya, ` +
+    `${CHILDLINE_KENYA}, is free for anyone under 18.`,
+  // B: pregnancy decisions.
+  B:
+    "This is an important question, and I can't answer it safely here yet. " +
+    "A nurse or counsellor can talk it through with you privately and " +
+    "without judgement, and you do not have to give a reason. If you are " +
+    "in danger or someone has hurt you, call the GBV helpline " +
+    `${GBV_HELPLINE}. Childline Kenya, ${CHILDLINE_KENYA}, is free for ` +
+    "anyone under 18.",
+});
+
 /** Reply to a short query that names no health topic (vagueQuery.js). */
 const VAGUE_QUERY_MESSAGE =
   "I'm not sure what you mean. Is your question about periods, pregnancy, contraception or STIs?";
@@ -84,6 +107,7 @@ module.exports = {
   SELF_HARM_REFERRAL_MESSAGE,
   ABUSE_REFERRAL_MESSAGE,
   NO_ANSWER_MESSAGE,
+  HELD_TOPIC_MESSAGES,
   VAGUE_QUERY_MESSAGE,
   UNVERIFIED_CONTACTS_WARNING,
   warnIfContactsUnverified,

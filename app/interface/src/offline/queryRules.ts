@@ -489,6 +489,91 @@ export const EXTRA_HEALTH_TERMS: readonly string[] = [
 ];
 // END GENERATED HEALTH TERMS
 
+/** One held-topic group: its id and its patterns (see heldTopics.json). */
+export interface HeldTopicGroup {
+  id: "A" | "B";
+  patterns: readonly string[];
+}
+
+// BEGIN GENERATED HELD TOPICS: written by
+// app/gateway/scripts/build-held-topics.js from
+// app/gateway/src/content/heldTopics.json; do not edit by hand.
+export const HELD_TOPIC_GROUPS: readonly HeldTopicGroup[] = [
+  {
+    id: "A",
+    patterns: [
+      "p2",
+      "postinor",
+      "levonorgestrel",
+      "ulipristal",
+      "morning after",
+      "emergency pill",
+      "emergency contraception",
+      "emergency contraceptive",
+      "plan b",
+      "e pill",
+      "condom+burst",
+      "condom+bursted",
+      "condom+broke",
+      "condom+broken",
+      "condom+break",
+      "condom+slipped",
+      "condom+slip",
+      "condom+tore",
+      "condom+torn",
+      "condom+split",
+      "condom+leaked",
+      "condom+came+off",
+      "pill+forgot",
+      "pill+forgotten",
+      "pill+missed",
+      "pill+skipped",
+      "pill+late",
+      "pulled out",
+      "pull out",
+      "pulling out",
+      "withdrawal",
+      "unprotected",
+      "without a condom",
+      "without condom",
+      "without protection",
+      "no condom",
+      "no protection",
+      "precum",
+      "pre cum",
+      "pre ejaculate",
+      "preejaculate",
+    ],
+  },
+  {
+    id: "B",
+    patterns: [
+      "positive pregnancy test",
+      "pregnancy+test+positive",
+      "unwanted pregnancy",
+      "unplanned pregnancy",
+      "dont want to be pregnant",
+      "do not want to be pregnant",
+      "dont want the baby",
+      "dont want this baby",
+      "dont want to keep",
+      "abortion",
+      "abort",
+      "aborted",
+      "aborting",
+      "terminate",
+      "termination",
+      "terminating",
+      "get rid of the pregnancy",
+      "get rid of a pregnancy",
+      "get rid of my pregnancy",
+      "get rid of pregnancy",
+      "get rid of the baby",
+    ],
+  },
+];
+// END GENERATED HELD TOPICS
+
 /** Every single-word health term: the knowledge-base and extra lists. */
 const HEALTH_TERM_SET: ReadonlySet<string> = new Set([
   ...HEALTH_TERMS,
