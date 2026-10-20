@@ -9,9 +9,13 @@
   flex-direction: column;
 }
 
+/*
+ * A screen fills the space the shell leaves between the header and the
+ * footer line, so the footer stays on the first screenful.
+ */
 .screen {
   width: min(100%, 720px);
-  min-height: calc(100vh - 112px);
+  flex: 1 0 auto;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -327,7 +331,7 @@
   align-items: center;
   gap: 6px;
   min-height: 44px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--control-border);
   border-radius: 999px;
   padding: 6px 14px;
   background: var(--lilac);
@@ -538,7 +542,7 @@
   place-items: center;
   width: 44px;
   height: 44px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--control-border);
   border-radius: 50%;
   background: var(--card);
   color: var(--ink);
@@ -672,7 +676,6 @@
   }
 
   .screen {
-    min-height: calc(100vh - 88px);
     padding: 20px 0;
   }
 
@@ -748,4 +751,61 @@
     transform: translateY(-5px);
     opacity: 1;
   }
+}
+
+/* App shell (redesign Step 2): wordmark, header actions, Exit, footer line */
+
+.wordmark {
+  font-weight: var(--weight-black);
+  color: var(--color-plum);
+}
+
+.wordmark-girl {
+  color: var(--color-rose-text);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Exit: a solid plum fill, so its edge is far above 3:1 on any light page. */
+.btn-exit {
+  min-height: var(--tap-target);
+  min-width: var(--tap-target);
+  border: 2px solid var(--color-plum);
+  border-radius: 999px;
+  padding: 0 18px;
+  background: var(--color-plum);
+  color: var(--color-on-dark);
+  font-size: 1rem;
+  font-weight: var(--weight-extrabold);
+  cursor: pointer;
+}
+
+.danger-line {
+  color: var(--color-ink);
+  font-size: 0.95rem;
+  font-weight: var(--weight-semibold);
+  text-align: center;
+}
+
+.danger-line a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  min-width: var(--tap-target);
+  justify-content: center;
+  /* The padding widens the tap target; the margin keeps the text tight. */
+  margin: 0 -4px;
+  padding: 0 4px;
+  color: var(--color-violet);
+  font-weight: var(--weight-black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.app-footer {
+  padding: 8px 16px 16px;
 }

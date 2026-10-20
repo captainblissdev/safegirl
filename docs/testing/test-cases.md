@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 105 cases: 89 Pass, 15 Fail, 1 Not run. Two of the
+**Totals:** 112 cases: 96 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -196,6 +196,13 @@ entry.
 | TC-103 | FR-03 | Group C reply (provisional, pending clinician sign-off) and pipeline | Exactly the provisional wording; `outcome: "held"`, `kind: "held-topic"`, `heldTopicGroup: "C"`, no `/classify` or `/retrieve` | As expected ("uses the provisional wording for group C"; "returns the group's signpost without classifying or retrieving") | Pass |
 | TC-104 | FR-03 | Live, gateway and `ml_service` v3, gate on, before and after group C: demo-risk (20, **non-blind**), example questions (13), labelled development set (35), DR-04 (31), and the knowledge-base question "Is my period normal, and when should I see a health worker?" | No example question caught; no query answered correctly before is caught; the knowledge-base question still answered | Newly caught by C: demo-risk #15, #16, #17; examples 0/13; development Q27, Q29 (Q27 got KB-P1, acceptable KB-G3; Q29 no answer); DR-04 #10 (KB-P5). None answered correctly before. The knowledge-base question gets KB-G3. No other reply changed ([`held-topics-c-proof.csv`](held-topics-c-proof.csv), [DL](../decision-log.md#held-topic-group-c-possible-pregnancy-and-testing-2026-10-20)) | Pass |
 | TC-105 | NFR (offline) | Offline: group C in `offlinePipeline.ts` and parity | Same patterns, reply and results on every shared case; the offline pipeline gives the group C signpost | As expected (`offlineSafetyParity.test.js`, held-topic parity, now with the group C cases; `offlinePipeline.test.ts`, Test 9) | Pass |
+| TC-106 | FR-05, NFR (privacy) | Quick exit: the Exit action | In-memory chat and screen state cleared, then sessionStorage, then `location.replace` called with `EXIT_URL` ("https://www.google.com", one constant) | As expected (`quickExit.test.ts`, Tests 1 and 2) | Pass |
+| TC-107 | FR-05, NFR (privacy) | Exception. sessionStorage throws or is missing; the state reset throws | The page is still replaced with `EXIT_URL` | As expected (`quickExit.test.ts`, Tests 3 and 4) | Pass |
+| TC-108 | FR-05 | Escape pressed twice, 400 ms apart and exactly 1000 ms apart | Exit runs once each time | As expected (`quickExit.test.ts`, Test 5) | Pass |
+| TC-109 | FR-05 | Negative. One Escape; two Escapes 1001 ms apart; another key between two Escapes; three quick Escapes | No exit, except that a new window starts after a slow press; three quick presses exit once | As expected (`quickExit.test.ts`, Tests 6 and 7) | Pass |
+| TC-110 | FR-05 | The header on every screen and reply kind that exists today (disclaimer; chat empty, answer, no answer, help, vague, held, limited mode; referral; session end), as App.tsx composes them in `AppShell` | The wordmark, a Help button and a visible Exit button (not in a menu) before the content; App wires Exit to `location.replace` and double Escape to a keydown listener, never `window.close` | As expected (`components.test.tsx`, Tests 2, 19 and 21) | Pass |
+| TC-111 | FR-04 | The footer line "In danger? Call … free and open 24 hours." on the same screens | Exactly once on every screen; its `tel:` link equals `telHref(GBV_HELPLINE)`; on chat screens directly above the ask bar; no component types a phone number | As expected (`components.test.tsx`, Tests 19 and 20) | Pass |
+| TC-112 | NFR (accessibility) | Control edges and the shell's new colour pairs | Every control has a 3:1 edge or fill (chips and the dialog's close button moved off the light card border); the control border 3:1 or more on every light surface; plum and white on plum 4.5:1 or more | Control border 3.10:1 at worst (lilac glow); plum 10.59:1; white on plum 14.32:1 (`styles/tokens.test.ts`, Test 6) | Pass |
 
 ## Defects and retests
 

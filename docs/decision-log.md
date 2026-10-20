@@ -968,3 +968,37 @@ interface keeps compiling; offline tests and parity follow.
 group C signpost from the same generated patterns and a mirrored reply;
 the parity test runs the group C cases through both matchers. Tests:
 TC-099 to TC-105.
+
+## Quick exit (2026-10-20)
+
+Decided by Cindy on 20 October 2026 (`fix/ui-redesign`, Stage B2 step
+2). The interface had no quick exit; this builds one. **No frozen item
+changed.**
+
+**What it does** (`app/interface/src/quickExit.ts`, wired in `App.tsx`):
+an "Exit" button in the header of every screen, always visible, 44px
+tall, never in a menu. On tap, the app clears its in-memory chat and
+screen state and sessionStorage, then calls
+`location.replace(EXIT_URL)` with `EXIT_URL = "https://www.google.com"`
+(one constant), so the SafeGirl page is replaced in the tab instead of
+being left in its back history. Escape pressed twice within one second
+does the same. There is no confirmation and no animation.
+`window.close()` is not used: browsers and the installed PWA often
+ignore it. Blocked storage never stops the exit.
+
+**Limit.** Quick exit does **not** remove the visit from the browser's
+own history, and it does not remove SafeGirl from the phone's app
+switcher or recent apps. The interface must never claim that it does;
+the Help sheet (step 3) will describe the double-Escape shortcut without
+that claim.
+
+**Tests:** `app/interface/src/quickExit.test.ts` and
+`components.test.tsx` (TC-106 to TC-110).
+
+**Footer line (same step).** Every screen now ends with "In danger?
+Call 1195, free and open 24 hours.", with a tap-to-call link built from
+`GBV_HELPLINE`; on the chat screen it sits directly above the ask bar
+(TC-111). The constants describe 1195 differently: the help panel says
+"GBV helpline … For violence or abuse.", and `HELP_CONTACTS_VERIFIED`
+is `false`, so "free and open 24 hours" is a claim not yet confirmed
+with the service. The constants were not edited.

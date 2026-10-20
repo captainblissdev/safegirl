@@ -114,7 +114,6 @@ console.log("\nTest 2: every text pair reaches 4.5:1");
     ["ink", token("--color-ink"), light],
     ["muted", token("--color-muted"), light],
     ["violet", token("--color-violet"), light],
-    ["Girl wordmark", token("--color-girl"), light],
     ["rose text", token("--color-rose-text"), light],
     ["orchid text", token("--color-orchid-text"), light],
     ["white on primary", token("--color-on-dark"), ["#6d28d9", "#c026d3"]],
@@ -244,6 +243,60 @@ console.log("\nTest 5: no colour value outside tokens.css");
       `${file.replace("../", "")} has no colour value`,
     );
   }
+}
+
+console.log("\nTest 6: control edges and the header's new pairs");
+{
+  const surfaces = [
+    "--color-page",
+    "--color-card",
+    "--glow-pink",
+    "--glow-lilac",
+    "--color-tint",
+    "--answer-bg-end",
+    "--topic-periods-bg",
+    "--topic-pregnancy-bg",
+    "--topic-contraception-bg",
+    "--topic-sti-bg",
+  ].map(token);
+  const edge = token("--color-control-border");
+  const worstEdge = Math.min(...surfaces.map((bg) => contrast(edge, bg)));
+  assert(
+    worstEdge >= 3,
+    `control border on every light surface: ${worstEdge.toFixed(2)}:1`,
+  );
+
+  const plum = token("--color-plum");
+  const light = [
+    "--color-page",
+    "--color-card",
+    "--glow-pink",
+    "--glow-lilac",
+  ].map(token);
+  const worstPlum = Math.min(...light.map((bg) => contrast(plum, bg)));
+  assert(
+    worstPlum >= 4.5,
+    `plum ("Safe", Exit fill) on light: ${worstPlum.toFixed(2)}:1`,
+  );
+  assert(
+    contrast(token("--color-on-dark"), plum) >= 4.5,
+    `white on plum (Exit label): ${contrast(token("--color-on-dark"), plum).toFixed(2)}:1`,
+  );
+
+  // Controls never rely on the light card border as their only edge.
+  const app = read("../App.css");
+  for (const control of [".chip", ".btn-close", ".btn-help", ".btn-exit"]) {
+    const rule = new RegExp(
+      `\\${control}\\s*\\{[^}]*border: [^;]*var\\(--(control-border|primary|color-plum|color-control-border)\\)`,
+    );
+    assert(rule.test(app), `${control} has a 3:1 edge, not the card border`);
+  }
+  assert(
+    /\.input-row input\s*\{[^}]*border: 1px solid var\(--control-border\)/.test(
+      app,
+    ),
+    "the ask bar input has the control border",
+  );
 }
 
 console.log("\nAll design token tests passed.");

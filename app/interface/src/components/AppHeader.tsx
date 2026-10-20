@@ -2,12 +2,20 @@ import { useEffect, useRef, useState } from "react";
 import { CloseIcon, LogoMark } from "./Icons";
 import SupportContent from "./SupportContent";
 
+interface Props {
+  /** Quick exit (quickExit.ts). */
+  onExit: () => void;
+}
+
 /**
- * Header shown on every screen, with a standing "Need help now?" button.
- * The button opens a panel listing the help options, so they are always
- * one tap away, not only after the Safety Net flags a query.
+ * Header shown on every screen (AppShell): the gradient logo mark and the
+ * "SafeGirl" wordmark, a Help button and an Exit button. Exit is always
+ * visible and never in a menu.
+ *
+ * PLACEHOLDER until Step 3 of the redesign: Help still opens the existing
+ * support panel (SupportContent). Step 3 replaces it with the Help sheet.
  */
-export default function AppHeader() {
+export default function AppHeader({ onExit }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const openButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -36,19 +44,27 @@ export default function AppHeader() {
     <header className="app-header">
       <span className="brand">
         <LogoMark />
-        SafeGirl
+        <span className="wordmark">
+          Safe<span className="wordmark-girl">Girl</span>
+        </span>
       </span>
 
-      <button
-        ref={openButtonRef}
-        className="btn-help"
-        type="button"
-        aria-haspopup="dialog"
-        aria-expanded={isOpen}
-        onClick={() => setIsOpen(true)}
-      >
-        Need help now?
-      </button>
+      <div className="header-actions">
+        <button
+          ref={openButtonRef}
+          className="btn-help"
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen(true)}
+        >
+          Help
+        </button>
+
+        <button className="btn-exit" type="button" onClick={onExit}>
+          Exit
+        </button>
+      </div>
 
       {isOpen && (
         <div className="help-overlay" onClick={close}>
@@ -60,7 +76,7 @@ export default function AppHeader() {
             onClick={(event) => event.stopPropagation()}
           >
             <div className="help-dialog-head">
-              <h2 id="help-dialog-title">Need help now?</h2>
+              <h2 id="help-dialog-title">Help</h2>
               <button
                 ref={closeButtonRef}
                 className="btn-close"

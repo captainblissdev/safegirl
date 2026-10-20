@@ -17,7 +17,9 @@ import {
   type AnswerDetails,
 } from "../details";
 import type { ChatTurn } from "../types";
+import { telHref } from "../content/telHref";
 import AppHeader from "./AppHeader";
+import AppShell from "./AppShell";
 import ChatInterface from "./ChatInterface";
 import ChatSidebar from "./ChatSidebar";
 import Disclaimer from "./Disclaimer";
@@ -65,16 +67,27 @@ console.log("Test 1: the help options list every number from helpContent");
   );
 }
 
-console.log("\nTest 2: the header has a standing 'Need help now?' button");
+console.log("\nTest 2: the header has the wordmark, a Help button and Exit");
 {
-  const html = renderToStaticMarkup(<AppHeader />);
+  const html = renderToStaticMarkup(<AppHeader onExit={() => undefined} />);
 
-  assert(html.includes("Need help now?"), "the button is present");
+  assert(
+    html.includes('Safe<span class="wordmark-girl">Girl</span>'),
+    'the wordmark is "Safe" + "Girl"',
+  );
+  assert(
+    /<button[^>]*class="btn-help"[^>]*>Help<\/button>/.test(html),
+    "Help is a button",
+  );
   assert(
     html.includes('aria-haspopup="dialog"'),
-    "it is announced as opening a dialog",
+    "Help is announced as opening a dialog",
   );
   assert(!html.includes('role="dialog"'), "the panel starts closed");
+  assert(
+    html.includes('<button class="btn-exit" type="button">Exit</button>'),
+    "Exit is a visible button in the header, not in a menu",
+  );
 }
 
 const renderChat = (turns: ChatTurn[]) =>
@@ -501,6 +514,136 @@ console.log(
   assert(
     !follows([question, answer({ answerFound: false })]),
     "not after a no-answer reply even if it names a category",
+  );
+}
+
+console.log(
+  "\nTest 19: every screen and reply kind has the header Exit and the footer line",
+);
+{
+  const noop = () => undefined;
+  const user: ChatTurn = { id: "u", role: "user", text: "a question" };
+  const reply = (extra: Partial<ChatTurn>): ChatTurn[] => [
+    user,
+    { id: "r", role: "assistant", text: "reply", ...extra },
+  ];
+  // As App.tsx composes them: every screen inside AppShell; the chat
+  // screen puts the footer line above its ask bar itself.
+  const chat = (turns: ChatTurn[]) => (
+    <AppShell onExit={noop} footerInContent>
+      <ChatInterface turns={turns} onSend={noop} isLoading={false} />
+    </AppShell>
+  );
+  const screens: [string, JSX.Element][] = [
+    [
+      "disclaimer",
+      <AppShell onExit={noop}>
+        <Disclaimer onContinue={noop} />
+      </AppShell>,
+    ],
+    ["chat, empty", chat([])],
+    [
+      "chat, answer",
+      chat(reply({ outcome: "grounded_answer", answerFound: true })),
+    ],
+    [
+      "chat, no answer",
+      chat(reply({ outcome: "grounded_answer", answerFound: false })),
+    ],
+    ["chat, help", chat(reply({ outcome: "signposting" }))],
+    ["chat, vague", chat(reply({ outcome: "clarification" }))],
+    ["chat, held", chat(reply({ outcome: "held" }))],
+    [
+      "chat, limited mode",
+      chat(reply({ outcome: "grounded_answer", limitedMode: true })),
+    ],
+    [
+      "referral",
+      <AppShell onExit={noop} calm>
+        <ReferralScreen message="referral" onContinueChat={noop} />
+      </AppShell>,
+    ],
+    [
+      "session end",
+      <AppShell onExit={noop}>
+        <SessionEnd onStartNew={noop} />
+      </AppShell>,
+    ],
+  ];
+  const line = "In danger? Call ";
+  const href = `href="${telHref(GBV_HELPLINE)}"`;
+
+  for (const [name, element] of screens) {
+    const html = renderToStaticMarkup(element);
+    assert(
+      html.split(line).length === 2,
+      `${name}: the footer line appears once`,
+    );
+    assert(
+      html.includes(
+        `${line}<a ${href}>${GBV_HELPLINE}</a>, free and open 24 hours.`,
+      ),
+      `${name}: its tap-to-call link is built from GBV_HELPLINE`,
+    );
+    assert(
+      html.includes('class="btn-exit"') &&
+        html.indexOf('class="btn-exit"') < html.indexOf(line),
+      `${name}: the header Exit button is present, before the content`,
+    );
+    if (name.startsWith("chat")) {
+      const lineAt = html.indexOf('class="danger-line"');
+      const barAt = html.indexOf('class="input-row"');
+      assert(
+        lineAt > -1 &&
+          barAt > lineAt &&
+          !html.slice(lineAt, barAt).includes("<button"),
+        `${name}: the footer line sits directly above the ask bar`,
+      );
+    }
+  }
+}
+
+console.log(
+  "\nTest 20: tel: links come from the constants, never a typed number",
+);
+{
+  assert(
+    telHref(GBV_HELPLINE) === `tel:${GBV_HELPLINE}`,
+    "telHref builds tel:",
+  );
+  for (const file of [
+    "./DangerLine.tsx",
+    "./AppShell.tsx",
+    "./AppHeader.tsx",
+  ]) {
+    const source = readFileSync(new URL(file, import.meta.url), "utf8");
+    assert(!/\d{3}/.test(source), `${file} types no phone number`);
+  }
+}
+
+console.log(
+  "\nTest 21: App renders every screen inside AppShell and wires Exit",
+);
+{
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  const shellOpen = app.indexOf("<AppShell");
+  const shellClose = app.lastIndexOf("</AppShell>");
+  for (const screen of ["disclaimer", "chat", "referral", "sessionEnd"]) {
+    const at = app.indexOf(`screen === "${screen}" &&`);
+    assert(
+      at > shellOpen && at < shellClose,
+      `the ${screen} screen is inside AppShell`,
+    );
+  }
+  assert(
+    app.includes("createDoubleEscapeHandler(") &&
+      app.includes('addEventListener("keydown"'),
+    "double Escape is wired to a keydown listener",
+  );
+  assert(
+    app.includes("replace: (url) => window.location.replace(url)") &&
+      !app.includes("window.close("),
+    "Exit uses location.replace, never window.close",
   );
 }
 

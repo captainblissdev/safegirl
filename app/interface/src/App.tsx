@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import type { ChatTurn, Screen } from "./types";
 import { QueryCancelledError, submitQuery } from "./api/client";
 import { answerDetails, isDetailsEnabled } from "./details";
-import AppHeader from "./components/AppHeader";
+import AppShell from "./components/AppShell";
 import Disclaimer from "./components/Disclaimer";
 import ChatInterface from "./components/ChatInterface";
 import ChatSidebar from "./components/ChatSidebar";
 import ReferralScreen from "./components/ReferralScreen";
 import SessionEnd from "./components/SessionEnd";
 import SupportContent from "./components/SupportContent";
+import { createDoubleEscapeHandler, quickExit } from "./quickExit";
 import "./App.css";
 
 /**
@@ -122,16 +123,43 @@ export default function App() {
     setScreen("disclaimer");
   };
 
+  /** Quick exit: clear everything, then leave (see quickExit.ts). */
+  const handleExit = () =>
+    quickExit({
+      clearState: () => {
+        cancelPending();
+        setTurns([]);
+        setReferralMessage("");
+        setError(null);
+        setScreen("disclaimer");
+      },
+      getSessionStorage: () => window.sessionStorage,
+      replace: (url) => window.location.replace(url),
+    });
+
+  // Escape pressed twice within a second also exits, on every screen.
+  const exitRef = useRef(handleExit);
+  useEffect(() => {
+    exitRef.current = handleExit;
+  });
+  useEffect(() => {
+    const onEscape = createDoubleEscapeHandler(() => exitRef.current());
+    const onKeyDown = (event: KeyboardEvent) => {
+      onEscape(event.key);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
   return (
     // The playful background is left off the referral screen, which stays
-    // calm; the help dialog has its own plain panel.
-    <div
-      className={
-        screen === "referral" ? "app-shell" : "app-shell app-shell--playful"
-      }
+    // calm; the help dialog has its own plain panel. The chat screen puts
+    // the footer line above its ask bar itself.
+    <AppShell
+      onExit={handleExit}
+      calm={screen === "referral"}
+      footerInContent={screen === "chat"}
     >
-      <AppHeader />
-
       {isOffline && (
         <div className="offline-banner" role="status">
           You&apos;re offline — answers come from information stored on this
@@ -189,6 +217,6 @@ export default function App() {
       )}
 
       {screen === "sessionEnd" && <SessionEnd onStartNew={handleStartNew} />}
-    </div>
+    </AppShell>
   );
 }

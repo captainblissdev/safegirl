@@ -4,10 +4,11 @@
  * colour value is written anywhere else. Contrast is checked by
  * src/styles/tokens.test.ts (text 4.5:1 or more, focus ring 3:1 or more).
  *
- * Adjusted from the brief for contrast (tint only, same meaning):
- * - the "Girl" wordmark #BE185D -> #BC185C (4.46:1 on the lilac glow);
- * - rose and orchid stay as fills and gradient stops; their text
- *   variants are darker (#DB2777 4.34:1 and #C026D3 4.45:1 on the page).
+ * Adjusted from the brief for contrast (tint only, same meaning): rose
+ * and orchid stay as fills and gradient stops; their text variants are
+ * darker (#DB2777 4.34:1 and #C026D3 4.45:1 on the page). The "Girl" of
+ * the wordmark uses the rose text colour (the brief's #BE185D is 4.46:1
+ * on the lilac glow).
  */
 :root {
   /* Type: Nunito, self-hosted (see the @font-face in index.css). */
@@ -29,7 +30,6 @@
   --color-rose: #db2777; /* fills only */
   --color-rose-text: #b81f63; /* rose as text */
   --color-plum: #3b0f6b; /* deep plum: headings on light, dark surfaces */
-  --color-girl: #bc185c; /* the "Girl" in the wordmark */
   --color-on-dark: #ffffff; /* text on gradients and dark surfaces */
   --color-control-border: #8570b8; /* input outlines, 3:1 or more */
 

@@ -6,6 +6,7 @@ import {
   suggestionsFor,
 } from "../content/uiText";
 import { formatDetails } from "../details";
+import DangerLine from "./DangerLine";
 import {
   FlowerIcon,
   MascotHeart,
@@ -180,6 +181,9 @@ export default function ChatInterface({
           );
         })}
       </div>
+
+      {/* The footer line sits directly above the ask bar. */}
+      <DangerLine />
 
       <div className="input-row">
         <label className="sr-only" htmlFor="chat-input">
