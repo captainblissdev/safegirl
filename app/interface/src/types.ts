@@ -5,7 +5,14 @@
 
 // "signposting": a generic help request answered with help information,
 // without classification or retrieval. Displayed like a normal answer.
-export type QueryOutcome = "grounded_answer" | "referral" | "signposting";
+// "clarification": a vague query (short, no health term) answered with a
+// clarifying question, without classification or retrieval. Displayed
+// like a normal answer.
+export type QueryOutcome =
+  | "grounded_answer"
+  | "referral"
+  | "signposting"
+  | "clarification";
 
 /**
  * What kind of reply the gateway sent (REPLY_KINDS in

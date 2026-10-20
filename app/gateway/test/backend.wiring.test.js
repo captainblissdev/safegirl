@@ -66,7 +66,13 @@ describe("handleQuery() with a classifier client", () => {
       entry: pregnancyEntry,
       retrievalScope: "unscoped",
     });
-    const handleQuery = createHandleQuery({ classifierClient: client });
+    // The vague-query rule is switched off here: "antenatal" is not a
+    // knowledge-base word, so the rule would answer this query itself
+    // (see vagueQuery.test.js), and this test is about the pipeline after it.
+    const handleQuery = createHandleQuery({
+      classifierClient: client,
+      isVague: () => false,
+    });
 
     const query = "when should I start antenatal visits";
     const response = await handleQuery(query);

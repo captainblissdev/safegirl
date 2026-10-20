@@ -595,3 +595,92 @@ abstain (confidence 0.302).
 - The known failure stands: "Can I get pregnant from precum?" (0.8440)
   still passes the gate and gets KB-P5.
 - The offline pipeline is still not gated; it has no retrieval scores.
+
+## Vague-query rule (2026-10-20)
+
+Approved by Cindy on 20 October 2026 (`fix/response-clarity`). **No
+frozen item changed**: no model, threshold, knowledge-base text or
+Safety Net pattern. A new fixed rule runs after the Safety Net and the
+help rule and before the classifier (`app/gateway/src/vagueQuery.js`,
+wired in `backend.js`).
+
+**What it does.** A query is vague when it has **at most three content
+words and none of them is a health term**. It then gets a clarifying
+question instead of an answer: "I'm not sure what you mean. Is your
+question about periods, pregnancy, contraception or STIs?"
+(`VAGUE_QUERY_MESSAGE` in `content/helpContent.js`; `outcome:
+"clarification"`, `kind: "vague"`; no classification or retrieval, so
+`ml_service` is not called). A flagged query still gets the referral and
+a help request still gets signposting; the rule is never consulted for
+either.
+
+**Content words, not all words (a deviation from the brief).** The brief
+said "3 words or fewer". Counted literally, three of the eight required
+vague queries are longer ("Can I ask you something?" has five words,
+"What should I do?" and "Do I have it?" four), so the rule could not
+intercept them. The rule therefore counts **content words**: the words
+left after normalising the query as the help rule does and setting
+aside common English function words (pronouns, articles, auxiliaries,
+prepositions, conjunctions, question words; `FUNCTION_WORDS` in
+`vagueQuery.js`). "What should I do?" has none; "Can I ask you
+something?" has two. **This interpretation needs confirming.**
+
+**How the health-term list is built.**
+`app/gateway/scripts/build-health-terms.js` reads the active knowledge
+base (the entries the gateway serves; HELD content is never read),
+collects every word of each entry's user question, answer,
+evidence/claim, conditions and safety notes (724 distinct words), and
+writes the selected terms to `app/gateway/src/content/healthTerms.json`
+(122 terms). It refuses to write a term that is not a knowledge-base
+word. The selection is by hand, by one criterion: the word names a body
+part, a symptom, a condition or infection, pregnancy, periods, puberty
+or sex, a contraceptive method, a medicine, a test or treatment, or a
+health service or worker. Words with an everyday meaning are left out
+("exam", "exams", "irregular", "tired", "emergency", "ring", "fits",
+"growth", "care", "normal", "worried", "feel"), as are privacy words
+("confidential", "privacy"). A query word matches a term as written or
+with a plural "s" or "es" added or removed. `--check` reports a stale
+list, and a gateway test fails if the list is out of date.
+
+**Not independent.** The selection was made with the eight vague queries
+and the other required sets known, so the counts below show the rule
+does what it was built to do; they are not an independent measure.
+
+**Result** (`app/gateway/test/vagueQuery.test.js`, which reads each set
+from the repository):
+
+| Set | Intercepted | Required |
+|---|---|---|
+| 8 vague test queries | **8/8** | all |
+| 13 example questions (chips and follow-ups) | **0/13** | none |
+| 35 labelled development-set queries | **0/35** | none |
+| 31 DR-04 test queries | **3/31** | none: **not met** |
+
+The three DR-04 queries the rule answers itself are "What can I do when
+I mess up ?" (the expert's own note says it "can fit into any of the
+other categories"), "How is a coil inserted?" and "Tell me how to use a
+tampon?". "coil" and "tampon" are not knowledge-base words, so a list
+built from the knowledge base cannot contain them. They were **not**
+added: choosing words with DR-04 in view would make the rule depend on
+the independent test set, and the list would no longer come from the
+knowledge base. This is an open failure (TC-079), left for a decision.
+
+Live, on 20 October 2026, all 8 vague queries got the clarifying
+question and all 13 example questions were answered as before.
+
+**Other effects and limits.**
+- On the 23 unlabelled development-set rows, the 5 off-topic queries
+  ("what is the capital of Kenya", ...) now get the clarifying question
+  instead of an unrelated entry. So do the in-domain gap "When should I
+  start antenatal visits?" (Q43, Q53; "antenatal" is not a
+  knowledge-base word, and no entry covers it) and two Safety Net
+  negatives, "my teacher threatened to fail me" and "I am so tired of
+  exams".
+- A health word missing from the knowledge base ("coil", "tampon",
+  "antenatal", "doctor", "STD") cannot stop the rule, so a short
+  question built on one gets the clarifying question.
+- Short questions in Swahili or Sheng with no English health term (for
+  example "niko na mimba?") get the clarifying question; before, they
+  went to the multilingual retrieval model.
+- The offline pipeline does not have the rule yet (see the offline
+  parity entry below).

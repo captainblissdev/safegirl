@@ -17,7 +17,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 74 cases: 60 Pass, 13 Fail, 1 Not run. Two of the
+**Totals:** 81 cases: 66 Pass, 14 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -156,6 +156,13 @@ entry.
 | TC-072 | FR-03 | Exception. `RELEVANCE_GATE=false`, and other values ("", "true", "FALSE", "0", "no", " false") | Off only for exactly `false`: the response and the `ml_service` calls are as before the gate (no `relevanceGate` field, no extra `/retrieve`); every other value leaves it on | As expected ("is off only for RELEVANCE_GATE exactly 'false', and on otherwise"; "leaves the response and the ml_service calls as before the gate") | Pass |
 | TC-073 | FR-03 | Positive, live. The 13 example questions (chips and follow-ups) through the gateway with the gate on by default, `ml_service` v3 (20 Oct) | All 13 answered, gate passed | 13/13 answered with the same entry as before, `relevanceGate: "passed"`; lowest unscoped score 0.8570 ([DL, Relevance gate on by default](../decision-log.md#relevance-gate-on-by-default-2026-10-20)) | Pass |
 | TC-074 | FR-03 | Negative, live. The 8 vague queries ("Am I okay?" … "hmm") with the gate on by default (20 Oct) | None gets a knowledge-base entry | 8/8 get the no-answer message: 7 by the gate, "hmm" by the classifier abstain (same source) | Pass |
+| TC-075 | FR-03 | Unit. Content words and health-term matching ("What should I do?", "Can I ask you something?", "I'm worried"; plurals such as "pills", "breasts") | Function words set aside; at most 3 content words; terms match with a plural added or removed; "normal", "worried", "okay", "exams" are not terms | As expected (`vagueQuery.test.js`, "vague-query rule: the rule itself", 5 tests) | Pass |
+| TC-076 | FR-03 | Positive. The 8 vague test queries, through the rule and through `handleQuery()` | 8/8 intercepted; each gets the clarifying question (`outcome: "clarification"`, `kind: "vague"`) with no `/classify` or `/retrieve` call | As expected ("intercepts all 8 vague test queries"; "returns the clarifying question without classifying or retrieving") | Pass |
+| TC-077 | FR-03 | Negative. The 13 example questions (read from `uiText.ts`) and the 35 labelled development-set queries | None intercepted | 0/13 and 0/35 ("intercepts none of the 13 example questions"; "intercepts none of the 35 labelled development-set queries") | Pass |
+| TC-078 | FR-02, FR-04 | Precedence. A flagged query (stubbed Safety Net), "Help", and a short health question ("what is PrEP") | Referral without consulting the rule; signposting for "Help"; the health question goes on to the classifier | As expected ("never overrides the Safety Net"; "leaves 'Help' to the help rule, which runs first"; "sends a short health question on to the classifier") | Pass |
+| TC-079 | FR-03 | Negative. The 31 DR-04 test queries | None intercepted | 3/31 intercepted: "What can I do when I mess up ?", "How is a coil inserted?", "Tell me how to use a tampon?" ("coil" and "tampon" are not knowledge-base words); pinned in "intercepts exactly the 3 recorded DR-04 queries of 31 (open failure)" | Fail |
+| TC-080 | DR (knowledge base) | The health-term list against the knowledge base | Every term is a word of the active knowledge base; the committed list is up to date | 122 terms of 724 knowledge-base words; up to date ("health-term list", 2 tests; `node scripts/build-health-terms.js --check`) | Pass |
+| TC-081 | FR-03 | Live. The 8 vague queries and the 13 example questions through the gateway and `ml_service` v3 (20 Oct) | Vague queries get the clarifying question; example questions answered as before | 8/8 clarifying question; 13/13 answered with the same entries ([DL, Vague-query rule](../decision-log.md#vague-query-rule-2026-10-20)) | Pass |
 
 ## Defects and retests
 
@@ -172,7 +179,8 @@ entry.
 
 Open failures, not fixed: TC-048 (first visit offline), TC-050 to TC-053
 and TC-056, TC-057 (Safety Net recall and false referrals), TC-059,
-TC-060, TC-062 (retrieval errors and the precum gap). They are documented
+TC-060, TC-062 (retrieval errors and the precum gap), and TC-079 (three
+DR-04 queries caught by the vague-query rule). They are documented
 limits under the Safety Net and demo freezes, not defects scheduled for
 repair.
 

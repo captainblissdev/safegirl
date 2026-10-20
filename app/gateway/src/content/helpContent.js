@@ -34,6 +34,10 @@ const SIGNPOSTING_MESSAGE = `I don't have information on that yet. ${HELP_GUIDAN
 /** Reply when no knowledge-base answer is available (including abstained). */
 const NO_ANSWER_MESSAGE = HELP_GUIDANCE;
 
+/** Reply to a short query that names no health topic (vagueQuery.js). */
+const VAGUE_QUERY_MESSAGE =
+  "I'm not sure what you mean. Is your question about periods, pregnancy, contraception or STIs?";
+
 /**
  * Referral for self-harm or suicidal statements (Safety Net category
  * "self_harm"). Interim wording, not clinically reviewed.
@@ -79,6 +83,7 @@ module.exports = {
   SELF_HARM_REFERRAL_MESSAGE,
   ABUSE_REFERRAL_MESSAGE,
   NO_ANSWER_MESSAGE,
+  VAGUE_QUERY_MESSAGE,
   UNVERIFIED_CONTACTS_WARNING,
   warnIfContactsUnverified,
 };

@@ -33,6 +33,7 @@ const {
   SIGNPOSTING_MESSAGE,
   SELF_HARM_REFERRAL_MESSAGE,
   ABUSE_REFERRAL_MESSAGE,
+  VAGUE_QUERY_MESSAGE,
 } = require("./content/helpContent");
 
 /**
@@ -46,7 +47,8 @@ const {
  *   classifier's confidence is unknown.
  * - "abstain": no answer; the standard no-answer message.
  * - "help": a generic help request; the signposting message.
- * - "vague": a short query with no health term; a clarifying question.
+ * - "vague": a short query with no health term; a clarifying question
+ *   (outcome "clarification").
  * - "referral": the Safety Net flagged the query.
  */
 const REPLY_KINDS = Object.freeze([
@@ -208,11 +210,40 @@ function signpost() {
   };
 }
 
+/**
+ * Response to a vague query: a short query that names no health topic
+ * (src/vagueQuery.js). A clarifying question, without classification or
+ * retrieval, so there is no category or classifier output.
+ *
+ * @returns {object} Final response payload.
+ */
+function clarify() {
+  return {
+    outcome: "clarification",
+    kind: "vague",
+    matchedQuestion: null,
+    message: VAGUE_QUERY_MESSAGE,
+    category: null,
+    answerFound: false,
+    generated: false,
+    note: "Vague query: a clarifying question returned without classification or retrieval.",
+    source: null,
+    safetyNotes: null,
+    generationInvoked: false,
+    predictedCategory: null,
+    classifierSource: null,
+    confidence: null,
+    retrievalScope: "none",
+  };
+}
+
 module.exports = {
   ABUSE_REFERRAL_MESSAGE,
   REPLY_KINDS,
+  clarify,
   orchestrate,
   signpost,
   NO_ANSWER_MESSAGE,
   SIGNPOSTING_MESSAGE,
+  VAGUE_QUERY_MESSAGE,
 };
