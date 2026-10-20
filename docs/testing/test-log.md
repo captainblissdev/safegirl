@@ -56,6 +56,33 @@ response-clarity changes. The gateway and interface suites need no
 | Interface build | `npm run build` (`app/interface`) | 12 precache entries | 2026-10-20 | Pass |
 | `ml_service` | – | No automated test suite exists | 2026-10-20 | Not run (none to run). `python ml_service/build_kb.py --check`: `knowledge_base.json` up to date, 21 entries. The live checks TC-073, TC-074 and TC-081 ran against `ml_service` v3 |
 
+## Vague-query rule interception (20 October 2026)
+
+How many queries of each set the vague-query rule answers itself
+(`isVagueQuery` in `app/gateway/src/vagueQuery.js`; the same counts are
+asserted in `app/gateway/test/vagueQuery.test.js`). Development and
+DR-04 sets are read from `resources/`; the example questions from
+`app/interface/src/content/uiText.ts`.
+
+| Set | Required | Knowledge-base terms only (step 3) | With the extra terms (step 7) |
+|---|---|---|---|
+| 8 vague test queries | all | 8/8 | 8/8 |
+| 13 example questions | none | 0/13 | 0/13 |
+| 35 labelled development-set queries | none | 0/35 | 0/35 |
+| 31 DR-04 test queries | none | 3/31 (TC-079, Fail) | 1/31 (TC-090, non-blind) |
+
+DR-04 catches with the extra terms: "What can I do when I mess up ?"
+only. "How is a coil inserted?" and "Tell me how to use a tampon?" are
+no longer caught. The extra terms were added after those catches were
+seen, so the DR-04 recheck is non-blind for this rule; no word was added
+to remove the remaining catch.
+
+For reference, of the 23 development-set rows with no class label, 7
+reach the rule and are caught with the extra terms: the 5 off-topic
+queries and the Safety Net negatives "my teacher threatened to fail me"
+and "I am so tired of exams". "When should I start antenatal visits?"
+(Q43, Q53) is no longer caught.
+
 ## Setup checks (15 October 2026)
 
 | Check | What it checks | Command | Date | Result | Source |
