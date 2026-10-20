@@ -19,7 +19,7 @@ import {
 import type { ChatTurn } from "../types";
 import { telHref } from "../content/telHref";
 import { TOPICS } from "../content/topics";
-import { SOURCES_LINE } from "../content/uiText";
+import { PLACEHOLDER_EXAMPLES, SOURCES_LINE } from "../content/uiText";
 import AppHeader from "./AppHeader";
 import AppShell from "./AppShell";
 import ChatInterface from "./ChatInterface";
@@ -153,22 +153,19 @@ console.log("\nTest 4: a full-service answer has no notice");
   assert(!html.includes("Limited mode"), "no notice");
 }
 
-console.log("\nTest 5: the greeting states what SafeGirl can and cannot do");
+console.log("\nTest 5: Home states what SafeGirl can and cannot do");
 {
   const html = renderChat([]);
 
   assert(
-    html.includes(escapeHtml("Hi, I'm here to help.")) &&
-      html.includes("Ask me a question about your body or your health."),
-    "the greeting is shown",
+    html.includes(
+      '<h1 id="home-title" class="hero-title">Ask about your body, periods, pregnancy or sex.</h1>',
+    ),
+    "the hero heading is the h1",
   );
   assert(
-    html.includes(
-      escapeHtml(
-        "I can answer questions about contraception, STIs, pregnancy and periods. I'm not a doctor or a counsellor.",
-      ),
-    ),
-    "the scope line is shown",
+    html.includes(`${SOURCES_LINE} ${escapeHtml("This can't diagnose you.")}`),
+    "the shared sources line, then that it can't diagnose",
   );
 }
 
@@ -201,9 +198,9 @@ console.log("\nTest 6: the privacy wording on the disclaimer and session end");
   );
 }
 
-console.log("\nTest 7: the topic chips are real buttons");
+console.log("\nTest 7: the topic chips are real buttons (in the conversation)");
 {
-  const html = renderChat([]);
+  const html = renderChat([{ id: "1", role: "user", text: "hi" }]);
   const chips = html.match(/<button class="chip[ "][^>]*>.*?<\/button>/g) ?? [];
 
   assert(chips.length === 4, "four chip buttons");
@@ -352,7 +349,11 @@ console.log(
 );
 {
   const html = renderToStaticMarkup(
-    <ChatInterface turns={[]} onSend={() => undefined} isLoading />,
+    <ChatInterface
+      turns={[{ id: "1", role: "user", text: "what is PrEP" }]}
+      onSend={() => undefined}
+      isLoading
+    />,
   );
 
   assert(html.includes('role="status"'), "the indicator is a status");
@@ -462,22 +463,21 @@ console.log("\nTest 16: follow-ups appear under the latest answer only");
   );
 }
 
-console.log("\nTest 17: a hint above the chips before the first question");
+console.log("\nTest 17: Home before the first question, the ask bar after it");
 {
+  const empty = renderChat([]);
+  const started = renderChat([{ id: "1", role: "user", text: "hi" }]);
+  assert(empty.includes('<div class="home">'), "an empty chat shows Home");
+  assert(!empty.includes("Not sure where to start?"), "the old hint is gone");
+  assert(!started.includes('class="home"'), "Home goes once the chat starts");
   assert(
-    renderChat([]).includes("Not sure where to start? Try one:"),
-    "shown on an empty chat",
+    started.includes('<div class="input-row">') &&
+      started.includes('placeholder="Ask about your body or health…"'),
+    "the conversation has the ask bar at the bottom",
   );
-  assert(
-    !renderChat([{ id: "1", role: "user", text: "hi" }]).includes(
-      "Not sure where to start?",
-    ),
-    "hidden once the chat has started",
-  );
-  assert(
-    renderChat([]).includes('placeholder="Ask about your body or health…"'),
-    "the input has the friendlier placeholder",
-  );
+  for (const html of [empty, started]) {
+    assert(html.split("<input").length === 2, "exactly one input either way");
+  }
 }
 
 console.log(
@@ -607,7 +607,15 @@ console.log(
       exitAt > -1 && exitAt < html.indexOf(line),
       `${name}: an Exit button is present, before the content`,
     );
-    if (name.startsWith("chat")) {
+    if (name === "chat, empty") {
+      const tilesAt = html.indexOf('class="topic-tiles"');
+      const anonymousAt = html.indexOf('class="home-anonymous"');
+      const lineAt = html.indexOf('class="danger-line"');
+      assert(
+        tilesAt > -1 && tilesAt < anonymousAt && anonymousAt < lineAt,
+        "Home: the tiles, then 'Anonymous…', then the footer line",
+      );
+    } else if (name.startsWith("chat")) {
       const lineAt = html.indexOf('class="danger-line"');
       const barAt = html.indexOf('class="input-row"');
       assert(
@@ -634,6 +642,8 @@ console.log(
     "./AppHeader.tsx",
     "./Splash.tsx",
     "./HelpSheet.tsx",
+    "./Home.tsx",
+    "./AskBar.tsx",
   ]) {
     const source = readFileSync(new URL(file, import.meta.url), "utf8");
     assert(!/\d{3}/.test(source), `${file} types no phone number`);
@@ -934,6 +944,81 @@ console.log("\nTest 27: the header uses the shared shield-and-heart mark");
       html.includes('class="mark-shield"') &&
       html.includes('class="mark-heart"'),
     "the header mark is the shield and heart",
+  );
+}
+
+console.log("\nTest 28: Home");
+{
+  const html = renderChat([]);
+  assert(html.split("<h1").length === 2, "exactly one h1 on Home");
+  assert(
+    html.includes('<p class="hero-sub">') && html.includes(SOURCES_LINE),
+    "the hero uses the shared sources constant",
+  );
+  assert(
+    /<p class="hero-tag"><svg[^>]*>.*?<\/svg> Private and anonymous<\/p>/.test(
+      html,
+    ),
+    'the "Private and anonymous" tag with its lock icon',
+  );
+  const pill = html.slice(
+    html.indexOf('<div class="ask-pill">'),
+    html.indexOf("</div>", html.indexOf('<div class="ask-pill">')),
+  );
+  assert(pill.split("<input").length === 2, "the ask pill has one input");
+  assert(
+    pill.includes(
+      '<label class="sr-only" for="chat-input">Type your question</label>',
+    ) && pill.includes('id="chat-input"'),
+    "a visually hidden label for it",
+  );
+  assert(
+    pill.includes('aria-label="Ask"') && pill.includes('class="btn-send"'),
+    'a send button labelled "Ask"',
+  );
+  assert(
+    pill.includes(`placeholder="${escapeHtml(PLACEHOLDER_EXAMPLES[0])}"`),
+    "the placeholder starts with the first example",
+  );
+  assert(
+    !html.slice(0, html.indexOf("ask-pill")).includes("aria-live"),
+    "the placeholder is not in a live region",
+  );
+  const tiles = [
+    ...html.matchAll(
+      /<button class="topic-tile topic-tile--([a-z]+)" type="button">.*?<span class="topic-tile-label">([^<]+)<\/span><span class="topic-tile-sub">([^<]+)<\/span><\/button>/g,
+    ),
+  ].map((m) => ({ topicClass: m[1], label: m[2], subtitle: m[3] }));
+  assert(
+    JSON.stringify(tiles) ===
+      JSON.stringify(
+        TOPICS.map(({ topicClass, label, subtitle }) => ({
+          topicClass,
+          label,
+          subtitle,
+        })),
+      ),
+    "four tile buttons with the labels, classes and subtitles of content/topics.ts",
+  );
+  for (const topic of TOPICS) {
+    const words = topic.subtitle.split(/\s+/).length;
+    assert(words >= 3 && words <= 5, `"${topic.subtitle}" is 3 to 5 words`);
+  }
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const tile = /\.topic-tile \{[^}]*min-height: (\d+)px;/.exec(css);
+  assert(
+    tile !== null && Number(tile[1]) >= 88,
+    "tiles are at least 88px tall (44px or more)",
+  );
+  const shell = renderToStaticMarkup(
+    <AppShell onExit={() => undefined} help={closedHelp} footerInContent>
+      <ChatInterface turns={[]} onSend={() => undefined} isLoading={false} />
+    </AppShell>,
+  );
+  assert(
+    shell.includes('<button class="btn-exit" type="button">Exit</button>') &&
+      shell.split("In danger? Call ").length === 2,
+    "Exit and the footer line are on Home",
   );
 }
 

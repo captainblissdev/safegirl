@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 127 cases: 111 Pass, 15 Fail, 1 Not run. Two of the
+**Totals:** 135 cases: 119 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -218,6 +218,14 @@ entry.
 | TC-125 | FR-05 | The sources line | One constant, "Most answers come from Kenyan Ministry of Health and WHO guidance.", used on the splash and in the Help sheet; no file retypes it; the old wording is gone | As expected (`components.test.tsx`, Test 26) | Pass |
 | TC-126 | NFR (design) | The shield-and-heart mark | One shared component in the header (gradient tile, white shield and heart) and on the splash (light tile, violet shield, rose heart) | As expected (`components.test.tsx`, Tests 22 and 27; browser check after Continue) | Pass |
 | TC-127 | NFR (accessibility) | Splash contrast, worst case (lightest stop with a glow on top) | Text 4.5:1 or more; edges and the focus ring 3:1 or more | White 5.01; glass cards and Exit pill 4.52 (fill darkened from 14% to 7%); tagline #F6E9FF 4.95 (the rose glow ends above it, measured); button text 10.95; icons 6.04 or more; header mark 4.60 (`styles/tokens.test.ts`, Tests 7 and 8) | Pass |
+| TC-128 | FR-03 | Home's hero | One `<h1>` ("Ask about your body, periods, pregnancy or sex."); the shared sources line, then "This can't diagnose you."; the "Private and anonymous" tag with its lock icon | As expected (`components.test.tsx`, Tests 5 and 28) | Pass |
+| TC-129 | FR-01 | The ask pill | One input with the hidden label "Type your question", a send button labelled "Ask"; exactly one input before and after the first question; asking from the hero runs the full pipeline | As expected (`components.test.tsx`, Tests 17 and 28; browser check: "What can I do about period pain?" got KB-G4 through the live gateway and `ml_service`) | Pass |
+| TC-130 | FR-03 | Topic tiles | Four buttons with the labels, classes and subtitles of `content/topics.ts`, subtitles 3 to 5 words, at least 88px tall; a tile focuses the ask bar until step 5 | As expected (`components.test.tsx`, Test 28; browser check: tiles 135 to 137px tall, a tile focuses the input) | Pass |
+| TC-131 | FR-03 | Placeholder examples | Each is a knowledge-base question, from neither DR-04 nor the demo-risk set, retrieved as its own entry, and answered with it by the full pipeline without `ml_service` | As expected (`app/gateway/test/homeExamples.test.js`, 5 tests); live with `ml_service`, all six get their own entry | Pass |
+| TC-132 | NFR (accessibility) | Placeholder rotation | Every 6 s to the next example and wrapping; none with reduced motion; the input not inside a live region | As expected (`placeholderRotation.test.ts`; `components.test.tsx`, Test 28; browser check with and without reduced motion) | Pass |
+| TC-133 | FR-04, FR-05 | Exit and the footer line on Home; the first screen | Both present; at 390x844 the footer line shows without scrolling | As expected (`components.test.tsx`, Tests 19 and 28; browser check: the line ends at 813 of 844px) | Pass |
+| TC-134 | NFR (accessibility) | Home contrast | Text 4.5:1 or more, edges, icons and the focus ring 3:1 or more | Tag pill 4.94; hero text 6.32; placeholder 6.80; send arrow 4.71; tile edges 3.02 to 3.09; icons on tints 4.84 to 5.47; subtitles 6.80; footer 5.03 (`styles/tokens.test.ts`, Test 9) | Pass |
+| TC-135 | NFR (offline) | Home's examples offline | Each gets the general answer for its own entry's category; no rule intercepts it | As expected (`offlinePipeline.test.ts`, Test 11) | Pass |
 
 ## Defects and retests
 

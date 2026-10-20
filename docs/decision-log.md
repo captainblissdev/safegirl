@@ -1092,3 +1092,68 @@ and the abuse referral. It is left unchanged for now, because the
 constants are frozen, and is to be corrected with the helpline-
 constants change once 116 has been verified. The Help sheet already
 avoids the claim.
+
+## Home (2026-10-20)
+
+Stage B2 step 4 (`fix/ui-redesign`), on Cindy's brief. **No frozen item
+changed.** Home is the chat's empty state (`components/Home.tsx`); after
+the first question the existing conversation view is shown, to be
+redesigned in steps 6 and 7.
+
+**What it has.** Under the header: a hero (gradient #5B21B6 to #A21CAF)
+with a "Private and anonymous" tag, the page's only `<h1>` ("Ask about
+your body, periods, pregnancy or sex."), the shared sources line
+followed by "This can't diagnose you.", and the ask pill. "Or browse by
+topic", then a 2x2 grid of topic tiles from `content/topics.ts`, then
+"Anonymous. We never ask for your name." above the footer line.
+
+**One ask bar.** The input and send button became `components/AskBar.tsx`.
+The chat renders exactly one: in the hero on Home (label "Type your
+question", button "Ask"), at the bottom once the chat has started. Both
+send through the chat's own handler, so every question runs the full
+pipeline.
+
+**Placeholder examples** (`PLACEHOLDER_EXAMPLES` in `content/uiText.ts`),
+rotating every 6 seconds unless the device asks for reduced motion; the
+placeholder is not a live region and the input keeps its label:
+1. "Can STIs be cured, and can they harm me if I leave them?" (KB-S5)
+2. "What can I do about period pain?" (KB-G4)
+3. "Which birth control methods can a teenager use?" (KB-C3)
+4. "Can I take PrEP to prevent HIV? I'm a teenager." (KB-S7)
+5. "How do I manage my period hygienically?" (KB-G5)
+6. "What warning signs in pregnancy mean I should go to hospital right away?" (KB-P6)
+
+Each is the exact text of a knowledge-base question, from neither DR-04
+nor the demo-risk set, and is answered with its own entry by keyword
+retrieval (the path without `ml_service`, tested) and by the live
+pipeline with the gate on (checked on 20 October 2026: 20 of the 21
+knowledge-base questions get their own entry; KB-P1 does not, so it is
+left out). **The brief's first example, "Can I have an STI without
+knowing?", is not used**: it is not a knowledge-base question, and it
+is query #10 of the demo-risk set, so it breaks both rules the brief
+sets for the examples. The list starts with an STI question instead.
+
+**Topic tiles.** Labels and classes from `content/topics.ts`, which now
+also holds each tile's subtitle, describing only what the knowledge base
+covers: "Periods, puberty, clinics" (general), "Warning signs, food,
+school" (pregnancy), "Methods, condoms, fertility" (contraception),
+"Symptoms, treatment, PEP, PrEP" (sti). Until the Topic list exists
+(step 5) a tile focuses the ask bar, as the Help sheet's topic buttons
+do.
+
+**Deviations, for contrast.** The tiles are buttons, so their edge must
+reach 3:1 (step 2). A 1.5px border in the tint (#FFDDEE and so on) gave
+about 1.05:1, so each tile's border is the lightest shade of its
+topic's hue that reaches 3:1 against the page and both glows: #E5337D,
+#9360E3, #CE30DE, #EB315F (3.02 to 3.09:1). The tag pill's fill is 15%
+white (white text 4.94:1 at the hero's light end; 22% would give 4.33).
+On Home the footer line closes the page under the tiles, as the brief
+lays out, rather than sitting directly above the ask bar (step 2's
+rule), because the ask bar is inside the hero.
+
+**First screen.** At 390x844 the footer line ends at 813px (header 59,
+hero 312, tile grid 284), so it shows without scrolling; no spacing was
+reduced. At 360x740 and 320x640 Home scrolls.
+
+The conversation view still has the four example chips; they go with
+the redesign of the answer view.

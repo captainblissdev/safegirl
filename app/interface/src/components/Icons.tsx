@@ -184,6 +184,15 @@ export function FlowerIcon(props: IconProps) {
   );
 }
 
+/** A drop, for the Periods and health topic. */
+export function DropIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 3c3.5 4.4 6 7.9 6 11a6 6 0 0 1-12 0c0-3.1 2.5-6.6 6-11z" />
+    </Svg>
+  );
+}
+
 export function SpeechIcon(props: IconProps) {
   return (
     <Svg {...props}>

@@ -1148,3 +1148,195 @@
 .surface-dark .danger-line a {
   color: var(--color-on-dark);
 }
+
+/* Home (redesign Step 4): the empty state of the chat */
+
+.home-screen {
+  justify-content: flex-start;
+  padding: 8px 0 12px;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 8px;
+}
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  border-radius: var(--radius-card-large);
+  padding: 18px;
+  background: var(--gradient-hero);
+  color: var(--color-on-dark);
+  box-shadow: var(--shadow);
+}
+
+.hero-sparkle {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  color: var(--color-on-dark);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: var(--hero-tag-bg);
+  font-size: 13px;
+  font-weight: var(--weight-extrabold);
+}
+
+.hero-title {
+  font-size: 26px;
+  font-weight: var(--weight-black);
+  line-height: 1.15;
+}
+
+.hero-sub {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* The ask pill: the chat's one ask bar, white, inside the hero. */
+.ask-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 30px;
+  padding: 6px 6px 6px 16px;
+  background: var(--color-card);
+}
+
+.ask-pill input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 1rem;
+  text-overflow: ellipsis;
+}
+
+.ask-pill input::placeholder {
+  color: var(--color-muted);
+}
+
+.ask-pill .btn-send {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  background: var(--gradient-primary);
+  color: var(--color-on-dark);
+}
+
+/* Inside the white pill the violet ring shows; the hero's white one would not. */
+.surface-dark .ask-pill :focus-visible {
+  outline-color: var(--focus-ring-color);
+}
+
+.home-topics-title {
+  color: var(--color-plum);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+.topic-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.topic-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 88px;
+  border: 1.5px solid;
+  border-radius: 22px;
+  padding: 12px;
+  background: var(--color-card);
+  color: var(--color-ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.topic-tile-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+}
+
+.topic-tile-label {
+  font-size: 16px;
+  font-weight: var(--weight-black);
+  line-height: 1.2;
+}
+
+.topic-tile-sub {
+  color: var(--color-muted);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.topic-tile--general {
+  border-color: var(--topic-periods-edge);
+}
+
+.topic-tile--general .topic-tile-icon {
+  background: var(--topic-periods-bg);
+  color: var(--topic-periods-text);
+}
+
+.topic-tile--pregnancy {
+  border-color: var(--topic-pregnancy-edge);
+}
+
+.topic-tile--pregnancy .topic-tile-icon {
+  background: var(--topic-pregnancy-bg);
+  color: var(--topic-pregnancy-text);
+}
+
+.topic-tile--contraception {
+  border-color: var(--topic-contraception-edge);
+}
+
+.topic-tile--contraception .topic-tile-icon {
+  background: var(--topic-contraception-bg);
+  color: var(--topic-contraception-text);
+}
+
+.topic-tile--sti {
+  border-color: var(--topic-sti-edge);
+}
+
+.topic-tile--sti .topic-tile-icon {
+  background: var(--topic-sti-bg);
+  color: var(--topic-sti-text);
+}
+
+.home-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.home-anonymous {
+  color: var(--color-muted);
+  font-size: 14px;
+  text-align: center;
+}

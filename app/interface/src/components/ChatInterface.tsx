@@ -1,20 +1,21 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   LIMITED_MODE_NOTICE,
+  PLACEHOLDER_EXAMPLES,
+  PLACEHOLDER_ROTATE_MS,
   TOPIC_EXAMPLES,
   offersFollowUps,
   suggestionsFor,
 } from "../content/uiText";
 import { formatDetails } from "../details";
-import DangerLine from "./DangerLine";
 import {
-  FlowerIcon,
-  MascotHeart,
-  PillIcon,
-  SendIcon,
-  ShieldIcon,
-  SproutIcon,
-} from "./Icons";
+  prefersReducedMotion,
+  startPlaceholderRotation,
+} from "../placeholderRotation";
+import AskBar from "./AskBar";
+import DangerLine from "./DangerLine";
+import Home from "./Home";
+import { FlowerIcon, PillIcon, ShieldIcon, SproutIcon } from "./Icons";
 
 /** Each topic chip's icon; its colour comes from .chip--<topic> in CSS. */
 const TOPIC_ICONS = {
@@ -52,6 +53,27 @@ export default function ChatInterface({
 }: Props) {
   const [draft, setDraft] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  // Home is the empty state: before the first question of this chat.
+  const isHome = turns.length === 0;
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+
+  // Rotate Home's placeholder, unless the device asks for reduced motion.
+  // When Home goes away, the next Home starts from the first example again.
+  useEffect(() => {
+    if (!isHome) return undefined;
+    const stop = startPlaceholderRotation({
+      count: PLACEHOLDER_EXAMPLES.length,
+      intervalMs: PLACEHOLDER_ROTATE_MS,
+      reducedMotion: prefersReducedMotion(),
+      onChange: setPlaceholderIndex,
+      setInterval: (callback, ms) => window.setInterval(callback, ms),
+      clearInterval: (handle) => window.clearInterval(handle as number),
+    });
+    return () => {
+      stop();
+      setPlaceholderIndex(0);
+    };
+  }, [isHome]);
 
   /** Put a question in the input box, ready to send or edit. */
   const fillInput = (question: string) => {
@@ -77,6 +99,34 @@ export default function ChatInterface({
     setDraft("");
   };
 
+  const askBar = (
+    <AskBar
+      variant={isHome ? "hero" : "bar"}
+      value={draft}
+      onChange={setDraft}
+      onSubmit={handleSend}
+      disabled={isLoading}
+      placeholder={
+        isHome
+          ? PLACEHOLDER_EXAMPLES[placeholderIndex]
+          : "Ask about your body or health…"
+      }
+      inputRef={inputRef}
+    />
+  );
+
+  if (isHome) {
+    return (
+      <main className="screen chat-screen home-screen">
+        <Home
+          askBar={askBar}
+          // Step 5 replaces this with the Topic list.
+          onTopic={() => inputRef.current?.focus()}
+        />
+      </main>
+    );
+  }
+
   return (
     <main className="screen chat-screen">
       <section
@@ -84,22 +134,6 @@ export default function ChatInterface({
         aria-live="polite"
         aria-label="Conversation"
       >
-        {turns.length === 0 && (
-          <div className="greeting">
-            <MascotHeart />
-            <div className="bot-bubble">
-              <p>
-                <strong>Hi, I&apos;m here to help.</strong> Ask me a question
-                about your body or your health.
-              </p>
-              <p className="scope-line">
-                I can answer questions about contraception, STIs, pregnancy and
-                periods. I&apos;m not a doctor or a counsellor.
-              </p>
-            </div>
-          </div>
-        )}
-
         {turns.map((turn) =>
           turn.role === "user" ? (
             <div key={turn.id} className="user-bubble">
@@ -156,10 +190,6 @@ export default function ChatInterface({
         )}
       </section>
 
-      {turns.length === 0 && (
-        <p className="chips-hint">Not sure where to start? Try one:</p>
-      )}
-
       <div
         className="category-chips"
         role="group"
@@ -185,37 +215,7 @@ export default function ChatInterface({
       {/* The footer line sits directly above the ask bar. */}
       <DangerLine />
 
-      <div className="input-row">
-        <label className="sr-only" htmlFor="chat-input">
-          Ask a question
-        </label>
-
-        <input
-          ref={inputRef}
-          id="chat-input"
-          type="text"
-          value={draft}
-          placeholder="Ask about your body or health…"
-          onChange={(event) => setDraft(event.target.value)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              handleSend();
-            }
-          }}
-          disabled={isLoading}
-          autoComplete="off"
-        />
-
-        <button
-          className="btn-send"
-          type="button"
-          onClick={handleSend}
-          disabled={isLoading || !draft.trim()}
-          aria-label="Send question"
-        >
-          <SendIcon />
-        </button>
-      </div>
+      {askBar}
     </main>
   );
 }

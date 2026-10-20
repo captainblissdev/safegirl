@@ -420,4 +420,136 @@ console.log("\nTest 8: the shield-and-heart mark");
   assert(rose >= 3, `rose heart on the splash tile: ${rose.toFixed(2)}:1`);
 }
 
+console.log("\nTest 9: Home");
+{
+  const hero = [...token("--gradient-hero").matchAll(/#[0-9a-f]{6}/g)].map(
+    (m) => m[0],
+  );
+  const white = token("--color-on-dark");
+  /** rgba(r, g, b, a) composited over a hex colour, as hex. */
+  const over = (rgba: string, hex: string) => {
+    const [r, g, b, a] = rgba
+      .replace(/[^0-9.,]/g, "")
+      .split(",")
+      .map(Number);
+    const base = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    return (
+      "#" +
+      [r, g, b]
+        .map((c, i) => Math.round(c * a + base[i] * (1 - a)))
+        .map((c) => c.toString(16).padStart(2, "0"))
+        .join("")
+    );
+  };
+  const worst = (fg: string, backgrounds: string[]) =>
+    Math.min(...backgrounds.map((bg) => contrast(fg, bg)));
+
+  const tag = worst(
+    white,
+    hero.map((bg) => over(token("--hero-tag-bg"), bg)),
+  );
+  assert(
+    tag >= 4.5,
+    `tag pill: white on its fill over the hero: ${tag.toFixed(2)}:1`,
+  );
+  const sub = worst(white, hero);
+  assert(
+    sub >= 4.5,
+    `heading and subtext, white on the hero: ${sub.toFixed(2)}:1`,
+  );
+
+  const card = token("--color-card");
+  const pillEdge = worst(card, hero);
+  assert(
+    pillEdge >= 3,
+    `the white ask pill's edge on the hero: ${pillEdge.toFixed(2)}:1`,
+  );
+  const placeholder = contrast(token("--color-muted"), card);
+  assert(
+    placeholder >= 4.5,
+    `placeholder on the pill: ${placeholder.toFixed(2)}:1`,
+  );
+  const inputText = contrast(token("--color-ink"), card);
+  assert(inputText >= 4.5, `typed text on the pill: ${inputText.toFixed(2)}:1`);
+  const send = [...token("--gradient-primary").matchAll(/#[0-9a-f]{6}/g)].map(
+    (m) => m[0],
+  );
+  const arrow = worst(white, send);
+  assert(
+    arrow >= 3,
+    `the send arrow, white on violet to orchid: ${arrow.toFixed(2)}:1`,
+  );
+  const sendEdge = worst(card, send);
+  assert(
+    sendEdge >= 3,
+    `the send button on the white pill: ${sendEdge.toFixed(2)}:1`,
+  );
+  const ring = contrast(token("--color-violet"), card);
+  assert(
+    ring >= 3,
+    `violet focus ring inside the white pill: ${ring.toFixed(2)}:1`,
+  );
+
+  const page = [
+    token("--color-page"),
+    card,
+    token("--glow-pink"),
+    token("--glow-lilac"),
+  ];
+  for (const [name, edge, bg, text] of [
+    [
+      "periods",
+      "--topic-periods-edge",
+      "--topic-periods-bg",
+      "--topic-periods-text",
+    ],
+    [
+      "pregnancy",
+      "--topic-pregnancy-edge",
+      "--topic-pregnancy-bg",
+      "--topic-pregnancy-text",
+    ],
+    [
+      "contraception",
+      "--topic-contraception-edge",
+      "--topic-contraception-bg",
+      "--topic-contraception-text",
+    ],
+    ["sti", "--topic-sti-edge", "--topic-sti-bg", "--topic-sti-text"],
+  ]) {
+    const e = worst(token(edge), page);
+    assert(
+      e >= 3,
+      `${name} tile edge on the page and glows: ${e.toFixed(2)}:1`,
+    );
+    const icon = contrast(token(text), token(bg));
+    assert(icon >= 3, `${name} icon on its tint: ${icon.toFixed(2)}:1`);
+    const subOnTint = contrast(token("--color-muted"), token(bg));
+    assert(
+      subOnTint >= 4.5,
+      `${name}: muted text on the tint, for the record: ${subOnTint.toFixed(2)}:1`,
+    );
+  }
+  const label = contrast(token("--color-ink"), card);
+  assert(
+    label >= 4.5,
+    `tile labels, ink on the white tile: ${label.toFixed(2)}:1`,
+  );
+  const subtitle = contrast(token("--color-muted"), card);
+  assert(
+    subtitle >= 4.5,
+    `tile subtitles, muted on the white tile: ${subtitle.toFixed(2)}:1`,
+  );
+  const footer = worst(token("--color-muted"), page);
+  assert(
+    footer >= 4.5,
+    `"Anonymous…", muted on the page: ${footer.toFixed(2)}:1`,
+  );
+  const heading = worst(token("--color-plum"), page);
+  assert(
+    heading >= 4.5,
+    `"Or browse by topic", plum on the page: ${heading.toFixed(2)}:1`,
+  );
+}
+
 console.log("\nAll design token tests passed.");
