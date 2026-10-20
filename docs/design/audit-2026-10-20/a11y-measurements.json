@@ -1,0 +1,1817 @@
+{
+  "states": {
+    "disclaimer-360": {
+      "axe": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "help": "Page should contain a level-one heading",
+            "nodes": [
+              {
+                "target": "html",
+                "summary": "Fix all of the following:\n  Page must have a level-one heading",
+                "data": null
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": ".btn-primary",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "bold",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "button.btn-primary",
+          "text": "Continue",
+          "w": 336,
+          "h": 52
+        }
+      ],
+      "text": "You're in a safe space\nYou're safe here, no login needed\nWe don't save your questions or your answers.\nWe're here to help, but a doctor or nurse can too.\nContinue",
+      "layout": {
+        "innerHeight": 740,
+        "scrollY": 0,
+        "docHeight": 740,
+        "input": null,
+        "error": null,
+        "lastBot": null,
+        "chatLogScrolls": null
+      }
+    },
+    "empty-chat-360": {
+      "axe": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "help": "Page should contain a level-one heading",
+            "nodes": [
+              {
+                "target": "html",
+                "summary": "Fix all of the following:\n  Page must have a level-one heading",
+                "data": null
+              }
+            ]
+          }
+        ],
+        "incomplete": []
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--contraception",
+          "text": "Contraception",
+          "w": 159,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--sti",
+          "text": "STI",
+          "w": 78,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--pregnancy",
+          "text": "Pregnancy",
+          "w": 132,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--periods",
+          "text": "Periods",
+          "w": 110,
+          "h": 44
+        },
+        {
+          "el": "input.",
+          "text": "Ask about your body or health…",
+          "w": 274,
+          "h": 52
+        },
+        {
+          "el": "button.btn-send",
+          "text": "Send question",
+          "w": 52,
+          "h": 52
+        },
+        {
+          "el": "button.link-button",
+          "text": "End session",
+          "w": 109,
+          "h": 44
+        }
+      ],
+      "text": "Hi, I'm here to help. Ask me a question about your body or your health.\n\nI can answer questions about contraception, STIs, pregnancy and periods. I'm not a doctor or a counsellor.\n\nNot sure where to start? Try one:\n\nContraception\nSTI\nPregnancy\nPeriods\nAsk a question",
+      "layout": {
+        "innerHeight": 740,
+        "scrollY": 0,
+        "docHeight": 757,
+        "input": {
+          "top": 619,
+          "bottom": 671,
+          "inView": true
+        },
+        "error": null,
+        "lastBot": null,
+        "chatLogScrolls": false
+      }
+    },
+    "help-dialog-360": {
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": ".help-dialog > .support-content > .support-section:nth-child(1) > ul > li > .support-note",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "normal",
+                  "messageKey": "elmPartiallyObscuring",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "button.btn-close",
+          "text": "Close help",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "1195",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "116",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "999",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "112",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--contraception",
+          "text": "Contraception",
+          "w": 159,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--sti",
+          "text": "STI",
+          "w": 78,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--pregnancy",
+          "text": "Pregnancy",
+          "w": 132,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--periods",
+          "text": "Periods",
+          "w": 110,
+          "h": 44
+        },
+        {
+          "el": "input.",
+          "text": "Ask about your body or health…",
+          "w": 274,
+          "h": 52
+        },
+        {
+          "el": "button.btn-send",
+          "text": "Send question",
+          "w": 52,
+          "h": 52
+        },
+        {
+          "el": "button.link-button",
+          "text": "End session",
+          "w": 109,
+          "h": 44
+        }
+      ],
+      "text": "Hi, I'm here to help. Ask me a question about your body or your health.\n\nI can answer questions about contraception, STIs, pregnancy and periods. I'm not a doctor or a counsellor.\n\nNot sure where to start? Try one:\n\nContraception\nSTI\nPregnancy\nPeriods\nAsk a question",
+      "layout": {
+        "innerHeight": 740,
+        "scrollY": 0,
+        "docHeight": 757,
+        "input": {
+          "top": 619,
+          "bottom": 671,
+          "inView": true
+        },
+        "error": null,
+        "lastBot": null,
+        "chatLogScrolls": false
+      }
+    },
+    "answer-scoped-360": {
+      "axe": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "help": "Page should contain a level-one heading",
+            "nodes": [
+              {
+                "target": "html",
+                "summary": "Fix all of the following:\n  Page must have a level-one heading",
+                "data": null
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": ".user-bubble",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "normal",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "button.suggestion",
+          "text": "Do I need a condom if I am on the pill?",
+          "w": 282,
+          "h": 66
+        },
+        {
+          "el": "button.suggestion",
+          "text": "will the injection make me unable to hav",
+          "w": 282,
+          "h": 66
+        },
+        {
+          "el": "button.chip.chip--contraception",
+          "text": "Contraception",
+          "w": 159,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--sti",
+          "text": "STI",
+          "w": 78,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--pregnancy",
+          "text": "Pregnancy",
+          "w": 132,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--periods",
+          "text": "Periods",
+          "w": 110,
+          "h": 44
+        },
+        {
+          "el": "input.",
+          "text": "Ask about your body or health…",
+          "w": 274,
+          "h": 52
+        },
+        {
+          "el": "button.btn-send",
+          "text": "Send question",
+          "w": 52,
+          "h": 52
+        },
+        {
+          "el": "button.link-button",
+          "text": "End session",
+          "w": 109,
+          "h": 44
+        }
+      ],
+      "text": "Which birth control methods can a teenager use?\nKenya's national family planning guidelines say adolescents can safely use any contraceptive method, following the guidelines and the WHO eligibility criteria. A health worker will help you choose, and some medical conditions can change which method suits you. Using condoms as well gives extra protection against STIs.\n\nYou could also ask:\n\nDo I need a condom if I am on the pill?\nwill the injection make me unable to have kids\nContraception\nSTI\nPregnancy\nPeriods\nAsk a question",
+      "layout": {
+        "innerHeight": 740,
+        "scrollY": 0,
+        "docHeight": 925,
+        "input": {
+          "top": 787,
+          "bottom": 839,
+          "inView": false
+        },
+        "error": null,
+        "lastBot": {
+          "top": 177,
+          "bottom": 469,
+          "inView": true
+        },
+        "chatLogScrolls": false
+      }
+    },
+    "reply-abstain-360": {
+      "axe": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "help": "Page should contain a level-one heading",
+            "nodes": [
+              {
+                "target": "html",
+                "summary": "Fix all of the following:\n  Page must have a level-one heading",
+                "data": null
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": ".user-bubble",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "normal",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--contraception",
+          "text": "Contraception",
+          "w": 159,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--sti",
+          "text": "STI",
+          "w": 78,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--pregnancy",
+          "text": "Pregnancy",
+          "w": 132,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--periods",
+          "text": "Periods",
+          "w": 110,
+          "h": 44
+        },
+        {
+          "el": "input.",
+          "text": "Ask about your body or health…",
+          "w": 274,
+          "h": 52
+        },
+        {
+          "el": "button.btn-send",
+          "text": "Send question",
+          "w": 52,
+          "h": 52
+        },
+        {
+          "el": "button.link-button",
+          "text": "End session",
+          "w": 109,
+          "h": 44
+        }
+      ],
+      "text": "hmm\nA nurse or counsellor at a health facility can help, and you do not have to give a reason for asking. If you are in danger or someone has hurt you, call the GBV helpline 1195. Childline Kenya, 116, is free for anyone under 18.\nContraception\nSTI\nPregnancy\nPeriods\nAsk a question",
+      "layout": {
+        "innerHeight": 740,
+        "scrollY": 0,
+        "docHeight": 757,
+        "input": {
+          "top": 619,
+          "bottom": 671,
+          "inView": true
+        },
+        "error": null,
+        "lastBot": {
+          "top": 153,
+          "bottom": 349,
+          "inView": true
+        },
+        "chatLogScrolls": false
+      }
+    },
+    "referral-360": {
+      "axe": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "help": "Page should contain a level-one heading",
+            "nodes": [
+              {
+                "target": "html",
+                "summary": "Fix all of the following:\n  Page must have a level-one heading",
+                "data": null
+              }
+            ]
+          }
+        ],
+        "incomplete": []
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "1195",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "116",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "999",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "112",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "button.btn-outline",
+          "text": "Continue chat",
+          "w": 336,
+          "h": 52
+        }
+      ],
+      "text": "We hear you.\nWe want to help.\nI'm sorry this is happening, and it is not your fault. You deserve to be safe. Please tell someone you trust, or go to a health facility, where you can get care and support. If you are in danger now, call 999 or 112. The GBV helpline 1195 and Childline Kenya 116 (for anyone under 18) can also help.\nSupport options\nLocal health services\nGo to a health facility\nA clinic or hospital can give you care and support.\nConfidential helplines\nGBV helpline\n1195\nFor violence or abuse.\nChildline Kenya\n116\nFor anyone under 18.\nEmergency guidance\nEmergency\n999 or 112\nIf you are in danger now.\nContinue chat",
+      "layout": {
+        "innerHeight": 740,
+        "scrollY": 0,
+        "docHeight": 1275,
+        "input": null,
+        "error": null,
+        "lastBot": null,
+        "chatLogScrolls": null
+      }
+    },
+    "error-state-360": {
+      "axe": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "help": "Page should contain a level-one heading",
+            "nodes": [
+              {
+                "target": "html",
+                "summary": "Fix all of the following:\n  Page must have a level-one heading",
+                "data": null
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": ".user-bubble",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "normal",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--contraception",
+          "text": "Contraception",
+          "w": 159,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--sti",
+          "text": "STI",
+          "w": 78,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--pregnancy",
+          "text": "Pregnancy",
+          "w": 132,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--periods",
+          "text": "Periods",
+          "w": 110,
+          "h": 44
+        },
+        {
+          "el": "input.",
+          "text": "Ask about your body or health…",
+          "w": 274,
+          "h": 52
+        },
+        {
+          "el": "button.btn-send",
+          "text": "Send question",
+          "w": 52,
+          "h": 52
+        },
+        {
+          "el": "button.link-button",
+          "text": "End session",
+          "w": 109,
+          "h": 44
+        }
+      ],
+      "text": "Which birth control methods can a teenager use?\nContraception\nSTI\nPregnancy\nPeriods\nAsk a question",
+      "layout": {
+        "innerHeight": 740,
+        "scrollY": 0,
+        "docHeight": 839,
+        "input": {
+          "top": 619,
+          "bottom": 671,
+          "inView": true
+        },
+        "error": {
+          "top": 701,
+          "bottom": 773,
+          "inView": false
+        },
+        "lastBot": null,
+        "chatLogScrolls": false
+      }
+    },
+    "disclaimer-1280": {
+      "axe": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "help": "Page should contain a level-one heading",
+            "nodes": [
+              {
+                "target": "html",
+                "summary": "Fix all of the following:\n  Page must have a level-one heading",
+                "data": null
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": ".btn-primary",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "bold",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "button.btn-primary",
+          "text": "Continue",
+          "w": 720,
+          "h": 52
+        }
+      ],
+      "text": "You're in a safe space\nYou're safe here, no login needed\nWe don't save your questions or your answers.\nWe're here to help, but a doctor or nurse can too.\nContinue",
+      "layout": {
+        "innerHeight": 800,
+        "scrollY": 0,
+        "docHeight": 800,
+        "input": null,
+        "error": null,
+        "lastBot": null,
+        "chatLogScrolls": null
+      }
+    },
+    "empty-chat-1280": {
+      "axe": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "help": "Page should contain a level-one heading",
+            "nodes": [
+              {
+                "target": "html",
+                "summary": "Fix all of the following:\n  Page must have a level-one heading",
+                "data": null
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": ".btn-primary",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "bold",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "button.btn-primary",
+          "text": "New chat",
+          "w": 200,
+          "h": 52
+        },
+        {
+          "el": "button.chip.chip--contraception",
+          "text": "Contraception",
+          "w": 159,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--sti",
+          "text": "STI",
+          "w": 78,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--pregnancy",
+          "text": "Pregnancy",
+          "w": 132,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--periods",
+          "text": "Periods",
+          "w": 110,
+          "h": 44
+        },
+        {
+          "el": "input.",
+          "text": "Ask about your body or health…",
+          "w": 482,
+          "h": 52
+        },
+        {
+          "el": "button.btn-send",
+          "text": "Send question",
+          "w": 52,
+          "h": 52
+        },
+        {
+          "el": "button.link-button",
+          "text": "End session",
+          "w": 109,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "1195",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "116",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "999",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "112",
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "text": "Hi, I'm here to help. Ask me a question about your body or your health.\n\nI can answer questions about contraception, STIs, pregnancy and periods. I'm not a doctor or a counsellor.\n\nNot sure where to start? Try one:\n\nContraception\nSTI\nPregnancy\nPeriods\nAsk a question",
+      "layout": {
+        "innerHeight": 800,
+        "scrollY": 0,
+        "docHeight": 813,
+        "input": {
+          "top": 671,
+          "bottom": 723,
+          "inView": true
+        },
+        "error": null,
+        "lastBot": null,
+        "chatLogScrolls": false
+      }
+    },
+    "help-dialog-1280": {
+      "axe": {
+        "violations": [],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": ".btn-primary",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "bold",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "button.btn-close",
+          "text": "Close help",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "1195",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "116",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "999",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "112",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "button.btn-primary",
+          "text": "New chat",
+          "w": 200,
+          "h": 52
+        },
+        {
+          "el": "button.chip.chip--contraception",
+          "text": "Contraception",
+          "w": 159,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--sti",
+          "text": "STI",
+          "w": 78,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--pregnancy",
+          "text": "Pregnancy",
+          "w": 132,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--periods",
+          "text": "Periods",
+          "w": 110,
+          "h": 44
+        },
+        {
+          "el": "input.",
+          "text": "Ask about your body or health…",
+          "w": 482,
+          "h": 52
+        },
+        {
+          "el": "button.btn-send",
+          "text": "Send question",
+          "w": 52,
+          "h": 52
+        },
+        {
+          "el": "button.link-button",
+          "text": "End session",
+          "w": 109,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "1195",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "116",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "999",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "112",
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "text": "Hi, I'm here to help. Ask me a question about your body or your health.\n\nI can answer questions about contraception, STIs, pregnancy and periods. I'm not a doctor or a counsellor.\n\nNot sure where to start? Try one:\n\nContraception\nSTI\nPregnancy\nPeriods\nAsk a question",
+      "layout": {
+        "innerHeight": 800,
+        "scrollY": 0,
+        "docHeight": 813,
+        "input": {
+          "top": 671,
+          "bottom": 723,
+          "inView": true
+        },
+        "error": null,
+        "lastBot": null,
+        "chatLogScrolls": false
+      }
+    },
+    "answer-scoped-1280": {
+      "axe": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "help": "Page should contain a level-one heading",
+            "nodes": [
+              {
+                "target": "html",
+                "summary": "Fix all of the following:\n  Page must have a level-one heading",
+                "data": null
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": ".btn-primary",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "bold",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              },
+              {
+                "target": ".user-bubble",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "normal",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "button.btn-primary",
+          "text": "New chat",
+          "w": 200,
+          "h": 52
+        },
+        {
+          "el": "button.suggestion",
+          "text": "Do I need a condom if I am on the pill?",
+          "w": 303,
+          "h": 44
+        },
+        {
+          "el": "button.suggestion",
+          "text": "will the injection make me unable to hav",
+          "w": 360,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--contraception",
+          "text": "Contraception",
+          "w": 159,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--sti",
+          "text": "STI",
+          "w": 78,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--pregnancy",
+          "text": "Pregnancy",
+          "w": 132,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--periods",
+          "text": "Periods",
+          "w": 110,
+          "h": 44
+        },
+        {
+          "el": "input.",
+          "text": "Ask about your body or health…",
+          "w": 482,
+          "h": 52
+        },
+        {
+          "el": "button.btn-send",
+          "text": "Send question",
+          "w": 52,
+          "h": 52
+        },
+        {
+          "el": "button.link-button",
+          "text": "End session",
+          "w": 109,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "1195",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "116",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "999",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "112",
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "text": "Which birth control methods can a teenager use?\nKenya's national family planning guidelines say adolescents can safely use any contraceptive method, following the guidelines and the WHO eligibility criteria. A health worker will help you choose, and some medical conditions can change which method suits you. Using condoms as well gives extra protection against STIs.\n\nYou could also ask:\n\nDo I need a condom if I am on the pill?\nwill the injection make me unable to have kids\nContraception\nSTI\nPregnancy\nPeriods\nAsk a question",
+      "layout": {
+        "innerHeight": 800,
+        "scrollY": 0,
+        "docHeight": 813,
+        "input": {
+          "top": 671,
+          "bottom": 723,
+          "inView": true
+        },
+        "error": null,
+        "lastBot": {
+          "top": 177,
+          "bottom": 349,
+          "inView": true
+        },
+        "chatLogScrolls": false
+      }
+    },
+    "reply-abstain-1280": {
+      "axe": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "help": "Page should contain a level-one heading",
+            "nodes": [
+              {
+                "target": "html",
+                "summary": "Fix all of the following:\n  Page must have a level-one heading",
+                "data": null
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": ".btn-primary",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "bold",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              },
+              {
+                "target": ".user-bubble",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "normal",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "button.btn-primary",
+          "text": "New chat",
+          "w": 200,
+          "h": 52
+        },
+        {
+          "el": "button.chip.chip--contraception",
+          "text": "Contraception",
+          "w": 159,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--sti",
+          "text": "STI",
+          "w": 78,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--pregnancy",
+          "text": "Pregnancy",
+          "w": 132,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--periods",
+          "text": "Periods",
+          "w": 110,
+          "h": 44
+        },
+        {
+          "el": "input.",
+          "text": "Ask about your body or health…",
+          "w": 482,
+          "h": 52
+        },
+        {
+          "el": "button.btn-send",
+          "text": "Send question",
+          "w": 52,
+          "h": 52
+        },
+        {
+          "el": "button.link-button",
+          "text": "End session",
+          "w": 109,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "1195",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "116",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "999",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "112",
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "text": "hmm\nA nurse or counsellor at a health facility can help, and you do not have to give a reason for asking. If you are in danger or someone has hurt you, call the GBV helpline 1195. Childline Kenya, 116, is free for anyone under 18.\nContraception\nSTI\nPregnancy\nPeriods\nAsk a question",
+      "layout": {
+        "innerHeight": 800,
+        "scrollY": 0,
+        "docHeight": 813,
+        "input": {
+          "top": 671,
+          "bottom": 723,
+          "inView": true
+        },
+        "error": null,
+        "lastBot": {
+          "top": 177,
+          "bottom": 301,
+          "inView": true
+        },
+        "chatLogScrolls": false
+      }
+    },
+    "referral-1280": {
+      "axe": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "help": "Page should contain a level-one heading",
+            "nodes": [
+              {
+                "target": "html",
+                "summary": "Fix all of the following:\n  Page must have a level-one heading",
+                "data": null
+              }
+            ]
+          }
+        ],
+        "incomplete": []
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "1195",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "116",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "999",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "112",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "button.btn-outline",
+          "text": "Continue chat",
+          "w": 720,
+          "h": 52
+        }
+      ],
+      "text": "We hear you.\nWe want to help.\nI'm sorry this is happening, and it is not your fault. You deserve to be safe. Please tell someone you trust, or go to a health facility, where you can get care and support. If you are in danger now, call 999 or 112. The GBV helpline 1195 and Childline Kenya 116 (for anyone under 18) can also help.\nSupport options\nLocal health services\nGo to a health facility\nA clinic or hospital can give you care and support.\nConfidential helplines\nGBV helpline\n1195\nFor violence or abuse.\nChildline Kenya\n116\nFor anyone under 18.\nEmergency guidance\nEmergency\n999 or 112\nIf you are in danger now.\nContinue chat",
+      "layout": {
+        "innerHeight": 800,
+        "scrollY": 0,
+        "docHeight": 1230,
+        "input": null,
+        "error": null,
+        "lastBot": null,
+        "chatLogScrolls": null
+      }
+    },
+    "error-state-1280": {
+      "axe": {
+        "violations": [
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "help": "Page should contain a level-one heading",
+            "nodes": [
+              {
+                "target": "html",
+                "summary": "Fix all of the following:\n  Page must have a level-one heading",
+                "data": null
+              }
+            ]
+          }
+        ],
+        "incomplete": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "help": "Elements must meet minimum color contrast ratio thresholds",
+            "nodes": [
+              {
+                "target": ".btn-primary",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "bold",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              },
+              {
+                "target": ".user-bubble",
+                "summary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient",
+                "data": {
+                  "contrastRatio": 0,
+                  "fontSize": "12.0pt (16px)",
+                  "fontWeight": "normal",
+                  "messageKey": "bgGradient",
+                  "expectedContrastRatio": "4.5:1"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "el": "button.btn-help",
+          "text": "Need help now?",
+          "w": 155,
+          "h": 44
+        },
+        {
+          "el": "button.btn-primary",
+          "text": "New chat",
+          "w": 200,
+          "h": 52
+        },
+        {
+          "el": "button.chip.chip--contraception",
+          "text": "Contraception",
+          "w": 159,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--sti",
+          "text": "STI",
+          "w": 78,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--pregnancy",
+          "text": "Pregnancy",
+          "w": 132,
+          "h": 44
+        },
+        {
+          "el": "button.chip.chip--periods",
+          "text": "Periods",
+          "w": 110,
+          "h": 44
+        },
+        {
+          "el": "input.",
+          "text": "Ask about your body or health…",
+          "w": 482,
+          "h": 52
+        },
+        {
+          "el": "button.btn-send",
+          "text": "Send question",
+          "w": 52,
+          "h": 52
+        },
+        {
+          "el": "button.link-button",
+          "text": "End session",
+          "w": 109,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "1195",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "116",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "999",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "el": "a.",
+          "text": "112",
+          "w": 44,
+          "h": 44
+        }
+      ],
+      "text": "Which birth control methods can a teenager use?\nContraception\nSTI\nPregnancy\nPeriods\nAsk a question",
+      "layout": {
+        "innerHeight": 800,
+        "scrollY": 0,
+        "docHeight": 895,
+        "input": {
+          "top": 671,
+          "bottom": 723,
+          "inView": true
+        },
+        "error": {
+          "top": 745,
+          "bottom": 817,
+          "inView": false
+        },
+        "lastBot": null,
+        "chatLogScrolls": false
+      }
+    }
+  },
+  "keyboard": {
+    "disclaimerTabs": [
+      {
+        "el": "button.btn-help",
+        "text": "Need help now?",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.btn-primary",
+        "text": "Continue",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "body"
+      },
+      {
+        "el": "button.btn-help",
+        "text": "Need help now?",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      }
+    ],
+    "focusAfterContinue": "body",
+    "chatTabs": [
+      {
+        "el": "button.chip.chip--contraception",
+        "text": "Contraception",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.chip.chip--sti",
+        "text": "STI",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.chip.chip--pregnancy",
+        "text": "Pregnancy",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.chip.chip--periods",
+        "text": "Periods",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "input.",
+        "text": "Ask about your body or health…",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.link-button",
+        "text": "End session",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "body"
+      },
+      {
+        "el": "button.btn-help",
+        "text": "Need help now?",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.chip.chip--contraception",
+        "text": "Contraception",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      }
+    ],
+    "focusAfterAnswer": "body",
+    "tabsAfterAnswer": [
+      {
+        "el": "button.link-button",
+        "text": "End session",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "body"
+      },
+      {
+        "el": "button.btn-help",
+        "text": "Need help now?",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.suggestion",
+        "text": "what is PrEP",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.suggestion",
+        "text": "is the HPV vaccine free for girls my age",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.chip.chip--contraception",
+        "text": "Contraception",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      }
+    ],
+    "focusOnDialogOpen": "Close help",
+    "dialogTabs": [
+      {
+        "el": "a.",
+        "text": "1195",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": true
+      },
+      {
+        "el": "a.",
+        "text": "116",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": true
+      },
+      {
+        "el": "a.",
+        "text": "999",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": true
+      },
+      {
+        "el": "a.",
+        "text": "112",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": true
+      },
+      {
+        "el": "button.suggestion",
+        "text": "what is PrEP",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.suggestion",
+        "text": "is the HPV vaccine free for girls my age",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.chip.chip--contraception",
+        "text": "Contraception",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.chip.chip--sti",
+        "text": "STI",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.chip.chip--pregnancy",
+        "text": "Pregnancy",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.chip.chip--periods",
+        "text": "Periods",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "input.",
+        "text": "Ask about your body or health…",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      },
+      {
+        "el": "button.link-button",
+        "text": "End session",
+        "outline": "solid 3px rgb(91, 47, 199)",
+        "focusVisible": true,
+        "inDialog": false
+      }
+    ],
+    "focusAfterEscape": "link-button"
+  },
+  "liveRegions": [
+    {
+      "el": "SECTION.chat-log",
+      "live": "polite",
+      "role": null,
+      "label": "Conversation"
+    }
+  ],
+  "zoom": {
+    "zoom200-360-disclaimer": {
+      "viewport": 219,
+      "scrollWidth": 219,
+      "horizontalScroll": false,
+      "clipped": []
+    },
+    "zoom200-360-empty-chat": {
+      "viewport": 219,
+      "scrollWidth": 219,
+      "horizontalScroll": false,
+      "clipped": []
+    },
+    "zoom200-360-answer-scoped": {
+      "viewport": 219,
+      "scrollWidth": 219,
+      "horizontalScroll": false,
+      "clipped": []
+    },
+    "zoom200-360-referral": {
+      "viewport": 219,
+      "scrollWidth": 219,
+      "horizontalScroll": false,
+      "clipped": []
+    },
+    "reflow-320-disclaimer": {
+      "viewport": 320,
+      "scrollWidth": 320,
+      "horizontalScroll": false,
+      "clipped": []
+    },
+    "reflow-320-empty-chat": {
+      "viewport": 320,
+      "scrollWidth": 320,
+      "horizontalScroll": false,
+      "clipped": []
+    },
+    "reflow-320-answer-scoped": {
+      "viewport": 320,
+      "scrollWidth": 320,
+      "horizontalScroll": false,
+      "clipped": []
+    },
+    "reflow-320-referral": {
+      "viewport": 320,
+      "scrollWidth": 320,
+      "horizontalScroll": false,
+      "clipped": []
+    }
+  },
+  "reducedMotion": {
+    "no-preference": {
+      "typingDots": "typing-dot",
+      "bubble": "bubble-in",
+      "buttonsWithTransitions": 6
+    },
+    "reduce": {
+      "typingDots": "none",
+      "bubble": "none",
+      "buttonsWithTransitions": 0
+    }
+  }
+}
