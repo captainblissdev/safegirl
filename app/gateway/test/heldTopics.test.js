@@ -46,11 +46,11 @@ function recordingHandler(overrides = {}) {
 }
 
 describe("held-topic patterns", () => {
-  it("has groups A and B, each with a name, a criterion and patterns", () => {
+  it("has groups A, B and C, each with a name, a criterion and patterns", () => {
     const groups = getHeldTopicGroups();
     assert.deepEqual(
       groups.map((group) => group.id),
-      ["A", "B"],
+      ["A", "B", "C"],
     );
     for (const group of groups) {
       assert.ok(group.name.length > 0, group.id);
@@ -58,7 +58,7 @@ describe("held-topic patterns", () => {
       assert.ok(group.patterns.length > 0, group.id);
     }
     // Throws on a malformed or duplicated pattern.
-    assert.equal(readHeldTopicGroups().length, 2);
+    assert.equal(readHeldTopicGroups().length, 3);
   });
 
   it("is copied, up to date, into the offline queryRules.ts", () => {

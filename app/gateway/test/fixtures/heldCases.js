@@ -32,8 +32,27 @@ const HELD_B = [
   "how do I get rid of the pregnancy",
 ];
 
-const HELD_NONE = [
+const HELD_C = [
+  "my period is late this month",
   "I missed my period",
+  "my period is two weeks overdue",
+  "my periods are delayed",
+  "I have had no period since March",
+  "my period hasn't come yet",
+  "my period did not come this month",
+  "could I be pregnant?",
+  "am I pregnant",
+  "I think I'm pregnant",
+  "when should I take a pregnancy test",
+  "how soon can a pregnancy test show it",
+  "the test was negative but still no period",
+];
+
+const HELD_NONE = [
+  "Is my period normal",
+  "irregular periods",
+  "period pain",
+  "Is my period normal, and when should I see a health worker?",
   "how do I get rid of period cramps",
   "I don't want to get pregnant, which method is best",
   "Which birth control methods can a teenager use?",
@@ -43,4 +62,4 @@ const HELD_NONE = [
   "Am I okay?",
 ];
 
-module.exports = { HELD_A, HELD_B, HELD_NONE };
+module.exports = { HELD_A, HELD_B, HELD_C, HELD_NONE };

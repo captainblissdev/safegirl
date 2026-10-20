@@ -13,9 +13,9 @@
  *    Safety Net: a flagged query always gets the referral.
  * 3. Held-topic rule: a query on a topic the knowledge base does not
  *    cover safely yet (emergency contraception and other situations
- *    after sex or a contraception failure; pregnancy decisions) gets a
- *    neutral signpost, without classification or retrieval (see
- *    heldTopics.js). It never overrides the Safety Net or the help rule.
+ *    after sex or a contraception failure; pregnancy decisions; possible
+ *    pregnancy and testing) gets a neutral signpost, without
+ *    classification or retrieval (see heldTopics.js). It never overrides the Safety Net or the help rule.
  * 4. Vague-query rule: a short query (at most three content words) that
  *    names no health term ("Am I okay?", "I'm worried") gets a
  *    clarifying question, without classification or retrieval (see
