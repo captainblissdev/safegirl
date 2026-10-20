@@ -14,6 +14,8 @@ No new test was written and no evaluation was re-run for this file.
   all 6 suites pass (TC-066 onwards).
   After step 7, at `3bac650`: gateway 395/395 pass; interface all 6
   suites pass.
+  Held-topic rule, on `fix/held-topics` at `513442e`: gateway 412/412
+  pass; interface all 6 suites pass.
 - **Manual and evaluation results** are taken from the files cited, with
   their own dates.
 
@@ -22,7 +24,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 90 cases: 74 Pass, 15 Fail, 1 Not run. Two of the
+**Totals:** 98 cases: 82 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -177,6 +179,14 @@ entry.
 | TC-088 | NFR (offline) | Gateway and offline copies of the help and vague-query rules: patterns, function words, word limit, health terms, clarifying question, and every shared case (help cases, vague queries, example questions, 58 development-set and 31 DR-04 queries, Safety Net cases) | Identical tables and identical results; the 9 earlier parity tests still pass | As expected (`offlineSafetyParity.test.js`, "gateway and offline help and vague-query rule parity", 4 tests; the file's 14 tests all pass); the offline health-term block is up to date (`vagueQuery.test.js`) | Pass |
 | TC-089 | FR-03 | The extra health-term list and the frozen function words | Every category has a name and criterion; terms are well formed and unique; the rule uses the list's words and phrases ("is a coil safe", "tampons or pads", "I took P2", "he pulled out early" not vague; "he pulled the door out" has no phrase); no vague query's content word is listed; the function-word list matches its frozen hash; the offline copy is up to date | As expected (`vagueQuery.test.js`, "extra health terms (outside the knowledge base)", 3 tests; "knows extra terms as words, with plurals, and as phrases"; "uses the frozen function-word list"; `offlineSafetyParity.test.js`, "has the same function words, word limit and health terms (KB and extra)") | Pass |
 | TC-090 | FR-03 | Retest of TC-079, **non-blind**: the 31 DR-04 queries after the extra health terms were added (with TC-079's three catches already seen) | None intercepted | 1/31 intercepted: "What can I do when I mess up ?". The coil and tampon questions now pass (`vagueQuery.test.js`, "intercepts exactly the 1 recorded DR-04 query of 31 (non-blind retest)"; [DL, Health terms from outside the knowledge base](../decision-log.md#health-terms-from-outside-the-knowledge-base-2026-10-20)) | Fail |
+| TC-091 | FR-03 | The held-topic pattern file and its offline copy | Groups A and B, each with a name, criterion and patterns; patterns well formed and unique; the offline copy up to date | As expected (`heldTopics.test.js`, "held-topic patterns", 2 tests; `node scripts/build-held-topics.js --check`) | Pass |
+| TC-092 | FR-03 | Positive. Synthetic group A queries (P2, postinor, morning after, plan b, condom broke or slipped in any word order, forgot or missed pill, pulled out, withdrawal, unprotected, without a condom, pre-cum) | Each matches group A | 14/14 (`heldTopics.test.js`, "matches group A …"; cases in `test/fixtures/heldCases.js`) | Pass |
+| TC-093 | FR-03 | Positive. Synthetic group B queries (positive pregnancy test, unwanted pregnancy, "don't want to be pregnant", abortion, terminate, "get rid of the pregnancy"); a query matching both groups | Each matches group B; a query matching both gets group A | 8/8; both-groups query gives A ("matches group B …"; "gives group A when a query matches both groups") | Pass |
+| TC-094 | FR-03 | Negative. "I missed my period", "how do I get rid of period cramps", "I don't want to get pregnant, which method is best", two example questions, "what is PrEP", "is my HIV test positive forever", "Am I okay?" | No match | 8/8 unmatched ("leaves other questions alone") | Pass |
+| TC-095 | FR-02, FR-03, FR-04 | Pipeline. A group A and a group B query; a flagged query naming a held topic (stubbed and real); "Help"; "plan b?" (also vague); an example question | The group's signpost (`outcome: "held"`, `kind: "held-topic"`, `heldTopicGroup`) with no `/classify` or `/retrieve`; referral wins; help rule first; held before vague; other questions classified | As expected ("held-topic rule in handleQuery()", 6 tests) | Pass |
+| TC-096 | FR-03 | The two held-topic replies (provisional, pending clinician sign-off) | Exactly the approved provisional wording, with the existing numbers 1195 and 116 | As expected ("held-topic replies", 2 tests) | Pass |
+| TC-097 | FR-03 | Live, gateway and `ml_service` v3, gate on, before and after the rule: demo-risk set (20, **non-blind**), example questions (13), labelled development set (35), DR-04 (31) | No example question intercepted; no development or DR-04 query that was answered correctly before is intercepted | Intercepted: demo-risk 8/20; examples 0/13; development 0/35; DR-04 5/31 (#5, #6, #24, #18, #30), none answered correctly before (3 no-answer, 2 KB-P5 school re-entry); no other reply changed ([`held-topics-proof.csv`](held-topics-proof.csv), [DL](../decision-log.md#held-topic-rule-2026-10-20)) | Pass |
+| TC-098 | NFR (offline) | Offline: the rule in `offlinePipeline.ts` and parity with the gateway | Same order, groups, patterns, replies and results on every shared case | As expected (`offlineSafetyParity.test.js`, "gateway and offline held-topic rule parity", 3 tests; `offlinePipeline.test.ts`, Tests 9 and 10) | Pass |
 
 ## Defects and retests
 

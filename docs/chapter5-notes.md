@@ -275,6 +275,29 @@ precum?" scores 0.8440 and is still answered with the wrong entry
     vague test queries known, and the extra list was added after three
     DR-04 catches were seen, so the DR-04 result for this rule (1/31
     still caught: "What can I do when I mess up ?") is non-blind.
+- Held-topic rule (added 20 October 2026). Source:
+  [`docs/decision-log.md`](decision-log.md#held-topic-rule-2026-10-20).
+  - **What it does.** Questions on topics the knowledge base does not
+    cover safely yet get a neutral signpost instead of a retrieved
+    answer, with no classification or retrieval: group A, after sex or
+    contraception failure (P2 and other emergency contraception, a
+    condom that failed, a missed pill, withdrawal, unprotected sex,
+    precum); group B, pregnancy decisions (a positive test, an
+    unwanted pregnancy, abortion). It runs after the Safety Net and the
+    help rule and before the vague-query rule, online and offline.
+  - **Wording pending clinician sign-off.** Both replies are
+    provisional.
+  - **Non-blind.** The patterns were written by category of general
+    vocabulary, but after the demo-risk results were seen, so the
+    demo-risk count (8/20 intercepted) shows the rule doing what it was
+    built for, not an independent result. On the other sets: example
+    questions 0/13, development set 0/35, DR-04 5/31, none of them
+    answered correctly before.
+  - **Limits.** Pattern matching, in English: Sheng such as "Condom
+    iliburst" is not caught, and a held topic phrased without a
+    listed pattern still reaches the classifier. A broad pattern such
+    as "unprotected" also catches a question about pregnancy testing
+    after unprotected sex (DR-04 #30), which gets the group A signpost.
 
 ## 7. Decisions to cite
 
