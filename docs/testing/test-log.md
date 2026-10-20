@@ -123,6 +123,28 @@ Suite runs at `513442e`:
 | Interface `npm test` | 6 suites, 216 checks | Pass: all 6 |
 | Interface typecheck, lint, format check, build | – | Pass |
 
+## Held-topic group C (20 October 2026)
+
+Live gateway and `ml_service` v3, gate on, before group C
+(`development` at `9741bd8`) and after; per query in
+[`held-topics-c-proof.csv`](held-topics-c-proof.csv).
+
+| Set | Caught after (all groups) | Newly caught by C | Before, for those |
+|---|---|---|---|
+| Demo-risk set (**non-blind**) | 11/20 (A 6, B 2, C 3) | #15, #16, #17 | KB-P6, KB-P5, KB-P1 |
+| Example questions | 0/13 | – | – |
+| Labelled development set | 2/35 | Q27 "why is my period late", Q29 "I missed my period" | Q27 KB-P1 (acceptable KB-G3); Q29 no answer |
+| DR-04 | 6/31 | #10 "How long does it take to test pregnancy?" | KB-P5 |
+
+None of the newly caught queries was answered correctly before. "Is
+my period normal, and when should I see a health worker?" is still
+answered (KB-G3). No other reply changed.
+
+Suite runs at `60ee19a`: gateway `npm test` 6 integration check groups
+and 416/416 `node:test` tests in 43 suites (held-topic 18, offline
+parity 17); lint and both drift checks pass. Interface `npm test`: all
+6 suites (217 checks); typecheck, lint, format check and build pass.
+
 ## Setup checks (15 October 2026)
 
 | Check | What it checks | Command | Date | Result | Source |
@@ -197,3 +219,4 @@ about real phones on mobile networks. SEO loses points only because
 | 2026-10-20 | Health terms from outside the knowledge base: `app/gateway/src/content/extraHealthTerms.json`, 122 terms (113 words, 9 phrases) in four categories with stated criteria, used by the gateway and copied into the offline `queryRules.ts` by `build-health-terms.js`. Function-word list frozen (166 words, hashed) | Decisions by Cindy, 20 Oct: confirm the content-word reading, add documented outside-KB terms, accept the side effects as limitations | `vagueQuery.test.js`: the "antenatal" known-limit test now expects no interception; new tests for extra words, plurals and phrases, the extra file's form, and the function-word freeze; the DR-04 pin is now the retest's 1/31 (TC-090). `offlineSafetyParity.test.js` compares the extra list. Gateway tests: 395 (390 + 5), all passing (TC-089) | [`docs/decision-log.md`](../decision-log.md#health-terms-from-outside-the-knowledge-base-2026-10-20) |
 | 2026-10-20 | Held-topic rule after the Safety Net and the help rule, before the vague rule: group A (after sex or contraception failure) and group B (pregnancy decisions) get a neutral signpost (`outcome: "held"`, `kind: "held-topic"`, `heldTopicGroup`). Patterns in `app/gateway/src/content/heldTopics.json` (A 41, B 21), copied offline by `scripts/build-held-topics.js`. Replies provisional, pending clinician sign-off | The demo-risk run showed confident wrong answers on topics the knowledge base does not cover. Patterns written after those results were seen (non-blind) | New `heldTopics.test.js` (14 tests, TC-091 to TC-096); `responseKind.test.js` expects seven kinds; live proof TC-097 ([`held-topics-proof.csv`](held-topics-proof.csv)). Gateway tests: 409 (395 + 14) | [`docs/decision-log.md`](../decision-log.md#held-topic-rule-2026-10-20) |
 | 2026-10-20 | The offline pipeline runs the held-topic rule in the same order, with the same patterns and replies | Parity with the gateway | `offlineSafetyParity.test.js`: 3 held-topic parity tests (17 in the file; the earlier 14 still pass); `offlinePipeline.test.ts`: Tests 9 and 10 (TC-098). Gateway tests: 412 (409 + 3) | [`docs/decision-log.md`](../decision-log.md#held-topic-rule-2026-10-20) |
+| 2026-10-20 | Held-topic group C, possible pregnancy and testing (35 patterns; priority A, B, C), online and offline. Reply provisional, pending clinician sign-off | The demo-risk run gave late-period and pregnancy-test questions unrelated entries. Patterns written after those results were seen (non-blind) | `heldTopics.test.js`: group C, priority, general-period negatives and the C reply (18 tests, was 14); fixtures gain `HELD_C`, and "I missed my period" moves from the no-match list to it; parity runs the C cases; `offlinePipeline.test.ts` Test 9 covers C (TC-099 to TC-105). Gateway tests: 416 (412 + 4) | [`docs/decision-log.md`](../decision-log.md#held-topic-group-c-possible-pregnancy-and-testing-2026-10-20) |

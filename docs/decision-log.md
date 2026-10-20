@@ -963,3 +963,8 @@ non-blind.
 The offline copy of the patterns is generated from the same file, and
 the offline types and reply map accept group C (same commit), so the
 interface keeps compiling; offline tests and parity follow.
+
+**Offline and tests (same date).** The offline pipeline gives the
+group C signpost from the same generated patterns and a mirrored reply;
+the parity test runs the group C cases through both matchers. Tests:
+TC-099 to TC-105.

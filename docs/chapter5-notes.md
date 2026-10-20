@@ -298,6 +298,16 @@ precum?" scores 0.8440 and is still answered with the wrong entry
     listed pattern still reaches the classifier. A broad pattern such
     as "unprotected" also catches a question about pregnancy testing
     after unprotected sex (DR-04 #30), which gets the group A signpost.
+  - **Group C, possible pregnancy and testing** (added the same day):
+    a late, missed or overdue period, no period, "am I pregnant",
+    pregnancy test timing, a negative test with no period. General
+    period questions ("Is my period normal", irregular periods, period
+    pain) are not caught, and the knowledge-base period entry is still
+    answered. Priority A, then B, then C. Reply provisional, pending
+    clinician sign-off. Non-blind like A and B. It also catches two
+    development-set questions with an acceptable entry, Q27 "why is my
+    period late" and Q29 "I missed my period", neither answered
+    correctly before; they now get the signpost instead of KB-G3.
 
 ## 7. Decisions to cite
 
