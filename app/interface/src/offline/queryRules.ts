@@ -1,9 +1,11 @@
 /**
- * The help rule and the vague-query rule for the offline pipeline.
+ * The help rule, the held-topic rule and the vague-query rule for the
+ * offline pipeline.
  *
- * Ports of app/gateway/src/helpSignposting.js and
- * app/gateway/src/vagueQuery.js, which are the source of truth, so
- * "Help" and vague queries get the same reply online and offline. The
+ * Ports of app/gateway/src/helpSignposting.js,
+ * app/gateway/src/heldTopics.js and app/gateway/src/vagueQuery.js,
+ * which are the source of truth, so "Help", held topics and vague
+ * queries get the same reply online and offline. The
  * parity test (app/gateway/test/offlineSafetyParity.test.js) compares
  * the pattern sources, the function words and the health terms, and
  * runs the shared cases through both. This file has no imports, so Node
@@ -633,4 +635,48 @@ export function isVagueQuery(text: unknown): boolean {
     !words.some((word) => isHealthTerm(word)) &&
     !hasHealthPhrase(text)
   );
+}
+
+/** True when a query word and a pattern word match, allowing a plural. */
+export function sameWord(word: string, pattern: string): boolean {
+  return (
+    word === pattern ||
+    word === `${pattern}s` ||
+    word === `${pattern}es` ||
+    pattern === `${word}s` ||
+    pattern === `${word}es`
+  );
+}
+
+/**
+ * True when the tokenised query matches one held-topic pattern: a single
+ * word, a phrase "a b" (consecutive words) or a word set "a+b" (every
+ * word present, in any order).
+ */
+export function matchesPattern(tokens: string[], pattern: string): boolean {
+  if (pattern.includes("+")) {
+    return pattern
+      .split("+")
+      .every((part) => tokens.some((word) => sameWord(word, part)));
+  }
+  if (pattern.includes(" ")) {
+    return ` ${tokens.join(" ")} `.includes(` ${pattern} `);
+  }
+  return tokens.some((word) => sameWord(word, pattern));
+}
+
+/**
+ * The id of the first held-topic group the query matches ("A" or "B"),
+ * or null. Port of app/gateway/src/heldTopics.js.
+ */
+export function matchHeldTopic(text: unknown): "A" | "B" | null {
+  if (typeof text !== "string") {
+    return null;
+  }
+
+  const tokens = tokenize(normalize(text));
+  const group = HELD_TOPIC_GROUPS.find((candidate) =>
+    candidate.patterns.some((pattern) => matchesPattern(tokens, pattern)),
+  );
+  return group ? group.id : null;
 }

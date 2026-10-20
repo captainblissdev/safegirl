@@ -26,6 +26,8 @@ const { POSITIVE, NEGATIVE } = require("./fixtures/safetyCases");
 const helpRule = require("../src/helpSignposting");
 const vagueRule = require("../src/vagueQuery");
 const { HELP_POSITIVE, HELP_NEGATIVE } = require("./fixtures/helpCases");
+const heldRule = require("../src/heldTopics");
+const { HELD_A, HELD_B, HELD_NONE } = require("./fixtures/heldCases");
 const {
   DEV_ALL,
   DR04,
@@ -267,6 +269,67 @@ describe("gateway and offline help and vague-query rule parity", () => {
         offlineRules.isGenericHelpRequest(text) !==
           helpRule.isGenericHelpRequest(text) ||
         offlineRules.isVagueQuery(text) !== vagueRule.isVagueQuery(text),
+    );
+    assert.deepEqual(differences, []);
+  });
+});
+
+describe("gateway and offline held-topic rule parity", () => {
+  const OFFLINE_RULES_FILE = path.join(
+    __dirname,
+    "..",
+    "..",
+    "interface",
+    "src",
+    "offline",
+    "queryRules.ts",
+  );
+  let offlineRules;
+  let offlineContent;
+  let cases;
+
+  before(async () => {
+    offlineRules = await import(pathToFileURL(OFFLINE_RULES_FILE).href);
+    offlineContent = await import(pathToFileURL(OFFLINE_CONTENT_FILE).href);
+    cases = [
+      ...HELD_A,
+      ...HELD_B,
+      ...HELD_NONE,
+      ...HELP_POSITIVE,
+      ...HELP_NEGATIVE,
+      ...VAGUE_QUERIES,
+      ...(await loadExampleQuestions()),
+      ...DEV_ALL,
+      ...DR04,
+      ...CASES,
+    ];
+  });
+
+  it("has the same groups and patterns, in order", () => {
+    assert.deepEqual(
+      offlineRules.HELD_TOPIC_GROUPS.map((group) => ({
+        id: group.id,
+        patterns: [...group.patterns],
+      })),
+      heldRule.getHeldTopicGroups().map((group) => ({
+        id: group.id,
+        patterns: group.patterns,
+      })),
+    );
+  });
+
+  it("has the same held-topic replies", () => {
+    assert.deepEqual(
+      { ...offlineContent.HELD_TOPIC_MESSAGES },
+      { ...gatewayContent.HELD_TOPIC_MESSAGES },
+    );
+  });
+
+  it("gives the same held-topic group on every shared case", () => {
+    assert.ok(cases.length >= 270, `only ${cases.length} cases`);
+    const differences = cases.filter(
+      (text) =>
+        offlineRules.matchHeldTopic(text) !== heldRule.matchHeldTopic(text),
     );
     assert.deepEqual(differences, []);
   });

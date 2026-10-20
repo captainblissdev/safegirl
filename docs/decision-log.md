@@ -899,3 +899,13 @@ patterns were written from general vocabulary, by category, and not
 from any single query, but **after the demo-risk results had been
 seen**. Counts on the demo-risk set therefore show the rule does what
 it was built to do; they are not an independent measure.
+
+**Offline (same date).** The offline pipeline the app ships
+(`app/interface/src/offline/offlinePipeline.ts`) runs the held-topic
+rule in the gateway's position: Safety Net, help rule, held-topic rule,
+vague-query rule, then the keyword classifier. The matcher is ported in
+`offline/queryRules.ts`, which holds a generated copy of the patterns
+(`scripts/build-held-topics.js`, drift-tested), and the two replies are
+mirrored in `offline/helpContent.ts`. The parity test compares the
+groups, the patterns and the replies, and runs every shared case
+through both matchers.

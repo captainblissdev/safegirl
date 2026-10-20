@@ -20,6 +20,7 @@ const {
   renderOffline,
   OFFLINE_FILE,
 } = require("../scripts/build-held-topics");
+const { HELD_A, HELD_B, HELD_NONE } = require("./fixtures/heldCases");
 
 /** handleQuery() with a classifier client that records any call. */
 function recordingHandler(overrides = {}) {
@@ -72,37 +73,13 @@ describe("held-topic patterns", () => {
 
 describe("matchHeldTopic()", () => {
   it("matches group A: after sex or contraception failure", () => {
-    for (const query of [
-      "where can I buy P2",
-      "is postinor safe",
-      "how late can I take the morning after pill",
-      "what is plan b",
-      "the condom broke last night",
-      "he broke the condom",
-      "our condoms slipped off",
-      "I forgot to take my pill yesterday",
-      "I missed two pills this week",
-      "he pulled out in time",
-      "is withdrawal a good method",
-      "we had unprotected sex",
-      "we did it without a condom",
-      "can pre-cum cause pregnancy",
-    ]) {
+    for (const query of HELD_A) {
       assert.equal(matchHeldTopic(query), "A", query);
     }
   });
 
   it("matches group B: pregnancy decisions", () => {
-    for (const query of [
-      "my pregnancy test came back positive",
-      "I have a positive pregnancy test",
-      "this is an unwanted pregnancy",
-      "I don't want to be pregnant anymore",
-      "where can I get an abortion",
-      "are abortions safe",
-      "can I terminate it",
-      "how do I get rid of the pregnancy",
-    ]) {
+    for (const query of HELD_B) {
       assert.equal(matchHeldTopic(query), "B", query);
     }
   });
@@ -115,16 +92,7 @@ describe("matchHeldTopic()", () => {
   });
 
   it("leaves other questions alone", () => {
-    for (const query of [
-      "I missed my period",
-      "how do I get rid of period cramps",
-      "I don't want to get pregnant, which method is best",
-      "Which birth control methods can a teenager use?",
-      "Do I need a condom if I am on the pill?",
-      "what is PrEP",
-      "is my HIV test positive forever",
-      "Am I okay?",
-    ]) {
+    for (const query of HELD_NONE) {
       assert.equal(matchHeldTopic(query), null, query);
     }
     assert.equal(matchHeldTopic(42), null, "not a string");

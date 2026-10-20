@@ -53,6 +53,29 @@ export const HELP_GUIDANCE =
 /** Reply to a generic help request that names no topic. */
 export const SIGNPOSTING_MESSAGE = `You're not alone. These people can help right now. ${HELP_GUIDANCE}`;
 
+/**
+ * Replies to a held topic (queryRules.ts), by group. Provisional wording,
+ * pending clinician sign-off.
+ */
+export const HELD_TOPIC_MESSAGES: Readonly<Record<"A" | "B", string>> = {
+  // A: after sex or contraception failure.
+  A:
+    "This is an important question, and I can't answer it safely here yet. " +
+    "A nurse, a pharmacist or a clinic can help, and you do not have to " +
+    "give a reason. If something happened recently, do not wait: some " +
+    "options work best soon after sex. If you are in danger or someone " +
+    `has hurt you, call the GBV helpline ${GBV_HELPLINE}. Childline Kenya, ` +
+    `${CHILDLINE_KENYA}, is free for anyone under 18.`,
+  // B: pregnancy decisions.
+  B:
+    "This is an important question, and I can't answer it safely here yet. " +
+    "A nurse or counsellor can talk it through with you privately and " +
+    "without judgement, and you do not have to give a reason. If you are " +
+    "in danger or someone has hurt you, call the GBV helpline " +
+    `${GBV_HELPLINE}. Childline Kenya, ${CHILDLINE_KENYA}, is free for ` +
+    "anyone under 18.",
+};
+
 /** Reply to a short query that names no health topic (queryRules.ts). */
 export const VAGUE_QUERY_MESSAGE =
   "I'm not sure what you mean. Is your question about periods, pregnancy, contraception or STIs?";
