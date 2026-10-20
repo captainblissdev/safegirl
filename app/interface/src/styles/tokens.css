@@ -1,0 +1,96 @@
+/*
+ * SafeGirl design tokens: the one source of truth for colour, type,
+ * shape and focus. Every other stylesheet uses these variables; no
+ * colour value is written anywhere else. Contrast is checked by
+ * src/styles/tokens.test.ts (text 4.5:1 or more, focus ring 3:1 or more).
+ *
+ * Adjusted from the brief for contrast (tint only, same meaning):
+ * - the "Girl" wordmark #BE185D -> #BC185C (4.46:1 on the lilac glow);
+ * - rose and orchid stay as fills and gradient stops; their text
+ *   variants are darker (#DB2777 4.34:1 and #C026D3 4.45:1 on the page).
+ */
+:root {
+  /* Type: Nunito, self-hosted (see the @font-face in index.css). */
+  --font-family:
+    "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --weight-regular: 400;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+  --weight-black: 900;
+
+  /* Core colours. */
+  --color-ink: #2a1245; /* body text */
+  --color-muted: #6b4f86; /* secondary text */
+  --color-violet: #6d28d9; /* links, icons, focus ring */
+  --color-orchid: #c026d3; /* gradient stop and fills only */
+  --color-orchid-text: #a320b3; /* orchid as text */
+  --color-rose: #db2777; /* fills only */
+  --color-rose-text: #b81f63; /* rose as text */
+  --color-plum: #3b0f6b; /* deep plum: headings on light, dark surfaces */
+  --color-girl: #bc185c; /* the "Girl" in the wordmark */
+  --color-on-dark: #ffffff; /* text on gradients and dark surfaces */
+  --color-control-border: #8570b8; /* input outlines, 3:1 or more */
+
+  /* Gradients. */
+  --gradient-primary: linear-gradient(135deg, #6d28d9, #c026d3);
+  --gradient-hero: linear-gradient(135deg, #5b21b6, #a21caf);
+
+  /* Page: background colour with two soft glows. */
+  --color-page: #fff6fb;
+  --glow-pink: #ffd3ea; /* top right */
+  --glow-lilac: #e6d7ff; /* left */
+  --page-background:
+    radial-gradient(circle at 100% 0%, var(--glow-pink) 0, transparent 42%),
+    radial-gradient(circle at 0% 45%, var(--glow-lilac) 0, transparent 40%),
+    var(--color-page);
+
+  /* Cards. */
+  --color-card: #ffffff;
+  --color-card-border: #f3d3e6;
+  --radius-card: 22px;
+  --radius-card-large: 28px;
+  --color-tint: #f3e8ff; /* soft violet tint for small surfaces */
+
+  /* Focus: 3px violet ring, 2px offset; white on dark surfaces. */
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--color-violet);
+  --focus-ring-on-dark: #ffffff;
+
+  /* Every tap target is at least this tall and wide. */
+  --tap-target: 44px;
+
+  /* Reply kinds. */
+  --answer-bg-start: #f3e8ff;
+  --answer-bg-end: #ffe4f1;
+  --answer-text: #5b21b6;
+  --clarify-bg-start: #f1e4ff;
+  --clarify-bg-end: #ffe1f0;
+  --clarify-text: #86198f;
+  --held-bg: #fff0f6;
+  --held-border: #f472b6;
+  --held-text: #9d174d;
+  --support-bg-start: #3b0f6b;
+  --support-bg-end: #86198f;
+  --support-text: #ffffff;
+  --noanswer-bg: #f3eefa;
+  --noanswer-border: #dccdf0;
+  --noanswer-text: #4b3f63;
+
+  /* Topic tints: background and text. */
+  --topic-periods-bg: #ffddee;
+  --topic-periods-text: #be185d;
+  --topic-pregnancy-bg: #eadcff;
+  --topic-pregnancy-text: #6d28d9;
+  --topic-contraception-bg: #f8d9fa;
+  --topic-contraception-text: #a21caf;
+  --topic-sti-bg: #ffdce4;
+  --topic-sti-text: #be123c;
+
+  /* Depth. */
+  --overlay: rgba(42, 18, 69, 0.5);
+  --shadow: 0 18px 48px rgba(42, 18, 69, 0.12);
+  --shadow-soft: 0 4px 14px rgba(42, 18, 69, 0.06);
+}
