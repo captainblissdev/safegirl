@@ -2,11 +2,16 @@ import type { QueryResponse } from "../types";
 import { classify } from "./classifier";
 import { checkSafety } from "./safetyNet";
 import {
+  HELD_TOPIC_MESSAGES,
   referralMessage,
   SIGNPOSTING_MESSAGE,
   VAGUE_QUERY_MESSAGE,
 } from "./helpContent";
-import { isGenericHelpRequest, isVagueQuery } from "./queryRules";
+import {
+  isGenericHelpRequest,
+  isVagueQuery,
+  matchHeldTopic,
+} from "./queryRules";
 
 const OFFLINE_ANSWERS: Record<string, string> = {
   contraception:
@@ -20,10 +25,10 @@ const OFFLINE_ANSWERS: Record<string, string> = {
 
 /**
  * The offline pipeline, in the gateway's order: Safety Net, help rule,
- * vague-query rule, then the keyword classifier and a general answer for
- * its category. The two rules are ports of the gateway's
- * (offline/queryRules.ts), so "Help" and vague queries get the same reply
- * offline as online.
+ * held-topic rule, vague-query rule, then the keyword classifier and a
+ * general answer for its category. The rules are ports of the gateway's
+ * (offline/queryRules.ts), so "Help", held topics and vague queries get
+ * the same reply offline as online.
  */
 export function handleQueryOffline(queryText: string): QueryResponse {
   const safety = checkSafety(queryText);
@@ -52,6 +57,23 @@ export function handleQueryOffline(queryText: string): QueryResponse {
       generated: false,
       generationInvoked: false,
       note: "Offline mode: generic help request, help information returned.",
+    };
+  }
+
+  // A held topic gets its group's neutral signpost.
+  const heldGroup = matchHeldTopic(queryText);
+  if (heldGroup) {
+    return {
+      outcome: "held",
+      kind: "held-topic",
+      heldTopicGroup: heldGroup,
+      matchedQuestion: null,
+      message: HELD_TOPIC_MESSAGES[heldGroup],
+      category: null,
+      answerFound: false,
+      generated: false,
+      generationInvoked: false,
+      note: "Offline mode: held topic, signpost returned.",
     };
   }
 

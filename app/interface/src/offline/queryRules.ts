@@ -1,9 +1,11 @@
 /**
- * The help rule and the vague-query rule for the offline pipeline.
+ * The help rule, the held-topic rule and the vague-query rule for the
+ * offline pipeline.
  *
- * Ports of app/gateway/src/helpSignposting.js and
- * app/gateway/src/vagueQuery.js, which are the source of truth, so
- * "Help" and vague queries get the same reply online and offline. The
+ * Ports of app/gateway/src/helpSignposting.js,
+ * app/gateway/src/heldTopics.js and app/gateway/src/vagueQuery.js,
+ * which are the source of truth, so "Help", held topics and vague
+ * queries get the same reply online and offline. The
  * parity test (app/gateway/test/offlineSafetyParity.test.js) compares
  * the pattern sources, the function words and the health terms, and
  * runs the shared cases through both. This file has no imports, so Node
@@ -489,6 +491,91 @@ export const EXTRA_HEALTH_TERMS: readonly string[] = [
 ];
 // END GENERATED HEALTH TERMS
 
+/** One held-topic group: its id and its patterns (see heldTopics.json). */
+export interface HeldTopicGroup {
+  id: "A" | "B";
+  patterns: readonly string[];
+}
+
+// BEGIN GENERATED HELD TOPICS: written by
+// app/gateway/scripts/build-held-topics.js from
+// app/gateway/src/content/heldTopics.json; do not edit by hand.
+export const HELD_TOPIC_GROUPS: readonly HeldTopicGroup[] = [
+  {
+    id: "A",
+    patterns: [
+      "p2",
+      "postinor",
+      "levonorgestrel",
+      "ulipristal",
+      "morning after",
+      "emergency pill",
+      "emergency contraception",
+      "emergency contraceptive",
+      "plan b",
+      "e pill",
+      "condom+burst",
+      "condom+bursted",
+      "condom+broke",
+      "condom+broken",
+      "condom+break",
+      "condom+slipped",
+      "condom+slip",
+      "condom+tore",
+      "condom+torn",
+      "condom+split",
+      "condom+leaked",
+      "condom+came+off",
+      "pill+forgot",
+      "pill+forgotten",
+      "pill+missed",
+      "pill+skipped",
+      "pill+late",
+      "pulled out",
+      "pull out",
+      "pulling out",
+      "withdrawal",
+      "unprotected",
+      "without a condom",
+      "without condom",
+      "without protection",
+      "no condom",
+      "no protection",
+      "precum",
+      "pre cum",
+      "pre ejaculate",
+      "preejaculate",
+    ],
+  },
+  {
+    id: "B",
+    patterns: [
+      "positive pregnancy test",
+      "pregnancy+test+positive",
+      "unwanted pregnancy",
+      "unplanned pregnancy",
+      "dont want to be pregnant",
+      "do not want to be pregnant",
+      "dont want the baby",
+      "dont want this baby",
+      "dont want to keep",
+      "abortion",
+      "abort",
+      "aborted",
+      "aborting",
+      "terminate",
+      "termination",
+      "terminating",
+      "get rid of the pregnancy",
+      "get rid of a pregnancy",
+      "get rid of my pregnancy",
+      "get rid of pregnancy",
+      "get rid of the baby",
+    ],
+  },
+];
+// END GENERATED HELD TOPICS
+
 /** Every single-word health term: the knowledge-base and extra lists. */
 const HEALTH_TERM_SET: ReadonlySet<string> = new Set([
   ...HEALTH_TERMS,
@@ -548,4 +635,48 @@ export function isVagueQuery(text: unknown): boolean {
     !words.some((word) => isHealthTerm(word)) &&
     !hasHealthPhrase(text)
   );
+}
+
+/** True when a query word and a pattern word match, allowing a plural. */
+export function sameWord(word: string, pattern: string): boolean {
+  return (
+    word === pattern ||
+    word === `${pattern}s` ||
+    word === `${pattern}es` ||
+    pattern === `${word}s` ||
+    pattern === `${word}es`
+  );
+}
+
+/**
+ * True when the tokenised query matches one held-topic pattern: a single
+ * word, a phrase "a b" (consecutive words) or a word set "a+b" (every
+ * word present, in any order).
+ */
+export function matchesPattern(tokens: string[], pattern: string): boolean {
+  if (pattern.includes("+")) {
+    return pattern
+      .split("+")
+      .every((part) => tokens.some((word) => sameWord(word, part)));
+  }
+  if (pattern.includes(" ")) {
+    return ` ${tokens.join(" ")} `.includes(` ${pattern} `);
+  }
+  return tokens.some((word) => sameWord(word, pattern));
+}
+
+/**
+ * The id of the first held-topic group the query matches ("A" or "B"),
+ * or null. Port of app/gateway/src/heldTopics.js.
+ */
+export function matchHeldTopic(text: unknown): "A" | "B" | null {
+  if (typeof text !== "string") {
+    return null;
+  }
+
+  const tokens = tokenize(normalize(text));
+  const group = HELD_TOPIC_GROUPS.find((candidate) =>
+    candidate.patterns.some((pattern) => matchesPattern(tokens, pattern)),
+  );
+  return group ? group.id : null;
 }

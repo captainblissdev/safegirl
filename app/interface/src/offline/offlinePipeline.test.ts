@@ -2,6 +2,7 @@ import { handleQueryOffline } from "./pipeline";
 import { handleQueryOffline as handleShippedOffline } from "./offlinePipeline";
 import {
   ABUSE_REFERRAL_MESSAGE,
+  HELD_TOPIC_MESSAGES,
   SIGNPOSTING_MESSAGE,
   VAGUE_QUERY_MESSAGE,
 } from "./helpContent";
@@ -108,5 +109,27 @@ const r8 = handleShippedOffline("what is PrEP");
 
 assert(r8.outcome === "grounded_answer", "outcome is grounded_answer");
 assert(r8.kind === undefined, "no kind on a general limited-mode answer");
+
+console.log("\nTest 9: shipped offline pipeline, held topics get the signpost");
+for (const [query, group] of [
+  ["the condom broke last night", "A"],
+  ["plan b?", "A"],
+  ["where can I get an abortion", "B"],
+] as const) {
+  const response = handleShippedOffline(query);
+  assert(
+    response.outcome === "held" &&
+      response.kind === "held-topic" &&
+      response.heldTopicGroup === group &&
+      response.message === HELD_TOPIC_MESSAGES[group],
+    `"${query}" gets the group ${group} signpost`,
+  );
+}
+
+console.log(
+  "\nTest 10: shipped offline pipeline, the Safety Net beats a held topic",
+);
+const r10 = handleShippedOffline("he forced me and the condom broke");
+assert(r10.outcome === "referral", "outcome is referral");
 
 console.log("\nAll offline pipeline tests passed.");

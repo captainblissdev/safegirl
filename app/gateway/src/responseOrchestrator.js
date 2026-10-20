@@ -33,6 +33,7 @@ const {
   SIGNPOSTING_MESSAGE,
   SELF_HARM_REFERRAL_MESSAGE,
   ABUSE_REFERRAL_MESSAGE,
+  HELD_TOPIC_MESSAGES,
   VAGUE_QUERY_MESSAGE,
 } = require("./content/helpContent");
 
@@ -47,6 +48,8 @@ const {
  *   classifier's confidence is unknown.
  * - "abstain": no answer; the standard no-answer message.
  * - "help": a generic help request; the signposting message.
+ * - "held-topic": a topic the knowledge base does not cover safely yet
+ *   (heldTopics.js); a neutral signpost (outcome "held").
  * - "vague": a short query with no health term; a clarifying question
  *   (outcome "clarification").
  * - "referral": the Safety Net flagged the query.
@@ -56,6 +59,7 @@ const REPLY_KINDS = Object.freeze([
   "answer-unscoped",
   "abstain",
   "help",
+  "held-topic",
   "vague",
   "referral",
 ]);
@@ -211,6 +215,34 @@ function signpost() {
 }
 
 /**
+ * Response to a held topic (src/heldTopics.js): a neutral signpost for
+ * the matched group, without classification or retrieval.
+ *
+ * @param {string} group - The held-topic group, "A" or "B".
+ * @returns {object} Final response payload.
+ */
+function hold(group) {
+  return {
+    outcome: "held",
+    kind: "held-topic",
+    heldTopicGroup: group,
+    matchedQuestion: null,
+    message: HELD_TOPIC_MESSAGES[group],
+    category: null,
+    answerFound: false,
+    generated: false,
+    note: "Held topic: a signpost returned without classification or retrieval, pending clinician-approved content.",
+    source: null,
+    safetyNotes: null,
+    generationInvoked: false,
+    predictedCategory: null,
+    classifierSource: null,
+    confidence: null,
+    retrievalScope: "none",
+  };
+}
+
+/**
  * Response to a vague query: a short query that names no health topic
  * (src/vagueQuery.js). A clarifying question, without classification or
  * retrieval, so there is no category or classifier output.
@@ -241,9 +273,11 @@ module.exports = {
   ABUSE_REFERRAL_MESSAGE,
   REPLY_KINDS,
   clarify,
+  hold,
   orchestrate,
   signpost,
   NO_ANSWER_MESSAGE,
   SIGNPOSTING_MESSAGE,
+  HELD_TOPIC_MESSAGES,
   VAGUE_QUERY_MESSAGE,
 };

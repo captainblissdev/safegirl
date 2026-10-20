@@ -8,8 +8,11 @@
 // "clarification": a vague query (short, no health term) answered with a
 // clarifying question, without classification or retrieval. Displayed
 // like a normal answer.
+// "held": a held topic (one the knowledge base does not cover safely
+// yet) answered with a neutral signpost, without classification or
+// retrieval. Displayed like a normal answer.
 export type QueryOutcome =
-  "grounded_answer" | "referral" | "signposting" | "clarification";
+  "grounded_answer" | "referral" | "signposting" | "clarification" | "held";
 
 /**
  * What kind of reply the gateway sent (REPLY_KINDS in
@@ -19,6 +22,8 @@ export type QueryOutcome =
  *   categories searched, or keyword fallback).
  * - "abstain": no answer; the standard no-answer message.
  * - "help": a generic help request; the signposting message.
+ * - "held-topic": a topic the knowledge base does not cover safely yet; a
+ *   neutral signpost (outcome "held"; heldTopicGroup says which group).
  * - "vague": a short query with no health term; a clarifying question.
  * - "referral": the Safety Net flagged the query.
  */
@@ -27,6 +32,7 @@ export type ReplyKind =
   | "answer-unscoped"
   | "abstain"
   | "help"
+  | "held-topic"
   | "vague"
   | "referral";
 
@@ -41,6 +47,9 @@ export interface QueryResponse {
   // The "User question" of the knowledge-base entry the answer came
   // from, verbatim; null when no entry was served.
   matchedQuestion?: string | null;
+  // On held-topic replies: the matched group, "A" (after sex or
+  // contraception failure) or "B" (pregnancy decisions).
+  heldTopicGroup?: "A" | "B";
 
   // Present on grounded_answer responses.
   // Category of the knowledge-base entry actually served; null when no

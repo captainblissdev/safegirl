@@ -94,6 +94,35 @@ queries and the Safety Net negatives "my teacher threatened to fail me"
 and "I am so tired of exams". "When should I start antenatal visits?"
 (Q43, Q53) is no longer caught.
 
+## Held-topic rule (20 October 2026)
+
+Interception, live gateway and `ml_service` v3, gate on, before the
+rule (`development` at `743679a`) and after; per query in
+[`held-topics-proof.csv`](held-topics-proof.csv).
+
+| Set | Intercepted | Before, for those intercepted |
+|---|---|---|
+| Demo-risk set (**non-blind**) | 8/20: A #1, #2, #4, #5, #6, #7; B #18, #19 | 4 no-answer; #6 KB-G3, #7 KB-C4, #18 KB-P6, #19 KB-P7 |
+| Example questions | 0/13 | – |
+| Labelled development set | 0/35 | – |
+| DR-04 | 5/31: B #5, #6, #24; A #18, #30 | 3 no-answer; #24 and #30 KB-P5 (school re-entry) |
+
+No intercepted development or DR-04 query was answered correctly
+before. No reply outside the intercepted rows changed. Demo-risk #3
+("Condom iliburst 😭 what do I do?") is not caught; no pattern was
+added for it.
+
+Suite runs at `513442e`:
+
+| Suite | Count | Result |
+|---|---|---|
+| Gateway `npm test` | 6 integration check groups + 412 `node:test` tests in 43 suites | Pass: 412/412 |
+| of which: held-topic rule (`heldTopics.test.js`) | 14 tests | Pass |
+| of which: offline parity (`offlineSafetyParity.test.js`) | 17 tests (the earlier 14 included) | Pass |
+| Gateway lint; `build-held-topics.js --check`; `build-health-terms.js --check` | – | Pass; up to date |
+| Interface `npm test` | 6 suites, 216 checks | Pass: all 6 |
+| Interface typecheck, lint, format check, build | – | Pass |
+
 ## Setup checks (15 October 2026)
 
 | Check | What it checks | Command | Date | Result | Source |
@@ -166,3 +195,5 @@ about real phones on mobile networks. SEO loses points only because
 | 2026-10-20 | Help reply opens "You're not alone. These people can help right now." instead of "I don't have information on that yet."; the no-answer reply now opens "I couldn't find a good answer to that.". Text only; numbers unchanged. Mirrored in `app/interface/src/offline/helpContent.ts` | UI audit UI-02, UI-03 | `helpSignposting.test.js`: the old wording test replaced by three (TC-082, TC-083); `offlineSafetyParity.test.js` gains a message parity test (TC-084; 10 tests, was 9). Gateway tests: 385 (382 + 3), all passing | [`docs/decision-log.md`](../decision-log.md#help-and-no-answer-wording-2026-10-20) |
 | 2026-10-20 | The offline pipeline the app ships (`offlinePipeline.ts`) now runs the help rule and the vague-query rule, in the gateway's order, from `app/interface/src/offline/queryRules.ts` (ports of the gateway rules; health terms written by the gateway's build script) | Offline, "Help" and vague queries got a general category sentence (UI audit UI-07) | `offlineSafetyParity.test.js`: 4 rule parity tests (14 in the file; the earlier 9 still pass); `vagueQuery.test.js`: offline health-term block up to date; help and query-set cases moved to `test/fixtures/helpCases.js` and `querySets.js`. Gateway tests: 390 (385 + 5), all passing. Interface `offlinePipeline.test.ts`: Tests 5 to 8 run `offlinePipeline.ts` (TC-085 to TC-088) | [`docs/decision-log.md`](../decision-log.md#offline-parity-for-the-help-and-vague-query-rules-2026-10-20) |
 | 2026-10-20 | Health terms from outside the knowledge base: `app/gateway/src/content/extraHealthTerms.json`, 122 terms (113 words, 9 phrases) in four categories with stated criteria, used by the gateway and copied into the offline `queryRules.ts` by `build-health-terms.js`. Function-word list frozen (166 words, hashed) | Decisions by Cindy, 20 Oct: confirm the content-word reading, add documented outside-KB terms, accept the side effects as limitations | `vagueQuery.test.js`: the "antenatal" known-limit test now expects no interception; new tests for extra words, plurals and phrases, the extra file's form, and the function-word freeze; the DR-04 pin is now the retest's 1/31 (TC-090). `offlineSafetyParity.test.js` compares the extra list. Gateway tests: 395 (390 + 5), all passing (TC-089) | [`docs/decision-log.md`](../decision-log.md#health-terms-from-outside-the-knowledge-base-2026-10-20) |
+| 2026-10-20 | Held-topic rule after the Safety Net and the help rule, before the vague rule: group A (after sex or contraception failure) and group B (pregnancy decisions) get a neutral signpost (`outcome: "held"`, `kind: "held-topic"`, `heldTopicGroup`). Patterns in `app/gateway/src/content/heldTopics.json` (A 41, B 21), copied offline by `scripts/build-held-topics.js`. Replies provisional, pending clinician sign-off | The demo-risk run showed confident wrong answers on topics the knowledge base does not cover. Patterns written after those results were seen (non-blind) | New `heldTopics.test.js` (14 tests, TC-091 to TC-096); `responseKind.test.js` expects seven kinds; live proof TC-097 ([`held-topics-proof.csv`](held-topics-proof.csv)). Gateway tests: 409 (395 + 14) | [`docs/decision-log.md`](../decision-log.md#held-topic-rule-2026-10-20) |
+| 2026-10-20 | The offline pipeline runs the held-topic rule in the same order, with the same patterns and replies | Parity with the gateway | `offlineSafetyParity.test.js`: 3 held-topic parity tests (17 in the file; the earlier 14 still pass); `offlinePipeline.test.ts`: Tests 9 and 10 (TC-098). Gateway tests: 412 (409 + 3) | [`docs/decision-log.md`](../decision-log.md#held-topic-rule-2026-10-20) |

@@ -834,3 +834,78 @@ unseen expert questions, and DR-04 is no longer an independent test of
 the vague-query rule. TC-079 keeps its original Fail. No word was added
 for the remaining catch, "What can I do when I mess up ?", which names
 no topic.
+
+## Held-topic rule (2026-10-20)
+
+Requested by Cindy on 20 October 2026 (`fix/held-topics`). **No frozen
+item changed**: no model, knowledge-base text, threshold (0.35, 0.5,
+gate 0.8439), Safety Net pattern, help number or
+`HELP_CONTACTS_VERIFIED`.
+
+**Why.** The demo-risk run (`docs/testing/demo-risk-results.csv`)
+showed that topics the knowledge base does not cover get confident
+wrong answers: with the gate on, "I forgot my pill, am I still
+protected?" got KB-C4 ("Yes, if you want protection from STIs…"), "I
+don't want to be pregnant, what are my options?" got KB-P7 (iron and
+folic acid), and "I got a positive pregnancy test… now what?" got KB-P6
+(danger signs). Until a clinician approves content, these topics get a
+neutral signpost instead of a guess.
+
+**What it does.** A fixed rule after the Safety Net and the help rule,
+before the vague-query rule and the classifier
+(`app/gateway/src/heldTopics.js`, wired in `backend.js`). A query that
+matches a held-topic pattern gets the signpost for its group, with no
+classification or retrieval, so `ml_service` is not called:
+`outcome: "held"`, `kind: "held-topic"` (a new reply kind), and a new
+field `heldTopicGroup` ("A" or "B"). A flagged query still gets the
+referral and a help request still gets signposting.
+
+**Patterns** (`app/gateway/src/content/heldTopics.json`, one
+hand-written file; copied into the offline pipeline by
+`scripts/build-held-topics.js`, with a drift test). Queries are
+tokenised as for the health-term lists. A pattern is a single word
+(matching with a plural added or removed), a phrase (consecutive
+words), or a word set written "a+b" (every word present, in any order,
+so "he broke the condom" matches `condom+broke`). Groups are checked in
+order, so a query matching both gets group A's reply.
+
+| Group | Criterion | Patterns |
+|---|---|---|
+| A: after sex or contraception failure | Emergency contraception by name or description, a condom that failed, a missed or late pill, withdrawal, sex without protection, or pre-ejaculate | 41 (P2, postinor, morning after, emergency pill or contraception, plan b; condom with burst, broke, slipped, tore, split and similar; pill with forgot, missed, skipped, late; pulled out, withdrawal; unprotected, without a condom, no protection; precum, pre-ejaculate) |
+| B: pregnancy decisions | A positive pregnancy test, an unwanted or unplanned pregnancy, or ending a pregnancy | 21 (positive pregnancy test; unwanted or unplanned pregnancy; "don't want to be pregnant", "don't want the baby"; abortion, abort, terminate, termination; "get rid of the pregnancy", "get rid of the baby") |
+
+**"Get rid of" is narrowed.** The brief listed "get rid of". Bare, it
+would also match "how do I get rid of period cramps" or itching, so the
+patterns are "get rid of the pregnancy", "… a pregnancy", "… my
+pregnancy", "… pregnancy" and "… the baby". This needs confirming.
+
+**Replies: provisional, pending clinician sign-off.** In
+`content/helpContent.js` (`HELD_TOPIC_MESSAGES`), using the existing
+help numbers:
+- A: "This is an important question, and I can't answer it safely here
+  yet. A nurse, a pharmacist or a clinic can help, and you do not have to
+  give a reason. If something happened recently, do not wait: some
+  options work best soon after sex. If you are in danger or someone has
+  hurt you, call the GBV helpline 1195. Childline Kenya, 116, is free
+  for anyone under 18."
+- B: "This is an important question, and I can't answer it safely here
+  yet. A nurse or counsellor can talk it through with you privately and
+  without judgement, and you do not have to give a reason. If you are in
+  danger or someone has hurt you, call the GBV helpline 1195. Childline
+  Kenya, 116, is free for anyone under 18."
+
+**Not independent: the demo-risk run is non-blind for this rule.** The
+patterns were written from general vocabulary, by category, and not
+from any single query, but **after the demo-risk results had been
+seen**. Counts on the demo-risk set therefore show the rule does what
+it was built to do; they are not an independent measure.
+
+**Offline (same date).** The offline pipeline the app ships
+(`app/interface/src/offline/offlinePipeline.ts`) runs the held-topic
+rule in the gateway's position: Safety Net, help rule, held-topic rule,
+vague-query rule, then the keyword classifier. The matcher is ported in
+`offline/queryRules.ts`, which holds a generated copy of the patterns
+(`scripts/build-held-topics.js`, drift-tested), and the two replies are
+mirrored in `offline/helpContent.ts`. The parity test compares the
+groups, the patterns and the replies, and runs every shared case
+through both matchers.
