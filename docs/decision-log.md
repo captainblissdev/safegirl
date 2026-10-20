@@ -1320,3 +1320,34 @@ for anyone under 18", in `HELP_GUIDANCE` and the held A and B texts)
 appears on the help, no-answer, held A and held B screens. Not on
 clarify, held C or the referrals (the abuse referral says "(for anyone
 under 18)" without "free"). Unchanged, as briefed.
+
+## Reply screens on narrow phones (2026-10-20)
+
+Stage B2 step 7b (`fix/ui-redesign`), on Cindy's bug report: on the
+clarify screen at 390px the 2x2 topic grid ran past the card, clipping
+"Pregnancy" and "STIs and HIV". Layout only; no text changed.
+
+**One shared component.** The four topics are now `TopicChoices`
+everywhere they appear: clarify (a grid with icon tiles), no answer and
+the Help sheet (pills). The Help sheet's own `topic-button` copy is
+gone, so its pills are white with the 3:1 edge instead of tinted. The
+held screens have no topic buttons.
+
+**Grid rules.** Two columns of `minmax(0, 1fr)`, 10px apart; each item
+`min-width: 0; max-width: 100%`; buttons `box-sizing: border-box`, full
+width, padding 10px 12px (pills 8px 12px); labels wrap
+(`overflow-wrap: anywhere`); 15px weight 900, 14px under 360px wide.
+The reply card is `overflow: visible`.
+
+**No broken words.** With the 32px icon tile beside the label, a column
+leaves about 85px for the label at 390px and about 50px at 320px, but
+"Contraception" needs 103px (97px at 14px). Wrapping alone broke it
+mid-word ("Contracepti-on", "Pregna-ncy"). So when the grid is narrower
+than 360px (a container query), the icon sits above the label; under
+360px wide, the reply screen and card also give 4px more room each
+side. Every word now fits whole at 320, 360, 390 and 430px.
+
+**Lines with a phone link.** The footer line and the help and referral
+cards' emergency line had a 44px-tall inline-flex link, which made a
+wrapped line very tall. Both now have line-height 1.35; the link stays
+inline and its 44px-tall tap area is an invisible `::after`.

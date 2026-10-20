@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
-import { TOPICS, type Topic } from "../content/topics";
+import type { Topic } from "../content/topics";
 import {
   CLARIFY_FALLBACK,
   NO_ANSWER_RETRY,
@@ -15,7 +15,7 @@ import {
   SearchIcon,
   Sparkle,
 } from "./Icons";
-import { TOPIC_ICONS } from "./topicIcons";
+import TopicChoices from "./TopicChoices";
 
 /**
  * The screens for the replies that are not knowledge-base answers:
@@ -53,40 +53,6 @@ function Pill({ icon, label }: { icon: ReactNode; label: string }) {
     <p className="reply-pill">
       {icon} {label}
     </p>
-  );
-}
-
-/** The four topics, each opening its Topic list. */
-function TopicChoices({
-  variant,
-  onTopic,
-}: {
-  variant: "grid" | "pills";
-  onTopic: (topic: Topic) => void;
-}) {
-  return (
-    <ul className={`topic-choices topic-choices--${variant}`}>
-      {TOPICS.map((topic) => {
-        const Icon = TOPIC_ICONS[topic.topicClass];
-        return (
-          <li key={topic.topicClass}>
-            <button
-              className={`topic-choice topic-choice--${topic.topicClass}`}
-              type="button"
-              data-topic={topic.topicClass}
-              onClick={() => onTopic(topic)}
-            >
-              {variant === "grid" && (
-                <span className="topic-choice-icon">
-                  <Icon size={18} />
-                </span>
-              )}
-              {topic.label}
-            </button>
-          </li>
-        );
-      })}
-    </ul>
   );
 }
 

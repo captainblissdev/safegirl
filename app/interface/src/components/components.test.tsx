@@ -607,6 +607,7 @@ console.log(
     "./AnswerView.tsx",
     "./ReplyViews.tsx",
     "./CallButtons.tsx",
+    "./TopicChoices.tsx",
     "./ReferralScreen.tsx",
   ]) {
     const source = readFileSync(new URL(file, import.meta.url), "utf8");
@@ -795,8 +796,10 @@ console.log("\nTest 23: the Help sheet");
   );
   for (const topic of TOPICS) {
     assert(
-      html.includes(`>${topic.label}</button>`),
-      `topic button: ${topic.label}`,
+      html.includes(
+        `data-topic="${topic.topicClass}"><span class="topic-choice-label">${topic.label}</span></button>`,
+      ),
+      `topic button (the shared TopicChoices): ${topic.label}`,
     );
   }
 }
@@ -1664,7 +1667,9 @@ console.log(
           (b, i) =>
             b[1] === TOPICS[i].topicClass &&
             b[2] === TOPICS[i].topicClass &&
-            b[3].endsWith(TOPICS[i].label),
+            b[3].endsWith(
+              `<span class="topic-choice-label">${TOPICS[i].label}</span>`,
+            ),
         ),
       `${name}: the four topics, in order, each carrying its class`,
     );
@@ -1679,7 +1684,11 @@ console.log(
     "utf8",
   );
   assert(
-    views.includes("onClick={() => onTopic(topic)}"),
+    readFileSync(
+      new URL("./TopicChoices.tsx", import.meta.url),
+      "utf8",
+    ).includes("onClick={() => onTopic(topic)}") &&
+      views.split("<TopicChoices").length === 3,
     "tapping one hands its topic to onTopic",
   );
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
@@ -1857,6 +1866,85 @@ console.log(
     app.split('aria-live="polite"').length === 2 &&
       app.indexOf('aria-live="polite"') < app.indexOf('screen === "chat" &&'),
     "App's one live region sits outside the screens, so it survives a screen change (the referral)",
+  );
+}
+
+console.log("\nTest 44: the topic grid and the footer line fit narrow phones");
+{
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  // The declarations of the top-level rule with exactly this selector.
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  assert(
+    rule(".topic-choices").includes(
+      "grid-template-columns: repeat(2, minmax(0, 1fr));",
+    ) && rule(".topic-choices").includes("gap: 10px;"),
+    "two equal columns that can shrink, 10px apart",
+  );
+  assert(
+    /min-width: 0;\s*max-width: 100%;/.test(rule(".topic-choices > li")),
+    "every grid child: min-width 0, max-width 100%",
+  );
+  const button = rule(".topic-choice");
+  assert(
+    [
+      "box-sizing: border-box;",
+      "width: 100%;",
+      "padding: 10px 12px;",
+      "font-size: 15px;",
+      "font-weight: var(--weight-black);",
+      "border: 1.5px solid var(--color-control-border);",
+    ].every((d) => button.includes(d)),
+    "buttons: border-box, full width, 10px 12px, 15px weight 900, the 3:1 edge",
+  );
+  assert(
+    rule(".topic-choice-label").includes("overflow-wrap: anywhere;") &&
+      !/\.topic-choice[^{]*\{[^}]*white-space: nowrap/.test(css),
+    "labels wrap; nothing forbids it",
+  );
+  assert(
+    rule(".topic-choices--grid .topic-choice").includes("min-height: 58px;") &&
+      rule(".topic-choice-icon").includes("flex: none;") &&
+      rule(".topic-choice-icon").includes("width: 32px;"),
+    "grid buttons keep 58px and the 32px icon tile, which does not shrink",
+  );
+  assert(
+    /@media \(max-width: 359px\) \{\s*\.topic-choice \{\s*font-size: 14px;/.test(
+      css,
+    ),
+    "under 360px the label is 14px",
+  );
+  assert(
+    rule(".topic-choices--grid").includes("container-type: inline-size;") &&
+      css.includes(
+        "@container (max-width: 359px) {\n  .topic-choices--grid .topic-choice {\n    flex-direction: column;",
+      ),
+    "a grid too narrow for icon and label side by side puts the icon above, so no word breaks",
+  );
+  assert(
+    rule(".reply-card").includes("overflow: visible;") &&
+      rule(".reply-card").includes("min-width: 0;"),
+    "the reply card neither clips nor scrolls sideways",
+  );
+  assert(
+    rule(".danger-line").includes("line-height: 1.35;") &&
+      !rule(".danger-line a").includes("min-height") &&
+      css.includes(".danger-line a::after,\n.emergency-line a::after {") &&
+      rule(".emergency-line a::after").includes("height: var(--tap-target);") &&
+      rule(".emergency-line").includes("line-height: 1.35;") &&
+      !rule(".emergency-line a").includes("min-height"),
+    "footer and emergency lines: line-height 1.35; their links keep a 44px-tall tap area",
+  );
+  const sheet = readFileSync(
+    new URL("./HelpSheet.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    sheet.includes('<TopicChoices variant="pills" onTopic={onTopic} />') &&
+      !css.includes(".topic-button"),
+    "the Help sheet uses the same TopicChoices; the old topic-button copy is gone",
   );
 }
 

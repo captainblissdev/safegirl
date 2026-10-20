@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 165 cases: 149 Pass, 15 Fail, 1 Not run. Two of the
+**Totals:** 170 cases: 154 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -256,6 +256,11 @@ entry.
 | TC-163 | NFR (safety) | Score, confidence and the details line on the reply screens, `?details=1` off and on | None on any reply screen; the details line only in the plain view, only with `?details=1` | As expected (Test 42; browser check with `?details=1`) | Pass |
 | TC-164 | NFR (accessibility) | Announcements | One polite live region outside the screens names each reply once; no reply text in a live region; the referral's alert removed | As expected (Test 43; browser check) | Pass |
 | TC-165 | NFR (accessibility) | Reply screen contrast | Text 4.5:1 or more; edges and focus rings 3:1 or more | Clarify text 13.60, pill 8.24, button edge 3.45; held text 7.15, 116 edge 3.80; white on the lightest dark stop 8.24, 116 glass text 6.43, its edge 4.31 and 5.52; no-answer text 8.41, pill edge 3.68 (`styles/tokens.test.ts`, Test 12) | Pass |
+| TC-166 | NFR (usability) | The four topic buttons (clarify) and pills (no answer, Help sheet) at 320, 360, 390 and 430px | Every button inside its card and the viewport; each label fully visible (label `scrollWidth` ≤ `clientWidth`); no word broken; 44px or taller | As expected at all four widths (browser check; `clarify-fixed-320.png`, `clarify-fixed-390.png`, `noanswer-fixed-320.png`) | Pass |
+| TC-167 | NFR (usability) | Clarify, held, help, referral, no answer and the Help sheet at 320, 360, 390 and 430px | `scrollWidth` ≤ `innerWidth`; no element past the viewport or clipped | As expected on all 24 (browser check; `held-fixed-320.png`, `help-fixed-320.png`, `referral-fixed-320.png`) | Pass |
+| TC-168 | FR-03 | Each topic button and pill at each width | Opens its own Topic list | As expected: 32 of 32 on clarify and no answer, and the Help sheet's STIs pill at each width (browser check) | Pass |
+| TC-169 | NFR (accessibility) | The footer line and the emergency line when they wrap | Line-height 1.35; each phone link keeps a 44px-tall tap area | As expected at all four widths (browser check: the link is hit 20px above and below its centre; `components.test.tsx`, Test 44) | Pass |
+| TC-170 | NFR (maintainability) | Where the four topics appear | One shared component and one set of grid rules (`TopicChoices`) on clarify, no answer and the Help sheet | As expected (`components.test.tsx`, Tests 23, 40 and 44) | Pass |
 
 ## Defects and retests
 

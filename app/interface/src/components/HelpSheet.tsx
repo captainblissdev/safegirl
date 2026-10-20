@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 import { telHref } from "../content/telHref";
-import { TOPICS, type Topic } from "../content/topics";
+import type { Topic } from "../content/topics";
 import { SOURCES_LINE } from "../content/uiText";
 import { trapTab } from "../focusTrap";
 import {
@@ -10,6 +10,7 @@ import {
   GBV_HELPLINE,
 } from "../offline/helpContent";
 import { CloseIcon } from "./Icons";
+import TopicChoices from "./TopicChoices";
 
 /**
  * The Help sheet, opened from the header's Help button on every screen.
@@ -136,18 +137,7 @@ export default function HelpSheet({ onClose, onExit, onTopic }: Props) {
 
         <section aria-labelledby="help-topics">
           <h3 id="help-topics">Topics</h3>
-          <div className="topic-buttons">
-            {TOPICS.map((topic) => (
-              <button
-                key={topic.topicClass}
-                className={`topic-button topic-button--${topic.topicClass}`}
-                type="button"
-                onClick={() => onTopic(topic)}
-              >
-                {topic.label}
-              </button>
-            ))}
-          </div>
+          <TopicChoices variant="pills" onTopic={onTopic} />
         </section>
       </div>
     </div>
