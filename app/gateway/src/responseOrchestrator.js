@@ -218,7 +218,7 @@ function signpost() {
  * Response to a held topic (src/heldTopics.js): a neutral signpost for
  * the matched group, without classification or retrieval.
  *
- * @param {string} group - The held-topic group, "A" or "B".
+ * @param {string} group - The held-topic group, "A", "B" or "C".
  * @returns {object} Final response payload.
  */
 function hold(group) {

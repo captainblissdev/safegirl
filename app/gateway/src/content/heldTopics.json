@@ -1,5 +1,5 @@
 {
-  "description": "Held topics: subjects the knowledge base does not cover safely yet, answered with a neutral signpost instead of a retrieved entry, until a clinician approves content. Used by src/heldTopics.js; scripts/build-held-topics.js copies the groups into the offline queryRules.ts, and a test fails if the copy is out of date. Written by hand from general vocabulary, by category, after the demo-risk results (docs/testing/demo-risk-results.csv) had been seen; not from any test query. Patterns are lowercase, written as the rule normalises a query (apostrophes and punctuation removed): a single word matches as written or with a plural 's' or 'es' added or removed; 'a b' is a phrase, matched as consecutive words; 'a+b' matches when every word is in the query, in any order. Groups are checked in order, so a query matching both gets group A's reply. Decision: docs/decision-log.md, 'Held-topic rule (2026-10-20)'.",
+  "description": "Held topics: subjects the knowledge base does not cover safely yet, answered with a neutral signpost instead of a retrieved entry, until a clinician approves content. Used by src/heldTopics.js; scripts/build-held-topics.js copies the groups into the offline queryRules.ts, and a test fails if the copy is out of date. Written by hand from general vocabulary, by category, after the demo-risk results (docs/testing/demo-risk-results.csv) had been seen (groups A and B, then group C); not from any test query. Patterns are lowercase, written as the rule normalises a query (apostrophes and punctuation removed): a single word matches as written or with a plural 's' or 'es' added or removed; 'a b' is a phrase, matched as consecutive words; 'a+b' matches when every word is in the query, in any order. Groups are checked in order (A, then B, then C), so a query matching several gets the first group's reply. Decision: docs/decision-log.md, 'Held-topic rule (2026-10-20)'.",
   "groups": [
     {
       "id": "A",
@@ -75,6 +75,48 @@
         "get rid of my pregnancy",
         "get rid of pregnancy",
         "get rid of the baby"
+      ]
+    },
+    {
+      "id": "C",
+      "name": "possible pregnancy and testing",
+      "criterion": "A late, missed, delayed or overdue period, or no period; a period that has not come; asking whether one could be pregnant; when to take a pregnancy test; or a negative test with no period. A question about periods in general (whether they are normal or irregular, or period pain) is not included.",
+      "patterns": [
+        "period+late",
+        "period+missed",
+        "period+delayed",
+        "period+overdue",
+        "period+skipped",
+        "late period",
+        "missed period",
+        "no period",
+        "no periods",
+        "period+hasnt+come",
+        "period+has+not+come",
+        "period+didnt+come",
+        "period+did+not+come",
+        "period+not+come",
+        "period+not+coming",
+        "period+isnt+coming",
+        "period+isnt+here",
+        "period+not+here",
+        "am i pregnant",
+        "could i be pregnant",
+        "might i be pregnant",
+        "can i be pregnant",
+        "i might be pregnant",
+        "maybe i am pregnant",
+        "maybe im pregnant",
+        "i think i am pregnant",
+        "i think im pregnant",
+        "pregnancy+test+when",
+        "pregnancy+test+soon",
+        "pregnancy+test+early",
+        "pregnancy+test+long",
+        "pregnancy+test+days",
+        "pregnancy+test+weeks",
+        "pregnancy+test+after",
+        "test+negative+period"
       ]
     }
   ]

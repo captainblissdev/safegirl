@@ -115,6 +115,7 @@ for (const [query, group] of [
   ["the condom broke last night", "A"],
   ["plan b?", "A"],
   ["where can I get an abortion", "B"],
+  ["my period is late this month", "C"],
 ] as const) {
   const response = handleShippedOffline(query);
   assert(

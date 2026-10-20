@@ -16,6 +16,8 @@ No new test was written and no evaluation was re-run for this file.
   suites pass.
   Held-topic rule, on `fix/held-topics` at `513442e`: gateway 412/412
   pass; interface all 6 suites pass.
+  Group C, on `fix/held-topics-c` at `60ee19a`: gateway 416/416 pass;
+  interface all 6 suites pass.
 - **Manual and evaluation results** are taken from the files cited, with
   their own dates.
 
@@ -24,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 98 cases: 82 Pass, 15 Fail, 1 Not run. Two of the
+**Totals:** 105 cases: 89 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -187,6 +189,13 @@ entry.
 | TC-096 | FR-03 | The two held-topic replies (provisional, pending clinician sign-off) | Exactly the approved provisional wording, with the existing numbers 1195 and 116 | As expected ("held-topic replies", 2 tests) | Pass |
 | TC-097 | FR-03 | Live, gateway and `ml_service` v3, gate on, before and after the rule: demo-risk set (20, **non-blind**), example questions (13), labelled development set (35), DR-04 (31) | No example question intercepted; no development or DR-04 query that was answered correctly before is intercepted | Intercepted: demo-risk 8/20; examples 0/13; development 0/35; DR-04 5/31 (#5, #6, #24, #18, #30), none answered correctly before (3 no-answer, 2 KB-P5 school re-entry); no other reply changed ([`held-topics-proof.csv`](held-topics-proof.csv), [DL](../decision-log.md#held-topic-rule-2026-10-20)) | Pass |
 | TC-098 | NFR (offline) | Offline: the rule in `offlinePipeline.ts` and parity with the gateway | Same order, groups, patterns, replies and results on every shared case | As expected (`offlineSafetyParity.test.js`, "gateway and offline held-topic rule parity", 3 tests; `offlinePipeline.test.ts`, Tests 9 and 10) | Pass |
+| TC-099 | FR-03 | Group C in the pattern file and its offline copy | Groups A, B and C, each with a name, criterion and patterns; the offline copy up to date | As expected (`heldTopics.test.js`, "has groups A, B and C …"; "is copied, up to date, into the offline queryRules.ts"; `build-held-topics.js --check`) | Pass |
+| TC-100 | FR-03 | Positive. Synthetic group C queries: late, missed, overdue or delayed period; no period; period has not come; "could I be pregnant?", "am I pregnant", "I think I'm pregnant"; pregnancy test timing; negative test with no period | Each matches group C | 13/13 ("matches group C: possible pregnancy and testing"; cases in `test/fixtures/heldCases.js`) | Pass |
+| TC-101 | FR-03 | Priority. "I took P2 and my period is late"; "my period is late and I want an abortion" | A, then B, then C: the first gets A, the second B | As expected ("checks the groups in the order A, B, C") | Pass |
+| TC-102 | FR-03 | Negative. "Is my period normal", "irregular periods", "period pain", the knowledge-base question "Is my period normal, and when should I see a health worker?", "is it normal for my period to be irregular", "how do I deal with period cramps" | No match | 6/6 unmatched ("leaves general period questions alone"; the first four also in the no-match fixture) | Pass |
+| TC-103 | FR-03 | Group C reply (provisional, pending clinician sign-off) and pipeline | Exactly the provisional wording; `outcome: "held"`, `kind: "held-topic"`, `heldTopicGroup: "C"`, no `/classify` or `/retrieve` | As expected ("uses the provisional wording for group C"; "returns the group's signpost without classifying or retrieving") | Pass |
+| TC-104 | FR-03 | Live, gateway and `ml_service` v3, gate on, before and after group C: demo-risk (20, **non-blind**), example questions (13), labelled development set (35), DR-04 (31), and the knowledge-base question "Is my period normal, and when should I see a health worker?" | No example question caught; no query answered correctly before is caught; the knowledge-base question still answered | Newly caught by C: demo-risk #15, #16, #17; examples 0/13; development Q27, Q29 (Q27 got KB-P1, acceptable KB-G3; Q29 no answer); DR-04 #10 (KB-P5). None answered correctly before. The knowledge-base question gets KB-G3. No other reply changed ([`held-topics-c-proof.csv`](held-topics-c-proof.csv), [DL](../decision-log.md#held-topic-group-c-possible-pregnancy-and-testing-2026-10-20)) | Pass |
+| TC-105 | NFR (offline) | Offline: group C in `offlinePipeline.ts` and parity | Same patterns, reply and results on every shared case; the offline pipeline gives the group C signpost | As expected (`offlineSafetyParity.test.js`, held-topic parity, now with the group C cases; `offlinePipeline.test.ts`, Test 9) | Pass |
 
 ## Defects and retests
 

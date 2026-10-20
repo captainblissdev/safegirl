@@ -493,7 +493,7 @@ export const EXTRA_HEALTH_TERMS: readonly string[] = [
 
 /** One held-topic group: its id and its patterns (see heldTopics.json). */
 export interface HeldTopicGroup {
-  id: "A" | "B";
+  id: "A" | "B" | "C";
   patterns: readonly string[];
 }
 
@@ -571,6 +571,46 @@ export const HELD_TOPIC_GROUPS: readonly HeldTopicGroup[] = [
       "get rid of my pregnancy",
       "get rid of pregnancy",
       "get rid of the baby",
+    ],
+  },
+  {
+    id: "C",
+    patterns: [
+      "period+late",
+      "period+missed",
+      "period+delayed",
+      "period+overdue",
+      "period+skipped",
+      "late period",
+      "missed period",
+      "no period",
+      "no periods",
+      "period+hasnt+come",
+      "period+has+not+come",
+      "period+didnt+come",
+      "period+did+not+come",
+      "period+not+come",
+      "period+not+coming",
+      "period+isnt+coming",
+      "period+isnt+here",
+      "period+not+here",
+      "am i pregnant",
+      "could i be pregnant",
+      "might i be pregnant",
+      "can i be pregnant",
+      "i might be pregnant",
+      "maybe i am pregnant",
+      "maybe im pregnant",
+      "i think i am pregnant",
+      "i think im pregnant",
+      "pregnancy+test+when",
+      "pregnancy+test+soon",
+      "pregnancy+test+early",
+      "pregnancy+test+long",
+      "pregnancy+test+days",
+      "pregnancy+test+weeks",
+      "pregnancy+test+after",
+      "test+negative+period",
     ],
   },
 ];
@@ -669,7 +709,7 @@ export function matchesPattern(tokens: string[], pattern: string): boolean {
  * The id of the first held-topic group the query matches ("A" or "B"),
  * or null. Port of app/gateway/src/heldTopics.js.
  */
-export function matchHeldTopic(text: unknown): "A" | "B" | null {
+export function matchHeldTopic(text: unknown): "A" | "B" | "C" | null {
   if (typeof text !== "string") {
     return null;
   }

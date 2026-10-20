@@ -909,3 +909,62 @@ vague-query rule, then the keyword classifier. The matcher is ported in
 mirrored in `offline/helpContent.ts`. The parity test compares the
 groups, the patterns and the replies, and runs every shared case
 through both matchers.
+
+## Held-topic group C: possible pregnancy and testing (2026-10-20)
+
+Requested by Cindy on 20 October 2026 (`fix/held-topics-c`). **No
+frozen item changed**: no model, knowledge-base text, threshold, Safety
+Net pattern, help number or `HELP_CONTACTS_VERIFIED`. Extends the
+held-topic rule above with a third group, in the same file
+(`app/gateway/src/content/heldTopics.json`) and the same matcher.
+
+**Why.** In the demo-risk run, questions about a late period or
+pregnancy testing got unrelated entries stated as answers: the
+pregnancy danger signs (KB-P6), school re-entry (KB-P5) and the pelvic
+exam entry (KB-P1). No entry covers these questions.
+
+**Criterion.** A late, missed, delayed or overdue period, or no
+period; a period that has not come; asking whether one could be
+pregnant; when to take a pregnancy test; or a negative test with no
+period. A question about periods in general (whether they are normal
+or irregular, or period pain) is not included. 35 patterns, by
+category:
+
+| Category | Patterns |
+|---|---|
+| Late, missed, delayed or overdue period | `period+late`, `period+missed`, `period+delayed`, `period+overdue`, `period+skipped`, "late period", "missed period" |
+| No period | "no period", "no periods" |
+| Period has not come | `period+hasnt+come`, `period+has+not+come`, `period+didnt+come`, `period+did+not+come`, `period+not+come`, `period+not+coming`, `period+isnt+coming`, `period+isnt+here`, `period+not+here` |
+| Could I be pregnant | "am i pregnant", "could i be pregnant", "might i be pregnant", "can i be pregnant", "i might be pregnant", "maybe i am pregnant", "maybe im pregnant", "i think i am pregnant", "i think im pregnant" |
+| Pregnancy test timing | `pregnancy+test+` with when, soon, early, long, days, weeks or after |
+| Negative test with no period | `test+negative+period` |
+
+Every period pattern needs a word for lateness or absence, so "Is my
+period normal", "irregular periods" and "period pain" do not match
+(tested), and the knowledge-base question "Is my period normal, and
+when should I see a health worker?" is still answered.
+
+**Priority.** Groups are checked in order A, then B, then C, so "Does
+P2 make your period come late?" keeps group A's reply.
+
+**Reply: provisional, pending clinician sign-off** (`HELD_TOPIC_MESSAGES.C`
+in `content/helpContent.js`; `kind: "held-topic"`, `heldTopicGroup:
+"C"`): "A late period can have many causes, including pregnancy, so it
+is worth checking. A pharmacist or clinic can help you do a pregnancy
+test, and a nurse can talk it through with you privately and without
+judgement. You do not have to give a reason. If you have heavy bleeding
+or severe pain, go to a health facility straight away."
+
+**Not independent.** The patterns were written by category of general
+vocabulary, not from any single query, but **after the demo-risk
+results had been seen**, so the demo-risk count for group C is
+non-blind.
+
+The offline copy of the patterns is generated from the same file, and
+the offline types and reply map accept group C (same commit), so the
+interface keeps compiling; offline tests and parity follow.
+
+**Offline and tests (same date).** The offline pipeline gives the
+group C signpost from the same generated patterns and a mirrored reply;
+the parity test runs the group C cases through both matchers. Tests:
+TC-099 to TC-105.

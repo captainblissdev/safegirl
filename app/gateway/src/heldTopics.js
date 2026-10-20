@@ -7,8 +7,8 @@
  * signpost instead of a retrieved entry that would be a confident guess.
  * The topics are held until a clinician approves content.
  *
- * The patterns are in src/content/heldTopics.json, in two groups (A and
- * B), checked in order. Queries are tokenised as the vague-query rule
+ * The patterns are in src/content/heldTopics.json, in three groups (A,
+ * B and C), checked in that order. Queries are tokenised as the vague-query rule
  * does (helpSignposting.normalize, then vagueQuery.tokenize). A pattern
  * is a single word (matching as written or with a plural "s" or "es"
  * added or removed), a phrase "a b" (consecutive words), or a word set
@@ -56,8 +56,8 @@ function matchesPattern(tokens, pattern) {
 }
 
 /**
- * The id of the first held-topic group the query matches ("A" or "B"),
- * or null.
+ * The id of the first held-topic group the query matches ("A", "B" or
+ * "C"), or null.
  *
  * @param {string} text - User's query.
  * @returns {string|null}

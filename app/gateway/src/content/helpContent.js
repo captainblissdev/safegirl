@@ -55,6 +55,13 @@ const HELD_TOPIC_MESSAGES = Object.freeze({
     "in danger or someone has hurt you, call the GBV helpline " +
     `${GBV_HELPLINE}. Childline Kenya, ${CHILDLINE_KENYA}, is free for ` +
     "anyone under 18.",
+  // C: possible pregnancy and testing.
+  C:
+    "A late period can have many causes, including pregnancy, so it is " +
+    "worth checking. A pharmacist or clinic can help you do a pregnancy " +
+    "test, and a nurse can talk it through with you privately and without " +
+    "judgement. You do not have to give a reason. If you have heavy " +
+    "bleeding or severe pain, go to a health facility straight away.",
 });
 
 /** Reply to a short query that names no health topic (vagueQuery.js). */

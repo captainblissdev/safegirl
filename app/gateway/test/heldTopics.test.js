@@ -20,7 +20,7 @@ const {
   renderOffline,
   OFFLINE_FILE,
 } = require("../scripts/build-held-topics");
-const { HELD_A, HELD_B, HELD_NONE } = require("./fixtures/heldCases");
+const { HELD_A, HELD_B, HELD_C, HELD_NONE } = require("./fixtures/heldCases");
 
 /** handleQuery() with a classifier client that records any call. */
 function recordingHandler(overrides = {}) {
@@ -46,11 +46,11 @@ function recordingHandler(overrides = {}) {
 }
 
 describe("held-topic patterns", () => {
-  it("has groups A and B, each with a name, a criterion and patterns", () => {
+  it("has groups A, B and C, each with a name, a criterion and patterns", () => {
     const groups = getHeldTopicGroups();
     assert.deepEqual(
       groups.map((group) => group.id),
-      ["A", "B"],
+      ["A", "B", "C"],
     );
     for (const group of groups) {
       assert.ok(group.name.length > 0, group.id);
@@ -58,7 +58,7 @@ describe("held-topic patterns", () => {
       assert.ok(group.patterns.length > 0, group.id);
     }
     // Throws on a malformed or duplicated pattern.
-    assert.equal(readHeldTopicGroups().length, 2);
+    assert.equal(readHeldTopicGroups().length, 3);
   });
 
   it("is copied, up to date, into the offline queryRules.ts", () => {
@@ -91,6 +91,33 @@ describe("matchHeldTopic()", () => {
     );
   });
 
+  it("matches group C: possible pregnancy and testing", () => {
+    for (const query of HELD_C) {
+      assert.equal(matchHeldTopic(query), "C", query);
+    }
+  });
+
+  it("checks the groups in the order A, B, C", () => {
+    assert.equal(matchHeldTopic("I took P2 and my period is late"), "A");
+    assert.equal(
+      matchHeldTopic("my period is late and I want an abortion"),
+      "B",
+    );
+  });
+
+  it("leaves general period questions alone", () => {
+    for (const query of [
+      "Is my period normal",
+      "irregular periods",
+      "period pain",
+      "Is my period normal, and when should I see a health worker?",
+      "is it normal for my period to be irregular",
+      "how do I deal with period cramps",
+    ]) {
+      assert.equal(matchHeldTopic(query), null, query);
+    }
+  });
+
   it("leaves other questions alone", () => {
     for (const query of HELD_NONE) {
       assert.equal(matchHeldTopic(query), null, query);
@@ -113,6 +140,13 @@ describe("held-topic replies", () => {
       "This is an important question, and I can't answer it safely here yet. A nurse or counsellor can talk it through with you privately and without judgement, and you do not have to give a reason. If you are in danger or someone has hurt you, call the GBV helpline 1195. Childline Kenya, 116, is free for anyone under 18.",
     );
   });
+
+  it("uses the provisional wording for group C", () => {
+    assert.equal(
+      HELD_TOPIC_MESSAGES.C,
+      "A late period can have many causes, including pregnancy, so it is worth checking. A pharmacist or clinic can help you do a pregnancy test, and a nurse can talk it through with you privately and without judgement. You do not have to give a reason. If you have heavy bleeding or severe pain, go to a health facility straight away.",
+    );
+  });
 });
 
 describe("held-topic rule in handleQuery()", () => {
@@ -120,6 +154,7 @@ describe("held-topic rule in handleQuery()", () => {
     for (const [query, group] of [
       ["the condom broke last night", "A"],
       ["where can I get an abortion", "B"],
+      ["my period is late this month", "C"],
     ]) {
       const { calls, handleQuery } = recordingHandler();
       const response = await handleQuery(query);

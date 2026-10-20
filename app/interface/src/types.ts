@@ -48,8 +48,9 @@ export interface QueryResponse {
   // from, verbatim; null when no entry was served.
   matchedQuestion?: string | null;
   // On held-topic replies: the matched group, "A" (after sex or
-  // contraception failure) or "B" (pregnancy decisions).
-  heldTopicGroup?: "A" | "B";
+  // contraception failure), "B" (pregnancy decisions) or "C" (possible
+  // pregnancy and testing).
+  heldTopicGroup?: "A" | "B" | "C";
 
   // Present on grounded_answer responses.
   // Category of the knowledge-base entry actually served; null when no

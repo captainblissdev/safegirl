@@ -27,7 +27,7 @@ const helpRule = require("../src/helpSignposting");
 const vagueRule = require("../src/vagueQuery");
 const { HELP_POSITIVE, HELP_NEGATIVE } = require("./fixtures/helpCases");
 const heldRule = require("../src/heldTopics");
-const { HELD_A, HELD_B, HELD_NONE } = require("./fixtures/heldCases");
+const { HELD_A, HELD_B, HELD_C, HELD_NONE } = require("./fixtures/heldCases");
 const {
   DEV_ALL,
   DR04,
@@ -294,6 +294,7 @@ describe("gateway and offline held-topic rule parity", () => {
     cases = [
       ...HELD_A,
       ...HELD_B,
+      ...HELD_C,
       ...HELD_NONE,
       ...HELP_POSITIVE,
       ...HELP_NEGATIVE,
