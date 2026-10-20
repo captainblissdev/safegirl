@@ -516,3 +516,36 @@ knowledge-base entry. Its unscoped score is 0.8440, just above the
 threshold, so the gate lets it through and it is still answered with the
 wrong entry, KB-P5 (school re-entry)
 (`research/eval/results/coverage_gap_examples_2026-10-15.csv`).
+
+## Reply kind and matched question in every response (2026-10-20)
+
+Approved by Cindy on 20 October 2026, as part of the response-clarity
+fixes (`fix/response-clarity`). **No frozen item changed**: no model,
+threshold, knowledge-base text or Safety Net pattern. Two fields are
+added to every gateway response; no existing field changes.
+
+**Why.** The UI audit ([`docs/design/ui-audit-2026-10-20.md`](design/ui-audit-2026-10-20.md),
+UI-01) found that a loosely matched answer is shown as a direct reply:
+"Am I okay?" got KB-S4, "It could be. Unusual discharge…", with nothing
+to say it answers "I have unusual discharge, itching, burning or lower
+belly pain. Could it be an STI?". The interface could not show the
+matched question because the response did not carry it.
+
+**What changed** (`app/gateway/src/responseOrchestrator.js`):
+- `matchedQuestion`: the "User question" of the knowledge-base entry
+  the answer came from, verbatim, or `null` when no entry was served
+  (no answer, the relevance gate abstained, help, referral).
+- `kind`, one of `REPLY_KINDS`:
+
+  | `kind` | When |
+  |---|---|
+  | `answer-scoped` | An answer retrieved within the predicted category (`retrievalScope: "scoped"`) |
+  | `answer-unscoped` | An answer retrieved across all categories (`"unscoped"`), or by local keyword retrieval after the keyword fallback (`"local"`), where the classifier's confidence is unknown |
+  | `abstain` | The standard no-answer message: classifier abstain, relevance gate abstain, or no entry found |
+  | `help` | A generic help request (`outcome: "signposting"`) |
+  | `vague` | Reserved for the vague-query rule (added in a later step) |
+  | `referral` | The Safety Net flagged the query |
+
+The interface type (`QueryResponse` in `app/interface/src/types.ts`) has
+the same two fields and a `ReplyKind` union; a gateway test checks the
+union against `REPLY_KINDS`. The interface does not use the fields yet.

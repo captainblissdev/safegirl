@@ -17,7 +17,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 65 cases: 51 Pass, 13 Fail, 1 Not run. Two of the
+**Totals:** 70 cases: 56 Pass, 13 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -138,6 +138,20 @@ unless stated.
 | TC-063 | IR-01 | Fresh clone of `development`, following the README as it was | The three processes can be set up and started | Failed: no venv or install step, no checkpoint source, no interface `.env` step, a start order missing; pins did not match the working environment (defect 6) | Fail |
 | TC-064 | IR-01 | Fresh Python 3.12 venv from the corrected `ml_service/requirements.txt` | Installs, `pip check` clean, `/health` ok | As expected ([`docs/testing/test-log.md`](test-log.md), Setup checks) | Pass (retest) |
 | TC-065 | IR-01 | A new person follows the rewritten README end to end | All three processes run | No such walkthrough recorded after the rewrite | Not run |
+
+## Response clarity (20 October 2026)
+
+Added on `fix/response-clarity`; each change is in
+[`docs/decision-log.md`](../decision-log.md) under its 20 October 2026
+entry.
+
+| Test ID | Traceability | Scenario and data | Expected result | Actual result (evidence) | Verdict |
+|---|---|---|---|---|---|
+| TC-066 | FR-03 | Positive. A clear query answered with retrieval scoped to the predicted class (mocked `ml_service`, confidence 0.9, KB-S4) | `kind: "answer-scoped"`; `matchedQuestion` is KB-S4's question, verbatim | As expected (`responseKind.test.js`, "scoped answer: answer-scoped, with the entry's question verbatim") | Pass |
+| TC-067 | FR-03 | Positive. Unscoped retrieval (confidence 0.45), then the keyword fallback (`/classify` fails, local retrieval) | `kind: "answer-unscoped"` in both; `matchedQuestion` is the served entry's question | As expected ("unscoped answer: …"; "keyword fallback (local retrieval): …") | Pass |
+| TC-068 | FR-03 | Negative. Classifier abstain (confidence 0.2), and relevance gate abstain (unscoped score 0.80, gate on) | `kind: "abstain"`; `matchedQuestion: null`; no entry text in the response | As expected ("classifier abstain: …"; "relevance gate abstain: …") | Pass |
+| TC-069 | FR-04, FR-03 | Generic help request and a flagged query | `kind: "help"` and `kind: "referral"`, both with `matchedQuestion: null` | As expected ("help request: …"; "flagged query: …") | Pass |
+| TC-070 | FR-03 | Every active knowledge-base entry served through the orchestrator; the interface's `ReplyKind` type | Each response's `matchedQuestion` is that entry's own question, unchanged; the interface union lists the six gateway kinds in order | As expected ("matchedQuestion is each active entry's own question, unchanged"; "the interface's ReplyKind type lists the same kinds") | Pass |
 
 ## Defects and retests
 
