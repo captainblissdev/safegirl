@@ -12,6 +12,9 @@ import {
   LIMITED_MODE_NOTICE,
   NO_ANSWER_RETRY,
   PERSON_MESSAGE,
+  HERO_PILL,
+  ASK_LABEL,
+  ASK_SEND_NAME,
   REPLY_PILLS,
 } from "../content/uiText";
 import {
@@ -39,6 +42,7 @@ import {
 } from "../content/kbQuestions";
 import TopicList from "./TopicList";
 import AnswerView from "./AnswerView";
+import AskBar from "./AskBar";
 import { announcementFor, replyViewOf } from "../replyView";
 import { PLACEHOLDER_EXAMPLES, SOURCES_LINE } from "../content/uiText";
 import AppHeader from "./AppHeader";
@@ -930,26 +934,27 @@ console.log("\nTest 28: Home");
     'the "Private and anonymous" tag with its lock icon',
   );
   const pill = html.slice(
-    html.indexOf('<div class="ask-pill">'),
-    html.indexOf("</div>", html.indexOf('<div class="ask-pill">')),
+    html.indexOf('<div class="ask-card">'),
+    html.indexOf("</div></div>", html.indexOf('<div class="ask-card">')),
   );
-  assert(pill.split("<input").length === 2, "the ask pill has one input");
+  assert(pill.split("<input").length === 2, "the ask card has one input");
   assert(
     pill.includes(
-      '<label class="sr-only" for="chat-input">Type your question</label>',
+      `<label class="ask-card-label" for="chat-input">${ASK_LABEL}</label>`,
     ) && pill.includes('id="chat-input"'),
-    "a visually hidden label for it",
+    `a visible label, "${ASK_LABEL}", tied to it`,
   );
   assert(
-    pill.includes('aria-label="Ask"') && pill.includes('class="btn-send"'),
-    'a send button labelled "Ask"',
+    pill.includes(`aria-label="${ASK_SEND_NAME}"`) &&
+      pill.includes('class="btn-send"'),
+    `a send button named "${ASK_SEND_NAME}"`,
   );
   assert(
     pill.includes(`placeholder="${escapeHtml(PLACEHOLDER_EXAMPLES[0])}"`),
     "the placeholder starts with the first example",
   );
   assert(
-    !html.slice(0, html.indexOf("ask-pill")).includes("aria-live"),
+    !html.slice(0, html.indexOf("ask-card")).includes("aria-live"),
     "the placeholder is not in a live region",
   );
   const tiles = [
@@ -2110,6 +2115,110 @@ console.log(
   assert(
     css.includes("html:has(.answer-dock) {\n  scroll-padding-bottom: 40vh;\n}"),
     "a focused control scrolls clear of the docked ask bar (WCAG 2.4.11)",
+  );
+}
+
+/** The Home ask bar alone, for its send button's state. */
+function AskBarForTest({ value }: { value: string }) {
+  return (
+    <AskBar
+      variant="hero"
+      value={value}
+      onChange={() => undefined}
+      onSubmit={() => undefined}
+      disabled={false}
+      placeholder="p"
+      inputRef={{ current: null }}
+    />
+  );
+}
+
+console.log("\nTest 48: Home polish (step 4b)");
+{
+  const html = renderChat([]);
+  assert(
+    html.includes(`</svg> ${HERO_PILL}</p>`) &&
+      html.indexOf('class="hero-tag"') < html.indexOf("<h1"),
+    `the "${HERO_PILL}" pill with its lock, above the h1`,
+  );
+  assert(
+    HERO_PILL === "Private and anonymous" &&
+      ASK_LABEL === "Type your question" &&
+      ASK_SEND_NAME === "Get an answer",
+    "the new copy, each in one constant",
+  );
+  assert(
+    html.includes('<span class="hero-decor" aria-hidden="true">') &&
+      html.split("hero-circle hero-circle--").length === 3 &&
+      html.includes("hero-sparkle-icon"),
+    "the hero decoration (two circles and a sparkle) is hidden from screen readers",
+  );
+  assert(
+    html.indexOf('class="ask-card"') > html.indexOf("</section>"),
+    "the ask card follows the hero card",
+  );
+  /** True when Home's send button is enabled for this field value. */
+  const send = (value: string) =>
+    !renderToStaticMarkup(<AskBarForTest value={value} />).includes(
+      'disabled="" aria-label="Get an answer"',
+    );
+  assert(!send(""), "the send button is disabled while the field is empty");
+  assert(!send("   "), "and while it holds only spaces");
+  assert(send("is my period normal"), "and enabled once there is text");
+  const footer = html.slice(html.indexOf('<footer class="home-footer">'));
+  assert(
+    footer.includes('<p class="home-anonymous"><svg') &&
+      footer.includes("Anonymous. We never ask for your name.") &&
+      footer.includes(
+        `<a href="${telHref(GBV_HELPLINE)}" aria-label="${telName(GBV_HELPLINE)}">${GBV_HELPLINE}</a>`,
+      ),
+    "the footer card: lock, the anonymous line and the footer line with its tel: link from the constant",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes("End session") &&
+      app.indexOf("<ChatInterface") < app.indexOf("End session"),
+    "End session stays, directly after the chat (below the footer card)",
+  );
+  assert(
+    JSON.stringify(TOPICS.map((t) => [t.label, t.topicClass, t.subtitle])) ===
+      JSON.stringify([
+        ["Periods and health", "general", "Cycle, pain, clinics"],
+        ["Pregnancy", "pregnancy", "Signs, care, school"],
+        ["Contraception", "contraception", "Methods and myths"],
+        ["STIs and HIV", "sti", "Signs, testing, care"],
+      ]),
+    "labels and classes unchanged; the new subtitles",
+  );
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  assert(
+    rule(".ask-field").includes("border: 1.5px solid var(--ask-field-edge);") &&
+      rule(".ask-field .btn-send:disabled").includes(
+        "background: var(--send-disabled-bg);",
+      ) &&
+      rule(".ask-field .btn-send:disabled").includes("opacity: 1;"),
+    "the field has a 3:1 edge; the disabled send button keeps a mid-violet fill at full opacity",
+  );
+  assert(
+    rule(".topic-tile").includes("border: 1.5px solid;") &&
+      rule(".topic-tile").includes("min-height: 104px;"),
+    "the topic cards keep their coloured edges",
+  );
+  assert(
+    /@media \(max-width: 600px\) \{[\s\S]*?\.app-header \{\s*margin-right: 8px;\s*margin-left: 8px;/.test(
+      css,
+    ),
+    "on phones the header lines up with the 20px content gutter",
+  );
+  const narrow = css.slice(css.lastIndexOf("@media (max-width: 359px) {"));
+  assert(
+    narrow.includes("column-gap: 8px;") &&
+      narrow.includes(".topic-tile-label {\n    font-size: 15px;"),
+    "under 360px: a 16px gutter, the header on one row, tile titles at 15px",
   );
 }
 

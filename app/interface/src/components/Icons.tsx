@@ -315,6 +315,44 @@ export function PeopleIcon(props: IconProps) {
   );
 }
 
+/** The design's four-pointed sparkle, filled (the Home hero). */
+export function HeroSparkle({ size = 26 }: IconProps) {
+  return (
+    <svg
+      className="hero-sparkle-icon"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        fill="currentColor"
+        d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"
+      />
+    </svg>
+  );
+}
+
+/** The design's small lock (Home's pill and footer card). */
+export function SmallLockIcon(props: IconProps) {
+  return (
+    <Svg strokeWidth={2.4} {...props}>
+      <rect x="5" y="11" width="14" height="9" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </Svg>
+  );
+}
+
+/** The send button's up arrow (Home's ask card). */
+export function ArrowUpIcon(props: IconProps) {
+  return (
+    <Svg size={20} strokeWidth={2.6} {...props}>
+      <path d="M12 19V5M5 12l7-7 7 7" />
+    </Svg>
+  );
+}
+
 export function CloseIcon(props: IconProps) {
   return (
     <Svg {...props}>

@@ -35,7 +35,12 @@
 
   /* Gradients. */
   --gradient-primary: linear-gradient(135deg, #6d28d9, #c026d3);
-  --gradient-hero: linear-gradient(135deg, #5b21b6, #a21caf);
+  --gradient-hero: linear-gradient(
+    135deg,
+    #5b21b6 0%,
+    #8a24c9 55%,
+    #a21caf 100%
+  );
   /* Splash: deep plum, violet, magenta. */
   --gradient-splash: linear-gradient(
     165deg,
@@ -59,7 +64,25 @@
   --splash-icon-shield: #be185d;
 
   /* Home hero: the tag pill's fill (white text 4.94:1 at the light end). */
-  --hero-tag-bg: rgba(255, 255, 255, 0.15);
+  /* Home (step 4b): the hero card, its pill and decoration, the ask
+     card, the footer card and the topic cards' shadow. */
+  --hero-shadow: 0 14px 28px rgba(91, 33, 182, 0.28);
+  --hero-circle-strong: rgba(244, 114, 182, 0.35);
+  --hero-circle-soft: rgba(244, 114, 182, 0.22);
+  --hero-pill-bg: #ffffff;
+  --hero-pill-text: #9d174d;
+  --hero-sub-text: #f6e9ff;
+  --ask-card-shadow: 0 8px 20px rgba(109, 40, 217, 0.08);
+  --ask-field-bg: #fff0f7;
+  /* The design's #f3c6de field edge is 1.37:1; the field is a control,
+     so its edge is darkened to reach 3:1 on the field and the card. */
+  --ask-field-edge: #c25a92;
+  --send-shadow: 0 6px 14px rgba(192, 38, 211, 0.35);
+  /* The empty field's send button: still visibly a button. */
+  --send-disabled-bg: #8b5cf6;
+  --footer-card-bg: #ffe9f4;
+  --footer-card-text: #5e2a58;
+  --topic-card-shadow: 0 6px 16px rgba(190, 24, 93, 0.08);
 
   /*
    * Home topic tiles: the edge of each tile (a button) is the lightest

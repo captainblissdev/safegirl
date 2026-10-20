@@ -79,3 +79,12 @@ export const NO_ANSWER_RETRY =
  */
 export const DANGER_LINE_CALL_ABOVE =
   "In danger? Use the GBV helpline call button above. It is free and open 24 hours.";
+
+/** Home's hero pill (step 4b). */
+export const HERO_PILL = "Private and anonymous";
+
+/** The visible label of Home's question field (step 4b). */
+export const ASK_LABEL = "Type your question";
+
+/** The accessible name of Home's send button (step 4b). */
+export const ASK_SEND_NAME = "Get an answer";

@@ -636,6 +636,12 @@
     padding: 12px;
   }
 
+  /* The header lines up with the screens' 20px content gutter. */
+  .app-header {
+    margin-right: 8px;
+    margin-left: 8px;
+  }
+
   .screen {
     padding: 20px 0;
   }
@@ -1005,7 +1011,7 @@
   color: var(--color-on-dark);
 }
 
-/* Home (redesign Step 4): the empty state of the chat */
+/* Home (redesign Steps 4 and 4b): the empty state of the chat */
 
 .home-screen {
   justify-content: flex-start;
@@ -1014,31 +1020,64 @@
 
 .home {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
   padding: 0 8px;
 }
 
+/* The hero card. The decoration sits behind the text (z-index). */
 .hero {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   overflow: hidden;
-  border-radius: var(--radius-card-large);
-  padding: 18px;
+  border-radius: 28px;
+  padding: 22px 20px;
   background: var(--gradient-hero);
   color: var(--color-on-dark);
-  box-shadow: var(--shadow);
+  box-shadow: var(--hero-shadow);
+}
+
+.hero > :not(.hero-decor) {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-circle {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.hero-circle--large {
+  top: -34px;
+  right: -34px;
+  width: 120px;
+  height: 120px;
+  background: var(--hero-circle-strong);
+}
+
+.hero-circle--small {
+  right: 30px;
+  bottom: -40px;
+  width: 84px;
+  height: 84px;
+  background: var(--hero-circle-soft);
 }
 
 .hero-sparkle {
   position: absolute;
-  top: 14px;
-  right: 16px;
+  top: 20px;
+  right: 22px;
   color: var(--color-on-dark);
-  opacity: 0.8;
-  pointer-events: none;
+  opacity: 0.9;
 }
 
 .hero-tag {
@@ -1047,59 +1086,88 @@
   align-items: center;
   gap: 6px;
   border-radius: 999px;
-  padding: 4px 12px;
-  background: var(--hero-tag-bg);
+  padding: 5px 12px 5px 10px;
+  background: var(--hero-pill-bg);
+  color: var(--hero-pill-text);
   font-size: 13px;
   font-weight: var(--weight-extrabold);
 }
 
 .hero-title {
-  font-size: 26px;
+  max-width: 290px;
+  font-size: 27px;
   font-weight: var(--weight-black);
   line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .hero-sub {
-  font-size: 15px;
-  line-height: 1.4;
+  max-width: 290px;
+  color: var(--hero-sub-text);
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.45;
 }
 
-/* The ask pill: the chat's one ask bar, white, inside the hero. */
-.ask-pill {
+/* The ask card: the chat's one ask bar on Home, with a visible label. */
+.ask-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1.5px solid var(--color-card-border);
+  border-radius: 24px;
+  padding: 14px;
+  background: var(--color-card);
+  box-shadow: var(--ask-card-shadow);
+}
+
+.ask-card-label {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-extrabold);
+}
+
+/* The field is a control: its edge reaches 3:1 (see tokens.css). */
+.ask-field {
   display: flex;
   align-items: center;
   gap: 8px;
-  border-radius: 30px;
-  padding: 6px 6px 6px 16px;
-  background: var(--color-card);
+  border: 1.5px solid var(--ask-field-edge);
+  border-radius: 28px;
+  padding: 5px 5px 5px 16px;
+  background: var(--ask-field-bg);
 }
 
-.ask-pill input {
+.ask-field input {
   flex: 1;
   min-width: 0;
-  min-height: 48px;
+  height: 44px;
   border: 0;
   background: transparent;
   color: var(--color-ink);
-  font-size: 1rem;
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
   text-overflow: ellipsis;
 }
 
-.ask-pill input::placeholder {
+.ask-field input::placeholder {
   color: var(--color-muted);
 }
 
-.ask-pill .btn-send {
+.ask-field .btn-send {
   flex: 0 0 48px;
   width: 48px;
   height: 48px;
   background: var(--gradient-primary);
   color: var(--color-on-dark);
+  box-shadow: var(--send-shadow);
 }
 
-/* Inside the white pill the violet ring shows; the hero's white one would not. */
-.surface-dark .ask-pill :focus-visible {
-  outline-color: var(--focus-ring-color);
+/* Empty field: disabled, but still visibly a button. */
+.ask-field .btn-send:disabled {
+  background: var(--send-disabled-bg);
+  box-shadow: none;
+  opacity: 1;
 }
 
 .home-topics-title {
@@ -1118,26 +1186,28 @@
   min-width: 0;
 }
 
+/* The coloured edges are control edges (3:1, tokens.css). */
 .topic-tile {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 6px;
-  min-height: 88px;
+  min-height: 104px;
   border: 1.5px solid;
   border-radius: 22px;
-  padding: 12px;
+  padding: 14px;
   background: var(--color-card);
   color: var(--color-ink);
   text-align: left;
+  box-shadow: var(--topic-card-shadow);
   cursor: pointer;
 }
 
 .topic-tile-icon {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 14px;
 }
 
@@ -1151,6 +1221,7 @@
 .topic-tile-sub {
   color: var(--color-muted);
   font-size: 13px;
+  font-weight: var(--weight-semibold);
   line-height: 1.3;
 }
 
@@ -1190,16 +1261,32 @@
   color: var(--topic-sti-text);
 }
 
+/* The footer card: the anonymous line and the footer line. */
 .home-footer {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 6px;
+  margin-top: auto;
+  border-radius: 18px;
+  padding: 12px 14px;
+  background: var(--footer-card-bg);
+  color: var(--footer-card-text);
+  font-size: 13px;
+  font-weight: var(--weight-bold);
 }
 
 .home-anonymous {
-  color: var(--color-muted);
-  font-size: 14px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.home-footer .danger-line {
+  color: var(--footer-card-text);
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+  line-height: 1.4;
+  text-align: left;
 }
 
 /* Topic list (redesign Step 5) */
@@ -1815,4 +1902,30 @@
    200% zoom, where it takes up to 39% of the screen. */
 html:has(.answer-dock) {
   scroll-padding-bottom: 40vh;
+}
+
+/* Under 360px wide, every screen and the header use a 16px gutter (20px
+   above), so the header's logo, Help and Exit stay on one row. */
+@media (max-width: 359px) {
+  .app-header {
+    column-gap: 8px;
+    margin-right: 4px;
+    margin-left: 4px;
+  }
+
+  .home {
+    padding-right: 4px;
+    padding-left: 4px;
+  }
+
+  .topic-screen,
+  .answer-screen {
+    padding-right: 4px;
+    padding-left: 4px;
+  }
+
+  /* "Contraception" at 16px is wider than a tile at 320px. */
+  .topic-tile-label {
+    font-size: 15px;
+  }
 }

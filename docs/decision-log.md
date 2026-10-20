@@ -1435,3 +1435,42 @@ Browser zoom scales all text, so WCAG 1.4.4 is met.
 **Results:** axe 0 violations on all 28 scans; Lighthouse Home 98, 100,
 100, 91 in all three runs; answer flow 100 (time span), 100, 100, 80 in
 all three; PWA 100 in all three.
+
+## Home polish (2026-10-20)
+
+Redesign step 4b (`fix/ui-redesign`), on Cindy's brief with every value
+given. Layout and UI copy only; no reply, KB, held or help text, helpline
+constant, gate, threshold or Safety Net pattern changed.
+
+**What changed.** The hero is a card (three-stop violet gradient, radius
+28) with a white "Private and anonymous" pill and a lock, and a sparkle
+and two pink circles behind the text (aria-hidden). The ask bar moved
+out of the hero into a white card with the visible label "Type your
+question", a pink field and a 48px gradient send button named "Get an
+answer" with an up arrow. The anonymous line and the footer line sit in
+a pink footer card with a lock; End session stays directly below it.
+Topic cards: radius 22, padding 14, 104px tall, 40px icon tiles, a soft
+shadow, the coloured 3:1 edges kept.
+
+**New copy** (constants): `HERO_PILL` "Private and anonymous" (the text
+was already on screen, now a constant), `ASK_LABEL` "Type your question"
+(was a hidden label, now visible), `ASK_SEND_NAME` "Get an answer" (was
+"Ask"). Subtitles (`content/topics.ts`): "Periods, puberty, clinics" to
+"Cycle, pain, clinics"; "Warning signs, food, school" to "Signs, care,
+school"; "Methods, condoms, fertility" to "Methods and myths"; "Symptoms,
+treatment, PEP, PrEP" to "Signs, testing, care". Labels and classes
+unchanged.
+
+**Design values changed for contrast.** The field edge #F3C6DE is
+1.37:1 on the field; the field is a control, so its edge is #C25A92
+(3.69:1 on the field, 4.06:1 on the card). The empty field's send button
+is #8B5CF6 at full opacity (white arrow 4.23:1; edge on the field
+3.84:1). The paragraph colour #F6E9FF would be 4.04:1 over the large
+circle; it never meets it (checked at 320 to 430px), and over the small
+circle it is 4.52:1, so nothing was changed.
+
+**Gutters.** Before: content 20px at 390 and 320px, the header 12px.
+After: content and header 20px from 360px up. Under 360px both are 16px
+(the header's logo, Help and Exit need 283px on one row; a 20px gutter
+leaves 280px at 320px), and tile titles drop from 16 to 15px, because
+"Contraception" at 16px is wider than a tile at 320px.

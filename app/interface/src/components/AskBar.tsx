@@ -1,5 +1,6 @@
 import type { RefObject } from "react";
-import { ArrowRightIcon, SendIcon } from "./Icons";
+import { ASK_LABEL, ASK_SEND_NAME } from "../content/uiText";
+import { ArrowUpIcon, SendIcon } from "./Icons";
 
 /**
  * The ask bar: one labelled text input and a send button. The chat
@@ -21,7 +22,7 @@ interface Props {
 }
 
 const COPY = {
-  hero: { label: "Type your question", send: "Ask" },
+  hero: { label: ASK_LABEL, send: ASK_SEND_NAME },
   bar: { label: "Ask a question", send: "Send question" },
 } as const;
 
@@ -36,12 +37,8 @@ export default function AskBar({
   label,
 }: Props) {
   const copy = COPY[variant];
-  return (
-    <div className={variant === "hero" ? "ask-pill" : "input-row"}>
-      <label className="sr-only" htmlFor="chat-input">
-        {label ?? copy.label}
-      </label>
-
+  const field = (
+    <>
       <input
         ref={inputRef}
         id="chat-input"
@@ -65,8 +62,24 @@ export default function AskBar({
         disabled={disabled || !value.trim()}
         aria-label={copy.send}
       >
-        {variant === "hero" ? <ArrowRightIcon /> : <SendIcon />}
+        {variant === "hero" ? <ArrowUpIcon /> : <SendIcon />}
       </button>
+    </>
+  );
+
+  return variant === "hero" ? (
+    <div className="ask-card">
+      <label className="ask-card-label" htmlFor="chat-input">
+        {label ?? copy.label}
+      </label>
+      <div className="ask-field">{field}</div>
+    </div>
+  ) : (
+    <div className="input-row">
+      <label className="sr-only" htmlFor="chat-input">
+        {label ?? copy.label}
+      </label>
+      {field}
     </div>
   );
 }

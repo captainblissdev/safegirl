@@ -94,8 +94,12 @@ console.log("Test 1: the brief's tokens are defined with their values");
     "primary gradient #6D28D9 to #C026D3",
   );
   assert(
-    token("--gradient-hero") === "linear-gradient(135deg, #5b21b6, #a21caf)",
-    "hero gradient #5B21B6 to #A21CAF",
+    token("--gradient-hero")
+      .replace(/\s+/g, " ")
+      .replace("( ", "(")
+      .replace(" )", ")") ===
+      "linear-gradient(135deg, #5b21b6 0%, #8a24c9 55%, #a21caf 100%)",
+    "hero gradient #5B21B6, #8A24C9 (55%), #A21CAF",
   );
   const radius = (name: string) => parseInt(token(name), 10);
   assert(
@@ -431,32 +435,11 @@ console.log("\nTest 9: Home");
     (m) => m[0],
   );
   const white = token("--color-on-dark");
-  /** rgba(r, g, b, a) composited over a hex colour, as hex. */
-  const over = (rgba: string, hex: string) => {
-    const [r, g, b, a] = rgba
-      .replace(/[^0-9.,]/g, "")
-      .split(",")
-      .map(Number);
-    const base = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
-    return (
-      "#" +
-      [r, g, b]
-        .map((c, i) => Math.round(c * a + base[i] * (1 - a)))
-        .map((c) => c.toString(16).padStart(2, "0"))
-        .join("")
-    );
-  };
   const worst = (fg: string, backgrounds: string[]) =>
     Math.min(...backgrounds.map((bg) => contrast(fg, bg)));
 
-  const tag = worst(
-    white,
-    hero.map((bg) => over(token("--hero-tag-bg"), bg)),
-  );
-  assert(
-    tag >= 4.5,
-    `tag pill: white on its fill over the hero: ${tag.toFixed(2)}:1`,
-  );
+  const tag = contrast(token("--hero-pill-text"), token("--hero-pill-bg"));
+  assert(tag >= 4.5, `hero pill text on white: ${tag.toFixed(2)}:1`);
   const sub = worst(white, hero);
   assert(
     sub >= 4.5,
@@ -467,7 +450,7 @@ console.log("\nTest 9: Home");
   const pillEdge = worst(card, hero);
   assert(
     pillEdge >= 3,
-    `the white ask pill's edge on the hero: ${pillEdge.toFixed(2)}:1`,
+    `the white pill's edge on the hero: ${pillEdge.toFixed(2)}:1`,
   );
   const placeholder = contrast(token("--color-muted"), card);
   assert(
@@ -857,6 +840,127 @@ console.log("\nTest 13: the Talk to a person screen");
     contrast(token("--color-control-border"), card),
     3,
     "topic pill edge on the card",
+  );
+}
+
+console.log("\nTest 14: Home polish (step 4b)");
+{
+  const over = (rgba: string, hex: string) => {
+    const [r, g, b, a] = rgba
+      .replace(/[^0-9.,]/g, "")
+      .split(",")
+      .map(Number);
+    const base = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    return (
+      "#" +
+      [r, g, b]
+        .map((c, i) => Math.round(c * a + base[i] * (1 - a)))
+        .map((c) => c.toString(16).padStart(2, "0"))
+        .join("")
+    );
+  };
+  const check = (ratio: number, min: number, what: string) =>
+    assert(ratio >= min, `${what}: ${ratio.toFixed(2)}:1`);
+  const stops = [...token("--gradient-hero").matchAll(/#[0-9a-f]{6}/g)].map(
+    (m) => m[0],
+  );
+  assert(
+    JSON.stringify(stops) === '["#5b21b6","#8a24c9","#a21caf"]',
+    "the hero gradient runs #5B21B6, #8A24C9, #A21CAF",
+  );
+  const worst = (fg: string, bgs: string[]) =>
+    Math.min(...bgs.map((bg) => contrast(fg, bg)));
+  const behind = [
+    ...stops,
+    ...stops.map((s) => over(token("--hero-circle-strong"), s)),
+    ...stops.map((s) => over(token("--hero-circle-soft"), s)),
+  ];
+  check(
+    worst(token("--color-on-dark"), behind),
+    4.5,
+    "headline, white on the hero, circles included",
+  );
+  // The paragraph sits below the large top-right circle (the browser
+  // check confirms it never meets it at 320 to 430px), so only the small
+  // circle can be behind it. Over the large one it would be 4.04:1.
+  check(
+    worst(token("--hero-sub-text"), [
+      ...stops,
+      ...stops.map((s) => over(token("--hero-circle-soft"), s)),
+    ]),
+    4.5,
+    "paragraph #F6E9FF on the hero, small circle included",
+  );
+  check(
+    contrast(token("--hero-pill-text"), token("--hero-pill-bg")),
+    4.5,
+    "pill #9D174D on white",
+  );
+  check(
+    contrast(token("--color-muted"), token("--color-card")),
+    4.5,
+    "ask label #6B4F86 on white",
+  );
+  const field = token("--ask-field-bg");
+  check(
+    contrast(token("--ask-field-edge"), field),
+    3,
+    "field edge on the field",
+  );
+  check(
+    contrast(token("--ask-field-edge"), token("--color-card")),
+    3,
+    "field edge on the white card",
+  );
+  console.log(
+    `  INFO: the design's field edge #f3c6de would be ${contrast("#f3c6de", field).toFixed(2)}:1 on the field`,
+  );
+  check(
+    contrast(token("--color-muted"), field),
+    4.5,
+    "placeholder on the field",
+  );
+  check(contrast(token("--color-ink"), field), 4.5, "typed text on the field");
+  const send = [...token("--gradient-primary").matchAll(/#[0-9a-f]{6}/g)].map(
+    (m) => m[0],
+  );
+  check(
+    worst(token("--color-on-dark"), send),
+    3,
+    "send arrow, white on the gradient",
+  );
+  check(worst(field, send), 3, "send button's edge on the field");
+  check(
+    contrast(token("--color-on-dark"), token("--send-disabled-bg")),
+    3,
+    "disabled send arrow, white on mid-violet",
+  );
+  check(
+    contrast(token("--send-disabled-bg"), field),
+    3,
+    "disabled send button's edge on the field",
+  );
+  check(contrast(token("--color-violet"), field), 3, "focus ring on the field");
+  const foot = token("--footer-card-bg");
+  check(
+    contrast(token("--footer-card-text"), foot),
+    4.5,
+    "footer card text #5E2A58 on #FFE9F4",
+  );
+  check(
+    contrast(token("--color-violet"), foot),
+    4.5,
+    "footer card's 1195 link on #FFE9F4",
+  );
+  check(
+    contrast(token("--color-violet"), foot),
+    3,
+    "focus ring on the footer card",
+  );
+  check(
+    contrast(token("--color-muted"), token("--color-card")),
+    4.5,
+    "topic subtitle #6B4F86 on white",
   );
 }
 

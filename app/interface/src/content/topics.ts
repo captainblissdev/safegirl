@@ -24,24 +24,24 @@ export const TOPICS: readonly Topic[] = [
   {
     label: "Periods and health",
     topicClass: "general",
-    subtitle: "Periods, puberty, clinics",
+    subtitle: "Cycle, pain, clinics",
   },
   // KB-P1, P5 to P7: first visit, school, warning signs, iron and food.
   {
     label: "Pregnancy",
     topicClass: "pregnancy",
-    subtitle: "Warning signs, food, school",
+    subtitle: "Signs, care, school",
   },
   // KB-C1 to C5: getting it as a teenager, methods, condoms, fertility.
   {
     label: "Contraception",
     topicClass: "contraception",
-    subtitle: "Methods, condoms, fertility",
+    subtitle: "Methods and myths",
   },
   // KB-S3 to S7: PEP, symptoms, cure, HPV vaccine, PrEP.
   {
     label: "STIs and HIV",
     topicClass: "sti",
-    subtitle: "Symptoms, treatment, PEP, PrEP",
+    subtitle: "Signs, testing, care",
   },
 ];

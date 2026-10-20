@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 201 cases: 181 Pass, 19 Fail, 1 Not run. Two of the
+**Totals:** 207 cases: 187 Pass, 19 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -292,6 +292,12 @@ entry.
 | TC-199 | NFR (performance) | Lighthouse 12.3.0 mobile on Home, three runs | Scores recorded, failing audits listed | 98, 100, 100, 91 in all three; FCP 1.8 s, LCP 2.0 s, TBT 0 ms, CLS 0.023; SEO fails `robots-txt` (UI-18) | Pass |
 | TC-200 | NFR (performance) | Lighthouse 12.3.0 user flow on the answer screen, three runs | Scores recorded | Time span performance 100; snapshot 100, 100, 80 (`robots-txt`) in all three; TBT 50, 50, 60 ms | Pass |
 | TC-201 | NFR (installability) | Lighthouse 11.7.1 PWA checks on Home, three runs | Installable | 100 in all three runs | Pass |
+| TC-202 | FR-01 | Home's hero, ask card and footer card | The "Private and anonymous" pill with a lock above the h1; the visible label "Type your question" tied to the field; the anonymous line and the footer line in the footer card; End session directly below it | As expected (`components.test.tsx`, Test 48; browser check at 320, 360, 390 and 430px) | Pass |
+| TC-203 | NFR (accessibility) | Home's send button | Named "Get an answer"; disabled while the field is empty or only spaces, enabled with text; disabled, still a mid-violet button at full opacity | As expected (Test 48; browser check: #8B5CF6, opacity 1, 48 by 48) | Pass |
+| TC-204 | FR-03 | Topic cards | Labels and classes unchanged; the new subtitles; each card opens its Topic list; coloured edges kept | As expected (Test 48; browser check at all four widths) | Pass |
+| TC-205 | FR-05 | The footer card's 1195 link | `tel:` href from the constant; 44px tap area | As expected (Test 48; browser check) | Pass |
+| TC-206 | NFR (usability) | Home at 320, 360, 390 and 430px | No horizontal overflow; no clipped text or broken word; the sparkle touches no text; nothing under the header; header on one row; gutters 20px (16px under 360px) | As expected (browser check; `home-after-4b-390.png`, `home-after-4b-320.png`). Step 7b and step 9 checks re-run: no regressions | Pass |
+| TC-207 | NFR (accessibility) | Home contrast | Text 4.5:1; control edges, icons and focus 3:1 | Headline 4.71 (over the circles); paragraph 4.52; pill 7.88; label 6.80; field edge 3.69 (design value 1.37, darkened); placeholder 6.17; typed text 15.00; send arrow 4.71, disabled 4.23; footer text 9.35, link 6.16; subtitle 6.80 (`styles/tokens.test.ts`, Test 14) | Pass |
 
 ## Defects and retests
 
