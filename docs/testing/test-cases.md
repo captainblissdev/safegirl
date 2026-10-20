@@ -20,7 +20,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 89 cases: 74 Pass, 14 Fail, 1 Not run. Two of the
+**Totals:** 90 cases: 74 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -174,6 +174,7 @@ entry.
 | TC-087 | FR-02, NFR (offline) | Offline: a safety phrase ("someone touched me") and a health question ("what is PrEP") | The abuse referral (`kind: "referral"`); a general limited-mode answer | As expected (`offlinePipeline.test.ts`, Tests 7 and 8) | Pass |
 | TC-088 | NFR (offline) | Gateway and offline copies of the help and vague-query rules: patterns, function words, word limit, health terms, clarifying question, and every shared case (help cases, vague queries, example questions, 58 development-set and 31 DR-04 queries, Safety Net cases) | Identical tables and identical results; the 9 earlier parity tests still pass | As expected (`offlineSafetyParity.test.js`, "gateway and offline help and vague-query rule parity", 4 tests; the file's 14 tests all pass); the offline health-term block is up to date (`vagueQuery.test.js`) | Pass |
 | TC-089 | FR-03 | The extra health-term list and the frozen function words | Every category has a name and criterion; terms are well formed and unique; the rule uses the list's words and phrases ("is a coil safe", "tampons or pads", "I took P2", "he pulled out early" not vague; "he pulled the door out" has no phrase); no vague query's content word is listed; the function-word list matches its frozen hash; the offline copy is up to date | As expected (`vagueQuery.test.js`, "extra health terms (outside the knowledge base)", 3 tests; "knows extra terms as words, with plurals, and as phrases"; "uses the frozen function-word list"; `offlineSafetyParity.test.js`, "has the same function words, word limit and health terms (KB and extra)") | Pass |
+| TC-090 | FR-03 | Retest of TC-079, **non-blind**: the 31 DR-04 queries after the extra health terms were added (with TC-079's three catches already seen) | None intercepted | 1/31 intercepted: "What can I do when I mess up ?". The coil and tampon questions now pass (`vagueQuery.test.js`, "intercepts exactly the 1 recorded DR-04 query of 31 (non-blind retest)"; [DL, Health terms from outside the knowledge base](../decision-log.md#health-terms-from-outside-the-knowledge-base-2026-10-20)) | Fail |
 
 ## Defects and retests
 
@@ -190,8 +191,9 @@ entry.
 
 Open failures, not fixed: TC-048 (first visit offline), TC-050 to TC-053
 and TC-056, TC-057 (Safety Net recall and false referrals), TC-059,
-TC-060, TC-062 (retrieval errors and the precum gap), and TC-079 (three
-DR-04 queries caught by the vague-query rule). They are documented
+TC-060, TC-062 (retrieval errors and the precum gap), TC-079 (three
+DR-04 queries caught by the vague-query rule) and its non-blind retest
+TC-090 (one still caught). They are documented
 limits under the Safety Net and demo freezes, not defects scheduled for
 repair.
 

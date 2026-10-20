@@ -822,3 +822,15 @@ Some extra terms are everyday words ("late", "missed", "positive",
 "negative", "test", "scan", "cup", "ring", "patch", "burn"). They were
 asked for; a short query containing one now goes to the classifier
 rather than getting the clarifying question.
+
+**The DR-04 recheck is non-blind for this rule.** The extra terms were
+added **after** the vague-query rule's three DR-04 catches had been seen
+("What can I do when I mess up ?", "How is a coil inserted?", "Tell me
+how to use a tampon?"; TC-079). The terms were chosen by category of
+general vocabulary, not to fit those queries, but "coil" and "tampon"
+are among them and were chosen knowing those catches. The recheck (1/31
+caught, TC-090) therefore does not measure how the rule would do on
+unseen expert questions, and DR-04 is no longer an independent test of
+the vague-query rule. TC-079 keeps its original Fail. No word was added
+for the remaining catch, "What can I do when I mess up ?", which names
+no topic.
