@@ -84,12 +84,22 @@ describe("relevance gate: threshold and flag", () => {
     assert.equal(RELEVANCE_GATE_THRESHOLD, 0.8439);
   });
 
-  it("is on only for RELEVANCE_GATE exactly 'true'", () => {
-    assert.equal(isRelevanceGateEnabled({ RELEVANCE_GATE: "true" }), true);
-    for (const value of [undefined, "", "TRUE", "True", "1", "yes", " true"]) {
+  it("is off only for RELEVANCE_GATE exactly 'false', and on otherwise", () => {
+    assert.equal(isRelevanceGateEnabled({ RELEVANCE_GATE: "false" }), false);
+    assert.equal(isRelevanceGateEnabled({}), true, "unset");
+    for (const value of [
+      undefined,
+      "",
+      "true",
+      "FALSE",
+      "False",
+      "0",
+      "no",
+      " false",
+    ]) {
       assert.equal(
         isRelevanceGateEnabled({ RELEVANCE_GATE: value }),
-        false,
+        true,
         String(value),
       );
     }
@@ -215,17 +225,52 @@ describe("relevance gate in handleQuery (flag on)", () => {
   });
 });
 
-describe("relevance gate off (the default)", () => {
-  it("leaves the response and the ml_service calls unchanged", async () => {
-    const previous = process.env.RELEVANCE_GATE;
-    delete process.env.RELEVANCE_GATE;
-    try {
+/** Run fn with RELEVANCE_GATE set to value (undefined: unset). */
+async function withGateEnv(value, fn) {
+  const previous = process.env.RELEVANCE_GATE;
+  if (value === undefined) delete process.env.RELEVANCE_GATE;
+  else process.env.RELEVANCE_GATE = value;
+  try {
+    return await fn();
+  } finally {
+    if (previous === undefined) delete process.env.RELEVANCE_GATE;
+    else process.env.RELEVANCE_GATE = previous;
+  }
+}
+
+describe("relevance gate on by default", () => {
+  it("abstains below the threshold with RELEVANCE_GATE unset", async () => {
+    await withGateEnv(undefined, async () => {
+      const { client } = mlService({ confidence: 0.4, unscopedScore: 0.5 });
+      const response = await createHandleQuery({ classifierClient: client })(
+        "which pill can I use",
+      );
+      assertAbstained(response);
+    });
+  });
+
+  it("answers at or above the threshold with RELEVANCE_GATE unset", async () => {
+    await withGateEnv(undefined, async () => {
+      const { client } = mlService({ confidence: 0.4, unscopedScore: 0.8439 });
+      const response = await createHandleQuery({ classifierClient: client })(
+        "which pill can I use",
+      );
+      assert.equal(response.answerFound, true);
+      assert.equal(response.message, ENTRY.answer);
+      assert.equal(response.relevanceGate, "passed");
+    });
+  });
+});
+
+describe("relevance gate off with RELEVANCE_GATE=false", () => {
+  it("leaves the response and the ml_service calls as before the gate", async () => {
+    await withGateEnv("false", async () => {
       const low = { confidence: 0.4, unscopedScore: 0.5 };
-      const offByDefault = mlService(low);
+      const fromEnv = mlService(low);
       const explicitOff = mlService(low);
 
-      const byDefault = await createHandleQuery({
-        classifierClient: offByDefault.client,
+      const byEnv = await createHandleQuery({
+        classifierClient: fromEnv.client,
       })("which pill can I use");
       const off = await createHandleQuery({
         classifierClient: explicitOff.client,
@@ -233,7 +278,7 @@ describe("relevance gate off (the default)", () => {
       })("which pill can I use");
 
       for (const [response, requests] of [
-        [byDefault, offByDefault.requests],
+        [byEnv, fromEnv.requests],
         [off, explicitOff.requests],
       ]) {
         assert.equal(response.answerFound, true);
@@ -241,7 +286,7 @@ describe("relevance gate off (the default)", () => {
         assert.ok(!("relevanceGate" in response));
         assert.deepEqual(endpoints(requests), ["/classify", "/retrieve"]);
       }
-      assert.deepEqual(byDefault, off);
+      assert.deepEqual(byEnv, off);
 
       // A scoped query also makes no extra call when the gate is off.
       const scoped = mlService({ confidence: 0.9, unscopedScore: 0.5 });
@@ -249,9 +294,6 @@ describe("relevance gate off (the default)", () => {
         "which pill can I use",
       );
       assert.deepEqual(endpoints(scoped.requests), ["/classify", "/retrieve"]);
-    } finally {
-      if (previous === undefined) delete process.env.RELEVANCE_GATE;
-      else process.env.RELEVANCE_GATE = previous;
-    }
+    });
   });
 });

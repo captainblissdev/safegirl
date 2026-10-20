@@ -9,6 +9,11 @@ No new test was written and no evaluation was re-run for this file.
 - **Automated suites:** re-run on 15 October 2026 on `docs/traceability`
   at `cb0b2fb`. Gateway `npm test`: 342/342 pass, plus the 6 integration
   check groups. Interface `npm test`: all 6 suites pass.
+  Re-run on 20 October 2026 on `fix/response-clarity` at `3a066fa`:
+  gateway 390/390 pass plus the 6 integration check groups; interface
+  all 6 suites pass (TC-066 onwards).
+  After step 7, at `3bac650`: gateway 395/395 pass; interface all 6
+  suites pass.
 - **Manual and evaluation results** are taken from the files cited, with
   their own dates.
 
@@ -17,7 +22,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 65 cases: 51 Pass, 13 Fail, 1 Not run. Two of the
+**Totals:** 90 cases: 74 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -139,6 +144,40 @@ unless stated.
 | TC-064 | IR-01 | Fresh Python 3.12 venv from the corrected `ml_service/requirements.txt` | Installs, `pip check` clean, `/health` ok | As expected ([`docs/testing/test-log.md`](test-log.md), Setup checks) | Pass (retest) |
 | TC-065 | IR-01 | A new person follows the rewritten README end to end | All three processes run | No such walkthrough recorded after the rewrite | Not run |
 
+## Response clarity (20 October 2026)
+
+Added on `fix/response-clarity`; each change is in
+[`docs/decision-log.md`](../decision-log.md) under its 20 October 2026
+entry.
+
+| Test ID | Traceability | Scenario and data | Expected result | Actual result (evidence) | Verdict |
+|---|---|---|---|---|---|
+| TC-066 | FR-03 | Positive. A clear query answered with retrieval scoped to the predicted class (mocked `ml_service`, confidence 0.9, KB-S4) | `kind: "answer-scoped"`; `matchedQuestion` is KB-S4's question, verbatim | As expected (`responseKind.test.js`, "scoped answer: answer-scoped, with the entry's question verbatim") | Pass |
+| TC-067 | FR-03 | Positive. Unscoped retrieval (confidence 0.45), then the keyword fallback (`/classify` fails, local retrieval) | `kind: "answer-unscoped"` in both; `matchedQuestion` is the served entry's question | As expected ("unscoped answer: …"; "keyword fallback (local retrieval): …") | Pass |
+| TC-068 | FR-03 | Negative. Classifier abstain (confidence 0.2), and relevance gate abstain (unscoped score 0.80, gate on) | `kind: "abstain"`; `matchedQuestion: null`; no entry text in the response | As expected ("classifier abstain: …"; "relevance gate abstain: …") | Pass |
+| TC-069 | FR-04, FR-03 | Generic help request and a flagged query | `kind: "help"` and `kind: "referral"`, both with `matchedQuestion: null` | As expected ("help request: …"; "flagged query: …") | Pass |
+| TC-070 | FR-03 | Every active knowledge-base entry served through the orchestrator; the interface's `ReplyKind` type | Each response's `matchedQuestion` is that entry's own question, unchanged; the interface union lists the six gateway kinds in order | As expected ("matchedQuestion is each active entry's own question, unchanged"; "the interface's ReplyKind type lists the same kinds") | Pass |
+| TC-071 | FR-03 | Boundary. `RELEVANCE_GATE` unset; unscoped score 0.50, then exactly 0.8439 (mocked `ml_service`) | Gate on by default: 0.50 gets the no-answer message with no entry text; 0.8439 is answered (`relevanceGate: "passed"`) | As expected (`relevanceGate.test.js`, "abstains below the threshold with RELEVANCE_GATE unset"; "answers at or above the threshold with RELEVANCE_GATE unset") | Pass |
+| TC-072 | FR-03 | Exception. `RELEVANCE_GATE=false`, and other values ("", "true", "FALSE", "0", "no", " false") | Off only for exactly `false`: the response and the `ml_service` calls are as before the gate (no `relevanceGate` field, no extra `/retrieve`); every other value leaves it on | As expected ("is off only for RELEVANCE_GATE exactly 'false', and on otherwise"; "leaves the response and the ml_service calls as before the gate") | Pass |
+| TC-073 | FR-03 | Positive, live. The 13 example questions (chips and follow-ups) through the gateway with the gate on by default, `ml_service` v3 (20 Oct) | All 13 answered, gate passed | 13/13 answered with the same entry as before, `relevanceGate: "passed"`; lowest unscoped score 0.8570 ([DL, Relevance gate on by default](../decision-log.md#relevance-gate-on-by-default-2026-10-20)) | Pass |
+| TC-074 | FR-03 | Negative, live. The 8 vague queries ("Am I okay?" … "hmm") with the gate on by default (20 Oct) | None gets a knowledge-base entry | 8/8 get the no-answer message: 7 by the gate, "hmm" by the classifier abstain (same source) | Pass |
+| TC-075 | FR-03 | Unit. Content words and health-term matching ("What should I do?", "Can I ask you something?", "I'm worried"; plurals such as "pills", "breasts") | Function words set aside; at most 3 content words; terms match with a plural added or removed; "normal", "worried", "okay", "exams" are not terms | As expected (`vagueQuery.test.js`, "vague-query rule: the rule itself", 5 tests) | Pass |
+| TC-076 | FR-03 | Positive. The 8 vague test queries, through the rule and through `handleQuery()` | 8/8 intercepted; each gets the clarifying question (`outcome: "clarification"`, `kind: "vague"`) with no `/classify` or `/retrieve` call | As expected ("intercepts all 8 vague test queries"; "returns the clarifying question without classifying or retrieving") | Pass |
+| TC-077 | FR-03 | Negative. The 13 example questions (read from `uiText.ts`) and the 35 labelled development-set queries | None intercepted | 0/13 and 0/35 ("intercepts none of the 13 example questions"; "intercepts none of the 35 labelled development-set queries") | Pass |
+| TC-078 | FR-02, FR-04 | Precedence. A flagged query (stubbed Safety Net), "Help", and a short health question ("what is PrEP") | Referral without consulting the rule; signposting for "Help"; the health question goes on to the classifier | As expected ("never overrides the Safety Net"; "leaves 'Help' to the help rule, which runs first"; "sends a short health question on to the classifier") | Pass |
+| TC-079 | FR-03 | Negative. The 31 DR-04 test queries | None intercepted | 3/31 intercepted: "What can I do when I mess up ?", "How is a coil inserted?", "Tell me how to use a tampon?" ("coil" and "tampon" are not knowledge-base words); pinned in "intercepts exactly the 3 recorded DR-04 queries of 31 (open failure)" | Fail |
+| TC-080 | DR (knowledge base) | The health-term list against the knowledge base | Every term is a word of the active knowledge base; the committed list is up to date | 122 terms of 724 knowledge-base words; up to date ("health-term list", 2 tests; `node scripts/build-health-terms.js --check`) | Pass |
+| TC-081 | FR-03 | Live. The 8 vague queries and the 13 example questions through the gateway and `ml_service` v3 (20 Oct) | Vague queries get the clarifying question; example questions answered as before | 8/8 clarifying question; 13/13 answered with the same entries ([DL, Vague-query rule](../decision-log.md#vague-query-rule-2026-10-20)) | Pass |
+| TC-082 | FR-03 | The help reply's wording | Starts "You're not alone. These people can help right now.", then the help text; never "I don't have information" | As expected (`helpSignposting.test.js`, "opens the help reply plainly, then gives the help information") | Pass |
+| TC-083 | FR-03 | The no-answer reply's wording | Starts "I couldn't find a good answer to that.", then the help text; both messages keep 1195 and 116 | As expected ("says no answer was found before the help information"; "keeps the help numbers in both messages") | Pass |
+| TC-084 | NFR (offline) | The offline copy of the help, signposting and no-answer messages | Identical to the gateway's | As expected (`offlineSafetyParity.test.js`, "has the same help, signposting and no-answer messages") | Pass |
+| TC-085 | NFR (offline) | Offline (`offlinePipeline.ts`, the pipeline the app ships): "Help" | The signposting message, `kind: "help"` | As expected (`offlinePipeline.test.ts`, Test 5) | Pass |
+| TC-086 | NFR (offline) | Offline: the 8 vague test queries | Each gets the clarifying question (`outcome: "clarification"`, `kind: "vague"`) | 8/8 (`offlinePipeline.test.ts`, Test 6) | Pass |
+| TC-087 | FR-02, NFR (offline) | Offline: a safety phrase ("someone touched me") and a health question ("what is PrEP") | The abuse referral (`kind: "referral"`); a general limited-mode answer | As expected (`offlinePipeline.test.ts`, Tests 7 and 8) | Pass |
+| TC-088 | NFR (offline) | Gateway and offline copies of the help and vague-query rules: patterns, function words, word limit, health terms, clarifying question, and every shared case (help cases, vague queries, example questions, 58 development-set and 31 DR-04 queries, Safety Net cases) | Identical tables and identical results; the 9 earlier parity tests still pass | As expected (`offlineSafetyParity.test.js`, "gateway and offline help and vague-query rule parity", 4 tests; the file's 14 tests all pass); the offline health-term block is up to date (`vagueQuery.test.js`) | Pass |
+| TC-089 | FR-03 | The extra health-term list and the frozen function words | Every category has a name and criterion; terms are well formed and unique; the rule uses the list's words and phrases ("is a coil safe", "tampons or pads", "I took P2", "he pulled out early" not vague; "he pulled the door out" has no phrase); no vague query's content word is listed; the function-word list matches its frozen hash; the offline copy is up to date | As expected (`vagueQuery.test.js`, "extra health terms (outside the knowledge base)", 3 tests; "knows extra terms as words, with plurals, and as phrases"; "uses the frozen function-word list"; `offlineSafetyParity.test.js`, "has the same function words, word limit and health terms (KB and extra)") | Pass |
+| TC-090 | FR-03 | Retest of TC-079, **non-blind**: the 31 DR-04 queries after the extra health terms were added (with TC-079's three catches already seen) | None intercepted | 1/31 intercepted: "What can I do when I mess up ?". The coil and tampon questions now pass (`vagueQuery.test.js`, "intercepts exactly the 1 recorded DR-04 query of 31 (non-blind retest)"; [DL, Health terms from outside the knowledge base](../decision-log.md#health-terms-from-outside-the-knowledge-base-2026-10-20)) | Fail |
+
 ## Defects and retests
 
 | # | Defect | Found by | Fix (commits) | Retest |
@@ -154,7 +193,9 @@ unless stated.
 
 Open failures, not fixed: TC-048 (first visit offline), TC-050 to TC-053
 and TC-056, TC-057 (Safety Net recall and false referrals), TC-059,
-TC-060, TC-062 (retrieval errors and the precum gap). They are documented
+TC-060, TC-062 (retrieval errors and the precum gap), TC-079 (three
+DR-04 queries caught by the vague-query rule) and its non-blind retest
+TC-090 (one still caught). They are documented
 limits under the Safety Net and demo freezes, not defects scheduled for
 repair.
 

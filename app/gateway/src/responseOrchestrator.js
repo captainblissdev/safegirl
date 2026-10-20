@@ -22,6 +22,10 @@
  * A clear query never returns a null message: when no knowledge-base
  * answer is available for any reason (unknown or empty category, missing
  * KB file, blank answer), NO_ANSWER_MESSAGE is returned instead.
+ *
+ * Every response carries a reply kind (one of REPLY_KINDS) and
+ * matchedQuestion: the "User question" of the knowledge-base entry the
+ * answer came from, or null when no entry was served.
  */
 
 const {
@@ -29,7 +33,32 @@ const {
   SIGNPOSTING_MESSAGE,
   SELF_HARM_REFERRAL_MESSAGE,
   ABUSE_REFERRAL_MESSAGE,
+  VAGUE_QUERY_MESSAGE,
 } = require("./content/helpContent");
+
+/**
+ * What kind of reply a response is, so the interface can present each
+ * one differently:
+ * - "answer-scoped": a knowledge-base answer, retrieved within the
+ *   classifier's predicted category (confidence at or above 0.5).
+ * - "answer-unscoped": a knowledge-base answer found less surely:
+ *   retrieval across all categories (confidence from 0.35 to 0.5), or
+ *   local keyword retrieval after the keyword fallback, where the
+ *   classifier's confidence is unknown.
+ * - "abstain": no answer; the standard no-answer message.
+ * - "help": a generic help request; the signposting message.
+ * - "vague": a short query with no health term; a clarifying question
+ *   (outcome "clarification").
+ * - "referral": the Safety Net flagged the query.
+ */
+const REPLY_KINDS = Object.freeze([
+  "answer-scoped",
+  "answer-unscoped",
+  "abstain",
+  "help",
+  "vague",
+  "referral",
+]);
 
 /**
  * Combine Safety Net, classification, and generation results.
@@ -84,6 +113,8 @@ function orchestrate({
   if (safety.flagged) {
     return {
       outcome: "referral",
+      kind: "referral",
+      matchedQuestion: null,
       // Self-harm gets its own message; everything else flagged gets the
       // violence/abuse referral.
       message:
@@ -114,6 +145,8 @@ function orchestrate({
   if (!generation || !generation.text) {
     return {
       outcome: "grounded_answer",
+      kind: "abstain",
+      matchedQuestion: null,
       message: NO_ANSWER_MESSAGE,
       category,
       answerFound: false,
@@ -135,6 +168,10 @@ function orchestrate({
    */
   return {
     outcome: "grounded_answer",
+    kind: retrievalScope === "scoped" ? "answer-scoped" : "answer-unscoped",
+    // The knowledge-base question this answer was written for, so the
+    // user can see what was matched. Shown verbatim; never edited.
+    matchedQuestion: retrievedEntry?.question ?? null,
     message: generation.text,
     category,
     answerFound: true,
@@ -156,6 +193,8 @@ function orchestrate({
 function signpost() {
   return {
     outcome: "signposting",
+    kind: "help",
+    matchedQuestion: null,
     message: SIGNPOSTING_MESSAGE,
     category: null,
     answerFound: false,
@@ -171,10 +210,40 @@ function signpost() {
   };
 }
 
+/**
+ * Response to a vague query: a short query that names no health topic
+ * (src/vagueQuery.js). A clarifying question, without classification or
+ * retrieval, so there is no category or classifier output.
+ *
+ * @returns {object} Final response payload.
+ */
+function clarify() {
+  return {
+    outcome: "clarification",
+    kind: "vague",
+    matchedQuestion: null,
+    message: VAGUE_QUERY_MESSAGE,
+    category: null,
+    answerFound: false,
+    generated: false,
+    note: "Vague query: a clarifying question returned without classification or retrieval.",
+    source: null,
+    safetyNotes: null,
+    generationInvoked: false,
+    predictedCategory: null,
+    classifierSource: null,
+    confidence: null,
+    retrievalScope: "none",
+  };
+}
+
 module.exports = {
   ABUSE_REFERRAL_MESSAGE,
+  REPLY_KINDS,
+  clarify,
   orchestrate,
   signpost,
   NO_ANSWER_MESSAGE,
   SIGNPOSTING_MESSAGE,
+  VAGUE_QUERY_MESSAGE,
 };

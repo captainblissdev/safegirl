@@ -157,10 +157,13 @@ Source: [`classifier_analysis.md`](../research/eval/results/classifier_analysis.
   [`relevance_signal.md`](../research/eval/results/relevance_signal.md),
   [`classifier_analysis.md`](../research/eval/results/classifier_analysis.md#c-relevance-signal-when-should-the-system-not-answer).
 
-**Relevance gate (added after this analysis, off by default).** The
-unscoped retrieval-score signal above was turned into a gate behind the
-`RELEVANCE_GATE` flag: below 0.8439 the gateway gives the standard
-no-answer message instead of the retrieved entry. Its one validation
+**Relevance gate (added after this analysis; on by default since 20
+October 2026).** The unscoped retrieval-score signal above was turned
+into a gate, first behind the `RELEVANCE_GATE` flag and then on by
+default (`RELEVANCE_GATE=false` turns it off): below 0.8439 the gateway
+gives the standard no-answer message instead of the retrieved entry.
+All 13 example questions in the interface pass it (lowest score 0.8570,
+20 October 2026). Its one validation
 run answered 18/20 in-scope questions (wrongly rejecting V03 and V19),
 rejected 8/8 off-topic and 4/6 out-of-scope health questions. That set
 partly paraphrases development questions, so the result is not
@@ -245,6 +248,33 @@ precum?" scores 0.8440 and is still answered with the wrong entry
   [`docs/testing/pwa-audit.md`](testing/pwa-audit.md#lighthouse).
 - Held content: GBV information and Sheng/code-switched material are
   excluded pending review. Source: [`README.md`](../README.md).
+- Vague-query rule (added 20 October 2026; accepted limitations,
+  decision by Cindy). Source:
+  [`docs/decision-log.md`](decision-log.md#health-terms-from-outside-the-knowledge-base-2026-10-20).
+  - **English only.** The clarifying question ("I'm not sure what you
+    mean. Is your question about periods, pregnancy, contraception or
+    STIs?") is in English, and the rule's function words and health
+    terms are English. A short query in Swahili or Sheng with no
+    English health term (for example "niko na mimba?") gets the
+    clarifying question; before the rule it went to the multilingual
+    retrieval model. **Swahili and Sheng are out of scope (DR-07).**
+  - **Health words outside both term lists.** The rule stops only for
+    health words on its lists: 122 from the knowledge base and 122 more
+    added by category from outside it, including "antenatal", "coil",
+    "tampon", "P2", "STD" and "pulled out". A short question built on a
+    health word on neither list still gets the clarifying question.
+  - **Everyday words on the extra list.** "late", "missed",
+    "positive", "negative", "test", "scan", "ring" and similar count as
+    health terms, so a short off-topic query containing one goes to the
+    classifier instead of getting the clarifying question.
+  - **Other queries now clarified.** Off-topic queries ("what is the
+    capital of Kenya") and short non-health worries ("I am so tired of
+    exams", "my teacher threatened to fail me") get the clarifying
+    question rather than an unrelated answer.
+  - **Not independently tested.** The term lists were chosen with the
+    vague test queries known, and the extra list was added after three
+    DR-04 catches were seen, so the DR-04 result for this rule (1/31
+    still caught: "What can I do when I mess up ?") is non-blind.
 
 ## 7. Decisions to cite
 

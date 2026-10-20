@@ -516,3 +516,321 @@ knowledge-base entry. Its unscoped score is 0.8440, just above the
 threshold, so the gate lets it through and it is still answered with the
 wrong entry, KB-P5 (school re-entry)
 (`research/eval/results/coverage_gap_examples_2026-10-15.csv`).
+
+## Reply kind and matched question in every response (2026-10-20)
+
+Approved by Cindy on 20 October 2026, as part of the response-clarity
+fixes (`fix/response-clarity`). **No frozen item changed**: no model,
+threshold, knowledge-base text or Safety Net pattern. Two fields are
+added to every gateway response; no existing field changes.
+
+**Why.** The UI audit ([`docs/design/ui-audit-2026-10-20.md`](design/ui-audit-2026-10-20.md),
+UI-01) found that a loosely matched answer is shown as a direct reply:
+"Am I okay?" got KB-S4, "It could be. Unusual discharge…", with nothing
+to say it answers "I have unusual discharge, itching, burning or lower
+belly pain. Could it be an STI?". The interface could not show the
+matched question because the response did not carry it.
+
+**What changed** (`app/gateway/src/responseOrchestrator.js`):
+- `matchedQuestion`: the "User question" of the knowledge-base entry
+  the answer came from, verbatim, or `null` when no entry was served
+  (no answer, the relevance gate abstained, help, referral).
+- `kind`, one of `REPLY_KINDS`:
+
+  | `kind` | When |
+  |---|---|
+  | `answer-scoped` | An answer retrieved within the predicted category (`retrievalScope: "scoped"`) |
+  | `answer-unscoped` | An answer retrieved across all categories (`"unscoped"`), or by local keyword retrieval after the keyword fallback (`"local"`), where the classifier's confidence is unknown |
+  | `abstain` | The standard no-answer message: classifier abstain, relevance gate abstain, or no entry found |
+  | `help` | A generic help request (`outcome: "signposting"`) |
+  | `vague` | Reserved for the vague-query rule (added in a later step) |
+  | `referral` | The Safety Net flagged the query |
+
+The interface type (`QueryResponse` in `app/interface/src/types.ts`) has
+the same two fields and a `ReplyKind` union; a gateway test checks the
+union against `REPLY_KINDS`. The interface does not use the fields yet.
+
+## Relevance gate on by default (2026-10-20)
+
+Approved by Cindy on 20 October 2026 (`fix/response-clarity`). The gate
+added on 15 October ("Relevance gate behind a flag", above) is now **on
+by default**. `RELEVANCE_GATE=false` turns it off and restores the
+earlier behaviour; any other value, or none, leaves it on, so a typo
+cannot switch it off. **The threshold stays 0.8439** and was not
+re-examined; no model, threshold, knowledge-base entry or Safety Net
+pattern changed. Code: `isRelevanceGateEnabled` in
+`app/gateway/src/relevanceGate.js`.
+
+**Why.** With the gate off, vague queries got unrelated entries stated
+as answers: "Am I okay?", "I feel strange" and "Do I have it?" all got
+KB-S4 ("It could be. Unusual discharge…"), and "I'm worried" got the
+pregnancy warning signs (UI audit, UI-01).
+
+**Validation result (unchanged, from the one run on 15 October).** 2 of
+20 in-scope validation questions are wrongly rejected: V03 "is it true
+that family planning makes you barren" (0.8285) and V19 "is clinic
+private" (0.8259). Off-topic 8/8 and out-of-scope health 4/6 are
+rejected (`research/eval/results/labels_and_gate_2026-10-15.md`).
+
+**Example questions.** All 13 example questions the interface offers (4
+topic chips and the "You could also ask" follow-ups) pass the gate.
+Checked on 20 October 2026 against the live gateway and `ml_service`,
+with the gate on by default: each was answered with the same entry as
+before, `relevanceGate: "passed"`. Their top-1 unscoped scores run from
+0.8570 ("will the injection make me unable to have kids", KB-C5; 0.013
+above the threshold) to 0.9239. This is a check, not a tuning step: the
+threshold was not changed with these scores in view.
+
+**Vague queries.** In the same run, 7 of the 8 vague test queries got
+the standard no-answer message from the gate ("Am I okay?", "Is this
+normal?", "I feel strange", "Can I ask you something?", "I'm worried",
+"What should I do?", "Do I have it?"); "hmm" was already a classifier
+abstain (confidence 0.302).
+
+**Costs and limits.**
+- A scoped query makes one extra unscoped `/retrieve` call for the
+  gate's score.
+- V03 and V19 type questions (in scope, but worded unlike any entry) now
+  get the no-answer message.
+- The known failure stands: "Can I get pregnant from precum?" (0.8440)
+  still passes the gate and gets KB-P5.
+- The offline pipeline is still not gated; it has no retrieval scores.
+
+## Vague-query rule (2026-10-20)
+
+Approved by Cindy on 20 October 2026 (`fix/response-clarity`). **No
+frozen item changed**: no model, threshold, knowledge-base text or
+Safety Net pattern. A new fixed rule runs after the Safety Net and the
+help rule and before the classifier (`app/gateway/src/vagueQuery.js`,
+wired in `backend.js`).
+
+**What it does.** A query is vague when it has **at most three content
+words and none of them is a health term**. It then gets a clarifying
+question instead of an answer: "I'm not sure what you mean. Is your
+question about periods, pregnancy, contraception or STIs?"
+(`VAGUE_QUERY_MESSAGE` in `content/helpContent.js`; `outcome:
+"clarification"`, `kind: "vague"`; no classification or retrieval, so
+`ml_service` is not called). A flagged query still gets the referral and
+a help request still gets signposting; the rule is never consulted for
+either.
+
+**Content words, not all words (a deviation from the brief).** The brief
+said "3 words or fewer". Counted literally, three of the eight required
+vague queries are longer ("Can I ask you something?" has five words,
+"What should I do?" and "Do I have it?" four), so the rule could not
+intercept them. The rule therefore counts **content words**: the words
+left after normalising the query as the help rule does and setting
+aside common English function words (pronouns, articles, auxiliaries,
+prepositions, conjunctions, question words; `FUNCTION_WORDS` in
+`vagueQuery.js`). "What should I do?" has none; "Can I ask you
+something?" has two. **This interpretation needs confirming.**
+
+**How the health-term list is built.**
+`app/gateway/scripts/build-health-terms.js` reads the active knowledge
+base (the entries the gateway serves; HELD content is never read),
+collects every word of each entry's user question, answer,
+evidence/claim, conditions and safety notes (724 distinct words), and
+writes the selected terms to `app/gateway/src/content/healthTerms.json`
+(122 terms). It refuses to write a term that is not a knowledge-base
+word. The selection is by hand, by one criterion: the word names a body
+part, a symptom, a condition or infection, pregnancy, periods, puberty
+or sex, a contraceptive method, a medicine, a test or treatment, or a
+health service or worker. Words with an everyday meaning are left out
+("exam", "exams", "irregular", "tired", "emergency", "ring", "fits",
+"growth", "care", "normal", "worried", "feel"), as are privacy words
+("confidential", "privacy"). A query word matches a term as written or
+with a plural "s" or "es" added or removed. `--check` reports a stale
+list, and a gateway test fails if the list is out of date.
+
+**Not independent.** The selection was made with the eight vague queries
+and the other required sets known, so the counts below show the rule
+does what it was built to do; they are not an independent measure.
+
+**Result** (`app/gateway/test/vagueQuery.test.js`, which reads each set
+from the repository):
+
+| Set | Intercepted | Required |
+|---|---|---|
+| 8 vague test queries | **8/8** | all |
+| 13 example questions (chips and follow-ups) | **0/13** | none |
+| 35 labelled development-set queries | **0/35** | none |
+| 31 DR-04 test queries | **3/31** | none: **not met** |
+
+The three DR-04 queries the rule answers itself are "What can I do when
+I mess up ?" (the expert's own note says it "can fit into any of the
+other categories"), "How is a coil inserted?" and "Tell me how to use a
+tampon?". "coil" and "tampon" are not knowledge-base words, so a list
+built from the knowledge base cannot contain them. They were **not**
+added: choosing words with DR-04 in view would make the rule depend on
+the independent test set, and the list would no longer come from the
+knowledge base. This is an open failure (TC-079), left for a decision.
+
+Live, on 20 October 2026, all 8 vague queries got the clarifying
+question and all 13 example questions were answered as before.
+
+**Other effects and limits.**
+- On the 23 unlabelled development-set rows, the 5 off-topic queries
+  ("what is the capital of Kenya", ...) now get the clarifying question
+  instead of an unrelated entry. So do the in-domain gap "When should I
+  start antenatal visits?" (Q43, Q53; "antenatal" is not a
+  knowledge-base word, and no entry covers it) and two Safety Net
+  negatives, "my teacher threatened to fail me" and "I am so tired of
+  exams".
+- A health word missing from the knowledge base ("coil", "tampon",
+  "antenatal", "doctor", "STD") cannot stop the rule, so a short
+  question built on one gets the clarifying question.
+- Short questions in Swahili or Sheng with no English health term (for
+  example "niko na mimba?") get the clarifying question; before, they
+  went to the multilingual retrieval model.
+- The offline pipeline does not have the rule yet (see the offline
+  parity entry below).
+
+## Help and no-answer wording (2026-10-20)
+
+Approved by Cindy on 20 October 2026 (`fix/response-clarity`). **Text
+only**: no number, no `HELP_CONTACTS_VERIFIED` value and no referral
+message changed. Both messages keep the shared help text
+(`HELP_GUIDANCE`: a nurse or counsellor, the GBV helpline 1195 and
+Childline Kenya 116) and get a new first sentence.
+
+| Message | Before | Now |
+|---|---|---|
+| Help reply (`SIGNPOSTING_MESSAGE`) | "I don't have information on that yet. A nurse or counsellor …" | "You're not alone. These people can help right now. A nurse or counsellor …" |
+| No-answer reply (`NO_ANSWER_MESSAGE`) | "A nurse or counsellor …" | "I couldn't find a good answer to that. A nurse or counsellor …" |
+
+**Why.** The UI audit (UI-02, UI-03) found that a request for help was
+answered as if a question had gone unanswered, and that the no-answer
+reply gave helpline numbers with no word that nothing was found, so it
+read like a crisis referral.
+
+The gateway copy (`app/gateway/src/content/helpContent.js`) is the
+source of truth. The offline copy (`app/interface/src/offline/helpContent.ts`)
+now has the same `HELP_GUIDANCE`, `SIGNPOSTING_MESSAGE` and
+`NO_ANSWER_MESSAGE`, and the parity test compares all three. The
+evaluation scripts (`research/eval/run_eval.js`, `labels_and_gate.js`)
+import `NO_ANSWER_MESSAGE` rather than copying it, so they follow the
+change.
+
+## Offline parity for the help and vague-query rules (2026-10-20)
+
+Approved by Cindy on 20 October 2026 (`fix/response-clarity`). **No
+frozen item changed.** The offline pipeline the app uses
+(`app/interface/src/offline/offlinePipeline.ts`) now runs the gateway's
+order: Safety Net, **help rule, vague-query rule**, then the keyword
+classifier and a general answer.
+
+**Why.** Offline, "Help" got the general sentence "Youth-friendly health
+services should provide respectful, confidential information and
+care…", and vague queries got one of the four category sentences (UI
+audit UI-07, section 7).
+
+**What changed.**
+- `app/interface/src/offline/queryRules.ts`: ports of the help rule
+  (`helpSignposting.js`) and the vague-query rule (`vagueQuery.js`) in
+  one file with no imports, so Node can load it in the parity test, as
+  it does `safetyNet.ts`. Its health terms are a generated block written
+  by `app/gateway/scripts/build-health-terms.js` with the gateway's
+  list, so both copies change together.
+- `offlinePipeline.ts`: "Help" gets the signposting message
+  (`outcome: "signposting"`, `kind: "help"`); a vague query gets the
+  clarifying question (`outcome: "clarification"`, `kind: "vague"`); a
+  referral now carries `kind: "referral"`. The general limited-mode
+  answers carry no `kind`: they come from no knowledge-base entry.
+- `offline/helpContent.ts` gains `VAGUE_QUERY_MESSAGE`.
+
+**Tests.** The gateway parity test (`offlineSafetyParity.test.js`) now
+also compares the help patterns, the function words, the word limit, the
+health terms and the clarifying question, and runs every shared case
+(help cases, the vague queries, the example questions, all 58
+development-set queries, the 31 DR-04 queries and the Safety Net cases)
+through both copies of both rules. The original 9 parity tests still
+pass; with the message test added on 20 October the file has 14. The
+interface's offline test now also runs the pipeline the app ships
+(`offlinePipeline.ts`): until now it ran only `pipeline.ts`, which the
+app does not use.
+
+`offline/pipeline.ts` is unchanged and still unused by the app.
+
+## Health terms from outside the knowledge base (2026-10-20)
+
+Decided by Cindy on 20 October 2026, after the vague-query rule's first
+results (`fix/response-clarity`, Stage A step 7). **No frozen item
+changed**: no model, threshold, knowledge-base text or Safety Net
+pattern.
+
+**Decisions.**
+1. **The content-word reading of "3 words or fewer" is confirmed**, and
+   the function-word list is frozen as below.
+2. **A small, documented list of health terms from outside the
+   knowledge base is added**, built from whole categories of general
+   vocabulary, not from individual queries.
+3. **The rule's side effects are accepted** and recorded as
+   limitations: the clarifying question is English-only, and Swahili and
+   Sheng are out of scope (DR-07). See `docs/chapter5-notes.md`.
+
+**Frozen function-word list** (`FUNCTION_WORDS` in
+`app/gateway/src/vagueQuery.js`, copied in
+`app/interface/src/offline/queryRules.ts`). 166 words, written as the
+rule normalises a query (lowercase, apostrophes removed). SHA-256 of
+the words sorted and joined with newlines:
+`78c4667147a1b043a0ae9428435c7cd9a9e8108b308c3dd0b6f3c251b1339a7b`.
+A gateway test fails if the list changes, and the parity test keeps the
+offline copy identical.
+
+a, about, above, after, again, against, all, am, an, and, any, are,
+arent, as, at, be, because, been, before, being, below, between, both,
+but, by, can, cannot, cant, could, couldnt, did, didnt, do, does,
+doesnt, doing, dont, down, during, each, few, for, from, further, had,
+hadnt, has, hasnt, have, havent, having, he, hed, her, here, hers,
+herself, hes, him, himself, his, how, hows, i, id, if, ill, im, in,
+into, is, isnt, it, its, itself, ive, just, lets, may, me, might, more,
+most, must, my, myself, no, nor, not, of, off, on, once, only, or,
+other, ought, our, ours, ourselves, out, over, own, r, same, shall,
+she, shes, should, shouldnt, so, some, such, than, that, thats, the,
+their, theirs, them, themselves, then, there, theres, these, they,
+theyre, this, those, through, to, too, u, under, until, up, ur, very,
+was, wasnt, we, were, werent, what, whats, when, where, which, while,
+who, whom, why, will, with, wont, would, wouldnt, you, youd, youll,
+your, youre, yours, yourself, yourselves, youve.
+
+**The extra list.** `app/gateway/src/content/extraHealthTerms.json`,
+written by hand. The gateway reads it; `scripts/build-health-terms.js`
+checks its form (lowercase words, single spaces, no duplicates, a
+criterion for every category) and copies it into the generated block of
+the offline `queryRules.ts`, so the same drift test covers both lists. A
+term with a space is a phrase ("pulled out", "emergency pill"), matched
+against the whole normalised query, function words included; a single
+word matches with a plural "s" or "es" added or removed, as for the
+knowledge-base list. The criterion per category, also in the file:
+
+| Category | Criterion | Terms |
+|---|---|---|
+| Contraceptive methods and names | A contraceptive method, device or brand name in common use in Kenya, or a common way of describing one (including withdrawal) | 35 |
+| Menstrual and body | Menstrual products and periods, the reproductive and urinary body, and common words for genital symptoms or sexual activity | 46 |
+| STIs and HIV | A sexually transmitted infection, HIV, a common genital infection, or a medicine or test for one | 19 |
+| Pregnancy | Pregnancy, conception, its care and its end, and the words commonly used for a pregnancy scare (a late or missed period, a positive or negative test) | 22 |
+
+122 terms: 113 single words and 9 phrases. 20 of the words are also in
+the knowledge-base list. With the 122 knowledge-base terms the rule
+knows 215 distinct single words and 9 phrases. Beyond the terms named in
+the brief, the additions come from general knowledge of each category
+(for example spelling variants such as "gonorrhea", Kenyan brand names
+such as "postinor" and "jadelle", and body words such as "cervix"), not
+from any test query; `docs/testing/demo-risk-set.csv` was not opened.
+
+Some extra terms are everyday words ("late", "missed", "positive",
+"negative", "test", "scan", "cup", "ring", "patch", "burn"). They were
+asked for; a short query containing one now goes to the classifier
+rather than getting the clarifying question.
+
+**The DR-04 recheck is non-blind for this rule.** The extra terms were
+added **after** the vague-query rule's three DR-04 catches had been seen
+("What can I do when I mess up ?", "How is a coil inserted?", "Tell me
+how to use a tampon?"; TC-079). The terms were chosen by category of
+general vocabulary, not to fit those queries, but "coil" and "tampon"
+are among them and were chosen knowing those catches. The recheck (1/31
+caught, TC-090) therefore does not measure how the rule would do on
+unseen expert questions, and DR-04 is no longer an independent test of
+the vague-query rule. TC-079 keeps its original Fail. No word was added
+for the remaining catch, "What can I do when I mess up ?", which names
+no topic.

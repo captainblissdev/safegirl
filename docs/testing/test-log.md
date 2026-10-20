@@ -38,6 +38,62 @@ npm 12.0.2). None needs `ml_service`, Firebase or credentials.
 | Interface build | Production build with the PWA service worker | `npx vite build` (`app/interface`) | 12 precache entries | 2026-10-15 | Pass | [`app/interface/vite.config.ts`](../../app/interface/vite.config.ts) |
 | CI | Gateway tests; interface lint, format, typecheck, tests, build. No `ml_service` job | GitHub Actions on push | – | every push | See the Actions tab | [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml) |
 
+## Automated suites (re-run 20 October 2026)
+
+Re-run on `fix/response-clarity` at `3a066fa` (Node 24.18.1), after the
+response-clarity changes. The gateway and interface suites need no
+`ml_service`, Firebase or credentials.
+
+| Suite | Command (directory) | Count | Date | Result |
+|---|---|---|---|---|
+| Gateway tests | `npm test` (`app/gateway`) | 6 integration check groups + 390 `node:test` tests in 37 suites (was 354 on 15 Oct) | 2026-10-20 | Pass: 390/390, 0 failed |
+| of which: reply kind and matched question | `test/responseKind.test.js` | 10 tests | 2026-10-20 | Pass |
+| of which: vague-query rule and health terms | `test/vagueQuery.test.js` | 17 tests (DR-04 interception pinned at the recorded 3/31, TC-079) | 2026-10-20 | Pass |
+| of which: offline parity | `test/offlineSafetyParity.test.js` | 14 tests (the 9 of 15 Oct, 1 message test, 4 help and vague-rule tests) | 2026-10-20 | Pass |
+| Gateway lint | `npm run lint` (`app/gateway`) | – | 2026-10-20 | Pass |
+| Interface tests | `npm test` (`app/interface`) | 6 suites, 212 checks | 2026-10-20 | Pass: all 6, 0 failed |
+| Interface typecheck, lint, format | `npm run typecheck`, `npm run lint`, `npm run format:check` (`app/interface`) | – | 2026-10-20 | Pass |
+| Interface build | `npm run build` (`app/interface`) | 12 precache entries | 2026-10-20 | Pass |
+| `ml_service` | – | No automated test suite exists | 2026-10-20 | Not run (none to run). `python ml_service/build_kb.py --check`: `knowledge_base.json` up to date, 21 entries. The live checks TC-073, TC-074 and TC-081 ran against `ml_service` v3 |
+
+**After step 7 (extra health terms)**, re-run at `3bac650`:
+
+| Suite | Count | Result |
+|---|---|---|
+| Gateway `npm test` | 6 integration check groups + 395 `node:test` tests in 38 suites | Pass: 395/395, 0 failed |
+| of which: vague-query rule and health terms (`vagueQuery.test.js`) | 22 tests | Pass |
+| of which: offline parity (`offlineSafetyParity.test.js`) | 14 tests (the 9 of 15 Oct included) | Pass |
+| Gateway lint; `node scripts/build-health-terms.js --check` | – | Pass; both lists up to date |
+| Interface `npm test` | 6 suites, 212 checks | Pass: all 6, 0 failed |
+| Interface typecheck, lint, format check, build | – | Pass |
+
+## Vague-query rule interception (20 October 2026)
+
+How many queries of each set the vague-query rule answers itself
+(`isVagueQuery` in `app/gateway/src/vagueQuery.js`; the same counts are
+asserted in `app/gateway/test/vagueQuery.test.js`). Development and
+DR-04 sets are read from `resources/`; the example questions from
+`app/interface/src/content/uiText.ts`.
+
+| Set | Required | Knowledge-base terms only (step 3) | With the extra terms (step 7) |
+|---|---|---|---|
+| 8 vague test queries | all | 8/8 | 8/8 |
+| 13 example questions | none | 0/13 | 0/13 |
+| 35 labelled development-set queries | none | 0/35 | 0/35 |
+| 31 DR-04 test queries | none | 3/31 (TC-079, Fail) | 1/31 (TC-090, non-blind) |
+
+DR-04 catches with the extra terms: "What can I do when I mess up ?"
+only. "How is a coil inserted?" and "Tell me how to use a tampon?" are
+no longer caught. The extra terms were added after those catches were
+seen, so the DR-04 recheck is non-blind for this rule; no word was added
+to remove the remaining catch.
+
+For reference, of the 23 development-set rows with no class label, 7
+reach the rule and are caught with the extra terms: the 5 off-topic
+queries and the Safety Net negatives "my teacher threatened to fail me"
+and "I am so tired of exams". "When should I start antenatal visits?"
+(Q43, Q53) is no longer caught.
+
 ## Setup checks (15 October 2026)
 
 | Check | What it checks | Command | Date | Result | Source |
@@ -103,4 +159,10 @@ about real phones on mobile networks. SEO loses points only because
 | Date | What changed | Why | Tests updated | Source |
 |---|---|---|---|---|
 | 2026-10-15 | Flagged queries are no longer classified, in the gateway and in the offline pipeline. Referrals now report `classificationSkipped: true` and null `predictedCategory`, `classifierSource` and `confidence` | The Safety Net never reads the classifier's result; the call was left over from the proposal's parallel design and made referrals wait on `ml_service`. FR-04 is now met | `backend.wiring.test.js`, `backend.test.js` (Test 2) and `helpSignposting.test.js` now expect no `/classify` call and `classificationSkipped: true`; `safetyNet.test.js` asserts zero classify calls on flagged queries and adds a regression test (a classifier that hangs or throws is never called, and the referral returns at once). Gateway tests: 344 (was 342), all passing; interface: 6 suites passing | [`docs/decision-log.md`](../decision-log.md#classifier-skipped-on-flagged-queries-a-freeze-exception-2026-10-15) |
-| 2026-10-15 | A relevance gate in the gateway, behind `RELEVANCE_GATE` (off by default): below a top-1 unscoped retrieval score of 0.8439, a clear query gets the standard no-answer message instead of the retrieved entry | Low-relevance queries got unrelated answers; the gate was validated once on 15 October (in-scope 18/20 answered, off-topic 8/8 and out-of-scope health 4/6 rejected) | New `app/gateway/test/relevanceGate.test.js` (10 tests: flag parsing; just below, at and just above the threshold; scoped gating; no score; flagged and signposting paths; no entry text in abstain responses; flag off unchanged). Gateway tests: 352 (342 + 10), all passing. Interface: unchanged, 6 suites passing; it already renders the no-answer reply | [`docs/decision-log.md`](../decision-log.md#relevance-gate-behind-a-flag-2026-10-15) |
+| 2026-10-15 | A relevance gate in the gateway, behind `RELEVANCE_GATE` (off by default; on by default from 2026-10-20, see below): below a top-1 unscoped retrieval score of 0.8439, a clear query gets the standard no-answer message instead of the retrieved entry | Low-relevance queries got unrelated answers; the gate was validated once on 15 October (in-scope 18/20 answered, off-topic 8/8 and out-of-scope health 4/6 rejected) | New `app/gateway/test/relevanceGate.test.js` (10 tests: flag parsing; just below, at and just above the threshold; scoped gating; no score; flagged and signposting paths; no entry text in abstain responses; flag off unchanged). Gateway tests: 352 (342 + 10), all passing. Interface: unchanged, 6 suites passing; it already renders the no-answer reply | [`docs/decision-log.md`](../decision-log.md#relevance-gate-behind-a-flag-2026-10-15) |
+| 2026-10-20 | Every gateway response carries `kind` (answer-scoped, answer-unscoped, abstain, help, vague, referral) and `matchedQuestion` (the served entry's "User question", verbatim, or null). The interface's `QueryResponse` type has both fields and a `ReplyKind` union | UI audit UI-01: a loosely matched answer was shown with no sign of the question it answers | New `app/gateway/test/responseKind.test.js` (10 tests, TC-066 to TC-070). Gateway tests: 364 (354 + 10), all passing; interface typecheck passes | [`docs/decision-log.md`](../decision-log.md#reply-kind-and-matched-question-in-every-response-2026-10-20) |
+| 2026-10-20 | The relevance gate is on by default; `RELEVANCE_GATE=false` turns it off. Threshold unchanged (0.8439) | With the gate off, vague queries got unrelated entries as answers (UI audit UI-01). Validation (15 Oct, unchanged): V03 and V19 wrongly rejected (2 of 20 in-scope); all 13 example questions pass (live check, 20 Oct) | `relevanceGate.test.js`: flag test rewritten (off only for exactly `false`), "off (the default)" replaced by two default-on tests and one `false` override test (TC-071, TC-072); `helpSignposting.test.js` now expects the gate's extra unscoped `/retrieve` on a scoped query. Gateway tests: 366 (364 + 2 net), all passing. Live checks TC-073, TC-074 | [`docs/decision-log.md`](../decision-log.md#relevance-gate-on-by-default-2026-10-20) |
+| 2026-10-20 | A vague-query rule after the Safety Net and the help rule: a query with at most three content words and no health term gets a clarifying question (`outcome: "clarification"`, `kind: "vague"`), without classification or retrieval. The 122 health terms are generated from the knowledge base by `app/gateway/scripts/build-health-terms.js` | Vague queries got unrelated entries stated as answers (UI audit UI-01, UI-02). Interception: vague 8/8; example questions 0/13; labelled development set 0/35; DR-04 3/31 (open failure, TC-079) | New `app/gateway/test/vagueQuery.test.js` (16 tests, TC-075 to TC-080); `backend.wiring.test.js` switches the rule off in one test whose query ("antenatal") the rule now answers. Gateway tests: 382 (366 + 16), all passing; interface typecheck passes. Live check TC-081 | [`docs/decision-log.md`](../decision-log.md#vague-query-rule-2026-10-20) |
+| 2026-10-20 | Help reply opens "You're not alone. These people can help right now." instead of "I don't have information on that yet."; the no-answer reply now opens "I couldn't find a good answer to that.". Text only; numbers unchanged. Mirrored in `app/interface/src/offline/helpContent.ts` | UI audit UI-02, UI-03 | `helpSignposting.test.js`: the old wording test replaced by three (TC-082, TC-083); `offlineSafetyParity.test.js` gains a message parity test (TC-084; 10 tests, was 9). Gateway tests: 385 (382 + 3), all passing | [`docs/decision-log.md`](../decision-log.md#help-and-no-answer-wording-2026-10-20) |
+| 2026-10-20 | The offline pipeline the app ships (`offlinePipeline.ts`) now runs the help rule and the vague-query rule, in the gateway's order, from `app/interface/src/offline/queryRules.ts` (ports of the gateway rules; health terms written by the gateway's build script) | Offline, "Help" and vague queries got a general category sentence (UI audit UI-07) | `offlineSafetyParity.test.js`: 4 rule parity tests (14 in the file; the earlier 9 still pass); `vagueQuery.test.js`: offline health-term block up to date; help and query-set cases moved to `test/fixtures/helpCases.js` and `querySets.js`. Gateway tests: 390 (385 + 5), all passing. Interface `offlinePipeline.test.ts`: Tests 5 to 8 run `offlinePipeline.ts` (TC-085 to TC-088) | [`docs/decision-log.md`](../decision-log.md#offline-parity-for-the-help-and-vague-query-rules-2026-10-20) |
+| 2026-10-20 | Health terms from outside the knowledge base: `app/gateway/src/content/extraHealthTerms.json`, 122 terms (113 words, 9 phrases) in four categories with stated criteria, used by the gateway and copied into the offline `queryRules.ts` by `build-health-terms.js`. Function-word list frozen (166 words, hashed) | Decisions by Cindy, 20 Oct: confirm the content-word reading, add documented outside-KB terms, accept the side effects as limitations | `vagueQuery.test.js`: the "antenatal" known-limit test now expects no interception; new tests for extra words, plurals and phrases, the extra file's form, and the function-word freeze; the DR-04 pin is now the retest's 1/31 (TC-090). `offlineSafetyParity.test.js` compares the extra list. Gateway tests: 395 (390 + 5), all passing (TC-089) | [`docs/decision-log.md`](../decision-log.md#health-terms-from-outside-the-knowledge-base-2026-10-20) |

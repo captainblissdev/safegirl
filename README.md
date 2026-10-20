@@ -154,11 +154,12 @@ On the retrieval **development set** (not an independent test), the frozen keywo
 
 Every query is handled in this order:
 
-1. **Safety Net.** Checks for self-harm and suicidal statements, and for violence, abuse, blackmail and threats. Self-harm gets its own referral message.
-2. **Help rule.** If the query was not flagged and the whole message is a generic help request that names no topic (for example "Where can I get help?"), the gateway returns help information (`outcome: "signposting"`). The classifier and retrieval do not run, and `ml_service` is not called.
-3. **Intent classifier.** Runs for every other query, including flagged ones.
-4. **If the Safety Net flagged the query,** the gateway returns the referral message. The classifier has already run, and its prediction is reported in the response (`predictedCategory`) but is not used to answer; retrieval and generation do not run.
-5. **Otherwise,** retrieval and generation produce the answer.
+1. **Safety Net.** Checks for self-harm and suicidal statements, and for violence, abuse, blackmail and threats. A flagged query gets the referral message (self-harm has its own), and nothing below runs: since 15 October 2026 flagged queries are not classified, and their text is not sent to `ml_service`.
+2. **Help rule.** If the whole message is a generic help request that names no topic (for example "Where can I get help?"), the gateway returns help information (`outcome: "signposting"`, `kind: "help"`). The classifier and retrieval do not run, and `ml_service` is not called.
+3. **Vague-query rule.** If the query has at most three content words (words other than common function words such as "I", "you", "is", "do", "what") and none of them is a health term from the knowledge base, the gateway asks what the user means: "I'm not sure what you mean. Is your question about periods, pregnancy, contraception or STIs?" (`outcome: "clarification"`, `kind: "vague"`). The classifier and retrieval do not run. The health terms are in two files: `app/gateway/src/content/healthTerms.json`, generated from the knowledge base by `node scripts/build-health-terms.js` (in `app/gateway`), and `app/gateway/src/content/extraHealthTerms.json`, a hand-written list from outside the knowledge base with a criterion per category. The script also copies both into the offline pipeline.
+4. **Intent classifier.** Runs for every other query.
+5. **Retrieval and generation** produce the answer.
+6. **Relevance gate** (on by default; off with `RELEVANCE_GATE=false`). If the top-1 unscoped retrieval score is below 0.8439, the gateway returns the standard no-answer message instead of the retrieved entry. A scoped query costs one extra unscoped `/retrieve` call for the score. Without an `ml_service` score (keyword fallback, local retrieval or a classifier abstain) the gate is not applied.
 
 The Safety Net is synchronous, so it has always finished before the classifier starts; earlier versions of this README and the architecture diagram described the two as dispatched in parallel.
 
@@ -340,8 +341,11 @@ Or, to test the gateway without Firebase (for example with `curl` or the evaluat
 | `CLASSIFIER_CONFIDENCE_THRESHOLD` | `0.5` | At or above this confidence, retrieval is scoped to the predicted category; below it, retrieval searches all categories. Frozen; leave unset |
 | `CLASSIFIER_ABSTAIN_THRESHOLD` | `0.35` | Below this confidence, no retrieval is attempted and the gateway returns its standard "no specific answer" message. Must be below the confidence threshold. Frozen; leave unset |
 | `CLASSIFIER_TIMEOUT_MS` | `3000` | Timeout for each request to `ml_service`, in milliseconds |
+| `RELEVANCE_GATE` | on | The relevance gate: a clear query whose top-1 unscoped retrieval score is below 0.8439 gets the standard no-answer message instead of the retrieved entry. On unless the value is exactly `false`; `RELEVANCE_GATE=false` restores the behaviour before 20 October 2026. The threshold is frozen and is not configurable |
 
 Empty or invalid values fall back to the defaults, with a logged warning. Each response reports how its answer was found in `retrievalScope`: `scoped`, `unscoped`, `abstained`, or `local` (keyword retrieval).
+
+Every response also has a `kind`: `answer-scoped`, `answer-unscoped` (unscoped or keyword retrieval), `abstain` (the no-answer message), `help` (signposting), `vague` (a clarifying question) or `referral`. An answer carries `matchedQuestion`, the "User question" of the knowledge-base entry it came from, verbatim; it is `null` when no entry was served. The shape is `QueryResponse` in [`app/interface/src/types.ts`](app/interface/src/types.ts).
 
 **`HELP_CONTACTS_VERIFIED` is not an environment variable.** It is a constant in `app/gateway/src/content/helpContent.js` and in the offline copy `app/interface/src/offline/helpContent.ts`, and it is `false`. While it is `false`, the gateway and the interface log a warning at startup that the help numbers (999, 112, 1195, 116) are unverified; it changes nothing else. Putting it in `.env` has no effect. It should be set to `true`, in both files together (the parity test checks they match), only after every number has been confirmed with the services themselves.
 
@@ -404,6 +408,8 @@ node --env-file=.env server.js
 
 It should print `SafeGirl backend listening on :3001`, plus the unverified help numbers warning.
 
+The relevance gate is on by default. To run the gateway as it was before 20 October 2026, without the gate, add `RELEVANCE_GATE=false` to `.env`.
+
 **Terminal 3, interface:**
 
 ```powershell
@@ -435,11 +441,11 @@ npm run preview
 
 ## Testing
 
-None of the automated tests need `ml_service`, a Firebase project or any credentials. Counts were verified on 15 October 2026 on a fresh clone of `development`.
+None of the automated tests need `ml_service`, a Firebase project or any credentials. Counts were verified on 20 October 2026 on `fix/response-clarity`.
 
 | Suite | Command (from) | Count |
 | --- | --- | --- |
-| Gateway integration checks and unit tests | `npm test` (`app/gateway`) | 6 integration check groups, then 342 `node:test` tests |
+| Gateway integration checks and unit tests | `npm test` (`app/gateway`) | 6 integration check groups, then 395 `node:test` tests |
 | Gateway lint | `npm run lint` (`app/gateway`) | – |
 | Interface tests | `npm test` (`app/interface`) | 6 suites: offline pipeline, query client, timeouts, session, components, font setup |
 | Interface typecheck | `npm run typecheck` (`app/interface`) | – |
@@ -466,7 +472,7 @@ It writes per-query results to `research/eval/results/retrieval_eval_<UTC timest
 
 ## Offline and PWA Behaviour
 
-The interface is an installable PWA. The service worker precaches only the app shell (HTML, JS, CSS, icons); `/api` responses are never cached. When the network or the gateway is unavailable, or a query or sign-in times out (20 s and 10 s), the interface answers from its offline pipeline: the same Safety Net rules and referral messages, then a short general answer marked as limited mode. A first visit while offline shows the browser's own error page, because nothing is cached yet. After a session, browser storage holds no query or answer text. Details: [`docs/testing/pwa-audit.md`](docs/testing/pwa-audit.md).
+The interface is an installable PWA. The service worker precaches only the app shell (HTML, JS, CSS, icons); `/api` responses are never cached. When the network or the gateway is unavailable, or a query or sign-in times out (20 s and 10 s), the interface answers from its offline pipeline: the same Safety Net rules and referral messages, the same help rule and vague-query rule with the same replies (since 20 October 2026), then a short general answer marked as limited mode. A first visit while offline shows the browser's own error page, because nothing is cached yet. After a session, browser storage holds no query or answer text. Details: [`docs/testing/pwa-audit.md`](docs/testing/pwa-audit.md).
 
 ---
 

@@ -7,10 +7,11 @@
  * entry. It never runs for a flagged query or a help-signposting
  * response, which are answered before retrieval.
  *
- * It is off by default and on only when RELEVANCE_GATE is exactly
- * "true". It needs a score from ml_service: after a keyword fallback,
- * local retrieval or an abstained classification there is no score, and
- * the gate is not applied.
+ * It is on by default (since 2026-10-20) and off only when
+ * RELEVANCE_GATE is exactly "false"; any other value, or none, leaves it
+ * on, so a typo cannot switch it off. It needs a score from ml_service:
+ * after a keyword fallback, local retrieval or an abstained
+ * classification there is no score, and the gate is not applied.
  */
 
 /**
@@ -22,9 +23,9 @@
  */
 const RELEVANCE_GATE_THRESHOLD = 0.8439;
 
-/** True only when RELEVANCE_GATE is exactly "true". */
+/** True unless RELEVANCE_GATE is exactly "false". */
 function isRelevanceGateEnabled(env = process.env) {
-  return env.RELEVANCE_GATE === "true";
+  return env.RELEVANCE_GATE !== "false";
 }
 
 /**

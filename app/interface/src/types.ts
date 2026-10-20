@@ -5,11 +5,42 @@
 
 // "signposting": a generic help request answered with help information,
 // without classification or retrieval. Displayed like a normal answer.
-export type QueryOutcome = "grounded_answer" | "referral" | "signposting";
+// "clarification": a vague query (short, no health term) answered with a
+// clarifying question, without classification or retrieval. Displayed
+// like a normal answer.
+export type QueryOutcome =
+  "grounded_answer" | "referral" | "signposting" | "clarification";
+
+/**
+ * What kind of reply the gateway sent (REPLY_KINDS in
+ * app/gateway/src/responseOrchestrator.js):
+ * - "answer-scoped": a knowledge-base answer within the predicted category.
+ * - "answer-unscoped": a knowledge-base answer found less surely (all
+ *   categories searched, or keyword fallback).
+ * - "abstain": no answer; the standard no-answer message.
+ * - "help": a generic help request; the signposting message.
+ * - "vague": a short query with no health term; a clarifying question.
+ * - "referral": the Safety Net flagged the query.
+ */
+export type ReplyKind =
+  | "answer-scoped"
+  | "answer-unscoped"
+  | "abstain"
+  | "help"
+  | "vague"
+  | "referral";
 
 export interface QueryResponse {
   outcome: QueryOutcome;
   message: string;
+
+  // Set on every gateway response. The offline pipeline sets it on its
+  // referral, help and vague replies and leaves it out of its general
+  // limited-mode answers, which come from no knowledge-base entry.
+  kind?: ReplyKind;
+  // The "User question" of the knowledge-base entry the answer came
+  // from, verbatim; null when no entry was served.
+  matchedQuestion?: string | null;
 
   // Present on grounded_answer responses.
   // Category of the knowledge-base entry actually served; null when no

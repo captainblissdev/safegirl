@@ -12,55 +12,16 @@ const {
   SIGNPOSTING_MESSAGE,
   NO_ANSWER_MESSAGE,
   HELP_CONTACTS_VERIFIED,
+  HELP_GUIDANCE,
   UNVERIFIED_CONTACTS_WARNING,
   warnIfContactsUnverified,
 } = require("../src/content/helpContent");
 const { captureOutput } = require("./support");
 
-const POSITIVE = [
-  "Where can I get help?",
-  "where can i get help",
-  "WHERE CAN I FIND HELP",
-  "How can I get some help?",
-  "Where can I go for help?",
-  "Where do I turn for help?",
-  "Who can I talk to?",
-  "Who should I speak to?",
-  "Is there someone I can talk to?",
-  "I want to talk to someone",
-  "I need someone to talk to",
-  "I need help",
-  "I need some help!!",
-  "Can someone help me?",
-  "Could anyone help me please",
-  "Can you help?",
-  "Help",
-  "Help me",
-  "Hi, where can I get help?",
-];
-
-const NEGATIVE = [
-  "Where can I get birth control?",
-  "Help me understand the HIV window period",
-  "I need help with contraception",
-  "Who can I talk to about my period?",
-  "Can someone help me get the morning after pill?",
-  "Where can I get help with an STI test?",
-  "I need help, I think I'm pregnant",
-  "Where can I get help if the condom broke?",
-  "Is the clinic helpful?",
-  "What is the helpline number for HIV testing?",
-  "Help me find a clinic for contraception",
-  "Who can I talk to at the clinic about PrEP?",
-  "I fear that I am pregnant",
-  "Is the clinic confidential?",
-  "What is consent?",
-  "helping a friend who might be pregnant",
-  "I need help paying for antenatal checkups",
-  "Where can I get condoms?",
-  "",
-  "   ",
-];
+const {
+  HELP_POSITIVE: POSITIVE,
+  HELP_NEGATIVE: NEGATIVE,
+} = require("./fixtures/helpCases");
 
 describe("isGenericHelpRequest()", () => {
   for (const text of POSITIVE) {
@@ -138,7 +99,9 @@ describe("handleQuery() with the help rule", () => {
 
     const { result, output } = await captureOutput(() => handleQuery(query));
 
-    assert.deepEqual(requests, ["/classify", "/retrieve"]);
+    // The second /retrieve is the relevance gate's unscoped score: the
+    // gate is on by default and retrieval here was scoped.
+    assert.deepEqual(requests, ["/classify", "/retrieve", "/retrieve"]);
     assert.equal(result.outcome, "grounded_answer");
     assert.equal(result.retrievalScope, "scoped");
     assert.ok(!output.toLowerCase().includes("birth control"));
@@ -175,14 +138,26 @@ describe("handleQuery() with the help rule", () => {
 });
 
 describe("help content", () => {
-  it("uses the help information, without the first sentence, as the no-answer message", () => {
-    assert.ok(SIGNPOSTING_MESSAGE.endsWith(NO_ANSWER_MESSAGE));
-    assert.ok(
-      SIGNPOSTING_MESSAGE.startsWith("I don't have information on that yet. "),
+  it("opens the help reply plainly, then gives the help information", () => {
+    assert.equal(
+      SIGNPOSTING_MESSAGE,
+      `You're not alone. These people can help right now. ${HELP_GUIDANCE}`,
     );
-    assert.ok(!NO_ANSWER_MESSAGE.startsWith("I don't have information"));
-    for (const number of ["1195", "116"]) {
-      assert.ok(NO_ANSWER_MESSAGE.includes(number));
+    assert.ok(!SIGNPOSTING_MESSAGE.includes("I don't have information"));
+  });
+
+  it("says no answer was found before the help information", () => {
+    assert.equal(
+      NO_ANSWER_MESSAGE,
+      `I couldn't find a good answer to that. ${HELP_GUIDANCE}`,
+    );
+  });
+
+  it("keeps the help numbers in both messages", () => {
+    for (const message of [SIGNPOSTING_MESSAGE, NO_ANSWER_MESSAGE]) {
+      for (const number of ["1195", "116"]) {
+        assert.ok(message.includes(number), number);
+      }
     }
   });
 

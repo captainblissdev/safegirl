@@ -11,9 +11,14 @@
  *    ("Where can I get help?") gets signposting, without classification
  *    or retrieval, so ml_service is not called. It never overrides the
  *    Safety Net: a flagged query always gets the referral.
- * 3. For clear queries only: Intent Classifier, then retrieval and
+ * 3. Vague-query rule: a short query (at most three content words) that
+ *    names no health term ("Am I okay?", "I'm worried") gets a
+ *    clarifying question, without classification or retrieval (see
+ *    vagueQuery.js). Like the help rule, it never overrides the Safety
+ *    Net, and a help request is signposted before it is consulted.
+ * 4. For other clear queries: Intent Classifier, then retrieval and
  *    generation.
- * 4. Relevance gate (only when RELEVANCE_GATE is "true"; see
+ * 5. Relevance gate (on unless RELEVANCE_GATE is "false"; see
  *    relevanceGate.js): after retrieval, a clear query whose top-1
  *    unscoped retrieval score is below the threshold gets the standard
  *    no-answer message instead of the retrieved entry. Flagged queries
@@ -31,9 +36,10 @@
 
 const { checkSafety: defaultCheckSafety } = require("./safetyNet");
 const { isGenericHelpRequest } = require("./helpSignposting");
+const { isVagueQuery } = require("./vagueQuery");
 const { createClassifierClient } = require("./classifierClient");
 const { generate } = require("./generationModule");
-const { orchestrate, signpost } = require("./responseOrchestrator");
+const { clarify, orchestrate, signpost } = require("./responseOrchestrator");
 const {
   isRelevanceGateEnabled,
   relevanceGateDecision,
@@ -55,6 +61,7 @@ const RELEVANCE_GATE_NOTE =
  *        retrieve(text, classification), as createClassifierClient returns.
  * @param {Function} [deps.checkSafety] - Safety Net check.
  * @param {Function} [deps.isHelpRequest] - Generic help-request rule.
+ * @param {Function} [deps.isVague] - Vague-query rule.
  * @param {boolean} [deps.relevanceGate] - Whether the relevance gate is
  *        on; defaults to the RELEVANCE_GATE environment variable.
  * @returns {(queryText: string) => Promise<object>} Query handler.
@@ -63,6 +70,7 @@ function createHandleQuery({
   classifierClient,
   checkSafety = defaultCheckSafety,
   isHelpRequest = isGenericHelpRequest,
+  isVague = isVagueQuery,
   relevanceGate = isRelevanceGateEnabled(),
 }) {
   /**
@@ -85,6 +93,11 @@ function createHandleQuery({
       return signpost();
     }
 
+    // 3. Vague query: ask what the user means, without classifying.
+    if (!safety.flagged && isVague(queryText)) {
+      return clarify();
+    }
+
     let classification = null;
     let generation = null;
     let retrievedEntry = null;
@@ -92,7 +105,7 @@ function createHandleQuery({
     let gateResult;
 
     /**
-     * 3. Clear-query path:
+     * 4. Clear-query path:
      * Only queries that pass the Safety Net are classified, then go on
      * to retrieval and response generation.
      *
@@ -110,7 +123,7 @@ function createHandleQuery({
           await classifierClient.retrieve(queryText, classification));
         generation = generate(retrievedEntry);
       } else {
-        // 4. Relevance gate, after retrieval: abstain with the standard
+        // 5. Relevance gate, after retrieval: abstain with the standard
         // no-answer message when the top-1 unscoped score is too low.
         let unscopedScore;
         ({
