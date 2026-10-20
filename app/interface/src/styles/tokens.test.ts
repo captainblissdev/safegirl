@@ -552,4 +552,36 @@ console.log("\nTest 9: Home");
   );
 }
 
+console.log("\nTest 10: the Topic list");
+{
+  const page = [
+    token("--color-page"),
+    token("--color-card"),
+    token("--glow-pink"),
+    token("--glow-lilac"),
+  ];
+  const worst = (fg: string, backgrounds: string[]) =>
+    Math.min(...backgrounds.map((bg) => contrast(fg, bg)));
+  const back = worst(token("--color-violet"), page);
+  assert(back >= 4.5, `"All topics", violet on the page: ${back.toFixed(2)}:1`);
+  const title = worst(token("--color-plum"), page);
+  assert(title >= 4.5, `the h1, plum on the page: ${title.toFixed(2)}:1`);
+  const count = worst(token("--color-muted"), page);
+  assert(
+    count >= 4.5,
+    `"N questions", muted on the page: ${count.toFixed(2)}:1`,
+  );
+  const row = contrast(token("--color-ink"), token("--color-card"));
+  assert(row >= 4.5, `question rows, ink on white: ${row.toFixed(2)}:1`);
+  const edge = worst(token("--color-control-border"), page);
+  assert(edge >= 3, `the list card's edge: ${edge.toFixed(2)}:1`);
+  const chevron = contrast(
+    token("--color-rose-text"),
+    token("--chevron-tile-bg"),
+  );
+  assert(chevron >= 3, `chevron, rose on its tile: ${chevron.toFixed(2)}:1`);
+  const ring = contrast(token("--color-violet"), token("--color-card"));
+  assert(ring >= 3, `focus ring inside the white card: ${ring.toFixed(2)}:1`);
+}
+
 console.log("\nAll design token tests passed.");

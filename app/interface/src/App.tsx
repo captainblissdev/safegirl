@@ -7,6 +7,8 @@ import Splash from "./components/Splash";
 import ChatInterface from "./components/ChatInterface";
 import ChatSidebar from "./components/ChatSidebar";
 import ReferralScreen from "./components/ReferralScreen";
+import TopicList from "./components/TopicList";
+import type { Topic } from "./content/topics";
 import SessionEnd from "./components/SessionEnd";
 import SupportContent from "./components/SupportContent";
 import { createDoubleEscapeHandler, quickExit } from "./quickExit";
@@ -40,6 +42,23 @@ export default function App() {
   );
   const [isHelpOpen, setIsHelpOpen] = useState(false);
   const helpButtonRef = useRef<HTMLButtonElement>(null);
+  // The Topic list's class, what opened it, and where focus returns.
+  const [topic, setTopic] = useState<Topic | null>(null);
+  const topicOpenerRef = useRef<"tile" | "help">("tile");
+  const returnFocusRef = useRef<string | null>(null);
+
+  // After "All topics", focus the tile (or Help button) that opened the
+  // list. Home's own focus on its h1 runs first, as a child effect.
+  useEffect(() => {
+    const target = returnFocusRef.current;
+    if (screen !== "chat" || target === null) return;
+    returnFocusRef.current = null;
+    if (target === "help") {
+      helpButtonRef.current?.focus();
+    } else {
+      document.querySelector<HTMLElement>(target)?.focus();
+    }
+  }, [screen]);
   const [turns, setTurns] = useState<ChatTurn[]>([]);
   const [referralMessage, setReferralMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -141,20 +160,39 @@ export default function App() {
     helpButtonRef.current?.focus();
   };
 
-  /**
-   * A topic button in the Help sheet. Until the Topic list exists
-   * (redesign Step 5) it closes the sheet and focuses the ask bar. On the
-   * splash there is no ask bar yet: the sheet just closes, so the splash
-   * still has to be accepted first.
-   */
-  const handleHelpTopic = () => {
+  /** Open the Topic list, remembering what opened it for focus return. */
+  const openTopic = (next: Topic, opener: "tile" | "help") => {
+    topicOpenerRef.current = opener;
+    setTopic(next);
+    setScreen("topic");
+  };
+
+  /** A topic button in the Help sheet: close the sheet, open the list. */
+  const handleHelpTopic = (next: Topic) => {
     setIsHelpOpen(false);
-    const askBar = document.getElementById("chat-input");
-    if (askBar) {
-      askBar.focus();
-    } else {
-      helpButtonRef.current?.focus();
-    }
+    openTopic(next, "help");
+  };
+
+  /**
+   * "All topics": back to Home, then focus returns to the tile that opened
+   * the list, or to the Help button if the Help sheet did.
+   */
+  const closeTopic = () => {
+    returnFocusRef.current =
+      topicOpenerRef.current === "tile" && topic
+        ? `[data-topic="${topic.topicClass}"]`
+        : "help";
+    setScreen("chat");
+  };
+
+  /**
+   * A question tapped in the Topic list, or typed in its ask bar: the
+   * exact text goes through the same full pipeline as any question. It is
+   * never scoped to the topic.
+   */
+  const askFromTopic = (text: string) => {
+    setScreen("chat");
+    void handleSend(text);
   };
 
   /** Quick exit: clear everything, then leave (see quickExit.ts). */
@@ -166,6 +204,7 @@ export default function App() {
         setReferralMessage("");
         setError(null);
         setIsHelpOpen(false);
+        setTopic(null);
         setScreen("splash");
       },
       getSessionStorage: () => window.sessionStorage,
@@ -223,7 +262,7 @@ export default function App() {
         buttonRef: helpButtonRef,
       }}
       calm={screen === "referral"}
-      footerInContent={screen === "chat"}
+      footerInContent={screen === "chat" || screen === "topic"}
     >
       {isOffline && (
         <div className="offline-banner" role="status">
@@ -242,6 +281,7 @@ export default function App() {
               onSend={(text) => void handleSend(text)}
               isLoading={isLoading}
               showDetails={SHOW_DETAILS}
+              onTopic={(next) => openTopic(next, "tile")}
             />
 
             {error && (
@@ -268,6 +308,10 @@ export default function App() {
             <SupportContent />
           </aside>
         </div>
+      )}
+
+      {screen === "topic" && topic && (
+        <TopicList topic={topic} onAsk={askFromTopic} onBack={closeTopic} />
       )}
 
       {screen === "referral" && (

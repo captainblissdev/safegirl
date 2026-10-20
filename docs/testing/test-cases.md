@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 135 cases: 119 Pass, 15 Fail, 1 Not run. Two of the
+**Totals:** 143 cases: 127 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -226,6 +226,14 @@ entry.
 | TC-133 | FR-04, FR-05 | Exit and the footer line on Home; the first screen | Both present; at 390x844 the footer line shows without scrolling | As expected (`components.test.tsx`, Tests 19 and 28; browser check: the line ends at 813 of 844px) | Pass |
 | TC-134 | NFR (accessibility) | Home contrast | Text 4.5:1 or more, edges, icons and the focus ring 3:1 or more | Tag pill 4.94; hero text 6.32; placeholder 6.80; send arrow 4.71; tile edges 3.02 to 3.09; icons on tints 4.84 to 5.47; subtitles 6.80; footer 5.03 (`styles/tokens.test.ts`, Test 9) | Pass |
 | TC-135 | NFR (offline) | Home's examples offline | Each gets the general answer for its own entry's category; no rule intercepts it | As expected (`offlinePipeline.test.ts`, Test 11) | Pass |
+| TC-136 | FR-03 | Each Home tile and each Help sheet topic button | Opens the Topic list of its own class; the Help sheet closes | As expected (browser check: 4 tiles and 4 sheet buttons; `components.test.tsx`, Test 30) | Pass |
+| TC-137 | FR-03 | The list for each class | "N questions" with N from the data (general 7, pregnancy 4, contraception 5, STIs 5); one row button per knowledge-base question of the class, its accessible name the question text, at least 44px tall | As expected (`components.test.tsx`, Test 29; browser check: rows 52px or taller) | Pass |
+| TC-138 | FR-01, FR-02 | Tapping each of the 21 questions | The exact question text goes through the full pipeline (request body exactly `{"text": …}`) | As expected for all 21 (browser check). 20 return their own entry; KB-P1 returns KB-G3 (classed general 0.852, similarity 0.8453) and stays listed | Pass |
+| TC-139 | FR-01 | The Topic list's ask bar ("what is PrEP" asked from the Pregnancy list) | Not scoped to the topic: the body is `{"text": "what is PrEP"}` and the PrEP answer comes back | As expected (browser check; `components.test.tsx`, Test 30) | Pass |
+| TC-140 | NFR (accessibility) | Focus on the Topic list and screen changes | Focus to the h1 on open; "All topics" returns focus to the opening tile, or to Help; Home's h1 and the referral heading take focus when they appear | As expected (browser check; `components.test.tsx`, Tests 29 and 30) | Pass |
+| TC-141 | FR-04, FR-05 | The Topic list's frame | One h1; Exit in the header; the footer line under the list, directly above the ask bar; no sideways scroll at 390px | As expected (`components.test.tsx`, Test 29; browser check) | Pass |
+| TC-142 | NFR (privacy) | The questions data | Generated from the active knowledge base, up to date, with id, class and question only (no answers) | As expected (`app/gateway/test/kbQuestions.test.js`, 3 tests; `build-kb-questions.js --check`) | Pass |
+| TC-143 | NFR (accessibility) | Topic list contrast | Text 4.5:1 or more; edges, icons and the focus ring 3:1 or more | Back link 5.25; h1 10.59; count 5.03; rows 16.52; card edge 3.10; chevron 5.16; ring 7.10 (`styles/tokens.test.ts`, Test 10) | Pass |
 
 ## Defects and retests
 

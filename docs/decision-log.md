@@ -1157,3 +1157,45 @@ reduced. At 360x740 and 320x640 Home scrolls.
 
 The conversation view still has the four example chips; they go with
 the redesign of the answer view.
+
+## Topic list (2026-10-20)
+
+Stage B2 step 5 (`fix/ui-redesign`), on Cindy's brief. **No frozen item
+changed**: no model, knowledge-base text, threshold or gate.
+
+**What it is.** A screen opened from a Home tile or a Help sheet topic
+button (`components/TopicList.tsx`): "All topics" back link, the topic's
+icon tile, its label as the only `<h1>`, "N questions" (N from the data),
+a card listing that class's knowledge-base questions, the footer line,
+and an ask bar labelled "Ask something else".
+
+**One path to an answer.** Tapping a question hands its exact text to
+the same send handler as any question, so the full pipeline runs
+(Safety Net, help, held topics, vague rule, classifier, retrieval,
+gate); the ask bar does the same. Nothing returns an answer directly
+and nothing is scoped to the topic: a browser check showed every request
+body is exactly `{"text": …}`.
+
+**Where the questions come from.** The interface had a copy of the
+knowledge base (`offline/Kbdata.json`), but it is maintained by hand,
+holds the answers, and is used only by the unused `offline/pipeline.ts`.
+Instead of shipping the answers in the bundle or adding an endpoint, a
+build script (`app/gateway/scripts/build-kb-questions.js`) writes
+`app/interface/src/content/kbQuestions.json` from the active knowledge
+base: id, class and question only, no answers. A gateway test fails if
+it is stale or carries any other field. It works offline. No gateway
+route was added.
+
+**Known mismatch kept in the list: KB-P1.** "Do I have to get a pelvic
+exam right away at my first visit?" is classed general by V3 (0.852;
+pregnancy 0.055), so retrieval is scoped to general and serves KB-G3
+("Is my period normal…", similarity 0.8453); unscoped, KB-P1 itself
+would be top at 0.9023. It stays in the Pregnancy list, as briefed. The
+other 20 questions return their own entry when tapped (browser check,
+20 October 2026).
+
+**Focus (UI-14).** The Topic list moves focus to its h1 when it opens;
+"All topics" returns focus to the tile that opened it, or to the Help
+button if the Help sheet did. Home's h1 takes focus when Home appears
+(after the splash or a new chat), and the referral heading when the
+referral appears.

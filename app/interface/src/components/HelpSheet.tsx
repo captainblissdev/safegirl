@@ -33,8 +33,8 @@ interface Props {
    */
   onExit: () => void;
   /**
-   * A topic button. Until the Topic list exists (redesign Step 5), App
-   * closes the sheet and focuses the ask bar.
+   * A topic button: App closes the sheet and opens the Topic list for
+   * that class.
    */
   onTopic: (topic: Topic) => void;
 }

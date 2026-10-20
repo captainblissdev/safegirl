@@ -1340,3 +1340,121 @@
   font-size: 14px;
   text-align: center;
 }
+
+/* Topic list (redesign Step 5) */
+
+.topic-screen {
+  justify-content: flex-start;
+  gap: 14px;
+  padding: 8px 8px 12px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 4px;
+  min-height: var(--tap-target);
+  border: 0;
+  padding: 0 4px;
+  background: none;
+  color: var(--color-violet);
+  font-size: 1rem;
+  font-weight: var(--weight-extrabold);
+  cursor: pointer;
+}
+
+.topic-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.topic-head-icon {
+  display: grid;
+  flex: 0 0 52px;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+}
+
+.topic-head--general .topic-head-icon {
+  background: var(--topic-periods-bg);
+  color: var(--topic-periods-text);
+}
+
+.topic-head--pregnancy .topic-head-icon {
+  background: var(--topic-pregnancy-bg);
+  color: var(--topic-pregnancy-text);
+}
+
+.topic-head--contraception .topic-head-icon {
+  background: var(--topic-contraception-bg);
+  color: var(--topic-contraception-text);
+}
+
+.topic-head--sti .topic-head-icon {
+  background: var(--topic-sti-bg);
+  color: var(--topic-sti-text);
+}
+
+.topic-title {
+  color: var(--color-plum);
+  font-size: 1.5rem;
+  font-weight: var(--weight-black);
+  line-height: 1.15;
+}
+
+.topic-count {
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+}
+
+/* The list card: its edge is the 3:1 control border. */
+.topic-questions {
+  overflow: hidden;
+  border: 1.5px solid var(--color-control-border);
+  border-radius: 22px;
+  background: var(--color-card);
+  list-style: none;
+}
+
+.topic-questions li + li {
+  border-top: 1px solid var(--color-card-border);
+}
+
+.topic-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--tap-target);
+  border: 0;
+  padding: 12px 14px;
+  background: none;
+  color: var(--color-ink);
+  font-size: 15px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The focus ring sits inside the card, so it is not clipped. */
+.topic-question:focus-visible {
+  outline-offset: -4px;
+}
+
+.topic-question-go {
+  display: grid;
+  flex: 0 0 28px;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--chevron-tile-bg);
+  color: var(--color-rose-text);
+}

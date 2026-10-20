@@ -16,6 +16,8 @@ interface Props {
   disabled: boolean;
   placeholder: string;
   inputRef: RefObject<HTMLInputElement>;
+  /** Overrides the variant's visible-to-screen-readers label. */
+  label?: string;
 }
 
 const COPY = {
@@ -31,12 +33,13 @@ export default function AskBar({
   disabled,
   placeholder,
   inputRef,
+  label,
 }: Props) {
   const copy = COPY[variant];
   return (
     <div className={variant === "hero" ? "ask-pill" : "input-row"}>
       <label className="sr-only" htmlFor="chat-input">
-        {copy.label}
+        {label ?? copy.label}
       </label>
 
       <input

@@ -19,6 +19,8 @@ import {
 import type { ChatTurn } from "../types";
 import { telHref } from "../content/telHref";
 import { TOPICS } from "../content/topics";
+import { KB_QUESTIONS, questionsFor } from "../content/kbQuestions";
+import TopicList from "./TopicList";
 import { PLACEHOLDER_EXAMPLES, SOURCES_LINE } from "../content/uiText";
 import AppHeader from "./AppHeader";
 import AppShell from "./AppShell";
@@ -159,7 +161,7 @@ console.log("\nTest 5: Home states what SafeGirl can and cannot do");
 
   assert(
     html.includes(
-      '<h1 id="home-title" class="hero-title">Ask about your body, periods, pregnancy or sex.</h1>',
+      '<h1 tabindex="-1" id="home-title" class="hero-title">Ask about your body, periods, pregnancy or sex.</h1>',
     ),
     "the hero heading is the h1",
   );
@@ -644,6 +646,7 @@ console.log(
     "./HelpSheet.tsx",
     "./Home.tsx",
     "./AskBar.tsx",
+    "./TopicList.tsx",
   ]) {
     const source = readFileSync(new URL(file, import.meta.url), "utf8");
     assert(!/\d{3}/.test(source), `${file} types no phone number`);
@@ -986,7 +989,7 @@ console.log("\nTest 28: Home");
   );
   const tiles = [
     ...html.matchAll(
-      /<button class="topic-tile topic-tile--([a-z]+)" type="button">.*?<span class="topic-tile-label">([^<]+)<\/span><span class="topic-tile-sub">([^<]+)<\/span><\/button>/g,
+      /<button class="topic-tile topic-tile--([a-z]+)" data-topic="[a-z]+" type="button">.*?<span class="topic-tile-label">([^<]+)<\/span><span class="topic-tile-sub">([^<]+)<\/span><\/button>/g,
     ),
   ].map((m) => ({ topicClass: m[1], label: m[2], subtitle: m[3] }));
   assert(
@@ -1019,6 +1022,132 @@ console.log("\nTest 28: Home");
     shell.includes('<button class="btn-exit" type="button">Exit</button>') &&
       shell.split("In danger? Call ").length === 2,
     "Exit and the footer line are on Home",
+  );
+}
+
+console.log("\nTest 29: the Topic list for each topic");
+{
+  const noop = () => undefined;
+  for (const topic of TOPICS) {
+    const html = renderToStaticMarkup(
+      <TopicList topic={topic} onAsk={noop} onBack={noop} />,
+    );
+    const data = questionsFor(topic.topicClass);
+    assert(
+      data.length > 0 &&
+        data.every((item) => item.topicClass === topic.topicClass),
+      `${topic.label}: the data holds only this class`,
+    );
+    assert(html.split("<h1").length === 2, `${topic.label}: one h1`);
+    assert(
+      html.includes(
+        `<h1 tabindex="-1" class="topic-title">${topic.label}</h1>`,
+      ),
+      `${topic.label}: the label is the h1, focusable for the move on open`,
+    );
+    assert(
+      html.includes(`<p class="topic-count">${data.length} questions</p>`),
+      `${topic.label}: "${data.length} questions", from the data`,
+    );
+    const rows = [
+      ...html.matchAll(
+        /<button class="topic-question" type="button"><span>([^<]*)<\/span><span class="topic-question-go" aria-hidden="true">/g,
+      ),
+    ].map((m) => m[1]);
+    assert(
+      JSON.stringify(rows) ===
+        JSON.stringify(
+          data.map((item) => escapeHtml(item.question).replace(/"/g, "&quot;")),
+        ),
+      `${topic.label}: one row button per question, its name the question text`,
+    );
+    assert(
+      /<button class="back-link" type="button"><svg[^>]*>.*?<\/svg> All topics<\/button>/.test(
+        html,
+      ),
+      `${topic.label}: an "All topics" back link`,
+    );
+    const lineAt = html.indexOf('class="danger-line"');
+    const barAt = html.indexOf('<div class="input-row">');
+    assert(
+      lineAt > html.lastIndexOf("topic-question") && lineAt < barAt,
+      `${topic.label}: the footer line under the list, then the ask bar`,
+    );
+    assert(
+      html.includes(
+        '<label class="sr-only" for="chat-input">Ask something else</label>',
+      ) && html.split("<input").length === 2,
+      `${topic.label}: one ask bar, labelled "Ask something else"`,
+    );
+  }
+  assert(
+    KB_QUESTIONS.length === 21 &&
+      KB_QUESTIONS.every((item) => Object.keys(item).length === 3),
+    "21 questions with id, class and question only (no answers)",
+  );
+}
+
+console.log(
+  "\nTest 30: one path: rows and the ask bar go to the full pipeline",
+);
+{
+  const list = readFileSync(
+    new URL("./TopicList.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    list.includes("onClick={() => onAsk(item.question)}"),
+    "a row hands its exact question text to onAsk",
+  );
+  assert(
+    /const ask = \(\) => \{[^}]*onAsk\(text\);/.test(list),
+    "the ask bar hands its text to the same onAsk",
+  );
+  assert(
+    list.includes("onAsk: (text: string) => void;"),
+    "onAsk takes the text only: nothing scopes it to the topic",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    /const askFromTopic = \(text: string\) => \{\s*setScreen\("chat"\);\s*void handleSend\(text\);/.test(
+      app,
+    ),
+    "App sends it through handleSend, the full pipeline used for every question",
+  );
+  assert(
+    app.includes("submitQuery(text, { signal: request.signal })"),
+    "handleSend submits only the text",
+  );
+  assert(
+    app.includes('onTopic={(next) => openTopic(next, "tile")}') &&
+      /const handleHelpTopic = \(next: Topic\) => \{\s*setIsHelpOpen\(false\);\s*openTopic\(next, "help"\);/.test(
+        app,
+      ),
+    "Home tiles and Help sheet buttons both open the Topic list",
+  );
+  assert(
+    app.includes('`[data-topic="${topic.topicClass}"]`') &&
+      app.includes("helpButtonRef.current?.focus();"),
+    "back returns focus to the tile, or to Help",
+  );
+  const home = renderChat([]);
+  for (const topic of TOPICS) {
+    assert(
+      home.includes(
+        `class="topic-tile topic-tile--${topic.topicClass}" data-topic="${topic.topicClass}"`,
+      ),
+      `the ${topic.label} tile carries its class for the list and for focus`,
+    );
+  }
+  assert(
+    home.includes('<h1 tabindex="-1" id="home-title"'),
+    "Home's h1 can take focus when Home appears",
+  );
+  assert(
+    renderToStaticMarkup(
+      <ReferralScreen message="m" onContinueChat={() => undefined} />,
+    ).includes('<h2 tabindex="-1" id="referral-title">'),
+    "the referral heading can take focus when it appears",
   );
 }
 

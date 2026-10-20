@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { HeartIcon } from "./Icons";
 import SupportContent from "./SupportContent";
 
@@ -22,6 +23,12 @@ interface Props {
 }
 
 export default function ReferralScreen({ message, onContinueChat }: Props) {
+  // Focus moves to the heading when the referral appears.
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
+
   return (
     <main className="screen">
       <section className="card card--referral" aria-labelledby="referral-title">
@@ -29,7 +36,7 @@ export default function ReferralScreen({ message, onContinueChat }: Props) {
           <HeartIcon size={32} />
         </span>
 
-        <h2 id="referral-title">
+        <h2 ref={headingRef} tabIndex={-1} id="referral-title">
           We hear you.
           <br />
           We want to help.

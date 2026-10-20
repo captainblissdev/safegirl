@@ -25,6 +25,7 @@ const TOPIC_ICONS = {
   periods: FlowerIcon,
 } as const;
 import type { ChatTurn } from "../types";
+import type { Topic } from "../content/topics";
 
 /**
  * Chat interface.
@@ -43,6 +44,8 @@ interface Props {
   isLoading: boolean;
   /** Show the demo details line under each answer. */
   showDetails?: boolean;
+  /** A Home topic tile: opens the Topic list (App). */
+  onTopic?: (topic: Topic) => void;
 }
 
 export default function ChatInterface({
@@ -50,6 +53,7 @@ export default function ChatInterface({
   onSend,
   isLoading,
   showDetails = false,
+  onTopic = () => undefined,
 }: Props) {
   const [draft, setDraft] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -118,11 +122,7 @@ export default function ChatInterface({
   if (isHome) {
     return (
       <main className="screen chat-screen home-screen">
-        <Home
-          askBar={askBar}
-          // Step 5 replaces this with the Topic list.
-          onTopic={() => inputRef.current?.focus()}
-        />
+        <Home askBar={askBar} onTopic={onTopic} />
       </main>
     );
   }

@@ -193,6 +193,22 @@ export function DropIcon(props: IconProps) {
   );
 }
 
+export function ChevronLeftIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M15 5l-7 7 7 7" />
+    </Svg>
+  );
+}
+
+export function ChevronRightIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M9 5l7 7-7 7" />
+    </Svg>
+  );
+}
+
 export function SpeechIcon(props: IconProps) {
   return (
     <Svg {...props}>

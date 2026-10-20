@@ -71,6 +71,9 @@
   --topic-contraception-edge: #ce30de;
   --topic-sti-edge: #eb315f;
 
+  /* Topic list: the round tile behind each question's chevron. */
+  --chevron-tile-bg: #ffe4f1;
+
   /* The shield-and-heart mark. */
   --mark-gradient: linear-gradient(135deg, #6d28d9, #db2777);
   --mark-tile-light: linear-gradient(160deg, #ffffff, #ffe4f1);

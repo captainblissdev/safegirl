@@ -1,15 +1,9 @@
-import type { ReactNode } from "react";
-import { TOPICS, type Topic, type TopicClass } from "../content/topics";
+import { useEffect, useRef, type ReactNode } from "react";
+import { TOPICS, type Topic } from "../content/topics";
 import { SOURCES_LINE } from "../content/uiText";
 import DangerLine from "./DangerLine";
-import {
-  DropIcon,
-  HeartIcon,
-  LockIcon,
-  PillIcon,
-  ShieldIcon,
-  Sparkle,
-} from "./Icons";
+import { LockIcon, Sparkle } from "./Icons";
+import { TOPIC_ICONS } from "./topicIcons";
 
 /**
  * Home: the empty state of the chat. A hero with the page's only h1, the
@@ -17,25 +11,21 @@ import {
  * 2x2 grid of topic tiles from content/topics.ts, and the footer.
  */
 
-const TOPIC_ICONS: Record<TopicClass, typeof DropIcon> = {
-  general: DropIcon,
-  pregnancy: HeartIcon,
-  contraception: PillIcon,
-  sti: ShieldIcon,
-};
-
 interface Props {
   /** The chat's ask bar, rendered in the hero. */
   askBar: ReactNode;
-  /**
-   * A topic tile. Until the Topic list exists (redesign Step 5) the chat
-   * focuses the ask bar, as the Help sheet's topic buttons do; Step 5
-   * replaces this.
-   */
+  /** A topic tile: opens the Topic list for that class. */
   onTopic: (topic: Topic) => void;
 }
 
 export default function Home({ askBar, onTopic }: Props) {
+  // Focus moves to the h1 when Home appears (after the splash, or a new
+  // chat). Coming back from a Topic list, App then focuses the tile.
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
+
   return (
     <div className="home">
       <section className="hero surface-dark" aria-labelledby="home-title">
@@ -45,7 +35,12 @@ export default function Home({ askBar, onTopic }: Props) {
         <p className="hero-tag">
           <LockIcon size={16} /> Private and anonymous
         </p>
-        <h1 id="home-title" className="hero-title">
+        <h1
+          ref={headingRef}
+          tabIndex={-1}
+          id="home-title"
+          className="hero-title"
+        >
           Ask about your body, periods, pregnancy or sex.
         </h1>
         <p className="hero-sub">{SOURCES_LINE} This can&apos;t diagnose you.</p>
@@ -62,6 +57,7 @@ export default function Home({ askBar, onTopic }: Props) {
             <button
               key={topic.topicClass}
               className={`topic-tile topic-tile--${topic.topicClass}`}
+              data-topic={topic.topicClass}
               type="button"
               onClick={() => onTopic(topic)}
             >
