@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { ChatTurn, Screen } from "./types";
 import { announcementFor, replyViewOf } from "./replyView";
+import { nextLoopCount, reachesLoopLimit } from "./loopLimit";
 import { QueryCancelledError, submitQuery } from "./api/client";
 import { answerDetails, isDetailsEnabled } from "./details";
 import AppShell from "./components/AppShell";
@@ -73,6 +74,8 @@ export default function App() {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   // The query in flight, so leaving the chat can cancel it.
   const pendingRef = useRef<AbortController | null>(null);
+  // Consecutive vague or abstain replies, in memory only (loopLimit.ts).
+  const loopCountRef = useRef(0);
 
   useEffect(() => {
     const goOnline = () => setIsOffline(false);
@@ -88,6 +91,9 @@ export default function App() {
   }, []);
 
   const handleSend = async (text: string) => {
+    // One request at a time: a question sent while a reply loads is not
+    // sent (the ask bar is disabled meanwhile).
+    if (pendingRef.current) return;
     const userTurn: ChatTurn = {
       id: crypto.randomUUID(),
       role: "user",
@@ -105,6 +111,7 @@ export default function App() {
 
     try {
       const response = await submitQuery(text, { signal: request.signal });
+      loopCountRef.current = nextLoopCount(loopCountRef.current, response.kind);
 
       if (response.outcome === "referral") {
         setReferralMessage(response.message);
@@ -124,6 +131,7 @@ export default function App() {
           kind: response.kind,
           matchedQuestion: response.matchedQuestion,
           source: response.source,
+          loopLimited: reachesLoopLimit(loopCountRef.current),
         };
 
         setTurns((prev) => [...prev, botTurn]);
@@ -150,6 +158,7 @@ export default function App() {
 
   const handleNewChat = () => {
     cancelPending();
+    loopCountRef.current = 0;
     setTurns([]);
     setError(null);
     setAnswerOrigin(null);
@@ -162,6 +171,7 @@ export default function App() {
 
   const handleStartNew = () => {
     cancelPending();
+    loopCountRef.current = 0;
     setTurns([]);
     setReferralMessage("");
     setError(null);
@@ -179,6 +189,7 @@ export default function App() {
   /** Open the Topic list, remembering what opened it for focus return. */
   const openTopic = (next: Topic, opener: "tile" | "help") => {
     topicOpenerRef.current = opener;
+    loopCountRef.current = 0;
     setAnswerOrigin(null);
     setTopic(next);
     setScreen("topic");
@@ -253,6 +264,7 @@ export default function App() {
     quickExit({
       clearState: () => {
         cancelPending();
+        loopCountRef.current = 0;
         setTurns([]);
         setReferralMessage("");
         setError(null);
@@ -343,6 +355,7 @@ export default function App() {
               onTopic={(next) => openTopic(next, "tile")}
               back={answerBack}
               onHome={handleNewChat}
+              onOpenHelp={openHelp}
             />
 
             {error && (

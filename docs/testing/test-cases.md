@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 170 cases: 154 Pass, 15 Fail, 1 Not run. Two of the
+**Totals:** 183 cases: 167 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -261,6 +261,19 @@ entry.
 | TC-168 | FR-03 | Each topic button and pill at each width | Opens its own Topic list | As expected: 32 of 32 on clarify and no answer, and the Help sheet's STIs pill at each width (browser check) | Pass |
 | TC-169 | NFR (accessibility) | The footer line and the emergency line when they wrap | Line-height 1.35; each phone link keeps a 44px-tall tap area | As expected at all four widths (browser check: the link is hit 20px above and below its centre; `components.test.tsx`, Test 44) | Pass |
 | TC-170 | NFR (maintainability) | Where the four topics appear | One shared component and one set of grid rules (`TopicChoices`) on clarify, no answer and the Help sheet | As expected (`components.test.tsx`, Tests 23, 40 and 44) | Pass |
+| TC-171 | FR-03 | Three vague or abstain replies in a row | The 1st and 2nd show their own screens; the 3rd shows Talk to a person; a 4th shows it again | As expected (`loopLimit.test.ts`, Test 2; browser check with a mocked gateway: clarify, clarify, person, then person) | Pass |
+| TC-172 | FR-03 | What resets the count | An answer, help, held-topic or referral reply, a limited-mode answer, opening a Topic list, "Ask a different question", a new session and quick exit all reset it | As expected (`loopLimit.test.ts`, Tests 3 and 5; browser check for answer, help, held, Topic list and Ask a different question) | Pass |
+| TC-173 | FR-04 | Help, held-topic and referral replies at or above the limit | Never replaced, counted or delayed | As expected (`loopLimit.test.ts`, Test 4) | Pass |
+| TC-174 | NFR (privacy) | Browser storage during the loop | Nothing written to localStorage or sessionStorage (only the splash flag, as before) | As expected (`loopLimit.test.ts`, Test 6; browser check: localStorage `{}`, sessionStorage only `safegirl.splashSeen`) | Pass |
+| TC-175 | NFR (accessibility) | The Talk to a person screen | One h1 (the message) with focus, announced once; no echo; "See who can help" opens the Help sheet; the four pills open their Topic lists; Exit and the footer line | As expected (`components.test.tsx`, Test 45; browser check) | Pass |
+| TC-176 | NFR (usability) | The Talk to a person screen at 320, 360, 390 and 430px | `scrollWidth` ≤ `innerWidth`; pills inside the card; labels fully visible | As expected (browser check; `person-after-320.png`, `person-after-390.png`) | Pass |
+| TC-177 | NFR (accessibility) | Talk to a person contrast | Text 4.5:1 or more; edges and focus ring 3:1 or more | Message 8.41; pill 9.59; button text 14.32; its edge 12.56; focus ring 6.23; pill edges 3.68 (`styles/tokens.test.ts`, Test 13) | Pass |
+| TC-178 | FR-01, FR-04 | Mocked gateway: after a clarify reply, a help phrase and a Safety Net phrase from the shared test lists | The help reply, then the referral | As expected (`askFlow.test.ts`, Test 1; browser check) | Pass |
+| TC-179 | FR-01 | Mocked gateway: after an answer, a held-topic query | The held reply (group A) | As expected (`askFlow.test.ts`, Test 2; browser check) | Pass |
+| TC-180 | FR-01 | Mocked gateway: a question typed after opening a Topic list and returning | The body is exactly `{"text": …}`: no topic or scope | As expected (`askFlow.test.ts`, Test 3; browser check) | Pass |
+| TC-181 | FR-06 | Mocked gateway: a sequence of questions | No request carries the previous query or reply | As expected (`askFlow.test.ts`, Test 4; browser check) | Pass |
+| TC-182 | FR-01 | The ask bar | Enter submits; disabled while empty or loading; one request at a time; cleared after sending; focus to the reply's h1 | As expected (`askFlow.test.ts`, Test 5; browser check: a second Enter while loading sent nothing) | Pass |
+| TC-183 | FR-01, FR-04 | Live, synthetic: "Am I okay?", then "I want to kill myself", then "What can I do about period pain?" | vague, referral, an answer; each body only `{ text }` | vague (clarify), referral, answer-scoped (browser check, live gateway and `ml_service`) | Pass |
 
 ## Defects and retests
 

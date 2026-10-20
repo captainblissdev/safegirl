@@ -1782,3 +1782,18 @@
 .reply-decor .sparkle {
   color: inherit;
 }
+
+/* Talk to a person (redesign Step 8): the no-answer card, with a plum
+   button that opens the Help sheet. */
+.btn-see-help {
+  align-self: flex-start;
+  min-height: var(--tap-target);
+  border: 1.5px solid var(--color-plum);
+  border-radius: 999px;
+  padding: 10px 20px;
+  background: var(--color-plum);
+  color: var(--color-on-dark);
+  font-size: 1rem;
+  font-weight: var(--weight-black);
+  cursor: pointer;
+}

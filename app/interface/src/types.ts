@@ -108,6 +108,9 @@ export interface ChatTurn {
   kind?: ReplyKind;
   matchedQuestion?: string | null;
   source?: string | null;
+  // The loop limit (loopLimit.ts) was reached on this vague or abstain
+  // reply: the Talk to a person screen shows instead of it.
+  loopLimited?: boolean;
 }
 
 /** A knowledge-base answer: shown on the answer screen. */

@@ -54,7 +54,15 @@ export const REPLY_PILLS = {
   help: "Support",
   referral: "We hear you",
   noAnswer: "No answer yet",
+  person: "Let's find a person",
 } as const;
+
+/**
+ * The Talk to a person screen's message (loopLimit.ts), shown instead of
+ * a vague or abstain reply once the loop limit is reached.
+ */
+export const PERSON_MESSAGE =
+  "I'm having trouble finding what you need. A nurse or counsellor at a health facility can help, and you do not have to give a reason.";
 
 /** Under the clarifying question, for anything outside the four topics. */
 export const CLARIFY_FALLBACK =

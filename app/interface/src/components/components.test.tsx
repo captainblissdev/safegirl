@@ -11,6 +11,7 @@ import {
   DANGER_LINE_CALL_ABOVE,
   LIMITED_MODE_NOTICE,
   NO_ANSWER_RETRY,
+  PERSON_MESSAGE,
   REPLY_PILLS,
 } from "../content/uiText";
 import {
@@ -1484,8 +1485,8 @@ console.log("\nTest 37: each reply kind has one h1, its reply text, focusable");
   assert(
     /useEffect\(\(\) => \{\s*ref\.current\?\.focus\(\);\s*\}, \[key\]\);/.test(
       views,
-    ) && views.split("useFocusOnArrival(id)").length === 5,
-    "focus moves to the h1 on arrival, on all four reply screens",
+    ) && views.split("useFocusOnArrival(id)").length === 6,
+    "focus moves to the h1 on arrival, on all five reply screens",
   );
   const plain = renderChat([
     { id: "u", role: "user", text: "q" },
@@ -1688,7 +1689,7 @@ console.log(
       new URL("./TopicChoices.tsx", import.meta.url),
       "utf8",
     ).includes("onClick={() => onTopic(topic)}") &&
-      views.split("<TopicChoices").length === 3,
+      views.split("<TopicChoices").length === 4,
     "tapping one hands its topic to onTopic",
   );
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
@@ -1945,6 +1946,98 @@ console.log("\nTest 44: the topic grid and the footer line fit narrow phones");
     sheet.includes('<TopicChoices variant="pills" onTopic={onTopic} />') &&
       !css.includes(".topic-button"),
     "the Help sheet uses the same TopicChoices; the old topic-button copy is gone",
+  );
+}
+
+console.log("\nTest 45: the Talk to a person screen");
+{
+  const noop = () => undefined;
+  const limited = (kind: "vague" | "abstain", extra: Partial<ChatTurn> = {}) =>
+    renderToStaticMarkup(
+      <AppShell onExit={noop} help={closedHelp} footerInContent>
+        <ChatInterface
+          turns={[
+            { id: "u8", role: "user", text: ECHO },
+            {
+              id: "r8",
+              role: "assistant",
+              text: kind === "vague" ? VAGUE_QUERY_MESSAGE : NO_ANSWER_MESSAGE,
+              outcome: kind === "vague" ? "clarification" : "grounded_answer",
+              kind,
+              loopLimited: true,
+              ...extra,
+            },
+          ]}
+          onSend={noop}
+          isLoading={false}
+        />
+      </AppShell>,
+    );
+  for (const kind of ["vague", "abstain"] as const) {
+    const html = limited(kind);
+    assert(
+      html.split("<h1").length === 2 &&
+        html.includes(
+          `<h1 tabindex="-1" class="reply-title">${escapeHtml(PERSON_MESSAGE)}</h1>`,
+        ),
+      `${kind} at the limit: one h1, the person message, focusable`,
+    );
+    assert(
+      !html.includes(escapeHtml(VAGUE_QUERY_MESSAGE)) &&
+        !html.includes(escapeHtml(NO_ANSWER_MESSAGE)),
+      `${kind} at the limit: shown instead of the reply`,
+    );
+    assert(
+      !html.includes("&lt;b&gt;") && !html.includes("You asked"),
+      `${kind} at the limit: her text is not shown`,
+    );
+    assert(
+      html.includes(`</svg> ${escapeHtml(REPLY_PILLS.person)}</p>`) &&
+        html.includes(
+          'class="reply-card reply-card--noanswer reply-card--person"',
+        ),
+      `${kind} at the limit: the no-answer card, pill "${REPLY_PILLS.person}"`,
+    );
+    assert(
+      html.includes(
+        '<button class="btn-see-help" type="button">See who can help</button>',
+      ) &&
+        !html.includes("call-button") &&
+        !html
+          .slice(
+            html.indexOf("reply-card--person"),
+            html.indexOf("</section>", html.indexOf("reply-card--person")),
+          )
+          .includes('href="tel:'),
+      `${kind} at the limit: "See who can help", no call buttons in the card`,
+    );
+    const pills = [...html.matchAll(/data-topic="(\w+)"/g)].map((m) => m[1]);
+    assert(
+      JSON.stringify(pills) === JSON.stringify(TOPICS.map((t) => t.topicClass)),
+      `${kind} at the limit: the four topic pills`,
+    );
+    assert(
+      html.includes('<button class="btn-exit" type="button">Exit</button>') &&
+        html.split('class="danger-line"').length === 2 &&
+        html.includes(`${GBV_HELPLINE}</a>, free and open 24 hours.`),
+      `${kind} at the limit: Exit and the footer line`,
+    );
+  }
+  assert(
+    !limited("vague", { loopLimited: false }).includes(
+      PERSON_MESSAGE.slice(0, 20),
+    ),
+    "below the limit, the normal clarify screen",
+  );
+  const chat = readFileSync(
+    new URL("./ChatInterface.tsx", import.meta.url),
+    "utf8",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    chat.includes("onOpenHelp={onOpenHelp}") &&
+      app.includes("onOpenHelp={openHelp}"),
+    '"See who can help" opens the Help sheet',
   );
 }
 

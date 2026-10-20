@@ -831,4 +831,33 @@ console.log(
   );
 }
 
+console.log("\nTest 13: the Talk to a person screen");
+{
+  const card = token("--noanswer-bg");
+  const check = (ratio: number, min: number, what: string) =>
+    assert(ratio >= min, `${what}: ${ratio.toFixed(2)}:1`);
+  check(contrast(token("--noanswer-text"), card), 4.5, "message on the card");
+  check(
+    contrast(token("--noanswer-text"), token("--reply-pill-bg")),
+    4.5,
+    '"Let\'s find a person" on the white pill',
+  );
+  check(
+    contrast(token("--color-on-dark"), token("--color-plum")),
+    4.5,
+    '"See who can help": white on plum',
+  );
+  check(
+    contrast(token("--color-plum"), card),
+    3,
+    "the button's edge on the card",
+  );
+  check(contrast(token("--color-violet"), card), 3, "focus ring on the card");
+  check(
+    contrast(token("--color-control-border"), card),
+    3,
+    "topic pill edge on the card",
+  );
+}
+
 console.log("\nAll design token tests passed.");

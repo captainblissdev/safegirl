@@ -4,6 +4,7 @@ import type { Topic } from "../content/topics";
 import {
   CLARIFY_FALLBACK,
   NO_ANSWER_RETRY,
+  PERSON_MESSAGE,
   REPLY_PILLS,
 } from "../content/uiText";
 import CallButtons, { EmergencyLine } from "./CallButtons";
@@ -11,6 +12,7 @@ import DangerLine from "./DangerLine";
 import {
   HeartIcon,
   InfoIcon,
+  PeopleIcon,
   QuestionIcon,
   SearchIcon,
   Sparkle,
@@ -177,6 +179,43 @@ export function NoAnswerReply({
         <TopicChoices variant="pills" onTopic={onTopic} />
       </section>
       <p className="reply-note">{NO_ANSWER_RETRY}</p>
+      <div className="answer-dock">
+        <DangerLine />
+        {askBar}
+      </div>
+    </main>
+  );
+}
+
+/**
+ * Talk to a person: shown instead of a vague or abstain reply once the
+ * loop limit is reached (loopLimit.ts). Her question is not shown. "See
+ * who can help" opens the Help sheet, which holds the helplines.
+ */
+export function PersonReply({
+  id,
+  askBar,
+  onTopic,
+  onOpenHelp,
+}: {
+  id: string;
+  askBar: ReactNode;
+  onTopic: (topic: Topic) => void;
+  onOpenHelp: () => void;
+}) {
+  const headingRef = useFocusOnArrival(id);
+  return (
+    <main className="screen chat-screen reply-screen">
+      <section className="reply-card reply-card--noanswer reply-card--person">
+        <Pill icon={<PeopleIcon size={16} />} label={REPLY_PILLS.person} />
+        <h1 ref={headingRef} tabIndex={-1} className="reply-title">
+          {PERSON_MESSAGE}
+        </h1>
+        <button className="btn-see-help" type="button" onClick={onOpenHelp}>
+          See who can help
+        </button>
+        <TopicChoices variant="pills" onTopic={onTopic} />
+      </section>
       <div className="answer-dock">
         <DangerLine />
         {askBar}

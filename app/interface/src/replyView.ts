@@ -7,11 +7,18 @@ import { isAnswerTurn, type ChatTurn } from "./types";
  * from the offline pipeline) keeps the plain reply view.
  */
 export type ReplyView =
-  "answer" | "clarify" | "held" | "help" | "noAnswer" | "plain";
+  "answer" | "clarify" | "held" | "help" | "noAnswer" | "person" | "plain";
 
 export function replyViewOf(turn: ChatTurn | undefined): ReplyView | null {
   if (turn?.role !== "assistant") return null;
   if (isAnswerTurn(turn)) return "answer";
+  // Only a vague or abstain reply can be replaced (loopLimit.ts).
+  if (
+    turn.loopLimited === true &&
+    (turn.kind === "vague" || turn.kind === "abstain")
+  ) {
+    return "person";
+  }
   switch (turn.kind) {
     case "vague":
       return "clarify";
@@ -45,6 +52,8 @@ export function announcementFor(view: ReplyView | "referral" | null): string {
       return `New reply: ${REPLY_PILLS.referral}.`;
     case "noAnswer":
       return `New reply: ${REPLY_PILLS.noAnswer}.`;
+    case "person":
+      return `New reply: ${REPLY_PILLS.person}.`;
     case "plain":
       return "New reply.";
     default:

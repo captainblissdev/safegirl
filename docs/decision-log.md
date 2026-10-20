@@ -1351,3 +1351,45 @@ side. Every word now fits whole at 320, 360, 390 and 430px.
 cards' emergency line had a 44px-tall inline-flex link, which made a
 wrapped line very tall. Both now have line-height 1.35; the link stays
 inline and its 44px-tall tap area is an invisible `::after`.
+
+## Loop limit and the ask bar (2026-10-20)
+
+Stage B2 step 8 (`fix/ui-redesign`), on Cindy's brief. Interface
+behaviour only: no reply text, pipeline rule or order, gate, threshold
+or Safety Net pattern changed.
+
+**Loop limit** (`loopLimit.ts`). App counts consecutive vague and
+abstain replies, in memory only (a ref; nothing in localStorage or
+sessionStorage). Any other reply kind (answer, help, held topic,
+referral, or a limited-mode answer with no kind) sets it back to 0, and
+so do opening a Topic list, "Ask a different question" (and the other
+ways back to Home: Back to home, New chat), a new session and quick
+exit. `LOOP_LIMIT = 3`: the third vague or abstain reply in a row, and
+each one after it until the count resets, shows the Talk to a person
+screen instead of the reply. Help, held-topic and referral replies are
+never counted, replaced or delayed; the request is never blocked.
+
+The screen uses the no-answer card, the pill "Let's find a person", and
+one new message as its only h1 (`PERSON_MESSAGE`: "I'm having trouble
+finding what you need. A nurse or counsellor at a health facility can
+help, and you do not have to give a reason."). Her question is not
+shown. "See who can help" opens the existing Help sheet (no call
+buttons or numbers on the screen itself); then the four topic pills,
+the footer line and the ask bar.
+
+**The ask bar runs the whole pipeline every time.** The request body is
+built from the typed text alone (`{ "text": … }`), from every screen; no
+topic, scope, class, earlier query or earlier reply is ever sent, and
+opening a Topic list scopes nothing. Enter submits; the button is
+disabled while the bar is empty or a reply loads; the text clears after
+sending; focus moves to the reply's h1. New: App sends one request at a
+time (a second send while one is in flight is dropped; the Topic list's
+ask bar was the one path that could start a second). There is no
+character limit in the interface (unchanged); the gateway accepts a
+JSON body of up to 10 kB (`BODY_LIMIT`).
+
+**Decision needed: the keyword fallback and the relevance gate.** While
+the classifier service was starting, the keyword fallback answered an
+off-topic query with a knowledge-base answer and the gate was not
+applied (audit UI-19). Whether the fallback path should also apply the
+gate is open; nothing was changed.

@@ -17,6 +17,7 @@ import {
   ClarifyReply,
   HeldReply,
   NoAnswerReply,
+  PersonReply,
   SupportReply,
 } from "./ReplyViews";
 import { replyViewOf } from "../replyView";
@@ -48,6 +49,8 @@ interface Props {
   back?: { label: string; onBack: () => void };
   /** "Ask a different question" on a held-topic reply: back to Home. */
   onHome?: () => void;
+  /** "See who can help" on the Talk to a person screen: the Help sheet. */
+  onOpenHelp?: () => void;
 }
 
 export default function ChatInterface({
@@ -58,6 +61,7 @@ export default function ChatInterface({
   onTopic = () => undefined,
   back = { label: "Back to home", onBack: () => undefined },
   onHome = () => undefined,
+  onOpenHelp = () => undefined,
 }: Props) {
   const [draft, setDraft] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -165,6 +169,16 @@ export default function ChatInterface({
           {askBar}
         </div>
       </SupportReply>
+    );
+  }
+  if (lastTurn && view === "person") {
+    return (
+      <PersonReply
+        id={lastTurn.id}
+        askBar={askBar}
+        onTopic={onTopic}
+        onOpenHelp={onOpenHelp}
+      />
     );
   }
   if (lastTurn && view === "noAnswer") {
