@@ -12,6 +12,8 @@ No new test was written and no evaluation was re-run for this file.
   Re-run on 20 October 2026 on `fix/response-clarity` at `3a066fa`:
   gateway 390/390 pass plus the 6 integration check groups; interface
   all 6 suites pass (TC-066 onwards).
+  After step 7, at `3bac650`: gateway 395/395 pass; interface all 6
+  suites pass.
 - **Manual and evaluation results** are taken from the files cited, with
   their own dates.
 

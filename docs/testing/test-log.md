@@ -56,6 +56,17 @@ response-clarity changes. The gateway and interface suites need no
 | Interface build | `npm run build` (`app/interface`) | 12 precache entries | 2026-10-20 | Pass |
 | `ml_service` | – | No automated test suite exists | 2026-10-20 | Not run (none to run). `python ml_service/build_kb.py --check`: `knowledge_base.json` up to date, 21 entries. The live checks TC-073, TC-074 and TC-081 ran against `ml_service` v3 |
 
+**After step 7 (extra health terms)**, re-run at `3bac650`:
+
+| Suite | Count | Result |
+|---|---|---|
+| Gateway `npm test` | 6 integration check groups + 395 `node:test` tests in 38 suites | Pass: 395/395, 0 failed |
+| of which: vague-query rule and health terms (`vagueQuery.test.js`) | 22 tests | Pass |
+| of which: offline parity (`offlineSafetyParity.test.js`) | 14 tests (the 9 of 15 Oct included) | Pass |
+| Gateway lint; `node scripts/build-health-terms.js --check` | – | Pass; both lists up to date |
+| Interface `npm test` | 6 suites, 212 checks | Pass: all 6, 0 failed |
+| Interface typecheck, lint, format check, build | – | Pass |
+
 ## Vague-query rule interception (20 October 2026)
 
 How many queries of each set the vague-query rule answers itself

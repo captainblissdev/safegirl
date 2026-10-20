@@ -445,7 +445,7 @@ None of the automated tests need `ml_service`, a Firebase project or any credent
 
 | Suite | Command (from) | Count |
 | --- | --- | --- |
-| Gateway integration checks and unit tests | `npm test` (`app/gateway`) | 6 integration check groups, then 390 `node:test` tests |
+| Gateway integration checks and unit tests | `npm test` (`app/gateway`) | 6 integration check groups, then 395 `node:test` tests |
 | Gateway lint | `npm run lint` (`app/gateway`) | – |
 | Interface tests | `npm test` (`app/interface`) | 6 suites: offline pipeline, query client, timeouts, session, components, font setup |
 | Interface typecheck | `npm run typecheck` (`app/interface`) | – |
