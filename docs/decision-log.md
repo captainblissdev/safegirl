@@ -750,3 +750,75 @@ interface's offline test now also runs the pipeline the app ships
 app does not use.
 
 `offline/pipeline.ts` is unchanged and still unused by the app.
+
+## Health terms from outside the knowledge base (2026-10-20)
+
+Decided by Cindy on 20 October 2026, after the vague-query rule's first
+results (`fix/response-clarity`, Stage A step 7). **No frozen item
+changed**: no model, threshold, knowledge-base text or Safety Net
+pattern.
+
+**Decisions.**
+1. **The content-word reading of "3 words or fewer" is confirmed**, and
+   the function-word list is frozen as below.
+2. **A small, documented list of health terms from outside the
+   knowledge base is added**, built from whole categories of general
+   vocabulary, not from individual queries.
+3. **The rule's side effects are accepted** and recorded as
+   limitations: the clarifying question is English-only, and Swahili and
+   Sheng are out of scope (DR-07). See `docs/chapter5-notes.md`.
+
+**Frozen function-word list** (`FUNCTION_WORDS` in
+`app/gateway/src/vagueQuery.js`, copied in
+`app/interface/src/offline/queryRules.ts`). 166 words, written as the
+rule normalises a query (lowercase, apostrophes removed). SHA-256 of
+the words sorted and joined with newlines:
+`78c4667147a1b043a0ae9428435c7cd9a9e8108b308c3dd0b6f3c251b1339a7b`.
+A gateway test fails if the list changes, and the parity test keeps the
+offline copy identical.
+
+a, about, above, after, again, against, all, am, an, and, any, are,
+arent, as, at, be, because, been, before, being, below, between, both,
+but, by, can, cannot, cant, could, couldnt, did, didnt, do, does,
+doesnt, doing, dont, down, during, each, few, for, from, further, had,
+hadnt, has, hasnt, have, havent, having, he, hed, her, here, hers,
+herself, hes, him, himself, his, how, hows, i, id, if, ill, im, in,
+into, is, isnt, it, its, itself, ive, just, lets, may, me, might, more,
+most, must, my, myself, no, nor, not, of, off, on, once, only, or,
+other, ought, our, ours, ourselves, out, over, own, r, same, shall,
+she, shes, should, shouldnt, so, some, such, than, that, thats, the,
+their, theirs, them, themselves, then, there, theres, these, they,
+theyre, this, those, through, to, too, u, under, until, up, ur, very,
+was, wasnt, we, were, werent, what, whats, when, where, which, while,
+who, whom, why, will, with, wont, would, wouldnt, you, youd, youll,
+your, youre, yours, yourself, yourselves, youve.
+
+**The extra list.** `app/gateway/src/content/extraHealthTerms.json`,
+written by hand. The gateway reads it; `scripts/build-health-terms.js`
+checks its form (lowercase words, single spaces, no duplicates, a
+criterion for every category) and copies it into the generated block of
+the offline `queryRules.ts`, so the same drift test covers both lists. A
+term with a space is a phrase ("pulled out", "emergency pill"), matched
+against the whole normalised query, function words included; a single
+word matches with a plural "s" or "es" added or removed, as for the
+knowledge-base list. The criterion per category, also in the file:
+
+| Category | Criterion | Terms |
+|---|---|---|
+| Contraceptive methods and names | A contraceptive method, device or brand name in common use in Kenya, or a common way of describing one (including withdrawal) | 35 |
+| Menstrual and body | Menstrual products and periods, the reproductive and urinary body, and common words for genital symptoms or sexual activity | 46 |
+| STIs and HIV | A sexually transmitted infection, HIV, a common genital infection, or a medicine or test for one | 19 |
+| Pregnancy | Pregnancy, conception, its care and its end, and the words commonly used for a pregnancy scare (a late or missed period, a positive or negative test) | 22 |
+
+122 terms: 113 single words and 9 phrases. 20 of the words are also in
+the knowledge-base list. With the 122 knowledge-base terms the rule
+knows 215 distinct single words and 9 phrases. Beyond the terms named in
+the brief, the additions come from general knowledge of each category
+(for example spelling variants such as "gonorrhea", Kenyan brand names
+such as "postinor" and "jadelle", and body words such as "cervix"), not
+from any test query; `docs/testing/demo-risk-set.csv` was not opened.
+
+Some extra terms are everyday words ("late", "missed", "positive",
+"negative", "test", "scan", "cup", "ring", "patch", "burn"). They were
+asked for; a short query containing one now goes to the classifier
+rather than getting the clarifying question.

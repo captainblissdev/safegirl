@@ -11,12 +11,16 @@
 
 const { describe, it, before } = require("node:test");
 const assert = require("node:assert/strict");
+const crypto = require("node:crypto");
 const fs = require("node:fs");
 
 const {
+  FUNCTION_WORDS,
   MAX_CONTENT_WORDS,
   contentWords,
+  getExtraHealthTerms,
   getHealthTerms,
+  hasHealthPhrase,
   isHealthTerm,
   isVagueQuery,
 } = require("../src/vagueQuery");
@@ -27,8 +31,10 @@ const {
 } = require("../src/responseOrchestrator");
 const {
   buildHealthTerms,
+  readExtraTerms,
   renderOffline,
   serialize,
+  EXTRA_FILE,
   OFFLINE_FILE,
   OUTPUT_FILE,
 } = require("../scripts/build-health-terms");
@@ -40,16 +46,13 @@ const {
 } = require("./fixtures/querySets");
 
 /**
- * DR-04 queries the rule answers itself: an open, recorded failure
- * (docs/testing/test-cases.md, TC-079). "coil" and "tampon" are not
- * knowledge-base words, and "mess up" names no topic. Kept here so any
- * change is noticed and recorded.
+ * DR-04 queries the rule answers itself. With the knowledge-base terms
+ * alone there were three (TC-079, Fail, kept as recorded). After the
+ * extra terms were added, with those three already seen (a non-blind
+ * retest, TC-090), one remains: "mess up" names no topic. Kept here so
+ * any change is noticed and recorded.
  */
-const DR04_INTERCEPTED = [
-  "What can I do when I mess up ?",
-  "How is a coil inserted?",
-  "Tell me how to use a tampon?",
-];
+const DR04_INTERCEPTED = ["What can I do when I mess up ?"];
 
 /** handleQuery() with a classifier client that records any call. */
 function recordingHandler() {
@@ -73,6 +76,15 @@ function recordingHandler() {
 describe("vague-query rule: the rule itself", () => {
   it("allows at most three content words", () => {
     assert.equal(MAX_CONTENT_WORDS, 3);
+  });
+
+  it("uses the frozen function-word list (decision log, 2026-10-20)", () => {
+    const sorted = [...FUNCTION_WORDS].sort();
+    assert.equal(sorted.length, 166);
+    assert.equal(
+      crypto.createHash("sha256").update(sorted.join("\n")).digest("hex"),
+      "78c4667147a1b043a0ae9428435c7cd9a9e8108b308c3dd0b6f3c251b1339a7b",
+    );
   });
 
   it("sets function words aside and keeps content words", () => {
@@ -106,10 +118,25 @@ describe("vague-query rule: the rule itself", () => {
     assert.equal(isVagueQuery(42), false, "not a string");
   });
 
-  it("answers 'when should I start antenatal visits' itself: a known limit", () => {
-    // "antenatal" is not a knowledge-base word. Recorded in the
-    // decision log; no entry covers antenatal timing either.
-    assert.equal(isVagueQuery("when should I start antenatal visits"), true);
+  it("lets 'when should I start antenatal visits' through: 'antenatal' is an extra term", () => {
+    // "antenatal" is not a knowledge-base word; it is in the extra list.
+    assert.equal(isVagueQuery("when should I start antenatal visits"), false);
+  });
+
+  it("knows extra terms as words, with plurals, and as phrases", () => {
+    for (const query of [
+      "is a coil safe",
+      "tampons or pads",
+      "I took P2",
+      "he pulled out early",
+      "morning after",
+    ]) {
+      assert.equal(isVagueQuery(query), false, query);
+    }
+    assert.equal(hasHealthPhrase("my boyfriend pulled out"), true);
+    assert.equal(hasHealthPhrase("he pulled the door out"), false);
+    // A phrase's words alone are not terms.
+    assert.equal(isVagueQuery("I pulled it"), true);
   });
 });
 
@@ -143,7 +170,7 @@ describe("vague-query rule: required query sets", () => {
     );
   });
 
-  it("intercepts exactly the 3 recorded DR-04 queries of 31 (open failure)", () => {
+  it("intercepts exactly the 1 recorded DR-04 query of 31 (non-blind retest)", () => {
     assert.equal(DR04.length, 31);
     assert.deepEqual(
       DR04.filter((q) => isVagueQuery(q)),
@@ -236,5 +263,47 @@ describe("health-term list", () => {
     const { terms } = buildHealthTerms();
     assert.deepEqual([...getHealthTerms()].sort(), terms);
     assert.ok(terms.every((term) => /^[a-z]+$/.test(term)));
+  });
+});
+
+describe("extra health terms (outside the knowledge base)", () => {
+  it("has a name and a criterion for every category, and well-formed terms", () => {
+    const { categories } = JSON.parse(fs.readFileSync(EXTRA_FILE, "utf8"));
+    assert.deepEqual(
+      categories.map((category) => category.name),
+      [
+        "contraceptive methods and names",
+        "menstrual and body",
+        "STIs and HIV",
+        "pregnancy",
+      ],
+    );
+    for (const category of categories) {
+      assert.ok(category.criterion.length > 20, category.name);
+      assert.ok(category.terms.length > 0, category.name);
+    }
+    // Throws on a malformed or duplicated term.
+    assert.ok(readExtraTerms().length > 0);
+  });
+
+  it("is what the rule uses: single words and phrases", () => {
+    const terms = readExtraTerms();
+    const { words, phrases } = getExtraHealthTerms();
+    assert.deepEqual(
+      [...words],
+      terms.filter((term) => !term.includes(" ")),
+    );
+    assert.deepEqual(
+      phrases,
+      terms.filter((term) => term.includes(" ")),
+    );
+  });
+
+  it("does not list any of the vague test queries' content words", () => {
+    for (const query of VAGUE_QUERIES) {
+      for (const word of contentWords(query)) {
+        assert.ok(!getExtraHealthTerms().words.has(word), word);
+      }
+    }
   });
 });

@@ -236,6 +236,7 @@ export const FUNCTION_WORDS: ReadonlySet<string> = new Set([
 
 // BEGIN GENERATED HEALTH TERMS: written by
 // app/gateway/scripts/build-health-terms.js; do not edit by hand.
+// From the knowledge base (app/gateway/src/content/healthTerms.json):
 export const HEALTH_TERMS: readonly string[] = [
   "abdominal",
   "abortion",
@@ -360,9 +361,144 @@ export const HEALTH_TERMS: readonly string[] = [
   "violence",
   "yfs",
 ];
+// From outside the knowledge base
+// (app/gateway/src/content/extraHealthTerms.json):
+export const EXTRA_HEALTH_TERMS: readonly string[] = [
+  "coil",
+  "iud",
+  "iucd",
+  "implant",
+  "implanon",
+  "jadelle",
+  "injection",
+  "injectable",
+  "depo",
+  "provera",
+  "sayana",
+  "pill",
+  "pills",
+  "condom",
+  "condoms",
+  "female condom",
+  "femidom",
+  "patch",
+  "ring",
+  "diaphragm",
+  "spermicide",
+  "sterilisation",
+  "sterilization",
+  "vasectomy",
+  "tubal",
+  "p2",
+  "postinor",
+  "emergency pill",
+  "emergency contraception",
+  "morning after",
+  "withdrawal",
+  "pulled out",
+  "pull out",
+  "family planning",
+  "contraceptives",
+  "tampon",
+  "pad",
+  "pads",
+  "cup",
+  "menstrual cup",
+  "sanitary",
+  "towel",
+  "pee",
+  "peeing",
+  "urine",
+  "urinate",
+  "urinating",
+  "burn",
+  "burns",
+  "itch",
+  "itchy",
+  "smell",
+  "smells",
+  "odour",
+  "odor",
+  "discharge",
+  "virgin",
+  "virginity",
+  "hymen",
+  "sex",
+  "intercourse",
+  "precum",
+  "pre cum",
+  "sperm",
+  "semen",
+  "ovulation",
+  "ovulate",
+  "ovulating",
+  "fertile",
+  "cramps",
+  "cramp",
+  "menses",
+  "spotting",
+  "vagina",
+  "vulva",
+  "penis",
+  "uterus",
+  "womb",
+  "ovary",
+  "ovaries",
+  "cervix",
+  "hiv",
+  "aids",
+  "std",
+  "stds",
+  "chlamydia",
+  "gonorrhoea",
+  "gonorrhea",
+  "syphilis",
+  "herpes",
+  "hpv",
+  "warts",
+  "thrush",
+  "yeast",
+  "prep",
+  "pep",
+  "arv",
+  "arvs",
+  "test",
+  "testing",
+  "antenatal",
+  "prenatal",
+  "trimester",
+  "scan",
+  "ultrasound",
+  "miscarriage",
+  "abortion",
+  "labour",
+  "labor",
+  "contractions",
+  "delivery",
+  "midwife",
+  "breastfeeding",
+  "breastfeed",
+  "conceive",
+  "conception",
+  "fetus",
+  "foetus",
+  "late",
+  "missed",
+  "positive",
+  "negative",
+];
 // END GENERATED HEALTH TERMS
 
-const HEALTH_TERM_SET: ReadonlySet<string> = new Set(HEALTH_TERMS);
+/** Every single-word health term: the knowledge-base and extra lists. */
+const HEALTH_TERM_SET: ReadonlySet<string> = new Set([
+  ...HEALTH_TERMS,
+  ...EXTRA_HEALTH_TERMS.filter((term) => !term.includes(" ")),
+]);
+
+/** Extra terms with a space, matched against the whole query. */
+const HEALTH_PHRASES: readonly string[] = EXTRA_HEALTH_TERMS.filter((term) =>
+  term.includes(" "),
+);
 
 /** Lowercase words of a text, apostrophes dropped, punctuation removed. */
 export function tokenize(text: string): string[] {
@@ -390,9 +526,16 @@ export function isHealthTerm(word: string): boolean {
   );
 }
 
+/** True when the normalised query contains one of the extra phrases. */
+export function hasHealthPhrase(text: string): boolean {
+  const padded = ` ${tokenize(normalize(text)).join(" ")} `;
+  return HEALTH_PHRASES.some((phrase) => padded.includes(` ${phrase} `));
+}
+
 /**
  * True when the query is short (at most MAX_CONTENT_WORDS content words)
- * and names no health term.
+ * and names no health term: no knowledge-base or extra term among its
+ * words, and no extra phrase in it.
  */
 export function isVagueQuery(text: unknown): boolean {
   if (typeof text !== "string") {
@@ -402,6 +545,7 @@ export function isVagueQuery(text: unknown): boolean {
   const words = contentWords(text);
   return (
     words.length <= MAX_CONTENT_WORDS &&
-    !words.some((word) => isHealthTerm(word))
+    !words.some((word) => isHealthTerm(word)) &&
+    !hasHealthPhrase(text)
   );
 }

@@ -4,7 +4,9 @@
  * Writes src/content/healthTerms.json, the list of health terms the
  * vague-query rule (src/vagueQuery.js) looks for, and the same list into
  * the generated block of the offline copy of the rule
- * (app/interface/src/offline/queryRules.ts). Every term is a word of
+ * (app/interface/src/offline/queryRules.ts), together with a copy of the
+ * hand-written extra terms from outside the knowledge base
+ * (src/content/extraHealthTerms.json), which it checks for form. Every term is a word of
  * the active knowledge base: the script reads the entries the gateway
  * serves (retrievalModule.loadKnowledgeBase(), so HELD content is never
  * read), collects every word of their user question, answer,
@@ -48,6 +50,14 @@ const OFFLINE_FILE = path.join(
   "src",
   "offline",
   "queryRules.ts",
+);
+
+const EXTRA_FILE = path.join(
+  __dirname,
+  "..",
+  "src",
+  "content",
+  "extraHealthTerms.json",
 );
 
 const BLOCK_START = "// BEGIN GENERATED HEALTH TERMS";
@@ -238,8 +248,33 @@ function buildHealthTerms() {
 
 const serialize = (list) => `${JSON.stringify(list, null, 2)}\n`;
 
+/**
+ * The hand-written extra terms (src/content/extraHealthTerms.json), in
+ * file order. Throws if a category lacks a criterion, or a term is not
+ * lowercase words separated by single spaces, or appears twice.
+ */
+function readExtraTerms() {
+  const { categories } = JSON.parse(fs.readFileSync(EXTRA_FILE, "utf8"));
+  const terms = [];
+  for (const category of categories) {
+    if (!category.name || !category.criterion) {
+      throw new Error("Every extra-term category needs a name and a criterion");
+    }
+    for (const term of category.terms) {
+      if (!/^[a-z0-9]+( [a-z0-9]+)*$/.test(term)) {
+        throw new Error(`Extra term not in normalised form: "${term}"`);
+      }
+      if (terms.includes(term)) {
+        throw new Error(`Extra term listed twice: "${term}"`);
+      }
+      terms.push(term);
+    }
+  }
+  return terms;
+}
+
 /** queryRules.ts source with its generated block holding these terms. */
-function renderOffline(source, terms) {
+function renderOffline(source, terms, extraTerms = readExtraTerms()) {
   const start = source.indexOf(BLOCK_START);
   const end = source.indexOf(BLOCK_END);
   if (start === -1 || end === -1 || end < start) {
@@ -248,8 +283,14 @@ function renderOffline(source, terms) {
   const block = [
     `${BLOCK_START}: written by`,
     "// app/gateway/scripts/build-health-terms.js; do not edit by hand.",
+    "// From the knowledge base (app/gateway/src/content/healthTerms.json):",
     "export const HEALTH_TERMS: readonly string[] = [",
     ...terms.map((term) => `  "${term}",`),
+    "];",
+    "// From outside the knowledge base",
+    "// (app/gateway/src/content/extraHealthTerms.json):",
+    "export const EXTRA_HEALTH_TERMS: readonly string[] = [",
+    ...extraTerms.map((term) => `  "${term}",`),
     "];",
     "",
   ].join("\n");
@@ -297,8 +338,10 @@ if (require.main === module) {
 
 module.exports = {
   buildHealthTerms,
+  readExtraTerms,
   renderOffline,
   serialize,
+  EXTRA_FILE,
   OFFLINE_FILE,
   OUTPUT_FILE,
   SELECTED,

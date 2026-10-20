@@ -15,9 +15,13 @@
  * all words keeps "What should I do?" (no content words) and "Can I ask
  * you something?" (two: "ask", "something") short.
  *
- * Health terms come from src/content/healthTerms.json, generated from
- * the knowledge base by scripts/build-health-terms.js. A word matches a
- * term as written, or with a plural "s" or "es" added or taken away.
+ * Health terms come from two lists: src/content/healthTerms.json,
+ * generated from the knowledge base by scripts/build-health-terms.js,
+ * and src/content/extraHealthTerms.json, written by hand by category of
+ * general vocabulary (decision log, 20 October 2026). A word matches a
+ * term as written, or with a plural "s" or "es" added or taken away; an
+ * extra term with a space is a phrase ("pulled out"), matched against
+ * the whole normalised query, function words included.
  *
  * Deterministic and deliberately narrow: any health term, or more than
  * three content words, means no match, and the query goes through the
@@ -220,8 +224,10 @@ function contentWords(text) {
 }
 
 let healthTerms = null;
+let extraHealthTerms = null;
+let allHealthTermWords = null;
 
-/** The health-term set, read once from src/content/healthTerms.json. */
+/** The knowledge-base health terms, read once from src/content/healthTerms.json. */
 function getHealthTerms() {
   if (!healthTerms) {
     healthTerms = new Set(require("./content/healthTerms.json").terms);
@@ -229,8 +235,37 @@ function getHealthTerms() {
   return healthTerms;
 }
 
+/**
+ * The health terms from outside the knowledge base, read once from
+ * src/content/extraHealthTerms.json: single words, and phrases (terms
+ * with a space) matched against the whole normalised query.
+ */
+function getExtraHealthTerms() {
+  if (!extraHealthTerms) {
+    const terms = require("./content/extraHealthTerms.json").categories.flatMap(
+      (category) => category.terms,
+    );
+    extraHealthTerms = {
+      words: new Set(terms.filter((term) => !term.includes(" "))),
+      phrases: terms.filter((term) => term.includes(" ")),
+    };
+  }
+  return extraHealthTerms;
+}
+
+/** Every single-word health term: the knowledge-base list and the extra list. */
+function getAllHealthTermWords() {
+  if (!allHealthTermWords) {
+    allHealthTermWords = new Set([
+      ...getHealthTerms(),
+      ...getExtraHealthTerms().words,
+    ]);
+  }
+  return allHealthTermWords;
+}
+
 /** True when word is a health term, allowing a plural "s" or "es". */
-function isHealthTerm(word, terms = getHealthTerms()) {
+function isHealthTerm(word, terms = getAllHealthTermWords()) {
   return (
     terms.has(word) ||
     terms.has(`${word}s`) ||
@@ -239,15 +274,23 @@ function isHealthTerm(word, terms = getHealthTerms()) {
   );
 }
 
+/** True when the normalised query contains one of the extra phrases. */
+function hasHealthPhrase(text) {
+  const padded = ` ${tokenize(normalize(text)).join(" ")} `;
+  return getExtraHealthTerms().phrases.some((phrase) =>
+    padded.includes(` ${phrase} `),
+  );
+}
+
 /**
  * True when the query is short (at most MAX_CONTENT_WORDS content words)
- * and names no health term.
+ * and names no health term: no knowledge-base or extra term among its
+ * words, and no extra phrase in it.
  *
  * @param {string} text - User's query.
- * @param {Set<string>} [terms] - Health terms (defaults to the generated list).
  * @returns {boolean}
  */
-function isVagueQuery(text, terms = getHealthTerms()) {
+function isVagueQuery(text) {
   if (typeof text !== "string") {
     return false;
   }
@@ -255,7 +298,8 @@ function isVagueQuery(text, terms = getHealthTerms()) {
   const words = contentWords(text);
   return (
     words.length <= MAX_CONTENT_WORDS &&
-    !words.some((word) => isHealthTerm(word, terms))
+    !words.some((word) => isHealthTerm(word)) &&
+    !hasHealthPhrase(text)
   );
 }
 
@@ -263,7 +307,9 @@ module.exports = {
   FUNCTION_WORDS,
   MAX_CONTENT_WORDS,
   contentWords,
+  getExtraHealthTerms,
   getHealthTerms,
+  hasHealthPhrase,
   isHealthTerm,
   isVagueQuery,
   tokenize,

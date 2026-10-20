@@ -235,7 +235,7 @@ describe("gateway and offline help and vague-query rule parity", () => {
     );
   });
 
-  it("has the same function words, word limit and health terms", () => {
+  it("has the same function words, word limit and health terms (KB and extra)", () => {
     assert.deepEqual(
       [...offlineRules.FUNCTION_WORDS].sort(),
       [...vagueRule.FUNCTION_WORDS].sort(),
@@ -244,6 +244,11 @@ describe("gateway and offline help and vague-query rule parity", () => {
     assert.deepEqual(
       [...offlineRules.HEALTH_TERMS],
       [...vagueRule.getHealthTerms()].sort(),
+    );
+    const { words, phrases } = vagueRule.getExtraHealthTerms();
+    assert.deepEqual(
+      [...offlineRules.EXTRA_HEALTH_TERMS].sort(),
+      [...words, ...phrases].sort(),
     );
   });
 
