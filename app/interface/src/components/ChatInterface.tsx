@@ -3,28 +3,17 @@ import {
   LIMITED_MODE_NOTICE,
   PLACEHOLDER_EXAMPLES,
   PLACEHOLDER_ROTATE_MS,
-  TOPIC_EXAMPLES,
-  offersFollowUps,
-  suggestionsFor,
 } from "../content/uiText";
 import { formatDetails } from "../details";
 import {
   prefersReducedMotion,
   startPlaceholderRotation,
 } from "../placeholderRotation";
+import AnswerView from "./AnswerView";
 import AskBar from "./AskBar";
 import DangerLine from "./DangerLine";
 import Home from "./Home";
-import { FlowerIcon, PillIcon, ShieldIcon, SproutIcon } from "./Icons";
-
-/** Each topic chip's icon; its colour comes from .chip--<topic> in CSS. */
-const TOPIC_ICONS = {
-  contraception: PillIcon,
-  sti: ShieldIcon,
-  pregnancy: SproutIcon,
-  periods: FlowerIcon,
-} as const;
-import type { ChatTurn } from "../types";
+import { isAnswerTurn, type ChatTurn } from "../types";
 import type { Topic } from "../content/topics";
 
 /**
@@ -33,9 +22,10 @@ import type { Topic } from "../content/topics";
  * Satisfies FR-01 by sending user queries to the backend for classification
  * and FR-03 by displaying responses returned from retrieval and generation.
  *
- * Topic chips put an example question into the input box; they never send
- * it and never choose the category. The category used by the system always
- * comes from the backend.
+ * It shows the latest exchange only (App keeps no history). A
+ * knowledge-base answer gets the answer screen (AnswerView); the other
+ * reply kinds are shown as a reply under the question. The category used
+ * by the system always comes from the backend.
  */
 
 interface Props {
@@ -46,6 +36,8 @@ interface Props {
   showDetails?: boolean;
   /** A Home topic tile: opens the Topic list (App). */
   onTopic?: (topic: Topic) => void;
+  /** The answer screen's back link: "Back to <topic>" or "Back to home". */
+  back?: { label: string; onBack: () => void };
 }
 
 export default function ChatInterface({
@@ -54,6 +46,7 @@ export default function ChatInterface({
   isLoading,
   showDetails = false,
   onTopic = () => undefined,
+  back = { label: "Back to home", onBack: () => undefined },
 }: Props) {
   const [draft, setDraft] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -79,20 +72,8 @@ export default function ChatInterface({
     };
   }, [isHome]);
 
-  /** Put a question in the input box, ready to send or edit. */
-  const fillInput = (question: string) => {
-    setDraft(question);
-    inputRef.current?.focus();
-  };
-
-  // Follow-ups appear under the latest answer only, once it has arrived.
   const lastTurn = turns.length > 0 ? turns[turns.length - 1] : undefined;
-  const lastQuestion =
-    [...turns].reverse().find((turn) => turn.role === "user")?.text ?? "";
-  const suggestions =
-    !isLoading && offersFollowUps(lastTurn)
-      ? suggestionsFor(lastTurn?.details?.category, lastQuestion)
-      : [];
+  const showAnswer = !isLoading && isAnswerTurn(lastTurn);
 
   const handleSend = () => {
     const trimmed = draft.trim();
@@ -113,9 +94,12 @@ export default function ChatInterface({
       placeholder={
         isHome
           ? PLACEHOLDER_EXAMPLES[placeholderIndex]
-          : "Ask about your body or health…"
+          : showAnswer
+            ? "Ask something else…"
+            : "Ask about your body or health…"
       }
       inputRef={inputRef}
+      label={showAnswer ? "Ask something else" : undefined}
     />
   );
 
@@ -124,6 +108,18 @@ export default function ChatInterface({
       <main className="screen chat-screen home-screen">
         <Home askBar={askBar} onTopic={onTopic} />
       </main>
+    );
+  }
+
+  if (showAnswer && lastTurn) {
+    return (
+      <AnswerView
+        key={lastTurn.id}
+        turn={lastTurn}
+        onSend={onSend}
+        back={back}
+        askBar={askBar}
+      />
     );
   }
 
@@ -148,27 +144,6 @@ export default function ChatInterface({
               {showDetails && turn.details && (
                 <p className="answer-details">{formatDetails(turn.details)}</p>
               )}
-              {turn === lastTurn && suggestions.length > 0 && (
-                <div
-                  className="suggestions"
-                  role="group"
-                  aria-labelledby={`suggest-${turn.id}`}
-                >
-                  <p id={`suggest-${turn.id}`} className="suggestions-label">
-                    You could also ask:
-                  </p>
-                  {suggestions.map((suggestion) => (
-                    <button
-                      key={suggestion.evalId}
-                      className="suggestion"
-                      type="button"
-                      onClick={() => fillInput(suggestion.question)}
-                    >
-                      {suggestion.question}
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
           ),
         )}
@@ -189,28 +164,6 @@ export default function ChatInterface({
           </div>
         )}
       </section>
-
-      <div
-        className="category-chips"
-        role="group"
-        aria-label="Example questions by topic"
-      >
-        {TOPIC_EXAMPLES.map((example) => {
-          const Icon = TOPIC_ICONS[example.topic];
-          return (
-            <button
-              key={example.label}
-              className={`chip chip--${example.topic}`}
-              type="button"
-              onClick={() => fillInput(example.question)}
-              disabled={isLoading}
-            >
-              <Icon size={18} />
-              {example.label}
-            </button>
-          );
-        })}
-      </div>
 
       {/* The footer line sits directly above the ask bar. */}
       <DangerLine />

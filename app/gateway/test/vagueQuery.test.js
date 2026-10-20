@@ -3,9 +3,9 @@
  * list (src/content/healthTerms.json) and its place in handleQuery():
  * after the Safety Net and the help rule, before the classifier.
  *
- * The query sets are read from the repository, not copied: the 13
- * example questions from the interface (TOPIC_EXAMPLES and SUGGESTIONS
- * in app/interface/src/content/uiText.ts), the 35 labelled
+ * The query sets are read from the repository, not copied: the 21
+ * knowledge-base questions the interface offers
+ * (app/interface/src/content/kbQuestions.json), the 35 labelled
  * development-set queries and the 31 DR-04 test queries.
  */
 
@@ -154,8 +154,8 @@ describe("vague-query rule: required query sets", () => {
     );
   });
 
-  it("intercepts none of the 13 example questions", () => {
-    assert.equal(examples.length, 13);
+  it("intercepts none of the 21 knowledge-base questions the interface offers", () => {
+    assert.equal(examples.length, 21);
     assert.deepEqual(
       examples.filter((q) => isVagueQuery(q)),
       [],

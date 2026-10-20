@@ -120,6 +120,15 @@
   --noanswer-border: #dccdf0;
   --noanswer-text: #4b3f63;
 
+  /* Answer screen: the closest-question card and the answer card. The
+     answer card's border is decorative only (the card is not a control,
+     and its text stands on white); the shadow is a soft violet. */
+  --closest-bg: #eee4ff;
+  --closest-label: #5b21b6;
+  --answer-card-border: #e9d8fd;
+  --shadow-violet: 0 10px 28px rgba(109, 40, 217, 0.14);
+  --shadow-dock: 0 -6px 18px rgba(42, 18, 69, 0.08);
+
   /* Topic tints: background and text. */
   --topic-periods-bg: #ffddee;
   --topic-periods-text: #be185d;

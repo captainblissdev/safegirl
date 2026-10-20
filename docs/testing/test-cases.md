@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 143 cases: 127 Pass, 15 Fail, 1 Not run. Two of the
+**Totals:** 157 cases: 141 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -234,6 +234,20 @@ entry.
 | TC-141 | FR-04, FR-05 | The Topic list's frame | One h1; Exit in the header; the footer line under the list, directly above the ask bar; no sideways scroll at 390px | As expected (`components.test.tsx`, Test 29; browser check) | Pass |
 | TC-142 | NFR (privacy) | The questions data | Generated from the active knowledge base, up to date, with id, class and question only (no answers) | As expected (`app/gateway/test/kbQuestions.test.js`, 3 tests; `build-kb-questions.js --check`) | Pass |
 | TC-143 | NFR (accessibility) | Topic list contrast | Text 4.5:1 or more; edges, icons and the focus ring 3:1 or more | Back link 5.25; h1 10.59; count 5.03; rows 16.52; card edge 3.10; chevron 5.16; ring 7.10 (`styles/tokens.test.ts`, Test 10) | Pass |
+| TC-144 | FR-03 | An answer-scoped reply (KB-S5, "Can STIs be cured, and can they harm me if I leave them?") | The matched question is the h1 under "The closest question I have"; her own text is not shown as it | As expected (`components.test.tsx`, Test 31; browser check, live gateway) | Pass |
+| TC-145 | FR-03 | The answer text | Equal to the response's text, line breaks kept | As expected (Test 31; browser check: KB-S5 equals the response and the knowledge base) | Pass |
+| TC-146 | FR-03 | The source line, with and without `source` in the response | "Source: " and the response's source; no line (nothing invented) when the response has none | As expected (Test 32; browser check: all 21 live answers carry a source) | Pass |
+| TC-147 | NFR (safety) | The disclaimer under every answer | The one shared constant `ANSWER_DISCLAIMER` | As expected (Test 32) | Pass |
+| TC-148 | NFR (safety) | The answer screen, details off and on | No confidence, "strong match", similarity or score anywhere in the DOM | As expected (Test 33; browser check) | Pass |
+| TC-149 | FR-03 | Related questions for each of the 21 matched entries | Two other questions of the same class (fewer if the class has fewer), never the matched one | As expected (Test 34; browser check for KB-S5) | Pass |
+| TC-150 | FR-01 | Tapping a related question | Its exact text goes through the full pipeline (body exactly `{"text": …}`) and the new answer replaces the last | As expected (Test 34; browser check) | Pass |
+| TC-151 | NFR (accessibility) | The back link from Home and from a Topic list | "Back to home" to Home (focus on its h1); "Back to <topic>" to that list with focus on the tapped row; 44px tall | As expected (Test 35; browser check for KB-S5 and KB-G7) | Pass |
+| TC-152 | FR-01 | The answer screen's ask bar | Labelled "Ask something else"; sends the text only, never scoped | As expected (Test 35; browser check: `{"text": "what is PrEP"}`) | Pass |
+| TC-153 | FR-04, FR-05 | The answer screen's frame; the latest exchange only | Exit in the header; the footer line directly above the ask bar; a new question replaces the last exchange | As expected (Tests 16, 19 and 35; browser check) | Pass |
+| TC-154 | NFR (accessibility) | A new answer arriving | Focus moves to the h1; one polite live region says "New answer." once; the answer is in no live region; headings h1, h2, h2 | As expected (Test 36; browser check) | Pass |
+| TC-155 | NFR (accessibility) | Answer screen contrast | Text 4.5:1 or more; focus ring 3:1 or more | Label 7.35; matched question 13.52; ring on its card 5.81; "Answer" pill 7.54; answer 16.52; source and disclaimer 6.80; "Related questions" 10.59; dock line 16.52 and link 7.10 (`styles/tokens.test.ts`, Test 11) | Pass |
+| TC-156 | FR-03 | The rule tests' example-question set, rebuilt from the 21 knowledge-base questions | The vague rule intercepts none; the help, vague and held rules agree offline and online on every case, held-topic inputs included | 0/21 intercepted (`vagueQuery.test.js`); parity tests pass | Pass |
+| TC-157 | NFR (usability) | Layout at 390 by 844 | KB-S5's whole card fits above the dock; the longest entry (KB-G7, 443 characters) scrolls with the footer line and ask bar in view, nothing hidden at the end; no sideways scroll | As expected (browser check; `answer-after.png`, `answer-long-after.png`) | Pass |
 
 ## Defects and retests
 

@@ -103,6 +103,21 @@ export interface ChatTurn {
   answerFound?: boolean;
   // How the answer was produced, for the demo details view.
   details?: AnswerDetails;
+  // From the response, as sent: the reply kind, the matched knowledge-base
+  // question and the entry's source. The answer screen uses them.
+  kind?: ReplyKind;
+  matchedQuestion?: string | null;
+  source?: string | null;
+}
+
+/** A knowledge-base answer: shown on the answer screen. */
+export function isAnswerTurn(turn: ChatTurn | undefined): boolean {
+  return (
+    turn?.role === "assistant" &&
+    (turn.kind === "answer-scoped" || turn.kind === "answer-unscoped") &&
+    typeof turn.matchedQuestion === "string" &&
+    turn.matchedQuestion !== ""
+  );
 }
 
 // "splash" is the once-per-session privacy and safety disclaimer (FR-05).

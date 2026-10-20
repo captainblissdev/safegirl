@@ -285,7 +285,12 @@ console.log("\nTest 6: control edges and the header's new pairs");
 
   // Controls never rely on the light card border as their only edge.
   const app = read("../App.css");
-  for (const control of [".chip", ".btn-close", ".btn-help", ".btn-exit"]) {
+  for (const control of [
+    ".topic-questions",
+    ".btn-close",
+    ".btn-help",
+    ".btn-exit",
+  ]) {
     const rule = new RegExp(
       `\\${control}\\s*\\{[^}]*border: [^;]*var\\(--(control-border|primary|color-plum|color-control-border)\\)`,
     );
@@ -582,6 +587,60 @@ console.log("\nTest 10: the Topic list");
   assert(chevron >= 3, `chevron, rose on its tile: ${chevron.toFixed(2)}:1`);
   const ring = contrast(token("--color-violet"), token("--color-card"));
   assert(ring >= 3, `focus ring inside the white card: ${ring.toFixed(2)}:1`);
+}
+
+console.log("\nTest 11: the answer screen");
+{
+  const page = [
+    token("--color-page"),
+    token("--color-card"),
+    token("--glow-pink"),
+    token("--glow-lilac"),
+  ];
+  const worst = (fg: string, backgrounds: string[]) =>
+    Math.min(...backgrounds.map((bg) => contrast(fg, bg)));
+  const label = contrast(token("--closest-label"), token("--closest-bg"));
+  assert(
+    label >= 4.5,
+    `"The closest question I have" on its card: ${label.toFixed(2)}:1`,
+  );
+  const question = contrast(token("--color-ink"), token("--closest-bg"));
+  assert(
+    question >= 4.5,
+    `the matched question on its card: ${question.toFixed(2)}:1`,
+  );
+  const ringOnCard = contrast(token("--color-violet"), token("--closest-bg"));
+  assert(
+    ringOnCard >= 3,
+    `focus ring on the closest card: ${ringOnCard.toFixed(2)}:1`,
+  );
+  const pill = worst(token("--answer-text"), [
+    token("--answer-bg-start"),
+    token("--answer-bg-end"),
+  ]);
+  assert(
+    pill >= 4.5,
+    `"Answer" on the pill gradient (worst end): ${pill.toFixed(2)}:1`,
+  );
+  const text = contrast(token("--color-ink"), token("--color-card"));
+  assert(text >= 4.5, `the answer text on white: ${text.toFixed(2)}:1`);
+  const meta = contrast(token("--color-muted"), token("--color-card"));
+  assert(meta >= 4.5, `source and disclaimer on white: ${meta.toFixed(2)}:1`);
+  const related = worst(token("--color-plum"), page);
+  assert(
+    related >= 4.5,
+    `"Related questions" on the page: ${related.toFixed(2)}:1`,
+  );
+  const line = contrast(token("--color-ink"), token("--color-card"));
+  assert(line >= 4.5, `footer line on the white dock: ${line.toFixed(2)}:1`);
+  const link = contrast(token("--color-violet"), token("--color-card"));
+  assert(link >= 4.5, `footer link on the white dock: ${link.toFixed(2)}:1`);
+  // The card's border is decorative: the card is not a control and its
+  // text stands on white, so it needs no 3:1 (it is shown for the record).
+  const border = worst(token("--answer-card-border"), page);
+  console.log(
+    `  INFO: the answer card's decorative border: ${border.toFixed(2)}:1`,
+  );
 }
 
 console.log("\nAll design token tests passed.");

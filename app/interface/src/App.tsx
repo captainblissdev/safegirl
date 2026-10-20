@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { ChatTurn, Screen } from "./types";
+import { isAnswerTurn, type ChatTurn, type Screen } from "./types";
 import { QueryCancelledError, submitQuery } from "./api/client";
 import { answerDetails, isDetailsEnabled } from "./details";
 import AppShell from "./components/AppShell";
@@ -46,6 +46,12 @@ export default function App() {
   const [topic, setTopic] = useState<Topic | null>(null);
   const topicOpenerRef = useRef<"tile" | "help">("tile");
   const returnFocusRef = useRef<string | null>(null);
+  // Where the answer screen's back link goes: the Topic list the question
+  // was asked from (and the row tapped, for focus), or Home.
+  const [answerOrigin, setAnswerOrigin] = useState<{
+    topic: Topic;
+    questionId: string | null;
+  } | null>(null);
 
   // After "All topics", focus the tile (or Help button) that opened the
   // list. Home's own focus on its h1 runs first, as a child effect.
@@ -87,7 +93,9 @@ export default function App() {
       text,
     };
 
-    setTurns((prev) => [...prev, userTurn]);
+    // The latest exchange only: earlier ones are not kept on screen (nor
+    // anywhere else).
+    setTurns([userTurn]);
     setIsLoading(true);
     setError(null);
 
@@ -109,6 +117,9 @@ export default function App() {
           limitedMode: response.limitedMode === true,
           answerFound: response.answerFound,
           details: answerDetails(response),
+          kind: response.kind,
+          matchedQuestion: response.matchedQuestion,
+          source: response.source,
         };
 
         setTurns((prev) => [...prev, botTurn]);
@@ -137,6 +148,7 @@ export default function App() {
     cancelPending();
     setTurns([]);
     setError(null);
+    setAnswerOrigin(null);
   };
 
   const handleEndSession = () => {
@@ -163,6 +175,7 @@ export default function App() {
   /** Open the Topic list, remembering what opened it for focus return. */
   const openTopic = (next: Topic, opener: "tile" | "help") => {
     topicOpenerRef.current = opener;
+    setAnswerOrigin(null);
     setTopic(next);
     setScreen("topic");
   };
@@ -190,10 +203,40 @@ export default function App() {
    * exact text goes through the same full pipeline as any question. It is
    * never scoped to the topic.
    */
-  const askFromTopic = (text: string) => {
+  const askFromTopic = (text: string, questionId: string | null) => {
+    if (topic) setAnswerOrigin({ topic, questionId });
     setScreen("chat");
     void handleSend(text);
   };
+
+  /** A question asked on the chat screen itself: its back link is Home. */
+  const askFromChat = (text: string) => {
+    setAnswerOrigin(null);
+    void handleSend(text);
+  };
+
+  /**
+   * The answer screen's back link: to the Topic list the question came
+   * from, with focus on the row tapped, or else to Home.
+   */
+  const answerBack = answerOrigin
+    ? {
+        label: `Back to ${answerOrigin.topic.label}`,
+        onBack: () => {
+          cancelPending();
+          setTurns([]);
+          setError(null);
+          setTopic(answerOrigin.topic);
+          setScreen("topic");
+        },
+      }
+    : { label: "Back to home", onBack: handleNewChat };
+
+  // Announced once when a new answer arrives (focus moves to its h1). The
+  // answer text itself is not in a live region, so it is not read twice.
+  const lastTurn = turns.length > 0 ? turns[turns.length - 1] : undefined;
+  const announcement =
+    !isLoading && isAnswerTurn(lastTurn) ? "New answer." : "";
 
   /** Quick exit: clear everything, then leave (see quickExit.ts). */
   const handleExit = () =>
@@ -205,6 +248,7 @@ export default function App() {
         setError(null);
         setIsHelpOpen(false);
         setTopic(null);
+        setAnswerOrigin(null);
         setScreen("splash");
       },
       getSessionStorage: () => window.sessionStorage,
@@ -276,12 +320,16 @@ export default function App() {
           <ChatSidebar onNewChat={handleNewChat} />
 
           <div className="chat-column">
+            <p className="sr-only" role="status" aria-live="polite">
+              {announcement}
+            </p>
             <ChatInterface
               turns={turns}
-              onSend={(text) => void handleSend(text)}
+              onSend={askFromChat}
               isLoading={isLoading}
               showDetails={SHOW_DETAILS}
               onTopic={(next) => openTopic(next, "tile")}
+              back={answerBack}
             />
 
             {error && (
@@ -311,7 +359,12 @@ export default function App() {
       )}
 
       {screen === "topic" && topic && (
-        <TopicList topic={topic} onAsk={askFromTopic} onBack={closeTopic} />
+        <TopicList
+          topic={topic}
+          onAsk={askFromTopic}
+          onBack={closeTopic}
+          focusQuestionId={answerOrigin?.questionId ?? null}
+        />
       )}
 
       {screen === "referral" && (

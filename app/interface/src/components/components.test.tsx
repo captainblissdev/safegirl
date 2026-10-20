@@ -5,11 +5,7 @@ import {
   EMERGENCY_NUMBERS,
   GBV_HELPLINE,
 } from "../offline/helpContent";
-import {
-  LIMITED_MODE_NOTICE,
-  SUGGESTIONS,
-  TOPIC_EXAMPLES,
-} from "../content/uiText";
+import { ANSWER_DISCLAIMER, LIMITED_MODE_NOTICE } from "../content/uiText";
 import {
   answerDetails,
   formatDetails,
@@ -19,8 +15,13 @@ import {
 import type { ChatTurn } from "../types";
 import { telHref } from "../content/telHref";
 import { TOPICS } from "../content/topics";
-import { KB_QUESTIONS, questionsFor } from "../content/kbQuestions";
+import {
+  KB_QUESTIONS,
+  questionsFor,
+  relatedQuestions,
+} from "../content/kbQuestions";
 import TopicList from "./TopicList";
+import AnswerView from "./AnswerView";
 import { PLACEHOLDER_EXAMPLES, SOURCES_LINE } from "../content/uiText";
 import AppHeader from "./AppHeader";
 import AppShell from "./AppShell";
@@ -200,59 +201,40 @@ console.log("\nTest 6: the privacy wording on the disclaimer and session end");
   );
 }
 
-console.log("\nTest 7: the topic chips are real buttons (in the conversation)");
+console.log("\nTest 7: the old example chips are gone (UI-12)");
 {
   const html = renderChat([{ id: "1", role: "user", text: "hi" }]);
-  const chips = html.match(/<button class="chip[ "][^>]*>.*?<\/button>/g) ?? [];
-
-  assert(chips.length === 4, "four chip buttons");
-  assert(!html.includes('aria-hidden="true">'), "no chip is aria-hidden");
-  for (const example of TOPIC_EXAMPLES) {
-    assert(
-      chips.some((chip) => chip.endsWith(`</svg>${example.label}</button>`)),
-      `a "${example.label}" chip with an icon`,
-    );
-    assert(
-      chips.some((chip) => chip.includes(`chip--${example.topic}`)),
-      `the "${example.label}" chip has its own colour`,
-    );
-  }
+  assert(!html.includes('class="chip'), "no chip in the conversation");
+  assert(!html.includes("category-chips"), "no chip group in the conversation");
 }
 
-console.log(
-  "\nTest 8: each chip's question is a 'clear' development-set query, one per topic",
-);
+console.log("\nTest 8: nothing imports the old chips or follow-ups");
 {
-  const csv = readFileSync(
-    new URL(
-      "../../../../resources/eval/retrieval_eval_set.csv",
-      import.meta.url,
-    ),
+  const uiText = readFileSync(
+    new URL("../content/uiText.ts", import.meta.url),
     "utf8",
   );
-  // id,query,group,expected_behavior,acceptable_entry_ids,...
-  const rows = new Map(
-    csv
-      .replace(/\r/g, "")
-      .split("\n")
-      .map((line) => line.split(","))
-      .map((cells) => [cells[0], cells] as const),
-  );
-  const topics = new Set<string>();
-
-  for (const example of TOPIC_EXAMPLES) {
-    const row = rows.get(example.evalId);
-    assert(
-      row?.[1] === example.question,
-      `${example.evalId} is "${example.question}", verbatim`,
-    );
-    assert(row?.[2] === "clear", `${example.evalId} is in the "clear" group`);
-    topics.add(row?.[4]?.slice(0, 4) ?? "");
+  for (const name of [
+    "TOPIC_EXAMPLES",
+    "SUGGESTIONS",
+    "offersFollowUps",
+    "suggestionsFor",
+  ]) {
+    assert(!uiText.includes(name), `uiText.ts no longer has ${name}`);
   }
-  assert(
-    [...topics].sort().join(",") === "KB-C,KB-G,KB-P,KB-S",
-    "the four questions cover the four topics",
-  );
+  for (const file of [
+    "./ChatInterface.tsx",
+    "./AnswerView.tsx",
+    "../App.tsx",
+  ]) {
+    const source = readFileSync(new URL(file, import.meta.url), "utf8");
+    assert(
+      !/TOPIC_EXAMPLES|SUGGESTIONS|suggestionsFor|You could also ask/.test(
+        source,
+      ),
+      `${file} uses none of them`,
+    );
+  }
 }
 
 console.log("\nTest 9: the details view is off unless asked for");
@@ -373,95 +355,30 @@ console.log(
   );
 }
 
-console.log(
-  "\nTest 15: every suggestion is a 'clear' development-set query on its topic",
-);
+console.log('\nTest 15: the "You could also ask" follow-ups are gone (UI-12)');
 {
-  const csv = readFileSync(
-    new URL(
-      "../../../../resources/eval/retrieval_eval_set.csv",
-      import.meta.url,
-    ),
-    "utf8",
-  );
-  const rows = new Map(
-    csv
-      .replace(/\r/g, "")
-      .split("\n")
-      .map((line) => line.split(","))
-      .map((cells) => [cells[0], cells] as const),
-  );
-  const prefix: Record<string, string> = {
-    contraception: "KB-C",
-    sti: "KB-S",
-    pregnancy: "KB-P",
-    general: "KB-G",
-  };
-
-  for (const [category, list] of Object.entries(SUGGESTIONS)) {
-    for (const suggestion of list) {
-      const row = rows.get(suggestion.evalId);
-      assert(
-        row?.[1] === suggestion.question && row[2] === "clear",
-        `${suggestion.evalId} is a verbatim "clear" query`,
-      );
-      assert(
-        row?.[4]?.startsWith(prefix[category] ?? "?") === true,
-        `${suggestion.evalId} is answered from the ${category} entries`,
-      );
-    }
-  }
-  // Q14 is too close to the 0.35 no-answer cut-off (confidence 0.368 in
-  // research/eval/results/suggested_questions_2026-10-14.csv) to offer.
-  const offered = Object.values(SUGGESTIONS)
-    .flat()
-    .map((s) => s.evalId);
-  assert(!offered.includes("Q14"), "Q14 (fragile, 0.368) is not offered");
-  assert(offered.includes("Q15"), "Q15 replaces it in the general follow-ups");
+  const html = renderChat([
+    { id: "1", role: "user", text: "what is PrEP" },
+    {
+      id: "2",
+      role: "assistant",
+      text: "answer",
+      outcome: "grounded_answer",
+      answerFound: true,
+      details: { category: "sti" },
+    },
+  ]);
+  assert(!html.includes("You could also ask"), "no follow-up label");
+  assert(!html.includes('class="suggestion'), "no follow-up buttons");
 }
 
-console.log("\nTest 16: follow-ups appear under the latest answer only");
+console.log("\nTest 16: the screen shows the latest exchange only");
 {
-  const answer = (id: string, category: string): ChatTurn => ({
-    id,
-    role: "assistant",
-    text: `answer ${id}`,
-    outcome: "grounded_answer",
-    details: { category },
-  });
-  const turns: ChatTurn[] = [
-    { id: "1", role: "user", text: "what is PrEP" },
-    answer("2", "sti"),
-    { id: "3", role: "user", text: "Can chlamydia be cured" },
-    answer("4", "sti"),
-  ];
-  const html = renderChat(turns);
-  const suggestions =
-    html.match(/<button class="suggestion"[^>]*>[^<]*</g) ?? [];
-
-  assert(html.includes("You could also ask:"), "the label is shown");
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
-    html.indexOf("You could also ask:") > html.indexOf("answer 4"),
-    "under the latest answer",
-  );
-  assert(
-    html.split("You could also ask:").length === 2,
-    "only once, not under earlier answers",
-  );
-  assert(
-    suggestions.length === 2 &&
-      !suggestions.some((s) => s.toLowerCase().includes("chlamydia")),
-    "two follow-ups, leaving out the question just asked (case-insensitive)",
-  );
-  assert(
-    !renderToStaticMarkup(
-      <ChatInterface turns={turns} onSend={() => undefined} isLoading />,
-    ).includes("You could also ask:"),
-    "hidden while the next answer is loading",
-  );
-  assert(
-    !renderChat([turns[0], answer("2", "")]).includes("You could also ask:"),
-    "none when the category is unknown",
+    app.includes("setTurns([userTurn]);") &&
+      !app.includes("setTurns((prev) => [...prev, userTurn])"),
+    "a new question replaces the last exchange; earlier ones are not kept",
   );
 }
 
@@ -482,59 +399,52 @@ console.log("\nTest 17: Home before the first question, the ask bar after it");
   }
 }
 
-console.log(
-  "\nTest 18: no follow-ups after a referral, limited mode, no-answer, signposting or an error",
-);
+console.log("\nTest 18: the answer screen is for knowledge-base answers only");
 {
   const question: ChatTurn = { id: "q", role: "user", text: "what is PrEP" };
-  const answer = (extra: Partial<ChatTurn>): ChatTurn => ({
+  const reply = (extra: Partial<ChatTurn>): ChatTurn => ({
     id: "a",
     role: "assistant",
     text: "reply",
     outcome: "grounded_answer",
-    answerFound: true,
-    details: { category: "sti" },
     ...extra,
   });
-  const follows = (turns: ChatTurn[]) =>
-    renderChat(turns).includes("You could also ask:");
+  const isAnswerScreen = (turns: ChatTurn[], isLoading = false) =>
+    renderToStaticMarkup(
+      <ChatInterface
+        turns={turns}
+        onSend={() => undefined}
+        isLoading={isLoading}
+      />,
+    ).includes("answer-screen");
+  const matched = KB_QUESTIONS[0].question;
 
-  assert(follows([question, answer({})]), "shown after a full answer");
-  // A referral and an error never add an answer turn: the chat ends with
-  // the user's question, even after an earlier full answer.
+  for (const kind of ["answer-scoped", "answer-unscoped"] as const) {
+    assert(
+      isAnswerScreen([question, reply({ kind, matchedQuestion: matched })]),
+      `${kind}: the answer screen`,
+    );
+  }
+  for (const kind of ["abstain", "help", "held-topic", "vague"] as const) {
+    assert(
+      !isAnswerScreen([question, reply({ kind, matchedQuestion: null })]),
+      `${kind}: not the answer screen`,
+    );
+  }
   assert(
-    !follows([
-      question,
-      answer({}),
-      { id: "q2", role: "user", text: "my boyfriend hits me" },
-    ]),
-    "not after a referral or an error (the last turn is the question)",
+    !isAnswerScreen([question, reply({ limitedMode: true })]),
+    "a limited-mode answer (no kind, no entry): not the answer screen",
   );
   assert(
-    !follows([question, answer({ limitedMode: true })]),
-    "not after a limited-mode answer",
+    !isAnswerScreen([question]),
+    "a question with no answer yet (an error): not the answer screen",
   );
   assert(
-    !follows([
-      question,
-      answer({ answerFound: false, details: { category: null } }),
-    ]),
-    "not after the no-answer reply",
-  );
-  assert(
-    !follows([
-      question,
-      answer({
-        outcome: "signposting",
-        answerFound: false,
-        details: { category: null },
-      }),
-    ]),
-    "not after signposting",
-  );
-  assert(
-    !follows([question, answer({ answerFound: false })]),
-    "not after a no-answer reply even if it names a category",
+    !isAnswerScreen(
+      [question, reply({ kind: "answer-scoped", matchedQuestion: matched })],
+      true,
+    ),
+    "not while the next answer is loading",
   );
 }
 
@@ -562,6 +472,18 @@ console.log(
     [
       "chat, answer",
       chat(reply({ outcome: "grounded_answer", answerFound: true })),
+    ],
+    [
+      "chat, answer screen",
+      chat(
+        reply({
+          outcome: "grounded_answer",
+          answerFound: true,
+          kind: "answer-scoped",
+          matchedQuestion: KB_QUESTIONS[0].question,
+          source: "WHO",
+        }),
+      ),
     ],
     [
       "chat, no answer",
@@ -647,6 +569,7 @@ console.log(
     "./Home.tsx",
     "./AskBar.tsx",
     "./TopicList.tsx",
+    "./AnswerView.tsx",
   ]) {
     const source = readFileSync(new URL(file, import.meta.url), "utf8");
     assert(!/\d{3}/.test(source), `${file} types no phone number`);
@@ -1051,7 +974,7 @@ console.log("\nTest 29: the Topic list for each topic");
     );
     const rows = [
       ...html.matchAll(
-        /<button class="topic-question" type="button"><span>([^<]*)<\/span><span class="topic-question-go" aria-hidden="true">/g,
+        /<button class="topic-question" type="button" data-question="[^"]*"><span>([^<]*)<\/span><span class="topic-question-go" aria-hidden="true">/g,
       ),
     ].map((m) => m[1]);
     assert(
@@ -1096,20 +1019,20 @@ console.log(
     "utf8",
   );
   assert(
-    list.includes("onClick={() => onAsk(item.question)}"),
-    "a row hands its exact question text to onAsk",
+    list.includes("onClick={() => onAsk(item.question, item.id)}"),
+    "a row hands its exact question text (and its id, for focus) to onAsk",
   );
   assert(
-    /const ask = \(\) => \{[^}]*onAsk\(text\);/.test(list),
+    /const ask = \(\) => \{[^}]*onAsk\(text, null\);/.test(list),
     "the ask bar hands its text to the same onAsk",
   );
   assert(
-    list.includes("onAsk: (text: string) => void;"),
-    "onAsk takes the text only: nothing scopes it to the topic",
+    list.includes("onAsk: (text: string, questionId: string | null) => void;"),
+    "onAsk takes the text and the row id: nothing scopes it to the topic",
   );
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
-    /const askFromTopic = \(text: string\) => \{\s*setScreen\("chat"\);\s*void handleSend\(text\);/.test(
+    /const askFromTopic = \(text: string, questionId: string \| null\) => \{\s*if \(topic\) setAnswerOrigin\(\{ topic, questionId \}\);\s*setScreen\("chat"\);\s*void handleSend\(text\);/.test(
       app,
     ),
     "App sends it through handleSend, the full pipeline used for every question",
@@ -1148,6 +1071,297 @@ console.log(
       <ReferralScreen message="m" onContinueChat={() => undefined} />,
     ).includes('<h2 tabindex="-1" id="referral-title">'),
     "the referral heading can take focus when it appears",
+  );
+}
+
+const KB_S5 = KB_QUESTIONS.find((item) => item.id === "KB-S5")!;
+const answerTurn = (extra: Partial<ChatTurn> = {}): ChatTurn => ({
+  id: "a1",
+  role: "assistant",
+  text: "First paragraph of the answer.\n\nSecond paragraph, after a break.",
+  outcome: "grounded_answer",
+  answerFound: true,
+  kind: "answer-scoped",
+  matchedQuestion: KB_S5.question,
+  source: "Kenya MOH (2015); WHO (2018)",
+  details: DETAILS,
+  ...extra,
+});
+const renderAnswer = (turn: ChatTurn, showDetails = false) =>
+  renderToStaticMarkup(
+    <ChatInterface
+      turns={[{ id: "u1", role: "user", text: "can stis be cured" }, turn]}
+      onSend={() => undefined}
+      isLoading={false}
+      showDetails={showDetails}
+      back={{ label: "Back to home", onBack: () => undefined }}
+    />,
+  );
+
+console.log(
+  "\nTest 31: the answer screen shows the closest question and the answer as sent",
+);
+{
+  const turn = answerTurn();
+  const html = renderAnswer(turn);
+  assert(html.split("<h1").length === 2, "one h1");
+  assert(
+    html.includes(
+      `<h1 tabindex="-1" class="closest"><span class="closest-label">The closest question I have</span><span class="closest-question">${escapeHtml(KB_S5.question)}</span></h1>`,
+    ),
+    "the h1 is the matched question, labelled as the closest one I have",
+  );
+  assert(
+    !html.includes("can stis be cured"),
+    "the question she typed is not shown as the matched one (nor at all)",
+  );
+  assert(
+    !/You asked|Your question/.test(html),
+    "the matched question is never presented as hers",
+  );
+  assert(
+    html.includes(`<p class="answer-text">${turn.text}</p>`),
+    "the answer text equals the response text, line breaks included",
+  );
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  assert(
+    /\.answer-text \{[^}]*white-space: pre-line;/.test(css) &&
+      /\.answer-text \{[^}]*font-size: 16px;[^}]*font-weight: var\(--weight-semibold\);[^}]*line-height: 1\.55;/.test(
+        css,
+      ),
+    "paragraph breaks are kept (pre-line); 16px, weight 600, line-height 1.55",
+  );
+  assert(
+    html.indexOf("closest-label") < html.indexOf("answer-card") &&
+      html.indexOf("answer-card") < html.indexOf("answer-text"),
+    "the closest question, then the answer card",
+  );
+  assert(
+    /<h2 id="answer-title" class="answer-pill"><svg[^>]*><path[^>]*><\/path><\/svg> Answer<\/h2>/.test(
+      html,
+    ) && html.indexOf("answer-pill") < html.indexOf("answer-text"),
+    'the "Answer" pill, with a check icon, at the top of the card (an h2)',
+  );
+}
+
+console.log("\nTest 32: the source as sent, then the shared disclaimer");
+{
+  const withSource = renderAnswer(answerTurn());
+  const sourceAt = withSource.indexOf(
+    '<p class="answer-source">Source: Kenya MOH (2015); WHO (2018)</p>',
+  );
+  const disclaimerAt = withSource.indexOf(
+    `<p class="answer-disclaimer">${ANSWER_DISCLAIMER}</p>`,
+  );
+  assert(
+    sourceAt > withSource.indexOf("answer-text"),
+    "the source line, under the answer",
+  );
+  assert(disclaimerAt > sourceAt, "then the disclaimer");
+  assert(
+    ANSWER_DISCLAIMER ===
+      "General information, not a diagnosis. A nurse or clinic can test and treat you.",
+    "the disclaimer wording",
+  );
+  for (const source of [null, undefined, ""]) {
+    const html = renderAnswer(answerTurn({ source }));
+    assert(
+      !html.includes("Source:") && html.includes(ANSWER_DISCLAIMER),
+      `no source in the response (${JSON.stringify(source)}): no source line, nothing invented; the disclaimer stays`,
+    );
+  }
+  const view = readFileSync(
+    new URL("./AnswerView.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    view.includes("{ANSWER_DISCLAIMER}") && !view.includes("not a diagnosis"),
+    "the disclaimer is the one shared constant, not typed in the view",
+  );
+}
+
+console.log("\nTest 33: no confidence pill, match label or score anywhere");
+{
+  for (const showDetails of [false, true]) {
+    const html = renderAnswer(answerTurn(), showDetails);
+    for (const word of [
+      "confidence",
+      "0.82",
+      "strong match",
+      "Strong match",
+      "similarity",
+      "score",
+      "%",
+      "answer-details",
+    ]) {
+      assert(
+        !html.includes(word),
+        `details ${showDetails ? "on" : "off"}: no "${word}"`,
+      );
+    }
+  }
+  const view = readFileSync(
+    new URL("./AnswerView.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    !/details|confidence|similarity|score/i.test(
+      view.slice(view.indexOf("export default")),
+    ),
+    "the view reads no details, confidence or score",
+  );
+}
+
+console.log(
+  "\nTest 34: two related questions of the same class, not the matched one",
+);
+{
+  for (const item of KB_QUESTIONS) {
+    const related = relatedQuestions(item.question);
+    const others = questionsFor(item.topicClass).filter(
+      (other) => other.id !== item.id,
+    );
+    assert(
+      related.length === Math.min(2, others.length) &&
+        related.every((q) => others.some((other) => other.question === q)) &&
+        !related.includes(item.question),
+      `${item.id}: ${related.length} others of ${item.topicClass}, excluding itself`,
+    );
+  }
+  assert(
+    relatedQuestions("a question not in the knowledge base").length === 0,
+    "no matched entry: no related questions (none invented)",
+  );
+  const html = renderAnswer(answerTurn());
+  const rows = [
+    ...html.matchAll(
+      /<button class="topic-question" type="button"><span>([^<]*)<\/span><span class="topic-question-go" aria-hidden="true">/g,
+    ),
+  ].map((m) => m[1]);
+  assert(
+    JSON.stringify(rows) ===
+      JSON.stringify(relatedQuestions(KB_S5.question).map(escapeHtml)),
+    "KB-S5: its two related questions as chevron rows",
+  );
+  assert(
+    html.includes(
+      '<h2 id="related-title" class="related-title">Related questions</h2>',
+    ) && html.indexOf("related-title") > html.indexOf("answer-disclaimer"),
+    '"Related questions" under the answer card',
+  );
+  const view = readFileSync(
+    new URL("./AnswerView.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    view.includes("onClick={() => onSend(question)}"),
+    "tapping one sends its exact text",
+  );
+  const chat = readFileSync(
+    new URL("./ChatInterface.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    chat.includes("onSend={onSend}") && chat.includes("onSend(trimmed);"),
+    "through the same onSend as the ask bar (App's full pipeline)",
+  );
+}
+
+console.log("\nTest 35: back link, ask bar and frame of the answer screen");
+{
+  for (const label of ["Back to home", "Back to Pregnancy"]) {
+    const html = renderToStaticMarkup(
+      <AnswerView
+        turn={answerTurn()}
+        onSend={() => undefined}
+        back={{ label, onBack: () => undefined }}
+        askBar={null}
+      />,
+    );
+    assert(
+      new RegExp(
+        `^<main class="screen chat-screen answer-screen"><button class="back-link" type="button"><svg[^>]*>.*?</svg> ${label}</button>`,
+      ).test(html),
+      `"${label}" is the first thing on the screen, a button`,
+    );
+  }
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes("label: `Back to ${answerOrigin.topic.label}`") &&
+      app.includes(': { label: "Back to home", onBack: handleNewChat };'),
+    'from a Topic list "Back to <topic label>", otherwise "Back to home"',
+  );
+  assert(
+    app.includes("focusQuestionId={answerOrigin?.questionId ?? null}"),
+    "back to the Topic list hands it the tapped row",
+  );
+  const list = readFileSync(
+    new URL("./TopicList.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    list.includes("data-question={item.id}") &&
+      list.includes("(row ?? headingRef.current)?.focus();"),
+    "the Topic list focuses that row (its h1 if none was tapped)",
+  );
+  assert(
+    /const openTopic = [^}]*setAnswerOrigin\(null\);/.test(app) &&
+      /const askFromChat = \(text: string\) => \{\s*setAnswerOrigin\(null\);\s*void handleSend\(text\);/.test(
+        app,
+      ),
+    "a question asked on the chat screen (ask bar, related) goes back to Home",
+  );
+  const html = renderAnswer(answerTurn());
+  const lineAt = html.indexOf('class="danger-line"');
+  const barAt = html.indexOf('<div class="input-row">');
+  assert(
+    lineAt > html.lastIndexOf("topic-question") && barAt > lineAt,
+    "the footer line after the related questions, then the ask bar",
+  );
+  assert(
+    html.includes(
+      '<label class="sr-only" for="chat-input">Ask something else</label>',
+    ) && html.split("<input").length === 2,
+    'one ask bar, labelled "Ask something else"',
+  );
+  assert(
+    app.includes("onSend={askFromChat}") &&
+      app.includes("submitQuery(text, { signal: request.signal })"),
+    "the ask bar runs the full pipeline with the text only: never scoped",
+  );
+}
+
+console.log("\nTest 36: focus moves to the closest question; announced once");
+{
+  const html = renderAnswer(answerTurn());
+  assert(
+    html.includes('<h1 tabindex="-1" class="closest">'),
+    "the h1 can take focus",
+  );
+  const view = readFileSync(
+    new URL("./AnswerView.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    /useEffect\(\(\) => \{\s*headingRef\.current\?\.focus\(\);\s*\}, \[turn\.id\]\);/.test(
+      view,
+    ),
+    "focus moves to it when a new answer arrives",
+  );
+  assert(
+    !html.includes("aria-live") && !html.includes('role="status"'),
+    "the answer is in no live region (not read twice)",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes('<p className="sr-only" role="status" aria-live="polite">') &&
+      app.includes('!isLoading && isAnswerTurn(lastTurn) ? "New answer." : ""'),
+    'one polite live region, outside the screen, says "New answer." once',
+  );
+  const h2s = [...html.matchAll(/<h([1-6])/g)].map((m) => m[1]);
+  assert(
+    JSON.stringify(h2s) === JSON.stringify(["1", "2", "2"]),
+    "heading order: h1 (closest question), h2 Answer, h2 Related questions",
   );
 }
 

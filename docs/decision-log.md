@@ -1199,3 +1199,63 @@ other 20 questions return their own entry when tapped (browser check,
 button if the Help sheet did. Home's h1 takes focus when Home appears
 (after the splash or a new chat), and the referral heading when the
 referral appears.
+
+## Answer screen (2026-10-20)
+
+Stage B2 step 6 (`fix/ui-redesign`), on Cindy's brief. **No frozen item
+changed**: no model, knowledge-base text, threshold, gate, Safety Net
+pattern or helpline number. Answers are shown exactly as the gateway
+returns them.
+
+**Latest exchange only.** A new question replaces the last exchange
+(`setTurns([userTurn])` in `App.tsx`); earlier exchanges are not kept on
+screen, and they were never stored anywhere else.
+
+**What it shows** (`components/AnswerView.tsx`), for the answer-scoped
+and answer-unscoped reply kinds:
+
+1. A back link, 44px tall: "Back to <topic label>" when the question
+   came from a Topic list (back there, focus on the tapped row, or on
+   the list's h1 if its ask bar was used), otherwise "Back to home". A
+   question asked on the answer screen itself (its ask bar or a related
+   question) goes back to Home.
+2. "The closest question I have" over the knowledge-base question the
+   answer came from (`matchedQuestion`, as sent). It is never shown as
+   the question she asked; her own text is not shown on this screen.
+3. The answer card: an "Answer" pill with a check, the answer text as
+   sent (line breaks kept with `white-space: pre-line`), a divider, then
+   "Source: " and the `source` the response carries, then the shared
+   disclaimer `ANSWER_DISCLAIMER` ("General information, not a diagnosis.
+   A nurse or clinic can test and treat you."). With no `source` in the
+   response, there is no source line and nothing is invented. All 21
+   live answers carry one (browser check, 20 October 2026); the offline
+   pipeline's limited-mode answers carry none and have no reply kind, so
+   they keep the plain reply view.
+4. "Related questions": up to two other knowledge-base questions of the
+   matched entry's class, in knowledge-base order. Tapping one sends its
+   exact text through the full pipeline.
+5. The footer line and the ask bar ("Ask something else"), in a white
+   dock that stays at the bottom while a long answer scrolls; the ask
+   bar runs the full pipeline and is never scoped.
+
+**No trust signal.** No confidence pill, "strong match" label or score:
+similarity does not separate right answers from wrong ones (wrong
+answers score as high as 0.8557). The demo details line (`?details=1`)
+is not shown on the answer screen.
+
+**Headings and focus (UI-16).** The matched question is the screen's
+only h1 (the label is part of it); "Answer" and "Related questions" are
+h2s. When a new answer arrives, focus moves to the h1, and one polite
+live region outside the screen says "New answer." The answer itself is
+in no live region, so it is not read twice.
+
+**Example chips and follow-ups removed (UI-12).** The four topic chips
+and the "You could also ask" follow-ups are gone from the chat, with
+`TOPIC_EXAMPLES`, `SUGGESTIONS`, `offersFollowUps` and `suggestionsFor`;
+nothing else imported them except the gateway's rule-test fixture. Their
+13 questions (4 chips and 12 follow-ups, one shared) were the
+example-question set of the Stage A rule tests. That set is now the 21
+knowledge-base questions in `kbQuestions.json` (what the Topic list and
+the related questions offer); the vague rule intercepts none of them,
+and the help and vague parity cases now also include the held-topic
+test inputs. No DR-04 or demo-risk query was used.

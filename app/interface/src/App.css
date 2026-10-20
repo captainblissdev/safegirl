@@ -286,90 +286,6 @@
   overflow-wrap: anywhere;
 }
 
-.chips-hint {
-  color: var(--ink-soft);
-}
-
-/* "You could also ask…" follow-ups under the latest answer. */
-.suggestions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.suggestions-label {
-  width: 100%;
-  color: var(--ink-soft);
-}
-
-.suggestion {
-  min-height: 44px;
-  border: 1px dashed var(--control-border);
-  border-radius: 999px;
-  padding: 8px 14px;
-  background: var(--card);
-  color: var(--primary-deep);
-  font-size: 1rem;
-  text-align: left;
-  cursor: pointer;
-}
-
-.suggestion:hover {
-  border-style: solid;
-  background: var(--lilac);
-}
-
-.category-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 44px;
-  border: 1px solid var(--control-border);
-  border-radius: 999px;
-  padding: 6px 14px;
-  background: var(--lilac);
-  color: var(--primary-deep);
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.chip svg {
-  color: var(--primary);
-}
-
-.chip--contraception {
-  background: var(--tint-sky);
-}
-
-.chip--sti {
-  background: var(--tint-mint);
-}
-
-.chip--pregnancy {
-  background: var(--tint-peach);
-}
-
-.chip--periods {
-  background: var(--tint-pink);
-}
-
-.chip:hover {
-  border-color: var(--primary);
-}
-
-.chip:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
 .input-row {
   display: flex;
   gap: 10px;
@@ -809,13 +725,11 @@
     animation: bubble-in 240ms ease-out both;
   }
 
-  .chip,
   .btn-send,
   .btn-primary {
     transition: transform 120ms ease-out;
   }
 
-  .chip:active:not(:disabled),
   .btn-send:active:not(:disabled),
   .btn-primary:active:not(:disabled) {
     transform: scale(0.95);
@@ -1457,4 +1371,116 @@
   border-radius: 50%;
   background: var(--chevron-tile-bg);
   color: var(--color-rose-text);
+}
+
+/* Answer screen (redesign Step 6) */
+
+.answer-screen {
+  justify-content: flex-start;
+  gap: 14px;
+  min-height: 0;
+  padding: 8px 8px 0;
+}
+
+/* "The closest question I have": the h1, never shown as her question. */
+.closest {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: var(--closest-bg);
+}
+
+.closest-label {
+  color: var(--closest-label);
+  font-size: 12px;
+  font-weight: var(--weight-black);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.closest-question {
+  color: var(--color-ink);
+  font-size: 15px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.35;
+}
+
+.answer-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1.5px solid var(--answer-card-border);
+  border-radius: 24px;
+  padding: 16px;
+  background: var(--color-card);
+  box-shadow: var(--shadow-violet);
+}
+
+.answer-pill {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: linear-gradient(
+    90deg,
+    var(--answer-bg-start),
+    var(--answer-bg-end)
+  );
+  color: var(--answer-text);
+  font-size: 14px;
+  font-weight: var(--weight-black);
+}
+
+/* Exactly as returned: line breaks in the text are kept. */
+.answer-text {
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.55;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.answer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid var(--color-card-border);
+  padding-top: 12px;
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.4;
+}
+
+.related {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.related-title {
+  color: var(--color-plum);
+  font-size: 1rem;
+  font-weight: var(--weight-black);
+}
+
+/* The footer line and the ask bar stay in reach while a long answer
+   scrolls; sticky keeps their space in the flow, so nothing is hidden
+   under them. */
+.answer-dock {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 -8px;
+  border-radius: 22px 22px 0 0;
+  padding: 10px 12px 12px;
+  background: var(--color-card);
+  box-shadow: var(--shadow-dock);
 }

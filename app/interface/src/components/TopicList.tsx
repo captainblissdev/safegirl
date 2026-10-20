@@ -19,13 +19,27 @@ import { TOPIC_ICONS } from "./topicIcons";
 
 interface Props {
   topic: Topic;
-  /** Submit text through the full pipeline (App's send handler). */
-  onAsk: (text: string) => void;
+  /**
+   * Submit text through the full pipeline (App's send handler). The row's
+   * id is only for the answer screen's back link (focus returns to the
+   * row); it is never sent.
+   */
+  onAsk: (text: string, questionId: string | null) => void;
   /** Back to Home ("All topics"). */
   onBack: () => void;
+  /**
+   * Coming back from an answer: focus this row (the one tapped) instead
+   * of the h1.
+   */
+  focusQuestionId?: string | null;
 }
 
-export default function TopicList({ topic, onAsk, onBack }: Props) {
+export default function TopicList({
+  topic,
+  onAsk,
+  onBack,
+  focusQuestionId = null,
+}: Props) {
   const questions = questionsFor(topic.topicClass);
   const Icon = TOPIC_ICONS[topic.topicClass];
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -33,13 +47,19 @@ export default function TopicList({ topic, onAsk, onBack }: Props) {
   const [draft, setDraft] = useState("");
 
   useEffect(() => {
-    headingRef.current?.focus();
-  }, []);
+    const row =
+      focusQuestionId === null
+        ? null
+        : document.querySelector<HTMLElement>(
+            `[data-question="${focusQuestionId}"]`,
+          );
+    (row ?? headingRef.current)?.focus();
+  }, [focusQuestionId]);
 
   const ask = () => {
     const text = draft.trim();
     if (!text) return;
-    onAsk(text);
+    onAsk(text, null);
   };
 
   return (
@@ -69,7 +89,8 @@ export default function TopicList({ topic, onAsk, onBack }: Props) {
             <button
               className="topic-question"
               type="button"
-              onClick={() => onAsk(item.question)}
+              data-question={item.id}
+              onClick={() => onAsk(item.question, item.id)}
             >
               <span>{item.question}</span>
               <span className="topic-question-go" aria-hidden="true">
