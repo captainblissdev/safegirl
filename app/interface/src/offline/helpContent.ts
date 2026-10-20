@@ -1,12 +1,12 @@
 /**
- * Referral content for the offline pipeline.
+ * Referral and help content for the offline pipeline.
  *
- * A copy of the referral messages and numbers in
+ * A copy of the messages and numbers in
  * app/gateway/src/content/helpContent.js, which is the source of truth,
- * so a flagged query gets the same message online and offline. The
- * parity test (app/gateway/test/offlineSafetyParity.test.js) compares
- * both messages, the numbers and the verified flag, and fails until they
- * agree. The wording is interim and has not been clinically reviewed.
+ * so a query gets the same message online and offline. The parity test
+ * (app/gateway/test/offlineSafetyParity.test.js) compares the messages,
+ * the numbers and the verified flag, and fails until they agree. The
+ * wording is interim and has not been clinically reviewed.
  */
 
 import type { SafetyCategory } from "./safetyNet";
@@ -42,6 +42,19 @@ export const ABUSE_REFERRAL_MESSAGE =
   `${EMERGENCY_NUMBERS[0]} or ${EMERGENCY_NUMBERS[1]}. The GBV helpline ` +
   `${GBV_HELPLINE} and Childline Kenya ${CHILDLINE_KENYA} (for anyone ` +
   "under 18) can also help.";
+
+/** Where to get help, shared by the signposting and no-answer messages. */
+export const HELP_GUIDANCE =
+  "A nurse or counsellor at a health facility can help, and you do not " +
+  "have to give a reason for asking. If you are in danger or someone has " +
+  `hurt you, call the GBV helpline ${GBV_HELPLINE}. Childline Kenya, ` +
+  `${CHILDLINE_KENYA}, is free for anyone under 18.`;
+
+/** Reply to a generic help request that names no topic. */
+export const SIGNPOSTING_MESSAGE = `You're not alone. These people can help right now. ${HELP_GUIDANCE}`;
+
+/** Reply when no answer is available. */
+export const NO_ANSWER_MESSAGE = `I couldn't find a good answer to that. ${HELP_GUIDANCE}`;
 
 /** One way to get help, shown in the "Need help now?" panel. */
 export interface SupportContact {

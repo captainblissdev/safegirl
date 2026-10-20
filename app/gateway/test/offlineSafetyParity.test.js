@@ -132,6 +132,16 @@ describe("gateway and offline referral message parity", () => {
     );
   });
 
+  it("has the same help, signposting and no-answer messages", () => {
+    for (const name of [
+      "HELP_GUIDANCE",
+      "SIGNPOSTING_MESSAGE",
+      "NO_ANSWER_MESSAGE",
+    ]) {
+      assert.equal(offlineContent[name], gatewayContent[name], name);
+    }
+  });
+
   it("has the same numbers and the same verified flag", () => {
     assert.deepEqual(
       [...offlineContent.EMERGENCY_NUMBERS],

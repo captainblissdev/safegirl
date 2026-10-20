@@ -29,10 +29,10 @@ const HELP_GUIDANCE =
   `${CHILDLINE_KENYA}, is free for anyone under 18.`;
 
 /** Reply to a generic help request that names no topic. */
-const SIGNPOSTING_MESSAGE = `I don't have information on that yet. ${HELP_GUIDANCE}`;
+const SIGNPOSTING_MESSAGE = `You're not alone. These people can help right now. ${HELP_GUIDANCE}`;
 
 /** Reply when no knowledge-base answer is available (including abstained). */
-const NO_ANSWER_MESSAGE = HELP_GUIDANCE;
+const NO_ANSWER_MESSAGE = `I couldn't find a good answer to that. ${HELP_GUIDANCE}`;
 
 /** Reply to a short query that names no health topic (vagueQuery.js). */
 const VAGUE_QUERY_MESSAGE =
@@ -79,6 +79,7 @@ module.exports = {
   GBV_HELPLINE,
   CHILDLINE_KENYA,
   EMERGENCY_NUMBERS,
+  HELP_GUIDANCE,
   SIGNPOSTING_MESSAGE,
   SELF_HARM_REFERRAL_MESSAGE,
   ABUSE_REFERRAL_MESSAGE,

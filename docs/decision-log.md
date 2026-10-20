@@ -684,3 +684,29 @@ question and all 13 example questions were answered as before.
   went to the multilingual retrieval model.
 - The offline pipeline does not have the rule yet (see the offline
   parity entry below).
+
+## Help and no-answer wording (2026-10-20)
+
+Approved by Cindy on 20 October 2026 (`fix/response-clarity`). **Text
+only**: no number, no `HELP_CONTACTS_VERIFIED` value and no referral
+message changed. Both messages keep the shared help text
+(`HELP_GUIDANCE`: a nurse or counsellor, the GBV helpline 1195 and
+Childline Kenya 116) and get a new first sentence.
+
+| Message | Before | Now |
+|---|---|---|
+| Help reply (`SIGNPOSTING_MESSAGE`) | "I don't have information on that yet. A nurse or counsellor …" | "You're not alone. These people can help right now. A nurse or counsellor …" |
+| No-answer reply (`NO_ANSWER_MESSAGE`) | "A nurse or counsellor …" | "I couldn't find a good answer to that. A nurse or counsellor …" |
+
+**Why.** The UI audit (UI-02, UI-03) found that a request for help was
+answered as if a question had gone unanswered, and that the no-answer
+reply gave helpline numbers with no word that nothing was found, so it
+read like a crisis referral.
+
+The gateway copy (`app/gateway/src/content/helpContent.js`) is the
+source of truth. The offline copy (`app/interface/src/offline/helpContent.ts`)
+now has the same `HELP_GUIDANCE`, `SIGNPOSTING_MESSAGE` and
+`NO_ANSWER_MESSAGE`, and the parity test compares all three. The
+evaluation scripts (`research/eval/run_eval.js`, `labels_and_gate.js`)
+import `NO_ANSWER_MESSAGE` rather than copying it, so they follow the
+change.

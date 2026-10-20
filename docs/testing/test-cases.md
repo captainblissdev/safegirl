@@ -17,7 +17,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 81 cases: 66 Pass, 14 Fail, 1 Not run. Two of the
+**Totals:** 84 cases: 69 Pass, 14 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -163,6 +163,9 @@ entry.
 | TC-079 | FR-03 | Negative. The 31 DR-04 test queries | None intercepted | 3/31 intercepted: "What can I do when I mess up ?", "How is a coil inserted?", "Tell me how to use a tampon?" ("coil" and "tampon" are not knowledge-base words); pinned in "intercepts exactly the 3 recorded DR-04 queries of 31 (open failure)" | Fail |
 | TC-080 | DR (knowledge base) | The health-term list against the knowledge base | Every term is a word of the active knowledge base; the committed list is up to date | 122 terms of 724 knowledge-base words; up to date ("health-term list", 2 tests; `node scripts/build-health-terms.js --check`) | Pass |
 | TC-081 | FR-03 | Live. The 8 vague queries and the 13 example questions through the gateway and `ml_service` v3 (20 Oct) | Vague queries get the clarifying question; example questions answered as before | 8/8 clarifying question; 13/13 answered with the same entries ([DL, Vague-query rule](../decision-log.md#vague-query-rule-2026-10-20)) | Pass |
+| TC-082 | FR-03 | The help reply's wording | Starts "You're not alone. These people can help right now.", then the help text; never "I don't have information" | As expected (`helpSignposting.test.js`, "opens the help reply plainly, then gives the help information") | Pass |
+| TC-083 | FR-03 | The no-answer reply's wording | Starts "I couldn't find a good answer to that.", then the help text; both messages keep 1195 and 116 | As expected ("says no answer was found before the help information"; "keeps the help numbers in both messages") | Pass |
+| TC-084 | NFR (offline) | The offline copy of the help, signposting and no-answer messages | Identical to the gateway's | As expected (`offlineSafetyParity.test.js`, "has the same help, signposting and no-answer messages") | Pass |
 
 ## Defects and retests
 

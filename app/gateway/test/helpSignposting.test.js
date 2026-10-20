@@ -12,6 +12,7 @@ const {
   SIGNPOSTING_MESSAGE,
   NO_ANSWER_MESSAGE,
   HELP_CONTACTS_VERIFIED,
+  HELP_GUIDANCE,
   UNVERIFIED_CONTACTS_WARNING,
   warnIfContactsUnverified,
 } = require("../src/content/helpContent");
@@ -177,14 +178,26 @@ describe("handleQuery() with the help rule", () => {
 });
 
 describe("help content", () => {
-  it("uses the help information, without the first sentence, as the no-answer message", () => {
-    assert.ok(SIGNPOSTING_MESSAGE.endsWith(NO_ANSWER_MESSAGE));
-    assert.ok(
-      SIGNPOSTING_MESSAGE.startsWith("I don't have information on that yet. "),
+  it("opens the help reply plainly, then gives the help information", () => {
+    assert.equal(
+      SIGNPOSTING_MESSAGE,
+      `You're not alone. These people can help right now. ${HELP_GUIDANCE}`,
     );
-    assert.ok(!NO_ANSWER_MESSAGE.startsWith("I don't have information"));
-    for (const number of ["1195", "116"]) {
-      assert.ok(NO_ANSWER_MESSAGE.includes(number));
+    assert.ok(!SIGNPOSTING_MESSAGE.includes("I don't have information"));
+  });
+
+  it("says no answer was found before the help information", () => {
+    assert.equal(
+      NO_ANSWER_MESSAGE,
+      `I couldn't find a good answer to that. ${HELP_GUIDANCE}`,
+    );
+  });
+
+  it("keeps the help numbers in both messages", () => {
+    for (const message of [SIGNPOSTING_MESSAGE, NO_ANSWER_MESSAGE]) {
+      for (const number of ["1195", "116"]) {
+        assert.ok(message.includes(number), number);
+      }
     }
   });
 
