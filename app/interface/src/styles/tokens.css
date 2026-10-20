@@ -36,11 +36,31 @@
   /* Gradients. */
   --gradient-primary: linear-gradient(135deg, #6d28d9, #c026d3);
   --gradient-hero: linear-gradient(135deg, #5b21b6, #a21caf);
+  /* Splash: deep plum, violet, magenta. */
   --gradient-splash: linear-gradient(
-    160deg,
-    #3b0f6b,
-    #c026d3
-  ); /* plum to orchid */
+    165deg,
+    #3b0f6b 0%,
+    #5b21b6 45%,
+    #a21caf 100%
+  );
+  --splash-glow-rose: rgba(244, 114, 182, 0.28);
+  --splash-glow-orchid: rgba(192, 38, 211, 0.3);
+  --splash-tagline: #f6e9ff;
+  /*
+   * Glass cards and the Exit pill: 7% white, darkened from the design's
+   * 14% so that white text keeps 4.5:1 over the lightest part of the
+   * gradient with a glow on top (4.52:1; 14% gave 4.04:1).
+   */
+  --splash-glass-bg: rgba(255, 255, 255, 0.07);
+  --splash-glass-border: rgba(255, 255, 255, 0.28);
+  --splash-button-text: #4c1d95;
+  --splash-icon-lock: #6d28d9;
+  --splash-icon-speech: #a21caf;
+  --splash-icon-shield: #be185d;
+
+  /* The shield-and-heart mark. */
+  --mark-gradient: linear-gradient(135deg, #6d28d9, #db2777);
+  --mark-tile-light: linear-gradient(160deg, #ffffff, #ffe4f1);
 
   /* Page: background colour with two soft glows. */
   --color-page: #fff6fb;

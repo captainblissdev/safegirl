@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 122 cases: 106 Pass, 15 Fail, 1 Not run. Two of the
+**Totals:** 127 cases: 111 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -213,6 +213,11 @@ entry.
 | TC-120 | FR-04 | Help sheet numbers | Every `tel:` link and number from the constants (1195, 116, 999, 112); no other helpline; the 116 line states no cost or age; no component types a number | As expected (`components.test.tsx`, Tests 20 and 23) | Pass |
 | TC-121 | FR-05 | Copy on the splash, Help sheet, support panel, session end and chat | No claim that content is clinician reviewed | As expected (`components.test.tsx`, Test 24) | Pass |
 | TC-122 | NFR (accessibility) | Splash contrast | White text and the white focus ring 4.5:1 or more on both ends of the plum-to-orchid gradient; plum on the white button 4.5:1 or more; the button's edge 3:1 or more | White 4.71:1 at the orchid end; plum on white 14.32:1 (`styles/tokens.test.ts`, Test 7) | Pass |
+| TC-123 | FR-05 | The splash as a full-bleed screen | No app header and no Help button; exactly one `<h1>` (the wordmark); a compact Exit pill above the hidden decoration; the shared mark at 84px; the three promises; privacy line, button and footer line in that order | As expected (`components.test.tsx`, Tests 21 and 22; browser check at 320, 360 and 390px: no sideways scroll, full width, pill 69x44, button 58px) | Pass |
+| TC-124 | FR-05 | Quick exit from the splash | Double Escape and the Exit pill both leave for `EXIT_URL`; the first Tab stop is the pill, with the white focus ring | As expected (`components.test.tsx`, Test 21: one listener for every screen; browser check) | Pass |
+| TC-125 | FR-05 | The sources line | One constant, "Most answers come from Kenyan Ministry of Health and WHO guidance.", used on the splash and in the Help sheet; no file retypes it; the old wording is gone | As expected (`components.test.tsx`, Test 26) | Pass |
+| TC-126 | NFR (design) | The shield-and-heart mark | One shared component in the header (gradient tile, white shield and heart) and on the splash (light tile, violet shield, rose heart) | As expected (`components.test.tsx`, Tests 22 and 27; browser check after Continue) | Pass |
+| TC-127 | NFR (accessibility) | Splash contrast, worst case (lightest stop with a glow on top) | Text 4.5:1 or more; edges and the focus ring 3:1 or more | White 5.01; glass cards and Exit pill 4.52 (fill darkened from 14% to 7%); tagline #F6E9FF 4.95 (the rose glow ends above it, measured); button text 10.95; icons 6.04 or more; header mark 4.60 (`styles/tokens.test.ts`, Tests 7 and 8) | Pass |
 
 ## Defects and retests
 

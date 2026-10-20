@@ -1027,15 +1027,17 @@ Wording against the old disclaimer:
 | "You're safe here, no login needed" | "Anonymous. We never ask for your name." |
 | "We don't save your questions or your answers." | Kept unchanged, below the promises (the privacy part of FR-05) |
 | "We're here to help, but a doctor or nurse can too." | "Not a doctor. This can't diagnose you. A nurse or clinic can." |
-| (none) | "Real guidance. Answers come from Kenyan Ministry of Health and WHO sources." |
+| (none) | "Real guidance. Most answers come from Kenyan Ministry of Health and WHO guidance." (step 3b; first "Answers come from … sources") |
 | Button "Continue" | "I understand, continue" |
 | (none) | The footer line "In danger? Call 1195, free and open 24 hours." |
 
-**Open point on the "Real guidance" line.** Of the 21 active entries,
-KB-P5 cites only Kenya's Ministry of Education and KB-G6 only the
-American Academy of Pediatrics, and KB-G3 and KB-G4 cite the NHS
-alongside WHO. The line, used as briefed, is therefore not exact for
-every answer. Left for Cindy to decide.
+**"Real guidance" line: resolved (step 3b).** The line now reads "Most
+answers come from Kenyan Ministry of Health and WHO guidance.", one
+constant (`SOURCES_LINE` in `app/interface/src/content/uiText.ts`) used
+on the splash, in the Help sheet and, from step 4, on Home. "Most",
+because four of the 21 active entries cite other sources: KB-P5 only
+Kenya's Ministry of Education, KB-G6 only the American Academy of
+Pediatrics, and KB-G3 and KB-G4 the NHS alongside WHO.
 
 **Help sheet** (`components/HelpSheet.tsx`), replacing the support panel
 behind the Help button: "How SafeGirl works" (including how to leave
@@ -1057,3 +1059,36 @@ closed (React re-renders at once after a key press) and counted it,
 which the browser check caught (TC-113).
 
 Tests: TC-113 to TC-122.
+
+**Splash layout (step 3b, same date).** The splash is now a full-bleed
+screen of its own, as designed: the gradient #3B0F6B, #5B21B6, #A21CAF
+at 165 degrees, with no app header and no Help button; a compact Exit
+pill top right (double Escape works there too); decoration (two soft
+circles and two sparkles) hidden from screen readers; the shared
+shield-and-heart mark on an 84px light tile; the wordmark as the only
+`<h1>`; three glass promise cards with icon tiles; the privacy line;
+the button and the footer line pinned at the bottom. The same
+shield-and-heart mark, on a violet-to-rose tile, replaces the
+heart-in-a-circle in the header (`ShieldHeartMark` in
+`components/Icons.tsx`); the PWA icons are unchanged.
+
+Contrast, worst case (the lightest stop, #A21CAF, with a glow on top):
+white text 5.01:1; the glass cards' and the Exit pill's fill was
+darkened from 14% to 7% white, because 14% gave white text 4.04:1 (the
+pill's 18% gave 3.76:1); at 7% it is 4.52:1. The tagline and privacy
+line keep #F6E9FF: 4.95:1, because the rose glow ends 150px from the
+top and the tagline starts at 212px (measured in the browser at 320,
+360 and 390px); over the rose glow it would be 4.30:1. Button text
+#4C1D95 on white 10.95:1; promise icons on their white tiles 6.04:1 or
+more; the header mark's white shield and heart 4.60:1.
+
+**Open item: the 116 claim in the replies.** The help-guidance text in
+the constants says "Childline Kenya, 116, is free for anyone under 18",
+and the abuse referral says "Childline Kenya 116 (for anyone under
+18)". Neither the cost nor the age limit is confirmed (the phone check
+of 20 October covered 1195 only). The text appears in four reply
+types: help (signposting), no answer (abstain), held topics A and B,
+and the abuse referral. It is left unchanged for now, because the
+constants are frozen, and is to be corrected with the helpline-
+constants change once 116 has been verified. The Help sheet already
+avoids the claim.

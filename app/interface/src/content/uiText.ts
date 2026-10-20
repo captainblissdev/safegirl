@@ -4,6 +4,15 @@
 
 import type { ChatTurn } from "../types";
 
+/**
+ * Where the answers come from: the one place this line is written. Used
+ * on the splash, in the Help sheet and on Home. "Most", because four of
+ * the 21 knowledge-base entries cite other sources (KB-P5, KB-G6, KB-G3,
+ * KB-G4; docs/decision-log.md, "Splash and Help sheet").
+ */
+export const SOURCES_LINE =
+  "Most answers come from Kenyan Ministry of Health and WHO guidance.";
+
 /** Shown above an answer that came from the offline pipeline. */
 export const LIMITED_MODE_NOTICE =
   "Limited mode: I can't reach the full service right now, so this answer is general.";

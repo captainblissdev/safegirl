@@ -299,36 +299,125 @@ console.log("\nTest 6: control edges and the header's new pairs");
   );
 }
 
-console.log("\nTest 7: the splash (plum to orchid) and its controls");
+console.log(
+  "\nTest 7: the splash, worst case: lightest stop with a glow on top",
+);
 {
   const stops = [...token("--gradient-splash").matchAll(/#[0-9a-f]{6}/g)].map(
     (m) => m[0],
   );
   assert(
-    stops.join(",") === "#3b0f6b,#c026d3",
-    "the splash gradient runs deep plum to orchid",
+    stops.join(",") === "#3b0f6b,#5b21b6,#a21caf",
+    "the splash gradient runs #3B0F6B, #5B21B6, #A21CAF",
   );
+
+  /** rgba(r, g, b, a) composited over a hex colour, as hex. */
+  const over = (rgba: string, hex: string) => {
+    const [r, g, b, a] = rgba
+      .replace(/[^0-9.,]/g, "")
+      .split(",")
+      .map(Number);
+    const base = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    return (
+      "#" +
+      [r, g, b]
+        .map((c, i) => Math.round(c * a + base[i] * (1 - a)))
+        .map((c) => c.toString(16).padStart(2, "0"))
+        .join("")
+    );
+  };
+  const worst = (fg: string, backgrounds: string[]) =>
+    Math.min(...backgrounds.map((bg) => contrast(fg, bg)));
+
+  const lightest = stops[2];
+  const withRose = over(token("--splash-glow-rose"), lightest);
+  const withOrchid = over(token("--splash-glow-orchid"), lightest);
+  const anywhere = [...stops, withRose, withOrchid];
   const white = token("--color-on-dark");
-  const worstText = Math.min(...stops.map((bg) => contrast(white, bg)));
+
+  const text = worst(white, anywhere);
   assert(
-    worstText >= 4.5,
-    `white text on the splash: ${worstText.toFixed(2)}:1`,
+    text >= 4.5,
+    `white text anywhere on the splash: ${text.toFixed(2)}:1`,
   );
-  const ring = token("--focus-ring-on-dark");
-  const worstRing = Math.min(...stops.map((bg) => contrast(ring, bg)));
+
+  // The rose glow ends above the tagline (.splash-glow--rose ends 150px
+  // from the top; the tagline starts below the 84px tile and the 44px
+  // wordmark), so the tagline is checked without it.
+  const tagline = worst(token("--splash-tagline"), [...stops, withOrchid]);
   assert(
-    worstRing >= 3,
-    `white focus ring on the splash: ${worstRing.toFixed(2)}:1`,
+    tagline >= 4.5,
+    `tagline and privacy line #F6E9FF: ${tagline.toFixed(2)}:1`,
   );
-  const button = contrast(token("--color-plum"), token("--color-card"));
-  assert(button >= 4.5, `plum on the white button: ${button.toFixed(2)}:1`);
-  const edge = Math.min(
-    ...stops.map((bg) => contrast(token("--color-card"), bg)),
+  const taglineOverRose = contrast(token("--splash-tagline"), withRose);
+  console.log(
+    `  (for the record: #F6E9FF over the rose glow would be ${taglineOverRose.toFixed(2)}:1)`,
+  );
+
+  const glass = anywhere.map((bg) => over(token("--splash-glass-bg"), bg));
+  const cards = worst(white, glass);
+  assert(
+    cards >= 4.5,
+    `white text on the glass cards and Exit pill: ${cards.toFixed(2)}:1`,
+  );
+  const pillEdge = worst(white, anywhere);
+  assert(
+    pillEdge >= 3,
+    `the Exit pill's white border: ${pillEdge.toFixed(2)}:1`,
+  );
+
+  const ring = worst(token("--focus-ring-on-dark"), anywhere);
+  assert(ring >= 3, `white focus ring on the splash: ${ring.toFixed(2)}:1`);
+
+  const button = contrast(token("--splash-button-text"), token("--color-card"));
+  assert(button >= 4.5, `#4C1D95 on the white button: ${button.toFixed(2)}:1`);
+  const buttonEdge = worst(token("--color-card"), anywhere);
+  assert(
+    buttonEdge >= 3,
+    `the white button's edge: ${buttonEdge.toFixed(2)}:1`,
+  );
+
+  for (const name of [
+    "--splash-icon-lock",
+    "--splash-icon-speech",
+    "--splash-icon-shield",
+  ]) {
+    const icon = contrast(token(name), token("--color-card"));
+    assert(icon >= 3, `${name} on its white tile: ${icon.toFixed(2)}:1`);
+  }
+}
+
+console.log("\nTest 8: the shield-and-heart mark");
+{
+  const header = [...token("--mark-gradient").matchAll(/#[0-9a-f]{6}/g)].map(
+    (m) => m[0],
   );
   assert(
-    edge >= 3,
-    `the white button's edge on the splash: ${edge.toFixed(2)}:1`,
+    header.join(",") === "#6d28d9,#db2777",
+    "header tile #6D28D9 to #DB2777",
   );
+  const onHeader = Math.min(
+    ...header.map((bg) => contrast(token("--color-on-dark"), bg)),
+  );
+  assert(
+    onHeader >= 3,
+    `white shield and heart on the header tile: ${onHeader.toFixed(2)}:1`,
+  );
+  const tile = [...token("--mark-tile-light").matchAll(/#[0-9a-f]{6}/g)].map(
+    (m) => m[0],
+  );
+  assert(tile.join(",") === "#ffffff,#ffe4f1", "splash tile white to #FFE4F1");
+  const violet = Math.min(
+    ...tile.map((bg) => contrast(token("--color-violet"), bg)),
+  );
+  const rose = Math.min(
+    ...tile.map((bg) => contrast(token("--color-rose"), bg)),
+  );
+  assert(
+    violet >= 3,
+    `violet shield on the splash tile: ${violet.toFixed(2)}:1`,
+  );
+  assert(rose >= 3, `rose heart on the splash tile: ${rose.toFixed(2)}:1`);
 }
 
 console.log("\nAll design token tests passed.");

@@ -899,83 +899,248 @@
 }
 
 .danger-line a {
+  position: relative;
   display: inline-flex;
   align-items: center;
   min-height: var(--tap-target);
-  min-width: var(--tap-target);
-  justify-content: center;
-  /* The padding widens the tap target; the margin keeps the text tight. */
-  margin: 0 -4px;
-  padding: 0 4px;
   color: var(--color-violet);
   font-weight: var(--weight-black);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
+/*
+ * An invisible layer widens the tap target to 44px without moving the
+ * text, so "1195," reads without a gap at any font size.
+ */
+.danger-line a::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: max(100%, var(--tap-target));
+  transform: translateX(-50%);
+}
+
 .app-footer {
   padding: 8px 16px 16px;
 }
 
-/* Splash (redesign Step 3): the once-per-session disclaimer */
+/* Shield-and-heart mark (redesign Step 3b), shared by header and splash */
 
-.splash-screen {
-  justify-content: flex-start;
-  padding: 16px 0;
+.mark {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 30%;
 }
 
-.splash {
+.mark--header {
+  background: var(--mark-gradient);
+}
+
+.mark--header .mark-shield {
+  stroke: var(--color-on-dark);
+}
+
+.mark--header .mark-heart {
+  fill: var(--color-on-dark);
+}
+
+.mark--splash {
+  border-radius: 28px;
+  background: var(--mark-tile-light);
+  box-shadow: var(--shadow);
+}
+
+.mark--splash .mark-shield {
+  stroke: var(--color-violet);
+}
+
+.mark--splash .mark-heart {
+  fill: var(--color-rose);
+}
+
+/* Splash (redesign Step 3b): a full-bleed screen of its own */
+
+.splash-screen {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  border-radius: var(--radius-card-large);
-  padding: 32px 22px 20px;
+  gap: 22px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  padding: 56px 24px 28px;
   background: var(--gradient-splash);
   color: var(--color-on-dark);
-  text-align: center;
+}
+
+.splash-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.splash-glow {
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* Kept above the tagline: it ends 150px from the top. */
+.splash-glow--rose {
+  top: -90px;
+  right: -90px;
+  width: 240px;
+  height: 240px;
+  background: var(--splash-glow-rose);
+}
+
+.splash-glow--orchid {
+  bottom: -80px;
+  left: -90px;
+  width: 220px;
+  height: 220px;
+  background: var(--splash-glow-orchid);
+}
+
+.splash-sparkle {
+  position: absolute;
+  color: var(--color-on-dark);
+}
+
+.splash-sparkle--large {
+  top: 28px;
+  left: 62%;
+  opacity: 0.8;
+}
+
+.splash-sparkle--small {
+  top: 84px;
+  left: 78%;
+  opacity: 0.6;
+}
+
+.splash-top,
+.splash-promises,
+.splash-bottom {
+  position: relative;
+}
+
+/* Exit on the splash: a compact pill, above the decoration. */
+.btn-exit-pill {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 1;
+  min-height: var(--tap-target);
+  min-width: var(--tap-target);
+  border: 2px solid var(--color-on-dark);
+  border-radius: 999px;
+  padding: 0 18px;
+  background: var(--splash-glass-bg);
+  color: var(--color-on-dark);
+  font-size: 1rem;
+  font-weight: var(--weight-extrabold);
+  cursor: pointer;
+}
+
+.splash-top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
 }
 
 .splash-wordmark {
-  font-size: 2rem;
+  font-size: 44px;
   font-weight: var(--weight-black);
-  line-height: 1.1;
+  line-height: 1;
 }
 
 .splash-tagline {
-  font-size: 1.1rem;
+  max-width: 300px;
+  color: var(--splash-tagline);
+  font-size: 20px;
   font-weight: var(--weight-bold);
+  line-height: 1.3;
 }
 
 .splash-promises {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
-  width: 100%;
   list-style: none;
-  text-align: left;
 }
 
 .splash-promises li {
-  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1.5px solid var(--splash-glass-border);
+  border-radius: 20px;
   padding: 12px 14px;
-  border: 1px solid var(--color-on-dark);
+  background: var(--splash-glass-bg);
+  font-size: 15px;
+  font-weight: var(--weight-bold);
+  line-height: 1.35;
+}
+
+.promise-icon {
+  display: grid;
+  flex: 0 0 38px;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--color-card);
+}
+
+.promise-icon--lock {
+  color: var(--splash-icon-lock);
+}
+
+.promise-icon--speech {
+  color: var(--splash-icon-speech);
+}
+
+.promise-icon--shield {
+  color: var(--splash-icon-shield);
+}
+
+.splash-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
 }
 
 .splash-privacy {
-  font-weight: var(--weight-semibold);
+  color: var(--splash-tagline);
+  font-size: 14px;
+  text-align: center;
 }
 
-/* White fill, plum text, 58px tall. */
 .btn-splash {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   width: 100%;
   min-height: 58px;
   border: 0;
-  border-radius: 999px;
+  border-radius: 29px;
   background: var(--color-card);
-  color: var(--color-plum);
-  font-size: 1.05rem;
+  color: var(--splash-button-text);
+  font-size: 17px;
   font-weight: var(--weight-black);
+  box-shadow: var(--shadow);
   cursor: pointer;
+}
+
+.splash-bottom .danger-line {
+  font-size: 13px;
 }
 
 /* The footer line on a dark surface is white. */

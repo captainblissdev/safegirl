@@ -1,5 +1,5 @@
 import type { RefObject } from "react";
-import { LogoMark } from "./Icons";
+import { ShieldHeartMark } from "./Icons";
 
 interface Props {
   /** Quick exit (quickExit.ts). */
@@ -26,7 +26,7 @@ export default function AppHeader({
   return (
     <header className="app-header">
       <span className="brand">
-        <LogoMark />
+        <ShieldHeartMark variant="header" size={36} />
         <span className="wordmark">
           Safe<span className="wordmark-girl">Girl</span>
         </span>

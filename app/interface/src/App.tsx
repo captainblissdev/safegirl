@@ -198,10 +198,21 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKeyDown, true);
   }, []);
 
+  // The splash is a full-bleed screen of its own: no app header and no
+  // Help button, but its own Exit pill and the footer line. Double Escape
+  // works here too (the keydown listener above is on every screen).
+  if (screen === "splash") {
+    return (
+      <Splash
+        onContinue={() => setScreen(continueFromSplash(browserSessionStorage))}
+        onExit={handleExit}
+      />
+    );
+  }
+
   return (
     // The playful background is left off the referral screen, which stays
-    // calm. The chat screen puts the footer line above its ask bar, and the
-    // splash on its own dark surface.
+    // calm. The chat screen puts the footer line above its ask bar.
     <AppShell
       onExit={handleExit}
       help={{
@@ -212,21 +223,13 @@ export default function App() {
         buttonRef: helpButtonRef,
       }}
       calm={screen === "referral"}
-      footerInContent={screen === "chat" || screen === "splash"}
+      footerInContent={screen === "chat"}
     >
       {isOffline && (
         <div className="offline-banner" role="status">
           You&apos;re offline — answers come from information stored on this
           device and may be more limited.
         </div>
-      )}
-
-      {screen === "splash" && (
-        <Splash
-          onContinue={() =>
-            setScreen(continueFromSplash(browserSessionStorage))
-          }
-        />
       )}
 
       {screen === "chat" && (

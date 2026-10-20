@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 import { telHref } from "../content/telHref";
 import { TOPICS, type Topic } from "../content/topics";
+import { SOURCES_LINE } from "../content/uiText";
 import { trapTab } from "../focusTrap";
 import {
   CHILDLINE_KENYA,
@@ -88,10 +89,9 @@ export default function HelpSheet({ onClose, onExit, onTopic }: Props) {
         <section aria-labelledby="help-how">
           <h3 id="help-how">How SafeGirl works</h3>
           <p>
-            SafeGirl finds the closest answer it has from Kenyan Ministry of
-            Health and WHO guidance, and shows you its source. If it has no good
-            answer, it says so. It can&apos;t diagnose you; a nurse or clinic
-            can.
+            SafeGirl finds the closest answer it has and shows you its source.{" "}
+            {SOURCES_LINE} If it has no good answer, it says so. It can&apos;t
+            diagnose you; a nurse or clinic can.
           </p>
           <p>
             To leave quickly, tap Exit or press Escape twice. SafeGirl then

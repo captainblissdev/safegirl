@@ -8,9 +8,15 @@ import type { ReactNode } from "react";
 
 interface IconProps {
   size?: number;
+  /** Line width; 2 unless set (the splash promise icons use 2.2). */
+  strokeWidth?: number;
 }
 
-function Svg({ size = 24, children }: IconProps & { children: ReactNode }) {
+function Svg({
+  size = 24,
+  strokeWidth = 2,
+  children,
+}: IconProps & { children: ReactNode }) {
   return (
     <svg
       width={size}
@@ -18,7 +24,7 @@ function Svg({ size = 24, children }: IconProps & { children: ReactNode }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -29,28 +35,46 @@ function Svg({ size = 24, children }: IconProps & { children: ReactNode }) {
   );
 }
 
-/** The SafeGirl mark: a white heart in a purple-gradient circle. */
-export function LogoMark({ size = 32 }: IconProps) {
+/**
+ * The SafeGirl mark: a shield with a heart inside, on a rounded tile. One
+ * shared mark for the header and the splash; only its colours differ,
+ * and they come from CSS (.mark--header, .mark--splash), never from here.
+ * - "header": a violet-to-rose gradient tile, white shield and heart.
+ * - "splash": a white-to-pink tile, violet shield, rose heart.
+ */
+export function ShieldHeartMark({
+  variant = "header",
+  size = 36,
+}: {
+  variant?: "header" | "splash";
+  size?: number;
+}) {
+  const glyph = Math.round(size * 0.62);
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 100 100"
+    <span
+      className={`mark mark--${variant}`}
+      style={{ width: size, height: size }}
       aria-hidden="true"
-      focusable="false"
     >
-      <defs>
-        <linearGradient id="sg-logo-gradient" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" style={{ stopColor: "var(--primary)" }} />
-          <stop offset="1" style={{ stopColor: "var(--primary-end)" }} />
-        </linearGradient>
-      </defs>
-      <circle cx="50" cy="50" r="50" fill="url(#sg-logo-gradient)" />
-      <path
-        style={{ fill: "var(--on-primary)" }}
-        d="M50 75 C31 62 24 52 24 41 C24 32 31 26 38.5 26 C44 26 48 29.5 50 34 C52 29.5 56 26 61.5 26 C69 26 76 32 76 41 C76 52 69 62 50 75 Z"
-      />
-    </svg>
+      <svg
+        width={glyph}
+        height={glyph}
+        viewBox="0 0 24 24"
+        fill="none"
+        focusable="false"
+      >
+        <path
+          className="mark-shield"
+          d="M12 2.5l8 3.2v5.6c0 5-3.4 9.3-8 10.9-4.6-1.6-8-5.9-8-10.9V5.7l8-3.2z"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+        <path
+          className="mark-heart"
+          d="M12 16.4c-2.9-1.9-4.3-3.5-4.3-5.3 0-1.3 1-2.4 2.4-2.4.8 0 1.5.4 1.9 1.1.4-.7 1.1-1.1 1.9-1.1 1.4 0 2.4 1.1 2.4 2.4 0 1.8-1.4 3.4-4.3 5.3z"
+        />
+      </svg>
+    </span>
   );
 }
 
@@ -156,6 +180,14 @@ export function FlowerIcon(props: IconProps) {
       <circle cx="8.8" cy="16.4" r="3.2" />
       <circle cx="6.9" cy="10.3" r="3.2" />
       <circle cx="12" cy="12" r="2" fill="currentColor" />
+    </Svg>
+  );
+}
+
+export function SpeechIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z" />
     </Svg>
   );
 }

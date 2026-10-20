@@ -19,6 +19,7 @@ import {
 import type { ChatTurn } from "../types";
 import { telHref } from "../content/telHref";
 import { TOPICS } from "../content/topics";
+import { SOURCES_LINE } from "../content/uiText";
 import AppHeader from "./AppHeader";
 import AppShell from "./AppShell";
 import ChatInterface from "./ChatInterface";
@@ -174,7 +175,7 @@ console.log("\nTest 5: the greeting states what SafeGirl can and cannot do");
 console.log("\nTest 6: the privacy wording on the disclaimer and session end");
 {
   const disclaimer = renderToStaticMarkup(
-    <Splash onContinue={() => undefined} />,
+    <Splash onContinue={() => undefined} onExit={() => undefined} />,
   );
   const sessionEnd = renderToStaticMarkup(
     <SessionEnd onStartNew={() => undefined} />,
@@ -553,12 +554,8 @@ console.log(
     </AppShell>
   );
   const screens: [string, JSX.Element][] = [
-    [
-      "splash",
-      <AppShell onExit={noop} help={closedHelp} footerInContent>
-        <Splash onContinue={noop} />
-      </AppShell>,
-    ],
+    // The splash is full-bleed, outside AppShell, with its own Exit pill.
+    ["splash", <Splash onContinue={noop} onExit={noop} />],
     ["chat, empty", chat([])],
     [
       "chat, answer",
@@ -603,10 +600,12 @@ console.log(
       ),
       `${name}: its tap-to-call link is built from GBV_HELPLINE`,
     );
+    const exitAt = html.search(
+      /<button class="btn-exit(-pill)?" type="button">Exit<\/button>/,
+    );
     assert(
-      html.includes('class="btn-exit"') &&
-        html.indexOf('class="btn-exit"') < html.indexOf(line),
-      `${name}: the header Exit button is present, before the content`,
+      exitAt > -1 && exitAt < html.indexOf(line),
+      `${name}: an Exit button is present, before the content`,
     );
     if (name.startsWith("chat")) {
       const lineAt = html.indexOf('class="danger-line"');
@@ -642,13 +641,24 @@ console.log(
 }
 
 console.log(
-  "\nTest 21: App renders every screen inside AppShell and wires Exit",
+  "\nTest 21: App renders the splash on its own, every other screen in AppShell",
 );
 {
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  const splashAt = app.indexOf('if (screen === "splash") {');
   const shellOpen = app.indexOf("<AppShell");
   const shellClose = app.lastIndexOf("</AppShell>");
-  for (const screen of ["splash", "chat", "referral", "sessionEnd"]) {
+  assert(
+    splashAt > -1 && splashAt < shellOpen,
+    "the splash returns before AppShell (no app header on it)",
+  );
+  assert(
+    /<Splash\s+onContinue=\{[^}]*\}\s+onExit=\{handleExit\}/.test(
+      app.slice(splashAt, shellOpen),
+    ),
+    "the splash gets the same Exit handler",
+  );
+  for (const screen of ["chat", "referral", "sessionEnd"]) {
     const at = app.indexOf(`screen === "${screen}" &&`);
     assert(
       at > shellOpen && at < shellClose,
@@ -660,6 +670,14 @@ console.log(
       app.includes('addEventListener("keydown"'),
     "double Escape is wired to a keydown listener",
   );
+  const effect = app.slice(
+    app.indexOf("createDoubleEscapeHandler("),
+    app.indexOf('if (screen === "splash") {'),
+  );
+  assert(
+    effect.includes("}, []);"),
+    "the listener is registered once, for every screen, the splash included",
+  );
   assert(
     app.includes("replace: (url) => window.location.replace(url)") &&
       !app.includes("window.close("),
@@ -667,43 +685,64 @@ console.log(
   );
 }
 
-console.log("\nTest 22: the splash is the once-per-session disclaimer");
+console.log("\nTest 22: the splash is a full-bleed screen of its own");
 {
-  const html = renderToStaticMarkup(<Splash onContinue={() => undefined} />);
-  assert(html.includes('class="splash surface-dark"'), "a dark surface");
+  const html = renderToStaticMarkup(
+    <Splash onContinue={() => undefined} onExit={() => undefined} />,
+  );
+  assert(
+    html.startsWith('<main class="splash-screen surface-dark"'),
+    "a full-bleed dark screen (white focus ring)",
+  );
+  assert(html.split("<h1").length === 2, "exactly one h1");
   assert(/<h1[^>]*>SafeGirl<\/h1>/.test(html), "the wordmark is the h1");
+  assert(!html.includes("<header"), "no app header on the splash");
+  assert(!html.includes("btn-help"), "no Help button on the splash");
+  assert(
+    html.includes('<button class="btn-exit-pill" type="button">Exit</button>'),
+    "a compact Exit pill",
+  );
+  assert(
+    html.includes('<div class="splash-decor" aria-hidden="true">') &&
+      html.indexOf("splash-decor") < html.indexOf("btn-exit-pill"),
+    "the decoration is hidden from screen readers, and the pill is above it",
+  );
+  assert(
+    html.includes('class="mark mark--splash"') &&
+      html.includes('style="width:84px;height:84px"'),
+    "the shared shield-and-heart mark, 84 by 84",
+  );
   assert(
     html.includes("Honest answers about your body, health and growing up."),
     "the tagline",
   );
   for (const promise of [
     "<strong>Anonymous.</strong> We never ask for your name.",
-    "<strong>Real guidance.</strong> Answers come from Kenyan Ministry of Health and WHO sources.",
+    `<strong>Real guidance.</strong> ${SOURCES_LINE}`,
     `<strong>Not a doctor.</strong> ${escapeHtml("This can't diagnose you.")} A nurse or clinic can.`,
   ]) {
     assert(html.includes(promise), `promise: ${promise.slice(0, 40)}…`);
   }
+  for (const icon of ["lock", "speech", "shield"]) {
+    assert(
+      html.includes(`promise-icon promise-icon--${icon}`),
+      `the ${icon} icon tile`,
+    );
+  }
+  const privacyAt = html.indexOf(
+    escapeHtml("We don't save your questions or your answers."),
+  );
+  const buttonAt = html.indexOf('<button class="btn-splash"');
+  const lineAt = html.indexOf('class="danger-line"');
+  assert(
+    privacyAt > -1 && privacyAt < buttonAt && buttonAt < lineAt,
+    "privacy line, then the button, then the footer line",
+  );
   assert(
     html.includes(
-      '<button class="btn-splash" type="button">I understand, continue</button>',
+      '<button class="btn-splash" type="button">I understand, continue <svg',
     ),
-    'the "I understand, continue" button',
-  );
-  const surfaceEnd = html.lastIndexOf("</section>");
-  assert(
-    html.includes('class="danger-line"') &&
-      html.indexOf('class="danger-line"') < surfaceEnd,
-    "the footer line is on the splash surface",
-  );
-  const shell = renderToStaticMarkup(
-    <AppShell onExit={() => undefined} help={closedHelp} footerInContent>
-      <Splash onContinue={() => undefined} />
-    </AppShell>,
-  );
-  assert(
-    shell.includes('class="btn-exit"') &&
-      shell.indexOf('class="btn-exit"') < shell.indexOf("splash surface-dark"),
-    "the header Exit button is present on the splash",
+    '"I understand, continue" with an arrow',
   );
 }
 
@@ -791,7 +830,9 @@ console.log("\nTest 23: the Help sheet");
 console.log("\nTest 24: no copy claims clinician review");
 {
   const rendered = [
-    renderToStaticMarkup(<Splash onContinue={() => undefined} />),
+    renderToStaticMarkup(
+      <Splash onContinue={() => undefined} onExit={() => undefined} />,
+    ),
     renderToStaticMarkup(
       <HelpSheet
         onClose={() => undefined}
@@ -843,6 +884,56 @@ console.log(
       sheet.includes('event.key === "Escape"') &&
       sheet.includes("trapTab(event.nativeEvent"),
     "the sheet focuses its close button, closes on Escape and traps Tab",
+  );
+}
+
+console.log("\nTest 26: one sources line, used everywhere it appears");
+{
+  assert(
+    SOURCES_LINE ===
+      "Most answers come from Kenyan Ministry of Health and WHO guidance.",
+    "the sources line says Most",
+  );
+  const splash = renderToStaticMarkup(
+    <Splash onContinue={() => undefined} onExit={() => undefined} />,
+  );
+  const sheet = renderToStaticMarkup(
+    <HelpSheet
+      onClose={() => undefined}
+      onExit={() => undefined}
+      onTopic={() => undefined}
+    />,
+  );
+  assert(splash.includes(SOURCES_LINE), "on the splash");
+  assert(sheet.includes(SOURCES_LINE), "in the Help sheet");
+  for (const file of ["./Splash.tsx", "./HelpSheet.tsx"]) {
+    const source = readFileSync(new URL(file, import.meta.url), "utf8");
+    assert(
+      source.includes("SOURCES_LINE") && !source.includes("Ministry of"),
+      `${file} uses the constant and does not retype the line`,
+    );
+  }
+  assert(
+    !(splash + sheet).includes("Answers come from Kenyan"),
+    'the old "Answers come from…" wording is gone',
+  );
+}
+
+console.log("\nTest 27: the header uses the shared shield-and-heart mark");
+{
+  const html = renderToStaticMarkup(
+    <AppHeader
+      onExit={() => undefined}
+      onOpenHelp={() => undefined}
+      isHelpOpen={false}
+      helpButtonRef={{ current: null }}
+    />,
+  );
+  assert(
+    html.includes('class="mark mark--header"') &&
+      html.includes('class="mark-shield"') &&
+      html.includes('class="mark-heart"'),
+    "the header mark is the shield and heart",
   );
 }
 
