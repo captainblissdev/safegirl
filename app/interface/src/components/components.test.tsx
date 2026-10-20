@@ -18,19 +18,30 @@ import {
 } from "../details";
 import type { ChatTurn } from "../types";
 import { telHref } from "../content/telHref";
+import { TOPICS } from "../content/topics";
 import AppHeader from "./AppHeader";
 import AppShell from "./AppShell";
 import ChatInterface from "./ChatInterface";
 import ChatSidebar from "./ChatSidebar";
-import Disclaimer from "./Disclaimer";
+import HelpSheet from "./HelpSheet";
 import ReferralScreen from "./ReferralScreen";
 import SessionEnd from "./SessionEnd";
+import Splash from "./Splash";
 import SupportContent from "./SupportContent";
 
 /**
  * Render tests for the interface components, using react-dom/server:
  * no browser and no DOM library.
  */
+
+/** AppShell's Help props with the sheet closed (render tests only). */
+const closedHelp = {
+  isOpen: false,
+  onOpen: () => undefined,
+  onClose: () => undefined,
+  onTopic: () => undefined,
+  buttonRef: { current: null },
+};
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
@@ -69,7 +80,14 @@ console.log("Test 1: the help options list every number from helpContent");
 
 console.log("\nTest 2: the header has the wordmark, a Help button and Exit");
 {
-  const html = renderToStaticMarkup(<AppHeader onExit={() => undefined} />);
+  const html = renderToStaticMarkup(
+    <AppHeader
+      onExit={() => undefined}
+      onOpenHelp={() => undefined}
+      isHelpOpen={false}
+      helpButtonRef={{ current: null }}
+    />,
+  );
 
   assert(
     html.includes('Safe<span class="wordmark-girl">Girl</span>'),
@@ -156,7 +174,7 @@ console.log("\nTest 5: the greeting states what SafeGirl can and cannot do");
 console.log("\nTest 6: the privacy wording on the disclaimer and session end");
 {
   const disclaimer = renderToStaticMarkup(
-    <Disclaimer onContinue={() => undefined} />,
+    <Splash onContinue={() => undefined} />,
   );
   const sessionEnd = renderToStaticMarkup(
     <SessionEnd onStartNew={() => undefined} />,
@@ -166,7 +184,7 @@ console.log("\nTest 6: the privacy wording on the disclaimer and session end");
     disclaimer.includes(
       escapeHtml("We don't save your questions or your answers."),
     ),
-    "the disclaimer says questions and answers are not saved",
+    "the splash (the disclaimer) says questions and answers are not saved",
   );
   assert(
     !disclaimer.includes("keep anything"),
@@ -530,15 +548,15 @@ console.log(
   // As App.tsx composes them: every screen inside AppShell; the chat
   // screen puts the footer line above its ask bar itself.
   const chat = (turns: ChatTurn[]) => (
-    <AppShell onExit={noop} footerInContent>
+    <AppShell onExit={noop} help={closedHelp} footerInContent>
       <ChatInterface turns={turns} onSend={noop} isLoading={false} />
     </AppShell>
   );
   const screens: [string, JSX.Element][] = [
     [
-      "disclaimer",
-      <AppShell onExit={noop}>
-        <Disclaimer onContinue={noop} />
+      "splash",
+      <AppShell onExit={noop} help={closedHelp} footerInContent>
+        <Splash onContinue={noop} />
       </AppShell>,
     ],
     ["chat, empty", chat([])],
@@ -559,13 +577,13 @@ console.log(
     ],
     [
       "referral",
-      <AppShell onExit={noop} calm>
+      <AppShell onExit={noop} help={closedHelp} calm>
         <ReferralScreen message="referral" onContinueChat={noop} />
       </AppShell>,
     ],
     [
       "session end",
-      <AppShell onExit={noop}>
+      <AppShell onExit={noop} help={closedHelp}>
         <SessionEnd onStartNew={noop} />
       </AppShell>,
     ],
@@ -615,6 +633,8 @@ console.log(
     "./DangerLine.tsx",
     "./AppShell.tsx",
     "./AppHeader.tsx",
+    "./Splash.tsx",
+    "./HelpSheet.tsx",
   ]) {
     const source = readFileSync(new URL(file, import.meta.url), "utf8");
     assert(!/\d{3}/.test(source), `${file} types no phone number`);
@@ -628,7 +648,7 @@ console.log(
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   const shellOpen = app.indexOf("<AppShell");
   const shellClose = app.lastIndexOf("</AppShell>");
-  for (const screen of ["disclaimer", "chat", "referral", "sessionEnd"]) {
+  for (const screen of ["splash", "chat", "referral", "sessionEnd"]) {
     const at = app.indexOf(`screen === "${screen}" &&`);
     assert(
       at > shellOpen && at < shellClose,
@@ -644,6 +664,185 @@ console.log(
     app.includes("replace: (url) => window.location.replace(url)") &&
       !app.includes("window.close("),
     "Exit uses location.replace, never window.close",
+  );
+}
+
+console.log("\nTest 22: the splash is the once-per-session disclaimer");
+{
+  const html = renderToStaticMarkup(<Splash onContinue={() => undefined} />);
+  assert(html.includes('class="splash surface-dark"'), "a dark surface");
+  assert(/<h1[^>]*>SafeGirl<\/h1>/.test(html), "the wordmark is the h1");
+  assert(
+    html.includes("Honest answers about your body, health and growing up."),
+    "the tagline",
+  );
+  for (const promise of [
+    "<strong>Anonymous.</strong> We never ask for your name.",
+    "<strong>Real guidance.</strong> Answers come from Kenyan Ministry of Health and WHO sources.",
+    `<strong>Not a doctor.</strong> ${escapeHtml("This can't diagnose you.")} A nurse or clinic can.`,
+  ]) {
+    assert(html.includes(promise), `promise: ${promise.slice(0, 40)}…`);
+  }
+  assert(
+    html.includes(
+      '<button class="btn-splash" type="button">I understand, continue</button>',
+    ),
+    'the "I understand, continue" button',
+  );
+  const surfaceEnd = html.lastIndexOf("</section>");
+  assert(
+    html.includes('class="danger-line"') &&
+      html.indexOf('class="danger-line"') < surfaceEnd,
+    "the footer line is on the splash surface",
+  );
+  const shell = renderToStaticMarkup(
+    <AppShell onExit={() => undefined} help={closedHelp} footerInContent>
+      <Splash onContinue={() => undefined} />
+    </AppShell>,
+  );
+  assert(
+    shell.includes('class="btn-exit"') &&
+      shell.indexOf('class="btn-exit"') < shell.indexOf("splash surface-dark"),
+    "the header Exit button is present on the splash",
+  );
+}
+
+console.log("\nTest 23: the Help sheet");
+{
+  const html = renderToStaticMarkup(
+    <HelpSheet
+      onClose={() => undefined}
+      onExit={() => undefined}
+      onTopic={() => undefined}
+    />,
+  );
+  assert(
+    html.includes('role="dialog"') &&
+      html.includes('aria-modal="true"') &&
+      html.includes('aria-labelledby="help-sheet-title"') &&
+      html.includes('id="help-sheet-title"'),
+    "a labelled modal dialog",
+  );
+  assert(
+    html.includes(
+      '<button class="btn-close" type="button" aria-label="Close help">',
+    ),
+    "a labelled close button",
+  );
+  assert(
+    html.includes('<button class="btn-exit" type="button">Exit</button>'),
+    "the sheet has its own Exit button (it covers the header)",
+  );
+  for (const heading of [
+    "How SafeGirl works",
+    "Tips for asking",
+    "Need to talk to someone?",
+    "Topics",
+  ]) {
+    assert(html.includes(`>${heading}</h3>`), `section: ${heading}`);
+  }
+  assert(
+    html.includes(
+      `<a class="btn-call" href="${telHref(GBV_HELPLINE)}">Call ${GBV_HELPLINE}</a><span>GBV helpline. Free, 24 hours, English and Kiswahili.</span>`,
+    ),
+    "1195: tap-to-call from the constant, with the checked wording",
+  );
+  assert(
+    html.includes(
+      `<a class="btn-call" href="${telHref(CHILDLINE_KENYA)}">Call ${CHILDLINE_KENYA}</a><span>Childline Kenya, for children and young people.</span>`,
+    ),
+    "116: tap-to-call from the constant",
+  );
+  const childline = html.slice(
+    html.indexOf(telHref(CHILDLINE_KENYA)),
+    html.indexOf("</li>", html.indexOf(telHref(CHILDLINE_KENYA))),
+  );
+  assert(
+    !/free|18|under/i.test(childline.replace(CHILDLINE_KENYA, "")),
+    "the 116 line claims no cost and no age limit",
+  );
+  const [a, b] = EMERGENCY_NUMBERS;
+  assert(
+    html.includes(
+      `In immediate danger? Call <a href="${telHref(a)}">${a}</a> or <a href="${telHref(b)}">${b}</a>.`,
+    ),
+    "999 and 112 from the constants",
+  );
+  const numbers = [...html.matchAll(/href="tel:([^"]+)"/g)].map((m) => m[1]);
+  assert(
+    numbers.every((n) =>
+      [GBV_HELPLINE, CHILDLINE_KENYA, ...EMERGENCY_NUMBERS].includes(n),
+    ),
+    "no helpline that is not in the constants",
+  );
+  assert(
+    html.includes("press Escape twice") &&
+      html.includes("This does not clear your browser history."),
+    "explains quick exit without claiming to clear history",
+  );
+  for (const topic of TOPICS) {
+    assert(
+      html.includes(`>${topic.label}</button>`),
+      `topic button: ${topic.label}`,
+    );
+  }
+}
+
+console.log("\nTest 24: no copy claims clinician review");
+{
+  const rendered = [
+    renderToStaticMarkup(<Splash onContinue={() => undefined} />),
+    renderToStaticMarkup(
+      <HelpSheet
+        onClose={() => undefined}
+        onExit={() => undefined}
+        onTopic={() => undefined}
+      />,
+    ),
+    renderToStaticMarkup(<SupportContent />),
+    renderToStaticMarkup(<SessionEnd onStartNew={() => undefined} />),
+    renderToStaticMarkup(
+      <ChatInterface turns={[]} onSend={() => undefined} isLoading={false} />,
+    ),
+  ];
+  for (const html of rendered) {
+    assert(!/review|clinician|clinically/i.test(html), "no review claim");
+  }
+}
+
+console.log(
+  "\nTest 25: App wires the Help sheet, its focus and the Escape rule",
+);
+{
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes("() => helpOpenRef.current,"),
+    "the Escape handler ignores presses while the sheet is open",
+  );
+  assert(
+    app.includes('window.addEventListener("keydown", onKeyDown, true);'),
+    "it listens in the capture phase, before the sheet closes itself",
+  );
+  assert(
+    /const closeHelp = \(\) => \{\s*setIsHelpOpen\(false\);\s*helpButtonRef\.current\?\.focus\(\);/.test(
+      app,
+    ),
+    "closing the sheet returns focus to the Help button",
+  );
+  assert(
+    app.includes("startScreen(browserSessionStorage)") &&
+      app.includes("setScreen(continueFromSplash(browserSessionStorage))"),
+    "the splash shows once per session and Continue leads to home",
+  );
+  const sheet = readFileSync(
+    new URL("./HelpSheet.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    sheet.includes("closeRef.current?.focus()") &&
+      sheet.includes('event.key === "Escape"') &&
+      sheet.includes("trapTab(event.nativeEvent"),
+    "the sheet focuses its close button, closes on Escape and traps Tab",
   );
 }
 

@@ -3,7 +3,7 @@
  * they are reading.
  *
  * On Exit (the header button, or Escape pressed twice within
- * DOUBLE_ESCAPE_WINDOW_MS), the app clears its in-memory chat and screen
+ * DOUBLE_ESCAPE_WINDOW_MS with no panel open), the app clears its in-memory chat and screen
  * state and sessionStorage, then calls location.replace(EXIT_URL), so the
  * SafeGirl page is replaced in the tab instead of being added to the
  * tab's back history. There is no confirmation and no animation.
@@ -55,16 +55,20 @@ export function quickExit({
 /**
  * A key handler that calls onExit when Escape is pressed twice within
  * DOUBLE_ESCAPE_WINDOW_MS. Any other key, or a slower second press,
- * starts over. Returns true when it triggered Exit.
+ * starts over. An Escape pressed while a panel or sheet is open closes
+ * that panel and does not count: isPanelOpen is read at the moment of
+ * the key press, before the panel has closed. Returns true when it
+ * triggered Exit.
  */
 export function createDoubleEscapeHandler(
   onExit: () => void,
   now: () => number = () => Date.now(),
+  isPanelOpen: () => boolean = () => false,
 ): (key: string) => boolean {
   let lastEscape: number | null = null;
 
   return (key: string) => {
-    if (key !== "Escape") {
+    if (key !== "Escape" || isPanelOpen()) {
       lastEscape = null;
       return false;
     }

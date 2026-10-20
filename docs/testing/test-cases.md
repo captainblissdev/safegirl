@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 112 cases: 96 Pass, 15 Fail, 1 Not run. Two of the
+**Totals:** 122 cases: 106 Pass, 15 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -203,6 +203,16 @@ entry.
 | TC-110 | FR-05 | The header on every screen and reply kind that exists today (disclaimer; chat empty, answer, no answer, help, vague, held, limited mode; referral; session end), as App.tsx composes them in `AppShell` | The wordmark, a Help button and a visible Exit button (not in a menu) before the content; App wires Exit to `location.replace` and double Escape to a keydown listener, never `window.close` | As expected (`components.test.tsx`, Tests 2, 19 and 21) | Pass |
 | TC-111 | FR-04 | The footer line "In danger? Call … free and open 24 hours." on the same screens | Exactly once on every screen; its `tel:` link equals `telHref(GBV_HELPLINE)`; on chat screens directly above the ask bar; no component types a phone number | As expected (`components.test.tsx`, Tests 19 and 20) | Pass |
 | TC-112 | NFR (accessibility) | Control edges and the shell's new colour pairs | Every control has a 3:1 edge or fill (chips and the dialog's close button moved off the light card border); the control border 3:1 or more on every light surface; plum and white on plum 4.5:1 or more | Control border 3.10:1 at worst (lilac glow); plum 10.59:1; white on plum 14.32:1 (`styles/tokens.test.ts`, Test 6) | Pass |
+| TC-113 | FR-05 | Escape rules with a panel open: Escape closes the Help sheet, then another Escape within 1 s; and two Escapes with nothing open | The closing Escape does not count, so the next one does not exit; two Escapes with nothing open exit | As expected (`quickExit.test.ts`, Test 8; `components.test.tsx`, Test 25). The first browser run found the closing Escape counted (React re-renders before a bubbling window listener runs); fixed by listening in the capture phase, then the browser check passed | Pass |
+| TC-114 | FR-05 | Splash once per session: new session, continue, reload, new session | Splash, then home; a reload in the same session skips it; a new session shows it again | As expected (`splashSession.test.ts`, Tests 1 and 2; browser check) | Pass |
+| TC-115 | FR-05 | Exception. sessionStorage blocked (getter throws; getItem and setItem throw; none) | The splash shows on every load and Continue still works, with no error | As expected (`splashSession.test.ts`, Test 3; browser check with sessionStorage blocked: no page error) | Pass |
+| TC-116 | FR-05 | "I understand, continue" | Leads to home and remembers the splash for the session | As expected (`splashSession.test.ts`, Test 1; `components.test.tsx`, Test 25; browser check) | Pass |
+| TC-117 | FR-05 | Exit on the splash and inside the open Help sheet | Both replace the page with `EXIT_URL`; Back does not return to SafeGirl | As expected (`components.test.tsx`, Tests 22 and 23; browser check) | Pass |
+| TC-118 | FR-05 | Splash content | Tagline, the three promises, the privacy line "We don't save your questions or your answers." kept from the disclaimer, a 58px "I understand, continue" button, the footer line on the dark surface, the wordmark as `<h1>` | As expected (`components.test.tsx`, Tests 6 and 22; browser check: 58px) | Pass |
+| TC-119 | NFR (accessibility) | Help sheet focus: open, Tab and Shift+Tab 20 times, Escape | Focus moves to the close button; never leaves the sheet; Escape closes it and focus returns to the Help button; `role="dialog"`, `aria-modal`, labelled | As expected (`focusTrap.test.ts`; `components.test.tsx`, Tests 23 and 25; browser check: 9 distinct stops, all inside) | Pass |
+| TC-120 | FR-04 | Help sheet numbers | Every `tel:` link and number from the constants (1195, 116, 999, 112); no other helpline; the 116 line states no cost or age; no component types a number | As expected (`components.test.tsx`, Tests 20 and 23) | Pass |
+| TC-121 | FR-05 | Copy on the splash, Help sheet, support panel, session end and chat | No claim that content is clinician reviewed | As expected (`components.test.tsx`, Test 24) | Pass |
+| TC-122 | NFR (accessibility) | Splash contrast | White text and the white focus ring 4.5:1 or more on both ends of the plum-to-orchid gradient; plum on the white button 4.5:1 or more; the button's edge 3:1 or more | White 4.71:1 at the orchid end; plum on white 14.32:1 (`styles/tokens.test.ts`, Test 7) | Pass |
 
 ## Defects and retests
 

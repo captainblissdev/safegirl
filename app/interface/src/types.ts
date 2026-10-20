@@ -105,4 +105,5 @@ export interface ChatTurn {
   details?: AnswerDetails;
 }
 
-export type Screen = "disclaimer" | "chat" | "referral" | "sessionEnd";
+// "splash" is the once-per-session privacy and safety disclaimer (FR-05).
+export type Screen = "splash" | "chat" | "referral" | "sessionEnd";

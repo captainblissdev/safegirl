@@ -3,13 +3,18 @@ import type { ChatTurn, Screen } from "./types";
 import { QueryCancelledError, submitQuery } from "./api/client";
 import { answerDetails, isDetailsEnabled } from "./details";
 import AppShell from "./components/AppShell";
-import Disclaimer from "./components/Disclaimer";
+import Splash from "./components/Splash";
 import ChatInterface from "./components/ChatInterface";
 import ChatSidebar from "./components/ChatSidebar";
 import ReferralScreen from "./components/ReferralScreen";
 import SessionEnd from "./components/SessionEnd";
 import SupportContent from "./components/SupportContent";
 import { createDoubleEscapeHandler, quickExit } from "./quickExit";
+import {
+  browserSessionStorage,
+  continueFromSplash,
+  startScreen,
+} from "./splashSession";
 import "./App.css";
 
 /**
@@ -29,7 +34,12 @@ const SHOW_DETAILS = isDetailsEnabled(
 );
 
 export default function App() {
-  const [screen, setScreen] = useState<Screen>("disclaimer");
+  // The splash (the once-per-session disclaimer) unless already seen.
+  const [screen, setScreen] = useState<Screen>(() =>
+    startScreen(browserSessionStorage),
+  );
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
+  const helpButtonRef = useRef<HTMLButtonElement>(null);
   const [turns, setTurns] = useState<ChatTurn[]>([]);
   const [referralMessage, setReferralMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -120,7 +130,31 @@ export default function App() {
     setTurns([]);
     setReferralMessage("");
     setError(null);
-    setScreen("disclaimer");
+    setScreen("splash");
+  };
+
+  const openHelp = () => setIsHelpOpen(true);
+
+  /** Close the Help sheet and return focus to the Help button. */
+  const closeHelp = () => {
+    setIsHelpOpen(false);
+    helpButtonRef.current?.focus();
+  };
+
+  /**
+   * A topic button in the Help sheet. Until the Topic list exists
+   * (redesign Step 5) it closes the sheet and focuses the ask bar. On the
+   * splash there is no ask bar yet: the sheet just closes, so the splash
+   * still has to be accepted first.
+   */
+  const handleHelpTopic = () => {
+    setIsHelpOpen(false);
+    const askBar = document.getElementById("chat-input");
+    if (askBar) {
+      askBar.focus();
+    } else {
+      helpButtonRef.current?.focus();
+    }
   };
 
   /** Quick exit: clear everything, then leave (see quickExit.ts). */
@@ -131,34 +165,54 @@ export default function App() {
         setTurns([]);
         setReferralMessage("");
         setError(null);
-        setScreen("disclaimer");
+        setIsHelpOpen(false);
+        setScreen("splash");
       },
       getSessionStorage: () => window.sessionStorage,
       replace: (url) => window.location.replace(url),
     });
 
-  // Escape pressed twice within a second also exits, on every screen.
+  // Escape pressed twice within a second also exits, on every screen. An
+  // Escape that closes the Help sheet does not count (it is seen while the
+  // sheet is still open).
   const exitRef = useRef(handleExit);
+  const helpOpenRef = useRef(isHelpOpen);
   useEffect(() => {
     exitRef.current = handleExit;
+    helpOpenRef.current = isHelpOpen;
   });
   useEffect(() => {
-    const onEscape = createDoubleEscapeHandler(() => exitRef.current());
+    const onEscape = createDoubleEscapeHandler(
+      () => exitRef.current(),
+      () => Date.now(),
+      () => helpOpenRef.current,
+    );
     const onKeyDown = (event: KeyboardEvent) => {
       onEscape(event.key);
     };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
+    // Capture phase: this runs before React's own handlers, so an Escape
+    // that closes the Help sheet is seen while the sheet is still open.
+    // (React re-renders at once after a key press, so a bubbling listener
+    // would already see it closed and count the press.)
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => window.removeEventListener("keydown", onKeyDown, true);
   }, []);
 
   return (
     // The playful background is left off the referral screen, which stays
-    // calm; the help dialog has its own plain panel. The chat screen puts
-    // the footer line above its ask bar itself.
+    // calm. The chat screen puts the footer line above its ask bar, and the
+    // splash on its own dark surface.
     <AppShell
       onExit={handleExit}
+      help={{
+        isOpen: isHelpOpen,
+        onOpen: openHelp,
+        onClose: closeHelp,
+        onTopic: handleHelpTopic,
+        buttonRef: helpButtonRef,
+      }}
       calm={screen === "referral"}
-      footerInContent={screen === "chat"}
+      footerInContent={screen === "chat" || screen === "splash"}
     >
       {isOffline && (
         <div className="offline-banner" role="status">
@@ -167,8 +221,12 @@ export default function App() {
         </div>
       )}
 
-      {screen === "disclaimer" && (
-        <Disclaimer onContinue={() => setScreen("chat")} />
+      {screen === "splash" && (
+        <Splash
+          onContinue={() =>
+            setScreen(continueFromSplash(browserSessionStorage))
+          }
+        />
       )}
 
       {screen === "chat" && (

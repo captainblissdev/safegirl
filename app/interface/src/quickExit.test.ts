@@ -138,4 +138,42 @@ console.log("\nTest 7: the 1-second window is respected");
   assert(h.exits() === 1, "a third quick Escape does not exit twice");
 }
 
+console.log("\nTest 8: an Escape that closes a panel does not count");
+{
+  let panelOpen = true;
+  let time = 0;
+  let exits = 0;
+  const press = createDoubleEscapeHandler(
+    () => {
+      exits += 1;
+    },
+    () => time,
+    () => panelOpen,
+  );
+  // The panel's own handler closes it; the press is seen while it is open.
+  assert(press("Escape") === false, "the Escape that closes the panel");
+  panelOpen = false;
+  time = 500;
+  assert(press("Escape") === false, "the next Escape within 1 s does not exit");
+  assert(exits === 0, "no exit yet");
+  time = 900;
+  assert(press("Escape") === true, "a further Escape within 1 s exits");
+  assert(exits === 1, "Exit ran once");
+}
+{
+  let exits = 0;
+  let time = 0;
+  const press = createDoubleEscapeHandler(
+    () => {
+      exits += 1;
+    },
+    () => time,
+    () => false,
+  );
+  press("Escape");
+  time = 300;
+  press("Escape");
+  assert(exits === 1, "two Escapes with nothing open still exit");
+}
+
 console.log("\nAll quick exit tests passed.");

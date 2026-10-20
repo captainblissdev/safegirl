@@ -503,28 +503,46 @@
   background: var(--lilac);
 }
 
-.help-overlay {
+/* Help sheet (redesign Step 3): a modal panel over any screen */
+
+.sheet-overlay {
   position: fixed;
   inset: 0;
   z-index: 10;
   display: flex;
-  align-items: flex-start;
+  align-items: flex-end;
   justify-content: center;
-  padding: 16px;
   background: var(--overlay);
-  overflow-y: auto;
 }
 
-.help-dialog {
-  width: min(100%, 440px);
-  margin-top: 48px;
-  border-radius: 20px;
-  padding: 22px;
-  background: var(--card);
+.help-sheet {
+  width: min(100%, 560px);
+  max-height: 92vh;
+  overflow-y: auto;
+  border-radius: var(--radius-card-large) var(--radius-card-large) 0 0;
+  padding: 22px 22px 28px;
+  background: var(--color-card);
+  color: var(--color-ink);
   box-shadow: var(--shadow);
 }
 
-.help-dialog-head {
+.help-sheet section {
+  padding: 16px 0;
+  border-top: 1px solid var(--color-card-border);
+}
+
+.help-sheet h3 {
+  margin-bottom: 8px;
+  color: var(--color-plum);
+  font-size: 1.05rem;
+  font-weight: var(--weight-extrabold);
+}
+
+.help-sheet p + p {
+  margin-top: 8px;
+}
+
+.help-sheet-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -532,9 +550,98 @@
   margin-bottom: 8px;
 }
 
-.help-dialog-head h2 {
-  color: var(--primary-deep);
+.help-sheet-head h2 {
+  flex: 1;
+  color: var(--color-plum);
   font-size: 1.35rem;
+  font-weight: var(--weight-black);
+}
+
+.help-tips {
+  padding-left: 20px;
+}
+
+.help-calls {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+}
+
+.help-calls li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Tap-to-call: an outlined pill with a 3:1 violet edge. */
+.btn-call {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-target);
+  min-width: var(--tap-target);
+  border: 2px solid var(--color-violet);
+  border-radius: 999px;
+  padding: 0 16px;
+  color: var(--color-violet);
+  font-weight: var(--weight-extrabold);
+  text-decoration: none;
+}
+
+.help-emergency {
+  margin-top: 12px;
+  font-weight: var(--weight-semibold);
+}
+
+.help-emergency a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-target);
+  min-width: var(--tap-target);
+  margin: 0 -4px;
+  padding: 0 4px;
+  color: var(--color-violet);
+  font-weight: var(--weight-black);
+}
+
+.topic-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Topic buttons: the topic tint with a 3:1 control edge. */
+.topic-button {
+  min-height: var(--tap-target);
+  border: 1px solid var(--color-control-border);
+  border-radius: 16px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  font-weight: var(--weight-extrabold);
+  text-align: left;
+  cursor: pointer;
+}
+
+.topic-button--general {
+  background: var(--topic-periods-bg);
+  color: var(--topic-periods-text);
+}
+
+.topic-button--pregnancy {
+  background: var(--topic-pregnancy-bg);
+  color: var(--topic-pregnancy-text);
+}
+
+.topic-button--contraception {
+  background: var(--topic-contraception-bg);
+  color: var(--topic-contraception-text);
+}
+
+.topic-button--sti {
+  background: var(--topic-sti-bg);
+  color: var(--topic-sti-text);
 }
 
 .btn-close {
@@ -808,4 +915,71 @@
 
 .app-footer {
   padding: 8px 16px 16px;
+}
+
+/* Splash (redesign Step 3): the once-per-session disclaimer */
+
+.splash-screen {
+  justify-content: flex-start;
+  padding: 16px 0;
+}
+
+.splash {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  border-radius: var(--radius-card-large);
+  padding: 32px 22px 20px;
+  background: var(--gradient-splash);
+  color: var(--color-on-dark);
+  text-align: center;
+}
+
+.splash-wordmark {
+  font-size: 2rem;
+  font-weight: var(--weight-black);
+  line-height: 1.1;
+}
+
+.splash-tagline {
+  font-size: 1.1rem;
+  font-weight: var(--weight-bold);
+}
+
+.splash-promises {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  list-style: none;
+  text-align: left;
+}
+
+.splash-promises li {
+  border-radius: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-on-dark);
+}
+
+.splash-privacy {
+  font-weight: var(--weight-semibold);
+}
+
+/* White fill, plum text, 58px tall. */
+.btn-splash {
+  width: 100%;
+  min-height: 58px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-card);
+  color: var(--color-plum);
+  font-size: 1.05rem;
+  font-weight: var(--weight-black);
+  cursor: pointer;
+}
+
+/* The footer line on a dark surface is white. */
+.surface-dark .danger-line,
+.surface-dark .danger-line a {
+  color: var(--color-on-dark);
 }

@@ -999,6 +999,61 @@ that claim.
 Call 1195, free and open 24 hours.", with a tap-to-call link built from
 `GBV_HELPLINE`; on the chat screen it sits directly above the ask bar
 (TC-111). The constants describe 1195 differently: the help panel says
-"GBV helpline … For violence or abuse.", and `HELP_CONTACTS_VERIFIED`
-is `false`, so "free and open 24 hours" is a claim not yet confirmed
-with the service. The constants were not edited.
+"GBV helpline … For violence or abuse.". **Source of the "free and open
+24 hours" claim:** Cindy verified by phone call on 20 October 2026 that
+1195 is free, open 24 hours a day, 7 days a week, and answers in
+English and Kiswahili. That check covers 1195 only.
+`HELP_CONTACTS_VERIFIED` stays `false` (the other numbers are not
+confirmed), and the constants were not edited.
+
+## Splash and Help sheet (2026-10-20)
+
+Stage B2 step 3 (`fix/ui-redesign`), on Cindy's brief. **No frozen
+item changed.**
+
+**Splash.** The splash replaces the disclaimer screen and is the
+once-per-session privacy and safety disclaimer (FR-05): a plum-to-orchid
+surface with the logo, the wordmark (the page's `<h1>`), the tagline
+"Honest answers about your body, health and growing up.", three
+promises, the privacy line, "I understand, continue", and the footer
+line. A sessionStorage flag (read and written inside try/catch) keeps
+it from showing again in the same session; with storage blocked it
+shows on every load and still works (`app/interface/src/splashSession.ts`).
+Wording against the old disclaimer:
+
+| Old disclaimer | Splash |
+|---|---|
+| Heading "You're in a safe space" | Wordmark "SafeGirl" and tagline "Honest answers about your body, health and growing up." |
+| "You're safe here, no login needed" | "Anonymous. We never ask for your name." |
+| "We don't save your questions or your answers." | Kept unchanged, below the promises (the privacy part of FR-05) |
+| "We're here to help, but a doctor or nurse can too." | "Not a doctor. This can't diagnose you. A nurse or clinic can." |
+| (none) | "Real guidance. Answers come from Kenyan Ministry of Health and WHO sources." |
+| Button "Continue" | "I understand, continue" |
+| (none) | The footer line "In danger? Call 1195, free and open 24 hours." |
+
+**Open point on the "Real guidance" line.** Of the 21 active entries,
+KB-P5 cites only Kenya's Ministry of Education and KB-G6 only the
+American Academy of Pediatrics, and KB-G3 and KB-G4 cite the NHS
+alongside WHO. The line, used as briefed, is therefore not exact for
+every answer. Left for Cindy to decide.
+
+**Help sheet** (`components/HelpSheet.tsx`), replacing the support panel
+behind the Help button: "How SafeGirl works" (including how to leave
+quickly, without claiming that history is cleared), "Tips for asking",
+"Need to talk to someone?" (1195 with "GBV helpline. Free, 24 hours,
+English and Kiswahili.", from the phone check recorded above; 116 with
+"Childline Kenya, for children and young people.", with no cost or age
+claim; "In immediate danger? Call 999 or 112."), and the four topic
+buttons. Every number comes from the constants. It is a labelled modal
+dialog: focus moves to its close button, Tab stays inside, Escape or
+Close closes it and returns focus to the Help button. Because the sheet
+covers the header, it has its own Exit button. Until the Topic list
+exists (step 5), a topic button closes the sheet and focuses the ask bar.
+
+**Escape rule.** An Escape that closes the sheet does not count towards
+the double-Escape exit. App listens in the capture phase, so it sees the
+press while the sheet is still open; a bubbling listener saw it already
+closed (React re-renders at once after a key press) and counted it,
+which the browser check caught (TC-113).
+
+Tests: TC-113 to TC-122.

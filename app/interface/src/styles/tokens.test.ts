@@ -299,4 +299,36 @@ console.log("\nTest 6: control edges and the header's new pairs");
   );
 }
 
+console.log("\nTest 7: the splash (plum to orchid) and its controls");
+{
+  const stops = [...token("--gradient-splash").matchAll(/#[0-9a-f]{6}/g)].map(
+    (m) => m[0],
+  );
+  assert(
+    stops.join(",") === "#3b0f6b,#c026d3",
+    "the splash gradient runs deep plum to orchid",
+  );
+  const white = token("--color-on-dark");
+  const worstText = Math.min(...stops.map((bg) => contrast(white, bg)));
+  assert(
+    worstText >= 4.5,
+    `white text on the splash: ${worstText.toFixed(2)}:1`,
+  );
+  const ring = token("--focus-ring-on-dark");
+  const worstRing = Math.min(...stops.map((bg) => contrast(ring, bg)));
+  assert(
+    worstRing >= 3,
+    `white focus ring on the splash: ${worstRing.toFixed(2)}:1`,
+  );
+  const button = contrast(token("--color-plum"), token("--color-card"));
+  assert(button >= 4.5, `plum on the white button: ${button.toFixed(2)}:1`);
+  const edge = Math.min(
+    ...stops.map((bg) => contrast(token("--color-card"), bg)),
+  );
+  assert(
+    edge >= 3,
+    `the white button's edge on the splash: ${edge.toFixed(2)}:1`,
+  );
+}
+
 console.log("\nAll design token tests passed.");
