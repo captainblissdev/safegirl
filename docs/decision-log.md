@@ -1393,3 +1393,45 @@ the classifier service was starting, the keyword fallback answered an
 off-topic query with a knowledge-base answer and the gate was not
 applied (audit UI-19). Whether the fallback path should also apply the
 gate is open; nothing was changed.
+
+## Accessibility and performance evidence (2026-10-20)
+
+Stage B2 step 9 (`fix/ui-redesign`), on Cindy's brief: evidence for
+Chapter 5. Nothing was tuned to a score; every failure is kept.
+
+**Measured** on 14 screens (splash, Home, Help sheet, Topic list,
+answer, clarify, held A, B and C, help, referral, no answer, Talk to a
+person, limited mode) plus quick exit, at 390 and 320px: axe-core
+4.10.2; a scripted Tab walk (reach, order, focus ring,
+focus hidden), structure, target size, live regions, phone-link names,
+reflow at 320px, 200% zoom and text-only 200%, reduced motion; the
+contrast tests. Lighthouse 12.3.0 three times on Home (navigation) and on
+the answer screen (user flow), and Lighthouse 11.7.1 three times for the
+PWA checks. Chrome 155.0.8059.80, puppeteer-core
+23.11.1. Evidence and versions: `docs/design/audit-2026-10-20/evidence/`.
+
+**Found and fixed** (one commit, presentational and semantic only, no
+text changed):
+
+- At 200% zoom (195 CSS px) every screen but the splash scrolled
+  sideways (299px wide): the header did not wrap (UI-15) and Home's tiles
+  used `1fr` columns; the splash wordmark was clipped. The header now
+  wraps, the tiles shrink, and the wordmark is at most 16vw (UI-21).
+- With text-only 200% the header actions overflowed (443px wide); fixed
+  by the same header wrap.
+- Phone links showing only a number were named only by the number; each
+  now carries the service from `SUPPORT_SECTIONS` in its accessible name
+  ("1195, GBV helpline") (UI-20).
+- Tab could land on a control completely hidden under the docked ask bar
+  (WCAG 2.4.11), at 390px on the answer screen and at 200% zoom on held
+  and help; `scroll-padding-bottom: 40vh` while the dock is present
+  (UI-22).
+
+**Left open:** text set in px does not follow the browser's text-size
+setting (on most screens about half the text grows; on the splash 1 of
+13) (UI-23, P2); no `robots.txt` (UI-18, P2, Lighthouse SEO 91 and 80).
+Browser zoom scales all text, so WCAG 1.4.4 is met.
+
+**Results:** axe 0 violations on all 28 scans; Lighthouse Home 98, 100,
+100, 91 in all three runs; answer flow 100 (time span), 100, 100, 80 in
+all three; PWA 100 in all three.

@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 183 cases: 167 Pass, 15 Fail, 1 Not run. Two of the
+**Totals:** 201 cases: 181 Pass, 19 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -274,6 +274,24 @@ entry.
 | TC-181 | FR-06 | Mocked gateway: a sequence of questions | No request carries the previous query or reply | As expected (`askFlow.test.ts`, Test 4; browser check) | Pass |
 | TC-182 | FR-01 | The ask bar | Enter submits; disabled while empty or loading; one request at a time; cleared after sending; focus to the reply's h1 | As expected (`askFlow.test.ts`, Test 5; browser check: a second Enter while loading sent nothing) | Pass |
 | TC-183 | FR-01, FR-04 | Live, synthetic: "Am I okay?", then "I want to kill myself", then "What can I do about period pain?" | vague, referral, an answer; each body only `{ text }` | vague (clarify), referral, answer-scoped (browser check, live gateway and `ml_service`) | Pass |
+| TC-184 | NFR (accessibility) | axe-core 4.10.2 (WCAG 2.0 to 2.2 A/AA, best practice) on 14 screens at 390 and 320px | No violations | 0 violations on all 28 scans; colour contrast "incomplete" on gradients, covered by TC-196 (`evidence/axe/`) | Pass |
+| TC-185 | NFR (accessibility) | Keyboard on every screen | Every control reached by Tab in DOM order; visible focus ring on each; no trap; Escape closes the Help sheet and returns focus to Help; double Escape exits | As expected on all 14 screens (`evidence/a11y-checks.json`) | Pass |
+| TC-186 | NFR (accessibility) | Focus hidden by the docked ask bar (WCAG 2.4.11), before fixes | No focused control entirely hidden | A related question (answer, 390px) and Call 116 (held and help, 200% zoom) were entirely under the dock | Fail |
+| TC-187 | NFR (accessibility) | Retest of TC-186 after the fix | No focused control entirely hidden | None hidden on 14 screens at 390px and at 200% zoom | Pass |
+| TC-188 | NFR (accessibility) | Structure on every screen | One h1; one main; at most one header and one nav; the ask bar named; one live region per reply, never holding reply text | As expected on all 14 screens | Pass |
+| TC-189 | NFR (accessibility) | Target size at 390px | Every control 44 by 44 CSS px or more (inline phone links by their tap area) | None smaller on 14 screens | Pass |
+| TC-190 | NFR (accessibility) | Reflow at 320px | No horizontal scroll | None on 14 screens | Pass |
+| TC-191 | NFR (accessibility) | 200% zoom (195 CSS px), before fixes | No horizontal scroll; nothing lost or overlapping | 13 screens 299px wide (header, Home tiles); the splash wordmark clipped | Fail |
+| TC-192 | NFR (accessibility) | Retest of TC-191 after the fixes | As TC-191 | No scroll, overlap or clipping on 14 screens (`evidence/zoom/`) | Pass |
+| TC-193 | NFR (accessibility) | Text-only 200% (default font size 32px), before fixes | No horizontal scroll; nothing lost or overlapping | 13 screens 443px wide (header actions) | Fail |
+| TC-194 | NFR (accessibility) | Retest of TC-193 after the fixes | As TC-193 | No scroll, overlap or clipping on 14 screens. Text set in px does not grow (audit UI-23, open) | Pass |
+| TC-195 | NFR (accessibility) | prefers-reduced-motion | No animation or transition on the splash, while loading, or with the sparkle | 0 running with reduce; only the loading dots without it | Pass |
+| TC-196 | NFR (accessibility) | Contrast of every token pair | Text 4.5:1, edges, icons and focus 3:1 | All 109 pairs pass; lowest 3.02 (tile edge) and 4.52 (text) (`evidence/contrast.txt`) | Pass |
+| TC-197 | NFR (accessibility) | Page language and phone-link names, before fixes | `lang` set; every `tel:` link named with its service | `lang="en"`; links named only "1195", "999", "112", "Call 1195", "Call 116" | Fail |
+| TC-198 | NFR (accessibility) | Retest of TC-197 after the fix | As TC-197 | Every link named with its service in Chrome's accessibility tree ("1195, GBV helpline") | Pass |
+| TC-199 | NFR (performance) | Lighthouse 12.3.0 mobile on Home, three runs | Scores recorded, failing audits listed | 98, 100, 100, 91 in all three; FCP 1.8 s, LCP 2.0 s, TBT 0 ms, CLS 0.023; SEO fails `robots-txt` (UI-18) | Pass |
+| TC-200 | NFR (performance) | Lighthouse 12.3.0 user flow on the answer screen, three runs | Scores recorded | Time span performance 100; snapshot 100, 100, 80 (`robots-txt`) in all three; TBT 50, 50, 60 ms | Pass |
+| TC-201 | NFR (installability) | Lighthouse 11.7.1 PWA checks on Home, three runs | Installable | 100 in all three runs | Pass |
 
 ## Defects and retests
 
