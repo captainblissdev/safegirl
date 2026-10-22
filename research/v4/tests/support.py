@@ -106,5 +106,5 @@ SEED_HEADER = [
 ]
 
 
-def seed(sid, text, cls="sti", style="formal", source="KB-S1", secondary="", boundary=""):
-    return [sid, text, cls, secondary, style, boundary, source, ""]
+def seed(sid, text, cls="sti", style="formal", source="KB-S1", secondary="", boundary="", notes=""):
+    return [sid, text, cls, secondary, style, boundary, source, notes]

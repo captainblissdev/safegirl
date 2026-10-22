@@ -56,7 +56,10 @@ nothing here changes the V3 data (`resources/seeds/`, `resources/reviewed/`,
    contraception, abortion and the other held topics (the groups in
    `app/gateway/src/content/heldTopics.json`) stay out of the seeds until
    a clinician approves the content. The checker fails any item the
-   held-topic rule matches.
+   held-topic rule matches, with one exception: a seed that only uses
+   held-topic words while its label is a topic class (e.g. a pregnancy
+   question the group C patterns catch) passes with a warning when its
+   `notes` contain exactly `held-topic phrasing, label is topic only`.
 
 ## Checking a seed file
 
@@ -79,7 +82,8 @@ It needs Node (for the gateway's held-topic and Safety Net rules) and the
 - near duplicates of DR-04 (reported by row number only; its text is
   never printed);
 - near duplicates of `relevance_validation.csv` or the development set;
-- an item the held-topic rule matches.
+- an item the held-topic rule matches, unless its notes contain
+  `held-topic phrasing, label is topic only` (then a warning).
 
 "Near duplicate" means e5 cosine >= 0.95 or character ratio >= 0.85
 (difflib, on lowercased text with punctuation removed).

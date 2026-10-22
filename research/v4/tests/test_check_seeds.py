@@ -169,6 +169,27 @@ class RulesCountsAndOverlap(CheckerCase):
         self.assertIn("held topic: V4-1 matches held-topic group A", "\n".join(report.failures))
         self.assertIn("Safety Net: V4-2 is flagged (abuse)", "\n".join(report.warnings))
 
+    def test_held_topic_override_note_turns_the_failure_into_a_warning(self):
+        note = check_seeds.HELD_TOPIC_OVERRIDE
+        self.assertEqual(note, "held-topic phrasing, label is topic only")
+        report = self.run_check(
+            [
+                seed("V4-1", "Lantern heldword orchid?", cls="pregnancy", notes=f"probe; {note}"),
+                seed("V4-2", "Saffron heldword velvet?", cls="pregnancy", notes="held-topic phrasing"),
+                seed("V4-3", "Cobalt heldword dahlia?", notes="Held-topic phrasing, label is topic only"),
+                seed("V4-4", "Juniper kestrel lotus?", notes=note),
+            ]
+        )
+        failures = "\n".join(report.failures)
+        warnings = "\n".join(report.warnings)
+        self.assertIn("held topic: V4-1 matches held-topic group A; passed by its notes", warnings)
+        self.assertNotIn("V4-1", failures)
+        # Only the exact words count: partial or differently cased notes fail.
+        self.assertIn("held topic: V4-2 matches held-topic group A (no held-topic", failures)
+        self.assertIn("held topic: V4-3 matches held-topic group A (no held-topic", failures)
+        # The note on an item the rule does not match changes nothing.
+        self.assertNotIn("V4-4", failures + warnings)
+
     def test_counts_and_the_25_seed_warning(self):
         rows = [seed(f"V4-{i}", f"Unique{i} word{i} here{i}?") for i in range(25)]
         rows.append(seed("V4-x", "Saffron tundra velvet?", cls="general", style="euphemism", source="Doc, p. 3"))

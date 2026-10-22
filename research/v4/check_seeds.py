@@ -11,7 +11,8 @@ failure, 2 when the check cannot run (missing file, no Node).
 Failures: schema and allowed values; duplicate or empty seed_id; missing
 or unusable source; exact or near duplicates inside the file; near
 duplicates of the V3 training pool, DR-04, relevance_validation.csv or
-the development set; an item the held-topic rule matches.
+the development set; an item the held-topic rule matches, unless its
+notes say HELD_TOPIC_OVERRIDE (then it is a warning).
 
 DR-04 is read only for the comparison, and only its row numbers are ever
 printed. The same goes for the development set and
@@ -347,13 +348,26 @@ def check_duplicates(rows, refs, embed, report):
             report.fail(f"{name}: {ids[i]} ~ {pool[j][0]} ({show(cosine, ratio)})")
 
 
+# A seed may use held-topic words when it is about a topic class, not
+# the held content (e.g. "Can I get pregnant if ..." filed as
+# pregnancy). Its notes must say so, in these exact words.
+HELD_TOPIC_OVERRIDE = "held-topic phrasing, label is topic only"
+
+
 def check_rules(rows, rules, report):
     for row, result in zip(rows, rules([row["text"] for row in rows])):
         if result["held"]:
-            report.fail(
-                f"held topic: {row['seed_id']} matches held-topic group "
-                f"{result['held']} (no held-topic content until approved)"
-            )
+            if HELD_TOPIC_OVERRIDE in (row.get("notes") or ""):
+                report.warn(
+                    f"held topic: {row['seed_id']} matches held-topic group "
+                    f"{result['held']}; passed by its notes ({HELD_TOPIC_OVERRIDE!r})"
+                )
+            else:
+                report.fail(
+                    f"held topic: {row['seed_id']} matches held-topic group "
+                    f"{result['held']} (no held-topic content until approved; "
+                    f"notes may say {HELD_TOPIC_OVERRIDE!r} if the label is topic only)"
+                )
         if result["safety"]:
             report.warn(
                 f"Safety Net: {row['seed_id']} is flagged ({result['safety']}); "
