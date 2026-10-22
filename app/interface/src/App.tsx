@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { ChatTurn, Screen } from "./types";
+import type { AnswerVia, ChatTurn, Screen } from "./types";
 import { announcementFor, replyViewOf } from "./replyView";
 import { nextLoopCount, reachesLoopLimit } from "./loopLimit";
 import { QueryCancelledError, submitQuery } from "./api/client";
@@ -90,7 +90,7 @@ export default function App() {
     };
   }, []);
 
-  const handleSend = async (text: string) => {
+  const handleSend = async (text: string, via: AnswerVia = "typed") => {
     // One request at a time: a question sent while a reply loads is not
     // sent (the ask bar is disabled meanwhile).
     if (pendingRef.current) return;
@@ -132,6 +132,7 @@ export default function App() {
           matchedQuestion: response.matchedQuestion,
           source: response.source,
           loopLimited: reachesLoopLimit(loopCountRef.current),
+          via,
         };
 
         setTurns((prev) => [...prev, botTurn]);
@@ -221,13 +222,14 @@ export default function App() {
   const askFromTopic = (text: string, questionId: string | null) => {
     if (topic) setAnswerOrigin({ topic, questionId });
     setScreen("chat");
-    void handleSend(text);
+    // A row carries its id; the Topic list's ask bar does not.
+    void handleSend(text, questionId === null ? "typed" : "tapped");
   };
 
   /** A question asked on the chat screen itself: its back link is Home. */
-  const askFromChat = (text: string) => {
+  const askFromChat = (text: string, via: AnswerVia = "typed") => {
     setAnswerOrigin(null);
-    void handleSend(text);
+    void handleSend(text, via);
   };
 
   /**

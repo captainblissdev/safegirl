@@ -132,7 +132,7 @@ async function main() {
     const app = readFileSync(new URL("./App.tsx", import.meta.url), "utf8");
     assert(
       app.includes("submitQuery(text, { signal: request.signal })") &&
-        /const askFromTopic = \(text: string, questionId: string \| null\) => \{\s*if \(topic\) setAnswerOrigin\(\{ topic, questionId \}\);\s*setScreen\("chat"\);\s*void handleSend\(text\);/.test(
+        /const askFromTopic = \(text: string, questionId: string \| null\) => \{\s*if \(topic\) setAnswerOrigin\(\{ topic, questionId \}\);\s*setScreen\("chat"\);[\s\S]{0,120}void handleSend\(\s*text,\s*questionId === null \? "typed" : "tapped",?\s*\);/.test(
           app,
         ),
       "App sends the text alone; a Topic list's class and row id are never sent",
@@ -188,7 +188,7 @@ async function main() {
     );
     const app = readFileSync(new URL("./App.tsx", import.meta.url), "utf8");
     assert(
-      /const handleSend = async \(text: string\) => \{[\s\S]{0,200}if \(pendingRef\.current\) return;/.test(
+      /const handleSend = async \(text: string, via: AnswerVia = "typed"\) => \{[\s\S]{0,200}if \(pendingRef\.current\) return;/.test(
         app,
       ),
       "one request at a time, from every screen (the Topic list's too)",

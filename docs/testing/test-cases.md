@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 230 cases: 210 Pass, 19 Fail, 1 Not run. Two of the
+**Totals:** 234 cases: 214 Pass, 19 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -321,6 +321,10 @@ entry.
 | TC-228 | NFR (accessibility) | Step 3c contrast | Text 4.5:1; control edges, icons and focus 3:1 | Help 10.59; how-it-works text 5.42; tips 12.52; 1195 note 12.29; 116 note 6.80; edges 3.04; pill borders 3.07 to 3.14; emergency 9.35 (`styles/tokens.test.ts`, Test 19) | Pass |
 | TC-229 | FR-04 | The 116 sentence in the help, no-answer, held A and held B replies (gateway and offline) | "Childline Kenya, 116, is a free 24-hour helpline for children."; no reply says "free for anyone under 18"; the abuse referral's "(for anyone under 18)" unchanged; numbers and `HELP_CONTACTS_VERIFIED` unchanged | As expected (`app/gateway/test/helpline116Wording.test.js`, 4 tests; `heldTopics.test.js`; offline parity test) | Pass |
 | TC-230 | FR-04 | The 116 call button and every rendered reply and sheet | Description "Childline Kenya. Free, 24 hours, for children."; nothing rendered says "free for anyone under 18" | As expected (`components.test.tsx`, Test 54) | Pass |
+| TC-231 | FR-03 | A typed question (KB-S5 from Home) | The banner "I found a question like yours" with the matched question unchanged, then "Not what you meant? Try different words or pick a topic."; one h1, focused, no ring | As expected at 320, 360, 390 and 430px (`components.test.tsx`, Test 55; browser check; `answer-typed-6c.png`) | Pass |
+| TC-232 | FR-03 | A tapped Topic list row and a tapped related-question row | The question as the heading; no banner, label or hint; one h1, focused, no ring | As expected for both at all four widths (Test 55; browser check; `answer-tapped-6c.png`) | Pass |
+| TC-233 | FR-01, NFR (privacy) | Requests and storage on both paths | Body exactly `{"text": …}` (the row's exact text when tapped); nothing written to storage; no horizontal overflow | As expected (Test 55; browser check, 24 of 24) | Pass |
+| TC-234 | NFR (accessibility) | Step 6c contrast | Text 4.5:1 | Tapped heading 12.22; hint 5.03; banner label 7.35 (`styles/tokens.test.ts`, Test 20) | Pass |
 
 ## Defects and retests
 

@@ -22,7 +22,7 @@ import {
   SupportReply,
 } from "./ReplyViews";
 import { replyViewOf } from "../replyView";
-import type { ChatTurn } from "../types";
+import type { AnswerVia, ChatTurn } from "../types";
 import type { Topic } from "../content/topics";
 
 /**
@@ -40,7 +40,8 @@ import type { Topic } from "../content/topics";
 
 interface Props {
   turns: ChatTurn[];
-  onSend: (text: string) => void;
+  /** Typed in the ask bar ("typed"), or a related question tapped. */
+  onSend: (text: string, via?: AnswerVia) => void;
   isLoading: boolean;
   /** Show the demo details line under each answer. */
   showDetails?: boolean;
@@ -137,7 +138,7 @@ export default function ChatInterface({
       <AnswerView
         key={lastTurn.id}
         turn={lastTurn}
-        onSend={onSend}
+        onSend={(question) => onSend(question, "tapped")}
         back={back}
         askBar={askBar}
       />

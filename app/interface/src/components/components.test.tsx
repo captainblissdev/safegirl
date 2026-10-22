@@ -19,6 +19,8 @@ import {
   TOPIC_LIST_PLACEHOLDER,
   BACK_TO_QUESTIONS,
   CALL_CARD_HEADING,
+  MATCH_HINT,
+  MATCH_LABEL,
   ANONYMOUS_LINE,
   GBV_HELP_SHEET_NOTE,
   CLARIFY_MORE_WORDS,
@@ -1107,7 +1109,7 @@ console.log(
   );
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
-    /const askFromTopic = \(text: string, questionId: string \| null\) => \{\s*if \(topic\) setAnswerOrigin\(\{ topic, questionId \}\);\s*setScreen\("chat"\);\s*void handleSend\(text\);/.test(
+    /const askFromTopic = \(text: string, questionId: string \| null\) => \{\s*if \(topic\) setAnswerOrigin\(\{ topic, questionId \}\);\s*setScreen\("chat"\);[\s\S]{0,120}void handleSend\(\s*text,\s*questionId === null \? "typed" : "tapped",?\s*\);/.test(
       app,
     ),
     "App sends it through handleSend, the full pipeline used for every question",
@@ -1182,7 +1184,7 @@ console.log(
   assert(html.split("<h1").length === 2, "one h1");
   assert(
     html.includes(
-      `<h1 tabindex="-1" class="closest"><span class="closest-label">The closest question I have</span><span class="closest-question">${escapeHtml(KB_S5.question)}</span></h1>`,
+      `<h1 tabindex="-1" class="closest"><span class="closest-label">${MATCH_LABEL}</span><span class="closest-question">${escapeHtml(KB_S5.question)}</span></h1>`,
     ),
     "the h1 is the matched question, labelled as the closest one I have",
   );
@@ -1337,7 +1339,8 @@ console.log(
     "utf8",
   );
   assert(
-    chat.includes("onSend={onSend}") && chat.includes("onSend(trimmed);"),
+    chat.includes('onSend={(question) => onSend(question, "tapped")}') &&
+      chat.includes("onSend(trimmed);"),
     "through the same onSend as the ask bar (App's full pipeline)",
   );
 }
@@ -1381,7 +1384,7 @@ console.log("\nTest 35: back link, ask bar and frame of the answer screen");
   );
   assert(
     /const openTopic = [^}]*setAnswerOrigin\(null\);/.test(app) &&
-      /const askFromChat = \(text: string\) => \{\s*setAnswerOrigin\(null\);\s*void handleSend\(text\);/.test(
+      /const askFromChat = \(text: string, via: AnswerVia = "typed"\) => \{\s*setAnswerOrigin\(null\);\s*void handleSend\(text, via\);/.test(
         app,
       ),
     "a question asked on the chat screen (ask bar, related) goes back to Home",
@@ -2764,6 +2767,65 @@ console.log("\nTest 54: the 116 wording (22 October 2026)");
         '<span class="call-button-note">Childline Kenya. Free, 24 hours, for children.</span>',
       ),
     'the 116 button: "Childline Kenya. Free, 24 hours, for children."',
+  );
+}
+
+console.log(
+  "\nTest 55: the matched-question banner by how she asked (step 6c)",
+);
+{
+  const typed = renderAnswer(answerTurn({ via: "typed" }));
+  assert(
+    typed.includes(
+      `<h1 tabindex="-1" class="closest"><span class="closest-label">${MATCH_LABEL}</span><span class="closest-question">${escapeHtml(KB_S5.question)}</span></h1><p class="match-hint">${MATCH_HINT}</p>`,
+    ),
+    `typed: the banner "${MATCH_LABEL}", the matched question unchanged, then "${MATCH_HINT}"`,
+  );
+  const untagged = renderAnswer(answerTurn());
+  assert(
+    untagged.includes(`class="closest-label">${MATCH_LABEL}</span>`),
+    "no flag (as typed): the banner",
+  );
+  const tapped = renderAnswer(answerTurn({ via: "tapped" }));
+  assert(
+    tapped.includes(
+      `<h1 tabindex="-1" class="tapped-question">${escapeHtml(KB_S5.question)}</h1>`,
+    ) &&
+      !tapped.includes("closest") &&
+      !tapped.includes("match-hint"),
+    "tapped: the question as the heading; no banner, label or hint",
+  );
+  for (const [name, html] of [
+    ["typed", typed],
+    ["tapped", tapped],
+  ]) {
+    assert(
+      html.split("<h1").length === 2,
+      `${name}: exactly one h1, focusable`,
+    );
+  }
+  const view = readFileSync(
+    new URL("./AnswerView.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    view.includes('turn.via === "tapped"') &&
+      !/turn\.text\s*===|matchedQuestion\s*===|=== matchedQuestion/.test(view),
+    "the path decides the banner; no string comparison",
+  );
+  const chat = readFileSync(
+    new URL("./ChatInterface.tsx", import.meta.url),
+    "utf8",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    chat.includes('onSend={(question) => onSend(question, "tapped")}') &&
+      app.includes(
+        'void handleSend(text, questionId === null ? "typed" : "tapped");',
+      ) &&
+      app.includes("via,") &&
+      app.includes("submitQuery(text, { signal: request.signal })"),
+    "related rows and Topic list rows are tapped, ask bars typed; the request is still the text alone",
   );
 }
 

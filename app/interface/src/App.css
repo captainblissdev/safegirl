@@ -2407,3 +2407,23 @@
   line-height: 1.5;
   text-align: center;
 }
+
+/* Matched-question banner (redesign Step 6c) */
+
+/* A typed question: a quiet line close under the banner. */
+.match-hint {
+  margin-top: -6px;
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.45;
+}
+
+/* A tapped question: it heads the answer, with no banner. */
+.tapped-question {
+  margin: 4px 2px 0;
+  color: var(--color-ink);
+  font-size: 20px;
+  font-weight: var(--weight-black);
+  line-height: 1.3;
+}

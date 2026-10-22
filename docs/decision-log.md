@@ -1686,3 +1686,33 @@ text are unchanged.
 **Resolves** the open item "the 116 claim in the replies" (Splash and
 Help sheet entry) and the later notes listing the screens that showed
 the unconfirmed sentence.
+
+## Matched-question banner by how she asked (2026-10-22)
+
+Redesign step 6c (`fix/ui-redesign`), on Cindy's brief. Interface only:
+no reply or KB text, matching, retrieval, gate or threshold changed.
+
+**The problem.** Every answer showed "The closest question I have" over
+the matched question. After a tapped Topic list or related-question row,
+that banner repeated the question she had just tapped under a label
+saying "closest".
+
+**Typed or tapped.** App now records, per question, how it was asked
+(`via` on the reply turn, in memory only, never sent): typed in an ask
+bar (Home, the answer screen or the Topic list's), or tapped on a Topic
+list row or a related-question row. The request body is unchanged:
+exactly `{"text": …}`.
+
+- **Typed:** the lilac banner stays, labelled "I found a question like
+  yours" (`MATCH_LABEL`), with the matched question unchanged; under it,
+  "Not what you meant? Try different words or pick a topic."
+  (`MATCH_HINT`). The banner shows on this path even when the match is
+  exact: no strings are compared.
+- **Tapped:** no banner, label or hint. The question is the heading
+  above the answer card. It is the response's matched question: the
+  same as the tapped row for 20 of the 21 rows; for KB-P1, which the
+  pipeline answers with KB-G3, the heading names KB-G3's question, so the
+  heading always matches the answer under it.
+
+On both paths the heading is the screen's only h1 and takes the
+programmatic focus, with no ring.

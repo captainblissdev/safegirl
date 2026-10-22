@@ -1403,4 +1403,31 @@ console.log("\nTest 19: the Help sheet (step 3c)");
   );
 }
 
+console.log("\nTest 20: the matched-question banner (step 6c)");
+{
+  const page = [
+    token("--color-page"),
+    token("--color-card"),
+    token("--glow-pink"),
+    token("--glow-lilac"),
+  ];
+  const worst = (fg: string, bgs: string[]) =>
+    Math.min(...bgs.map((bg) => contrast(fg, bg)));
+  const heading = worst(token("--color-ink"), page);
+  assert(
+    heading >= 4.5,
+    `tapped question heading #2A1245 on the page: ${heading.toFixed(2)}:1`,
+  );
+  const hint = worst(token("--color-muted"), page);
+  assert(
+    hint >= 4.5,
+    `"Not what you meant?" #6B4F86 on the page: ${hint.toFixed(2)}:1`,
+  );
+  const label = contrast(token("--closest-label"), token("--closest-bg"));
+  assert(
+    label >= 4.5,
+    `"I found a question like yours" on #EEE4FF: ${label.toFixed(2)}:1`,
+  );
+}
+
 console.log("\nAll design token tests passed.");

@@ -36,6 +36,13 @@ export const PLACEHOLDER_ROTATE_MS = 6000;
 export const LIMITED_MODE_NOTICE =
   "Limited mode: I can't reach the full service right now, so this answer is general.";
 
+/** Over the matched question when she typed her question (step 6c). */
+export const MATCH_LABEL = "I found a question like yours";
+
+/** Under that banner (step 6c). */
+export const MATCH_HINT =
+  "Not what you meant? Try different words or pick a topic.";
+
 /**
  * Under every knowledge-base answer, after its source: the one place this
  * line is written.

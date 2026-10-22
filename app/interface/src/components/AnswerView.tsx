@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { relatedQuestions } from "../content/kbQuestions";
-import { ANSWER_DISCLAIMER } from "../content/uiText";
+import { ANSWER_DISCLAIMER, MATCH_HINT, MATCH_LABEL } from "../content/uiText";
 import type { ChatTurn } from "../types";
 import DangerLine from "./DangerLine";
 import { CheckIcon, ChevronLeftIcon, ChevronRightIcon } from "./Icons";
@@ -47,10 +47,22 @@ export default function AnswerView({ turn, onSend, back, askBar }: Props) {
         <ChevronLeftIcon size={20} /> {back.label}
       </button>
 
-      <h1 ref={headingRef} tabIndex={-1} className="closest">
-        <span className="closest-label">The closest question I have</span>
-        <span className="closest-question">{matchedQuestion}</span>
-      </h1>
+      {turn.via === "tapped" ? (
+        // She tapped this question: it heads the answer, with no banner.
+        // (The answer's own question, from the response; for the one row
+        // that is answered by another entry, that entry's question.)
+        <h1 ref={headingRef} tabIndex={-1} className="tapped-question">
+          {matchedQuestion}
+        </h1>
+      ) : (
+        <>
+          <h1 ref={headingRef} tabIndex={-1} className="closest">
+            <span className="closest-label">{MATCH_LABEL}</span>
+            <span className="closest-question">{matchedQuestion}</span>
+          </h1>
+          <p className="match-hint">{MATCH_HINT}</p>
+        </>
+      )}
 
       <article className="answer-card" aria-labelledby="answer-title">
         <h2 id="answer-title" className="answer-pill">

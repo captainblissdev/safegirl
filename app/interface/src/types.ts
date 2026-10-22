@@ -111,7 +111,13 @@ export interface ChatTurn {
   // The loop limit (loopLimit.ts) was reached on this vague or abstain
   // reply: the Talk to a person screen shows instead of it.
   loopLimited?: boolean;
+  // How the question was asked (interface state only, never sent): typed
+  // in an ask bar, or tapped on a Topic list or related-question row.
+  via?: AnswerVia;
 }
+
+/** How a question reached the pipeline: typed, or a tapped question row. */
+export type AnswerVia = "typed" | "tapped";
 
 /** A knowledge-base answer: shown on the answer screen. */
 export function isAnswerTurn(turn: ChatTurn | undefined): boolean {
