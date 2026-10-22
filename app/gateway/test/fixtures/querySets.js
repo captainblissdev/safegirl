@@ -2,12 +2,11 @@
  * Query sets for the vague-query rule tests (vagueQuery.test.js) and the
  * offline parity test (offlineSafetyParity.test.js), read from the
  * repository rather than copied: the development set, the DR-04 test
- * set and the interface's example questions.
+ * set and the knowledge-base questions the interface offers.
  */
 
 const fs = require("node:fs");
 const path = require("node:path");
-const { pathToFileURL } = require("node:url");
 
 const REPO = path.join(__dirname, "..", "..", "..", "..");
 
@@ -74,21 +73,23 @@ const DR04 = readCsv(
   path.join(REPO, "resources", "test", "independent_test_set.csv"),
 ).map((row) => row.text);
 
-/** The 13 distinct example questions the interface offers. */
+/**
+ * The example questions the interface offers: the 21 knowledge-base
+ * questions of the Topic list and the answer screen's related questions
+ * (app/interface/src/content/kbQuestions.json). They replaced the 13
+ * example chips and follow-ups, removed in redesign Step 6.
+ */
 async function loadExampleQuestions() {
-  const uiText = await import(
-    pathToFileURL(
-      path.join(REPO, "app", "interface", "src", "content", "uiText.ts"),
-    ).href
+  const file = path.join(
+    REPO,
+    "app",
+    "interface",
+    "src",
+    "content",
+    "kbQuestions.json",
   );
-  return [
-    ...new Set([
-      ...uiText.TOPIC_EXAMPLES.map((example) => example.question),
-      ...Object.values(uiText.SUGGESTIONS)
-        .flat()
-        .map((suggestion) => suggestion.question),
-    ]),
-  ];
+  const { questions } = JSON.parse(fs.readFileSync(file, "utf8"));
+  return questions.map((item) => item.question);
 }
 
 module.exports = {

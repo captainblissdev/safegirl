@@ -968,3 +968,751 @@ interface keeps compiling; offline tests and parity follow.
 group C signpost from the same generated patterns and a mirrored reply;
 the parity test runs the group C cases through both matchers. Tests:
 TC-099 to TC-105.
+
+## Quick exit (2026-10-20)
+
+Decided by Cindy on 20 October 2026 (`fix/ui-redesign`, Stage B2 step
+2). The interface had no quick exit; this builds one. **No frozen item
+changed.**
+
+**What it does** (`app/interface/src/quickExit.ts`, wired in `App.tsx`):
+an "Exit" button in the header of every screen, always visible, 44px
+tall, never in a menu. On tap, the app clears its in-memory chat and
+screen state and sessionStorage, then calls
+`location.replace(EXIT_URL)` with `EXIT_URL = "https://www.google.com"`
+(one constant), so the SafeGirl page is replaced in the tab instead of
+being left in its back history. Escape pressed twice within one second
+does the same. There is no confirmation and no animation.
+`window.close()` is not used: browsers and the installed PWA often
+ignore it. Blocked storage never stops the exit.
+
+**Limit.** Quick exit does **not** remove the visit from the browser's
+own history, and it does not remove SafeGirl from the phone's app
+switcher or recent apps. The interface must never claim that it does;
+the Help sheet (step 3) will describe the double-Escape shortcut without
+that claim.
+
+**Tests:** `app/interface/src/quickExit.test.ts` and
+`components.test.tsx` (TC-106 to TC-110).
+
+**Footer line (same step).** Every screen now ends with "In danger?
+Call 1195, free and open 24 hours.", with a tap-to-call link built from
+`GBV_HELPLINE`; on the chat screen it sits directly above the ask bar
+(TC-111). The constants describe 1195 differently: the help panel says
+"GBV helpline … For violence or abuse.". **Source of the "free and open
+24 hours" claim:** Cindy verified by phone call on 20 October 2026 that
+1195 is free, open 24 hours a day, 7 days a week, and answers in
+English and Kiswahili. That check covers 1195 only.
+`HELP_CONTACTS_VERIFIED` stays `false` (the other numbers are not
+confirmed), and the constants were not edited.
+
+## Splash and Help sheet (2026-10-20)
+
+Stage B2 step 3 (`fix/ui-redesign`), on Cindy's brief. **No frozen
+item changed.**
+
+**Splash.** The splash replaces the disclaimer screen and is the
+once-per-session privacy and safety disclaimer (FR-05): a plum-to-orchid
+surface with the logo, the wordmark (the page's `<h1>`), the tagline
+"Honest answers about your body, health and growing up.", three
+promises, the privacy line, "I understand, continue", and the footer
+line. A sessionStorage flag (read and written inside try/catch) keeps
+it from showing again in the same session; with storage blocked it
+shows on every load and still works (`app/interface/src/splashSession.ts`).
+Wording against the old disclaimer:
+
+| Old disclaimer | Splash |
+|---|---|
+| Heading "You're in a safe space" | Wordmark "SafeGirl" and tagline "Honest answers about your body, health and growing up." |
+| "You're safe here, no login needed" | "Anonymous. We never ask for your name." |
+| "We don't save your questions or your answers." | Kept unchanged, below the promises (the privacy part of FR-05) |
+| "We're here to help, but a doctor or nurse can too." | "Not a doctor. This can't diagnose you. A nurse or clinic can." |
+| (none) | "Real guidance. Most answers come from Kenyan Ministry of Health and WHO guidance." (step 3b; first "Answers come from … sources") |
+| Button "Continue" | "I understand, continue" |
+| (none) | The footer line "In danger? Call 1195, free and open 24 hours." |
+
+**"Real guidance" line: resolved (step 3b).** The line now reads "Most
+answers come from Kenyan Ministry of Health and WHO guidance.", one
+constant (`SOURCES_LINE` in `app/interface/src/content/uiText.ts`) used
+on the splash, in the Help sheet and, from step 4, on Home. "Most",
+because four of the 21 active entries cite other sources: KB-P5 only
+Kenya's Ministry of Education, KB-G6 only the American Academy of
+Pediatrics, and KB-G3 and KB-G4 the NHS alongside WHO.
+
+**Help sheet** (`components/HelpSheet.tsx`), replacing the support panel
+behind the Help button: "How SafeGirl works" (including how to leave
+quickly, without claiming that history is cleared), "Tips for asking",
+"Need to talk to someone?" (1195 with "GBV helpline. Free, 24 hours,
+English and Kiswahili.", from the phone check recorded above; 116 with
+"Childline Kenya, for children and young people.", with no cost or age
+claim; "In immediate danger? Call 999 or 112."), and the four topic
+buttons. Every number comes from the constants. It is a labelled modal
+dialog: focus moves to its close button, Tab stays inside, Escape or
+Close closes it and returns focus to the Help button. Because the sheet
+covers the header, it has its own Exit button. Until the Topic list
+exists (step 5), a topic button closes the sheet and focuses the ask bar.
+
+**Escape rule.** An Escape that closes the sheet does not count towards
+the double-Escape exit. App listens in the capture phase, so it sees the
+press while the sheet is still open; a bubbling listener saw it already
+closed (React re-renders at once after a key press) and counted it,
+which the browser check caught (TC-113).
+
+Tests: TC-113 to TC-122.
+
+**Splash layout (step 3b, same date).** The splash is now a full-bleed
+screen of its own, as designed: the gradient #3B0F6B, #5B21B6, #A21CAF
+at 165 degrees, with no app header and no Help button; a compact Exit
+pill top right (double Escape works there too); decoration (two soft
+circles and two sparkles) hidden from screen readers; the shared
+shield-and-heart mark on an 84px light tile; the wordmark as the only
+`<h1>`; three glass promise cards with icon tiles; the privacy line;
+the button and the footer line pinned at the bottom. The same
+shield-and-heart mark, on a violet-to-rose tile, replaces the
+heart-in-a-circle in the header (`ShieldHeartMark` in
+`components/Icons.tsx`); the PWA icons are unchanged.
+
+Contrast, worst case (the lightest stop, #A21CAF, with a glow on top):
+white text 5.01:1; the glass cards' and the Exit pill's fill was
+darkened from 14% to 7% white, because 14% gave white text 4.04:1 (the
+pill's 18% gave 3.76:1); at 7% it is 4.52:1. The tagline and privacy
+line keep #F6E9FF: 4.95:1, because the rose glow ends 150px from the
+top and the tagline starts at 212px (measured in the browser at 320,
+360 and 390px); over the rose glow it would be 4.30:1. Button text
+#4C1D95 on white 10.95:1; promise icons on their white tiles 6.04:1 or
+more; the header mark's white shield and heart 4.60:1.
+
+**Open item: the 116 claim in the replies.** The help-guidance text in
+the constants says "Childline Kenya, 116, is free for anyone under 18",
+and the abuse referral says "Childline Kenya 116 (for anyone under
+18)". Neither the cost nor the age limit is confirmed (the phone check
+of 20 October covered 1195 only). The text appears in four reply
+types: help (signposting), no answer (abstain), held topics A and B,
+and the abuse referral. It is left unchanged for now, because the
+constants are frozen, and is to be corrected with the helpline-
+constants change once 116 has been verified. The Help sheet already
+avoids the claim. **Resolved on 22 October 2026** (see "Helpline 116 wording"): the sentence now reads "Childline Kenya, 116, is a free 24-hour helpline for children."
+
+## Home (2026-10-20)
+
+Stage B2 step 4 (`fix/ui-redesign`), on Cindy's brief. **No frozen item
+changed.** Home is the chat's empty state (`components/Home.tsx`); after
+the first question the existing conversation view is shown, to be
+redesigned in steps 6 and 7.
+
+**What it has.** Under the header: a hero (gradient #5B21B6 to #A21CAF)
+with a "Private and anonymous" tag, the page's only `<h1>` ("Ask about
+your body, periods, pregnancy or sex."), the shared sources line
+followed by "This can't diagnose you.", and the ask pill. "Or browse by
+topic", then a 2x2 grid of topic tiles from `content/topics.ts`, then
+"Anonymous. We never ask for your name." above the footer line.
+
+**One ask bar.** The input and send button became `components/AskBar.tsx`.
+The chat renders exactly one: in the hero on Home (label "Type your
+question", button "Ask"), at the bottom once the chat has started. Both
+send through the chat's own handler, so every question runs the full
+pipeline.
+
+**Placeholder examples** (`PLACEHOLDER_EXAMPLES` in `content/uiText.ts`),
+rotating every 6 seconds unless the device asks for reduced motion; the
+placeholder is not a live region and the input keeps its label:
+1. "Can STIs be cured, and can they harm me if I leave them?" (KB-S5)
+2. "What can I do about period pain?" (KB-G4)
+3. "Which birth control methods can a teenager use?" (KB-C3)
+4. "Can I take PrEP to prevent HIV? I'm a teenager." (KB-S7)
+5. "How do I manage my period hygienically?" (KB-G5)
+6. "What warning signs in pregnancy mean I should go to hospital right away?" (KB-P6)
+
+Each is the exact text of a knowledge-base question, from neither DR-04
+nor the demo-risk set, and is answered with its own entry by keyword
+retrieval (the path without `ml_service`, tested) and by the live
+pipeline with the gate on (checked on 20 October 2026: 20 of the 21
+knowledge-base questions get their own entry; KB-P1 does not, so it is
+left out). **The brief's first example, "Can I have an STI without
+knowing?", is not used**: it is not a knowledge-base question, and it
+is query #10 of the demo-risk set, so it breaks both rules the brief
+sets for the examples. The list starts with an STI question instead.
+
+**Topic tiles.** Labels and classes from `content/topics.ts`, which now
+also holds each tile's subtitle, describing only what the knowledge base
+covers: "Periods, puberty, clinics" (general), "Warning signs, food,
+school" (pregnancy), "Methods, condoms, fertility" (contraception),
+"Symptoms, treatment, PEP, PrEP" (sti). Until the Topic list exists
+(step 5) a tile focuses the ask bar, as the Help sheet's topic buttons
+do.
+
+**Deviations, for contrast.** The tiles are buttons, so their edge must
+reach 3:1 (step 2). A 1.5px border in the tint (#FFDDEE and so on) gave
+about 1.05:1, so each tile's border is the lightest shade of its
+topic's hue that reaches 3:1 against the page and both glows: #E5337D,
+#9360E3, #CE30DE, #EB315F (3.02 to 3.09:1). The tag pill's fill is 15%
+white (white text 4.94:1 at the hero's light end; 22% would give 4.33).
+On Home the footer line closes the page under the tiles, as the brief
+lays out, rather than sitting directly above the ask bar (step 2's
+rule), because the ask bar is inside the hero.
+
+**First screen.** At 390x844 the footer line ends at 813px (header 59,
+hero 312, tile grid 284), so it shows without scrolling; no spacing was
+reduced. At 360x740 and 320x640 Home scrolls.
+
+The conversation view still has the four example chips; they go with
+the redesign of the answer view.
+
+## Topic list (2026-10-20)
+
+Stage B2 step 5 (`fix/ui-redesign`), on Cindy's brief. **No frozen item
+changed**: no model, knowledge-base text, threshold or gate.
+
+**What it is.** A screen opened from a Home tile or a Help sheet topic
+button (`components/TopicList.tsx`): "All topics" back link, the topic's
+icon tile, its label as the only `<h1>`, "N questions" (N from the data),
+a card listing that class's knowledge-base questions, the footer line,
+and an ask bar labelled "Ask something else".
+
+**One path to an answer.** Tapping a question hands its exact text to
+the same send handler as any question, so the full pipeline runs
+(Safety Net, help, held topics, vague rule, classifier, retrieval,
+gate); the ask bar does the same. Nothing returns an answer directly
+and nothing is scoped to the topic: a browser check showed every request
+body is exactly `{"text": …}`.
+
+**Where the questions come from.** The interface had a copy of the
+knowledge base (`offline/Kbdata.json`), but it is maintained by hand,
+holds the answers, and is used only by the unused `offline/pipeline.ts`.
+Instead of shipping the answers in the bundle or adding an endpoint, a
+build script (`app/gateway/scripts/build-kb-questions.js`) writes
+`app/interface/src/content/kbQuestions.json` from the active knowledge
+base: id, class and question only, no answers. A gateway test fails if
+it is stale or carries any other field. It works offline. No gateway
+route was added.
+
+**Known mismatch kept in the list: KB-P1.** "Do I have to get a pelvic
+exam right away at my first visit?" is classed general by V3 (0.852;
+pregnancy 0.055), so retrieval is scoped to general and serves KB-G3
+("Is my period normal…", similarity 0.8453); unscoped, KB-P1 itself
+would be top at 0.9023. It stays in the Pregnancy list, as briefed. The
+other 20 questions return their own entry when tapped (browser check,
+20 October 2026).
+
+**Focus (UI-14).** The Topic list moves focus to its h1 when it opens;
+"All topics" returns focus to the tile that opened it, or to the Help
+button if the Help sheet did. Home's h1 takes focus when Home appears
+(after the splash or a new chat), and the referral heading when the
+referral appears.
+
+## Answer screen (2026-10-20)
+
+Stage B2 step 6 (`fix/ui-redesign`), on Cindy's brief. **No frozen item
+changed**: no model, knowledge-base text, threshold, gate, Safety Net
+pattern or helpline number. Answers are shown exactly as the gateway
+returns them.
+
+**Latest exchange only.** A new question replaces the last exchange
+(`setTurns([userTurn])` in `App.tsx`); earlier exchanges are not kept on
+screen, and they were never stored anywhere else.
+
+**What it shows** (`components/AnswerView.tsx`), for the answer-scoped
+and answer-unscoped reply kinds:
+
+1. A back link, 44px tall: "Back to <topic label>" when the question
+   came from a Topic list (back there, focus on the tapped row, or on
+   the list's h1 if its ask bar was used), otherwise "Back to home". A
+   question asked on the answer screen itself (its ask bar or a related
+   question) goes back to Home.
+2. "The closest question I have" over the knowledge-base question the
+   answer came from (`matchedQuestion`, as sent). It is never shown as
+   the question she asked; her own text is not shown on this screen.
+3. The answer card: an "Answer" pill with a check, the answer text as
+   sent (line breaks kept with `white-space: pre-line`), a divider, then
+   "Source: " and the `source` the response carries, then the shared
+   disclaimer `ANSWER_DISCLAIMER` ("General information, not a diagnosis.
+   A nurse or clinic can test and treat you."). With no `source` in the
+   response, there is no source line and nothing is invented. All 21
+   live answers carry one (browser check, 20 October 2026); the offline
+   pipeline's limited-mode answers carry none and have no reply kind, so
+   they keep the plain reply view.
+4. "Related questions": up to two other knowledge-base questions of the
+   matched entry's class, in knowledge-base order. Tapping one sends its
+   exact text through the full pipeline.
+5. The footer line and the ask bar ("Ask something else"), in a white
+   dock that stays at the bottom while a long answer scrolls; the ask
+   bar runs the full pipeline and is never scoped.
+
+**No trust signal.** No confidence pill, "strong match" label or score:
+similarity does not separate right answers from wrong ones (wrong
+answers score as high as 0.8557). The demo details line (`?details=1`)
+is not shown on the answer screen.
+
+**Headings and focus (UI-16).** The matched question is the screen's
+only h1 (the label is part of it); "Answer" and "Related questions" are
+h2s. When a new answer arrives, focus moves to the h1, and one polite
+live region outside the screen says "New answer." The answer itself is
+in no live region, so it is not read twice.
+
+**Example chips and follow-ups removed (UI-12).** The four topic chips
+and the "You could also ask" follow-ups are gone from the chat, with
+`TOPIC_EXAMPLES`, `SUGGESTIONS`, `offersFollowUps` and `suggestionsFor`;
+nothing else imported them except the gateway's rule-test fixture. Their
+13 questions (4 chips and 12 follow-ups, one shared) were the
+example-question set of the Stage A rule tests. That set is now the 21
+knowledge-base questions in `kbQuestions.json` (what the Topic list and
+the related questions offer); the vague rule intercepts none of them,
+and the help and vague parity cases now also include the held-topic
+test inputs. No DR-04 or demo-risk query was used.
+
+## Reply screens (2026-10-20)
+
+Stage B2 step 7 (`fix/ui-redesign`), on Cindy's brief. **Restyle only**:
+no reply, knowledge-base, held-topic or help text changed, nor any
+helpline constant, `HELP_CONTACTS_VERIFIED`, gate, threshold or Safety
+Net pattern.
+
+**One screen per reply kind** (`components/ReplyViews.tsx`, chosen by
+`replyViewOf` in `replyView.ts` from the reply kind): clarify (vague),
+held topic (groups A, B, C), help, no answer (abstain), and the referral
+(`ReferralScreen.tsx`, the same dark card as help). On each, the reply
+text exactly as sent is the screen's only h1 and takes focus when it
+arrives; a pill with an icon tops the card. A reply with no kind (the
+offline pipeline's limited-mode answer) keeps the plain view, with its
+text as the h1. The session end's heading is now its h1.
+
+**Her question shown back only on clarify and no answer**, as plain
+text under "You asked" (React escapes it; `<b>x</b>` shows as typed).
+Never on held, help or referral. Her question is also no longer shown
+while a reply loads or after an error, and after a referral it is
+dropped, so "Continue chat" goes to Home.
+
+**Call buttons** on held, help and referral: the GBV helpline, then
+Childline Kenya, as `tel:` links built from the constants, each
+described by its own `SUPPORT_SECTIONS` label and note ("GBV helpline.
+For violence or abuse."; "Childline Kenya. For anyone under 18."). Help
+and referral also carry "In immediate danger? Call …" built from
+`EMERGENCY_NUMBERS`.
+
+**Footer line beside a call button.** Where the GBV call button is
+already on screen (held, help, referral), the footer line points to it
+instead of repeating the number: "In danger? Use the GBV helpline call
+button above. It is free and open 24 hours." (`DANGER_LINE_CALL_ABOVE`).
+On a phone (390 by 844) the line and the button share the first view on
+all three, so moving the line lower would not have avoided it. The
+reply texts of held A and B, help and the abuse referral name the
+number themselves, unchanged.
+
+**Announcements.** App's one polite live region now sits outside the
+screens (so it also covers the referral) and names the reply once ("New
+reply: Tell me a bit more." and so on; "New answer." for answers). No
+reply text is in a live region; the referral's `role="alert"` box is
+gone, so its text is read once, from the h1.
+
+**Interface wording added** (constants in `content/uiText.ts`): the pill
+labels ("Tell me a bit more", "Talk to a nurse" for held topics, which
+had no label, "Support" for help, "We hear you" for the referral, kept
+from the old referral heading, "No answer yet"); `CLARIFY_FALLBACK`;
+`NO_ANSWER_RETRY`; "Try a topic instead"; `DANGER_LINE_CALL_ABOVE`.
+
+**Removed from the referral screen:** the "We hear you. We want to
+help." heading (now the pill) and the full support-options list (still
+in the Help sheet and the wide-screen aside); the call buttons and the
+emergency line replace it on the card.
+
+**The unconfirmed Childline sentence** ("Childline Kenya, 116, is free
+for anyone under 18", in `HELP_GUIDANCE` and the held A and B texts)
+appears on the help, no-answer, held A and held B screens. Not on
+clarify, held C or the referrals (the abuse referral says "(for anyone
+under 18)" without "free"). Unchanged, as briefed. **Resolved on 22 October 2026** (see "Helpline 116 wording"): the sentence now reads "Childline Kenya, 116, is a free 24-hour helpline for children."
+
+## Reply screens on narrow phones (2026-10-20)
+
+Stage B2 step 7b (`fix/ui-redesign`), on Cindy's bug report: on the
+clarify screen at 390px the 2x2 topic grid ran past the card, clipping
+"Pregnancy" and "STIs and HIV". Layout only; no text changed.
+
+**One shared component.** The four topics are now `TopicChoices`
+everywhere they appear: clarify (a grid with icon tiles), no answer and
+the Help sheet (pills). The Help sheet's own `topic-button` copy is
+gone, so its pills are white with the 3:1 edge instead of tinted. The
+held screens have no topic buttons.
+
+**Grid rules.** Two columns of `minmax(0, 1fr)`, 10px apart; each item
+`min-width: 0; max-width: 100%`; buttons `box-sizing: border-box`, full
+width, padding 10px 12px (pills 8px 12px); labels wrap
+(`overflow-wrap: anywhere`); 15px weight 900, 14px under 360px wide.
+The reply card is `overflow: visible`.
+
+**No broken words.** With the 32px icon tile beside the label, a column
+leaves about 85px for the label at 390px and about 50px at 320px, but
+"Contraception" needs 103px (97px at 14px). Wrapping alone broke it
+mid-word ("Contracepti-on", "Pregna-ncy"). So when the grid is narrower
+than 360px (a container query), the icon sits above the label; under
+360px wide, the reply screen and card also give 4px more room each
+side. Every word now fits whole at 320, 360, 390 and 430px.
+
+**Lines with a phone link.** The footer line and the help and referral
+cards' emergency line had a 44px-tall inline-flex link, which made a
+wrapped line very tall. Both now have line-height 1.35; the link stays
+inline and its 44px-tall tap area is an invisible `::after`.
+
+## Loop limit and the ask bar (2026-10-20)
+
+Stage B2 step 8 (`fix/ui-redesign`), on Cindy's brief. Interface
+behaviour only: no reply text, pipeline rule or order, gate, threshold
+or Safety Net pattern changed.
+
+**Loop limit** (`loopLimit.ts`). App counts consecutive vague and
+abstain replies, in memory only (a ref; nothing in localStorage or
+sessionStorage). Any other reply kind (answer, help, held topic,
+referral, or a limited-mode answer with no kind) sets it back to 0, and
+so do opening a Topic list, "Ask a different question" (and the other
+ways back to Home: Back to home, New chat), a new session and quick
+exit. `LOOP_LIMIT = 3`: the third vague or abstain reply in a row, and
+each one after it until the count resets, shows the Talk to a person
+screen instead of the reply. Help, held-topic and referral replies are
+never counted, replaced or delayed; the request is never blocked.
+
+The screen uses the no-answer card, the pill "Let's find a person", and
+one new message as its only h1 (`PERSON_MESSAGE`: "I'm having trouble
+finding what you need. A nurse or counsellor at a health facility can
+help, and you do not have to give a reason."). Her question is not
+shown. "See who can help" opens the existing Help sheet (no call
+buttons or numbers on the screen itself); then the four topic pills,
+the footer line and the ask bar.
+
+**The ask bar runs the whole pipeline every time.** The request body is
+built from the typed text alone (`{ "text": … }`), from every screen; no
+topic, scope, class, earlier query or earlier reply is ever sent, and
+opening a Topic list scopes nothing. Enter submits; the button is
+disabled while the bar is empty or a reply loads; the text clears after
+sending; focus moves to the reply's h1. New: App sends one request at a
+time (a second send while one is in flight is dropped; the Topic list's
+ask bar was the one path that could start a second). There is no
+character limit in the interface (unchanged); the gateway accepts a
+JSON body of up to 10 kB (`BODY_LIMIT`).
+
+**Decision needed: the keyword fallback and the relevance gate.** While
+the classifier service was starting, the keyword fallback answered an
+off-topic query with a knowledge-base answer and the gate was not
+applied (audit UI-19). Whether the fallback path should also apply the
+gate is open; nothing was changed.
+
+## Accessibility and performance evidence (2026-10-20)
+
+Stage B2 step 9 (`fix/ui-redesign`), on Cindy's brief: evidence for
+Chapter 5. Nothing was tuned to a score; every failure is kept.
+
+**Measured** on 14 screens (splash, Home, Help sheet, Topic list,
+answer, clarify, held A, B and C, help, referral, no answer, Talk to a
+person, limited mode) plus quick exit, at 390 and 320px: axe-core
+4.10.2; a scripted Tab walk (reach, order, focus ring,
+focus hidden), structure, target size, live regions, phone-link names,
+reflow at 320px, 200% zoom and text-only 200%, reduced motion; the
+contrast tests. Lighthouse 12.3.0 three times on Home (navigation) and on
+the answer screen (user flow), and Lighthouse 11.7.1 three times for the
+PWA checks. Chrome 155.0.8059.80, puppeteer-core
+23.11.1. Evidence and versions: `docs/design/audit-2026-10-20/evidence/`.
+
+**Found and fixed** (one commit, presentational and semantic only, no
+text changed):
+
+- At 200% zoom (195 CSS px) every screen but the splash scrolled
+  sideways (299px wide): the header did not wrap (UI-15) and Home's tiles
+  used `1fr` columns; the splash wordmark was clipped. The header now
+  wraps, the tiles shrink, and the wordmark is at most 16vw (UI-21).
+- With text-only 200% the header actions overflowed (443px wide); fixed
+  by the same header wrap.
+- Phone links showing only a number were named only by the number; each
+  now carries the service from `SUPPORT_SECTIONS` in its accessible name
+  ("1195, GBV helpline") (UI-20).
+- Tab could land on a control completely hidden under the docked ask bar
+  (WCAG 2.4.11), at 390px on the answer screen and at 200% zoom on held
+  and help; `scroll-padding-bottom: 40vh` while the dock is present
+  (UI-22).
+
+**Left open:** text set in px does not follow the browser's text-size
+setting (on most screens about half the text grows; on the splash 1 of
+13) (UI-23, P2); no `robots.txt` (UI-18, P2, Lighthouse SEO 91 and 80).
+Browser zoom scales all text, so WCAG 1.4.4 is met.
+
+**Results:** axe 0 violations on all 28 scans; Lighthouse Home 98, 100,
+100, 91 in all three runs; answer flow 100 (time span), 100, 100, 80 in
+all three; PWA 100 in all three.
+
+## Home polish (2026-10-20)
+
+Redesign step 4b (`fix/ui-redesign`), on Cindy's brief with every value
+given. Layout and UI copy only; no reply, KB, held or help text, helpline
+constant, gate, threshold or Safety Net pattern changed.
+
+**What changed.** The hero is a card (three-stop violet gradient, radius
+28) with a white "Private and anonymous" pill and a lock, and a sparkle
+and two pink circles behind the text (aria-hidden). The ask bar moved
+out of the hero into a white card with the visible label "Type your
+question", a pink field and a 48px gradient send button named "Get an
+answer" with an up arrow. The anonymous line and the footer line sit in
+a pink footer card with a lock; End session stays directly below it.
+Topic cards: radius 22, padding 14, 104px tall, 40px icon tiles, a soft
+shadow, the coloured 3:1 edges kept.
+
+**New copy** (constants): `HERO_PILL` "Private and anonymous" (the text
+was already on screen, now a constant), `ASK_LABEL` "Type your question"
+(was a hidden label, now visible), `ASK_SEND_NAME` "Get an answer" (was
+"Ask"). Subtitles (`content/topics.ts`): "Periods, puberty, clinics" to
+"Cycle, pain, clinics"; "Warning signs, food, school" to "Signs, care,
+school"; "Methods, condoms, fertility" to "Methods and myths"; "Symptoms,
+treatment, PEP, PrEP" to "Signs, testing, care". Labels and classes
+unchanged.
+
+**Design values changed for contrast.** The field edge #F3C6DE is
+1.37:1 on the field; the field is a control, so its edge is #C25A92
+(3.69:1 on the field, 4.06:1 on the card). The empty field's send button
+is #8B5CF6 at full opacity (white arrow 4.23:1; edge on the field
+3.84:1). The paragraph colour #F6E9FF would be 4.04:1 over the large
+circle; it never meets it (checked at 320 to 430px), and over the small
+circle it is 4.52:1, so nothing was changed.
+
+**Gutters.** Before: content 20px at 390 and 320px, the header 12px.
+After: content and header 20px from 360px up. Under 360px both are 16px
+(the header's logo, Help and Exit need 283px on one row; a 20px gutter
+leaves 280px at 320px), and tile titles drop from 16 to 15px, because
+"Contraception" at 16px is wider than a tile at 320px.
+
+## Topic list and answer screen polish (2026-10-22)
+
+Redesign step 6b (`fix/ui-redesign`), on Cindy's brief with every value
+given. Layout and UI copy only; no reply, KB, held or help text,
+helpline constant, gate, threshold or Safety Net pattern changed.
+
+**Topic list.** A header card (pink-to-lilac gradient) with the topic
+icon on a white tile, the h1 and "Tap a question to read the answer."
+The question count stays for screen readers only. The question card
+(radius 24, soft shadow) has 16px rows and 30px chevron circles; under
+it, "More questions are being reviewed with doctors and nurses before
+they are added." Then the footer line as plain text and the ask bar as
+a white pill, placeholder "Or type your own question".
+
+**Answer screen.** The closest-question box loses any border or ring;
+the answer card, pill and source block take the given sizes, with
+"Source:" in bold (the source text itself unchanged). The related
+questions use a smaller version of the question card. The white panel
+behind the footer line and ask bar is gone: they are no longer sticky
+and sit at the end of the content, or at the bottom of a short screen.
+The ask bar is a white pill named "Ask" with the 48px gradient button.
+
+**Focus.** Headings and containers that only code focuses
+(`tabindex="-1"`) show no ring; every control keeps its ring. Checked at
+four widths: the focused h1 has no outline, a Tab-focused row has one.
+
+**Design values changed for contrast.** The question cards' edge
+#F3D3E6 (1.38:1 on white) marks the question buttons, so it is #C25A92
+(4.06:1 against the rows, 3.00:1 on the page and its glows); the ask
+pill uses the same 3:1 pink (#C25A92) for the design's #F3C6DE.
+
+**New copy** (constants in `content/uiText.ts`): `TOPIC_LIST_HINT`,
+`TOPIC_LIST_FOOTNOTE`, `TOPIC_LIST_PLACEHOLDER`.
+
+**Gutters** are unchanged: 20px from 360px up and 16px below, with the
+header aligned (from step 4b).
+
+## Reply screens aligned with the design (2026-10-22)
+
+Redesign step 7c (`fix/ui-redesign`), on Cindy's brief with every value
+given. Layout and UI copy only: every reply word, its order and
+punctuation are unchanged, and so are the helpline constants and their
+descriptions and the quick-exit behaviour.
+
+**Split for display (held, help, referral).** The first sentence (up to
+the first ".", "?" or "!" followed by a space) is the h1 and the rest a
+paragraph under it (`replySplit.ts`). A test proves, for every reply
+(held A, B and C, help, both referrals), that h1 + " " + paragraph is
+the reply exactly. The live region still says only the pill label.
+
+**Held.** The pink card holds the reply; the call buttons moved into a
+white card under it, headed "If you are in danger or someone has hurt
+you" (1195 on the violet gradient, 116 outlined). No footer line (the
+card carries the GBV call button). The ask bar is a white pill with no
+panel.
+
+**Help and referral.** A dark hero with the reply, the call buttons
+full width under it (1195 on the pink gradient, 116 outlined), the
+emergency line in a pink card ("In immediate danger?" in bold), "Need
+to leave quickly? Tap Quick exit at the top." and "Back to questions"
+(which does what "Continue chat" did). The header has no Help button
+and its exit button reads "Quick exit" (same behaviour). No footer line
+and no ask bar.
+
+**Clarify, no answer, Talk to a person.** Only the shared fixes: the
+footer line, then the ask bar as a white pill, with no panel.
+
+**No dock anywhere.** With the last sticky dock gone, the step 9 rule
+that reserved scroll padding for it was removed; nothing at the bottom
+can hide a focused control.
+
+**New copy** (`content/uiText.ts`): `CALL_CARD_HEADING`,
+`QUICK_EXIT_LABEL` "Quick exit", `QUICK_EXIT_HINT`, `BACK_TO_QUESTIONS`
+"Back to questions". Removed: `DANGER_LINE_CALL_ABOVE` (no screen with
+the call buttons shows a footer line now).
+
+**Design values changed for contrast.** The 116 button's edge #E3C4EE
+(1.57:1 on white) is #A060B8 (4.32:1 on white, 3.20:1 on the page);
+"Back to questions" edge #F0C4DD (1.14:1 on the page) is #B45F8F
+(3.12:1). No fill was darkened: white 13px text on #DB2777 is 4.60:1.
+The call buttons also get 8px top and bottom padding (the design's 0)
+so a two-line description never touches the edge at 320px.
+
+**Unconfirmed Childline sentence** ("…is free for anyone under 18"):
+still on the held A, held B, help and no-answer screens (reply text
+unchanged); not on held C, the referrals, clarify or Talk to a person. **Resolved on 22 October 2026** (see "Helpline 116 wording"): the sentence now reads "Childline Kenya, 116, is a free 24-hour helpline for children."
+
+## Clarify and help/referral to the redesigned boards (2026-10-22)
+
+Redesign step 7d (`fix/ui-redesign`), on Cindy's brief, replacing the
+clarify and help/referral parts of step 7c where they differ. Layout and
+UI copy only: every reply word, the helpline constants and their
+descriptions, and the quick-exit behaviour are unchanged.
+
+**Clarify.** Her message is a chat bubble on the right (plain text,
+escaped), after a visually hidden "You asked" h2; the visible label is
+gone. The reply card takes the board's shape and sparkle; inside it,
+"Pick the closest" and the four topic buttons, now always a column
+(icon tile above the label), 84px, bordered in each topic's own colour,
+in a `minmax(0, 1fr)` grid. Under the card: "Not sure which one? Type it
+again with a few more words." and the existing fallback line. Then the
+footer line and the ask pill (edge #9A6AB5), placeholder "Add a few more
+words".
+
+**Help and referral.** The hero gets the board's spacing, a 24px
+sparkle and a 300px heading width; the 1195 button runs #C2185B to
+#A21CAF; the 116 button and "Back to questions" use the #9A6AB5 edge.
+The emergency card now has two buttons, one per number from
+`EMERGENCY_NUMBERS`; its line ("In immediate danger?" in bold, then
+"Call 999 or 112.") keeps the same words but its numbers are plain text,
+so each number is a tap target once. No ask bar and no footer line, as
+in 7c.
+
+**New copy** (`content/uiText.ts`): `CLARIFY_PICK_LABEL` "Pick the
+closest", `CLARIFY_MORE_WORDS`, `CLARIFY_PLACEHOLDER` "Add a few more
+words".
+
+**Contrast.** No fill was darkened: white 13px text is 5.87:1 on
+#C2185B and 6.32:1 on #A21CAF. The #9A6AB5 edges are 4.12:1 on white
+and 3.04:1 on the page; the 999 and 112 buttons' edge #B8447E is 4.37:1
+on the pink card. The clarify ask pill alone uses #9A6AB5; the other ask
+pills keep #C25A92 (3.00:1 on the page).
+
+**Unconfirmed Childline sentence** ("…is free for anyone under 18"):
+unchanged; still on the held A, held B, help and no-answer screens. **Resolved on 22 October 2026** (see "Helpline 116 wording"): the sentence now reads "Childline Kenya, 116, is a free 24-hour helpline for children."
+
+## Help sheet to the redesigned board (2026-10-22)
+
+Redesign step 3c (`fix/ui-redesign`), on Cindy's brief. Styling and UI
+copy only; the helpline constants and their descriptions, every reply
+text and the quick-exit behaviour are unchanged.
+
+**A page under the header.** The sheet was a modal overlay that covered
+the header, so it carried its own Exit. It is now the page under the
+app header: the screen behind stays mounted but hidden (its state is
+kept), and the header's Exit stays in view and tappable, so the sheet
+no longer duplicates it. It is still a modal dialog (`aria-modal`,
+labelled by its h1 "Help"); focus still moves to its close button on
+open and stays inside it on Tab; Escape and "Close help" close it and
+return focus to the Help button; double Escape still exits; a topic
+pill still closes it and opens that Topic list. The brief's tests ask
+for focus on the h1 on open; the brief also freezes focus handling, so
+focus stays on the close button as built (a one-line change if wanted).
+
+**Layout.** The board's "How SafeGirl works" gradient card, the tips
+card, the 1195 (plum) and 116 (outlined) call buttons with icon tiles,
+the pink emergency line, wrapping topic pills in each topic's colour,
+and the anonymous line at the foot.
+
+**Wording.** Kept as built: the section heading "Topics" (the board
+says "Browse topics"); the anonymous line "Anonymous. We never ask for
+your name." (the board adds "\"Exit\" closes SafeGirl quickly."); both
+how-it-works paragraphs. Moved into constants without changing a word:
+the 1195 note `GBV_HELP_SHEET_NOTE` ("GBV helpline. Free, 24 hours,
+English and Kiswahili.", as verified by Cindy's call on 20 October) and
+`ANONYMOUS_LINE` (now shared with Home). Changed as briefed: the 116
+note is now `SUPPORT_SECTIONS` word for word, "Childline Kenya. For
+anyone under 18." (it was "Childline Kenya, for children and young
+people.", written in step 3 to avoid an age claim); it has no "free".
+
+**Contrast.** Close button and 116 edges #9A6AB5 (3.04:1 on the page).
+Topic pill borders, lightened from each text colour while keeping 3:1 on
+the page: periods #BA5D82 (3.12), pregnancy #8F68CD (3.09),
+contraception #AA5EB1 (3.14), STIs #BE5E78 (3.07). No fill darkened.
+The 1195 button's focus ring is white and drawn inside it.
+
+**Wide screens.** The aside "Need more support?" (`SupportContent`) is
+different content (local services, helplines and emergency guidance as
+a list), so it was not restyled.
+
+## Helpline 116 wording (2026-10-22)
+
+A documented decision by the project owner, taken on 22 October 2026
+after checking the Childline Kenya website. The only change in this
+step.
+
+**Change.** In the help, no-answer, held A and held B reply texts
+(gateway `src/content/helpContent.js` and its offline copy), "Childline
+Kenya, 116, is free for anyone under 18." becomes "Childline Kenya, 116,
+is a free 24-hour helpline for children." Every other word is
+unchanged. The 116 call button's description (`SUPPORT_SECTIONS`)
+becomes "Childline Kenya. Free, 24 hours, for children." (it was
+"Childline Kenya. For anyone under 18."). The abuse referral's
+"(for anyone under 18)" is unchanged, as decided. No claim about
+languages, airtime, networks or ages was added.
+
+**Reason.** The old text implied that the line was free only for
+under-18s.
+
+**Evidence** (childlinekenya.co.ke, fetched 22 October 2026, quoted):
+
+- "Kenya's only 24-hour, toll-free telephone and web-based helpline for
+  children."
+- "available on mobile devices for free from anywhere in Kenya"
+- "accessible to children and adults who have identified or witnessed
+  violence against children"
+- "Other members of the public also access the Helpline to report cases
+  on behalf of children"
+- "The number 116 belongs to the Government and Childline manages it on
+  behalf of the Government as a technical partner."
+
+**Not verified:** languages, airtime and network claims, and the
+childrenservices.go.ke page, which blocks automated access.
+
+**Decision owner:** the project owner. `HELP_CONTACTS_VERIFIED` stays
+`false`, pending the CREAW check. The 1195, 999 and 112 numbers and
+text are unchanged.
+
+**Resolves** the open item "the 116 claim in the replies" (Splash and
+Help sheet entry) and the later notes listing the screens that showed
+the unconfirmed sentence.
+
+## Matched-question banner by how she asked (2026-10-22)
+
+Redesign step 6c (`fix/ui-redesign`), on Cindy's brief. Interface only:
+no reply or KB text, matching, retrieval, gate or threshold changed.
+
+**The problem.** Every answer showed "The closest question I have" over
+the matched question. After a tapped Topic list or related-question row,
+that banner repeated the question she had just tapped under a label
+saying "closest".
+
+**Typed or tapped.** App now records, per question, how it was asked
+(`via` on the reply turn, in memory only, never sent): typed in an ask
+bar (Home, the answer screen or the Topic list's), or tapped on a Topic
+list row or a related-question row. The request body is unchanged:
+exactly `{"text": …}`.
+
+- **Typed:** the lilac banner stays, labelled "I found a question like
+  yours" (`MATCH_LABEL`), with the matched question unchanged; under it,
+  "Not what you meant? Try different words or pick a topic."
+  (`MATCH_HINT`). The banner shows on this path even when the match is
+  exact: no strings are compared.
+- **Tapped:** no banner, label or hint. The question is the heading
+  above the answer card. It is the response's matched question: the
+  same as the tapped row for 20 of the 21 rows; for KB-P1, which the
+  pipeline answers with KB-G3, the heading names KB-G3's question, so the
+  heading always matches the answer under it.
+
+On both paths the heading is the screen's only h1 and takes the
+programmatic focus, with no ring.

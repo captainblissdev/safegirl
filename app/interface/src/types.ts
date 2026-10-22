@@ -103,6 +103,32 @@ export interface ChatTurn {
   answerFound?: boolean;
   // How the answer was produced, for the demo details view.
   details?: AnswerDetails;
+  // From the response, as sent: the reply kind, the matched knowledge-base
+  // question and the entry's source. The answer screen uses them.
+  kind?: ReplyKind;
+  matchedQuestion?: string | null;
+  source?: string | null;
+  // The loop limit (loopLimit.ts) was reached on this vague or abstain
+  // reply: the Talk to a person screen shows instead of it.
+  loopLimited?: boolean;
+  // How the question was asked (interface state only, never sent): typed
+  // in an ask bar, or tapped on a Topic list or related-question row.
+  via?: AnswerVia;
 }
 
-export type Screen = "disclaimer" | "chat" | "referral" | "sessionEnd";
+/** How a question reached the pipeline: typed, or a tapped question row. */
+export type AnswerVia = "typed" | "tapped";
+
+/** A knowledge-base answer: shown on the answer screen. */
+export function isAnswerTurn(turn: ChatTurn | undefined): boolean {
+  return (
+    turn?.role === "assistant" &&
+    (turn.kind === "answer-scoped" || turn.kind === "answer-unscoped") &&
+    typeof turn.matchedQuestion === "string" &&
+    turn.matchedQuestion !== ""
+  );
+}
+
+// "splash" is the once-per-session privacy and safety disclaimer (FR-05).
+// "topic" is the Topic list: the knowledge-base questions of one class.
+export type Screen = "splash" | "chat" | "topic" | "referral" | "sessionEnd";

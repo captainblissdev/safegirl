@@ -1,0 +1,244 @@
+/*
+ * SafeGirl design tokens: the one source of truth for colour, type,
+ * shape and focus. Every other stylesheet uses these variables; no
+ * colour value is written anywhere else. Contrast is checked by
+ * src/styles/tokens.test.ts (text 4.5:1 or more, focus ring 3:1 or more).
+ *
+ * Adjusted from the brief for contrast (tint only, same meaning): rose
+ * and orchid stay as fills and gradient stops; their text variants are
+ * darker (#DB2777 4.34:1 and #C026D3 4.45:1 on the page). The "Girl" of
+ * the wordmark uses the rose text colour (the brief's #BE185D is 4.46:1
+ * on the lilac glow).
+ */
+:root {
+  /* Type: Nunito, self-hosted (see the @font-face in index.css). */
+  --font-family:
+    "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --weight-regular: 400;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+  --weight-black: 900;
+
+  /* Core colours. */
+  --color-ink: #2a1245; /* body text */
+  --color-muted: #6b4f86; /* secondary text */
+  --color-violet: #6d28d9; /* links, icons, focus ring */
+  --color-orchid: #c026d3; /* gradient stop and fills only */
+  --color-orchid-text: #a320b3; /* orchid as text */
+  --color-rose: #db2777; /* fills only */
+  --color-rose-text: #b81f63; /* rose as text */
+  --color-plum: #3b0f6b; /* deep plum: headings on light, dark surfaces */
+  --color-on-dark: #ffffff; /* text on gradients and dark surfaces */
+  --color-control-border: #8570b8; /* input outlines, 3:1 or more */
+
+  /* Gradients. */
+  --gradient-primary: linear-gradient(135deg, #6d28d9, #c026d3);
+  --gradient-hero: linear-gradient(
+    135deg,
+    #5b21b6 0%,
+    #8a24c9 55%,
+    #a21caf 100%
+  );
+  /* Splash: deep plum, violet, magenta. */
+  --gradient-splash: linear-gradient(
+    165deg,
+    #3b0f6b 0%,
+    #5b21b6 45%,
+    #a21caf 100%
+  );
+  --splash-glow-rose: rgba(244, 114, 182, 0.28);
+  --splash-glow-orchid: rgba(192, 38, 211, 0.3);
+  --splash-tagline: #f6e9ff;
+  /*
+   * Glass cards and the Exit pill: 7% white, darkened from the design's
+   * 14% so that white text keeps 4.5:1 over the lightest part of the
+   * gradient with a glow on top (4.52:1; 14% gave 4.04:1).
+   */
+  --splash-glass-bg: rgba(255, 255, 255, 0.07);
+  --splash-glass-border: rgba(255, 255, 255, 0.28);
+  --splash-button-text: #4c1d95;
+  --splash-icon-lock: #6d28d9;
+  --splash-icon-speech: #a21caf;
+  --splash-icon-shield: #be185d;
+
+  /* Home hero: the tag pill's fill (white text 4.94:1 at the light end). */
+  /* Home (step 4b): the hero card, its pill and decoration, the ask
+     card, the footer card and the topic cards' shadow. */
+  --hero-shadow: 0 14px 28px rgba(91, 33, 182, 0.28);
+  --hero-circle-strong: rgba(244, 114, 182, 0.35);
+  --hero-circle-soft: rgba(244, 114, 182, 0.22);
+  --hero-pill-bg: #ffffff;
+  --hero-pill-text: #9d174d;
+  --hero-sub-text: #f6e9ff;
+  --ask-card-shadow: 0 8px 20px rgba(109, 40, 217, 0.08);
+  --ask-field-bg: #fff0f7;
+  /* The design's #f3c6de field edge is 1.37:1; the field is a control,
+     so its edge is darkened to reach 3:1 on the field and the card. */
+  --ask-field-edge: #c25a92;
+  --send-shadow: 0 6px 14px rgba(192, 38, 211, 0.35);
+  /* The empty field's send button: still visibly a button. */
+  --send-disabled-bg: #8b5cf6;
+  --footer-card-bg: #ffe9f4;
+  --footer-card-text: #5e2a58;
+  --topic-card-shadow: 0 6px 16px rgba(190, 24, 93, 0.08);
+
+  /* Topic list and answer screen (step 6b). */
+  --topic-head-bg: linear-gradient(135deg, #ffdce4, #f4d9fb);
+  --topic-head-bg-start: #ffdce4;
+  --topic-head-bg-end: #f4d9fb;
+  --topic-head-tile-shadow: 0 6px 14px rgba(190, 18, 60, 0.16);
+  --list-card-shadow: 0 8px 20px rgba(109, 40, 217, 0.08);
+  --list-row-divider: #f8e4ee;
+  /* The design's list and related-question cards use #f3d3e6 (about
+     1.3:1); they hold the question buttons, so their edge marks a
+     control and is darkened to the 3:1 pink of the ask field. */
+  --list-edge: #c25a92;
+  --answer-meta-border: #f6e3ef;
+  --ask-bar-shadow: 0 8px 20px rgba(109, 40, 217, 0.1);
+
+  /* Reply screens (step 7c). */
+  --held-card-shadow: 0 10px 24px rgba(219, 39, 119, 0.14);
+  --held-title: #4a0d2b;
+  --call-main-shadow: 0 8px 16px rgba(192, 38, 211, 0.3);
+  /* The 116 button's edge (step 7d's #9a6ab5): 4.12:1 on white, 3.04:1
+     on the page. */
+  --call-second-edge: #9a6ab5;
+  --call-second-icon: #a21caf;
+  --support-hero-bg: linear-gradient(
+    135deg,
+    #3b0f6b 0%,
+    #6b21a8 60%,
+    #86198f 100%
+  );
+  --support-hero-shadow: 0 14px 28px rgba(59, 15, 107, 0.3);
+  --support-circle: rgba(244, 114, 182, 0.3);
+  --support-pill-text: #6b21a8;
+  /* White 13px text: 5.87:1 on #c2185b, 6.32:1 on #a21caf. */
+  --support-call-bg: linear-gradient(135deg, #c2185b, #a21caf);
+  --support-call-shadow: 0 10px 20px rgba(194, 24, 91, 0.3);
+  --back-button-edge: #9a6ab5;
+  /* The emergency card's 999 and 112 buttons (step 7d). */
+  --emergency-button-edge: #b8447e;
+  --emergency-button-text: #7a0e45;
+  /* Clarify (step 7d): her message, the card, the sparkle, the ask pill. */
+  --bubble-bg: linear-gradient(135deg, #3b0f6b, #6b21a8);
+  --bubble-bg-start: #3b0f6b;
+  --bubble-bg-end: #6b21a8;
+  --bubble-shadow: 0 8px 18px rgba(59, 15, 107, 0.22);
+  --clarify-card-shadow: 0 10px 24px rgba(109, 40, 217, 0.12);
+  --clarify-more-bg: rgba(255, 255, 255, 0.7);
+  --clarify-pill-edge: #9a6ab5;
+
+  /* Help sheet (step 3c). */
+  --help-how-bg: linear-gradient(135deg, #5b21b6, #a21caf);
+  --help-how-bg-start: #5b21b6;
+  --help-how-bg-end: #a21caf;
+  --help-how-shadow: 0 12px 26px rgba(109, 40, 217, 0.25);
+  --tips-text: #3a2d52;
+  --sheet-control-edge: #9a6ab5;
+  --close-icon: #4a1d7a;
+  --help-call-shadow: 0 10px 22px rgba(59, 15, 107, 0.25);
+  --help-call-tile: rgba(255, 255, 255, 0.18);
+  --help-call-second-tile: #ffe4f1;
+  --help-call-second-icon: #be185d;
+  /* Topic pills: text, and a lighter tint of it for the border that
+     still reaches 3:1 on the page and its glows. */
+  --pill-periods-text: #9d174d;
+  --pill-periods-edge: #ba5d82;
+  --pill-pregnancy-text: #5b21b6;
+  --pill-pregnancy-edge: #8f68cd;
+  --pill-contraception-text: #86198f;
+  --pill-contraception-edge: #aa5eb1;
+  --pill-sti-text: #9f1239;
+  --pill-sti-edge: #be5e78;
+  --back-button-text: #4a1d7a;
+
+  /*
+   * Home topic tiles: the edge of each tile (a button) is the lightest
+   * shade of its topic's hue with 3:1 against the page and both glows;
+   * the brief's tint border (#FFDDEE and so on) gave about 1.05:1.
+   */
+  --topic-periods-edge: #e5337d;
+  --topic-pregnancy-edge: #9360e3;
+  --topic-contraception-edge: #ce30de;
+  --topic-sti-edge: #eb315f;
+
+  /* Topic list: the round tile behind each question's chevron. */
+  --chevron-tile-bg: #ffe4f1;
+
+  /* The shield-and-heart mark. */
+  --mark-gradient: linear-gradient(135deg, #6d28d9, #db2777);
+  --mark-tile-light: linear-gradient(160deg, #ffffff, #ffe4f1);
+
+  /* Page: background colour with two soft glows. */
+  --color-page: #fff6fb;
+  --glow-pink: #ffd3ea; /* top right */
+  --glow-lilac: #e6d7ff; /* left */
+  --page-background:
+    radial-gradient(circle at 100% 0%, var(--glow-pink) 0, transparent 42%),
+    radial-gradient(circle at 0% 45%, var(--glow-lilac) 0, transparent 40%),
+    var(--color-page);
+
+  /* Cards. */
+  --color-card: #ffffff;
+  --color-card-border: #f3d3e6;
+  --radius-card: 22px;
+  --radius-card-large: 28px;
+  --color-tint: #f3e8ff; /* soft violet tint for small surfaces */
+
+  /* Focus: 3px violet ring, 2px offset; white on dark surfaces. */
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--color-violet);
+  --focus-ring-on-dark: #ffffff;
+
+  /* Every tap target is at least this tall and wide. */
+  --tap-target: 44px;
+
+  /* Reply kinds. */
+  --answer-bg-start: #f3e8ff;
+  --answer-bg-end: #ffe4f1;
+  --answer-text: #5b21b6;
+  --clarify-bg-start: #f1e4ff;
+  --clarify-bg-end: #ffe1f0;
+  --clarify-text: #86198f;
+  --held-bg: #fff0f6;
+  --held-border: #f472b6;
+  --held-text: #9d174d;
+  --support-bg-start: #3b0f6b;
+  --support-bg-end: #86198f;
+  --support-text: #ffffff;
+  --noanswer-bg: #f3eefa;
+  --noanswer-border: #dccdf0;
+  --noanswer-text: #4b3f63;
+
+  /* Answer screen: the closest-question card and the answer card. The
+     answer card's border is decorative only (the card is not a control,
+     and its text stands on white); the shadow is a soft violet. */
+  --closest-bg: #eee4ff;
+  --closest-label: #5b21b6;
+  --answer-card-border: #ebd5f7;
+  --shadow-violet: 0 10px 24px rgba(109, 40, 217, 0.1);
+
+  /* Reply screens (clarify, held, help and referral, no answer): pills,
+     decoration and the support card's buttons. */
+  --reply-pill-bg: #ffffff;
+  --clarify-sparkle: #c026d3;
+
+  /* Topic tints: background and text. */
+  --topic-periods-bg: #ffddee;
+  --topic-periods-text: #be185d;
+  --topic-pregnancy-bg: #eadcff;
+  --topic-pregnancy-text: #6d28d9;
+  --topic-contraception-bg: #f8d9fa;
+  --topic-contraception-text: #a21caf;
+  --topic-sti-bg: #ffdce4;
+  --topic-sti-text: #be123c;
+
+  /* Depth. */
+  --overlay: rgba(42, 18, 69, 0.5);
+  --shadow: 0 18px 48px rgba(42, 18, 69, 0.12);
+  --shadow-soft: 0 4px 14px rgba(42, 18, 69, 0.06);
+}

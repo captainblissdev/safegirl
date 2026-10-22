@@ -1,0 +1,143 @@
+[
+ {
+  "page": "home",
+  "run": 1,
+  "tool": "lighthouse 12.3.0",
+  "mode": "navigation",
+  "performance": 98,
+  "accessibility": 100,
+  "best-practices": 100,
+  "seo": 91,
+  "lcp": "2.0 s",
+  "fcp": "1.8 s",
+  "tbt": "0 ms",
+  "cls": "0.023",
+  "landed": "http://127.0.0.1:4173/"
+ },
+ {
+  "page": "answer",
+  "run": 1,
+  "tool": "lighthouse 12.3.0",
+  "mode": "time span + snapshot",
+  "timespanPerformance": 100,
+  "tbt": "50 ms",
+  "cls": "0.002",
+  "inp": "30 ms",
+  "accessibility": 100,
+  "best-practices": 100,
+  "seo": 80,
+  "snapshotPerformance": 0
+ },
+ {
+  "page": "home",
+  "run": 1,
+  "tool": "lighthouse 11.7.1",
+  "mode": "navigation, PWA only",
+  "pwa": 100,
+  "pwaAudits": [
+   "installable-manifest: 1",
+   "splash-screen: 1",
+   "themed-omnibox: 1",
+   "content-width: 1",
+   "viewport: 1",
+   "maskable-icon: 1",
+   "pwa-cross-browser: n/a",
+   "pwa-page-transitions: n/a",
+   "pwa-each-page-has-url: n/a"
+  ]
+ },
+ {
+  "page": "home",
+  "run": 2,
+  "tool": "lighthouse 12.3.0",
+  "mode": "navigation",
+  "performance": 98,
+  "accessibility": 100,
+  "best-practices": 100,
+  "seo": 91,
+  "lcp": "2.0 s",
+  "fcp": "1.8 s",
+  "tbt": "0 ms",
+  "cls": "0.023",
+  "landed": "http://127.0.0.1:4173/"
+ },
+ {
+  "page": "answer",
+  "run": 2,
+  "tool": "lighthouse 12.3.0",
+  "mode": "time span + snapshot",
+  "timespanPerformance": 100,
+  "tbt": "50 ms",
+  "cls": "0.002",
+  "inp": "30 ms",
+  "accessibility": 100,
+  "best-practices": 100,
+  "seo": 80,
+  "snapshotPerformance": 0
+ },
+ {
+  "page": "home",
+  "run": 2,
+  "tool": "lighthouse 11.7.1",
+  "mode": "navigation, PWA only",
+  "pwa": 100,
+  "pwaAudits": [
+   "installable-manifest: 1",
+   "splash-screen: 1",
+   "themed-omnibox: 1",
+   "content-width: 1",
+   "viewport: 1",
+   "maskable-icon: 1",
+   "pwa-cross-browser: n/a",
+   "pwa-page-transitions: n/a",
+   "pwa-each-page-has-url: n/a"
+  ]
+ },
+ {
+  "page": "home",
+  "run": 3,
+  "tool": "lighthouse 12.3.0",
+  "mode": "navigation",
+  "performance": 98,
+  "accessibility": 100,
+  "best-practices": 100,
+  "seo": 91,
+  "lcp": "2.0 s",
+  "fcp": "1.8 s",
+  "tbt": "0 ms",
+  "cls": "0.023",
+  "landed": "http://127.0.0.1:4173/"
+ },
+ {
+  "page": "answer",
+  "run": 3,
+  "tool": "lighthouse 12.3.0",
+  "mode": "time span + snapshot",
+  "timespanPerformance": 100,
+  "tbt": "60 ms",
+  "cls": "0.002",
+  "inp": "30 ms",
+  "accessibility": 100,
+  "best-practices": 100,
+  "seo": 80,
+  "snapshotPerformance": 0
+ },
+ {
+  "page": "home",
+  "run": 3,
+  "tool": "lighthouse 11.7.1",
+  "mode": "navigation, PWA only",
+  "pwa": 100,
+  "pwaAudits": [
+   "installable-manifest: 1",
+   "splash-screen: 1",
+   "themed-omnibox: 1",
+   "content-width: 1",
+   "viewport: 1",
+   "maskable-icon: 1",
+   "pwa-cross-browser: n/a",
+   "pwa-page-transitions: n/a",
+   "pwa-each-page-has-url: n/a"
+  ]
+ }
+]

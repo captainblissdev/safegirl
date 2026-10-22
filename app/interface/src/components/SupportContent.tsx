@@ -1,3 +1,4 @@
+import { telHref, telName } from "../content/telHref";
 import { SUPPORT_SECTIONS } from "../offline/helpContent";
 
 /**
@@ -20,7 +21,9 @@ export default function SupportContent() {
                     {contact.numbers.map((number, index) => (
                       <span key={number}>
                         {index > 0 && " or "}
-                        <a href={`tel:${number}`}>{number}</a>
+                        <a href={telHref(number)} aria-label={telName(number)}>
+                          {number}
+                        </a>
                       </span>
                     ))}
                   </span>

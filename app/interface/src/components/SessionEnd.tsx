@@ -22,7 +22,7 @@ export default function SessionEnd({ onStartNew }: Props) {
           <LeafIcon size={32} />
         </span>
 
-        <h2 id="session-end-title">Session ended.</h2>
+        <h1 id="session-end-title">Session ended.</h1>
 
         <p>Your questions and answers were not saved.</p>
 

@@ -130,14 +130,14 @@ describe("held-topic replies", () => {
   it("uses the provisional wording for group A", () => {
     assert.equal(
       HELD_TOPIC_MESSAGES.A,
-      "This is an important question, and I can't answer it safely here yet. A nurse, a pharmacist or a clinic can help, and you do not have to give a reason. If something happened recently, do not wait: some options work best soon after sex. If you are in danger or someone has hurt you, call the GBV helpline 1195. Childline Kenya, 116, is free for anyone under 18.",
+      "This is an important question, and I can't answer it safely here yet. A nurse, a pharmacist or a clinic can help, and you do not have to give a reason. If something happened recently, do not wait: some options work best soon after sex. If you are in danger or someone has hurt you, call the GBV helpline 1195. Childline Kenya, 116, is a free 24-hour helpline for children.",
     );
   });
 
   it("uses the provisional wording for group B", () => {
     assert.equal(
       HELD_TOPIC_MESSAGES.B,
-      "This is an important question, and I can't answer it safely here yet. A nurse or counsellor can talk it through with you privately and without judgement, and you do not have to give a reason. If you are in danger or someone has hurt you, call the GBV helpline 1195. Childline Kenya, 116, is free for anyone under 18.",
+      "This is an important question, and I can't answer it safely here yet. A nurse or counsellor can talk it through with you privately and without judgement, and you do not have to give a reason. If you are in danger or someone has hurt you, call the GBV helpline 1195. Childline Kenya, 116, is a free 24-hour helpline for children.",
     );
   });
 

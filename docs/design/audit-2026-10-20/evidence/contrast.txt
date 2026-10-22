@@ -1,0 +1,193 @@
+Test 1: the brief's tokens are defined with their values
+  PASS: --color-ink is #2a1245
+  PASS: --color-muted is #6b4f86
+  PASS: --color-violet is #6d28d9
+  PASS: --color-orchid is #c026d3
+  PASS: --color-rose is #db2777
+  PASS: --color-plum is #3b0f6b
+  PASS: --color-page is #fff6fb
+  PASS: --glow-pink is #ffd3ea
+  PASS: --glow-lilac is #e6d7ff
+  PASS: --color-card is #ffffff
+  PASS: --color-card-border is #f3d3e6
+  PASS: --focus-ring-width is 3px
+  PASS: --focus-ring-offset is 2px
+  PASS: --tap-target is 44px
+  PASS: --answer-bg-start is #f3e8ff
+  PASS: --answer-bg-end is #ffe4f1
+  PASS: --answer-text is #5b21b6
+  PASS: --clarify-bg-start is #f1e4ff
+  PASS: --clarify-bg-end is #ffe1f0
+  PASS: --clarify-text is #86198f
+  PASS: --held-bg is #fff0f6
+  PASS: --held-border is #f472b6
+  PASS: --held-text is #9d174d
+  PASS: --support-bg-start is #3b0f6b
+  PASS: --support-bg-end is #86198f
+  PASS: --support-text is #ffffff
+  PASS: --noanswer-bg is #f3eefa
+  PASS: --noanswer-border is #dccdf0
+  PASS: --noanswer-text is #4b3f63
+  PASS: --topic-periods-bg is #ffddee
+  PASS: --topic-periods-text is #be185d
+  PASS: --topic-pregnancy-bg is #eadcff
+  PASS: --topic-pregnancy-text is #6d28d9
+  PASS: --topic-contraception-bg is #f8d9fa
+  PASS: --topic-contraception-text is #a21caf
+  PASS: --topic-sti-bg is #ffdce4
+  PASS: --topic-sti-text is #be123c
+  PASS: primary gradient #6D28D9 to #C026D3
+  PASS: hero gradient #5B21B6 to #A21CAF
+  PASS: card radius between 22 and 28px
+
+Test 2: every text pair reaches 4.5:1
+  PASS: ink: 12.22:1
+  PASS: muted: 5.03:1
+  PASS: violet: 5.25:1
+  PASS: rose text: 4.55:1
+  PASS: orchid text: 4.55:1
+  PASS: white on primary: 4.71:1
+  PASS: white on hero: 6.32:1
+  PASS: support text: 8.24:1
+  PASS: answer text: 7.54:1
+  PASS: clarify text: 6.78:1
+  PASS: held text: 7.15:1
+  PASS: no-answer text: 8.41:1
+  PASS: periods: 4.84:1
+  PASS: pregnancy: 5.47:1
+  PASS: contraception: 4.91:1
+  PASS: STIs: 4.97:1
+
+Test 3: the focus ring reaches 3:1 where it is used
+  PASS: violet ring on light: 5.25:1
+  PASS: white ring on dark: 4.71:1
+
+Test 4: global focus, motion, font and tap-target rules
+  PASS: index.css imports the tokens first
+  PASS: focus ring: 3px violet, 2px offset, from the tokens
+  PASS: white focus ring on dark surfaces
+  PASS: reduced motion turns animation and transition off
+  PASS: body uses the token font and page background
+  PASS: buttons are at least the tap-target height
+
+Test 5: no colour value outside tokens.css
+
+Test 6: control edges and the header's new pairs
+  PASS: control border on every light surface: 3.10:1
+  PASS: plum ("Safe", Exit fill) on light: 10.59:1
+  PASS: white on plum (Exit label): 14.32:1
+  PASS: .topic-questions has a 3:1 edge, not the card border
+  PASS: .btn-close has a 3:1 edge, not the card border
+  PASS: .btn-help has a 3:1 edge, not the card border
+  PASS: .btn-exit has a 3:1 edge, not the card border
+  PASS: the ask bar input has the control border
+
+Test 7: the splash, worst case: lightest stop with a glow on top
+  PASS: the splash gradient runs #3B0F6B, #5B21B6, #A21CAF
+  PASS: white text anywhere on the splash: 5.01:1
+  PASS: tagline and privacy line #F6E9FF: 4.95:1
+  (for the record: #F6E9FF over the rose glow would be 4.30:1)
+  PASS: white text on the glass cards and Exit pill: 4.52:1
+  PASS: the Exit pill's white border: 5.01:1
+  PASS: white focus ring on the splash: 5.01:1
+  PASS: #4C1D95 on the white button: 10.95:1
+  PASS: the white button's edge: 5.01:1
+  PASS: --splash-icon-lock on its white tile: 7.10:1
+  PASS: --splash-icon-speech on its white tile: 6.32:1
+  PASS: --splash-icon-shield on its white tile: 6.04:1
+
+Test 8: the shield-and-heart mark
+  PASS: header tile #6D28D9 to #DB2777
+  PASS: white shield and heart on the header tile: 4.60:1
+  PASS: splash tile white to #FFE4F1
+  PASS: violet shield on the splash tile: 5.96:1
+  PASS: rose heart on the splash tile: 3.86:1
+
+Test 9: Home
+  PASS: tag pill: white on its fill over the hero: 4.94:1
+  PASS: heading and subtext, white on the hero: 6.32:1
+  PASS: the white ask pill's edge on the hero: 6.32:1
+  PASS: placeholder on the pill: 6.80:1
+  PASS: typed text on the pill: 16.52:1
+  PASS: the send arrow, white on violet to orchid: 4.71:1
+  PASS: the send button on the white pill: 4.71:1
+  PASS: violet focus ring inside the white pill: 7.10:1
+  PASS: periods tile edge on the page and glows: 3.04:1
+  PASS: periods icon on its tint: 4.84:1
+  PASS: periods: muted text on the tint, for the record: 5.45:1
+  PASS: pregnancy tile edge on the page and glows: 3.09:1
+  PASS: pregnancy icon on its tint: 5.47:1
+  PASS: pregnancy: muted text on the tint, for the record: 5.24:1
+  PASS: contraception tile edge on the page and glows: 3.04:1
+  PASS: contraception icon on its tint: 4.91:1
+  PASS: contraception: muted text on the tint, for the record: 5.28:1
+  PASS: sti tile edge on the page and glows: 3.02:1
+  PASS: sti icon on its tint: 4.97:1
+  PASS: sti: muted text on the tint, for the record: 5.38:1
+  PASS: tile labels, ink on the white tile: 16.52:1
+  PASS: tile subtitles, muted on the white tile: 6.80:1
+  PASS: "Anonymous…", muted on the page: 5.03:1
+  PASS: "Or browse by topic", plum on the page: 10.59:1
+
+Test 10: the Topic list
+  PASS: "All topics", violet on the page: 5.25:1
+  PASS: the h1, plum on the page: 10.59:1
+  PASS: "N questions", muted on the page: 5.03:1
+  PASS: question rows, ink on white: 16.52:1
+  PASS: the list card's edge: 3.10:1
+  PASS: chevron, rose on its tile: 5.16:1
+  PASS: focus ring inside the white card: 7.10:1
+
+Test 11: the answer screen
+  PASS: "The closest question I have" on its card: 7.35:1
+  PASS: the matched question on its card: 13.52:1
+  PASS: focus ring on the closest card: 5.81:1
+  PASS: "Answer" on the pill gradient (worst end): 7.54:1
+  PASS: the answer text on white: 16.52:1
+  PASS: source and disclaimer on white: 6.80:1
+  PASS: "Related questions" on the page: 10.59:1
+  PASS: footer line on the white dock: 16.52:1
+  PASS: footer link on the white dock: 7.10:1
+  INFO: the answer card's decorative border: 1.00:1
+
+Test 12: the reply screens (clarify, held, help and referral, no answer)
+  PASS: "You asked", muted on the page: 5.03:1
+  PASS: her question, ink on the page: 12.22:1
+  PASS: clarify text on its gradient (worst end): 13.60:1
+  PASS: "Tell me a bit more" on the white pill: 8.24:1
+  PASS: topic button edge on the clarify gradient: 3.45:1
+  PASS: topic button label on white: 16.52:1
+  PASS: focus ring on the clarify gradient: 5.85:1
+  PASS: the fallback line, muted on the page: 5.03:1
+  PASS: held text on its card: 7.15:1
+  PASS: held pill text on white: 7.88:1
+  PASS: 1195 button: white on plum: 14.32:1
+  PASS: 1195 button edge on the held card: 12.99:1
+  PASS: 116 button text on white: 7.88:1
+  PASS: 116 button edge on the held card: 3.80:1
+  PASS: focus ring on the held card: 6.44:1
+  PASS: "Ask a different question" on the page: 5.25:1
+  PASS: white text on the lightest stop: 8.24:1
+  PASS: white text on the darkest stop: 14.32:1
+  PASS: pill text on its glass, over the lightest stop: 5.90:1
+  PASS: 1195 button: plum on white: 14.32:1
+  PASS: 1195 button edge (white) on the lightest stop: 8.24:1
+  PASS: 116 button text on its glass, over the lightest stop: 6.43:1
+  PASS: 116 button edge against its own glass: 4.31:1
+  PASS: 116 button edge on the lightest stop: 5.52:1
+  PASS: white focus ring on the lightest stop: 8.24:1
+  PASS: no-answer text on its card: 8.41:1
+  PASS: "No answer yet" on the white pill: 9.59:1
+  PASS: topic pill edge on the no-answer card: 3.68:1
+  PASS: focus ring on the no-answer card: 6.23:1
+  INFO: decorative: held card border 2.40:1, no-answer card border 1.31:1
+
+Test 13: the Talk to a person screen
+  PASS: message on the card: 8.41:1
+  PASS: "Let's find a person" on the white pill: 9.59:1
+  PASS: "See who can help": white on plum: 14.32:1
+  PASS: the button's edge on the card: 12.56:1
+  PASS: focus ring on the card: 6.23:1
+  PASS: topic pill edge on the card: 3.68:1
+
+All design token tests passed.

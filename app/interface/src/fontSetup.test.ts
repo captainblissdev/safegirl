@@ -43,6 +43,11 @@ console.log("\nTest 2: the @font-face is self-hosted, swap, Latin-only");
     "loads the bundled WOFF2",
   );
   assert(face.includes("unicode-range"), "declares a Latin unicode-range");
+  const weights = /font-weight:\s*(\d+)\s+(\d+);/.exec(face);
+  assert(
+    weights !== null && Number(weights[1]) <= 400 && Number(weights[2]) >= 900,
+    "one variable file covers weights 400 to 900",
+  );
   assert(
     !/fonts\.(googleapis|gstatic)\.com/.test(css + read("../index.html")),
     "nothing is loaded from Google Fonts",

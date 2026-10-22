@@ -8,9 +8,15 @@ import type { ReactNode } from "react";
 
 interface IconProps {
   size?: number;
+  /** Line width; 2 unless set (the splash promise icons use 2.2). */
+  strokeWidth?: number;
 }
 
-function Svg({ size = 24, children }: IconProps & { children: ReactNode }) {
+function Svg({
+  size = 24,
+  strokeWidth = 2,
+  children,
+}: IconProps & { children: ReactNode }) {
   return (
     <svg
       width={size}
@@ -18,7 +24,7 @@ function Svg({ size = 24, children }: IconProps & { children: ReactNode }) {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
@@ -29,28 +35,46 @@ function Svg({ size = 24, children }: IconProps & { children: ReactNode }) {
   );
 }
 
-/** The SafeGirl mark: a white heart in a purple-gradient circle. */
-export function LogoMark({ size = 32 }: IconProps) {
+/**
+ * The SafeGirl mark: a shield with a heart inside, on a rounded tile. One
+ * shared mark for the header and the splash; only its colours differ,
+ * and they come from CSS (.mark--header, .mark--splash), never from here.
+ * - "header": a violet-to-rose gradient tile, white shield and heart.
+ * - "splash": a white-to-pink tile, violet shield, rose heart.
+ */
+export function ShieldHeartMark({
+  variant = "header",
+  size = 36,
+}: {
+  variant?: "header" | "splash";
+  size?: number;
+}) {
+  const glyph = Math.round(size * 0.62);
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 100 100"
+    <span
+      className={`mark mark--${variant}`}
+      style={{ width: size, height: size }}
       aria-hidden="true"
-      focusable="false"
     >
-      <defs>
-        <linearGradient id="sg-logo-gradient" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" style={{ stopColor: "var(--primary)" }} />
-          <stop offset="1" style={{ stopColor: "var(--primary-end)" }} />
-        </linearGradient>
-      </defs>
-      <circle cx="50" cy="50" r="50" fill="url(#sg-logo-gradient)" />
-      <path
-        style={{ fill: "var(--on-primary)" }}
-        d="M50 75 C31 62 24 52 24 41 C24 32 31 26 38.5 26 C44 26 48 29.5 50 34 C52 29.5 56 26 61.5 26 C69 26 76 32 76 41 C76 52 69 62 50 75 Z"
-      />
-    </svg>
+      <svg
+        width={glyph}
+        height={glyph}
+        viewBox="0 0 24 24"
+        fill="none"
+        focusable="false"
+      >
+        <path
+          className="mark-shield"
+          d="M12 2.5l8 3.2v5.6c0 5-3.4 9.3-8 10.9-4.6-1.6-8-5.9-8-10.9V5.7l8-3.2z"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+        <path
+          className="mark-heart"
+          d="M12 16.4c-2.9-1.9-4.3-3.5-4.3-5.3 0-1.3 1-2.4 2.4-2.4.8 0 1.5.4 1.9 1.1.4-.7 1.1-1.1 1.9-1.1 1.4 0 2.4 1.1 2.4 2.4 0 1.8-1.4 3.4-4.3 5.3z"
+        />
+      </svg>
+    </span>
   );
 }
 
@@ -160,6 +184,39 @@ export function FlowerIcon(props: IconProps) {
   );
 }
 
+/** A drop, for the Periods and health topic. */
+export function DropIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 3c3.5 4.4 6 7.9 6 11a6 6 0 0 1-12 0c0-3.1 2.5-6.6 6-11z" />
+    </Svg>
+  );
+}
+
+export function ChevronLeftIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M15 5l-7 7 7 7" />
+    </Svg>
+  );
+}
+
+export function ChevronRightIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M9 5l7 7-7 7" />
+    </Svg>
+  );
+}
+
+export function SpeechIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z" />
+    </Svg>
+  );
+}
+
 export function LockIcon(props: IconProps) {
   return (
     <Svg {...props}>
@@ -198,6 +255,100 @@ export function SendIcon(props: IconProps) {
   return (
     <Svg {...props}>
       <path d="M12 19V5M6 11l6-6 6 6" />
+    </Svg>
+  );
+}
+
+export function CheckIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M5 12.5l4.5 4.5L19 7.5" />
+    </Svg>
+  );
+}
+
+export function QuestionIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6" />
+      <path d="M12 17h.01" />
+    </Svg>
+  );
+}
+
+export function InfoIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 11v5" />
+      <path d="M12 8h.01" />
+    </Svg>
+  );
+}
+
+export function SearchIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="11" cy="11" r="6.5" />
+      <path d="M16 16l4 4" />
+    </Svg>
+  );
+}
+
+export function PhoneIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M6.6 3.5h3l1.5 4-2 1.3a11 11 0 0 0 6.1 6.1l1.3-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z" />
+    </Svg>
+  );
+}
+
+export function PeopleIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="9" cy="8" r="3.2" />
+      <path d="M3.5 19a5.5 5.5 0 0 1 11 0" />
+      <circle cx="17" cy="9" r="2.5" />
+      <path d="M15.5 14.2A4.5 4.5 0 0 1 21 18.5" />
+    </Svg>
+  );
+}
+
+/** The design's four-pointed sparkle, filled (the Home hero). */
+export function HeroSparkle({ size = 26 }: IconProps) {
+  return (
+    <svg
+      className="hero-sparkle-icon"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        fill="currentColor"
+        d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"
+      />
+    </svg>
+  );
+}
+
+/** The design's small lock (Home's pill and footer card). */
+export function SmallLockIcon(props: IconProps) {
+  return (
+    <Svg strokeWidth={2.4} {...props}>
+      <rect x="5" y="11" width="14" height="9" rx="2" />
+      <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+    </Svg>
+  );
+}
+
+/** The send button's up arrow (Home's ask card). */
+export function ArrowUpIcon(props: IconProps) {
+  return (
+    <Svg size={20} strokeWidth={2.6} {...props}>
+      <path d="M12 19V5M5 12l7-7 7 7" />
     </Svg>
   );
 }

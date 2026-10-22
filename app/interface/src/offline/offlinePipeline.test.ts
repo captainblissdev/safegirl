@@ -1,5 +1,6 @@
 import { handleQueryOffline } from "./pipeline";
 import { handleQueryOffline as handleShippedOffline } from "./offlinePipeline";
+import { PLACEHOLDER_EXAMPLES } from "../content/uiText";
 import {
   ABUSE_REFERRAL_MESSAGE,
   HELD_TOPIC_MESSAGES,
@@ -132,5 +133,33 @@ console.log(
 );
 const r10 = handleShippedOffline("he forced me and the condom broke");
 assert(r10.outcome === "referral", "outcome is referral");
+
+console.log(
+  "\nTest 11: shipped offline pipeline, Home's examples get their own topic",
+);
+{
+  // The offline pipeline gives a general answer per category (it has no
+  // knowledge-base retrieval), so the check is that each example reaches
+  // the category of the entry it is the question of, and that no rule
+  // intercepts it. Retrieval of the entry itself is checked in the
+  // gateway (app/gateway/test/homeExamples.test.js).
+  const expected: Record<string, string> = {
+    "Can STIs be cured, and can they harm me if I leave them?": "sti",
+    "What can I do about period pain?": "general",
+    "Which birth control methods can a teenager use?": "contraception",
+    "Can I take PrEP to prevent HIV? I'm a teenager.": "sti",
+    "How do I manage my period hygienically?": "general",
+    "What warning signs in pregnancy mean I should go to hospital right away?":
+      "pregnancy",
+  };
+  for (const example of PLACEHOLDER_EXAMPLES) {
+    const response = handleShippedOffline(example);
+    assert(
+      response.outcome === "grounded_answer" &&
+        response.category === expected[example],
+      `"${example}" gets the ${expected[example]} answer`,
+    );
+  }
+}
 
 console.log("\nAll offline pipeline tests passed.");

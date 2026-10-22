@@ -1,30 +1,29 @@
+@import "./styles/tokens.css";
+
 :root {
   /*
-   * The SafeGirl theme: every colour in the interface comes from these
-   * tokens. Calm purple and lavender, no alarm colours. Contrast ratios
-   * (WCAG AA) are recorded in docs/decision-log.md.
+   * Older names still used by the current screens, now pointing at the
+   * design tokens (styles/tokens.css), so every colour has one source.
+   * They go as each screen is rebuilt on the tokens directly.
    */
-  --page: #f7f2ff; /* page background */
-  --card: #ffffff; /* cards, bubbles, inputs */
-  --lilac: #efe6fc; /* tints: icon circles, chips, tiles, notices */
-  --lilac-strong: #e2d3f8; /* hover on lilac */
-  --tint-sky: #e2ecfd; /* topic chip: contraception */
-  --tint-mint: #dcf3ea; /* topic chip: STI */
-  --tint-peach: #ffe8dc; /* topic chip: pregnancy */
-  --tint-pink: #fde4f2; /* topic chip: periods */
-  --border: #d9c9f3; /* decorative borders and dividers */
-  --control-border: #8570b8; /* input outlines (3:1 or more) */
-  --ink: #2a1457; /* body text */
-  --ink-soft: #5b4a80; /* secondary text */
-  --primary: #5b2fc7; /* buttons, links, icons, focus rings */
-  --primary-end: #8b3fe0; /* end of the primary gradient */
-  --primary-deep: #3f1d96; /* headings and emphasis */
-  --on-primary: #ffffff; /* text on the primary gradient */
-  --gradient: linear-gradient(135deg, var(--primary), var(--primary-end));
-  --focus: var(--primary);
-  --overlay: rgba(42, 20, 87, 0.5);
-  --shadow: 0 18px 48px rgba(42, 20, 87, 0.12);
-  --shadow-soft: 0 4px 14px rgba(42, 20, 87, 0.06);
+  --page: var(--color-page);
+  --card: var(--color-card);
+  --lilac: var(--color-tint);
+  --lilac-strong: var(--answer-bg-end);
+  --tint-sky: var(--topic-contraception-bg);
+  --tint-mint: var(--topic-sti-bg);
+  --tint-peach: var(--topic-pregnancy-bg);
+  --tint-pink: var(--topic-periods-bg);
+  --border: var(--color-card-border);
+  --control-border: var(--color-control-border);
+  --ink: var(--color-ink);
+  --ink-soft: var(--color-muted);
+  --primary: var(--color-violet);
+  --primary-end: var(--color-orchid);
+  --primary-deep: var(--color-plum);
+  --on-primary: var(--color-on-dark);
+  --gradient: var(--gradient-primary);
+  --focus: var(--focus-ring-color);
 }
 
 * {
@@ -42,8 +41,9 @@ body,
 /*
  * Nunito, a rounded and friendly typeface, self-hosted with the app (never
  * loaded from Google), so no third party sees who opens SafeGirl. One
- * variable file covers every weight; Latin only. Licence: SIL OFL 1.1
- * (assets/fonts/Nunito-OFL.txt). It is precached for offline use.
+ * variable file covers every weight used (400 to 900); Latin only.
+ * Licence: SIL OFL 1.1 (assets/fonts/Nunito-OFL.txt). It is precached for
+ * offline use.
  */
 @font-face {
   font-family: "Nunito";
@@ -59,25 +59,38 @@ body,
 
 /* Body text is 16px or larger. System fonts are the fallback. */
 body {
-  font-family:
-    "Nunito",
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
+  font-family: var(--font-family);
+  font-weight: var(--weight-regular);
   font-size: 1rem;
-  background: var(--page);
-  color: var(--ink);
+  background: var(--page-background);
+  background-attachment: fixed;
+  color: var(--color-ink);
   line-height: 1.5;
 }
 
-/* One visible focus ring for every control (3:1 or more on every background). */
+/*
+ * One visible focus ring for every control: 3px violet, 2px offset (3:1 or
+ * more on every light surface). Inside a dark surface (.surface-dark) the
+ * ring is white, because violet falls below 3:1 there.
+ */
 :focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 3px;
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.surface-dark :focus-visible {
+  outline-color: var(--focus-ring-on-dark);
+}
+
+/*
+ * Headings and containers that only code focuses (tabindex="-1", when a
+ * screen or a reply arrives) show no ring: they are not controls, and
+ * the polite live region and the focus position already tell a screen
+ * reader where she is. Every real control keeps its ring.
+ */
+[tabindex="-1"]:focus,
+[tabindex="-1"]:focus-visible {
+  outline: none;
 }
 
 /* Motion is off for anyone who asks their device for reduced motion. */
@@ -100,4 +113,10 @@ textarea {
 button,
 input {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Every button and link control is at least 44px tall. */
+button,
+[role="button"] {
+  min-height: var(--tap-target);
 }

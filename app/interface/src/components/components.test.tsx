@@ -6,10 +6,39 @@ import {
   GBV_HELPLINE,
 } from "../offline/helpContent";
 import {
+  ANSWER_DISCLAIMER,
+  CLARIFY_FALLBACK,
   LIMITED_MODE_NOTICE,
-  SUGGESTIONS,
-  TOPIC_EXAMPLES,
+  NO_ANSWER_RETRY,
+  PERSON_MESSAGE,
+  HERO_PILL,
+  ASK_LABEL,
+  ASK_SEND_NAME,
+  TOPIC_LIST_FOOTNOTE,
+  TOPIC_LIST_HINT,
+  TOPIC_LIST_PLACEHOLDER,
+  BACK_TO_QUESTIONS,
+  CALL_CARD_HEADING,
+  MATCH_HINT,
+  MATCH_LABEL,
+  ANONYMOUS_LINE,
+  GBV_HELP_SHEET_NOTE,
+  CLARIFY_MORE_WORDS,
+  CLARIFY_PICK_LABEL,
+  CLARIFY_PLACEHOLDER,
+  QUICK_EXIT_HINT,
+  QUICK_EXIT_LABEL,
+  REPLY_PILLS,
 } from "../content/uiText";
+import {
+  HELD_TOPIC_MESSAGES,
+  NO_ANSWER_MESSAGE,
+  SIGNPOSTING_MESSAGE,
+  SUPPORT_SECTIONS,
+  VAGUE_QUERY_MESSAGE,
+  ABUSE_REFERRAL_MESSAGE,
+  SELF_HARM_REFERRAL_MESSAGE,
+} from "../offline/helpContent";
 import {
   answerDetails,
   formatDetails,
@@ -17,18 +46,42 @@ import {
   type AnswerDetails,
 } from "../details";
 import type { ChatTurn } from "../types";
+import { telHref, telName } from "../content/telHref";
+import { TOPICS } from "../content/topics";
+import {
+  KB_QUESTIONS,
+  questionsFor,
+  relatedQuestions,
+} from "../content/kbQuestions";
+import TopicList from "./TopicList";
+import AnswerView from "./AnswerView";
+import { splitReply } from "../replySplit";
+import AskBar from "./AskBar";
+import { announcementFor, replyViewOf } from "../replyView";
+import { PLACEHOLDER_EXAMPLES, SOURCES_LINE } from "../content/uiText";
 import AppHeader from "./AppHeader";
+import AppShell from "./AppShell";
 import ChatInterface from "./ChatInterface";
 import ChatSidebar from "./ChatSidebar";
-import Disclaimer from "./Disclaimer";
+import HelpSheet from "./HelpSheet";
 import ReferralScreen from "./ReferralScreen";
 import SessionEnd from "./SessionEnd";
+import Splash from "./Splash";
 import SupportContent from "./SupportContent";
 
 /**
  * Render tests for the interface components, using react-dom/server:
  * no browser and no DOM library.
  */
+
+/** AppShell's Help props with the sheet closed (render tests only). */
+const closedHelp = {
+  isOpen: false,
+  onOpen: () => undefined,
+  onClose: () => undefined,
+  onTopic: () => undefined,
+  buttonRef: { current: null },
+};
 
 function assert(condition: boolean, message: string) {
   if (!condition) {
@@ -65,16 +118,34 @@ console.log("Test 1: the help options list every number from helpContent");
   );
 }
 
-console.log("\nTest 2: the header has a standing 'Need help now?' button");
+console.log("\nTest 2: the header has the wordmark, a Help button and Exit");
 {
-  const html = renderToStaticMarkup(<AppHeader />);
+  const html = renderToStaticMarkup(
+    <AppHeader
+      onExit={() => undefined}
+      onOpenHelp={() => undefined}
+      isHelpOpen={false}
+      helpButtonRef={{ current: null }}
+    />,
+  );
 
-  assert(html.includes("Need help now?"), "the button is present");
+  assert(
+    html.includes('Safe<span class="wordmark-girl">Girl</span>'),
+    'the wordmark is "Safe" + "Girl"',
+  );
+  assert(
+    /<button[^>]*class="btn-help"[^>]*>Help<\/button>/.test(html),
+    "Help is a button",
+  );
   assert(
     html.includes('aria-haspopup="dialog"'),
-    "it is announced as opening a dialog",
+    "Help is announced as opening a dialog",
   );
   assert(!html.includes('role="dialog"'), "the panel starts closed");
+  assert(
+    html.includes('<button class="btn-exit" type="button">Exit</button>'),
+    "Exit is a visible button in the header, not in a menu",
+  );
 }
 
 const renderChat = (turns: ChatTurn[]) =>
@@ -121,29 +192,26 @@ console.log("\nTest 4: a full-service answer has no notice");
   assert(!html.includes("Limited mode"), "no notice");
 }
 
-console.log("\nTest 5: the greeting states what SafeGirl can and cannot do");
+console.log("\nTest 5: Home states what SafeGirl can and cannot do");
 {
   const html = renderChat([]);
 
   assert(
-    html.includes(escapeHtml("Hi, I'm here to help.")) &&
-      html.includes("Ask me a question about your body or your health."),
-    "the greeting is shown",
+    html.includes(
+      '<h1 tabindex="-1" id="home-title" class="hero-title">Ask about your body, periods, pregnancy or sex.</h1>',
+    ),
+    "the hero heading is the h1",
   );
   assert(
-    html.includes(
-      escapeHtml(
-        "I can answer questions about contraception, STIs, pregnancy and periods. I'm not a doctor or a counsellor.",
-      ),
-    ),
-    "the scope line is shown",
+    html.includes(`${SOURCES_LINE} ${escapeHtml("This can't diagnose you.")}`),
+    "the shared sources line, then that it can't diagnose",
   );
 }
 
 console.log("\nTest 6: the privacy wording on the disclaimer and session end");
 {
   const disclaimer = renderToStaticMarkup(
-    <Disclaimer onContinue={() => undefined} />,
+    <Splash onContinue={() => undefined} onExit={() => undefined} />,
   );
   const sessionEnd = renderToStaticMarkup(
     <SessionEnd onStartNew={() => undefined} />,
@@ -153,7 +221,7 @@ console.log("\nTest 6: the privacy wording on the disclaimer and session end");
     disclaimer.includes(
       escapeHtml("We don't save your questions or your answers."),
     ),
-    "the disclaimer says questions and answers are not saved",
+    "the splash (the disclaimer) says questions and answers are not saved",
   );
   assert(
     !disclaimer.includes("keep anything"),
@@ -169,59 +237,40 @@ console.log("\nTest 6: the privacy wording on the disclaimer and session end");
   );
 }
 
-console.log("\nTest 7: the topic chips are real buttons");
+console.log("\nTest 7: the old example chips are gone (UI-12)");
 {
-  const html = renderChat([]);
-  const chips = html.match(/<button class="chip[ "][^>]*>.*?<\/button>/g) ?? [];
-
-  assert(chips.length === 4, "four chip buttons");
-  assert(!html.includes('aria-hidden="true">'), "no chip is aria-hidden");
-  for (const example of TOPIC_EXAMPLES) {
-    assert(
-      chips.some((chip) => chip.endsWith(`</svg>${example.label}</button>`)),
-      `a "${example.label}" chip with an icon`,
-    );
-    assert(
-      chips.some((chip) => chip.includes(`chip--${example.topic}`)),
-      `the "${example.label}" chip has its own colour`,
-    );
-  }
+  const html = renderChat([{ id: "1", role: "user", text: "hi" }]);
+  assert(!html.includes('class="chip'), "no chip in the conversation");
+  assert(!html.includes("category-chips"), "no chip group in the conversation");
 }
 
-console.log(
-  "\nTest 8: each chip's question is a 'clear' development-set query, one per topic",
-);
+console.log("\nTest 8: nothing imports the old chips or follow-ups");
 {
-  const csv = readFileSync(
-    new URL(
-      "../../../../resources/eval/retrieval_eval_set.csv",
-      import.meta.url,
-    ),
+  const uiText = readFileSync(
+    new URL("../content/uiText.ts", import.meta.url),
     "utf8",
   );
-  // id,query,group,expected_behavior,acceptable_entry_ids,...
-  const rows = new Map(
-    csv
-      .replace(/\r/g, "")
-      .split("\n")
-      .map((line) => line.split(","))
-      .map((cells) => [cells[0], cells] as const),
-  );
-  const topics = new Set<string>();
-
-  for (const example of TOPIC_EXAMPLES) {
-    const row = rows.get(example.evalId);
-    assert(
-      row?.[1] === example.question,
-      `${example.evalId} is "${example.question}", verbatim`,
-    );
-    assert(row?.[2] === "clear", `${example.evalId} is in the "clear" group`);
-    topics.add(row?.[4]?.slice(0, 4) ?? "");
+  for (const name of [
+    "TOPIC_EXAMPLES",
+    "SUGGESTIONS",
+    "offersFollowUps",
+    "suggestionsFor",
+  ]) {
+    assert(!uiText.includes(name), `uiText.ts no longer has ${name}`);
   }
-  assert(
-    [...topics].sort().join(",") === "KB-C,KB-G,KB-P,KB-S",
-    "the four questions cover the four topics",
-  );
+  for (const file of [
+    "./ChatInterface.tsx",
+    "./AnswerView.tsx",
+    "../App.tsx",
+  ]) {
+    const source = readFileSync(new URL(file, import.meta.url), "utf8");
+    assert(
+      !/TOPIC_EXAMPLES|SUGGESTIONS|suggestionsFor|You could also ask/.test(
+        source,
+      ),
+      `${file} uses none of them`,
+    );
+  }
 }
 
 console.log("\nTest 9: the details view is off unless asked for");
@@ -320,7 +369,11 @@ console.log(
 );
 {
   const html = renderToStaticMarkup(
-    <ChatInterface turns={[]} onSend={() => undefined} isLoading />,
+    <ChatInterface
+      turns={[{ id: "1", role: "user", text: "what is PrEP" }]}
+      onSend={() => undefined}
+      isLoading
+    />,
   );
 
   assert(html.includes('role="status"'), "the indicator is a status");
@@ -338,169 +391,2441 @@ console.log(
   );
 }
 
-console.log(
-  "\nTest 15: every suggestion is a 'clear' development-set query on its topic",
-);
+console.log('\nTest 15: the "You could also ask" follow-ups are gone (UI-12)');
 {
-  const csv = readFileSync(
-    new URL(
-      "../../../../resources/eval/retrieval_eval_set.csv",
-      import.meta.url,
-    ),
-    "utf8",
-  );
-  const rows = new Map(
-    csv
-      .replace(/\r/g, "")
-      .split("\n")
-      .map((line) => line.split(","))
-      .map((cells) => [cells[0], cells] as const),
-  );
-  const prefix: Record<string, string> = {
-    contraception: "KB-C",
-    sti: "KB-S",
-    pregnancy: "KB-P",
-    general: "KB-G",
-  };
-
-  for (const [category, list] of Object.entries(SUGGESTIONS)) {
-    for (const suggestion of list) {
-      const row = rows.get(suggestion.evalId);
-      assert(
-        row?.[1] === suggestion.question && row[2] === "clear",
-        `${suggestion.evalId} is a verbatim "clear" query`,
-      );
-      assert(
-        row?.[4]?.startsWith(prefix[category] ?? "?") === true,
-        `${suggestion.evalId} is answered from the ${category} entries`,
-      );
-    }
-  }
-  // Q14 is too close to the 0.35 no-answer cut-off (confidence 0.368 in
-  // research/eval/results/suggested_questions_2026-10-14.csv) to offer.
-  const offered = Object.values(SUGGESTIONS)
-    .flat()
-    .map((s) => s.evalId);
-  assert(!offered.includes("Q14"), "Q14 (fragile, 0.368) is not offered");
-  assert(offered.includes("Q15"), "Q15 replaces it in the general follow-ups");
-}
-
-console.log("\nTest 16: follow-ups appear under the latest answer only");
-{
-  const answer = (id: string, category: string): ChatTurn => ({
-    id,
-    role: "assistant",
-    text: `answer ${id}`,
-    outcome: "grounded_answer",
-    details: { category },
-  });
-  const turns: ChatTurn[] = [
+  const html = renderChat([
     { id: "1", role: "user", text: "what is PrEP" },
-    answer("2", "sti"),
-    { id: "3", role: "user", text: "Can chlamydia be cured" },
-    answer("4", "sti"),
-  ];
-  const html = renderChat(turns);
-  const suggestions =
-    html.match(/<button class="suggestion"[^>]*>[^<]*</g) ?? [];
-
-  assert(html.includes("You could also ask:"), "the label is shown");
-  assert(
-    html.indexOf("You could also ask:") > html.indexOf("answer 4"),
-    "under the latest answer",
-  );
-  assert(
-    html.split("You could also ask:").length === 2,
-    "only once, not under earlier answers",
-  );
-  assert(
-    suggestions.length === 2 &&
-      !suggestions.some((s) => s.toLowerCase().includes("chlamydia")),
-    "two follow-ups, leaving out the question just asked (case-insensitive)",
-  );
-  assert(
-    !renderToStaticMarkup(
-      <ChatInterface turns={turns} onSend={() => undefined} isLoading />,
-    ).includes("You could also ask:"),
-    "hidden while the next answer is loading",
-  );
-  assert(
-    !renderChat([turns[0], answer("2", "")]).includes("You could also ask:"),
-    "none when the category is unknown",
-  );
+    {
+      id: "2",
+      role: "assistant",
+      text: "answer",
+      outcome: "grounded_answer",
+      answerFound: true,
+      details: { category: "sti" },
+    },
+  ]);
+  assert(!html.includes("You could also ask"), "no follow-up label");
+  assert(!html.includes('class="suggestion'), "no follow-up buttons");
 }
 
-console.log("\nTest 17: a hint above the chips before the first question");
+console.log("\nTest 16: the screen shows the latest exchange only");
 {
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
-    renderChat([]).includes("Not sure where to start? Try one:"),
-    "shown on an empty chat",
-  );
-  assert(
-    !renderChat([{ id: "1", role: "user", text: "hi" }]).includes(
-      "Not sure where to start?",
-    ),
-    "hidden once the chat has started",
-  );
-  assert(
-    renderChat([]).includes('placeholder="Ask about your body or health…"'),
-    "the input has the friendlier placeholder",
+    app.includes("setTurns([userTurn]);") &&
+      !app.includes("setTurns((prev) => [...prev, userTurn])"),
+    "a new question replaces the last exchange; earlier ones are not kept",
   );
 }
 
-console.log(
-  "\nTest 18: no follow-ups after a referral, limited mode, no-answer, signposting or an error",
-);
+console.log("\nTest 17: Home before the first question, the ask bar after it");
+{
+  const empty = renderChat([]);
+  const started = renderChat([{ id: "1", role: "user", text: "hi" }]);
+  assert(empty.includes('<div class="home">'), "an empty chat shows Home");
+  assert(!empty.includes("Not sure where to start?"), "the old hint is gone");
+  assert(!started.includes('class="home"'), "Home goes once the chat starts");
+  assert(
+    started.includes('<div class="input-row">') &&
+      started.includes('placeholder="Ask about your body or health…"'),
+    "the conversation has the ask bar at the bottom",
+  );
+  for (const html of [empty, started]) {
+    assert(html.split("<input").length === 2, "exactly one input either way");
+  }
+}
+
+console.log("\nTest 18: the answer screen is for knowledge-base answers only");
 {
   const question: ChatTurn = { id: "q", role: "user", text: "what is PrEP" };
-  const answer = (extra: Partial<ChatTurn>): ChatTurn => ({
+  const reply = (extra: Partial<ChatTurn>): ChatTurn => ({
     id: "a",
     role: "assistant",
     text: "reply",
     outcome: "grounded_answer",
-    answerFound: true,
-    details: { category: "sti" },
     ...extra,
   });
-  const follows = (turns: ChatTurn[]) =>
-    renderChat(turns).includes("You could also ask:");
+  const isAnswerScreen = (turns: ChatTurn[], isLoading = false) =>
+    renderToStaticMarkup(
+      <ChatInterface
+        turns={turns}
+        onSend={() => undefined}
+        isLoading={isLoading}
+      />,
+    ).includes("answer-screen");
+  const matched = KB_QUESTIONS[0].question;
 
-  assert(follows([question, answer({})]), "shown after a full answer");
-  // A referral and an error never add an answer turn: the chat ends with
-  // the user's question, even after an earlier full answer.
+  for (const kind of ["answer-scoped", "answer-unscoped"] as const) {
+    assert(
+      isAnswerScreen([question, reply({ kind, matchedQuestion: matched })]),
+      `${kind}: the answer screen`,
+    );
+  }
+  for (const kind of ["abstain", "help", "held-topic", "vague"] as const) {
+    assert(
+      !isAnswerScreen([question, reply({ kind, matchedQuestion: null })]),
+      `${kind}: not the answer screen`,
+    );
+  }
   assert(
-    !follows([
-      question,
-      answer({}),
-      { id: "q2", role: "user", text: "my boyfriend hits me" },
-    ]),
-    "not after a referral or an error (the last turn is the question)",
+    !isAnswerScreen([question, reply({ limitedMode: true })]),
+    "a limited-mode answer (no kind, no entry): not the answer screen",
   );
   assert(
-    !follows([question, answer({ limitedMode: true })]),
-    "not after a limited-mode answer",
+    !isAnswerScreen([question]),
+    "a question with no answer yet (an error): not the answer screen",
   );
   assert(
-    !follows([
-      question,
-      answer({ answerFound: false, details: { category: null } }),
-    ]),
-    "not after the no-answer reply",
+    !isAnswerScreen(
+      [question, reply({ kind: "answer-scoped", matchedQuestion: matched })],
+      true,
+    ),
+    "not while the next answer is loading",
+  );
+}
+
+console.log(
+  "\nTest 19: every screen and reply kind has the header Exit and the footer line",
+);
+{
+  const noop = () => undefined;
+  const user: ChatTurn = { id: "u", role: "user", text: "a question" };
+  const reply = (extra: Partial<ChatTurn>): ChatTurn[] => [
+    user,
+    { id: "r", role: "assistant", text: "reply", ...extra },
+  ];
+  // As App.tsx composes them: every screen inside AppShell; the chat
+  // screen puts the footer line above its ask bar itself.
+  const chat = (turns: ChatTurn[]) => (
+    <AppShell onExit={noop} help={closedHelp} footerInContent>
+      <ChatInterface turns={turns} onSend={noop} isLoading={false} />
+    </AppShell>
+  );
+  const screens: [string, JSX.Element][] = [
+    // The splash is full-bleed, outside AppShell, with its own Exit pill.
+    ["splash", <Splash onContinue={noop} onExit={noop} />],
+    ["chat, empty", chat([])],
+    [
+      "chat, answer",
+      chat(reply({ outcome: "grounded_answer", answerFound: true })),
+    ],
+    [
+      "chat, answer screen",
+      chat(
+        reply({
+          outcome: "grounded_answer",
+          answerFound: true,
+          kind: "answer-scoped",
+          matchedQuestion: KB_QUESTIONS[0].question,
+          source: "WHO",
+        }),
+      ),
+    ],
+    [
+      "chat, no answer",
+      chat(
+        reply({
+          outcome: "grounded_answer",
+          answerFound: false,
+          kind: "abstain",
+        }),
+      ),
+    ],
+    ["chat, help", chat(reply({ outcome: "signposting", kind: "help" }))],
+    ["chat, vague", chat(reply({ outcome: "clarification", kind: "vague" }))],
+    ["chat, held", chat(reply({ outcome: "held", kind: "held-topic" }))],
+    [
+      "chat, limited mode",
+      chat(reply({ outcome: "grounded_answer", limitedMode: true })),
+    ],
+    [
+      "referral",
+      <AppShell onExit={noop} help={closedHelp} calm footerInContent>
+        <ReferralScreen message="referral" onContinueChat={noop} />
+      </AppShell>,
+    ],
+    [
+      "session end",
+      <AppShell onExit={noop} help={closedHelp}>
+        <SessionEnd onStartNew={noop} />
+      </AppShell>,
+    ],
+  ];
+  const line = "In danger? Call ";
+  const href = `href="${telHref(GBV_HELPLINE)}"`;
+
+  // These screens carry the call buttons (GBV helpline first), so they
+  // show no footer line (step 7c).
+  const withCalls = ["chat, help", "chat, held", "referral"];
+  for (const [name, element] of screens) {
+    const html = renderToStaticMarkup(element);
+    if (withCalls.includes(name)) {
+      assert(
+        !html.includes('class="danger-line"') &&
+          html.includes(`class="call-button call-button--main" ${href}`),
+        `${name}: no footer line; the GBV call button is on the screen`,
+      );
+      assert(
+        /<button class="btn-exit" type="button">(Exit|Quick exit)<\/button>/.test(
+          html,
+        ),
+        `${name}: an Exit button in the header`,
+      );
+      continue;
+    }
+    assert(
+      html.split('class="danger-line"').length === 2,
+      `${name}: the footer line appears once`,
+    );
+    assert(
+      html.includes(
+        `${line}<a ${href} aria-label="${telName(GBV_HELPLINE)}">${GBV_HELPLINE}</a>, free and open 24 hours.`,
+      ),
+      `${name}: its tap-to-call link is built from GBV_HELPLINE`,
+    );
+    const exitAt = html.search(
+      /<button class="btn-exit(-pill)?" type="button">Exit<\/button>/,
+    );
+    assert(
+      exitAt > -1 && exitAt < html.indexOf('class="danger-line"'),
+      `${name}: an Exit button is present, before the content`,
+    );
+    if (name === "chat, empty") {
+      const tilesAt = html.indexOf('class="topic-tiles"');
+      const anonymousAt = html.indexOf('class="home-anonymous"');
+      const lineAt = html.indexOf('class="danger-line"');
+      assert(
+        tilesAt > -1 && tilesAt < anonymousAt && anonymousAt < lineAt,
+        "Home: the tiles, then 'Anonymous…', then the footer line",
+      );
+    } else if (name.startsWith("chat")) {
+      const lineAt = html.indexOf('class="danger-line"');
+      const barAt = html.search(/class="(input-row|ask-pill-bar)"/);
+      assert(
+        lineAt > -1 &&
+          barAt > lineAt &&
+          !html.slice(lineAt, barAt).includes("<button"),
+        `${name}: the footer line sits directly above the ask bar`,
+      );
+    }
+  }
+}
+
+console.log(
+  "\nTest 20: tel: links come from the constants, never a typed number",
+);
+{
+  assert(
+    telHref(GBV_HELPLINE) === `tel:${GBV_HELPLINE}`,
+    "telHref builds tel:",
+  );
+  for (const file of [
+    "./DangerLine.tsx",
+    "./AppShell.tsx",
+    "./AppHeader.tsx",
+    "./Splash.tsx",
+    "./HelpSheet.tsx",
+    "./Home.tsx",
+    "./AskBar.tsx",
+    "./TopicList.tsx",
+    "./AnswerView.tsx",
+    "./ReplyViews.tsx",
+    "./CallButtons.tsx",
+    "./TopicChoices.tsx",
+    "./ReferralScreen.tsx",
+  ]) {
+    const source = readFileSync(new URL(file, import.meta.url), "utf8");
+    assert(!/\d{3}/.test(source), `${file} types no phone number`);
+  }
+}
+
+console.log(
+  "\nTest 21: App renders the splash on its own, every other screen in AppShell",
+);
+{
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  const splashAt = app.indexOf('if (screen === "splash") {');
+  const shellOpen = app.indexOf("<AppShell");
+  const shellClose = app.lastIndexOf("</AppShell>");
+  assert(
+    splashAt > -1 && splashAt < shellOpen,
+    "the splash returns before AppShell (no app header on it)",
   );
   assert(
-    !follows([
-      question,
-      answer({
+    /<Splash\s+onContinue=\{[^}]*\}\s+onExit=\{handleExit\}/.test(
+      app.slice(splashAt, shellOpen),
+    ),
+    "the splash gets the same Exit handler",
+  );
+  for (const screen of ["chat", "referral", "sessionEnd"]) {
+    const at = app.indexOf(`screen === "${screen}" &&`);
+    assert(
+      at > shellOpen && at < shellClose,
+      `the ${screen} screen is inside AppShell`,
+    );
+  }
+  assert(
+    app.includes("createDoubleEscapeHandler(") &&
+      app.includes('addEventListener("keydown"'),
+    "double Escape is wired to a keydown listener",
+  );
+  const effect = app.slice(
+    app.indexOf("createDoubleEscapeHandler("),
+    app.indexOf('if (screen === "splash") {'),
+  );
+  assert(
+    effect.includes("}, []);"),
+    "the listener is registered once, for every screen, the splash included",
+  );
+  assert(
+    app.includes("replace: (url) => window.location.replace(url)") &&
+      !app.includes("window.close("),
+    "Exit uses location.replace, never window.close",
+  );
+}
+
+console.log("\nTest 22: the splash is a full-bleed screen of its own");
+{
+  const html = renderToStaticMarkup(
+    <Splash onContinue={() => undefined} onExit={() => undefined} />,
+  );
+  assert(
+    html.startsWith('<main class="splash-screen surface-dark"'),
+    "a full-bleed dark screen (white focus ring)",
+  );
+  assert(html.split("<h1").length === 2, "exactly one h1");
+  assert(/<h1[^>]*>SafeGirl<\/h1>/.test(html), "the wordmark is the h1");
+  assert(!html.includes("<header"), "no app header on the splash");
+  assert(!html.includes("btn-help"), "no Help button on the splash");
+  assert(
+    html.includes('<button class="btn-exit-pill" type="button">Exit</button>'),
+    "a compact Exit pill",
+  );
+  assert(
+    html.includes('<div class="splash-decor" aria-hidden="true">') &&
+      html.indexOf("splash-decor") < html.indexOf("btn-exit-pill"),
+    "the decoration is hidden from screen readers, and the pill is above it",
+  );
+  assert(
+    html.includes('class="mark mark--splash"') &&
+      html.includes('style="width:84px;height:84px"'),
+    "the shared shield-and-heart mark, 84 by 84",
+  );
+  assert(
+    html.includes("Honest answers about your body, health and growing up."),
+    "the tagline",
+  );
+  for (const promise of [
+    "<strong>Anonymous.</strong> We never ask for your name.",
+    `<strong>Real guidance.</strong> ${SOURCES_LINE}`,
+    `<strong>Not a doctor.</strong> ${escapeHtml("This can't diagnose you.")} A nurse or clinic can.`,
+  ]) {
+    assert(html.includes(promise), `promise: ${promise.slice(0, 40)}…`);
+  }
+  for (const icon of ["lock", "speech", "shield"]) {
+    assert(
+      html.includes(`promise-icon promise-icon--${icon}`),
+      `the ${icon} icon tile`,
+    );
+  }
+  const privacyAt = html.indexOf(
+    escapeHtml("We don't save your questions or your answers."),
+  );
+  const buttonAt = html.indexOf('<button class="btn-splash"');
+  const lineAt = html.indexOf('class="danger-line"');
+  assert(
+    privacyAt > -1 && privacyAt < buttonAt && buttonAt < lineAt,
+    "privacy line, then the button, then the footer line",
+  );
+  assert(
+    html.includes(
+      '<button class="btn-splash" type="button">I understand, continue <svg',
+    ),
+    '"I understand, continue" with an arrow',
+  );
+}
+
+console.log("\nTest 23: the Help sheet");
+{
+  const html = renderToStaticMarkup(
+    <HelpSheet onClose={() => undefined} onTopic={() => undefined} />,
+  );
+  assert(
+    html.includes('role="dialog"') &&
+      html.includes('aria-modal="true"') &&
+      html.includes('aria-labelledby="help-sheet-title"') &&
+      html.includes('id="help-sheet-title"'),
+    "a labelled modal dialog",
+  );
+  assert(
+    html.includes(
+      '<button class="btn-close" type="button" aria-label="Close help">',
+    ),
+    "a labelled close button",
+  );
+  assert(
+    !html.includes("btn-exit") &&
+      html.includes('<h1 id="help-sheet-title">Help</h1>'),
+    "the sheet's own h1 \"Help\"; no duplicate Exit (the header's Exit stays in view)",
+  );
+  for (const heading of [
+    "How SafeGirl works",
+    "Tips for asking",
+    "Need to talk to someone?",
+    "Topics",
+  ]) {
+    assert(html.includes(`>${heading}</h2>`), `section: ${heading}`);
+  }
+  assert(
+    html.includes(
+      `<a class="help-call help-call--main" href="${telHref(GBV_HELPLINE)}"><span class="help-call-icon"><svg`,
+    ) &&
+      html.includes(
+        `<span class="help-call-title">Call ${GBV_HELPLINE}</span><span class="help-call-note">${GBV_HELP_SHEET_NOTE}</span>`,
+      ) &&
+      GBV_HELP_SHEET_NOTE ===
+        "GBV helpline. Free, 24 hours, English and Kiswahili.",
+    "1195: tap-to-call from the constant, with the checked wording (now a constant)",
+  );
+  const childlineNote = (() => {
+    const contact = SUPPORT_SECTIONS.flatMap((x) => x.contacts).find((c) =>
+      c.numbers.includes(CHILDLINE_KENYA),
+    );
+    return `${contact?.label}. ${contact?.note}`;
+  })();
+  assert(
+    html.includes(
+      `<a class="help-call help-call--second" href="${telHref(CHILDLINE_KENYA)}"><span class="help-call-icon"><svg`,
+    ) &&
+      html.includes(
+        `<span class="help-call-title">Call ${CHILDLINE_KENYA}</span><span class="help-call-note">${childlineNote}</span>`,
+      ),
+    `116: tap-to-call from the constant; its note is SUPPORT_SECTIONS word for word ("${childlineNote}")`,
+  );
+  const childline = html.slice(
+    html.indexOf(telHref(CHILDLINE_KENYA)),
+    html.indexOf("</li>", html.indexOf(telHref(CHILDLINE_KENYA))),
+  );
+  assert(
+    !/free/i.test(childline) || /free/i.test(childlineNote),
+    'the 116 note says "free" only because the constant does (22 Oct 2026 wording)',
+  );
+  assert(
+    html
+      .trimEnd()
+      .endsWith(`<p class="help-footer">${ANONYMOUS_LINE}</p></div>`),
+    "the anonymous line closes the sheet",
+  );
+  const [a, b] = EMERGENCY_NUMBERS;
+  assert(
+    html.includes(
+      `In immediate danger? Call <a href="${telHref(a)}" aria-label="${telName(a)}">${a}</a> or <a href="${telHref(b)}" aria-label="${telName(b)}">${b}</a>.`,
+    ),
+    "999 and 112 from the constants",
+  );
+  const numbers = [...html.matchAll(/href="tel:([^"]+)"/g)].map((m) => m[1]);
+  assert(
+    numbers.every((n) =>
+      [GBV_HELPLINE, CHILDLINE_KENYA, ...EMERGENCY_NUMBERS].includes(n),
+    ),
+    "no helpline that is not in the constants",
+  );
+  assert(
+    html.includes("press Escape twice") &&
+      html.includes("This does not clear your browser history."),
+    "explains quick exit without claiming to clear history",
+  );
+  for (const topic of TOPICS) {
+    assert(
+      html.includes(
+        `data-topic="${topic.topicClass}"><span class="topic-choice-label">${topic.label}</span></button>`,
+      ),
+      `topic button (the shared TopicChoices): ${topic.label}`,
+    );
+  }
+}
+
+console.log("\nTest 24: no copy claims clinician review");
+{
+  const rendered = [
+    renderToStaticMarkup(
+      <Splash onContinue={() => undefined} onExit={() => undefined} />,
+    ),
+    renderToStaticMarkup(
+      <HelpSheet onClose={() => undefined} onTopic={() => undefined} />,
+    ),
+    renderToStaticMarkup(<SupportContent />),
+    renderToStaticMarkup(<SessionEnd onStartNew={() => undefined} />),
+    renderToStaticMarkup(
+      <ChatInterface turns={[]} onSend={() => undefined} isLoading={false} />,
+    ),
+  ];
+  for (const html of rendered) {
+    assert(!/review|clinician|clinically/i.test(html), "no review claim");
+  }
+}
+
+console.log(
+  "\nTest 25: App wires the Help sheet, its focus and the Escape rule",
+);
+{
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes("() => helpOpenRef.current,"),
+    "the Escape handler ignores presses while the sheet is open",
+  );
+  assert(
+    app.includes('window.addEventListener("keydown", onKeyDown, true);'),
+    "it listens in the capture phase, before the sheet closes itself",
+  );
+  assert(
+    /const closeHelp = \(\) => \{\s*setIsHelpOpen\(false\);\s*helpButtonRef\.current\?\.focus\(\);/.test(
+      app,
+    ),
+    "closing the sheet returns focus to the Help button",
+  );
+  assert(
+    app.includes("startScreen(browserSessionStorage)") &&
+      app.includes("setScreen(continueFromSplash(browserSessionStorage))"),
+    "the splash shows once per session and Continue leads to home",
+  );
+  const sheet = readFileSync(
+    new URL("./HelpSheet.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    sheet.includes("closeRef.current?.focus()") &&
+      sheet.includes('event.key === "Escape"') &&
+      sheet.includes("trapTab(event.nativeEvent"),
+    "the sheet focuses its close button, closes on Escape and traps Tab",
+  );
+}
+
+console.log("\nTest 26: one sources line, used everywhere it appears");
+{
+  assert(
+    SOURCES_LINE ===
+      "Most answers come from Kenyan Ministry of Health and WHO guidance.",
+    "the sources line says Most",
+  );
+  const splash = renderToStaticMarkup(
+    <Splash onContinue={() => undefined} onExit={() => undefined} />,
+  );
+  const sheet = renderToStaticMarkup(
+    <HelpSheet onClose={() => undefined} onTopic={() => undefined} />,
+  );
+  assert(splash.includes(SOURCES_LINE), "on the splash");
+  assert(sheet.includes(SOURCES_LINE), "in the Help sheet");
+  for (const file of ["./Splash.tsx", "./HelpSheet.tsx"]) {
+    const source = readFileSync(new URL(file, import.meta.url), "utf8");
+    assert(
+      source.includes("SOURCES_LINE") && !source.includes("Ministry of"),
+      `${file} uses the constant and does not retype the line`,
+    );
+  }
+  assert(
+    !(splash + sheet).includes("Answers come from Kenyan"),
+    'the old "Answers come from…" wording is gone',
+  );
+}
+
+console.log("\nTest 27: the header uses the shared shield-and-heart mark");
+{
+  const html = renderToStaticMarkup(
+    <AppHeader
+      onExit={() => undefined}
+      onOpenHelp={() => undefined}
+      isHelpOpen={false}
+      helpButtonRef={{ current: null }}
+    />,
+  );
+  assert(
+    html.includes('class="mark mark--header"') &&
+      html.includes('class="mark-shield"') &&
+      html.includes('class="mark-heart"'),
+    "the header mark is the shield and heart",
+  );
+}
+
+console.log("\nTest 28: Home");
+{
+  const html = renderChat([]);
+  assert(html.split("<h1").length === 2, "exactly one h1 on Home");
+  assert(
+    html.includes('<p class="hero-sub">') && html.includes(SOURCES_LINE),
+    "the hero uses the shared sources constant",
+  );
+  assert(
+    /<p class="hero-tag"><svg[^>]*>.*?<\/svg> Private and anonymous<\/p>/.test(
+      html,
+    ),
+    'the "Private and anonymous" tag with its lock icon',
+  );
+  const pill = html.slice(
+    html.indexOf('<div class="ask-card">'),
+    html.indexOf("</div></div>", html.indexOf('<div class="ask-card">')),
+  );
+  assert(pill.split("<input").length === 2, "the ask card has one input");
+  assert(
+    pill.includes(
+      `<label class="ask-card-label" for="chat-input">${ASK_LABEL}</label>`,
+    ) && pill.includes('id="chat-input"'),
+    `a visible label, "${ASK_LABEL}", tied to it`,
+  );
+  assert(
+    pill.includes(`aria-label="${ASK_SEND_NAME}"`) &&
+      pill.includes('class="btn-send"'),
+    `a send button named "${ASK_SEND_NAME}"`,
+  );
+  assert(
+    pill.includes(`placeholder="${escapeHtml(PLACEHOLDER_EXAMPLES[0])}"`),
+    "the placeholder starts with the first example",
+  );
+  assert(
+    !html.slice(0, html.indexOf("ask-card")).includes("aria-live"),
+    "the placeholder is not in a live region",
+  );
+  const tiles = [
+    ...html.matchAll(
+      /<button class="topic-tile topic-tile--([a-z]+)" data-topic="[a-z]+" type="button">.*?<span class="topic-tile-label">([^<]+)<\/span><span class="topic-tile-sub">([^<]+)<\/span><\/button>/g,
+    ),
+  ].map((m) => ({ topicClass: m[1], label: m[2], subtitle: m[3] }));
+  assert(
+    JSON.stringify(tiles) ===
+      JSON.stringify(
+        TOPICS.map(({ topicClass, label, subtitle }) => ({
+          topicClass,
+          label,
+          subtitle,
+        })),
+      ),
+    "four tile buttons with the labels, classes and subtitles of content/topics.ts",
+  );
+  for (const topic of TOPICS) {
+    const words = topic.subtitle.split(/\s+/).length;
+    assert(words >= 3 && words <= 5, `"${topic.subtitle}" is 3 to 5 words`);
+  }
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const tile = /\.topic-tile \{[^}]*min-height: (\d+)px;/.exec(css);
+  assert(
+    tile !== null && Number(tile[1]) >= 88,
+    "tiles are at least 88px tall (44px or more)",
+  );
+  const shell = renderToStaticMarkup(
+    <AppShell onExit={() => undefined} help={closedHelp} footerInContent>
+      <ChatInterface turns={[]} onSend={() => undefined} isLoading={false} />
+    </AppShell>,
+  );
+  assert(
+    shell.includes('<button class="btn-exit" type="button">Exit</button>') &&
+      shell.split("In danger? Call ").length === 2,
+    "Exit and the footer line are on Home",
+  );
+}
+
+console.log("\nTest 29: the Topic list for each topic");
+{
+  const noop = () => undefined;
+  for (const topic of TOPICS) {
+    const html = renderToStaticMarkup(
+      <TopicList topic={topic} onAsk={noop} onBack={noop} />,
+    );
+    const data = questionsFor(topic.topicClass);
+    assert(
+      data.length > 0 &&
+        data.every((item) => item.topicClass === topic.topicClass),
+      `${topic.label}: the data holds only this class`,
+    );
+    assert(html.split("<h1").length === 2, `${topic.label}: one h1`);
+    assert(
+      html.includes(
+        `<h1 tabindex="-1" class="topic-title">${topic.label}</h1>`,
+      ),
+      `${topic.label}: the label is the h1, focusable for the move on open`,
+    );
+    assert(
+      html.includes(
+        `<p class="sr-only topic-count">${data.length} questions</p>`,
+      ),
+      `${topic.label}: "${data.length} questions", from the data`,
+    );
+    const rows = [
+      ...html.matchAll(
+        /<button class="topic-question" type="button" data-question="[^"]*"><span>([^<]*)<\/span><span class="topic-question-go" aria-hidden="true">/g,
+      ),
+    ].map((m) => m[1]);
+    assert(
+      JSON.stringify(rows) ===
+        JSON.stringify(
+          data.map((item) => escapeHtml(item.question).replace(/"/g, "&quot;")),
+        ),
+      `${topic.label}: one row button per question, its name the question text`,
+    );
+    assert(
+      /<button class="back-link" type="button"><svg[^>]*>.*?<\/svg> All topics<\/button>/.test(
+        html,
+      ),
+      `${topic.label}: an "All topics" back link`,
+    );
+    const lineAt = html.indexOf('class="danger-line"');
+    const barAt = html.indexOf('<div class="ask-pill-bar">');
+    assert(
+      lineAt > html.lastIndexOf("topic-question") && lineAt < barAt,
+      `${topic.label}: the footer line under the list, then the ask bar`,
+    );
+    assert(
+      html.includes(
+        '<label class="sr-only" for="chat-input">Ask something else</label>',
+      ) && html.split("<input").length === 2,
+      `${topic.label}: one ask bar, labelled "Ask something else"`,
+    );
+  }
+  assert(
+    KB_QUESTIONS.length === 21 &&
+      KB_QUESTIONS.every((item) => Object.keys(item).length === 3),
+    "21 questions with id, class and question only (no answers)",
+  );
+}
+
+console.log(
+  "\nTest 30: one path: rows and the ask bar go to the full pipeline",
+);
+{
+  const list = readFileSync(
+    new URL("./TopicList.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    list.includes("onClick={() => onAsk(item.question, item.id)}"),
+    "a row hands its exact question text (and its id, for focus) to onAsk",
+  );
+  assert(
+    /const ask = \(\) => \{[^}]*onAsk\(text, null\);/.test(list),
+    "the ask bar hands its text to the same onAsk",
+  );
+  assert(
+    list.includes("onAsk: (text: string, questionId: string | null) => void;"),
+    "onAsk takes the text and the row id: nothing scopes it to the topic",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    /const askFromTopic = \(text: string, questionId: string \| null\) => \{\s*if \(topic\) setAnswerOrigin\(\{ topic, questionId \}\);\s*setScreen\("chat"\);[\s\S]{0,120}void handleSend\(\s*text,\s*questionId === null \? "typed" : "tapped",?\s*\);/.test(
+      app,
+    ),
+    "App sends it through handleSend, the full pipeline used for every question",
+  );
+  assert(
+    app.includes("submitQuery(text, { signal: request.signal })"),
+    "handleSend submits only the text",
+  );
+  assert(
+    app.includes('onTopic={(next) => openTopic(next, "tile")}') &&
+      /const handleHelpTopic = \(next: Topic\) => \{\s*setIsHelpOpen\(false\);\s*openTopic\(next, "help"\);/.test(
+        app,
+      ),
+    "Home tiles and Help sheet buttons both open the Topic list",
+  );
+  assert(
+    app.includes('`[data-topic="${topic.topicClass}"]`') &&
+      app.includes("helpButtonRef.current?.focus();"),
+    "back returns focus to the tile, or to Help",
+  );
+  const home = renderChat([]);
+  for (const topic of TOPICS) {
+    assert(
+      home.includes(
+        `class="topic-tile topic-tile--${topic.topicClass}" data-topic="${topic.topicClass}"`,
+      ),
+      `the ${topic.label} tile carries its class for the list and for focus`,
+    );
+  }
+  assert(
+    home.includes('<h1 tabindex="-1" id="home-title"'),
+    "Home's h1 can take focus when Home appears",
+  );
+  assert(
+    renderToStaticMarkup(
+      <ReferralScreen message="m" onContinueChat={() => undefined} />,
+    ).includes('<h1 tabindex="-1" class="support-title">m</h1>'),
+    "the referral heading (its message) can take focus when it appears",
+  );
+}
+
+const KB_S5 = KB_QUESTIONS.find((item) => item.id === "KB-S5")!;
+const answerTurn = (extra: Partial<ChatTurn> = {}): ChatTurn => ({
+  id: "a1",
+  role: "assistant",
+  text: "First paragraph of the answer.\n\nSecond paragraph, after a break.",
+  outcome: "grounded_answer",
+  answerFound: true,
+  kind: "answer-scoped",
+  matchedQuestion: KB_S5.question,
+  source: "Kenya MOH (2015); WHO (2018)",
+  details: DETAILS,
+  ...extra,
+});
+const renderAnswer = (turn: ChatTurn, showDetails = false) =>
+  renderToStaticMarkup(
+    <ChatInterface
+      turns={[{ id: "u1", role: "user", text: "can stis be cured" }, turn]}
+      onSend={() => undefined}
+      isLoading={false}
+      showDetails={showDetails}
+      back={{ label: "Back to home", onBack: () => undefined }}
+    />,
+  );
+
+console.log(
+  "\nTest 31: the answer screen shows the closest question and the answer as sent",
+);
+{
+  const turn = answerTurn();
+  const html = renderAnswer(turn);
+  assert(html.split("<h1").length === 2, "one h1");
+  assert(
+    html.includes(
+      `<h1 tabindex="-1" class="closest"><span class="closest-label">${MATCH_LABEL}</span><span class="closest-question">${escapeHtml(KB_S5.question)}</span></h1>`,
+    ),
+    "the h1 is the matched question, labelled as the closest one I have",
+  );
+  assert(
+    !html.includes("can stis be cured"),
+    "the question she typed is not shown as the matched one (nor at all)",
+  );
+  assert(
+    !/You asked|Your question/.test(html),
+    "the matched question is never presented as hers",
+  );
+  assert(
+    html.includes(`<p class="answer-text">${turn.text}</p>`),
+    "the answer text equals the response text, line breaks included",
+  );
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  assert(
+    /\.answer-text \{[^}]*white-space: pre-line;/.test(css) &&
+      /\.answer-text \{[^}]*font-size: 16px;[^}]*font-weight: var\(--weight-semibold\);[^}]*line-height: 1\.55;/.test(
+        css,
+      ),
+    "paragraph breaks are kept (pre-line); 16px, weight 600, line-height 1.55",
+  );
+  assert(
+    html.indexOf("closest-label") < html.indexOf("answer-card") &&
+      html.indexOf("answer-card") < html.indexOf("answer-text"),
+    "the closest question, then the answer card",
+  );
+  assert(
+    /<h2 id="answer-title" class="answer-pill"><svg[^>]*><path[^>]*><\/path><\/svg> Answer<\/h2>/.test(
+      html,
+    ) && html.indexOf("answer-pill") < html.indexOf("answer-text"),
+    'the "Answer" pill, with a check icon, at the top of the card (an h2)',
+  );
+}
+
+console.log("\nTest 32: the source as sent, then the shared disclaimer");
+{
+  const withSource = renderAnswer(answerTurn());
+  const sourceAt = withSource.indexOf(
+    '<p class="answer-source"><strong>Source:</strong> Kenya MOH (2015); WHO (2018)</p>',
+  );
+  const disclaimerAt = withSource.indexOf(
+    `<p class="answer-disclaimer">${ANSWER_DISCLAIMER}</p>`,
+  );
+  assert(
+    sourceAt > withSource.indexOf("answer-text"),
+    "the source line, under the answer",
+  );
+  assert(disclaimerAt > sourceAt, "then the disclaimer");
+  assert(
+    ANSWER_DISCLAIMER ===
+      "General information, not a diagnosis. A nurse or clinic can test and treat you.",
+    "the disclaimer wording",
+  );
+  for (const source of [null, undefined, ""]) {
+    const html = renderAnswer(answerTurn({ source }));
+    assert(
+      !html.includes("Source:") && html.includes(ANSWER_DISCLAIMER),
+      `no source in the response (${JSON.stringify(source)}): no source line, nothing invented; the disclaimer stays`,
+    );
+  }
+  const view = readFileSync(
+    new URL("./AnswerView.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    view.includes("{ANSWER_DISCLAIMER}") && !view.includes("not a diagnosis"),
+    "the disclaimer is the one shared constant, not typed in the view",
+  );
+}
+
+console.log("\nTest 33: no confidence pill, match label or score anywhere");
+{
+  for (const showDetails of [false, true]) {
+    const html = renderAnswer(answerTurn(), showDetails);
+    for (const word of [
+      "confidence",
+      "0.82",
+      "strong match",
+      "Strong match",
+      "similarity",
+      "score",
+      "%",
+      "answer-details",
+    ]) {
+      assert(
+        !html.includes(word),
+        `details ${showDetails ? "on" : "off"}: no "${word}"`,
+      );
+    }
+  }
+  const view = readFileSync(
+    new URL("./AnswerView.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    !/details|confidence|similarity|score/i.test(
+      view.slice(view.indexOf("export default")),
+    ),
+    "the view reads no details, confidence or score",
+  );
+}
+
+console.log(
+  "\nTest 34: two related questions of the same class, not the matched one",
+);
+{
+  for (const item of KB_QUESTIONS) {
+    const related = relatedQuestions(item.question);
+    const others = questionsFor(item.topicClass).filter(
+      (other) => other.id !== item.id,
+    );
+    assert(
+      related.length === Math.min(2, others.length) &&
+        related.every((q) => others.some((other) => other.question === q)) &&
+        !related.includes(item.question),
+      `${item.id}: ${related.length} others of ${item.topicClass}, excluding itself`,
+    );
+  }
+  assert(
+    relatedQuestions("a question not in the knowledge base").length === 0,
+    "no matched entry: no related questions (none invented)",
+  );
+  const html = renderAnswer(answerTurn());
+  const rows = [
+    ...html.matchAll(
+      /<button class="topic-question" type="button"><span>([^<]*)<\/span><span class="topic-question-go" aria-hidden="true">/g,
+    ),
+  ].map((m) => m[1]);
+  assert(
+    JSON.stringify(rows) ===
+      JSON.stringify(relatedQuestions(KB_S5.question).map(escapeHtml)),
+    "KB-S5: its two related questions as chevron rows",
+  );
+  assert(
+    html.includes(
+      '<h2 id="related-title" class="related-title">Related questions</h2>',
+    ) && html.indexOf("related-title") > html.indexOf("answer-disclaimer"),
+    '"Related questions" under the answer card',
+  );
+  const view = readFileSync(
+    new URL("./AnswerView.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    view.includes("onClick={() => onSend(question)}"),
+    "tapping one sends its exact text",
+  );
+  const chat = readFileSync(
+    new URL("./ChatInterface.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    chat.includes('onSend={(question) => onSend(question, "tapped")}') &&
+      chat.includes("onSend(trimmed);"),
+    "through the same onSend as the ask bar (App's full pipeline)",
+  );
+}
+
+console.log("\nTest 35: back link, ask bar and frame of the answer screen");
+{
+  for (const label of ["Back to home", "Back to Pregnancy"]) {
+    const html = renderToStaticMarkup(
+      <AnswerView
+        turn={answerTurn()}
+        onSend={() => undefined}
+        back={{ label, onBack: () => undefined }}
+        askBar={null}
+      />,
+    );
+    assert(
+      new RegExp(
+        `^<main class="screen chat-screen answer-screen"><button class="back-link" type="button"><svg[^>]*>.*?</svg> ${label}</button>`,
+      ).test(html),
+      `"${label}" is the first thing on the screen, a button`,
+    );
+  }
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes("label: `Back to ${answerOrigin.topic.label}`") &&
+      app.includes(': { label: "Back to home", onBack: handleNewChat };'),
+    'from a Topic list "Back to <topic label>", otherwise "Back to home"',
+  );
+  assert(
+    app.includes("focusQuestionId={answerOrigin?.questionId ?? null}"),
+    "back to the Topic list hands it the tapped row",
+  );
+  const list = readFileSync(
+    new URL("./TopicList.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    list.includes("data-question={item.id}") &&
+      list.includes("(row ?? headingRef.current)?.focus();"),
+    "the Topic list focuses that row (its h1 if none was tapped)",
+  );
+  assert(
+    /const openTopic = [^}]*setAnswerOrigin\(null\);/.test(app) &&
+      /const askFromChat = \(text: string, via: AnswerVia = "typed"\) => \{\s*setAnswerOrigin\(null\);\s*void handleSend\(text, via\);/.test(
+        app,
+      ),
+    "a question asked on the chat screen (ask bar, related) goes back to Home",
+  );
+  const html = renderAnswer(answerTurn());
+  const lineAt = html.indexOf('class="danger-line"');
+  const barAt = html.indexOf('<div class="ask-pill-bar">');
+  assert(
+    lineAt > html.lastIndexOf("topic-question") && barAt > lineAt,
+    "the footer line after the related questions, then the ask bar",
+  );
+  assert(
+    html.includes(
+      '<label class="sr-only" for="chat-input">Ask something else</label>',
+    ) && html.split("<input").length === 2,
+    'one ask bar, labelled "Ask something else"',
+  );
+  assert(
+    app.includes("onSend={askFromChat}") &&
+      app.includes("submitQuery(text, { signal: request.signal })"),
+    "the ask bar runs the full pipeline with the text only: never scoped",
+  );
+}
+
+console.log("\nTest 36: focus moves to the closest question; announced once");
+{
+  const html = renderAnswer(answerTurn());
+  assert(
+    html.includes('<h1 tabindex="-1" class="closest">'),
+    "the h1 can take focus",
+  );
+  const view = readFileSync(
+    new URL("./AnswerView.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    /useEffect\(\(\) => \{\s*headingRef\.current\?\.focus\(\);\s*\}, \[turn\.id\]\);/.test(
+      view,
+    ),
+    "focus moves to it when a new answer arrives",
+  );
+  assert(
+    !html.includes("aria-live") && !html.includes('role="status"'),
+    "the answer is in no live region (not read twice)",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes('<p className="sr-only" role="status" aria-live="polite">') &&
+      app.includes("announcementFor(replyViewOf(lastTurn))") &&
+      announcementFor("answer") === "New answer.",
+    'one polite live region, outside the screen, says "New answer." once',
+  );
+  const h2s = [...html.matchAll(/<h([1-6])/g)].map((m) => m[1]);
+  assert(
+    JSON.stringify(h2s) === JSON.stringify(["1", "2", "2"]),
+    "heading order: h1 (closest question), h2 Answer, h2 Related questions",
+  );
+}
+
+const ECHO = "<b>x</b>";
+const replyTurns = (text: string, extra: Partial<ChatTurn>): ChatTurn[] => [
+  { id: "u7", role: "user", text: ECHO },
+  {
+    id: "r7",
+    role: "assistant",
+    text,
+    outcome: "grounded_answer",
+    details: DETAILS,
+    ...extra,
+  },
+];
+const renderReply = (
+  text: string,
+  extra: Partial<ChatTurn>,
+  showDetails = false,
+) =>
+  renderToStaticMarkup(
+    <ChatInterface
+      turns={replyTurns(text, extra)}
+      onSend={() => undefined}
+      isLoading={false}
+      showDetails={showDetails}
+    />,
+  );
+const KINDS: [string, string, Partial<ChatTurn>][] = [
+  ["clarify", VAGUE_QUERY_MESSAGE, { outcome: "clarification", kind: "vague" }],
+  ["held A", HELD_TOPIC_MESSAGES.A, { outcome: "held", kind: "held-topic" }],
+  ["held B", HELD_TOPIC_MESSAGES.B, { outcome: "held", kind: "held-topic" }],
+  ["held C", HELD_TOPIC_MESSAGES.C, { outcome: "held", kind: "held-topic" }],
+  ["help", SIGNPOSTING_MESSAGE, { outcome: "signposting", kind: "help" }],
+  ["no answer", NO_ANSWER_MESSAGE, { answerFound: false, kind: "abstain" }],
+];
+const referral = (message: string) =>
+  renderToStaticMarkup(
+    <ReferralScreen message={message} onContinueChat={() => undefined} />,
+  );
+
+console.log("\nTest 37: each reply kind has one h1, its reply text, focusable");
+{
+  const screens: [string, string, string][] = [
+    ...KINDS.map(
+      ([name, text, extra]) =>
+        [name, text, renderReply(text, extra)] as [string, string, string],
+    ),
+    [
+      "referral, abuse",
+      ABUSE_REFERRAL_MESSAGE,
+      referral(ABUSE_REFERRAL_MESSAGE),
+    ],
+    [
+      "referral, self-harm",
+      SELF_HARM_REFERRAL_MESSAGE,
+      referral(SELF_HARM_REFERRAL_MESSAGE),
+    ],
+  ];
+  for (const [name, text, html] of screens) {
+    assert(html.split("<h1").length === 2, `${name}: one h1`);
+    // Held, help and referral show the first sentence as the h1 and the
+    // rest under it (step 7c); clarify and no answer show it whole.
+    const split = /held|help|referral/.test(name);
+    const { first, rest } = splitReply(text);
+    const cls = /help|referral/.test(name) ? "support-title" : "reply-title";
+    assert(
+      split
+        ? html.includes(
+            `<h1 tabindex="-1" class="${cls}">${escapeHtml(first)}</h1>`,
+          ) &&
+            (rest === null || html.includes(`>${escapeHtml(rest)}</p>`))
+        : html.includes(
+            `<h1 tabindex="-1" class="reply-title">${escapeHtml(text)}</h1>`,
+          ),
+      `${name}: the h1 is the reply text (its first sentence on held, help and referral, the rest below), and can take focus`,
+    );
+    const pillAt = html.indexOf('class="reply-pill"');
+    assert(
+      pillAt > -1 && pillAt < html.indexOf("<h1"),
+      `${name}: a pill with an icon at the top of the card`,
+    );
+  }
+  const views = readFileSync(
+    new URL("./ReplyViews.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    /useEffect\(\(\) => \{\s*ref\.current\?\.focus\(\);\s*\}, \[key\]\);/.test(
+      views,
+    ) && views.split("useFocusOnArrival(id)").length === 6,
+    "focus moves to the h1 on arrival, on all five reply screens",
+  );
+  const plain = renderChat([
+    { id: "u", role: "user", text: "q" },
+    {
+      id: "p",
+      role: "assistant",
+      text: "limited answer",
+      outcome: "grounded_answer",
+      limitedMode: true,
+    },
+  ]);
+  assert(
+    plain.split("<h1").length === 2 &&
+      plain.includes(
+        '<h1 tabindex="-1" class="plain-reply">limited answer</h1>',
+      ),
+    "a reply with no kind (limited mode): its text is the one h1",
+  );
+  const waiting = renderToStaticMarkup(
+    <ChatInterface
+      turns={[{ id: "u", role: "user", text: "q" }]}
+      onSend={() => undefined}
+      isLoading
+    />,
+  );
+  assert(
+    waiting.split("<h1").length === 2 &&
+      waiting.includes('<h1 class="sr-only">SafeGirl</h1>'),
+    "waiting for a reply, or after an error: one (visually hidden) h1",
+  );
+  assert(
+    renderToStaticMarkup(<SessionEnd onStartNew={() => undefined} />).includes(
+      '<h1 id="session-end-title">Session ended.</h1>',
+    ),
+    "the session end has its h1",
+  );
+  const pills = [
+    [KINDS[0], REPLY_PILLS.clarify],
+    [KINDS[1], REPLY_PILLS.held],
+    [KINDS[4], REPLY_PILLS.help],
+    [KINDS[5], REPLY_PILLS.noAnswer],
+  ] as const;
+  for (const [[name, text, extra], label] of pills) {
+    assert(
+      /<p class="reply-pill"><svg[^>]*>[\s\S]*?<\/svg> ([^<]*)<\/p>/.exec(
+        renderReply(text, extra),
+      )?.[1] === label,
+      `${name}: the pill reads "${label}"`,
+    );
+  }
+  assert(
+    referral("m").includes(`</svg> ${REPLY_PILLS.referral}</p>`),
+    `referral: the pill reads "${REPLY_PILLS.referral}"`,
+  );
+}
+
+console.log(
+  "\nTest 38: her question shown back on clarify and no answer only, escaped",
+);
+{
+  for (const [name, text, extra] of KINDS) {
+    const html = renderReply(text, extra);
+    const echoes = name === "clarify" || name === "no answer";
+    assert(!html.includes(ECHO), `${name}: never rendered as HTML`);
+    if (echoes) {
+      assert(
+        html.includes(
+          name === "clarify"
+            ? '<h2 class="sr-only">You asked</h2><p class="ask-bubble">&lt;b&gt;x&lt;/b&gt;</p>'
+            : '<p class="you-asked-label">You asked</p><p class="you-asked-text">&lt;b&gt;x&lt;/b&gt;</p>',
+        ),
+        name === "clarify"
+          ? 'clarify: her text in a bubble, as plain text, after a hidden "You asked" h2'
+          : `${name}: "You asked" and her text, as plain text`,
+      );
+    } else {
+      assert(
+        !html.includes("&lt;b&gt;") && !html.includes("You asked"),
+        `${name}: her text is not shown`,
+      );
+    }
+  }
+  assert(
+    !referral(ABUSE_REFERRAL_MESSAGE).includes("You asked"),
+    "referral: her text is not shown (the screen gets the message only)",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    /setReferralMessage\(response\.message\);[\s\S]{0,200}setTurns\(\[\]\);/.test(
+      app,
+    ),
+    "after a referral her question is dropped, so Continue chat never shows it",
+  );
+  const waiting = renderToStaticMarkup(
+    <ChatInterface
+      turns={[{ id: "u", role: "user", text: ECHO }]}
+      onSend={() => undefined}
+      isLoading
+    />,
+  );
+  assert(
+    !waiting.includes("&lt;b&gt;") && !waiting.includes("user-bubble"),
+    "while the reply loads (or after an error), her text is not shown",
+  );
+}
+
+console.log(
+  "\nTest 39: call buttons from the constants on held, help and referral",
+);
+{
+  const contacts = SUPPORT_SECTIONS.flatMap((section) => section.contacts);
+  const note = (number: string) => {
+    const contact = contacts.find((item) => item.numbers.includes(number));
+    return `${contact?.label}. ${contact?.note}`;
+  };
+  const button = (kind: string, number: string) =>
+    `<a class="call-button call-button--${kind}" href="${telHref(number)}"><svg`;
+  const withCalls: [string, string][] = [
+    ["held A", renderReply(HELD_TOPIC_MESSAGES.A, KINDS[1][2])],
+    ["held C", renderReply(HELD_TOPIC_MESSAGES.C, KINDS[3][2])],
+    ["help", renderReply(SIGNPOSTING_MESSAGE, KINDS[4][2])],
+    ["referral", referral(ABUSE_REFERRAL_MESSAGE)],
+  ];
+  for (const [name, html] of withCalls) {
+    const mainAt = html.indexOf(button("main", GBV_HELPLINE));
+    const secondAt = html.indexOf(button("second", CHILDLINE_KENYA));
+    assert(
+      mainAt > -1 && secondAt > mainAt,
+      `${name}: Call ${GBV_HELPLINE} then Call ${CHILDLINE_KENYA}, tel: hrefs from the constants`,
+    );
+    for (const number of [GBV_HELPLINE, CHILDLINE_KENYA]) {
+      assert(
+        html.includes(
+          `<span class="call-button-number">Call ${number}</span><span class="call-button-note">${note(number)}</span>`,
+        ),
+        `${name}: ${number}'s description is its constant label and note`,
+      );
+    }
+  }
+  for (const [name, html] of withCalls.slice(2)) {
+    const [first, second] = EMERGENCY_NUMBERS;
+    assert(
+      html.includes(
+        `<div class="emergency-card"><p class="emergency-line"><strong>In immediate danger?</strong> Call ${first} or ${second}.</p><ul class="emergency-buttons"><li><a class="emergency-button" href="${telHref(first)}" aria-label="${telName(first)}"><svg`,
+      ) &&
+        html.includes(
+          `</svg>${first}</a></li><li><a class="emergency-button" href="${telHref(second)}" aria-label="${telName(second)}"><svg`,
+        ) &&
+        html.includes(`</svg>${second}</a></li></ul></div>`),
+      `${name}: the pink card: "In immediate danger?" (bold) "Call ${first} or ${second}." from the constants`,
+    );
+    assert(
+      html.includes('<section class="support-hero surface-dark">'),
+      `${name}: the dark card, with the white focus ring (surface-dark)`,
+    );
+  }
+  for (const [name, text, extra] of [KINDS[0], KINDS[5]]) {
+    assert(
+      !renderReply(text, extra).includes("call-button"),
+      `${name}: no call buttons`,
+    );
+  }
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  assert(
+    /\.call-button \{[^}]*min-height: 58px;[^}]*border: 1\.5px solid/.test(css),
+    "call buttons are 58px tall (44px minimum) with a 1.5px edge",
+  );
+}
+
+console.log(
+  "\nTest 40: the four topic buttons and pills open their Topic lists",
+);
+{
+  for (const [name, text, extra, variant] of [
+    [...KINDS[0], "grid"],
+    [...KINDS[5], "pills"],
+  ] as const) {
+    const html = renderReply(text, extra);
+    const buttons = [
+      ...html.matchAll(
+        /<button class="topic-choice topic-choice--(\w+)" type="button" data-topic="(\w+)">([\s\S]*?)<\/button>/g,
+      ),
+    ];
+    assert(
+      buttons.length === 4 &&
+        buttons.every(
+          (b, i) =>
+            b[1] === TOPICS[i].topicClass &&
+            b[2] === TOPICS[i].topicClass &&
+            b[3].endsWith(
+              `<span class="topic-choice-label">${TOPICS[i].label}</span>`,
+            ),
+        ),
+      `${name}: the four topics, in order, each carrying its class`,
+    );
+    assert(
+      html.includes(`topic-choices topic-choices--${variant}`) &&
+        (variant === "grid") === html.includes("topic-choice-icon"),
+      `${name}: ${variant === "grid" ? "a 2x2 grid with icon tiles" : "pills"}`,
+    );
+  }
+  const views = readFileSync(
+    new URL("./ReplyViews.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    readFileSync(
+      new URL("./TopicChoices.tsx", import.meta.url),
+      "utf8",
+    ).includes("onClick={() => onTopic(topic)}") &&
+      views.split("<TopicChoices").length === 4,
+    "tapping one hands its topic to onTopic",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes('onTopic={(next) => openTopic(next, "tile")}'),
+    "App opens that Topic list (and back returns focus to the button)",
+  );
+  const clarify = renderReply(
+    ...(KINDS[0].slice(1) as [string, Partial<ChatTurn>]),
+  );
+  assert(
+    clarify.indexOf(`<p class="reply-note">${CLARIFY_FALLBACK}</p>`) >
+      clarify.indexOf("</section>"),
+    "clarify: the fallback line below the card",
+  );
+  const none = renderReply(
+    ...(KINDS[5].slice(1) as [string, Partial<ChatTurn>]),
+  );
+  assert(
+    none.includes('<h2 class="reply-subtitle">Try a topic instead</h2>') &&
+      none.indexOf(`<p class="reply-note">${NO_ANSWER_RETRY}</p>`) >
+        none.indexOf("</section>"),
+    'no answer: "Try a topic instead", then the retry line below the card',
+  );
+  const held = renderReply(HELD_TOPIC_MESSAGES.A, KINDS[1][2]);
+  assert(
+    held.includes(
+      '<button class="reply-link" type="button">Ask a different question</button>',
+    ) && app.includes("onHome={handleNewChat}"),
+    'held: "Ask a different question" returns to Home (whose h1 takes focus)',
+  );
+}
+
+console.log("\nTest 41: Exit, the footer line and the ask bar on every reply");
+{
+  const noop = () => undefined;
+  const framed: [string, string][] = [
+    ...KINDS.map(
+      ([name, text, extra]) =>
+        [
+          name,
+          renderToStaticMarkup(
+            <AppShell onExit={noop} help={closedHelp} footerInContent>
+              <ChatInterface
+                turns={replyTurns(text, extra)}
+                onSend={noop}
+                isLoading={false}
+              />
+            </AppShell>,
+          ),
+        ] as [string, string],
+    ),
+    [
+      "referral",
+      renderToStaticMarkup(
+        <AppShell onExit={noop} help={closedHelp} calm footerInContent>
+          <ReferralScreen
+            message={ABUSE_REFERRAL_MESSAGE}
+            onContinueChat={noop}
+          />
+        </AppShell>,
+      ),
+    ],
+  ];
+  for (const [name, html] of framed) {
+    assert(
+      html.includes('<button class="btn-exit" type="button">Exit</button>'),
+      `${name}: Exit in the header`,
+    );
+    // Held, help and referral carry the call buttons: no footer line.
+    const withCalls = /held|help|referral/.test(name);
+    assert(
+      html.split('class="danger-line"').length === (withCalls ? 1 : 2),
+      withCalls
+        ? `${name}: no footer line (the call buttons are on screen)`
+        : `${name}: the footer line once`,
+    );
+    if (name !== "referral" && name !== "help") {
+      assert(
+        html.includes(
+          '<label class="sr-only" for="chat-input">Ask something else</label>',
+        ),
+        `${name}: the ask bar, "Ask something else"`,
+      );
+    }
+  }
+}
+
+console.log(
+  "\nTest 42: no score or confidence; details only in the plain view, when asked",
+);
+{
+  for (const [name, text, extra] of KINDS) {
+    for (const showDetails of [false, true]) {
+      const html = renderReply(text, extra, showDetails);
+      assert(
+        !/confidence|similarity|score|strong match|classifier:|answer-details/i.test(
+          html,
+        ),
+        `${name}, details ${showDetails ? "on" : "off"}: no score, confidence or details line`,
+      );
+    }
+  }
+  assert(
+    !/confidence|score|classifier:/.test(referral(ABUSE_REFERRAL_MESSAGE)),
+    "referral: none either",
+  );
+  const plain = (showDetails: boolean) =>
+    renderToStaticMarkup(
+      <ChatInterface
+        turns={[
+          {
+            id: "p",
+            role: "assistant",
+            text: "limited answer",
+            outcome: "grounded_answer",
+            details: DETAILS,
+          },
+        ]}
+        onSend={() => undefined}
+        isLoading={false}
+        showDetails={showDetails}
+      />,
+    );
+  assert(
+    !plain(false).includes("classifier:") &&
+      plain(true).includes("classifier:"),
+    "the ?details=1 line: hidden by default, shown only when asked for",
+  );
+}
+
+console.log(
+  "\nTest 43: one polite announcement per reply; no reply text in a live region",
+);
+{
+  const turn = (extra: Partial<ChatTurn>): ChatTurn => ({
+    id: "t",
+    role: "assistant",
+    text: "t",
+    ...extra,
+  });
+  const expected: [string, string][] = [
+    [
+      announcementFor(replyViewOf(turn({ kind: "vague" }))),
+      `New reply: ${REPLY_PILLS.clarify}.`,
+    ],
+    [
+      announcementFor(replyViewOf(turn({ kind: "held-topic" }))),
+      `New reply: ${REPLY_PILLS.held}.`,
+    ],
+    [
+      announcementFor(replyViewOf(turn({ kind: "help" }))),
+      `New reply: ${REPLY_PILLS.help}.`,
+    ],
+    [
+      announcementFor(replyViewOf(turn({ kind: "abstain" }))),
+      `New reply: ${REPLY_PILLS.noAnswer}.`,
+    ],
+    [announcementFor("referral"), `New reply: ${REPLY_PILLS.referral}.`],
+    [announcementFor(replyViewOf(turn({ limitedMode: true }))), "New reply."],
+    [announcementFor(replyViewOf({ id: "u", role: "user", text: "q" })), ""],
+  ];
+  for (const [actual, wanted] of expected) {
+    assert(actual === wanted, `announces "${wanted}"`);
+  }
+  for (const [name, text, extra] of KINDS) {
+    const html = renderReply(text, extra);
+    assert(
+      !html.includes("aria-live") && !html.includes('role="alert"'),
+      `${name}: the reply text is in no live region`,
+    );
+  }
+  assert(
+    !referral(ABUSE_REFERRAL_MESSAGE).includes('role="alert"'),
+    "referral: no alert re-reading the message",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.split('aria-live="polite"').length === 2 &&
+      app.indexOf('aria-live="polite"') < app.indexOf('screen === "chat" &&'),
+    "App's one live region sits outside the screens, so it survives a screen change (the referral)",
+  );
+}
+
+console.log("\nTest 44: the topic grid and the footer line fit narrow phones");
+{
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  // The declarations of the top-level rule with exactly this selector.
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  assert(
+    rule(".topic-choices").includes(
+      "grid-template-columns: repeat(2, minmax(0, 1fr));",
+    ) && rule(".topic-choices").includes("gap: 10px;"),
+    "two equal columns that can shrink, 10px apart",
+  );
+  assert(
+    /min-width: 0;\s*max-width: 100%;/.test(rule(".topic-choices > li")),
+    "every grid child: min-width 0, max-width 100%",
+  );
+  const button = rule(".topic-choice");
+  assert(
+    [
+      "box-sizing: border-box;",
+      "width: 100%;",
+      "padding: 10px 12px;",
+      "font-size: 15px;",
+      "font-weight: var(--weight-black);",
+      "border: 1.5px solid var(--color-control-border);",
+    ].every((d) => button.includes(d)),
+    "buttons: border-box, full width, 10px 12px, 15px weight 900, the 3:1 edge",
+  );
+  assert(
+    rule(".topic-choice-label").includes("overflow-wrap: anywhere;") &&
+      !/\.topic-choice[^{]*\{[^}]*white-space: nowrap/.test(css),
+    "labels wrap; nothing forbids it",
+  );
+  assert(
+    rule(".topic-choices--grid .topic-choice").includes("min-height: 84px;") &&
+      rule(".topic-choice-icon").includes("flex: none;") &&
+      rule(".topic-choices--grid .topic-choice-icon").includes("width: 34px;"),
+    "grid buttons are 84px with a 34px icon tile that does not shrink (step 7d)",
+  );
+  assert(
+    /@media \(max-width: 359px\) \{\s*\.topic-choice \{\s*font-size: 14px;/.test(
+      css,
+    ),
+    "under 360px the label is 14px",
+  );
+  assert(
+    rule(".topic-choices--grid .topic-choice").includes(
+      "flex-direction: column;",
+    ),
+    "each grid button is a column, the icon above the label, so no word breaks (step 7d)",
+  );
+  assert(
+    rule(".reply-card").includes("overflow: visible;") &&
+      rule(".reply-card").includes("min-width: 0;"),
+    "the reply card neither clips nor scrolls sideways",
+  );
+  assert(
+    rule(".danger-line").includes("line-height: 1.35;") &&
+      !rule(".danger-line a").includes("min-height") &&
+      css.includes(
+        ".danger-line a::after,\n.emergency-line a::after,\n.help-emergency a::after {",
+      ) &&
+      rule(".help-emergency a::after").includes("height: var(--tap-target);") &&
+      rule(".emergency-line").includes("line-height: 1.35;") &&
+      !rule(".emergency-line a").includes("min-height"),
+    "footer and emergency lines: line-height 1.35; their links keep a 44px-tall tap area",
+  );
+  const sheet = readFileSync(
+    new URL("./HelpSheet.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    sheet.includes('<TopicChoices variant="pills" onTopic={onTopic} />') &&
+      !css.includes(".topic-button"),
+    "the Help sheet uses the same TopicChoices; the old topic-button copy is gone",
+  );
+}
+
+console.log("\nTest 45: the Talk to a person screen");
+{
+  const noop = () => undefined;
+  const limited = (kind: "vague" | "abstain", extra: Partial<ChatTurn> = {}) =>
+    renderToStaticMarkup(
+      <AppShell onExit={noop} help={closedHelp} footerInContent>
+        <ChatInterface
+          turns={[
+            { id: "u8", role: "user", text: ECHO },
+            {
+              id: "r8",
+              role: "assistant",
+              text: kind === "vague" ? VAGUE_QUERY_MESSAGE : NO_ANSWER_MESSAGE,
+              outcome: kind === "vague" ? "clarification" : "grounded_answer",
+              kind,
+              loopLimited: true,
+              ...extra,
+            },
+          ]}
+          onSend={noop}
+          isLoading={false}
+        />
+      </AppShell>,
+    );
+  for (const kind of ["vague", "abstain"] as const) {
+    const html = limited(kind);
+    assert(
+      html.split("<h1").length === 2 &&
+        html.includes(
+          `<h1 tabindex="-1" class="reply-title">${escapeHtml(PERSON_MESSAGE)}</h1>`,
+        ),
+      `${kind} at the limit: one h1, the person message, focusable`,
+    );
+    assert(
+      !html.includes(escapeHtml(VAGUE_QUERY_MESSAGE)) &&
+        !html.includes(escapeHtml(NO_ANSWER_MESSAGE)),
+      `${kind} at the limit: shown instead of the reply`,
+    );
+    assert(
+      !html.includes("&lt;b&gt;") && !html.includes("You asked"),
+      `${kind} at the limit: her text is not shown`,
+    );
+    assert(
+      html.includes(`</svg> ${escapeHtml(REPLY_PILLS.person)}</p>`) &&
+        html.includes(
+          'class="reply-card reply-card--noanswer reply-card--person"',
+        ),
+      `${kind} at the limit: the no-answer card, pill "${REPLY_PILLS.person}"`,
+    );
+    assert(
+      html.includes(
+        '<button class="btn-see-help" type="button">See who can help</button>',
+      ) &&
+        !html.includes("call-button") &&
+        !html
+          .slice(
+            html.indexOf("reply-card--person"),
+            html.indexOf("</section>", html.indexOf("reply-card--person")),
+          )
+          .includes('href="tel:'),
+      `${kind} at the limit: "See who can help", no call buttons in the card`,
+    );
+    const pills = [...html.matchAll(/data-topic="(\w+)"/g)].map((m) => m[1]);
+    assert(
+      JSON.stringify(pills) === JSON.stringify(TOPICS.map((t) => t.topicClass)),
+      `${kind} at the limit: the four topic pills`,
+    );
+    assert(
+      html.includes('<button class="btn-exit" type="button">Exit</button>') &&
+        html.split('class="danger-line"').length === 2 &&
+        html.includes(`${GBV_HELPLINE}</a>, free and open 24 hours.`),
+      `${kind} at the limit: Exit and the footer line`,
+    );
+  }
+  assert(
+    !limited("vague", { loopLimited: false }).includes(
+      PERSON_MESSAGE.slice(0, 20),
+    ),
+    "below the limit, the normal clarify screen",
+  );
+  const chat = readFileSync(
+    new URL("./ChatInterface.tsx", import.meta.url),
+    "utf8",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    chat.includes("onOpenHelp={onOpenHelp}") &&
+      app.includes("onOpenHelp={openHelp}"),
+    '"See who can help" opens the Help sheet',
+  );
+}
+
+console.log("\nTest 46: every phone link's name says which service it calls");
+{
+  assert(
+    telName(GBV_HELPLINE) === `${GBV_HELPLINE}, GBV helpline` &&
+      telName(CHILDLINE_KENYA, `Call ${CHILDLINE_KENYA}`) ===
+        `Call ${CHILDLINE_KENYA}, Childline Kenya` &&
+      telName(EMERGENCY_NUMBERS[0]) === `${EMERGENCY_NUMBERS[0]}, Emergency`,
+    "names: the visible text first, then the service label from SUPPORT_SECTIONS",
+  );
+  const noop = () => undefined;
+  const pages = [
+    renderToStaticMarkup(<HelpSheet onClose={noop} onTopic={noop} />),
+    renderToStaticMarkup(<SupportContent />),
+    renderToStaticMarkup(
+      <ReferralScreen message={ABUSE_REFERRAL_MESSAGE} onContinueChat={noop} />,
+    ),
+    renderChat([]),
+  ];
+  const services = ["GBV helpline", "Childline Kenya", "Emergency"];
+  for (const html of pages) {
+    for (const link of html.match(
+      /<a [^>]*href="tel:[^"]*"[^>]*>[\s\S]*?<\/a>/g,
+    ) ?? []) {
+      const label = /aria-label="([^"]*)"/.exec(link)?.[1];
+      const text = link.replace(/<[^>]*>/g, "");
+      const name = label ?? text;
+      const visible = text.replace(/\s+/g, " ").trim();
+      assert(
+        services.some((service) => name.includes(service)) &&
+          (label === undefined ||
+            label.startsWith(visible.split(/(?<=\d)(?=[A-Z])/)[0])),
+        `"${visible.slice(0, 40)}": named "${name.slice(0, 50)}", which starts with the visible text`,
+      );
+    }
+  }
+}
+
+console.log(
+  "\nTest 47: reflow at 200% zoom: header, Home tiles and the wordmark",
+);
+{
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  assert(
+    rule(".app-header").includes("flex-wrap: wrap;") &&
+      rule(".header-actions").includes("flex-wrap: wrap;") &&
+      rule(".header-actions").includes("margin-left: auto;"),
+    "the header wraps: Help and Exit move to a second row instead of scrolling",
+  );
+  assert(
+    rule(".topic-tiles").includes(
+      "grid-template-columns: repeat(2, minmax(0, 1fr));",
+    ) &&
+      rule(".topic-tiles > *").includes("min-width: 0;") &&
+      rule(".topic-tile-label").includes("overflow-wrap: anywhere;"),
+    "Home's tiles: two shrinkable columns, labels that wrap",
+  );
+  assert(
+    rule(".splash-wordmark").includes("font-size: min(44px, 16vw);"),
+    "the splash wordmark is never wider than the screen",
+  );
+  assert(
+    !css.includes("answer-dock") && !css.includes("position: sticky"),
+    "nothing is docked or sticky at the bottom, so focus is never hidden under it (WCAG 2.4.11; step 7c)",
+  );
+}
+
+/** The Home ask bar alone, for its send button's state. */
+function AskBarForTest({ value }: { value: string }) {
+  return (
+    <AskBar
+      variant="hero"
+      value={value}
+      onChange={() => undefined}
+      onSubmit={() => undefined}
+      disabled={false}
+      placeholder="p"
+      inputRef={{ current: null }}
+    />
+  );
+}
+
+console.log("\nTest 48: Home polish (step 4b)");
+{
+  const html = renderChat([]);
+  assert(
+    html.includes(`</svg> ${HERO_PILL}</p>`) &&
+      html.indexOf('class="hero-tag"') < html.indexOf("<h1"),
+    `the "${HERO_PILL}" pill with its lock, above the h1`,
+  );
+  assert(
+    HERO_PILL === "Private and anonymous" &&
+      ASK_LABEL === "Type your question" &&
+      ASK_SEND_NAME === "Get an answer",
+    "the new copy, each in one constant",
+  );
+  assert(
+    html.includes('<span class="hero-decor" aria-hidden="true">') &&
+      html.split("hero-circle hero-circle--").length === 3 &&
+      html.includes("hero-sparkle-icon"),
+    "the hero decoration (two circles and a sparkle) is hidden from screen readers",
+  );
+  assert(
+    html.indexOf('class="ask-card"') > html.indexOf("</section>"),
+    "the ask card follows the hero card",
+  );
+  /** True when Home's send button is enabled for this field value. */
+  const send = (value: string) =>
+    !renderToStaticMarkup(<AskBarForTest value={value} />).includes(
+      'disabled="" aria-label="Get an answer"',
+    );
+  assert(!send(""), "the send button is disabled while the field is empty");
+  assert(!send("   "), "and while it holds only spaces");
+  assert(send("is my period normal"), "and enabled once there is text");
+  const footer = html.slice(html.indexOf('<footer class="home-footer">'));
+  assert(
+    footer.includes('<p class="home-anonymous"><svg') &&
+      footer.includes("Anonymous. We never ask for your name.") &&
+      footer.includes(
+        `<a href="${telHref(GBV_HELPLINE)}" aria-label="${telName(GBV_HELPLINE)}">${GBV_HELPLINE}</a>`,
+      ),
+    "the footer card: lock, the anonymous line and the footer line with its tel: link from the constant",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes("End session") &&
+      app.indexOf("<ChatInterface") < app.indexOf("End session"),
+    "End session stays, directly after the chat (below the footer card)",
+  );
+  assert(
+    JSON.stringify(TOPICS.map((t) => [t.label, t.topicClass, t.subtitle])) ===
+      JSON.stringify([
+        ["Periods and health", "general", "Cycle, pain, clinics"],
+        ["Pregnancy", "pregnancy", "Signs, care, school"],
+        ["Contraception", "contraception", "Methods and myths"],
+        ["STIs and HIV", "sti", "Signs, testing, care"],
+      ]),
+    "labels and classes unchanged; the new subtitles",
+  );
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  assert(
+    rule(".ask-field").includes("border: 1.5px solid var(--ask-field-edge);") &&
+      rule(".ask-field .btn-send:disabled").includes(
+        "background: var(--send-disabled-bg);",
+      ) &&
+      rule(".ask-field .btn-send:disabled").includes("opacity: 1;"),
+    "the field has a 3:1 edge; the disabled send button keeps a mid-violet fill at full opacity",
+  );
+  assert(
+    rule(".topic-tile").includes("border: 1.5px solid;") &&
+      rule(".topic-tile").includes("min-height: 104px;"),
+    "the topic cards keep their coloured edges",
+  );
+  assert(
+    /@media \(max-width: 600px\) \{[\s\S]*?\.app-header \{\s*margin-right: 8px;\s*margin-left: 8px;/.test(
+      css,
+    ),
+    "on phones the header lines up with the 20px content gutter",
+  );
+  const narrow = css.slice(css.lastIndexOf("@media (max-width: 359px) {"));
+  assert(
+    narrow.includes("column-gap: 8px;") &&
+      narrow.includes(".topic-tile-label {\n    font-size: 15px;"),
+    "under 360px: a 16px gutter, the header on one row, tile titles at 15px",
+  );
+}
+
+console.log("\nTest 50: Topic list and answer screen polish (step 6b)");
+{
+  const list = renderToStaticMarkup(
+    <TopicList
+      topic={TOPICS[3]}
+      onAsk={() => undefined}
+      onBack={() => undefined}
+    />,
+  );
+  assert(
+    list.includes(
+      '<div class="topic-head topic-head--sti"><span class="topic-head-icon"><svg',
+    ) && list.includes(`<p class="topic-hint">${TOPIC_LIST_HINT}</p>`),
+    `header card: the icon tile, the h1 and "${TOPIC_LIST_HINT}"`,
+  );
+  assert(
+    list.includes('<p class="sr-only topic-count">5 questions</p>') &&
+      list.indexOf("sr-only topic-count") <
+        list.indexOf('<ul class="topic-questions"'),
+    "the question count stays, for screen readers only, before the list",
+  );
+  assert(
+    list.includes(`<p class="topic-footnote">${TOPIC_LIST_FOOTNOTE}</p>`) &&
+      list.indexOf("topic-footnote") > list.indexOf("</ul>"),
+    "the footnote under the list",
+  );
+  const bottom = list.slice(list.indexOf('<div class="screen-bottom">'));
+  assert(
+    bottom.includes('class="danger-line"') &&
+      bottom.indexOf('class="danger-line"') <
+        bottom.indexOf('<div class="ask-pill-bar">') &&
+      bottom.includes(`href="${telHref(GBV_HELPLINE)}"`),
+    "the footer line (its tel: link from the constant), then the ask pill",
+  );
+  assert(
+    bottom.includes(`placeholder="${TOPIC_LIST_PLACEHOLDER}"`) &&
+      bottom.includes('aria-label="Ask"'),
+    `Topic list placeholder "${TOPIC_LIST_PLACEHOLDER}"; send button named "Ask"`,
+  );
+  const answer = renderAnswer(answerTurn());
+  assert(
+    answer.includes('<h1 tabindex="-1" class="closest">') &&
+      answer.includes('<p class="answer-source"><strong>Source:</strong> '),
+    'the closest-question box is the focusable h1; "Source:" in bold',
+  );
+  assert(
+    answer.includes('<ul class="topic-questions topic-questions--related">'),
+    "related questions in their own, smaller card",
+  );
+  const end = answer.slice(answer.indexOf('<div class="screen-bottom">'));
+  assert(
+    !answer.includes("answer-dock") &&
+      end.indexOf('class="danger-line"') <
+        end.indexOf('<div class="ask-pill-bar">') &&
+      end.includes('placeholder="Ask something else…"'),
+    "answer screen: no panel; the footer line, then the ask pill (placeholder unchanged)",
+  );
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  assert(
+    rule(".screen-bottom").includes("margin-top: auto;") &&
+      !/background|position: sticky|box-shadow/.test(rule(".screen-bottom")),
+    "the bottom area: not sticky, no panel background, at the bottom of a short screen",
+  );
+  assert(
+    rule(".ask-pill-bar").includes(
+      "border: 1.5px solid var(--ask-field-edge);",
+    ) &&
+      rule(".topic-questions").includes(
+        "border: 1.5px solid var(--list-edge);",
+      ),
+    "control edges: the ask pill and the question cards use the 3:1 pink",
+  );
+  const index = readFileSync(new URL("../index.css", import.meta.url), "utf8");
+  assert(
+    /\[tabindex="-1"\]:focus,\s*\[tabindex="-1"\]:focus-visible \{\s*outline: none;/.test(
+      index,
+    ) &&
+      /:focus-visible \{\s*outline: var\(--focus-ring-width\) solid var\(--focus-ring-color\);/.test(
+        index,
+      ),
+    "no ring on what only code focuses; every control keeps its ring",
+  );
+}
+
+console.log("\nTest 51: reply screens aligned with the design (step 7c)");
+{
+  const replies: [string, string][] = [
+    ["held A", HELD_TOPIC_MESSAGES.A],
+    ["held B", HELD_TOPIC_MESSAGES.B],
+    ["held C", HELD_TOPIC_MESSAGES.C],
+    ["help", SIGNPOSTING_MESSAGE],
+    ["referral, abuse", ABUSE_REFERRAL_MESSAGE],
+    ["referral, self-harm", SELF_HARM_REFERRAL_MESSAGE],
+  ];
+  for (const [name, text] of replies) {
+    const { first, rest } = splitReply(text);
+    assert(
+      (rest === null ? first : `${first} ${rest}`) === text &&
+        /[.?!]$/.test(first),
+      `${name}: h1 + " " + paragraph equals the reply exactly (h1: "${first.slice(0, 40)}…")`,
+    );
+  }
+  assert(
+    JSON.stringify(splitReply("One sentence only.")) ===
+      JSON.stringify({ first: "One sentence only.", rest: null }),
+    "one sentence: no paragraph",
+  );
+  const held = renderReply(HELD_TOPIC_MESSAGES.A, {
+    outcome: "held",
+    kind: "held-topic",
+  });
+  const card = held.slice(
+    held.indexOf('class="reply-card reply-card--held"'),
+    held.indexOf("</section>"),
+  );
+  const calls = held.slice(held.indexOf('<section class="call-card"'));
+  assert(
+    !card.includes("call-button") &&
+      calls.includes(
+        `<h2 id="call-card-title" class="call-card-title">${CALL_CARD_HEADING}</h2>`,
+      ) &&
+      calls.includes(
+        `class="call-button call-button--main" href="${telHref(GBV_HELPLINE)}"`,
+      ) &&
+      calls.includes(
+        `class="call-button call-button--second" href="${telHref(CHILDLINE_KENYA)}"`,
+      ),
+    `held: the call buttons are in their own card under "${CALL_CARD_HEADING}", hrefs from the constants`,
+  );
+  assert(
+    !held.includes('class="danger-line"') &&
+      held.includes('<div class="screen-bottom"><div class="ask-pill-bar">') &&
+      held.includes('placeholder="Ask something else…"'),
+    "held: no footer line; the ask bar is a white pill with no panel",
+  );
+  const support = (html: string, name: string) => {
+    const hero = html.slice(
+      html.indexOf('<section class="support-hero'),
+      html.indexOf("</section>"),
+    );
+    assert(
+      !hero.includes("call-button") &&
+        html.includes(
+          `class="call-button call-button--main" href="${telHref(GBV_HELPLINE)}"`,
+        ) &&
+        html.indexOf("call-buttons--support") > html.indexOf("</section>"),
+      `${name}: the call buttons under the hero, hrefs from the constants`,
+    );
+    const [a, b] = EMERGENCY_NUMBERS;
+    assert(
+      html.includes(
+        `<div class="emergency-card"><p class="emergency-line"><strong>In immediate danger?</strong> Call ${a} or ${b}.</p><ul class="emergency-buttons"><li><a class="emergency-button" href="${telHref(a)}" aria-label="${telName(a)}"><svg`,
+      ) &&
+        html.includes(
+          `</svg>${a}</a></li><li><a class="emergency-button" href="${telHref(b)}" aria-label="${telName(b)}"><svg`,
+        ) &&
+        html.includes(`</svg>${b}</a></li></ul></div>`),
+      `${name}: the pink emergency card with ${a} and ${b} from the constants`,
+    );
+    assert(
+      !html.includes('class="danger-line"') && !html.includes("<input"),
+      `${name}: no footer line and no ask bar`,
+    );
+    assert(
+      html.includes(`<p class="support-exit-hint">${QUICK_EXIT_HINT}</p>`) &&
+        html.includes(
+          `<button class="btn-back-questions" type="button">${BACK_TO_QUESTIONS}</button>`,
+        ),
+      `${name}: "${QUICK_EXIT_HINT}", then "${BACK_TO_QUESTIONS}"`,
+    );
+  };
+  support(
+    renderReply(SIGNPOSTING_MESSAGE, { outcome: "signposting", kind: "help" }),
+    "help",
+  );
+  support(referral(ABUSE_REFERRAL_MESSAGE), "referral");
+  const header = (supportScreen: boolean) =>
+    renderToStaticMarkup(
+      <AppHeader
+        onExit={() => undefined}
+        onOpenHelp={() => undefined}
+        isHelpOpen={false}
+        helpButtonRef={{ current: null }}
+        support={supportScreen}
+      />,
+    );
+  assert(
+    !header(true).includes("btn-help") &&
+      header(true).includes(
+        `<button class="btn-exit" type="button">${QUICK_EXIT_LABEL}</button>`,
+      ) &&
+      header(false).includes("btn-help") &&
+      header(false).includes(
+        '<button class="btn-exit" type="button">Exit</button>',
+      ),
+    `help and referral: no Help button, "${QUICK_EXIT_LABEL}"; elsewhere unchanged`,
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    /support=\{\s*screen === "referral" \|\|\s*\(onChatScreen && !isLoading && replyViewOf\(lastTurn\) === "help"\)\s*\}/.test(
+      app,
+    ),
+    "App gives the support header to the referral and help screens only",
+  );
+  for (const [name, text, extra] of [
+    [
+      "clarify",
+      VAGUE_QUERY_MESSAGE,
+      { outcome: "clarification", kind: "vague" },
+    ],
+    ["no answer", NO_ANSWER_MESSAGE, { answerFound: false, kind: "abstain" }],
+  ] as [string, string, Partial<ChatTurn>][]) {
+    const html = renderReply(text, extra);
+    const bottom = html.slice(html.indexOf('<div class="screen-bottom">'));
+    assert(
+      bottom.includes('class="danger-line"') &&
+        bottom.indexOf('class="danger-line"') <
+          bottom.indexOf('<div class="ask-pill-bar">'),
+      `${name}: the footer line, then the ask bar as a white pill, no panel`,
+    );
+  }
+}
+
+console.log("\nTest 52: clarify and help/referral boards (step 7d)");
+{
+  const clarify = renderReply(VAGUE_QUERY_MESSAGE, {
+    outcome: "clarification",
+    kind: "vague",
+  });
+  assert(
+    clarify.includes(
+      '<h2 class="sr-only">You asked</h2><p class="ask-bubble">&lt;b&gt;x&lt;/b&gt;</p>',
+    ) && !clarify.includes("you-asked-label"),
+    "clarify: a hidden h2, then her text in a bubble, escaped; no visible label",
+  );
+  assert(
+    clarify.split("<h1").length === 2 &&
+      clarify.includes(
+        `<h1 tabindex="-1" class="reply-title">${escapeHtml(VAGUE_QUERY_MESSAGE)}</h1>`,
+      ),
+    "clarify: one h1, the reply, focusable",
+  );
+  assert(
+    clarify.includes(
+      `<p class="clarify-pick">${CLARIFY_PICK_LABEL}</p><ul class="topic-choices topic-choices--grid">`,
+    ),
+    `clarify: "${CLARIFY_PICK_LABEL}", then the four buttons`,
+  );
+  assert(
+    clarify.includes(
+      `<div class="clarify-more"><p class="clarify-more-words">${CLARIFY_MORE_WORDS}</p><p class="reply-note">${CLARIFY_FALLBACK}</p></div>`,
+    ),
+    "clarify: the two lines under the card",
+  );
+  const bottom = clarify.slice(clarify.indexOf('<div class="screen-bottom">'));
+  assert(
+    bottom.includes(`href="${telHref(GBV_HELPLINE)}"`) &&
+      bottom.indexOf('class="danger-line"') <
+        bottom.indexOf('<div class="ask-pill-bar">') &&
+      bottom.includes(`placeholder="${CLARIFY_PLACEHOLDER}"`) &&
+      bottom.includes('aria-label="Ask"'),
+    `clarify: the footer line (1195 from the constant), then the ask pill, "${CLARIFY_PLACEHOLDER}"`,
+  );
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  assert(
+    rule(".topic-choices").includes(
+      "grid-template-columns: repeat(2, minmax(0, 1fr));",
+    ) &&
+      rule(".topic-choices--grid .topic-choice").includes(
+        "flex-direction: column;",
+      ) &&
+      rule(".topic-choices--grid .topic-choice").includes("min-height: 84px;"),
+    "clarify: column buttons in a minmax(0, 1fr) grid",
+  );
+  for (const [name, text, render] of [
+    [
+      "help",
+      SIGNPOSTING_MESSAGE,
+      () =>
+        renderReply(SIGNPOSTING_MESSAGE, {
+          outcome: "signposting",
+          kind: "help",
+        }),
+    ],
+    [
+      "referral",
+      ABUSE_REFERRAL_MESSAGE,
+      () => referral(ABUSE_REFERRAL_MESSAGE),
+    ],
+  ] as [string, string, () => string][]) {
+    const html = render();
+    const { first, rest } = splitReply(text);
+    assert(
+      `${first} ${rest}` === text &&
+        html.includes(
+          `<h1 tabindex="-1" class="support-title">${escapeHtml(first)}</h1>`,
+        ) &&
+        html.includes(`<p class="support-body">${escapeHtml(rest ?? "")}</p>`),
+      `${name}: the h1 is the first sentence; h1 + " " + paragraph is the reply`,
+    );
+    const hero = html.slice(
+      html.indexOf('<section class="support-hero'),
+      html.indexOf("</section>"),
+    );
+    const [a, b] = EMERGENCY_NUMBERS;
+    assert(
+      !hero.includes("tel:") &&
+        [GBV_HELPLINE, CHILDLINE_KENYA, a, b].every((n) =>
+          html.includes(`href="${telHref(n)}"`),
+        ) &&
+        html.split('class="emergency-button"').length === 3,
+      `${name}: 1195, 116, ${a} and ${b} from the constants, all outside the hero; two emergency buttons`,
+    );
+    assert(
+      !html.includes('class="danger-line"') && !html.includes("<input"),
+      `${name}: no footer line and no ask bar`,
+    );
+  }
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes('onContinueChat={() => setScreen("chat")}') &&
+      readFileSync(
+        new URL("./ReferralScreen.tsx", import.meta.url),
+        "utf8",
+      ).includes("onBack={onContinueChat}"),
+    '"Back to questions" keeps the old Continue chat behaviour',
+  );
+}
+
+console.log("\nTest 53: the Help sheet as a page under the header (step 3c)");
+{
+  const noop = () => undefined;
+  const open = renderToStaticMarkup(
+    <AppShell
+      onExit={noop}
+      help={{ ...closedHelp, isOpen: true }}
+      footerInContent
+    >
+      <main className="screen">behind</main>
+    </AppShell>,
+  );
+  assert(
+    open.includes('<button class="btn-exit" type="button">Exit</button>') &&
+      open.indexOf("btn-exit") < open.indexOf('role="dialog"'),
+    "with the sheet open, the header's Exit stays in view, before the sheet",
+  );
+  assert(
+    open.includes(
+      '<div class="shell-content" hidden=""><main class="screen">behind</main></div>',
+    ),
+    "the screen behind stays mounted but hidden",
+  );
+  const closed = renderToStaticMarkup(
+    <AppShell onExit={noop} help={closedHelp} footerInContent>
+      <main className="screen">behind</main>
+    </AppShell>,
+  );
+  assert(
+    closed.includes(
+      '<div class="shell-content"><main class="screen">behind</main></div>',
+    ) && !closed.includes('role="dialog"'),
+    "closed: the screen shows, no sheet",
+  );
+  const html = renderToStaticMarkup(
+    <HelpSheet onClose={noop} onTopic={noop} />,
+  );
+  const [a, b] = EMERGENCY_NUMBERS;
+  for (const n of [GBV_HELPLINE, CHILDLINE_KENYA, a, b]) {
+    assert(
+      html.includes(`href="${telHref(n)}"`),
+      `${n}: href from the constant`,
+    );
+  }
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    /const closeHelp = \(\) => \{\s*setIsHelpOpen\(false\);\s*helpButtonRef\.current\?\.focus\(\);/.test(
+      app,
+    ) &&
+      /const handleHelpTopic = \(next: Topic\) => \{\s*setIsHelpOpen\(false\);\s*openTopic\(next, "help"\);/.test(
+        app,
+      ),
+    "closing returns focus to Help; a topic pill closes the sheet and opens its list (unchanged)",
+  );
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  assert(
+    rule(".btn-close").includes("width: 44px;") &&
+      rule(".btn-close").includes("height: 44px;") &&
+      rule(".btn-close").includes(
+        "border: 1.5px solid var(--sheet-control-edge);",
+      ),
+    "the close button: 44 by 44, with the 3:1 edge",
+  );
+  assert(
+    rule(".help-call--main:focus-visible").includes(
+      "outline-color: var(--focus-ring-on-dark);",
+    ) &&
+      rule(".help-call--main:focus-visible").includes("outline-offset: -5px;"),
+    "the dark 1195 button: a white ring drawn inside it",
+  );
+  assert(
+    rule(".help-sheet .topic-choices").includes("flex-wrap: wrap;"),
+    "the topic pills wrap",
+  );
+}
+
+console.log("\nTest 54: the 116 wording (22 October 2026)");
+{
+  const noop = () => undefined;
+  const screens: [string, string][] = [
+    [
+      "help",
+      renderReply(SIGNPOSTING_MESSAGE, {
         outcome: "signposting",
-        answerFound: false,
-        details: { category: null },
+        kind: "help",
       }),
-    ]),
-    "not after signposting",
+    ],
+    [
+      "no answer",
+      renderReply(NO_ANSWER_MESSAGE, { answerFound: false, kind: "abstain" }),
+    ],
+    [
+      "held A",
+      renderReply(HELD_TOPIC_MESSAGES.A, {
+        outcome: "held",
+        kind: "held-topic",
+      }),
+    ],
+    [
+      "held B",
+      renderReply(HELD_TOPIC_MESSAGES.B, {
+        outcome: "held",
+        kind: "held-topic",
+      }),
+    ],
+    [
+      "held C",
+      renderReply(HELD_TOPIC_MESSAGES.C, {
+        outcome: "held",
+        kind: "held-topic",
+      }),
+    ],
+    ["referral, abuse", referral(ABUSE_REFERRAL_MESSAGE)],
+    ["referral, self-harm", referral(SELF_HARM_REFERRAL_MESSAGE)],
+    [
+      "Help sheet",
+      renderToStaticMarkup(<HelpSheet onClose={noop} onTopic={noop} />),
+    ],
+    ["support panel", renderToStaticMarkup(<SupportContent />)],
+  ];
+  for (const [name, html] of screens) {
+    assert(
+      !/free for anyone under 18/i.test(html),
+      `${name}: no "free for anyone under 18"`,
+    );
+  }
+  const sentence =
+    "Childline Kenya, 116, is a free 24-hour helpline for children.";
+  for (const [name, text] of [
+    ["help", SIGNPOSTING_MESSAGE],
+    ["no answer", NO_ANSWER_MESSAGE],
+    ["held A", HELD_TOPIC_MESSAGES.A],
+    ["held B", HELD_TOPIC_MESSAGES.B],
+  ]) {
+    assert(text.split(sentence).length === 2, `${name}: "${sentence}"`);
+  }
+  assert(
+    ABUSE_REFERRAL_MESSAGE.includes(
+      "Childline Kenya 116 (for anyone under 18) can also help.",
+    ),
+    "the abuse referral's parenthetical is unchanged",
+  );
+  const contact = SUPPORT_SECTIONS.flatMap((x) => x.contacts).find((c) =>
+    c.numbers.includes(CHILDLINE_KENYA),
   );
   assert(
-    !follows([question, answer({ answerFound: false })]),
-    "not after a no-answer reply even if it names a category",
+    `${contact?.label}. ${contact?.note}` ===
+      "Childline Kenya. Free, 24 hours, for children." &&
+      screens[0][1].includes(
+        '<span class="call-button-note">Childline Kenya. Free, 24 hours, for children.</span>',
+      ),
+    'the 116 button: "Childline Kenya. Free, 24 hours, for children."',
+  );
+}
+
+console.log(
+  "\nTest 55: the matched-question banner by how she asked (step 6c)",
+);
+{
+  const typed = renderAnswer(answerTurn({ via: "typed" }));
+  assert(
+    typed.includes(
+      `<h1 tabindex="-1" class="closest"><span class="closest-label">${MATCH_LABEL}</span><span class="closest-question">${escapeHtml(KB_S5.question)}</span></h1><p class="match-hint">${MATCH_HINT}</p>`,
+    ),
+    `typed: the banner "${MATCH_LABEL}", the matched question unchanged, then "${MATCH_HINT}"`,
+  );
+  const untagged = renderAnswer(answerTurn());
+  assert(
+    untagged.includes(`class="closest-label">${MATCH_LABEL}</span>`),
+    "no flag (as typed): the banner",
+  );
+  const tapped = renderAnswer(answerTurn({ via: "tapped" }));
+  assert(
+    tapped.includes(
+      `<h1 tabindex="-1" class="tapped-question">${escapeHtml(KB_S5.question)}</h1>`,
+    ) &&
+      !tapped.includes("closest") &&
+      !tapped.includes("match-hint"),
+    "tapped: the question as the heading; no banner, label or hint",
+  );
+  for (const [name, html] of [
+    ["typed", typed],
+    ["tapped", tapped],
+  ]) {
+    assert(
+      html.split("<h1").length === 2,
+      `${name}: exactly one h1, focusable`,
+    );
+  }
+  const view = readFileSync(
+    new URL("./AnswerView.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    view.includes('turn.via === "tapped"') &&
+      !/turn\.text\s*===|matchedQuestion\s*===|=== matchedQuestion/.test(view),
+    "the path decides the banner; no string comparison",
+  );
+  const chat = readFileSync(
+    new URL("./ChatInterface.tsx", import.meta.url),
+    "utf8",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    chat.includes('onSend={(question) => onSend(question, "tapped")}') &&
+      app.includes(
+        'void handleSend(text, questionId === null ? "typed" : "tapped");',
+      ) &&
+      app.includes("via,") &&
+      app.includes("submitQuery(text, { signal: request.signal })"),
+    "related rows and Topic list rows are tapped, ask bars typed; the request is still the text alone",
   );
 }
 

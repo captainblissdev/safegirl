@@ -1,81 +1,62 @@
-import { useEffect, useRef, useState } from "react";
-import { CloseIcon, LogoMark } from "./Icons";
-import SupportContent from "./SupportContent";
+import type { RefObject } from "react";
+import { QUICK_EXIT_LABEL } from "../content/uiText";
+import { ShieldHeartMark } from "./Icons";
+
+interface Props {
+  /** Quick exit (quickExit.ts). */
+  onExit: () => void;
+  /** Opens the Help sheet. */
+  onOpenHelp: () => void;
+  /** Whether the Help sheet is open (for aria-expanded). */
+  isHelpOpen: boolean;
+  /** The Help button, so App can return focus to it when the sheet closes. */
+  helpButtonRef: RefObject<HTMLButtonElement>;
+  /**
+   * The help and referral screens: no Help button (the screen is the
+   * help), and the exit button reads "Quick exit". Same behaviour.
+   */
+  support?: boolean;
+}
 
 /**
- * Header shown on every screen, with a standing "Need help now?" button.
- * The button opens a panel listing the help options, so they are always
- * one tap away, not only after the Safety Net flags a query.
+ * Header shown on every screen (AppShell): the gradient logo mark and the
+ * "SafeGirl" wordmark, a Help button that opens the Help sheet, and an
+ * Exit button. Exit is always visible and never in a menu.
  */
-export default function AppHeader() {
-  const [isOpen, setIsOpen] = useState(false);
-  const openButtonRef = useRef<HTMLButtonElement>(null);
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    closeButtonRef.current?.focus();
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [isOpen]);
-
-  const close = () => {
-    setIsOpen(false);
-    openButtonRef.current?.focus();
-  };
-
+export default function AppHeader({
+  onExit,
+  onOpenHelp,
+  isHelpOpen,
+  helpButtonRef,
+  support = false,
+}: Props) {
   return (
     <header className="app-header">
       <span className="brand">
-        <LogoMark />
-        SafeGirl
+        <ShieldHeartMark variant="header" size={36} />
+        <span className="wordmark">
+          Safe<span className="wordmark-girl">Girl</span>
+        </span>
       </span>
 
-      <button
-        ref={openButtonRef}
-        className="btn-help"
-        type="button"
-        aria-haspopup="dialog"
-        aria-expanded={isOpen}
-        onClick={() => setIsOpen(true)}
-      >
-        Need help now?
-      </button>
-
-      {isOpen && (
-        <div className="help-overlay" onClick={close}>
-          <div
-            className="help-dialog"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="help-dialog-title"
-            onClick={(event) => event.stopPropagation()}
+      <div className="header-actions">
+        {!support && (
+          <button
+            ref={helpButtonRef}
+            className="btn-help"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded={isHelpOpen}
+            onClick={onOpenHelp}
           >
-            <div className="help-dialog-head">
-              <h2 id="help-dialog-title">Need help now?</h2>
-              <button
-                ref={closeButtonRef}
-                className="btn-close"
-                type="button"
-                onClick={close}
-                aria-label="Close help"
-              >
-                <CloseIcon size={20} />
-              </button>
-            </div>
+            Help
+          </button>
+        )}
 
-            <SupportContent />
-          </div>
-        </div>
-      )}
+        <button className="btn-exit" type="button" onClick={onExit}>
+          {support ? QUICK_EXIT_LABEL : "Exit"}
+        </button>
+      </div>
     </header>
   );
 }

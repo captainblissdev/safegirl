@@ -48,7 +48,7 @@ export const HELP_GUIDANCE =
   "A nurse or counsellor at a health facility can help, and you do not " +
   "have to give a reason for asking. If you are in danger or someone has " +
   `hurt you, call the GBV helpline ${GBV_HELPLINE}. Childline Kenya, ` +
-  `${CHILDLINE_KENYA}, is free for anyone under 18.`;
+  `${CHILDLINE_KENYA}, is a free 24-hour helpline for children.`;
 
 /** Reply to a generic help request that names no topic. */
 export const SIGNPOSTING_MESSAGE = `You're not alone. These people can help right now. ${HELP_GUIDANCE}`;
@@ -65,15 +65,15 @@ export const HELD_TOPIC_MESSAGES: Readonly<Record<"A" | "B" | "C", string>> = {
     "give a reason. If something happened recently, do not wait: some " +
     "options work best soon after sex. If you are in danger or someone " +
     `has hurt you, call the GBV helpline ${GBV_HELPLINE}. Childline Kenya, ` +
-    `${CHILDLINE_KENYA}, is free for anyone under 18.`,
+    `${CHILDLINE_KENYA}, is a free 24-hour helpline for children.`,
   // B: pregnancy decisions.
   B:
     "This is an important question, and I can't answer it safely here yet. " +
     "A nurse or counsellor can talk it through with you privately and " +
     "without judgement, and you do not have to give a reason. If you are " +
     "in danger or someone has hurt you, call the GBV helpline " +
-    `${GBV_HELPLINE}. Childline Kenya, ${CHILDLINE_KENYA}, is free for ` +
-    "anyone under 18.",
+    `${GBV_HELPLINE}. Childline Kenya, ${CHILDLINE_KENYA}, is a free ` +
+    "24-hour helpline for children.",
   // C: possible pregnancy and testing.
   C:
     "A late period can have many causes, including pregnancy, so it is " +
@@ -131,7 +131,7 @@ export const SUPPORT_SECTIONS: readonly SupportSection[] = [
       {
         label: "Childline Kenya",
         numbers: [CHILDLINE_KENYA],
-        note: "For anyone under 18.",
+        note: "Free, 24 hours, for children.",
       },
     ],
   },

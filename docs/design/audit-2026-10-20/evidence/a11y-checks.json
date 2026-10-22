@@ -1,0 +1,1538 @@
+{
+ "tools": {
+  "chrome": "Chrome/155.0.8059.80",
+  "axe": "4.10.2",
+  "puppeteer": "puppeteer-core 23.11.1",
+  "node": "v24.18.1"
+ },
+ "date": "2026-10-20T18:21:37.888Z",
+ "screens": {
+  "splash": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (12)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (12)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "SafeGirl",
+    "landmarks": {
+     "banner": 0,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": null,
+    "live": [],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "1195, GBV helpline"
+     }
+    ],
+    "tabbables": [
+     "button.btn-exit-pill \"Exit\"",
+     "button.btn-splash \"I understand, continue\"",
+     "a \"1195, GBV helpline\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 3,
+    "tabbable": 3,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-exit-pill \"Exit\"",
+     "button.btn-splash \"I understand, continue\"",
+     "a \"1195, GBV helpline\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 3,
+    "tabbable": 3,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-exit-pill \"Exit\"",
+     "button.btn-splash \"I understand, continue\"",
+     "a \"1195, GBV helpline\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [
+     "main.splash-screen surface-dark"
+    ],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": null
+   },
+   "textOnly200": {
+    "textElements": 13,
+    "grewToAbout2x": 1,
+    "overlaps": [],
+    "clipped": [
+     "main.splash-screen surface-dark"
+    ],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": null
+   }
+  },
+  "home": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (10)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (10)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "Ask about your body, periods, pregnancy or sex.",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": "Type your question",
+    "live": [
+     {
+      "el": "p.sr-only \"\"",
+      "text": ""
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "1195, GBV helpline"
+     }
+    ],
+    "tabbables": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "input#chat-input \"Can STIs be cured, and can they harm me \"",
+     "button.topic-tile.topic-tile--general \"Periods and healthPeriods, puberty, clin\"",
+     "button.topic-tile.topic-tile--pregnancy \"PregnancyWarning signs, food, school\"",
+     "button.topic-tile.topic-tile--contraception \"ContraceptionMethods, condoms, fertility\"",
+     "button.topic-tile.topic-tile--sti \"STIs and HIVSymptoms, treatment, PEP, Pr\"",
+     "a \"1195, GBV helpline\"",
+     "button.link-button \"End session\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 9,
+    "tabbable": 9,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "input \"Can STIs be cured, and can the\"",
+     "button.topic-tile \"Periods and healthPeriods, pub\"",
+     "button.topic-tile \"PregnancyWarning signs, food, \"",
+     "button.topic-tile \"ContraceptionMethods, condoms,\"",
+     "button.topic-tile \"STIs and HIVSymptoms, treatmen\"",
+     "a \"1195, GBV helpline\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 9,
+    "tabbable": 9,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "input \"Can STIs be cured, and can the\"",
+     "button.topic-tile \"Periods and healthPeriods, pub\"",
+     "button.topic-tile \"PregnancyWarning signs, food, \"",
+     "button.topic-tile \"ContraceptionMethods, condoms,\"",
+     "button.topic-tile \"STIs and HIVSymptoms, treatmen\"",
+     "a \"1195, GBV helpline\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": null
+   },
+   "textOnly200": {
+    "textElements": 21,
+    "grewToAbout2x": 8,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": null
+   }
+  },
+  "help-sheet": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (11)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (11)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "Ask about your body, periods, pregnancy or sex.",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": "Type your question",
+    "live": [
+     {
+      "el": "p.sr-only \"\"",
+      "text": ""
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "1195, GBV helpline"
+     },
+     {
+      "href": "tel:1195",
+      "name": "Call 1195, GBV helpline"
+     },
+     {
+      "href": "tel:116",
+      "name": "Call 116, Childline Kenya"
+     },
+     {
+      "href": "tel:999",
+      "name": "999, Emergency"
+     },
+     {
+      "href": "tel:112",
+      "name": "112, Emergency"
+     }
+    ],
+    "tabbables": [
+     "button.btn-exit \"Exit\"",
+     "button.btn-close \"Close help\"",
+     "a.btn-call \"Call 1195, GBV helpline\"",
+     "a.btn-call \"Call 116, Childline Kenya\"",
+     "a \"999, Emergency\"",
+     "a \"112, Emergency\"",
+     "button.topic-choice.topic-choice--general \"Periods and health\"",
+     "button.topic-choice.topic-choice--pregnancy \"Pregnancy\"",
+     "button.topic-choice.topic-choice--contraception \"Contraception\"",
+     "button.topic-choice.topic-choice--sti \"STIs and HIV\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 10,
+    "tabbable": 10,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "a.btn-call \"Call 1195, GBV helpline\"",
+     "a.btn-call \"Call 116, Childline Kenya\"",
+     "a \"999, Emergency\"",
+     "a \"112, Emergency\"",
+     "button.topic-choice \"Periods and health\"",
+     "button.topic-choice \"Pregnancy\"",
+     "button.topic-choice \"Contraception\"",
+     "button.topic-choice \"STIs and HIV\"",
+     "button.btn-exit \"Exit\"",
+     "button.btn-close \"Close help\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 10,
+    "tabbable": 10,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "a.btn-call \"Call 1195, GBV helpline\"",
+     "a.btn-call \"Call 116, Childline Kenya\"",
+     "a \"999, Emergency\"",
+     "a \"112, Emergency\"",
+     "button.topic-choice \"Periods and health\"",
+     "button.topic-choice \"Pregnancy\"",
+     "button.topic-choice \"Contraception\"",
+     "button.topic-choice \"STIs and HIV\"",
+     "button.btn-exit \"Exit\"",
+     "button.btn-close \"Close help\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": null
+   },
+   "textOnly200": {
+    "textElements": 43,
+    "grewToAbout2x": 26,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": null
+   }
+  },
+  "topic-list": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (7)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (7)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "STIs and HIV",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": "Ask something else",
+    "live": [
+     {
+      "el": "p.sr-only \"\"",
+      "text": ""
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "1195, GBV helpline"
+     }
+    ],
+    "tabbables": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.back-link \"All topics\"",
+     "button.topic-question \"I might have been exposed to HIV. Is the\"",
+     "button.topic-question \"I have unusual discharge, itching, burni\"",
+     "button.topic-question \"Can STIs be cured, and can they harm me \"",
+     "button.topic-question \"Is the HPV vaccine available to me, and \"",
+     "button.topic-question \"Can I take PrEP to prevent HIV? I'm a te\"",
+     "a \"1195, GBV helpline\"",
+     "input#chat-input \"Ask something else…\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 10,
+    "tabbable": 10,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.back-link \"All topics\"",
+     "button.topic-question \"I might have been exposed to H\"",
+     "button.topic-question \"I have unusual discharge, itch\"",
+     "button.topic-question \"Can STIs be cured, and can the\"",
+     "button.topic-question \"Is the HPV vaccine available t\"",
+     "button.topic-question \"Can I take PrEP to prevent HIV\"",
+     "a \"1195, GBV helpline\"",
+     "input \"Ask something else…\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 10,
+    "tabbable": 10,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.back-link \"All topics\"",
+     "button.topic-question \"I might have been exposed to H\"",
+     "button.topic-question \"I have unusual discharge, itch\"",
+     "button.topic-question \"Can STIs be cured, and can the\"",
+     "button.topic-question \"Is the HPV vaccine available t\"",
+     "button.topic-question \"Can I take PrEP to prevent HIV\"",
+     "a \"1195, GBV helpline\"",
+     "input \"Ask something else…\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": null
+   },
+   "textOnly200": {
+    "textElements": 15,
+    "grewToAbout2x": 9,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": null
+   }
+  },
+  "answer": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (7)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (6)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "The closest question I haveCan STIs be cured, and can they harm me if I leave th",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": "Ask something else",
+    "live": [
+     {
+      "el": "p.sr-only \"New answer.\"",
+      "text": "New answer."
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "1195, GBV helpline"
+     }
+    ],
+    "tabbables": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.back-link \"Back to home\"",
+     "button.topic-question \"I might have been exposed to HIV. Is the\"",
+     "button.topic-question \"I have unusual discharge, itching, burni\"",
+     "a \"1195, GBV helpline\"",
+     "input#chat-input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 8,
+    "tabbable": 8,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.back-link \"Back to home\"",
+     "button.topic-question \"I might have been exposed to H\"",
+     "button.topic-question \"I have unusual discharge, itch\"",
+     "a \"1195, GBV helpline\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 8,
+    "tabbable": 8,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.back-link \"Back to home\"",
+     "button.topic-question \"I might have been exposed to H\"",
+     "button.topic-question \"I have unusual discharge, itch\"",
+     "a \"1195, GBV helpline\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": 34
+   },
+   "textOnly200": {
+    "textElements": 19,
+    "grewToAbout2x": 11,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": 22
+   }
+  },
+  "clarify": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (7)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (7)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "I'm not sure what you mean. Is your question about periods, pregnancy, contracep",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": "Ask something else",
+    "live": [
+     {
+      "el": "p.sr-only \"New reply: Tell me a bit more.\"",
+      "text": "New reply: Tell me a bit more."
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "1195, GBV helpline"
+     }
+    ],
+    "tabbables": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.topic-choice.topic-choice--general \"Periods and health\"",
+     "button.topic-choice.topic-choice--pregnancy \"Pregnancy\"",
+     "button.topic-choice.topic-choice--contraception \"Contraception\"",
+     "button.topic-choice.topic-choice--sti \"STIs and HIV\"",
+     "a \"1195, GBV helpline\"",
+     "input#chat-input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 9,
+    "tabbable": 9,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.topic-choice \"Periods and health\"",
+     "button.topic-choice \"Pregnancy\"",
+     "button.topic-choice \"Contraception\"",
+     "button.topic-choice \"STIs and HIV\"",
+     "a \"1195, GBV helpline\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 9,
+    "tabbable": 9,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.topic-choice \"Periods and health\"",
+     "button.topic-choice \"Pregnancy\"",
+     "button.topic-choice \"Contraception\"",
+     "button.topic-choice \"STIs and HIV\"",
+     "a \"1195, GBV helpline\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": 34
+   },
+   "textOnly200": {
+    "textElements": 18,
+    "grewToAbout2x": 9,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": 22
+   }
+  },
+  "held-a": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (4)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (4)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "This is an important question, and I can't answer it safely here yet. A nurse, a",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": "Ask something else",
+    "live": [
+     {
+      "el": "p.sr-only \"New reply: Talk to a nurse.\"",
+      "text": "New reply: Talk to a nurse."
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "Call 1195GBV helpline. For violence or abuse."
+     },
+     {
+      "href": "tel:116",
+      "name": "Call 116Childline Kenya. For anyone under 18."
+     }
+    ],
+    "tabbables": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button.call-button--main \"Call 1195GBV helpline. For violence or a\"",
+     "a.call-button.call-button--second \"Call 116Childline Kenya. For anyone unde\"",
+     "button.reply-link \"Ask a different question\"",
+     "input#chat-input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 7,
+    "tabbable": 7,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button \"Call 1195GBV helpline. For vio\"",
+     "a.call-button \"Call 116Childline Kenya. For a\"",
+     "button.reply-link \"Ask a different question\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 7,
+    "tabbable": 7,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button \"Call 1195GBV helpline. For vio\"",
+     "a.call-button \"Call 116Childline Kenya. For a\"",
+     "button.reply-link \"Ask a different question\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": 39
+   },
+   "textOnly200": {
+    "textElements": 15,
+    "grewToAbout2x": 9,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": 32
+   }
+  },
+  "held-b": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (4)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (4)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "This is an important question, and I can't answer it safely here yet. A nurse or",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": "Ask something else",
+    "live": [
+     {
+      "el": "p.sr-only \"New reply: Talk to a nurse.\"",
+      "text": "New reply: Talk to a nurse."
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "Call 1195GBV helpline. For violence or abuse."
+     },
+     {
+      "href": "tel:116",
+      "name": "Call 116Childline Kenya. For anyone under 18."
+     }
+    ],
+    "tabbables": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button.call-button--main \"Call 1195GBV helpline. For violence or a\"",
+     "a.call-button.call-button--second \"Call 116Childline Kenya. For anyone unde\"",
+     "button.reply-link \"Ask a different question\"",
+     "input#chat-input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 7,
+    "tabbable": 7,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button \"Call 1195GBV helpline. For vio\"",
+     "a.call-button \"Call 116Childline Kenya. For a\"",
+     "button.reply-link \"Ask a different question\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 7,
+    "tabbable": 7,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button \"Call 1195GBV helpline. For vio\"",
+     "a.call-button \"Call 116Childline Kenya. For a\"",
+     "button.reply-link \"Ask a different question\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": 39
+   },
+   "textOnly200": {
+    "textElements": 15,
+    "grewToAbout2x": 9,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": 32
+   }
+  },
+  "held-c": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (4)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (4)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "A late period can have many causes, including pregnancy, so it is worth checking",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": "Ask something else",
+    "live": [
+     {
+      "el": "p.sr-only \"New reply: Talk to a nurse.\"",
+      "text": "New reply: Talk to a nurse."
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "Call 1195GBV helpline. For violence or abuse."
+     },
+     {
+      "href": "tel:116",
+      "name": "Call 116Childline Kenya. For anyone under 18."
+     }
+    ],
+    "tabbables": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button.call-button--main \"Call 1195GBV helpline. For violence or a\"",
+     "a.call-button.call-button--second \"Call 116Childline Kenya. For anyone unde\"",
+     "button.reply-link \"Ask a different question\"",
+     "input#chat-input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 7,
+    "tabbable": 7,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button \"Call 1195GBV helpline. For vio\"",
+     "a.call-button \"Call 116Childline Kenya. For a\"",
+     "button.reply-link \"Ask a different question\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 7,
+    "tabbable": 7,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button \"Call 1195GBV helpline. For vio\"",
+     "a.call-button \"Call 116Childline Kenya. For a\"",
+     "button.reply-link \"Ask a different question\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": 39
+   },
+   "textOnly200": {
+    "textElements": 15,
+    "grewToAbout2x": 9,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": 32
+   }
+  },
+  "help": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (10)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (10)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "You're not alone. These people can help right now. A nurse or counsellor at a he",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": "Ask something else",
+    "live": [
+     {
+      "el": "p.sr-only \"New reply: Support.\"",
+      "text": "New reply: Support."
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "Call 1195GBV helpline. For violence or abuse."
+     },
+     {
+      "href": "tel:116",
+      "name": "Call 116Childline Kenya. For anyone under 18."
+     },
+     {
+      "href": "tel:999",
+      "name": "999, Emergency"
+     },
+     {
+      "href": "tel:112",
+      "name": "112, Emergency"
+     }
+    ],
+    "tabbables": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button.call-button--main \"Call 1195GBV helpline. For violence or a\"",
+     "a.call-button.call-button--second \"Call 116Childline Kenya. For anyone unde\"",
+     "a \"999, Emergency\"",
+     "a \"112, Emergency\"",
+     "input#chat-input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 8,
+    "tabbable": 8,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button \"Call 1195GBV helpline. For vio\"",
+     "a.call-button \"Call 116Childline Kenya. For a\"",
+     "a \"999, Emergency\"",
+     "a \"112, Emergency\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 8,
+    "tabbable": 8,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button \"Call 1195GBV helpline. For vio\"",
+     "a.call-button \"Call 116Childline Kenya. For a\"",
+     "a \"999, Emergency\"",
+     "a \"112, Emergency\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": 39
+   },
+   "textOnly200": {
+    "textElements": 17,
+    "grewToAbout2x": 8,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": 32
+   }
+  },
+  "referral": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (10)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (10)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "I'm sorry this is happening, and it is not your fault. You deserve to be safe. P",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": null,
+    "live": [
+     {
+      "el": "p.sr-only \"New reply: We hear you.\"",
+      "text": "New reply: We hear you."
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "Call 1195GBV helpline. For violence or abuse."
+     },
+     {
+      "href": "tel:116",
+      "name": "Call 116Childline Kenya. For anyone under 18."
+     },
+     {
+      "href": "tel:999",
+      "name": "999, Emergency"
+     },
+     {
+      "href": "tel:112",
+      "name": "112, Emergency"
+     }
+    ],
+    "tabbables": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button.call-button--main \"Call 1195GBV helpline. For violence or a\"",
+     "a.call-button.call-button--second \"Call 116Childline Kenya. For anyone unde\"",
+     "a \"999, Emergency\"",
+     "a \"112, Emergency\"",
+     "button.btn-outline \"Continue chat\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 7,
+    "tabbable": 7,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button \"Call 1195GBV helpline. For vio\"",
+     "a.call-button \"Call 116Childline Kenya. For a\"",
+     "a \"999, Emergency\"",
+     "a \"112, Emergency\"",
+     "button.btn-outline \"Continue chat\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 7,
+    "tabbable": 7,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a.call-button \"Call 1195GBV helpline. For vio\"",
+     "a.call-button \"Call 116Childline Kenya. For a\"",
+     "a \"999, Emergency\"",
+     "a \"112, Emergency\"",
+     "button.btn-outline \"Continue chat\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": null
+   },
+   "textOnly200": {
+    "textElements": 16,
+    "grewToAbout2x": 7,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": null
+   }
+  },
+  "no-answer": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (6)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (6)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "I couldn't find a good answer to that. A nurse or counsellor at a health facilit",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": "Ask something else",
+    "live": [
+     {
+      "el": "p.sr-only \"New reply: No answer yet.\"",
+      "text": "New reply: No answer yet."
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "1195, GBV helpline"
+     }
+    ],
+    "tabbables": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.topic-choice.topic-choice--general \"Periods and health\"",
+     "button.topic-choice.topic-choice--pregnancy \"Pregnancy\"",
+     "button.topic-choice.topic-choice--contraception \"Contraception\"",
+     "button.topic-choice.topic-choice--sti \"STIs and HIV\"",
+     "a \"1195, GBV helpline\"",
+     "input#chat-input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 9,
+    "tabbable": 9,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.topic-choice \"Periods and health\"",
+     "button.topic-choice \"Pregnancy\"",
+     "button.topic-choice \"Contraception\"",
+     "button.topic-choice \"STIs and HIV\"",
+     "a \"1195, GBV helpline\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 9,
+    "tabbable": 9,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.topic-choice \"Periods and health\"",
+     "button.topic-choice \"Pregnancy\"",
+     "button.topic-choice \"Contraception\"",
+     "button.topic-choice \"STIs and HIV\"",
+     "a \"1195, GBV helpline\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": 34
+   },
+   "textOnly200": {
+    "textElements": 19,
+    "grewToAbout2x": 9,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": 22
+   }
+  },
+  "person": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (3)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (3)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "I'm having trouble finding what you need. A nurse or counsellor at a health faci",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": "Ask something else",
+    "live": [
+     {
+      "el": "p.sr-only \"New reply: Let's find a person.\"",
+      "text": "New reply: Let's find a person."
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "1195, GBV helpline"
+     }
+    ],
+    "tabbables": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.btn-see-help \"See who can help\"",
+     "button.topic-choice.topic-choice--general \"Periods and health\"",
+     "button.topic-choice.topic-choice--pregnancy \"Pregnancy\"",
+     "button.topic-choice.topic-choice--contraception \"Contraception\"",
+     "button.topic-choice.topic-choice--sti \"STIs and HIV\"",
+     "a \"1195, GBV helpline\"",
+     "input#chat-input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 10,
+    "tabbable": 10,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.btn-see-help \"See who can help\"",
+     "button.topic-choice \"Periods and health\"",
+     "button.topic-choice \"Pregnancy\"",
+     "button.topic-choice \"Contraception\"",
+     "button.topic-choice \"STIs and HIV\"",
+     "a \"1195, GBV helpline\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 10,
+    "tabbable": 10,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "button.btn-see-help \"See who can help\"",
+     "button.topic-choice \"Periods and health\"",
+     "button.topic-choice \"Pregnancy\"",
+     "button.topic-choice \"Contraception\"",
+     "button.topic-choice \"STIs and HIV\"",
+     "a \"1195, GBV helpline\"",
+     "input \"Ask something else…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": 34
+   },
+   "textOnly200": {
+    "textElements": 16,
+    "grewToAbout2x": 10,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": 22
+   }
+  },
+  "limited-mode": {
+   "320": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (5)"
+    ],
+    "sw": 320,
+    "iw": 320
+   },
+   "390": {
+    "axeViolations": [],
+    "axeIncomplete": [
+     "color-contrast (5)"
+    ],
+    "lang": "en",
+    "h1s": 1,
+    "h1": "A health worker can provide confidential STI information and testing. Seek care ",
+    "landmarks": {
+     "banner": 1,
+     "main": 1,
+     "nav": 0
+    },
+    "askBarName": "Ask a question",
+    "live": [
+     {
+      "el": "p.sr-only \"New reply.\"",
+      "text": "New reply."
+     },
+     {
+      "el": "div.offline-banner \"You're offline — answers come from infor\"",
+      "text": "You're offline — answers come from information stored on this device and may be "
+     }
+    ],
+    "liveWithReplyText": [],
+    "tel": [
+     {
+      "href": "tel:1195",
+      "name": "1195, GBV helpline"
+     }
+    ],
+    "tabbables": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a \"1195, GBV helpline\"",
+     "input#chat-input \"Ask about your body or health…\"",
+     "button.link-button \"End session\""
+    ],
+    "positiveTabindex": [],
+    "reversedFlex": [],
+    "cssOrder": [],
+    "smallTargets": [],
+    "sw": 390,
+    "iw": 390
+   },
+   "keyboard": {
+    "stops": 5,
+    "tabbable": 5,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a \"1195, GBV helpline\"",
+     "input \"Ask about your body or health…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "keyboardZoom200": {
+    "stops": 5,
+    "tabbable": 5,
+    "allReached": true,
+    "noRing": [],
+    "focusHidden": [],
+    "order": [
+     "button.btn-help \"Help\"",
+     "button.btn-exit \"Exit\"",
+     "a \"1195, GBV helpline\"",
+     "input \"Ask about your body or health…\"",
+     "button.link-button \"End session\""
+    ]
+   },
+   "zoom200": {
+    "overlaps": [],
+    "clipped": [],
+    "sw": 195,
+    "iw": 195,
+    "dockShare": null
+   },
+   "textOnly200": {
+    "textElements": 12,
+    "grewToAbout2x": 12,
+    "overlaps": [],
+    "clipped": [],
+    "sw": 390,
+    "iw": 390,
+    "dockShare": null
+   }
+  }
+ },
+ "helpSheetKeyboard": {
+  "focusMovesIn": true,
+  "tabStaysInside": true,
+  "escapeCloses": true,
+  "focusReturnsTo": "btn-help",
+  "doubleEscapeExitsTo": "https://www.google.com/"
+ },
+ "quickExit": {
+  "url": "https://www.google.com/",
+  "historyLength": 2
+ },
+ "defaultMotion": {
+  "splash": [],
+  "loading": [
+   "CSSAnimation:typing-dot@",
+   "CSSAnimation:typing-dot@",
+   "CSSAnimation:typing-dot@"
+  ],
+  "clarifyWithSparkle": []
+ },
+ "reducedMotion": {
+  "splash": [],
+  "loading": [],
+  "clarifyWithSparkle": []
+ }
+}

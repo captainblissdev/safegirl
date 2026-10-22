@@ -9,9 +9,13 @@
   flex-direction: column;
 }
 
+/*
+ * A screen fills the space the shell leaves between the header and the
+ * footer line, so the footer stays on the first screenful.
+ */
 .screen {
   width: min(100%, 720px);
-  min-height: calc(100vh - 112px);
+  flex: 1 0 auto;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -56,6 +60,7 @@
   box-shadow: var(--shadow);
 }
 
+.card h1,
 .card h2 {
   color: var(--primary-deep);
   font-size: clamp(1.5rem, 3vw, 2rem);
@@ -63,7 +68,6 @@
   text-align: center;
 }
 
-.card--referral,
 .card--end {
   display: flex;
   flex-direction: column;
@@ -282,90 +286,6 @@
   overflow-wrap: anywhere;
 }
 
-.chips-hint {
-  color: var(--ink-soft);
-}
-
-/* "You could also ask…" follow-ups under the latest answer. */
-.suggestions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.suggestions-label {
-  width: 100%;
-  color: var(--ink-soft);
-}
-
-.suggestion {
-  min-height: 44px;
-  border: 1px dashed var(--control-border);
-  border-radius: 999px;
-  padding: 8px 14px;
-  background: var(--card);
-  color: var(--primary-deep);
-  font-size: 1rem;
-  text-align: left;
-  cursor: pointer;
-}
-
-.suggestion:hover {
-  border-style: solid;
-  background: var(--lilac);
-}
-
-.category-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 44px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 6px 14px;
-  background: var(--lilac);
-  color: var(--primary-deep);
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.chip svg {
-  color: var(--primary);
-}
-
-.chip--contraception {
-  background: var(--tint-sky);
-}
-
-.chip--sti {
-  background: var(--tint-mint);
-}
-
-.chip--pregnancy {
-  background: var(--tint-peach);
-}
-
-.chip--periods {
-  background: var(--tint-pink);
-}
-
-.chip:hover {
-  border-color: var(--primary);
-}
-
-.chip:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
 .input-row {
   display: flex;
   gap: 10px;
@@ -399,33 +319,6 @@
   background: var(--gradient);
   color: var(--on-primary);
   cursor: pointer;
-}
-
-/* Referral */
-
-.referral-box {
-  width: 100%;
-  margin-top: 22px;
-  padding: 18px;
-  border: 2px solid var(--primary);
-  border-radius: 16px;
-  background: var(--card);
-  color: var(--ink);
-  text-align: left;
-}
-
-.support-panel {
-  width: 100%;
-  margin-top: 20px;
-  padding: 16px 18px;
-  border-radius: 16px;
-  background: var(--lilac);
-  text-align: left;
-}
-
-.support-panel > h3 {
-  color: var(--primary-deep);
-  font-size: 1.05rem;
 }
 
 /* Notices */
@@ -465,11 +358,14 @@
 
 /* Header with the standing "Need help now?" button. */
 
+/* On a narrow or zoomed screen Help and Exit wrap to a second row
+   instead of pushing the page sideways. */
 .app-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px 12px;
   padding-bottom: 14px;
   border-bottom: 1px solid var(--border);
 }
@@ -497,52 +393,6 @@
 
 .btn-help:hover {
   background: var(--lilac);
-}
-
-.help-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 16px;
-  background: var(--overlay);
-  overflow-y: auto;
-}
-
-.help-dialog {
-  width: min(100%, 440px);
-  margin-top: 48px;
-  border-radius: 20px;
-  padding: 22px;
-  background: var(--card);
-  box-shadow: var(--shadow);
-}
-
-.help-dialog-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.help-dialog-head h2 {
-  color: var(--primary-deep);
-  font-size: 1.35rem;
-}
-
-.btn-close {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  background: var(--card);
-  color: var(--ink);
-  cursor: pointer;
 }
 
 /* Help options, shared by the dialog, the referral and the side panel. */
@@ -671,8 +521,13 @@
     padding: 12px;
   }
 
+  /* The header lines up with the screens' 20px content gutter. */
+  .app-header {
+    margin-right: 8px;
+    margin-left: 8px;
+  }
+
   .screen {
-    min-height: calc(100vh - 88px);
     padding: 20px 0;
   }
 
@@ -699,13 +554,11 @@
     animation: bubble-in 240ms ease-out both;
   }
 
-  .chip,
   .btn-send,
   .btn-primary {
     transition: transform 120ms ease-out;
   }
 
-  .chip:active:not(:disabled),
   .btn-send:active:not(:disabled),
   .btn-primary:active:not(:disabled) {
     transform: scale(0.95);
@@ -748,4 +601,1829 @@
     transform: translateY(-5px);
     opacity: 1;
   }
+}
+
+/* App shell (redesign Step 2): wordmark, header actions, Exit, footer line */
+
+.wordmark {
+  font-weight: var(--weight-black);
+  color: var(--color-plum);
+}
+
+.wordmark-girl {
+  color: var(--color-rose-text);
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* Exit: a solid plum fill, so its edge is far above 3:1 on any light page. */
+.btn-exit {
+  min-height: var(--tap-target);
+  min-width: var(--tap-target);
+  border: 2px solid var(--color-plum);
+  border-radius: 999px;
+  padding: 0 18px;
+  background: var(--color-plum);
+  color: var(--color-on-dark);
+  font-size: 1rem;
+  font-weight: var(--weight-extrabold);
+  cursor: pointer;
+}
+
+.danger-line {
+  color: var(--color-ink);
+  font-size: 0.95rem;
+  font-weight: var(--weight-semibold);
+  line-height: 1.35;
+  text-align: center;
+}
+
+/* The link stays inline (so a wrapped line keeps its 1.35 spacing); its
+   tap area is the 44px-tall ::after below. */
+.danger-line a {
+  position: relative;
+  color: var(--color-violet);
+  font-weight: var(--weight-black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/*
+ * An invisible layer widens the tap target to 44px without moving the
+ * text, so "1195," reads without a gap at any font size.
+ */
+.danger-line a::after,
+.emergency-line a::after,
+.help-emergency a::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, var(--tap-target));
+  height: var(--tap-target);
+  transform: translate(-50%, -50%);
+}
+
+.app-footer {
+  padding: 8px 16px 16px;
+}
+
+/* Shield-and-heart mark (redesign Step 3b), shared by header and splash */
+
+.mark {
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 30%;
+}
+
+.mark--header {
+  background: var(--mark-gradient);
+}
+
+.mark--header .mark-shield {
+  stroke: var(--color-on-dark);
+}
+
+.mark--header .mark-heart {
+  fill: var(--color-on-dark);
+}
+
+.mark--splash {
+  border-radius: 28px;
+  background: var(--mark-tile-light);
+  box-shadow: var(--shadow);
+}
+
+.mark--splash .mark-shield {
+  stroke: var(--color-violet);
+}
+
+.mark--splash .mark-heart {
+  fill: var(--color-rose);
+}
+
+/* Splash (redesign Step 3b): a full-bleed screen of its own */
+
+.splash-screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow: hidden;
+  padding: 56px 24px 28px;
+  background: var(--gradient-splash);
+  color: var(--color-on-dark);
+}
+
+.splash-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.splash-glow {
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* Kept above the tagline: it ends 150px from the top. */
+.splash-glow--rose {
+  top: -90px;
+  right: -90px;
+  width: 240px;
+  height: 240px;
+  background: var(--splash-glow-rose);
+}
+
+.splash-glow--orchid {
+  bottom: -80px;
+  left: -90px;
+  width: 220px;
+  height: 220px;
+  background: var(--splash-glow-orchid);
+}
+
+.splash-sparkle {
+  position: absolute;
+  color: var(--color-on-dark);
+}
+
+.splash-sparkle--large {
+  top: 28px;
+  left: 62%;
+  opacity: 0.8;
+}
+
+.splash-sparkle--small {
+  top: 84px;
+  left: 78%;
+  opacity: 0.6;
+}
+
+.splash-top,
+.splash-promises,
+.splash-bottom {
+  position: relative;
+}
+
+/* Exit on the splash: a compact pill, above the decoration. */
+.btn-exit-pill {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 1;
+  min-height: var(--tap-target);
+  min-width: var(--tap-target);
+  border: 2px solid var(--color-on-dark);
+  border-radius: 999px;
+  padding: 0 18px;
+  background: var(--splash-glass-bg);
+  color: var(--color-on-dark);
+  font-size: 1rem;
+  font-weight: var(--weight-extrabold);
+  cursor: pointer;
+}
+
+.splash-top {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+/* Never wider than a narrow or zoomed screen (it was clipped at 200%). */
+.splash-wordmark {
+  font-size: min(44px, 16vw);
+  font-weight: var(--weight-black);
+  line-height: 1;
+}
+
+.splash-tagline {
+  max-width: 300px;
+  color: var(--splash-tagline);
+  font-size: 20px;
+  font-weight: var(--weight-bold);
+  line-height: 1.3;
+}
+
+.splash-promises {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+}
+
+.splash-promises li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1.5px solid var(--splash-glass-border);
+  border-radius: 20px;
+  padding: 12px 14px;
+  background: var(--splash-glass-bg);
+  font-size: 15px;
+  font-weight: var(--weight-bold);
+  line-height: 1.35;
+}
+
+.promise-icon {
+  display: grid;
+  flex: 0 0 38px;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--color-card);
+}
+
+.promise-icon--lock {
+  color: var(--splash-icon-lock);
+}
+
+.promise-icon--speech {
+  color: var(--splash-icon-speech);
+}
+
+.promise-icon--shield {
+  color: var(--splash-icon-shield);
+}
+
+.splash-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.splash-privacy {
+  color: var(--splash-tagline);
+  font-size: 14px;
+  text-align: center;
+}
+
+.btn-splash {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 58px;
+  border: 0;
+  border-radius: 29px;
+  background: var(--color-card);
+  color: var(--splash-button-text);
+  font-size: 17px;
+  font-weight: var(--weight-black);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+.splash-bottom .danger-line {
+  font-size: 13px;
+}
+
+/* The footer line on a dark surface is white. */
+.surface-dark .danger-line,
+.surface-dark .danger-line a {
+  color: var(--color-on-dark);
+}
+
+/* Home (redesign Steps 4 and 4b): the empty state of the chat */
+
+.home-screen {
+  justify-content: flex-start;
+  padding: 8px 0 12px;
+}
+
+.home {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 18px;
+  padding: 0 8px;
+}
+
+/* The hero card. The decoration sits behind the text (z-index). */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 22px 20px;
+  background: var(--gradient-hero);
+  color: var(--color-on-dark);
+  box-shadow: var(--hero-shadow);
+}
+
+.hero > :not(.hero-decor) {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-circle {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.hero-circle--large {
+  top: -34px;
+  right: -34px;
+  width: 120px;
+  height: 120px;
+  background: var(--hero-circle-strong);
+}
+
+.hero-circle--small {
+  right: 30px;
+  bottom: -40px;
+  width: 84px;
+  height: 84px;
+  background: var(--hero-circle-soft);
+}
+
+.hero-sparkle {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  color: var(--color-on-dark);
+  opacity: 0.9;
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 5px 12px 5px 10px;
+  background: var(--hero-pill-bg);
+  color: var(--hero-pill-text);
+  font-size: 13px;
+  font-weight: var(--weight-extrabold);
+}
+
+.hero-title {
+  max-width: 290px;
+  font-size: 27px;
+  font-weight: var(--weight-black);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.hero-sub {
+  max-width: 290px;
+  color: var(--hero-sub-text);
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.45;
+}
+
+/* The ask card: the chat's one ask bar on Home, with a visible label. */
+.ask-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1.5px solid var(--color-card-border);
+  border-radius: 24px;
+  padding: 14px;
+  background: var(--color-card);
+  box-shadow: var(--ask-card-shadow);
+}
+
+.ask-card-label {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-extrabold);
+}
+
+/* The field is a control: its edge reaches 3:1 (see tokens.css). */
+.ask-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid var(--ask-field-edge);
+  border-radius: 28px;
+  padding: 5px 5px 5px 16px;
+  background: var(--ask-field-bg);
+}
+
+.ask-field input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  text-overflow: ellipsis;
+}
+
+.ask-field input::placeholder {
+  color: var(--color-muted);
+}
+
+.ask-field .btn-send {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  background: var(--gradient-primary);
+  color: var(--color-on-dark);
+  box-shadow: var(--send-shadow);
+}
+
+/* Empty field: disabled, but still visibly a button. */
+.ask-field .btn-send:disabled {
+  background: var(--send-disabled-bg);
+  box-shadow: none;
+  opacity: 1;
+}
+
+.home-topics-title {
+  color: var(--color-plum);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+.topic-tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.topic-tiles > * {
+  min-width: 0;
+}
+
+/* The coloured edges are control edges (3:1, tokens.css). */
+.topic-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 104px;
+  border: 1.5px solid;
+  border-radius: 22px;
+  padding: 14px;
+  background: var(--color-card);
+  color: var(--color-ink);
+  text-align: left;
+  box-shadow: var(--topic-card-shadow);
+  cursor: pointer;
+}
+
+.topic-tile-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+}
+
+.topic-tile-label {
+  font-size: 16px;
+  font-weight: var(--weight-black);
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.topic-tile-sub {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.3;
+}
+
+.topic-tile--general {
+  border-color: var(--topic-periods-edge);
+}
+
+.topic-tile--general .topic-tile-icon {
+  background: var(--topic-periods-bg);
+  color: var(--topic-periods-text);
+}
+
+.topic-tile--pregnancy {
+  border-color: var(--topic-pregnancy-edge);
+}
+
+.topic-tile--pregnancy .topic-tile-icon {
+  background: var(--topic-pregnancy-bg);
+  color: var(--topic-pregnancy-text);
+}
+
+.topic-tile--contraception {
+  border-color: var(--topic-contraception-edge);
+}
+
+.topic-tile--contraception .topic-tile-icon {
+  background: var(--topic-contraception-bg);
+  color: var(--topic-contraception-text);
+}
+
+.topic-tile--sti {
+  border-color: var(--topic-sti-edge);
+}
+
+.topic-tile--sti .topic-tile-icon {
+  background: var(--topic-sti-bg);
+  color: var(--topic-sti-text);
+}
+
+/* The footer card: the anonymous line and the footer line. */
+.home-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: auto;
+  border-radius: 18px;
+  padding: 12px 14px;
+  background: var(--footer-card-bg);
+  color: var(--footer-card-text);
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+}
+
+.home-anonymous {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.home-footer .danger-line {
+  color: var(--footer-card-text);
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+  line-height: 1.4;
+  text-align: left;
+}
+
+/* Topic list (redesign Step 5) */
+
+.topic-screen {
+  justify-content: flex-start;
+  gap: 14px;
+  padding: 8px 8px 12px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 4px;
+  min-height: var(--tap-target);
+  border: 0;
+  padding: 0 4px;
+  background: none;
+  color: var(--color-violet);
+  font-size: 15px;
+  font-weight: var(--weight-extrabold);
+  cursor: pointer;
+}
+
+.topic-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  overflow: hidden;
+  border-radius: 26px;
+  padding: 18px;
+  background: var(--topic-head-bg);
+}
+
+.topic-head-icon {
+  display: grid;
+  flex: 0 0 56px;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: var(--color-card);
+  box-shadow: var(--topic-head-tile-shadow);
+}
+
+.topic-head--general .topic-head-icon {
+  color: var(--topic-periods-text);
+}
+
+.topic-head--pregnancy .topic-head-icon {
+  color: var(--topic-pregnancy-text);
+}
+
+.topic-head--contraception .topic-head-icon {
+  color: var(--topic-contraception-text);
+}
+
+.topic-head--sti .topic-head-icon {
+  color: var(--topic-sti-text);
+}
+
+.topic-title {
+  color: var(--color-plum);
+  font-size: 26px;
+  font-weight: var(--weight-black);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.topic-count {
+  /* Read by screen readers only (it also has .sr-only). */
+}
+
+/* The list card: its edge is the 3:1 control border. */
+.topic-questions {
+  overflow: hidden;
+  border: 1.5px solid var(--list-edge);
+  border-radius: 24px;
+  background: var(--color-card);
+  box-shadow: var(--list-card-shadow);
+  list-style: none;
+}
+
+.topic-questions li + li {
+  border-top: 1px solid var(--list-row-divider);
+}
+
+.topic-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--tap-target);
+  border: 0;
+  padding: 14px 16px;
+  background: none;
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The focus ring sits inside the card, so it is not clipped. */
+.topic-question:focus-visible {
+  outline-offset: -4px;
+}
+
+.topic-question-go {
+  display: grid;
+  flex: 0 0 30px;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--chevron-tile-bg);
+  color: var(--color-rose-text);
+}
+
+/* Answer screen (redesign Step 6) */
+
+.answer-screen {
+  justify-content: flex-start;
+  gap: 14px;
+  padding: 8px 8px 0;
+}
+
+/* "The closest question I have": the h1, never shown as her question. */
+.closest {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border: 0;
+  border-radius: 18px;
+  padding: 12px 14px;
+  background: var(--closest-bg);
+}
+
+.closest-label {
+  color: var(--closest-label);
+  font-size: 12px;
+  font-weight: var(--weight-black);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.closest-question {
+  color: var(--color-ink);
+  font-size: 15px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.4;
+}
+
+.answer-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1.5px solid var(--answer-card-border);
+  border-radius: 24px;
+  padding: 16px;
+  background: var(--color-card);
+  box-shadow: var(--shadow-violet);
+}
+
+.answer-pill {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 5px 12px 5px 10px;
+  background: linear-gradient(
+    135deg,
+    var(--answer-bg-start),
+    var(--answer-bg-end)
+  );
+  color: var(--answer-text);
+  font-size: 13px;
+  font-weight: var(--weight-black);
+}
+
+/* Exactly as returned: line breaks in the text are kept. */
+.answer-text {
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.55;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.answer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid var(--answer-meta-border);
+  padding-top: 10px;
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.45;
+}
+
+.related {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.related-title {
+  color: var(--color-plum);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+/* Reply screens (redesign Step 7): clarify, held, help and referral,
+   no answer. */
+
+.reply-screen {
+  justify-content: flex-start;
+  gap: 14px;
+  min-height: 0;
+  padding: 8px 8px 0;
+}
+
+/* "You asked" and her question, as plain text. */
+.you-asked-label {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: var(--weight-black);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.you-asked-text {
+  color: var(--color-ink);
+  font-size: 18px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.reply-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  overflow: visible;
+  padding: 18px 16px;
+}
+
+.reply-decor {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  pointer-events: none;
+}
+
+.reply-pill {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  padding: 5px 12px;
+  background: var(--reply-pill-bg);
+  font-size: 14px;
+  font-weight: var(--weight-black);
+}
+
+.reply-title {
+  font-size: 17px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.reply-subtitle {
+  color: var(--noanswer-text);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+.reply-note {
+  color: var(--color-muted);
+  font-size: 15px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.45;
+}
+
+/* Clarify */
+
+.reply-card--clarify {
+  gap: 14px;
+  border-radius: 8px 26px 26px 26px;
+  padding: 18px 16px 16px;
+  background: linear-gradient(
+    135deg,
+    var(--clarify-bg-start),
+    var(--clarify-bg-end)
+  );
+  box-shadow: var(--clarify-card-shadow);
+  color: var(--color-ink);
+}
+
+.reply-card--clarify .reply-decor {
+  top: 16px;
+  right: 18px;
+  color: var(--clarify-sparkle);
+  opacity: 0.55;
+}
+
+.reply-card--clarify .reply-pill {
+  color: var(--clarify-text);
+  font-size: 13px;
+  font-weight: var(--weight-black);
+}
+
+.reply-card--clarify .reply-title {
+  color: var(--color-ink);
+  font-size: 19px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.4;
+}
+
+/* Held topic */
+
+.reply-card--held {
+  border: 1.5px solid var(--held-border);
+  border-radius: 24px;
+  background: var(--held-bg);
+  color: var(--held-text);
+}
+
+.reply-card--held .reply-pill {
+  color: var(--held-text);
+}
+
+.reply-link {
+  align-self: flex-start;
+  min-height: var(--tap-target);
+  border: 0;
+  padding: 0 4px;
+  background: none;
+  color: var(--color-violet);
+  font-size: 1rem;
+  font-weight: var(--weight-extrabold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* Call buttons: tap-to-call links from the helpline constants. */
+
+.call-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+}
+
+.call-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  border: 1.5px solid transparent;
+  border-radius: 18px;
+  /* The design's 0 16px, with 8px top and bottom so a two-line
+     description never touches the edge on a narrow phone. */
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+.call-button-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.call-button-number {
+  font-size: 17px;
+  font-weight: var(--weight-black);
+}
+
+.call-button-note {
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+}
+
+/* No answer */
+
+.reply-card--noanswer {
+  border: 1.5px solid var(--noanswer-border);
+  border-radius: 24px;
+  background: var(--noanswer-bg);
+  color: var(--noanswer-text);
+}
+
+.reply-card--noanswer .reply-pill {
+  color: var(--noanswer-text);
+}
+
+/* The four topics (TopicChoices: clarify, no answer, Help sheet): two
+   equal columns that can shrink, and labels that wrap, so nothing runs
+   past the card on a narrow phone. */
+
+.topic-choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  list-style: none;
+}
+
+.topic-choices > li {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.topic-choice {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 100%;
+  border: 1.5px solid var(--color-control-border);
+  padding: 10px 12px;
+  background: var(--color-card);
+  color: var(--color-ink);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+}
+
+.topic-choice-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Clarify's grid (step 7d): each button a column, the icon tile above
+   the label, so even "Contraception" fits whole at 320px. The border is
+   the topic's own colour (3:1 or more on the card). */
+.topic-choices--grid .topic-choice {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 84px;
+  border-radius: 18px;
+  padding: 10px 12px;
+}
+
+.topic-choices--grid .topic-choice-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+}
+
+.topic-choices--grid .topic-choice--general {
+  border-color: var(--topic-periods-text);
+}
+
+.topic-choices--grid .topic-choice--pregnancy {
+  border-color: var(--topic-pregnancy-text);
+}
+
+.topic-choices--grid .topic-choice--contraception {
+  border-color: var(--topic-contraception-text);
+}
+
+.topic-choices--grid .topic-choice--sti {
+  border-color: var(--topic-sti-text);
+}
+
+.topic-choices--pills .topic-choice {
+  min-height: var(--tap-target);
+  border-radius: 999px;
+  padding: 8px 12px;
+}
+
+/* Below 360px, a word that still does not fit gets a size smaller, and
+   the reply screen and card give the columns a little more room. */
+@media (max-width: 359px) {
+  .topic-choice {
+    font-size: 14px;
+  }
+
+  .reply-screen {
+    padding-right: 4px;
+    padding-left: 4px;
+  }
+
+  .reply-card {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+}
+
+.topic-choice-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+}
+
+.topic-choice--general .topic-choice-icon {
+  background: var(--topic-periods-bg);
+  color: var(--topic-periods-text);
+}
+
+.topic-choice--pregnancy .topic-choice-icon {
+  background: var(--topic-pregnancy-bg);
+  color: var(--topic-pregnancy-text);
+}
+
+.topic-choice--contraception .topic-choice-icon {
+  background: var(--topic-contraception-bg);
+  color: var(--topic-contraception-text);
+}
+
+.topic-choice--sti .topic-choice-icon {
+  background: var(--topic-sti-bg);
+  color: var(--topic-sti-text);
+}
+
+/* The plain reply's text is its h1, in the bubble's own type. */
+.plain-reply {
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+/* The decoration takes its card's faint colour, not the global sparkle's. */
+.reply-decor .sparkle {
+  color: inherit;
+}
+
+/* Talk to a person (redesign Step 8): the no-answer card, with a plum
+   button that opens the Help sheet. */
+.btn-see-help {
+  align-self: flex-start;
+  min-height: var(--tap-target);
+  border: 1.5px solid var(--color-plum);
+  border-radius: 999px;
+  padding: 10px 20px;
+  background: var(--color-plum);
+  color: var(--color-on-dark);
+  font-size: 1rem;
+  font-weight: var(--weight-black);
+  cursor: pointer;
+}
+
+/* Under 360px wide, every screen and the header use a 16px gutter (20px
+   above), so the header's logo, Help and Exit stay on one row. */
+@media (max-width: 359px) {
+  .app-header {
+    column-gap: 8px;
+    margin-right: 4px;
+    margin-left: 4px;
+  }
+
+  .home {
+    padding-right: 4px;
+    padding-left: 4px;
+  }
+
+  .topic-screen,
+  .answer-screen,
+  .help-sheet {
+    padding-right: 4px;
+    padding-left: 4px;
+  }
+
+  /* "Contraception" at 16px is wider than a tile at 320px. */
+  .topic-tile-label {
+    font-size: 15px;
+  }
+}
+
+/* Topic list and answer screen (redesign Step 6b) */
+
+.topic-hint {
+  margin-top: 4px;
+  color: var(--footer-card-text);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+}
+
+.topic-footnote {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.5;
+}
+
+.answer-source strong {
+  color: var(--color-ink);
+  font-weight: var(--weight-black);
+}
+
+/* Related questions: a smaller version of the Topic list card. */
+.topic-questions--related {
+  border-radius: 20px;
+}
+
+.topic-questions--related .topic-question {
+  padding: 12px 14px;
+  font-size: 15px;
+}
+
+.topic-questions--related .topic-question-go {
+  flex-basis: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+/* The end of the Topic list and the answer screen: the footer line as
+   plain text, then the ask bar as a white pill of its own. Not sticky,
+   no panel; on a short screen it sits at the bottom. */
+.screen-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-bottom: 4px;
+}
+
+.screen-bottom .danger-line {
+  color: var(--footer-card-text);
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+}
+
+/* The ask pill: its edge marks a control, so it is the 3:1 pink. */
+.ask-pill-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid var(--ask-field-edge);
+  border-radius: 30px;
+  padding: 6px 6px 6px 18px;
+  background: var(--color-card);
+  box-shadow: var(--ask-bar-shadow);
+}
+
+.ask-pill-bar input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  text-overflow: ellipsis;
+}
+
+.ask-pill-bar input::placeholder {
+  color: var(--color-muted);
+}
+
+.ask-pill-bar .btn-send {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  background: var(--gradient-primary);
+  color: var(--color-on-dark);
+  box-shadow: var(--send-shadow);
+}
+
+.ask-pill-bar .btn-send:disabled {
+  background: var(--send-disabled-bg);
+  box-shadow: none;
+  opacity: 1;
+}
+
+/* Reply screens aligned with the design (redesign Step 7c) */
+
+/* Held: the pink card holds the reply; the calls have their own card. */
+.reply-card--held {
+  gap: 12px;
+  border: 2px solid var(--held-border);
+  border-radius: 26px;
+  padding: 18px;
+  background: var(--held-bg);
+  box-shadow: var(--held-card-shadow);
+}
+
+.reply-card--held .reply-pill {
+  color: var(--held-text);
+  font-size: 13px;
+  font-weight: var(--weight-black);
+}
+
+.reply-card--held .reply-title {
+  color: var(--held-title);
+  font-size: 18px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.45;
+}
+
+.reply-body {
+  color: var(--held-title);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.call-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1.5px solid var(--answer-card-border);
+  border-radius: 24px;
+  padding: 16px;
+  background: var(--color-card);
+  box-shadow: var(--list-card-shadow);
+}
+
+.call-card-title {
+  color: var(--color-ink);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+.call-buttons--held .call-button--main {
+  background: var(--gradient-primary);
+  color: var(--color-on-dark);
+  box-shadow: var(--call-main-shadow);
+}
+
+.call-button--second {
+  border-color: var(--call-second-edge);
+  background: var(--color-card);
+  color: var(--color-ink);
+}
+
+.call-button--second .call-button-note {
+  color: var(--color-muted);
+}
+
+.reply-link {
+  align-self: center;
+  min-height: 48px;
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+/* Help and referral. */
+.support-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 22px 20px;
+  background: var(--support-hero-bg);
+  box-shadow: var(--support-hero-shadow);
+  color: var(--color-on-dark);
+}
+
+.support-hero > :not(.hero-decor) {
+  position: relative;
+  z-index: 1;
+}
+
+.support-circle {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: var(--support-circle);
+}
+
+.support-hero .reply-pill {
+  background: var(--color-card);
+  color: var(--support-pill-text);
+  font-size: 13px;
+  font-weight: var(--weight-black);
+}
+
+.support-title {
+  color: var(--color-on-dark);
+  font-size: 27px;
+  font-weight: var(--weight-black);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.support-body {
+  color: var(--hero-sub-text);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.call-buttons--support .call-button {
+  gap: 14px;
+  min-height: 66px;
+  border-radius: 22px;
+  padding: 8px 18px;
+}
+
+.call-buttons--support .call-button-number {
+  font-size: 19px;
+}
+
+.call-buttons--support .call-button--main {
+  background: var(--support-call-bg);
+  color: var(--color-on-dark);
+  box-shadow: var(--support-call-shadow);
+}
+
+.emergency-card {
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: var(--footer-card-bg);
+  color: var(--footer-card-text);
+  font-size: 15px;
+  font-weight: var(--weight-bold);
+}
+
+.emergency-line {
+  line-height: 1.35;
+}
+
+.emergency-line strong {
+  font-weight: var(--weight-black);
+}
+
+/* Like the footer line's link: inline, with a 44px-tall tap area. */
+.emergency-line a {
+  position: relative;
+  color: var(--color-violet);
+  font-weight: var(--weight-black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.support-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-bottom: 4px;
+}
+
+.support-exit-hint {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  text-align: center;
+}
+
+.btn-back-questions {
+  min-height: 50px;
+  border: 1.5px solid var(--back-button-edge);
+  border-radius: 25px;
+  padding: 0 20px;
+  background: var(--color-card);
+  color: var(--back-button-text);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+  cursor: pointer;
+}
+
+/* Clarify and help/referral to the redesigned boards (Step 7d) */
+
+.clarify-screen {
+  gap: 14px;
+}
+
+/* Her message, as a chat bubble on the right. */
+.ask-bubble {
+  align-self: flex-end;
+  max-width: 84%;
+  margin-top: 6px;
+  border-radius: 22px 22px 6px 22px;
+  padding: 12px 18px;
+  background: var(--bubble-bg);
+  box-shadow: var(--bubble-shadow);
+  color: var(--color-on-dark);
+  font-size: 17px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.clarify-pick {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: var(--weight-black);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.clarify-more {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: var(--clarify-more-bg);
+}
+
+.clarify-more-words {
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+  line-height: 1.5;
+}
+
+.clarify-more .reply-note {
+  font-size: 14px;
+}
+
+.clarify-screen .ask-pill-bar {
+  border-color: var(--clarify-pill-edge);
+}
+
+/* Help and referral. */
+.support-hero {
+  margin-top: 4px;
+}
+
+.support-hero .hero-sparkle {
+  opacity: 0.85;
+}
+
+.support-title {
+  max-width: 300px;
+}
+
+.call-buttons--support .call-button--second svg {
+  color: var(--call-second-icon);
+}
+
+.emergency-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 20px;
+}
+
+.emergency-card .emergency-line {
+  line-height: 1.4;
+}
+
+.emergency-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  list-style: none;
+}
+
+.emergency-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  border: 1.5px solid var(--emergency-button-edge);
+  border-radius: 16px;
+  background: var(--color-card);
+  color: var(--emergency-button-text);
+  font-size: 19px;
+  font-weight: var(--weight-black);
+  text-decoration: none;
+}
+
+/* Help sheet (redesign Step 3c): a page under the header */
+
+.shell-content {
+  display: contents;
+}
+
+.shell-content[hidden] {
+  display: none;
+}
+
+.help-sheet {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  gap: 14px;
+  width: min(100%, 720px);
+  margin: 0 auto;
+  padding: 0 8px 16px;
+  color: var(--color-ink);
+}
+
+.help-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  padding-top: 16px;
+  box-sizing: content-box;
+}
+
+.help-sheet-head h1 {
+  color: var(--color-plum);
+  font-size: 24px;
+  font-weight: var(--weight-black);
+  letter-spacing: -0.01em;
+}
+
+.btn-close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid var(--sheet-control-edge);
+  border-radius: 50%;
+  background: var(--color-card);
+  color: var(--close-icon);
+  cursor: pointer;
+}
+
+.help-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.help-card--how {
+  border-radius: 26px;
+  padding: 16px 18px;
+  background: var(--help-how-bg);
+  box-shadow: var(--help-how-shadow);
+  color: var(--color-on-dark);
+}
+
+.help-card--how h2 {
+  font-size: 17px;
+  font-weight: var(--weight-black);
+}
+
+.help-card--how p {
+  color: var(--hero-sub-text);
+  font-size: 14.5px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.5;
+}
+
+.help-card--tips {
+  border: 1.5px solid var(--color-card-border);
+  border-radius: 22px;
+  padding: 14px 16px;
+  background: var(--color-card);
+}
+
+.help-sheet h2 {
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+.help-card--how h2 {
+  font-size: 17px;
+}
+
+.help-tips {
+  display: grid;
+  gap: 6px;
+  padding-left: 20px;
+  color: var(--tips-text);
+  font-size: 14.5px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.45;
+}
+
+.help-talk,
+.help-topics {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.help-calls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+}
+
+.help-call {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  border: 1.5px solid transparent;
+  border-radius: 22px;
+  padding: 10px 16px;
+  text-decoration: none;
+}
+
+.help-call-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+}
+
+.help-call-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.help-call-title {
+  font-size: 17px;
+  font-weight: var(--weight-black);
+}
+
+.help-call-note {
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+}
+
+.help-call--main {
+  background: var(--color-plum);
+  box-shadow: var(--help-call-shadow);
+  color: var(--color-on-dark);
+}
+
+.help-call--main .help-call-icon {
+  background: var(--help-call-tile);
+}
+
+.help-call--main .help-call-note {
+  color: var(--hero-sub-text);
+}
+
+/* On the dark button the ring is white and drawn inside it, so it shows
+   against the plum and not against the light page. */
+.help-call--main:focus-visible {
+  outline-color: var(--focus-ring-on-dark);
+  outline-offset: -5px;
+}
+
+.help-call--second {
+  border-color: var(--sheet-control-edge);
+  background: var(--color-card);
+  color: var(--color-ink);
+}
+
+.help-call--second .help-call-icon {
+  background: var(--help-call-second-tile);
+  color: var(--help-call-second-icon);
+}
+
+.help-call--second .help-call-note {
+  color: var(--color-muted);
+}
+
+.help-emergency {
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: var(--footer-card-bg);
+  color: var(--footer-card-text);
+  font-size: 13.5px;
+  font-weight: var(--weight-bold);
+  line-height: 1.5;
+}
+
+.help-emergency a {
+  position: relative;
+  color: var(--color-violet);
+  font-weight: var(--weight-black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* The topic pills wrap, each in its topic's colour. */
+.help-sheet .topic-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.help-sheet .topic-choices--pills .topic-choice {
+  width: auto;
+  min-height: var(--tap-target);
+  border-radius: 22px;
+  padding: 0 16px;
+  font-size: 15px;
+  font-weight: var(--weight-extrabold);
+}
+
+.help-sheet .topic-choice--general {
+  border-color: var(--pill-periods-edge);
+  color: var(--pill-periods-text);
+}
+
+.help-sheet .topic-choice--pregnancy {
+  border-color: var(--pill-pregnancy-edge);
+  color: var(--pill-pregnancy-text);
+}
+
+.help-sheet .topic-choice--contraception {
+  border-color: var(--pill-contraception-edge);
+  color: var(--pill-contraception-text);
+}
+
+.help-sheet .topic-choice--sti {
+  border-color: var(--pill-sti-edge);
+  color: var(--pill-sti-text);
+}
+
+.help-footer {
+  margin-top: auto;
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Matched-question banner (redesign Step 6c) */
+
+/* A typed question: a quiet line close under the banner. */
+.match-hint {
+  margin-top: -6px;
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.45;
+}
+
+/* A tapped question: it heads the answer, with no banner. */
+.tapped-question {
+  margin: 4px 2px 0;
+  color: var(--color-ink);
+  font-size: 20px;
+  font-weight: var(--weight-black);
+  line-height: 1.3;
 }
