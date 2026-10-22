@@ -1716,3 +1716,70 @@ exactly `{"text": …}`.
 
 On both paths the heading is the screen's only h1 and takes the
 programmatic focus, with no ring.
+
+## Knowledge base integrated before clinician sign-off (2026-10-22)
+
+Step K2a (`kb/integrate-candidates`, not merged), by owner decision.
+Decision owner: project owner.
+
+**Decision.** The 34 non-held candidates in
+`resources/knowledge_base/incoming/kb-candidate-entries.md`, plus
+NEW-P-04, are built into the knowledge base **before clinician
+sign-off**. The KB now has 41 entries: contraception 9, STIs 16,
+pregnancy 5, general 11. IDs follow
+[`docs/kb/id-mapping-2026-10-22.md`](kb/id-mapping-2026-10-22.md): the
+15 replacements keep the live ID; new entries continue after the highest
+number ever used in each class, counting the reserved held numbers.
+
+**Status.** Every entry carries "- **Status:** approved" or "pending".
+**32 entries are pending**; 9 are approved (the live entries no candidate
+touches, KB-C1, KB-C2, KB-S3, KB-P1, KB-G1, KB-G2, and the replacements
+whose answer and sources are unchanged, KB-P5 to KB-P7). The three
+loaders (`retrievalModule.js`, `build_kb.py`, `generate-kb-json.py`) fail
+on a missing or unknown status. The status is internal: it is in no
+response, `kbQuestions.json`, `knowledge_base.json` or `Kbdata.json`
+(`kbStatus.test.js`).
+
+**Demo restricted to approved entries.** Pending entries must stay out
+of the defence demo. `npm run release:check` (app/gateway, live
+`ml_service`, outside `npm test`) fails if an entry reached by the
+demo-risk set or Home's placeholder examples is pending. On 22 October
+2026 it **fails**: demo #3, #8, #9, #10, #12, #13 and #14 are answered
+with pending entries (KB-C4, KB-C3, KB-S8, KB-C7, KB-S12), and five of
+the six placeholders are pending entries (KB-S5, KB-G4, KB-C3, KB-S7,
+KB-G5; KB-P6 is approved). Demo #3 ("Condom iliburst…", expected:
+abstain, emergency contraception is held) is now answered with KB-C4.
+
+**Not built.** The held candidates NEW-C-06 (KB-C6 stays reserved) and
+NEW-S-06; KB-S3 (PEP) is unchanged.
+
+**NEW-G-08 (KB-G10).** Its last answer sentence, "If there is no bin,
+wrap the pad and keep it until you can dispose of it safely.", is
+excluded as unverified. Every other word is copied exactly.
+
+**Gate not re-validated.** The relevance gate (0.8439) and the
+thresholds (0.35/0.5) were set on the 21-entry KB and are unchanged; they
+are re-validated in K2b. The health-term list was not rebuilt (as
+briefed), so its drift test now fails: five selected terms (abortion,
+nurse, pharmacies, sexuality, violence) are no longer KB words. The vague
+rule itself is unchanged.
+
+**Known limitations (K1, confirmed live by `npm run kb:self-retrieval`).**
+
+- **KB-S16 (NEW-S-14) is mis-scoped.** V3 classes it general (0.87), so
+  scoped retrieval cannot reach it and it is answered with KB-G5;
+  unscoped it would be its own top entry (+0.076). Kept in the STI list,
+  as KB-P1 is (`knownLimitations.test.js`). KB-P1 is now answered with
+  KB-G6 (was KB-G3).
+- **KB-G7 (NEW-G-05) against KB-G1.** In K1, on question and answer
+  alone, KB-G7 ranked second behind KB-G1 by 0.002. With the full
+  passage as served, it is top by 0.012: still a near-miss.
+- **Long answers.** Answers reach 779 characters (KB-C10; KB-G9 706),
+  against 443 before.
+- **Reading level (UI-08).** The audit found a median Flesch–Kincaid
+  grade of 10.0 for readers aged 10–19; the new entries were not
+  rewritten for reading level and go to the clinical review with it.
+
+Self-retrieval on 22 October 2026: 39 of 41 questions get their own
+entry both unscoped and with live scoping; the two failures are KB-S16
+and KB-P1 above. 16 entries are near-misses (margin under 0.03).
