@@ -52,6 +52,14 @@ const KB_DIR = path.join(
 const ACTIVE_CATEGORIES = ["contraception", "sti", "pregnancy", "general"];
 
 /**
+ * Review status every active entry must carry ("- **Status:** ...").
+ * "pending" entries are served, but are awaiting clinician sign-off and
+ * must not be used in the defence demo (see scripts/release-check.js).
+ * The status is internal: it is never copied into a response.
+ */
+const KB_STATUSES = ["approved", "pending"];
+
+/**
  * Parse active knowledge-base entries from a Markdown file.
  *
  * Content after the first "\n---\n" boundary is treated as held content
@@ -91,6 +99,16 @@ function parseKbFile(filePath) {
       return match ? match[1].trim() : null;
     };
 
+    const status = get("Status");
+
+    if (!KB_STATUSES.includes(status)) {
+      throw new Error(
+        `${path.basename(filePath)}: ${idMatch[1]} has ${
+          status ? `unknown status "${status}"` : "no status"
+        } (expected ${KB_STATUSES.join(" or ")}).`,
+      );
+    }
+
     entries.push({
       kbId: idMatch[1],
       intent: get("Intent"),
@@ -100,6 +118,7 @@ function parseKbFile(filePath) {
       source: get("Source"),
       conditions: get("Conditions/limitations"),
       safetyNotes: get("Safety/referral notes"),
+      status,
     });
   }
 
@@ -220,6 +239,8 @@ function getEntryById(kbId) {
 }
 
 module.exports = {
+  KB_STATUSES,
+  parseKbFile,
   loadKnowledgeBase,
   retrieve,
   getEntryById,
