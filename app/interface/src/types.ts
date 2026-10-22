@@ -20,6 +20,8 @@ export type QueryOutcome =
  * - "answer-scoped": a knowledge-base answer within the predicted category.
  * - "answer-unscoped": a knowledge-base answer found less surely (all
  *   categories searched, or keyword fallback).
+ * - "answer-direct": the entry whose question was tapped in the Topic
+ *   list, returned as it is (POST /api/entry).
  * - "abstain": no answer; the standard no-answer message.
  * - "help": a generic help request; the signposting message.
  * - "held-topic": a topic the knowledge base does not cover safely yet; a
@@ -30,6 +32,7 @@ export type QueryOutcome =
 export type ReplyKind =
   | "answer-scoped"
   | "answer-unscoped"
+  | "answer-direct"
   | "abstain"
   | "help"
   | "held-topic"
@@ -123,7 +126,9 @@ export type AnswerVia = "typed" | "tapped";
 export function isAnswerTurn(turn: ChatTurn | undefined): boolean {
   return (
     turn?.role === "assistant" &&
-    (turn.kind === "answer-scoped" || turn.kind === "answer-unscoped") &&
+    (turn.kind === "answer-scoped" ||
+      turn.kind === "answer-unscoped" ||
+      turn.kind === "answer-direct") &&
     typeof turn.matchedQuestion === "string" &&
     turn.matchedQuestion !== ""
   );

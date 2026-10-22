@@ -29,6 +29,13 @@ import { getIdToken, isNetworkError } from "../auth/session";
  * Every answer from the offline pipeline is marked limitedMode: true, so
  * the chat can say the answer is general rather than pass it off as the
  * full service's answer. The offline pipeline runs its Safety Net first.
+ *
+ * submitEntry() is for a question tapped in the Topic list: it posts the
+ * entry id to /api/entry, and the gateway returns that entry directly.
+ * It falls back exactly as submitQuery() does, with the question's text;
+ * if the gateway does not know the entry (404 or 400, for example a list
+ * newer than the gateway's knowledge base), the text goes through the
+ * full pipeline instead, as a typed question would.
  */
 
 export const AUTH_ERROR_MESSAGES = {
@@ -106,15 +113,38 @@ export interface SubmitOptions {
 /** Marker: no token because the network is down or too slow. */
 const OFFLINE = Symbol("offline");
 
-/** One /api/query attempt; null means a network failure or a timeout. */
+/** One request attempt; null means a network failure or a timeout. */
 type Attempt =
   | { status: number; ok: false }
   | { status: number; ok: true; body: unknown; readable: boolean }
   | null;
 
+/** What to post, and the question's text for every fallback. */
+interface GatewayRequest {
+  path: "/api/query" | "/api/entry";
+  payload: Record<string, string>;
+  text: string;
+}
+
+export interface QueryClient {
+  submitQuery: (
+    text: string,
+    options?: SubmitOptions,
+  ) => Promise<QueryResponse>;
+  submitEntry: (
+    id: string,
+    text: string,
+    options?: SubmitOptions,
+  ) => Promise<QueryResponse>;
+}
+
 export function createQueryClient(
   deps: QueryClientDeps,
 ): (text: string, options?: SubmitOptions) => Promise<QueryResponse> {
+  return createClient(deps).submitQuery;
+}
+
+export function createClient(deps: QueryClientDeps): QueryClient {
   const timers = deps.timers ?? REAL_TIMERS;
 
   /** Settles like promise, or rejects as soon as the signal aborts. */
@@ -169,9 +199,9 @@ export function createQueryClient(
     return unlessCancelled(token, signal);
   }
 
-  /** POST the query and read the reply, within QUERY_TIMEOUT_MS. */
+  /** POST the request and read the reply, within QUERY_TIMEOUT_MS. */
   async function attempt(
-    text: string,
+    request: GatewayRequest,
     token: string,
     signal: AbortSignal | undefined,
   ): Promise<Attempt> {
@@ -181,13 +211,13 @@ export function createQueryClient(
     const timer = timers.setTimeout(() => controller.abort(), QUERY_TIMEOUT_MS);
 
     try {
-      const response = await deps.fetch("/api/query", {
+      const response = await deps.fetch(request.path, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify(request.payload),
         signal: controller.signal,
       });
 
@@ -223,9 +253,10 @@ export function createQueryClient(
   }
 
   async function run(
-    text: string,
+    request: GatewayRequest,
     signal: AbortSignal | undefined,
   ): Promise<QueryResponse> {
+    const { text } = request;
     if (!deps.isOnline()) {
       return fallback(text);
     }
@@ -235,7 +266,7 @@ export function createQueryClient(
       return fallback(text);
     }
 
-    let result = await attempt(text, token, signal);
+    let result = await attempt(request, token, signal);
     if (result === null) {
       return fallback(text);
     }
@@ -246,7 +277,7 @@ export function createQueryClient(
         return fallback(text);
       }
 
-      result = await attempt(text, freshToken, signal);
+      result = await attempt(request, freshToken, signal);
       if (result === null) {
         return fallback(text);
       }
@@ -254,6 +285,14 @@ export function createQueryClient(
       if (result.status === 401) {
         throw new AuthError(AUTH_ERROR_MESSAGES.sessionRejected);
       }
+    }
+
+    // An entry the gateway does not know: ask the question as text.
+    if (
+      request.path === "/api/entry" &&
+      (result.status === 404 || result.status === 400)
+    ) {
+      return run(queryRequest(text), signal);
     }
 
     // Unchanged from before authentication: other non-OK statuses
@@ -265,15 +304,19 @@ export function createQueryClient(
     return result.body as QueryResponse;
   }
 
-  return async function submitQuery(
-    text: string,
-    options: SubmitOptions = {},
+  function queryRequest(text: string): GatewayRequest {
+    return { path: "/api/query", payload: { text }, text };
+  }
+
+  async function submit(
+    request: GatewayRequest,
+    options: SubmitOptions,
   ): Promise<QueryResponse> {
     if (options.signal?.aborted) {
       throw new QueryCancelledError();
     }
 
-    const response = await run(text, options.signal);
+    const response = await run(request, options.signal);
 
     // A request cancelled while it was finishing is still cancelled: its
     // answer, and any limited-mode notice, must not be shown.
@@ -281,13 +324,22 @@ export function createQueryClient(
       throw new QueryCancelledError();
     }
     return response;
+  }
+
+  return {
+    submitQuery: (text, options = {}) => submit(queryRequest(text), options),
+    submitEntry: (id, text, options = {}) =>
+      submit({ path: "/api/entry", payload: { id }, text }, options),
   };
 }
 
-export const submitQuery = createQueryClient({
+const client = createClient({
   fetch: (url, init) => fetch(url, init),
   getToken: (forceRefresh) => getIdToken(forceRefresh),
   isOnline: () => navigator.onLine,
   offline: handleQueryOffline,
   isNetworkError,
 });
+
+export const submitQuery = client.submitQuery;
+export const submitEntry = client.submitEntry;

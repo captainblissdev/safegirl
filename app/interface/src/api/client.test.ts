@@ -4,6 +4,7 @@ import type { QueryResponse } from "../types";
 import {
   AUTH_ERROR_MESSAGES,
   AuthError,
+  createClient,
   createQueryClient,
   type HttpResponse,
   type QueryClientDeps,
@@ -298,6 +299,85 @@ console.log(
   assert(
     result.message === SELF_HARM_REFERRAL_MESSAGE,
     "with the self-harm referral message",
+  );
+}
+
+/** An entry client recording the path and body of every request. */
+function entrySetup(responses: (HttpResponse | Error)[], online = true) {
+  const calls: { url: string; body: unknown }[] = [];
+  const offlineCalls: string[] = [];
+  const queue = [...responses];
+  const { submitEntry } = createClient({
+    fetch: (url, init) => {
+      calls.push({ url, body: JSON.parse(init.body as string) });
+      const next = queue.shift();
+      if (next === undefined) {
+        return Promise.reject(new Error("unexpected extra request"));
+      }
+      return next instanceof Error
+        ? Promise.reject(next)
+        : Promise.resolve(next);
+    },
+    getToken: () => Promise.resolve("token-1"),
+    isOnline: () => online,
+    offline: (text) => {
+      offlineCalls.push(text);
+      return OFFLINE_ANSWER;
+    },
+    isNetworkError: () => false,
+  });
+  return { submitEntry, calls, offlineCalls };
+}
+
+const ROW = "How many antenatal clinic visits do I need?";
+
+console.log(
+  "\nTest 12: a tapped Topic list row posts only its entry id to /api/entry",
+);
+{
+  const { submitEntry, calls } = entrySetup([respond(200)]);
+  const result = await submitEntry("KB-P9", ROW);
+  assert(result === ONLINE_ANSWER, "returns the gateway's answer");
+  assert(
+    calls.length === 1 && calls[0].url === "/api/entry",
+    "one request, to /api/entry",
+  );
+  assert(
+    JSON.stringify(calls[0].body) === '{"id":"KB-P9"}',
+    "the body is exactly { id }: no text, topic or class",
+  );
+}
+
+console.log(
+  "\nTest 13: an entry the gateway does not know (404) is asked as text instead",
+);
+{
+  const { submitEntry, calls } = entrySetup([respond(404), respond(200)]);
+  const result = await submitEntry("KB-C6", ROW);
+  assert(result === ONLINE_ANSWER, "the full pipeline's answer is returned");
+  assert(
+    calls.length === 2 &&
+      calls[1].url === "/api/query" &&
+      JSON.stringify(calls[1].body) === JSON.stringify({ text: ROW }),
+    "the second request is the row's text to /api/query",
+  );
+}
+
+console.log(
+  "\nTest 14: offline or failing, a tap falls back like a typed question",
+);
+{
+  const offline = entrySetup([], false);
+  assertLimited(await offline.submitEntry("KB-P9", ROW));
+  assert(
+    offline.calls.length === 0 && offline.offlineCalls[0] === ROW,
+    "offline: no request; the offline pipeline gets the row's text",
+  );
+  const failing = entrySetup([respond(503)]);
+  assertLimited(await failing.submitEntry("KB-P9", ROW));
+  assert(
+    failing.offlineCalls[0] === ROW,
+    "a 503 uses the offline pipeline, with the row's text",
   );
 }
 
