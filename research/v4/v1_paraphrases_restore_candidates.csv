@@ -1,0 +1,221 @@
+paraphrase_id,seed_id,class,text,status,reasons,near_dup_group
+SEED-CONTRA-01-P1,SEED-CONTRA-01,contraception,If I get the pill will my parents find out?,candidate,,SEED-CONTRA-01-NDG1
+SEED-CONTRA-01-P2,SEED-CONTRA-01,contraception,Do I have to tell my mom or dad before getting birth control?,candidate,,
+SEED-CONTRA-01-P3,SEED-CONTRA-01,contraception,Is there a way to get on birth control that my parents won't know about?,candidate,,
+SEED-CONTRA-01-P4,SEED-CONTRA-01,contraception,Will the clinic tell my parents if I ask for birth control pills?,excluded,near_other_seed_paraphrase_SEED-GEN-02-P01;near_other_seed_paraphrase_SEED-GEN-02-P04,SEED-CONTRA-01-NDG1
+SEED-CONTRA-02-P1,SEED-CONTRA-02,contraception,Can a 16 year old get an IUD safely?,candidate,,SEED-CONTRA-02-NDG1
+SEED-CONTRA-02-P2,SEED-CONTRA-02,contraception,I'm 16 is it okay for me to have an IUD put in?,candidate,,SEED-CONTRA-02-NDG1
+SEED-CONTRA-02-P3,SEED-CONTRA-02,contraception,Are IUDs safe for teenagers to use?,candidate,,
+SEED-CONTRA-02-P4,SEED-CONTRA-02,contraception,Is there an age limit for getting an IUD?,candidate,,
+SEED-CONTRA-03-P1,SEED-CONTRA-03,contraception,Is there somewhere close by that gives out free condoms?,candidate,,
+SEED-CONTRA-03-P2,SEED-CONTRA-03,contraception,Where do I go to get condoms without paying?,candidate,,
+SEED-CONTRA-03-P3,SEED-CONTRA-03,contraception,Do any clinics near me give free condoms?,candidate,,
+SEED-CONTRA-03-P4,SEED-CONTRA-03,contraception,How do I find a place that has free condoms?,candidate,,
+SEED-CONTRA-04-P1,SEED-CONTRA-04,contraception,Will birth control make it harder for me to get pregnant in the future?,candidate,,
+SEED-CONTRA-04-P2,SEED-CONTRA-04,contraception,If I use contraception now can I still have children later?,candidate,,
+SEED-CONTRA-04-P3,SEED-CONTRA-04,contraception,Does the pill cause fertility problems down the line?,candidate,,
+SEED-CONTRA-04-P4,SEED-CONTRA-04,contraception,Can birth control permanently affect my fertility?,candidate,,
+SEED-CONTRA-05-P1,SEED-CONTRA-05,contraception,Do I need to be married to get the implant?,candidate,,
+SEED-CONTRA-05-P2,SEED-CONTRA-05,contraception,Is the contraceptive implant only for married women?,candidate,,
+SEED-CONTRA-05-P3,SEED-CONTRA-05,contraception,Can I still get an implant if I don't have a husband?,candidate,,
+SEED-CONTRA-05-P4,SEED-CONTRA-05,contraception,Will they refuse to give me an implant because I'm single?,candidate,,
+SEED-CONTRA-06-P1,SEED-CONTRA-06,contraception,How is the birth control pill different from the injection?,candidate,,
+SEED-CONTRA-06-P2,SEED-CONTRA-06,contraception,Pill or injection what's the difference between them?,candidate,,
+SEED-CONTRA-06-P3,SEED-CONTRA-06,contraception,Which is better the pill or the shot?,candidate,,
+SEED-CONTRA-06-P4,SEED-CONTRA-06,contraception,Can someone explain how the pill and the injection compare?,candidate,,
+SEED-CONTRA-07-P1,SEED-CONTRA-07,contraception,Is contraception free at government clinics?,candidate,,
+SEED-CONTRA-07-P2,SEED-CONTRA-07,contraception,How much does birth control cost at a public clinic?,candidate,,
+SEED-CONTRA-07-P3,SEED-CONTRA-07,contraception,Will I be charged for contraceptives at a government hospital?,candidate,,
+SEED-CONTRA-07-P4,SEED-CONTRA-07,contraception,Is birth control free if I go to a public health facility?,candidate,,
+SEED-CONTRA-08-P1,SEED-CONTRA-08,contraception,What if my current birth control isn't working can I change it?,candidate,,
+SEED-CONTRA-08-P2,SEED-CONTRA-08,contraception,Am I allowed to switch to a different contraceptive method?,candidate,,
+SEED-CONTRA-08-P3,SEED-CONTRA-08,contraception,Can I stop one type of birth control and try another?,candidate,,
+SEED-CONTRA-08-P4,SEED-CONTRA-08,contraception,Is it okay to change contraceptive methods if I'm not happy with mine?,candidate,,
+SEED-CONTRA-09-P1,SEED-CONTRA-09,contraception,How is emergency contraception different from normal birth control?,candidate,held_topic_ok_A,SEED-CONTRA-09-NDG1
+SEED-CONTRA-09-P2,SEED-CONTRA-09,contraception,Is the morning-after pill the same as regular contraception?,candidate,held_topic_ok_A,
+SEED-CONTRA-09-P3,SEED-CONTRA-09,contraception,What makes emergency contraception different from the pill I take every day?,candidate,held_topic_ok_A,SEED-CONTRA-09-NDG1
+SEED-CONTRA-09-P4,SEED-CONTRA-09,contraception,Are emergency pills different from daily birth control pills?,candidate,,
+SEED-CONTRA-10-P1,SEED-CONTRA-10,contraception,Is a nurse allowed to say no to giving me birth control because I'm young?,candidate,,SEED-CONTRA-10-NDG1
+SEED-CONTRA-10-P2,SEED-CONTRA-10,contraception,Can I be denied contraception just because of how old I am?,candidate,,
+SEED-CONTRA-10-P3,SEED-CONTRA-10,contraception,What if a nurse won't give me birth control because I'm a teenager?,candidate,,
+SEED-CONTRA-10-P4,SEED-CONTRA-10,contraception,Is it allowed for a nurse to refuse me contraception based on my age?,candidate,,SEED-CONTRA-10-NDG1
+SEED-CONTRA-11-P1,SEED-CONTRA-11,contraception,Is it possible to get pregnant from precum?,candidate,held_topic_ok_A,SEED-CONTRA-11-NDG1
+SEED-CONTRA-11-P2,SEED-CONTRA-11,contraception,Can precum alone make me pregnant?,candidate,held_topic_ok_A,SEED-CONTRA-11-NDG1
+SEED-CONTRA-11-P3,SEED-CONTRA-11,contraception,Does precum have sperm that can cause pregnancy?,candidate,held_topic_ok_A,SEED-CONTRA-11-NDG1
+SEED-CONTRA-11-P4,SEED-CONTRA-11,contraception,I heard precum can't get you pregnant is that true?,candidate,held_topic_ok_A,SEED-CONTRA-11-NDG1
+SEED-CONTRA-12-P1,SEED-CONTRA-12,contraception,We used the pull out method am I safe from getting pregnant?,candidate,held_topic_ok_A,SEED-CONTRA-12-NDG1
+SEED-CONTRA-12-P2,SEED-CONTRA-12,contraception,Is pulling out actually a safe way to avoid pregnancy?,candidate,held_topic_ok_A,SEED-CONTRA-12-NDG1
+SEED-CONTRA-12-P3,SEED-CONTRA-12,contraception,He didn't finish inside me does that mean I won't get pregnant?,candidate,,
+SEED-CONTRA-12-P4,SEED-CONTRA-12,contraception,Can I still get pregnant even if he pulled out in time?,excluded,near_v3_pool_SEED-PREG-18-P1;near_v3_pool_SEED-PREG-18-P2;near_v3_pool_SEED-PREG-18-P3;held_topic_ok_A,
+SEED-CONTRA-13-P1,SEED-CONTRA-13,contraception,I missed taking my birth control pill am I still safe?,candidate,held_topic_ok_A,
+SEED-CONTRA-13-P2,SEED-CONTRA-13,contraception,What happens if I forget to take the pill one day?,candidate,,
+SEED-CONTRA-13-P3,SEED-CONTRA-13,contraception,Am I still protected from pregnancy if I skipped a pill?,candidate,held_topic_ok_A,
+SEED-CONTRA-13-P4,SEED-CONTRA-13,contraception,I forgot to take my pill yesterday does that put me at risk?,candidate,held_topic_ok_A,
+SEED-CONTRA-14-P1,SEED-CONTRA-14,contraception,What type of contraception has the fewest side effects?,candidate,,
+SEED-CONTRA-14-P2,SEED-CONTRA-14,contraception,Is there a birth control method that doesn't have many side effects?,candidate,,
+SEED-CONTRA-14-P3,SEED-CONTRA-14,contraception,Which contraceptive option causes the least side effects?,candidate,,
+SEED-CONTRA-14-P4,SEED-CONTRA-14,contraception,What's the gentlest form of birth control with fewer side effects?,candidate,,
+SEED-GEN-01-P01,SEED-GEN-01,general,"What does ""youth-friendly"" mean when a clinic offers health services?",candidate,,SEED-GEN-01-NDG1
+SEED-GEN-01-P02,SEED-GEN-01,general,"What makes a health clinic ""youth-friendly""?",candidate,,SEED-GEN-01-NDG1
+SEED-GEN-01-P03,SEED-GEN-01,general,What should I expect from a youth-friendly health clinic?,candidate,,SEED-GEN-01-NDG1
+SEED-GEN-01-P04,SEED-GEN-01,general,What does it mean for a clinic to be youth-friendly?,candidate,,SEED-GEN-01-NDG1
+SEED-GEN-02-P01,SEED-GEN-02,general,Will the clinic tell my parents about what I talked about there?,excluded,near_other_seed_paraphrase_SEED-CONTRA-01-P4,SEED-GEN-02-NDG1
+SEED-GEN-02-P02,SEED-GEN-02,general,Could my parents find out what I discussed with the clinic?,candidate,,SEED-GEN-02-NDG1
+SEED-GEN-02-P03,SEED-GEN-02,general,Does the clinic share with my parents what we talked about?,candidate,,SEED-GEN-02-NDG1
+SEED-GEN-02-P04,SEED-GEN-02,general,Will my parents be told about my conversation with the clinic?,excluded,near_other_seed_paraphrase_SEED-CONTRA-01-P4,SEED-GEN-02-NDG1
+SEED-GEN-03-P01,SEED-GEN-03,general,"What age is considered ""youth"" for these services?",candidate,,SEED-GEN-03-NDG1
+SEED-GEN-03-P02,SEED-GEN-03,general,"Who is included in the ""youth"" age group for these services?",candidate,,SEED-GEN-03-NDG1
+SEED-GEN-03-P03,SEED-GEN-03,general,What ages are covered by these youth services?,candidate,,SEED-GEN-03-NDG1
+SEED-GEN-03-P04,SEED-GEN-03,general,How do these services define the age of a young person?,candidate,,SEED-GEN-03-NDG1
+SEED-GEN-04-P01,SEED-GEN-04,general,Can I visit a clinic if my school does not have one?,candidate,,SEED-GEN-04-NDG1
+SEED-GEN-04-P02,SEED-GEN-04,general,What can I do if there is no clinic at my school?,candidate,,SEED-GEN-04-NDG1
+SEED-GEN-04-P03,SEED-GEN-04,general,Am I able to go to a health clinic even if my school does not have one?,candidate,,SEED-GEN-04-NDG1
+SEED-GEN-04-P04,SEED-GEN-04,general,Can I use these services somewhere else if my school has no clinic?,candidate,,SEED-GEN-04-NDG1
+SEED-GEN-05-P01,SEED-GEN-05,general,Are these services free if I cannot afford them?,candidate,,SEED-GEN-05-NDG1
+SEED-GEN-05-P02,SEED-GEN-05,general,Can people who cannot afford the services get them for free?,candidate,,SEED-GEN-05-NDG1
+SEED-GEN-05-P03,SEED-GEN-05,general,Do these services cost anything for someone who cannot afford them?,candidate,,SEED-GEN-05-NDG1
+SEED-GEN-05-P04,SEED-GEN-05,general,Is there a free option for people who cannot afford these services?,candidate,,SEED-GEN-05-NDG1
+SEED-GEN-06-P01,SEED-GEN-06,general,What should I do if I am worried the nurse will judge me for asking questions?,candidate,,SEED-GEN-06-NDG1
+SEED-GEN-06-P02,SEED-GEN-06,general,What happens if I feel like the nurse might judge me for my questions?,candidate,,SEED-GEN-06-NDG1
+SEED-GEN-06-P03,SEED-GEN-06,general,How should I handle it if I am afraid a nurse will judge me when I ask questions?,candidate,,SEED-GEN-06-NDG1
+SEED-GEN-06-P04,SEED-GEN-06,general,What if I feel uncomfortable asking questions because I think the nurse might judge me?,candidate,,SEED-GEN-06-NDG1
+SEED-GEN-07-P01,SEED-GEN-07,general,Can I get help after school hours?,candidate,,SEED-GEN-07-NDG1
+SEED-GEN-07-P02,SEED-GEN-07,general,Are these services available outside school hours?,candidate,,
+SEED-GEN-07-P03,SEED-GEN-07,general,Can I talk to someone about these things when school is not in session?,candidate,,
+SEED-GEN-07-P04,SEED-GEN-07,general,Is there a way to get help if I need it outside of school hours?,candidate,,SEED-GEN-07-NDG1
+SEED-GEN-08-P01,SEED-GEN-08,general,Do I have to make an appointment before talking to someone?,candidate,,SEED-GEN-08-NDG1
+SEED-GEN-08-P02,SEED-GEN-08,general,Can I talk to someone without making an appointment first?,candidate,,SEED-GEN-08-NDG1
+SEED-GEN-08-P03,SEED-GEN-08,general,Is an appointment required if I want to speak to someone?,candidate,,SEED-GEN-08-NDG1
+SEED-GEN-08-P04,SEED-GEN-08,general,Do I need to book a time before I can talk to someone?,candidate,,SEED-GEN-08-NDG1
+SEED-GEN-09-P01,SEED-GEN-09,general,Can I ask questions that I feel embarrassed about?,candidate,,SEED-GEN-09-NDG1
+SEED-GEN-09-P02,SEED-GEN-09,general,Is it okay to bring up questions that make me feel embarrassed?,candidate,,SEED-GEN-09-NDG1
+SEED-GEN-09-P03,SEED-GEN-09,general,What if I have questions that I feel too embarrassed to ask?,candidate,,SEED-GEN-09-NDG1
+SEED-GEN-09-P04,SEED-GEN-09,general,Can I still ask about things that I feel uncomfortable talking about?,candidate,,
+SEED-GEN-10-P01,SEED-GEN-10,general,How is a youth centre different from a clinic?,candidate,,SEED-GEN-10-NDG1
+SEED-GEN-10-P02,SEED-GEN-10,general,What is the difference between going to a youth centre and going to a clinic?,candidate,,SEED-GEN-10-NDG1
+SEED-GEN-10-P03,SEED-GEN-10,general,How do youth centres and clinics differ?,candidate,,SEED-GEN-10-NDG1
+SEED-GEN-10-P04,SEED-GEN-10,general,What can a youth centre offer that is different from a clinic?,candidate,,SEED-GEN-10-NDG1
+SEED-PREG-01-P1,SEED-PREG-01,pregnancy,How many times do I need to go for antenatal checkups?,candidate,,SEED-PREG-01-NDG1
+SEED-PREG-01-P2,SEED-PREG-01,pregnancy,What's the recommended number of antenatal visits?,excluded,near_dev_set_Q53,
+SEED-PREG-01-P3,SEED-PREG-01,pregnancy,How often should I attend antenatal care during my pregnancy?,candidate,,
+SEED-PREG-01-P4,SEED-PREG-01,pregnancy,Do I need to go for multiple antenatal visits and how many?,candidate,,SEED-PREG-01-NDG1
+SEED-PREG-02-P1,SEED-PREG-02,pregnancy,Am I allowed to continue school while pregnant?,candidate,,SEED-PREG-02-NDG1
+SEED-PREG-02-P2,SEED-PREG-02,pregnancy,Will I be able to stay in school if I'm pregnant?,candidate,,SEED-PREG-02-NDG1
+SEED-PREG-02-P3,SEED-PREG-02,pregnancy,Can I keep attending classes during my pregnancy?,candidate,,
+SEED-PREG-02-P4,SEED-PREG-02,pregnancy,Is it possible to still be a student while pregnant?,candidate,,SEED-PREG-02-NDG1
+SEED-PREG-03-P1,SEED-PREG-03,pregnancy,What health risks come with being pregnant as a teenager?,candidate,,SEED-PREG-03-NDG1
+SEED-PREG-03-P2,SEED-PREG-03,pregnancy,Is having a baby young more risky for my health?,candidate,,
+SEED-PREG-03-P3,SEED-PREG-03,pregnancy,What are the dangers of teenage pregnancy for my health?,candidate,,SEED-PREG-03-NDG1
+SEED-PREG-03-P4,SEED-PREG-03,pregnancy,How risky is it health-wise to have a baby while still a teenager?,candidate,,
+SEED-PREG-04-P1,SEED-PREG-04,pregnancy,Is antenatal care free?,candidate,,
+SEED-PREG-04-P2,SEED-PREG-04,pregnancy,Will I be charged for going to antenatal checkups?,candidate,,
+SEED-PREG-04-P3,SEED-PREG-04,pregnancy,Do I need money to access antenatal care?,candidate,,
+SEED-PREG-04-P4,SEED-PREG-04,pregnancy,Is there a cost for antenatal visits?,candidate,,
+SEED-PREG-05-P1,SEED-PREG-05,pregnancy,Am I allowed to have my baby at home instead of at a clinic?,candidate,,SEED-PREG-05-NDG1
+SEED-PREG-05-P2,SEED-PREG-05,pregnancy,Is it okay to give birth at home rather than in a hospital?,candidate,,
+SEED-PREG-05-P3,SEED-PREG-05,pregnancy,Can I decide to deliver at home instead of a health facility?,candidate,,
+SEED-PREG-05-P4,SEED-PREG-05,pregnancy,Is home birth an option instead of going to a clinic?,candidate,,SEED-PREG-05-NDG1
+SEED-PREG-06-P1,SEED-PREG-06,pregnancy,Do I have to get a pelvic exam immediately at the clinic?,candidate,,SEED-PREG-06-NDG1
+SEED-PREG-06-P2,SEED-PREG-06,pregnancy,Will they make me have a pelvic exam as soon as I arrive?,candidate,,SEED-PREG-06-NDG1
+SEED-PREG-06-P3,SEED-PREG-06,pregnancy,Is a pelvic exam mandatory right away at my first visit?,candidate,,
+SEED-PREG-06-P4,SEED-PREG-06,pregnancy,Can I refuse or delay a pelvic exam at the clinic?,candidate,,
+SEED-PREG-07-P1,SEED-PREG-07,pregnancy,What happens during my first antenatal appointment?,candidate,,SEED-PREG-07-NDG1
+SEED-PREG-07-P2,SEED-PREG-07,pregnancy,What will they do at my first antenatal checkup?,candidate,,SEED-PREG-07-NDG1
+SEED-PREG-07-P3,SEED-PREG-07,pregnancy,What can I expect to happen at my initial antenatal visit?,candidate,,SEED-PREG-07-NDG1
+SEED-PREG-07-P4,SEED-PREG-07,pregnancy,What's involved in the first antenatal care visit?,candidate,,
+SEED-PREG-08-P1,SEED-PREG-08,pregnancy,Is there help available if my family isn't aware I'm pregnant?,candidate,,SEED-PREG-08-NDG1
+SEED-PREG-08-P2,SEED-PREG-08,pregnancy,Can I still get support without telling my family I'm pregnant?,candidate,,SEED-PREG-08-NDG1
+SEED-PREG-08-P3,SEED-PREG-08,pregnancy,What support can I access if I haven't told my family about my pregnancy?,candidate,,SEED-PREG-08-NDG1
+SEED-PREG-08-P4,SEED-PREG-08,pregnancy,Is support available even if my parents don't know?,candidate,,
+SEED-PREG-09-P1,SEED-PREG-09,pregnancy,Why are the health risks higher for teenage mothers compared to adults?,candidate,,SEED-PREG-09-NDG1
+SEED-PREG-09-P2,SEED-PREG-09,pregnancy,What makes pregnancy riskier for teenagers than for adult women?,candidate,,SEED-PREG-09-NDG1
+SEED-PREG-09-P3,SEED-PREG-09,pregnancy,Why is teenage pregnancy considered more risky than adult pregnancy?,candidate,,SEED-PREG-09-NDG1
+SEED-PREG-09-P4,SEED-PREG-09,pregnancy,What causes teen mothers to have higher health risks than older mothers?,candidate,,SEED-PREG-09-NDG1
+SEED-PREG-10-P1,SEED-PREG-10,pregnancy,Is it normal to feel nervous about antenatal checkups?,candidate,,
+SEED-PREG-10-P2,SEED-PREG-10,pregnancy,Is it okay to be scared about going for pregnancy checkups?,candidate,,SEED-PREG-10-NDG1
+SEED-PREG-10-P3,SEED-PREG-10,pregnancy,Am I normal for feeling anxious about pregnancy appointments?,candidate,,
+SEED-PREG-10-P4,SEED-PREG-10,pregnancy,Is being afraid of checkups a normal feeling during pregnancy?,candidate,,SEED-PREG-10-NDG1
+SEED-PREG-11-P1,SEED-PREG-11,pregnancy,My period hasn't come yet should I be concerned?,candidate,held_topic_ok_C,SEED-PREG-11-NDG1
+SEED-PREG-11-P2,SEED-PREG-11,pregnancy,I'm late on my period is that something to worry about?,candidate,held_topic_ok_C,SEED-PREG-11-NDG1
+SEED-PREG-11-P3,SEED-PREG-11,pregnancy,My period is delayed should this worry me?,candidate,held_topic_ok_C,SEED-PREG-11-NDG1
+SEED-PREG-11-P4,SEED-PREG-11,pregnancy,Is a late period something I need to be worried about?,candidate,held_topic_ok_C,SEED-PREG-11-NDG1
+SEED-PREG-12-P1,SEED-PREG-12,pregnancy,How early can I take a pregnancy test?,excluded,near_dr04_row_10;held_topic_ok_C,SEED-PREG-12-NDG1
+SEED-PREG-12-P2,SEED-PREG-12,pregnancy,When is the earliest I can test for pregnancy?,candidate,held_topic_ok_C,SEED-PREG-12-NDG1
+SEED-PREG-12-P3,SEED-PREG-12,pregnancy,How long should I wait before taking a pregnancy test?,excluded,near_dr04_row_10;held_topic_ok_C,SEED-PREG-12-NDG1
+SEED-PREG-12-P4,SEED-PREG-12,pregnancy,What's the soonest I can check if I'm pregnant?,candidate,,
+SEED-PREG-13-P1,SEED-PREG-13,pregnancy,My pregnancy test was negative but I still haven't gotten my period,candidate,held_topic_ok_C,SEED-PREG-13-NDG1
+SEED-PREG-13-P2,SEED-PREG-13,pregnancy,I tested negative but my period still hasn't come,candidate,held_topic_ok_C,SEED-PREG-13-NDG1
+SEED-PREG-13-P3,SEED-PREG-13,pregnancy,Why is my period late even though the test was negative?,candidate,held_topic_ok_C,
+SEED-PREG-13-P4,SEED-PREG-13,pregnancy,The test came back negative but my period is still missing,candidate,held_topic_ok_C,SEED-PREG-13-NDG1
+SEED-PREG-14-P1,SEED-PREG-14,pregnancy,My pregnancy test was positive what do I do now?,candidate,held_topic_ok_B,
+SEED-PREG-14-P2,SEED-PREG-14,pregnancy,I just found out I'm pregnant what are my next steps?,candidate,,
+SEED-PREG-14-P3,SEED-PREG-14,pregnancy,The test came back positive what should I do next?,candidate,,
+SEED-PREG-14-P4,SEED-PREG-14,pregnancy,Now that I know I'm pregnant what happens next?,candidate,,
+SEED-PREG-15-P1,SEED-PREG-15,pregnancy,I missed my period does that mean I'm pregnant?,candidate,held_topic_ok_C,SEED-PREG-15-NDG1
+SEED-PREG-15-P2,SEED-PREG-15,pregnancy,My period didn't come could I be pregnant?,candidate,held_topic_ok_C,
+SEED-PREG-15-P3,SEED-PREG-15,pregnancy,Does a missed period mean I'm definitely pregnant?,candidate,held_topic_ok_C,SEED-PREG-15-NDG1
+SEED-PREG-15-P4,SEED-PREG-15,pregnancy,I skipped my period am I pregnant?,candidate,held_topic_ok_C,
+SEED-STI-01-P01,SEED-STI-01,sti,How can I tell whether I might have an STI?,excluded,near_dr04_row_29;near_relevance_validation_V05,SEED-STI-01-NDG1
+SEED-STI-01-P02,SEED-STI-01,sti,What are the signs that I could have an STI?,excluded,near_relevance_validation_V05,SEED-STI-01-NDG1
+SEED-STI-01-P03,SEED-STI-01,sti,How would I know if I had an STI?,excluded,near_dr04_row_29;near_relevance_validation_V05;near_v3_pool_SEED-STI-11,SEED-STI-01-NDG1
+SEED-STI-01-P04,SEED-STI-01,sti,Is there a way to tell if I have an STI?,excluded,near_other_seed_paraphrase_SEED-STI-11-P02;near_other_seed_paraphrase_SEED-STI-11-P03;near_other_seed_paraphrase_SEED-STI-11-P04;near_relevance_validation_V05;near_v3_pool_SEED-STI-11,SEED-STI-01-NDG1
+SEED-STI-02-P01,SEED-STI-02,sti,Can I take an HIV test without my parents being told?,candidate,,SEED-STI-02-NDG1
+SEED-STI-02-P02,SEED-STI-02,sti,Is it possible to get an HIV test without informing my parents?,candidate,,SEED-STI-02-NDG1
+SEED-STI-02-P03,SEED-STI-02,sti,Can I be tested for HIV privately without telling my parents?,candidate,,SEED-STI-02-NDG1
+SEED-STI-02-P04,SEED-STI-02,sti,Do I have to tell my parents if I want to get an HIV test?,candidate,,SEED-STI-02-NDG1
+SEED-STI-03-P01,SEED-STI-03,sti,"What does PrEP mean, and can teenagers take it?",candidate,,SEED-STI-03-NDG1
+SEED-STI-03-P02,SEED-STI-03,sti,"Can teenagers use PrEP, and what is it?",candidate,,SEED-STI-03-NDG1
+SEED-STI-03-P03,SEED-STI-03,sti,Could you explain what PrEP is and whether it is for teenagers?,candidate,,SEED-STI-03-NDG1
+SEED-STI-03-P04,SEED-STI-03,sti,Is PrEP something teenagers can use?,candidate,,SEED-STI-03-NDG1
+SEED-STI-04-P01,SEED-STI-04,sti,How long after sex should I wait before taking an HIV test that is accurate?,excluded,near_other_seed_paraphrase_SEED-STI-14-P01,SEED-STI-04-NDG1
+SEED-STI-04-P02,SEED-STI-04,sti,When can I get a reliable HIV test after sex?,candidate,,SEED-STI-04-NDG1
+SEED-STI-04-P03,SEED-STI-04,sti,How soon can an HIV test accurately show a result after sex?,candidate,,SEED-STI-04-NDG1
+SEED-STI-04-P04,SEED-STI-04,sti,How long do I need to wait after sex to get an accurate HIV test?,excluded,near_other_seed_paraphrase_SEED-STI-14-P01;near_other_seed_paraphrase_SEED-STI-14-P04,SEED-STI-04-NDG1
+SEED-STI-05-P01,SEED-STI-05,sti,Should I get the HPV vaccine if I am not sexually active?,candidate,,SEED-STI-05-NDG1
+SEED-STI-05-P02,SEED-STI-05,sti,Is the HPV vaccine still needed if I have not had sex?,candidate,,SEED-STI-05-NDG1
+SEED-STI-05-P03,SEED-STI-05,sti,Does being sexually inactive mean I do not need the HPV vaccine?,candidate,,SEED-STI-05-NDG1
+SEED-STI-05-P04,SEED-STI-05,sti,Would the HPV vaccine be recommended even if I am not sexually active?,candidate,,SEED-STI-05-NDG1
+SEED-STI-06-P01,SEED-STI-06,sti,Are STIs completely curable?,candidate,,SEED-STI-06-NDG1
+SEED-STI-06-P02,SEED-STI-06,sti,Can an STI be fully cured?,candidate,,SEED-STI-06-NDG1
+SEED-STI-06-P03,SEED-STI-06,sti,Is it possible to get rid of an STI completely?,candidate,,SEED-STI-06-NDG2
+SEED-STI-06-P04,SEED-STI-06,sti,Do all STIs go away completely with treatment?,candidate,,SEED-STI-06-NDG2
+SEED-STI-07-P01,SEED-STI-07,sti,What happens when you have an HIV test?,candidate,,SEED-STI-07-NDG1
+SEED-STI-07-P02,SEED-STI-07,sti,What is the process like when I get tested for HIV?,candidate,,
+SEED-STI-07-P03,SEED-STI-07,sti,What should I expect during an HIV test?,candidate,,
+SEED-STI-07-P04,SEED-STI-07,sti,Can you explain what happens during an HIV test?,candidate,,SEED-STI-07-NDG1
+SEED-STI-08-P01,SEED-STI-08,sti,Can an STI be treated before having a lab test?,candidate,,SEED-STI-08-NDG1
+SEED-STI-08-P02,SEED-STI-08,sti,Do I always need a lab test before I can be treated for an STI?,candidate,,SEED-STI-08-NDG1
+SEED-STI-08-P03,SEED-STI-08,sti,Is it possible to receive STI treatment without a lab test first?,candidate,,SEED-STI-08-NDG1
+SEED-STI-08-P04,SEED-STI-08,sti,Can a healthcare provider treat an STI without doing a lab test beforehand?,candidate,,SEED-STI-08-NDG1
+SEED-STI-09-P01,SEED-STI-09,sti,Why do girls have a higher chance of getting STIs than boys?,candidate,,SEED-STI-09-NDG1
+SEED-STI-09-P02,SEED-STI-09,sti,What makes girls more likely to get STIs than boys?,candidate,,SEED-STI-09-NDG1
+SEED-STI-09-P03,SEED-STI-09,sti,Why is the risk of STIs higher for girls than for boys?,candidate,,SEED-STI-09-NDG1
+SEED-STI-09-P04,SEED-STI-09,sti,"Are girls really more likely to get STIs than boys, and why?",candidate,,SEED-STI-09-NDG1
+SEED-STI-10-P01,SEED-STI-10,sti,Is it normal to be nervous about getting tested?,candidate,,SEED-STI-10-NDG1
+SEED-STI-10-P02,SEED-STI-10,sti,Should I be worried if I feel scared about getting tested?,candidate,,SEED-STI-10-NDG1
+SEED-STI-10-P03,SEED-STI-10,sti,Is feeling afraid before an STI test normal?,candidate,,
+SEED-STI-10-P04,SEED-STI-10,sti,Can it be normal to feel anxious about getting tested?,candidate,,SEED-STI-10-NDG1
+SEED-STI-11-P01,SEED-STI-11,sti,Can someone have an STI without realizing it?,excluded,near_other_seed_paraphrase_SEED-STI-15-P04;near_v3_pool_SEED-STI-28;near_v3_pool_SEED-STI-28-P1;near_v3_pool_SEED-STI-28-P2;near_v3_pool_SEED-STI-28-P4;near_v3_pool_SEED-STI-41-P3,SEED-STI-11-NDG1
+SEED-STI-11-P02,SEED-STI-11,sti,Is it possible to have an STI and not know?,excluded,near_other_seed_paraphrase_SEED-STI-01-P04;near_v3_pool_SEED-STI-28;near_v3_pool_SEED-STI-28-P1;near_v3_pool_SEED-STI-28-P3;near_v3_pool_SEED-STI-28-P4,SEED-STI-11-NDG1
+SEED-STI-11-P03,SEED-STI-11,sti,Could I have an STI without noticing any signs?,excluded,near_other_seed_paraphrase_SEED-STI-01-P04,SEED-STI-11-NDG1
+SEED-STI-11-P04,SEED-STI-11,sti,Can an STI be present even if I do not know I have it?,excluded,near_other_seed_paraphrase_SEED-STI-01-P04;near_v3_pool_SEED-STI-28,SEED-STI-11-NDG1
+SEED-STI-12-P01,SEED-STI-12,sti,Why does it hurt or burn when I pee?,candidate,,SEED-STI-12-NDG1
+SEED-STI-12-P02,SEED-STI-12,sti,What could cause a burning feeling when I urinate?,candidate,,
+SEED-STI-12-P03,SEED-STI-12,sti,Why do I feel a burning sensation when I pee?,candidate,,SEED-STI-12-NDG1
+SEED-STI-12-P04,SEED-STI-12,sti,What might make it burn when I go to the bathroom?,candidate,,
+SEED-STI-13-P01,SEED-STI-13,sti,Is this kind of discharge normal?,candidate,,SEED-STI-13-NDG1
+SEED-STI-13-P02,SEED-STI-13,sti,Should I be concerned about this discharge?,candidate,,
+SEED-STI-13-P03,SEED-STI-13,sti,Could this discharge be normal?,candidate,,SEED-STI-13-NDG1
+SEED-STI-13-P04,SEED-STI-13,sti,How can I tell if this discharge is normal?,candidate,,SEED-STI-13-NDG1
+SEED-STI-14-P01,SEED-STI-14,sti,How long after sex should I wait to get tested for STIs?,excluded,near_other_seed_paraphrase_SEED-STI-04-P01;near_other_seed_paraphrase_SEED-STI-04-P04;near_v3_pool_SEED-STI-31;near_v3_pool_SEED-STI-31-P1;near_v3_pool_SEED-STI-31-P2,SEED-STI-14-NDG1
+SEED-STI-14-P02,SEED-STI-14,sti,When can I test for STIs after sex?,candidate,,SEED-STI-14-NDG1
+SEED-STI-14-P03,SEED-STI-14,sti,How soon can an STI test be done after sex?,candidate,,SEED-STI-14-NDG1
+SEED-STI-14-P04,SEED-STI-14,sti,How long does it take before I can test for an STI after sex?,excluded,near_other_seed_paraphrase_SEED-STI-04-P04;near_v3_pool_SEED-STI-31-P2;near_v3_pool_SEED-STI-31-P3,SEED-STI-14-NDG1
+SEED-STI-15-P01,SEED-STI-15,sti,Can I still get an STI if my partner has no symptoms?,excluded,near_v3_pool_SEED-STI-35-P2;near_v3_pool_SEED-STI-35-P3,SEED-STI-15-NDG1
+SEED-STI-15-P02,SEED-STI-15,sti,Is it possible for my partner to have no symptoms and still pass on an STI?,excluded,near_v3_pool_SEED-STI-35-P1;near_v3_pool_SEED-STI-35-P2;near_v3_pool_SEED-STI-35-P3,SEED-STI-15-NDG1
+SEED-STI-15-P03,SEED-STI-15,sti,Could I get an STI from a partner who does not have any symptoms?,excluded,near_v3_pool_SEED-STI-35;near_v3_pool_SEED-STI-35-P1;near_v3_pool_SEED-STI-35-P2;near_v3_pool_SEED-STI-35-P3,SEED-STI-15-NDG1
+SEED-STI-15-P04,SEED-STI-15,sti,Can someone without STI symptoms still transmit an STI?,excluded,near_other_seed_paraphrase_SEED-STI-11-P01;near_v3_pool_SEED-STI-35-P3,SEED-STI-15-NDG1
+SEED-STI-16-P01,SEED-STI-16,sti,Can sitting on a dirty toilet seat give me an STI?,candidate,,SEED-STI-16-NDG1
+SEED-STI-16-P02,SEED-STI-16,sti,Is it possible to get an STI from using a dirty toilet?,candidate,,SEED-STI-16-NDG1
+SEED-STI-16-P03,SEED-STI-16,sti,Could I catch an STI by sitting on a dirty toilet seat?,excluded,near_v3_pool_SEED-STI-18,SEED-STI-16-NDG1
+SEED-STI-16-P04,SEED-STI-16,sti,Can an STI be passed to me from a dirty toilet?,candidate,,SEED-STI-16-NDG1
