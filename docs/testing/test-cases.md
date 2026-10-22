@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 228 cases: 208 Pass, 19 Fail, 1 Not run. Two of the
+**Totals:** 230 cases: 210 Pass, 19 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -319,6 +319,8 @@ entry.
 | TC-226 | FR-03 | The sheet's topic pills | Each opens its Topic list and closes the sheet; they wrap | As expected for all four (browser check) | Pass |
 | TC-227 | NFR (usability) | The sheet at 320, 360, 390 and 430px, and 320 by 568 | No horizontal overflow or clipping; close button 44 by 44; the sheet below the header; every control shows its ring when tabbed (white inside the 1195 button); scrolls to the anonymous line at 320 by 568 | As expected, 45 of 45 (browser check; `help-sheet-after-390.png`, `help-sheet-after-320.png`); step 7b, 7d, 8 and 9 checks re-run with no regressions | Pass |
 | TC-228 | NFR (accessibility) | Step 3c contrast | Text 4.5:1; control edges, icons and focus 3:1 | Help 10.59; how-it-works text 5.42; tips 12.52; 1195 note 12.29; 116 note 6.80; edges 3.04; pill borders 3.07 to 3.14; emergency 9.35 (`styles/tokens.test.ts`, Test 19) | Pass |
+| TC-229 | FR-04 | The 116 sentence in the help, no-answer, held A and held B replies (gateway and offline) | "Childline Kenya, 116, is a free 24-hour helpline for children."; no reply says "free for anyone under 18"; the abuse referral's "(for anyone under 18)" unchanged; numbers and `HELP_CONTACTS_VERIFIED` unchanged | As expected (`app/gateway/test/helpline116Wording.test.js`, 4 tests; `heldTopics.test.js`; offline parity test) | Pass |
+| TC-230 | FR-04 | The 116 call button and every rendered reply and sheet | Description "Childline Kenya. Free, 24 hours, for children."; nothing rendered says "free for anyone under 18" | As expected (`components.test.tsx`, Test 54) | Pass |
 
 ## Defects and retests
 

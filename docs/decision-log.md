@@ -1091,7 +1091,7 @@ types: help (signposting), no answer (abstain), held topics A and B,
 and the abuse referral. It is left unchanged for now, because the
 constants are frozen, and is to be corrected with the helpline-
 constants change once 116 has been verified. The Help sheet already
-avoids the claim.
+avoids the claim. **Resolved on 22 October 2026** (see "Helpline 116 wording"): the sentence now reads "Childline Kenya, 116, is a free 24-hour helpline for children."
 
 ## Home (2026-10-20)
 
@@ -1319,7 +1319,7 @@ emergency line replace it on the card.
 for anyone under 18", in `HELP_GUIDANCE` and the held A and B texts)
 appears on the help, no-answer, held A and held B screens. Not on
 clarify, held C or the referrals (the abuse referral says "(for anyone
-under 18)" without "free"). Unchanged, as briefed.
+under 18)" without "free"). Unchanged, as briefed. **Resolved on 22 October 2026** (see "Helpline 116 wording"): the sentence now reads "Childline Kenya, 116, is a free 24-hour helpline for children."
 
 ## Reply screens on narrow phones (2026-10-20)
 
@@ -1560,7 +1560,7 @@ so a two-line description never touches the edge at 320px.
 
 **Unconfirmed Childline sentence** ("…is free for anyone under 18"):
 still on the held A, held B, help and no-answer screens (reply text
-unchanged); not on held C, the referrals, clarify or Talk to a person.
+unchanged); not on held C, the referrals, clarify or Talk to a person. **Resolved on 22 October 2026** (see "Helpline 116 wording"): the sentence now reads "Childline Kenya, 116, is a free 24-hour helpline for children."
 
 ## Clarify and help/referral to the redesigned boards (2026-10-22)
 
@@ -1599,7 +1599,7 @@ on the pink card. The clarify ask pill alone uses #9A6AB5; the other ask
 pills keep #C25A92 (3.00:1 on the page).
 
 **Unconfirmed Childline sentence** ("…is free for anyone under 18"):
-unchanged; still on the held A, held B, help and no-answer screens.
+unchanged; still on the held A, held B, help and no-answer screens. **Resolved on 22 October 2026** (see "Helpline 116 wording"): the sentence now reads "Childline Kenya, 116, is a free 24-hour helpline for children."
 
 ## Help sheet to the redesigned board (2026-10-22)
 
@@ -1644,3 +1644,45 @@ The 1195 button's focus ring is white and drawn inside it.
 **Wide screens.** The aside "Need more support?" (`SupportContent`) is
 different content (local services, helplines and emergency guidance as
 a list), so it was not restyled.
+
+## Helpline 116 wording (2026-10-22)
+
+A documented decision by the project owner, taken on 22 October 2026
+after checking the Childline Kenya website. The only change in this
+step.
+
+**Change.** In the help, no-answer, held A and held B reply texts
+(gateway `src/content/helpContent.js` and its offline copy), "Childline
+Kenya, 116, is free for anyone under 18." becomes "Childline Kenya, 116,
+is a free 24-hour helpline for children." Every other word is
+unchanged. The 116 call button's description (`SUPPORT_SECTIONS`)
+becomes "Childline Kenya. Free, 24 hours, for children." (it was
+"Childline Kenya. For anyone under 18."). The abuse referral's
+"(for anyone under 18)" is unchanged, as decided. No claim about
+languages, airtime, networks or ages was added.
+
+**Reason.** The old text implied that the line was free only for
+under-18s.
+
+**Evidence** (childlinekenya.co.ke, fetched 22 October 2026, quoted):
+
+- "Kenya's only 24-hour, toll-free telephone and web-based helpline for
+  children."
+- "available on mobile devices for free from anywhere in Kenya"
+- "accessible to children and adults who have identified or witnessed
+  violence against children"
+- "Other members of the public also access the Helpline to report cases
+  on behalf of children"
+- "The number 116 belongs to the Government and Childline manages it on
+  behalf of the Government as a technical partner."
+
+**Not verified:** languages, airtime and network claims, and the
+childrenservices.go.ke page, which blocks automated access.
+
+**Decision owner:** the project owner. `HELP_CONTACTS_VERIFIED` stays
+`false`, pending the CREAW check. The 1195, 999 and 112 numbers and
+text are unchanged.
+
+**Resolves** the open item "the 116 claim in the replies" (Splash and
+Help sheet entry) and the later notes listing the screens that showed
+the unconfirmed sentence.

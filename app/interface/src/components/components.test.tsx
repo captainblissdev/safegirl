@@ -806,7 +806,7 @@ console.log("\nTest 23: the Help sheet");
   );
   assert(
     !/free/i.test(childline) || /free/i.test(childlineNote),
-    'the 116 note says "free" only if the constant does (it does not)',
+    'the 116 note says "free" only because the constant does (22 Oct 2026 wording)',
   );
   assert(
     html
@@ -2685,6 +2685,85 @@ console.log("\nTest 53: the Help sheet as a page under the header (step 3c)");
   assert(
     rule(".help-sheet .topic-choices").includes("flex-wrap: wrap;"),
     "the topic pills wrap",
+  );
+}
+
+console.log("\nTest 54: the 116 wording (22 October 2026)");
+{
+  const noop = () => undefined;
+  const screens: [string, string][] = [
+    [
+      "help",
+      renderReply(SIGNPOSTING_MESSAGE, {
+        outcome: "signposting",
+        kind: "help",
+      }),
+    ],
+    [
+      "no answer",
+      renderReply(NO_ANSWER_MESSAGE, { answerFound: false, kind: "abstain" }),
+    ],
+    [
+      "held A",
+      renderReply(HELD_TOPIC_MESSAGES.A, {
+        outcome: "held",
+        kind: "held-topic",
+      }),
+    ],
+    [
+      "held B",
+      renderReply(HELD_TOPIC_MESSAGES.B, {
+        outcome: "held",
+        kind: "held-topic",
+      }),
+    ],
+    [
+      "held C",
+      renderReply(HELD_TOPIC_MESSAGES.C, {
+        outcome: "held",
+        kind: "held-topic",
+      }),
+    ],
+    ["referral, abuse", referral(ABUSE_REFERRAL_MESSAGE)],
+    ["referral, self-harm", referral(SELF_HARM_REFERRAL_MESSAGE)],
+    [
+      "Help sheet",
+      renderToStaticMarkup(<HelpSheet onClose={noop} onTopic={noop} />),
+    ],
+    ["support panel", renderToStaticMarkup(<SupportContent />)],
+  ];
+  for (const [name, html] of screens) {
+    assert(
+      !/free for anyone under 18/i.test(html),
+      `${name}: no "free for anyone under 18"`,
+    );
+  }
+  const sentence =
+    "Childline Kenya, 116, is a free 24-hour helpline for children.";
+  for (const [name, text] of [
+    ["help", SIGNPOSTING_MESSAGE],
+    ["no answer", NO_ANSWER_MESSAGE],
+    ["held A", HELD_TOPIC_MESSAGES.A],
+    ["held B", HELD_TOPIC_MESSAGES.B],
+  ]) {
+    assert(text.split(sentence).length === 2, `${name}: "${sentence}"`);
+  }
+  assert(
+    ABUSE_REFERRAL_MESSAGE.includes(
+      "Childline Kenya 116 (for anyone under 18) can also help.",
+    ),
+    "the abuse referral's parenthetical is unchanged",
+  );
+  const contact = SUPPORT_SECTIONS.flatMap((x) => x.contacts).find((c) =>
+    c.numbers.includes(CHILDLINE_KENYA),
+  );
+  assert(
+    `${contact?.label}. ${contact?.note}` ===
+      "Childline Kenya. Free, 24 hours, for children." &&
+      screens[0][1].includes(
+        '<span class="call-button-note">Childline Kenya. Free, 24 hours, for children.</span>',
+      ),
+    'the 116 button: "Childline Kenya. Free, 24 hours, for children."',
   );
 }
 
