@@ -20,3 +20,6 @@ app/gateway/firebase-service-account.json
 ml_service/final/
 ml_service/final/
 ml_service/venv/
+
+# Blind review keys stay outside the repository (docs/kb-integration-diagnosis-2026-10-22.md)
+blind_review_key*.csv

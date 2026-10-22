@@ -269,9 +269,9 @@ questions whose reply differs from before the expansion (Q02, Q03, Q04,
 Q11, Q23, Q30, Q50, Q54, Q55), each with the two replies the girl would
 see (the answer text, or the no-answer message), in random order, and
 blank `which_answers_better` and `notes` columns. Q18 is left out: its
-reply is the same as before. The key is in
-`research/kb/blind_review_key.csv`; it is in the repository, so a
-reviewer with repository access could find it.
+reply is the same as before. The key (which reply is old and which
+new) is kept outside the repository with the project owner since Step
+K5; an earlier copy remains in the git history of commit 20b9184.
 
 ## Options (proposed, none applied)
 
