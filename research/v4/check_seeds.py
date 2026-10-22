@@ -64,7 +64,32 @@ STYLES = (
 )
 DESIGN_RULE = "design rule"
 KB_ID = re.compile(r"^KB-[A-Z]+\d+$")
-DOCUMENT_PAGE = re.compile(r"\S.*\b(p|pp|page|pages)\.?\s*\d+", re.IGNORECASE)
+# A document source is "<document>, <locator>", several joined by ";".
+# The locator is a page (p. 9, pp. 14-16), a numbered section
+# (Section 3.2), or a section name ("warning signs section"). A section
+# name with no page passes with a warning: the page is to be added.
+LOCATOR_PAGE = re.compile(r"^\S.*?,\s*(p|pp|page|pages)\.?\s*\d", re.IGNORECASE)
+LOCATOR_SECTION = re.compile(r"^\S.*?,\s*section\s+[\dA-Z]", re.IGNORECASE)
+LOCATOR_SECTION_NAME = re.compile(r"^\S.*?,[^,]*\bsection\b[^,]*$", re.IGNORECASE)
+
+
+def source_locator(source: str) -> str:
+    """'page', 'section' or 'section_name' for a document source (the
+    weakest of its ";"-separated parts), or 'none' if a part has no
+    locator."""
+    kinds = []
+    for part in (p.strip() for p in source.split(";")):
+        if LOCATOR_PAGE.match(part):
+            kinds.append("page")
+        elif LOCATOR_SECTION.match(part):
+            kinds.append("section")
+        elif LOCATOR_SECTION_NAME.match(part):
+            kinds.append("section_name")
+        else:
+            return "none"
+    if "section_name" in kinds:
+        return "section_name"
+    return kinds[0] if kinds else "none"
 
 COSINE_LIMIT = 0.95
 RATIO_LIMIT = 0.85
@@ -334,8 +359,15 @@ def check_schema(header, rows, kb_ids, test_items, report):
                 report.fail(f"{where}: source {source} is not an active KB entry")
         elif source.lower() == DESIGN_RULE:
             report.fail(f"{where}: {DESIGN_RULE!r} is only for out_of_scope and vague")
-        elif not DOCUMENT_PAGE.search(source):
-            report.fail(f"{where}: source {source!r} is neither a KB id nor a document with a page")
+        else:
+            locator = source_locator(source)
+            if locator == "none":
+                report.fail(
+                    f"{where}: source {source!r} is neither a KB id nor "
+                    "'<document>, <locator>' (p., pp., Section or a section name)"
+                )
+            elif locator == "section_name":
+                report.warn(f"{where}: source {source!r} names a section but no page; add the page later")
 
 
 def check_duplicates(rows, refs, embed, report):

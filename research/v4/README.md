@@ -30,7 +30,7 @@ nothing here changes the V3 data (`resources/seeds/`, `resources/reviewed/`,
 | `secondary_class` | test items only | Empty on a training seed (see rule 3). On a test item, another class from the same list, different from `primary_class`. |
 | `style` | yes | `formal`, `colloquial`, `symptom_only`, `euphemism`, `myth_or_worry` or `short_or_misspelt`. |
 | `boundary` | no | The class boundary the item is written to probe, as `<class>_vs_<class>`, e.g. `pregnancy_vs_general`. Both classes from the list above. |
-| `source` | yes | For the four topic classes: an active KB entry id (`KB-S9`) or a document and page (`WHO FP Handbook 2022, p. 123`). For `out_of_scope` and `vague`: `design rule`. |
+| `source` | yes | For the four topic classes: an active KB entry id (`KB-S9`) or `<document>, <locator>`, several joined by `;`. The locator is a page (`p. 9`, `pp. 14-16`), a numbered section (`Section 3.2`) or a section name (`warning signs section`); a section name with no page passes with a warning, as the page is still to be added. For `out_of_scope` and `vague`: `design rule`. |
 | `notes` | no | Free text: why the item exists, what it probes. |
 
 ## Labelling rules
@@ -77,8 +77,9 @@ It needs Node (for the gateway's held-topic and Safety Net rules) and the
 
 - schema: missing or extra columns, a value outside the lists above, a
   duplicate or empty `seed_id`, an empty `text` or `source`, a `source`
-  that is neither an active KB id, a document with a page, nor
-  `design rule` for `out_of_scope` and `vague`;
+  that is neither an active KB id, `<document>, <locator>` (every
+  `;`-separated part with a locator), nor `design rule` for
+  `out_of_scope` and `vague`;
 - exact or near duplicates inside the file;
 - near duplicates of the V3 training pool (seeds and reviewed
   paraphrases) and of the 220 deleted V1 paraphrases

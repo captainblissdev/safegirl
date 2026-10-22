@@ -103,9 +103,52 @@ class Schema(CheckerCase):
         self.assertIn("V4-1: missing source", failures)
         self.assertIn("KB-S99 is not an active KB entry", failures)
         self.assertIn("KB-S9 is not an active KB entry", failures)
-        self.assertIn("'a leaflet' is neither a KB id nor a document with a page", failures)
+        self.assertIn("'a leaflet' is neither a KB id nor '<document>, <locator>'", failures)
         self.assertIn("V4-5: 'design rule' is only for out_of_scope and vague", failures)
         self.assertIn("V4-6: source for out_of_scope must be 'design rule'", failures)
+
+    def test_document_locators(self):
+        passing = [
+            "MoH Handbook for Teachers, p. 9",
+            "MoH Handbook for Teachers, pp. 14-16",
+            "MoH Handbook for Teachers, pp. 8, 10",
+            "School Re-Entry Guidelines (2020), Section 3.2",
+            "HIV/STI Guidelines, p. 29; FP Guidelines 7th ed., p. 45",
+        ]
+        warned = [
+            "Mother and Child Health Handbook (2020), warning signs section",
+            "Handbook, p. 4; Mother and Child Health Handbook, nutrition section",
+        ]
+        failing = [
+            "a leaflet",
+            "p. 12",
+            "Mother and Child Health Handbook, warning signs",
+            "Handbook, p. 4; another leaflet",
+            "KB candidate NEW-G-01",
+        ]
+        words = iter(
+            "apple birch cloud dune eagle fern grove harbor islet jasmine knoll lagoon "
+            "mesa nutmeg oasis prairie quill reef summit thistle".split()
+        )
+        rows = [
+            seed(f"V4-{kind}{i}", f"{next(words)} question?", cls="general", source=src)
+            for kind, sources in (("P", passing), ("W", warned), ("F", failing))
+            for i, src in enumerate(sources)
+        ]
+        report = self.run_check(rows)
+        failures = "\n".join(report.failures)
+        warnings = "\n".join(report.warnings)
+        for i in range(len(passing)):
+            self.assertNotIn(f"V4-P{i}:", failures + warnings)
+        for i in range(len(warned)):
+            self.assertIn(f"schema: V4-W{i}: source", warnings)
+            self.assertIn("names a section but no page; add the page later", warnings)
+            self.assertNotIn(f"V4-W{i}:", failures)
+        for i in range(len(failing)):
+            self.assertIn(f"schema: V4-F{i}: source", failures)
+        # Only the source rule is under test here; the short texts may
+        # also trip the fake embedder's duplicate checks.
+        self.assertEqual(len([f for f in report.failures if f.startswith("schema:")]), len(failing))
 
     def test_secondary_class_only_on_test_items(self):
         rows = [seed("V4-1", "Lantern meadow orchid?", secondary="general")]
