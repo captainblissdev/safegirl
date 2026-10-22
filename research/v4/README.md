@@ -103,6 +103,15 @@ is not a fixed list, and it changes when the KB changes. (On the 41-entry
 KB of the `kb/integrate-candidates` branch it was KB-S8, KB-G1, KB-G2 and
 KB-S12; the KB on this branch gives a different list.)
 
+### Earlier batches
+
+```
+.venv/Scripts/python.exe -I research/v4/check_seeds.py research/v4/seeds_v4_batch2.csv --also research/v4/seeds_v4_batch1.csv
+```
+
+`--also PATH` (repeatable) adds earlier seed batches: a seed near a seed
+of another batch fails, so the batches do not repeat each other.
+
 ### Sealed set
 
 ```

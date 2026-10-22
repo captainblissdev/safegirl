@@ -192,6 +192,22 @@ class Duplicates(CheckerCase):
         failures = self.failures([seed("V4-1", "Thyme pine cedar basil walnut?")])
         self.assertIn("V1 paraphrases: V4-1 ~ V1 paraphrase SEED-GEN-01-P1", failures)
 
+    def test_earlier_batches_with_also(self):
+        earlier = Path(self.tmp.name) / "seeds_v4_batch1.csv"
+        write_csv(earlier, SEED_HEADER, [seed("B1-7", "Walrus heron otter puffin seal?")])
+        write_csv(self.file, SEED_HEADER, [seed("V4-9", "seal puffin otter heron walrus"), *GOOD])
+        report = check_seeds.check_file(self.file, self.root, fake_embed, fake_rules, also=[earlier])
+        failures = "\n".join(report.failures)
+        self.assertIn("batch seeds_v4_batch1.csv: V4-9 ~ seeds_v4_batch1 B1-7", failures)
+        self.assertEqual(len(report.failures), 1)
+        self.assertIn("batch seeds_v4_batch1.csv: 1 seeds compared", "\n".join(report.info))
+        out = io.StringIO()
+        code = check_seeds.main(
+            [str(self.file), "--also", str(self.file)], fake_embed, fake_rules, self.root, out
+        )
+        self.assertEqual(code, 2)
+        self.assertIn("--also names the file being checked", out.getvalue())
+
     def test_dr04_reported_by_row_number_only(self):
         report = self.run_check([seed("V4-1", "Romeo quebec papa dr04 secret?")])
         failures = "\n".join(report.failures)

@@ -18,6 +18,9 @@ DR-04 is read only for the comparison, and only its row numbers are ever
 printed. The same goes for the development set and
 relevance_validation.csv, reported by their row ids.
 
+--also PATH (repeatable) adds earlier V4 seed batches: a seed near a
+seed of another batch fails, so batches do not repeat each other.
+
 --sealed PATH adds a sealed set kept outside the repository: a CSV with
 columns id,text. A seed near a sealed item fails, reported as seed_id,
 sealed id and similarity only. The sealed text and PATH itself are never
@@ -496,7 +499,18 @@ def check_sealed(rows, sealed, embed, report):
     report.note(f"sealed set: {len(sealed)} items compared")
 
 
-def check_file(path, root=REPO, embed=None, rules=None, test_items=False, sealed=None):
+def other_batches(paths) -> dict[str, list[tuple[str, str]]]:
+    """Earlier V4 seed batches as reference sets: name -> (label, text)."""
+    sets = {}
+    for path in paths:
+        _, rows = read_csv(path)
+        sets[f"batch {Path(path).name}"] = [
+            (f"{Path(path).stem} {row['seed_id']}", row["text"]) for row in rows if row.get("text")
+        ]
+    return sets
+
+
+def check_file(path, root=REPO, embed=None, rules=None, test_items=False, sealed=None, also=()):
     report = Report()
     header, rows = read_csv(path)
     kb = active_kb(root)
@@ -506,7 +520,10 @@ def check_file(path, root=REPO, embed=None, rules=None, test_items=False, sealed
     embed = cached(embed or e5_embedder())
     rules = rules or gateway_rules(root)
     refs = reference_sets(root)
-    check_duplicates(rows, refs, embed, report)
+    batches = other_batches(also)
+    check_duplicates(rows, {**refs, **batches}, embed, report)
+    for name, pool in batches.items():
+        report.note(f"{name}: {len(pool)} seeds compared")
     if sealed is not None:
         check_sealed(rows, sealed, embed, report)
     check_rules(rows, rules, report)
@@ -524,6 +541,14 @@ def main(argv=None, embed=None, rules=None, root=REPO, out=sys.stdout):
         help="the file holds test items: secondary_class allowed, no per-class minimum",
     )
     parser.add_argument(
+        "--also",
+        type=Path,
+        action="append",
+        default=[],
+        metavar="PATH",
+        help="an earlier V4 seed batch to check against (repeatable)",
+    )
+    parser.add_argument(
         "--sealed",
         type=Path,
         metavar="PATH",
@@ -534,6 +559,13 @@ def main(argv=None, embed=None, rules=None, root=REPO, out=sys.stdout):
     if not args.seeds.exists():
         print(f"no such file: {args.seeds}", file=out)
         return 2
+    for other in args.also:
+        if not other.exists():
+            print(f"no such file: {other}", file=out)
+            return 2
+        if other.resolve() == args.seeds.resolve():
+            print(f"--also names the file being checked: {other}", file=out)
+            return 2
     sealed = None
     if args.sealed is not None:
         try:
@@ -542,7 +574,7 @@ def main(argv=None, embed=None, rules=None, root=REPO, out=sys.stdout):
             print(f"cannot run the check: {error}", file=out)
             return 2
     try:
-        report = check_file(args.seeds, root, embed, rules, args.test_items, sealed)
+        report = check_file(args.seeds, root, embed, rules, args.test_items, sealed, args.also)
     except (OSError, subprocess.CalledProcessError) as error:
         print(f"cannot run the check: {error}", file=out)
         return 2
