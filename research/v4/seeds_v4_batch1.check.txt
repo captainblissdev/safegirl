@@ -1,0 +1,47 @@
+counts per class:
+  contraception  0
+  sti            0
+  pregnancy      13
+  general        24
+  out_of_scope   0
+  vague          0
+counts per class x style:
+  class                formal   colloquial symptom_only    euphemism myth_or_worr short_or_mis
+  contraception             0            0            0            0            0            0
+  sti                       0            0            0            0            0            0
+  pregnancy                 3            3            4            3            0            0
+  general                   4           11            1            2            2            4
+  out_of_scope              0            0            0            0            0            0
+  vague                     0            0            0            0            0            0
+train overlap (V3 seeds): 2 KB question(s)
+  KB-G1 ~ SEED-GEN-02 (cosine 0.994)
+  KB-G2 ~ SEED-GEN-03 (cosine 0.978)
+close to a training item (V3 seeds, cosine 0.95-0.97): 3
+  KB-S4 ~ SEED-STI-20 (cosine 0.950)
+  KB-P1 ~ SEED-PREG-06 (cosine 0.952)
+  KB-P5 ~ SEED-PREG-02 (cosine 0.962)
+train overlap (this file): 0 KB question(s)
+close to a training item (this file, cosine 0.95-0.97): 0
+
+warnings (18):
+  schema: SEED-V4-PREG-001: source 'MoH Mother and Child Health Handbook (2020), warning signs section' names a section but no page; add the page later
+  schema: SEED-V4-PREG-002: source 'MoH Mother and Child Health Handbook (2020), warning signs section' names a section but no page; add the page later
+  schema: SEED-V4-PREG-003: source 'MoH Mother and Child Health Handbook (2020), warning signs section' names a section but no page; add the page later
+  schema: SEED-V4-PREG-004: source 'MoH Mother and Child Health Handbook (2020), warning signs section' names a section but no page; add the page later
+  schema: SEED-V4-PREG-005: source 'MoH Mother and Child Health Handbook (2020), nutrition and supplements section' names a section but no page; add the page later
+  schema: SEED-V4-PREG-006: source 'MoH Mother and Child Health Handbook (2020), nutrition and supplements section' names a section but no page; add the page later
+  schema: SEED-V4-PREG-007: source 'MoH Mother and Child Health Handbook (2020), nutrition and supplements section' names a section but no page; add the page later
+  schema: SEED-V4-PREG-008: source 'MoE National Guidelines for School Re-Entry (2020), Section 3.2' names a section but no page; add the page later
+  schema: SEED-V4-PREG-009: source 'MoE National Guidelines for School Re-Entry (2020), Section 3.2' names a section but no page; add the page later
+  schema: SEED-V4-PREG-010: source 'MoE National Guidelines for School Re-Entry (2020), Section 3.2' names a section but no page; add the page later
+  held topic: SEED-V4-PREG-012 matches held-topic group C; passed by its notes ('held-topic phrasing, label is topic only')
+  held topic: SEED-V4-PREG-013 matches held-topic group C; passed by its notes ('held-topic phrasing, label is topic only')
+  counts: contraception has 0 seeds (under 25)
+  counts: sti has 0 seeds (under 25)
+  counts: pregnancy has 13 seeds (under 25)
+  counts: general has 24 seeds (under 25)
+  counts: out_of_scope has 0 seeds (under 25)
+  counts: vague has 0 seeds (under 25)
+failures (0):
+
+passed

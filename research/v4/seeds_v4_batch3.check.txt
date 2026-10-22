@@ -1,0 +1,34 @@
+sealed set: 145 items compared
+counts per class:
+  contraception  0
+  sti            0
+  pregnancy      0
+  general        0
+  out_of_scope   29
+  vague          27
+counts per class x style:
+  class                formal   colloquial symptom_only    euphemism myth_or_worr short_or_mis
+  contraception             0            0            0            0            0            0
+  sti                       0            0            0            0            0            0
+  pregnancy                 0            0            0            0            0            0
+  general                   0            0            0            0            0            0
+  out_of_scope              5           15            1            0            1            7
+  vague                     2           10            0            2            2           11
+train overlap (V3 seeds): 2 KB question(s)
+  KB-G1 ~ SEED-GEN-02 (cosine 0.994)
+  KB-G2 ~ SEED-GEN-03 (cosine 0.978)
+close to a training item (V3 seeds, cosine 0.95-0.97): 3
+  KB-S4 ~ SEED-STI-20 (cosine 0.950)
+  KB-P1 ~ SEED-PREG-06 (cosine 0.952)
+  KB-P5 ~ SEED-PREG-02 (cosine 0.962)
+train overlap (this file): 0 KB question(s)
+close to a training item (this file, cosine 0.95-0.97): 0
+
+warnings (4):
+  counts: contraception has 0 seeds (under 25)
+  counts: sti has 0 seeds (under 25)
+  counts: pregnancy has 0 seeds (under 25)
+  counts: general has 0 seeds (under 25)
+failures (0):
+
+passed

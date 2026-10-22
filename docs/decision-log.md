@@ -1716,3 +1716,22 @@ exactly `{"text": …}`.
 
 On both paths the heading is the screen's only h1 and takes the
 programmatic focus, with no ring.
+
+## DRAFT: V4 classifier pre-registration (2026-10-22)
+
+**DRAFT.** The full V4 pre-registration entry is to be pasted here by
+the project owner; nothing below replaces it. V4 data tooling is in
+[`research/v4/`](../research/v4/README.md) (branch `v4/data-tooling`,
+Step V4-1). No V4 model has been trained.
+
+**DR-04 near-duplicate in the V3 training pool.** The Step V4-0 audit
+(22 October 2026) found no DR-04 text verbatim in any seed, paraphrase
+or label file, but the reviewed V3 paraphrase SEED-PREG-19-P2 is a
+near-duplicate of DR-04 row 14 (e5 cosine 0.971, character ratio
+0.778), and seed SEED-PREG-12 asks DR-04 row 10's question in other
+words (cosine 0.967). V3 was trained with both, so its DR-04 results
+carry this overlap as well as being non-blind. The V3 files are
+unchanged; SEED-PREG-19-P2 is listed in
+`research/v4/v3_pool_exclusions.csv` and must not enter V4 training,
+and `research/v4/check_seeds.py` fails any V4 item within cosine 0.95
+or character ratio 0.85 of a DR-04 row.

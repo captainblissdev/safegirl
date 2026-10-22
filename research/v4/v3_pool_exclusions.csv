@@ -1,0 +1,2 @@
+item_id,kind,file,reason,evidence
+SEED-PREG-19-P2,reviewed paraphrase,resources/reviewed/pregnancy_v3_paraphrases.csv,near-duplicate of DR-04 row 14,"e5 cosine 0.971, character ratio 0.778 (Step V4-0 audit, 22 October 2026)"

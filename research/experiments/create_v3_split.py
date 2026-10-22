@@ -3,8 +3,9 @@ SafeGirl -- V3 seed-level fold assignment (euphemism holdout)
 ===============================================================
 
 Extends the frozen V2 StratifiedGroupKFold logic to the V3 seed pool
-(206 seeds: the original 182 + 24 new seeds targeting euphemistic /
-colloquial symptom phrasing).
+(206 seeds in V3: the original 182 + 24 new seeds targeting
+euphemistic / colloquial symptom phrasing; 211 since V3.1 added 5
+targeted seeds).
 
 METHODOLOGY CHANGE FROM V2
 ---------------------------
@@ -17,7 +18,8 @@ question after training: did V3 actually fix the euphemism
 misclassification problem documented against V2? Reusing a
 CV/training seed for that check would not be a real answer.
 
-The remaining 202 seeds go through StratifiedGroupKFold exactly as
+The remaining seeds (202 in V3, 207 since V3.1) go through
+StratifiedGroupKFold exactly as
 V2 did -- seed_id as the group, class-stratified, 5 folds, same
 random_state for reproducibility of the *splitting procedure* (note:
 this is a different, larger pool than V2's 182 seeds, so fold

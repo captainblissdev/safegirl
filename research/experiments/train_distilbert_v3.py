@@ -34,7 +34,8 @@ V3 (206 seeds) is a targeted retrain to address that weakness:
       out of the pool BEFORE fold assignment ever runs (see
       assign_folds_v3.py) -- these seeds and their paraphrases are
       never seen during any CV fold or the final retrain
-    - the remaining 202 seeds go through the same frozen
+    - the remaining seeds (202 in V3; 207 since V3.1 added 5 targeted
+      seeds, 211 in all) go through the same frozen
       StratifiedGroupKFold procedure as V2 (seed_id as group, class
       stratification, 5 folds, same model-selection logic)
     - the final deployed model is a FRESH retrain on all non-holdout
@@ -165,8 +166,9 @@ def load_fold_assignment(path: Path) -> dict[str, int | str]:
           and from final training -- see build_fold_datasets() below)
 
     This is a schema change from the V2 file, where fold was always an
-    integer. Every one of the 206 seeds belongs to exactly one of
-    these values; there is no separate 'test' value in this file. The
+    integer. Every one of the 211 seeds (206 in V3, plus V3.1's 5)
+    belongs to exactly one of these values; there is no separate
+    'test' value in this file. The
     independent expert test set (DR-04) lives entirely separately, in
     resources/test/, and is loaded by load_test_set() below.
     """
@@ -237,7 +239,7 @@ def load_test_set(test_dir: Path):
 
 def build_all_examples(seeds_path: Path, reviewed_dir: Path):
     """Returns (text, class, seed_id) for every seed AND every reviewed
-    paraphrase -- the full V3 pool (206 seeds + all reviewed
+    paraphrase -- the full V3 pool (211 seeds since V3.1 + all reviewed
     paraphrases, including the 60 new euphemism-focused ones), not yet
     split into folds or separated from the holdout. seed_id is carried
     through so build_fold_datasets() can route each example either to
@@ -262,7 +264,8 @@ def build_fold_datasets(all_examples, fold_assignment: dict[str, int | str]):
           holdout (fold_assignment value == "euphemism_holdout")
 
     This is a lookup against the ALREADY-FROZEN fold assignment
-    (StratifiedGroupKFold was run once, on the 202-seed CV pool only,
+    (StratifiedGroupKFold was run on the CV pool only -- 202 seeds in V3,
+    207 since V3.1 --
     to produce fold_assignment_v3.csv) -- paraphrases are never
     re-split independently, they inherit their seed's fold (or holdout
     status) exactly.
