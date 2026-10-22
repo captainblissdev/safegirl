@@ -72,14 +72,6 @@ export const CLARIFY_FALLBACK =
 export const NO_ANSWER_RETRY =
   "You can also try the question again in different words.";
 
-/**
- * The footer line on a reply that already shows the GBV call button
- * (held topic, help, referral): it points to the button instead of
- * repeating the number beside it.
- */
-export const DANGER_LINE_CALL_ABOVE =
-  "In danger? Use the GBV helpline call button above. It is free and open 24 hours.";
-
 /** Home's hero pill (step 4b). */
 export const HERO_PILL = "Private and anonymous";
 
@@ -98,3 +90,16 @@ export const TOPIC_LIST_FOOTNOTE =
 
 /** The Topic list's ask bar placeholder (step 6b). */
 export const TOPIC_LIST_PLACEHOLDER = "Or type your own question";
+
+/** Heading of the held screen's call card (step 7c). */
+export const CALL_CARD_HEADING = "If you are in danger or someone has hurt you";
+
+/** The header's exit button on the help and referral screens (step 7c). */
+export const QUICK_EXIT_LABEL = "Quick exit";
+
+/** Above "Back to questions" on the help and referral screens (step 7c). */
+export const QUICK_EXIT_HINT =
+  "Need to leave quickly? Tap Quick exit at the top.";
+
+/** Leaves the help or referral screen (was "Continue chat"; step 7c). */
+export const BACK_TO_QUESTIONS = "Back to questions";

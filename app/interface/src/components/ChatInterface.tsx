@@ -104,7 +104,7 @@ export default function ChatInterface({
 
   const askBar = (
     <AskBar
-      variant={isHome ? "hero" : view === "answer" ? "pill" : "bar"}
+      variant={isHome ? "hero" : ownScreen ? "pill" : "bar"}
       value={draft}
       onChange={setDraft}
       onSubmit={handleSend}
@@ -163,12 +163,12 @@ export default function ChatInterface({
   }
   if (lastTurn && view === "help") {
     return (
-      <SupportReply id={lastTurn.id} text={lastTurn.text} variant="help">
-        <div className="answer-dock">
-          <DangerLine callButtonAbove />
-          {askBar}
-        </div>
-      </SupportReply>
+      <SupportReply
+        id={lastTurn.id}
+        text={lastTurn.text}
+        variant="help"
+        onBack={onHome}
+      />
     );
   }
   if (lastTurn && view === "person") {

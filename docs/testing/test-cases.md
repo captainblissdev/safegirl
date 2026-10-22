@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 212 cases: 192 Pass, 19 Fail, 1 Not run. Two of the
+**Totals:** 218 cases: 198 Pass, 19 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -303,6 +303,12 @@ entry.
 | TC-210 | FR-01, FR-05 | The bottom of the Topic list and the answer screen | The footer line (tel: link from the constant, 44px tap area), then a white ask pill; no panel, not sticky; placeholders "Or type your own question" and "Ask something else…"; send named "Ask"; End session below it on the answer screen | As expected (Test 50; browser check) | Pass |
 | TC-211 | NFR (usability) | Both screens at 320, 360, 390 and 430px (a short and a long answer) | No horizontal overflow, nothing clipped, gutters 20px (16px under 360px) | As expected (browser check; `topic-after-6b-*.png`, `answer-after-6b-*.png`, `answer-long-after-6b-390.png`); step 7b and step 9 checks re-run with no regressions | Pass |
 | TC-212 | NFR (accessibility) | Step 6b contrast | Text 4.5:1; control edges and icons 3:1 | Topic h1 11.02; hint 8.30; question card edge 4.06 against the rows, 3.00 on the page (design value 1.38, darkened); footnote 5.03; footer line 7.97; closest label 7.35; Answer pill 7.54; source 6.80; ask pill edge 3.00 on the page (`styles/tokens.test.ts`, Test 16) | Pass |
+| TC-213 | FR-03, FR-04 | Splitting held A, B, C, help and both referrals for display | h1 (first sentence) + " " + paragraph equals the reply exactly | As expected for all six (`components.test.tsx`, Test 51; browser check: h1 ends at the first sentence) | Pass |
+| TC-214 | NFR (accessibility) | Focus on every reply screen | The h1 focused on arrival shows no ring; a Tab-focused control shows one | As expected on held A and C, help, referral, clarify, no answer and Talk to a person at 320, 360, 390 and 430px (browser check) | Pass |
+| TC-215 | FR-04 | Call buttons on held, help and referral | Outside the reply card; `tel:` hrefs from the constants; 58px (held) and 66px (help, referral) or taller; no footer line on these screens | As expected (Test 51; browser check) | Pass |
+| TC-216 | FR-04, FR-05 | Help and referral | The pink emergency card with 999 and 112 from the constants; no ask bar; "Back to questions" goes Home; header without Help, exit reads "Quick exit" and still leaves at once | As expected (Test 51; browser check: Quick exit to `https://www.google.com/`) | Pass |
+| TC-217 | NFR (usability) | The reply screens at 320, 360, 390 and 430px | No horizontal overflow, nothing clipped, gutters 20px (16px under 360px); ask bars as white pills with no panel | 218 of 218 browser checks; step 4b, 6b, 7b, 8 and 9 checks re-run with no regressions | Pass |
+| TC-218 | NFR (accessibility) | Step 7c contrast | Text 4.5:1; control edges and focus 3:1 | Held text 13.77; 1195 description 4.71 (held) and 4.60 (help, no darkening); hero paragraph 4.99 over the circle; 116 edge 4.32 on white, 3.20 on the page (design 1.57, darkened); emergency card 9.35, links 6.16; Back to questions edge 3.12 (design 1.14, darkened) (`styles/tokens.test.ts`, Test 17) | Pass |
 
 ## Defects and retests
 

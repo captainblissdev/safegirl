@@ -8,7 +8,6 @@ import {
 import {
   ANSWER_DISCLAIMER,
   CLARIFY_FALLBACK,
-  DANGER_LINE_CALL_ABOVE,
   LIMITED_MODE_NOTICE,
   NO_ANSWER_RETRY,
   PERSON_MESSAGE,
@@ -18,6 +17,10 @@ import {
   TOPIC_LIST_FOOTNOTE,
   TOPIC_LIST_HINT,
   TOPIC_LIST_PLACEHOLDER,
+  BACK_TO_QUESTIONS,
+  CALL_CARD_HEADING,
+  QUICK_EXIT_HINT,
+  QUICK_EXIT_LABEL,
   REPLY_PILLS,
 } from "../content/uiText";
 import {
@@ -45,6 +48,7 @@ import {
 } from "../content/kbQuestions";
 import TopicList from "./TopicList";
 import AnswerView from "./AnswerView";
+import { splitReply } from "../replySplit";
 import AskBar from "./AskBar";
 import { announcementFor, replyViewOf } from "../replyView";
 import { PLACEHOLDER_EXAMPLES, SOURCES_LINE } from "../content/uiText";
@@ -543,30 +547,35 @@ console.log(
   const line = "In danger? Call ";
   const href = `href="${telHref(GBV_HELPLINE)}"`;
 
-  // These replies show the GBV call button: the footer line points to it
-  // instead of repeating the number.
-  const callAbove = ["chat, help", "chat, held", "referral"];
+  // These screens carry the call buttons (GBV helpline first), so they
+  // show no footer line (step 7c).
+  const withCalls = ["chat, help", "chat, held", "referral"];
   for (const [name, element] of screens) {
     const html = renderToStaticMarkup(element);
+    if (withCalls.includes(name)) {
+      assert(
+        !html.includes('class="danger-line"') &&
+          html.includes(`class="call-button call-button--main" ${href}`),
+        `${name}: no footer line; the GBV call button is on the screen`,
+      );
+      assert(
+        /<button class="btn-exit" type="button">(Exit|Quick exit)<\/button>/.test(
+          html,
+        ),
+        `${name}: an Exit button in the header`,
+      );
+      continue;
+    }
     assert(
       html.split('class="danger-line"').length === 2,
       `${name}: the footer line appears once`,
     );
-    if (callAbove.includes(name)) {
-      assert(
-        html.includes(`<p class="danger-line">${DANGER_LINE_CALL_ABOVE}</p>`) &&
-          !DANGER_LINE_CALL_ABOVE.includes(GBV_HELPLINE) &&
-          html.includes(`class="call-button call-button--main" ${href}`),
-        `${name}: the line points to the call button, without repeating the number`,
-      );
-    } else {
-      assert(
-        html.includes(
-          `${line}<a ${href} aria-label="${telName(GBV_HELPLINE)}">${GBV_HELPLINE}</a>, free and open 24 hours.`,
-        ),
-        `${name}: its tap-to-call link is built from GBV_HELPLINE`,
-      );
-    }
+    assert(
+      html.includes(
+        `${line}<a ${href} aria-label="${telName(GBV_HELPLINE)}">${GBV_HELPLINE}</a>, free and open 24 hours.`,
+      ),
+      `${name}: its tap-to-call link is built from GBV_HELPLINE`,
+    );
     const exitAt = html.search(
       /<button class="btn-exit(-pill)?" type="button">Exit<\/button>/,
     );
@@ -1121,7 +1130,7 @@ console.log(
   assert(
     renderToStaticMarkup(
       <ReferralScreen message="m" onContinueChat={() => undefined} />,
-    ).includes('<h1 tabindex="-1" class="reply-title">m</h1>'),
+    ).includes('<h1 tabindex="-1" class="support-title">m</h1>'),
     "the referral heading (its message) can take focus when it appears",
   );
 }
@@ -1476,11 +1485,21 @@ console.log("\nTest 37: each reply kind has one h1, its reply text, focusable");
   ];
   for (const [name, text, html] of screens) {
     assert(html.split("<h1").length === 2, `${name}: one h1`);
+    // Held, help and referral show the first sentence as the h1 and the
+    // rest under it (step 7c); clarify and no answer show it whole.
+    const split = /held|help|referral/.test(name);
+    const { first, rest } = splitReply(text);
+    const cls = /help|referral/.test(name) ? "support-title" : "reply-title";
     assert(
-      html.includes(
-        `<h1 tabindex="-1" class="reply-title">${escapeHtml(text)}</h1>`,
-      ),
-      `${name}: the h1 is the reply text exactly, and can take focus`,
+      split
+        ? html.includes(
+            `<h1 tabindex="-1" class="${cls}">${escapeHtml(first)}</h1>`,
+          ) &&
+            (rest === null || html.includes(`>${escapeHtml(rest)}</p>`))
+        : html.includes(
+            `<h1 tabindex="-1" class="reply-title">${escapeHtml(text)}</h1>`,
+          ),
+      `${name}: the h1 is the reply text (its first sentence on held, help and referral, the rest below), and can take focus`,
     );
     const pillAt = html.indexOf('class="reply-pill"');
     assert(
@@ -1636,12 +1655,12 @@ console.log(
     const [first, second] = EMERGENCY_NUMBERS;
     assert(
       html.includes(
-        `<p class="emergency-line">In immediate danger? Call <a href="${telHref(first)}" aria-label="${telName(first)}">${first}</a> or <a href="${telHref(second)}" aria-label="${telName(second)}">${second}</a>.</p>`,
+        `<div class="emergency-card"><p class="emergency-line"><strong>In immediate danger?</strong> Call <a href="${telHref(first)}" aria-label="${telName(first)}">${first}</a> or <a href="${telHref(second)}" aria-label="${telName(second)}">${second}</a>.</p></div>`,
       ),
-      `${name}: "In immediate danger? Call ${first} or ${second}." from the constants`,
+      `${name}: the pink card: "In immediate danger?" (bold) "Call ${first} or ${second}." from the constants`,
     );
     assert(
-      html.includes('class="reply-card reply-card--support surface-dark"'),
+      html.includes('<section class="support-hero surface-dark">'),
       `${name}: the dark card, with the white focus ring (surface-dark)`,
     );
   }
@@ -1769,11 +1788,15 @@ console.log("\nTest 41: Exit, the footer line and the ask bar on every reply");
       html.includes('<button class="btn-exit" type="button">Exit</button>'),
       `${name}: Exit in the header`,
     );
+    // Held, help and referral carry the call buttons: no footer line.
+    const withCalls = /held|help|referral/.test(name);
     assert(
-      html.split('class="danger-line"').length === 2,
-      `${name}: the footer line once`,
+      html.split('class="danger-line"').length === (withCalls ? 1 : 2),
+      withCalls
+        ? `${name}: no footer line (the call buttons are on screen)`
+        : `${name}: the footer line once`,
     );
-    if (name !== "referral") {
+    if (name !== "referral" && name !== "help") {
       assert(
         html.includes(
           '<label class="sr-only" for="chat-input">Ask something else</label>',
@@ -2118,8 +2141,8 @@ console.log(
     "the splash wordmark is never wider than the screen",
   );
   assert(
-    css.includes("html:has(.answer-dock) {\n  scroll-padding-bottom: 40vh;\n}"),
-    "a focused control scrolls clear of the docked ask bar (WCAG 2.4.11)",
+    !css.includes("answer-dock") && !css.includes("position: sticky"),
+    "nothing is docked or sticky at the bottom, so focus is never hidden under it (WCAG 2.4.11; step 7c)",
   );
 }
 
@@ -2313,6 +2336,141 @@ console.log("\nTest 50: Topic list and answer screen polish (step 6b)");
       ),
     "no ring on what only code focuses; every control keeps its ring",
   );
+}
+
+console.log("\nTest 51: reply screens aligned with the design (step 7c)");
+{
+  const replies: [string, string][] = [
+    ["held A", HELD_TOPIC_MESSAGES.A],
+    ["held B", HELD_TOPIC_MESSAGES.B],
+    ["held C", HELD_TOPIC_MESSAGES.C],
+    ["help", SIGNPOSTING_MESSAGE],
+    ["referral, abuse", ABUSE_REFERRAL_MESSAGE],
+    ["referral, self-harm", SELF_HARM_REFERRAL_MESSAGE],
+  ];
+  for (const [name, text] of replies) {
+    const { first, rest } = splitReply(text);
+    assert(
+      (rest === null ? first : `${first} ${rest}`) === text &&
+        /[.?!]$/.test(first),
+      `${name}: h1 + " " + paragraph equals the reply exactly (h1: "${first.slice(0, 40)}…")`,
+    );
+  }
+  assert(
+    JSON.stringify(splitReply("One sentence only.")) ===
+      JSON.stringify({ first: "One sentence only.", rest: null }),
+    "one sentence: no paragraph",
+  );
+  const held = renderReply(HELD_TOPIC_MESSAGES.A, {
+    outcome: "held",
+    kind: "held-topic",
+  });
+  const card = held.slice(
+    held.indexOf('class="reply-card reply-card--held"'),
+    held.indexOf("</section>"),
+  );
+  const calls = held.slice(held.indexOf('<section class="call-card"'));
+  assert(
+    !card.includes("call-button") &&
+      calls.includes(
+        `<h2 id="call-card-title" class="call-card-title">${CALL_CARD_HEADING}</h2>`,
+      ) &&
+      calls.includes(
+        `class="call-button call-button--main" href="${telHref(GBV_HELPLINE)}"`,
+      ) &&
+      calls.includes(
+        `class="call-button call-button--second" href="${telHref(CHILDLINE_KENYA)}"`,
+      ),
+    `held: the call buttons are in their own card under "${CALL_CARD_HEADING}", hrefs from the constants`,
+  );
+  assert(
+    !held.includes('class="danger-line"') &&
+      held.includes('<div class="screen-bottom"><div class="ask-pill-bar">') &&
+      held.includes('placeholder="Ask something else…"'),
+    "held: no footer line; the ask bar is a white pill with no panel",
+  );
+  const support = (html: string, name: string) => {
+    const hero = html.slice(
+      html.indexOf('<section class="support-hero'),
+      html.indexOf("</section>"),
+    );
+    assert(
+      !hero.includes("call-button") &&
+        html.includes(
+          `class="call-button call-button--main" href="${telHref(GBV_HELPLINE)}"`,
+        ) &&
+        html.indexOf("call-buttons--support") > html.indexOf("</section>"),
+      `${name}: the call buttons under the hero, hrefs from the constants`,
+    );
+    const [a, b] = EMERGENCY_NUMBERS;
+    assert(
+      html.includes(
+        `<div class="emergency-card"><p class="emergency-line"><strong>In immediate danger?</strong> Call <a href="${telHref(a)}" aria-label="${telName(a)}">${a}</a> or <a href="${telHref(b)}" aria-label="${telName(b)}">${b}</a>.</p></div>`,
+      ),
+      `${name}: the pink emergency card with ${a} and ${b} from the constants`,
+    );
+    assert(
+      !html.includes('class="danger-line"') && !html.includes("<input"),
+      `${name}: no footer line and no ask bar`,
+    );
+    assert(
+      html.includes(`<p class="support-exit-hint">${QUICK_EXIT_HINT}</p>`) &&
+        html.includes(
+          `<button class="btn-back-questions" type="button">${BACK_TO_QUESTIONS}</button>`,
+        ),
+      `${name}: "${QUICK_EXIT_HINT}", then "${BACK_TO_QUESTIONS}"`,
+    );
+  };
+  support(
+    renderReply(SIGNPOSTING_MESSAGE, { outcome: "signposting", kind: "help" }),
+    "help",
+  );
+  support(referral(ABUSE_REFERRAL_MESSAGE), "referral");
+  const header = (supportScreen: boolean) =>
+    renderToStaticMarkup(
+      <AppHeader
+        onExit={() => undefined}
+        onOpenHelp={() => undefined}
+        isHelpOpen={false}
+        helpButtonRef={{ current: null }}
+        support={supportScreen}
+      />,
+    );
+  assert(
+    !header(true).includes("btn-help") &&
+      header(true).includes(
+        `<button class="btn-exit" type="button">${QUICK_EXIT_LABEL}</button>`,
+      ) &&
+      header(false).includes("btn-help") &&
+      header(false).includes(
+        '<button class="btn-exit" type="button">Exit</button>',
+      ),
+    `help and referral: no Help button, "${QUICK_EXIT_LABEL}"; elsewhere unchanged`,
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    /support=\{\s*screen === "referral" \|\|\s*\(onChatScreen && !isLoading && replyViewOf\(lastTurn\) === "help"\)\s*\}/.test(
+      app,
+    ),
+    "App gives the support header to the referral and help screens only",
+  );
+  for (const [name, text, extra] of [
+    [
+      "clarify",
+      VAGUE_QUERY_MESSAGE,
+      { outcome: "clarification", kind: "vague" },
+    ],
+    ["no answer", NO_ANSWER_MESSAGE, { answerFound: false, kind: "abstain" }],
+  ] as [string, string, Partial<ChatTurn>][]) {
+    const html = renderReply(text, extra);
+    const bottom = html.slice(html.indexOf('<div class="screen-bottom">'));
+    assert(
+      bottom.includes('class="danger-line"') &&
+        bottom.indexOf('class="danger-line"') <
+          bottom.indexOf('<div class="ask-pill-bar">'),
+      `${name}: the footer line, then the ask bar as a white pill, no panel`,
+    );
+  }
 }
 
 console.log("\nAll component tests passed.");

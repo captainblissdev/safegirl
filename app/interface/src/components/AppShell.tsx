@@ -23,6 +23,8 @@ interface Props {
   footerInContent?: boolean;
   /** The calm variant without the playful background (referral). */
   calm?: boolean;
+  /** The help and referral screens: header without Help, "Quick exit". */
+  support?: boolean;
   children: ReactNode;
 }
 
@@ -38,6 +40,7 @@ export default function AppShell({
   help,
   footerInContent = false,
   calm = false,
+  support = false,
   children,
 }: Props) {
   return (
@@ -47,6 +50,7 @@ export default function AppShell({
         onOpenHelp={help.onOpen}
         isHelpOpen={help.isOpen}
         helpButtonRef={help.buttonRef}
+        support={support}
       />
       {children}
       {!footerInContent && (

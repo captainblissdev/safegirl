@@ -328,6 +328,10 @@ export default function App() {
         buttonRef: helpButtonRef,
       }}
       calm={screen === "referral"}
+      support={
+        screen === "referral" ||
+        (onChatScreen && !isLoading && replyViewOf(lastTurn) === "help")
+      }
       footerInContent={
         screen === "chat" || screen === "topic" || screen === "referral"
       }

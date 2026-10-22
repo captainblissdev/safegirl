@@ -98,6 +98,30 @@
   --answer-meta-border: #f6e3ef;
   --ask-bar-shadow: 0 8px 20px rgba(109, 40, 217, 0.1);
 
+  /* Reply screens (step 7c). */
+  --held-card-shadow: 0 10px 24px rgba(219, 39, 119, 0.14);
+  --held-title: #4a0d2b;
+  --call-main-shadow: 0 8px 16px rgba(192, 38, 211, 0.3);
+  /* The design's #e3c4ee edge on the 116 button is 1.57:1; it marks a
+     control, so it is darkened to 3:1 on white and on the page. */
+  --call-second-edge: #a060b8;
+  --support-hero-bg: linear-gradient(
+    135deg,
+    #3b0f6b 0%,
+    #6b21a8 60%,
+    #86198f 100%
+  );
+  --support-hero-shadow: 0 14px 28px rgba(59, 15, 107, 0.3);
+  --support-circle: rgba(244, 114, 182, 0.3);
+  --support-pill-text: #6b21a8;
+  /* White 13px text on #db2777 is 4.60:1, so the design's start stays. */
+  --support-call-bg: linear-gradient(135deg, #db2777, #c026d3);
+  --support-call-shadow: 0 10px 20px rgba(219, 39, 119, 0.32);
+  /* The design's #f0c4dd edge is 1.14:1 on the page; "Back to
+     questions" is a control, so its edge is darkened to 3:1. */
+  --back-button-edge: #b45f8f;
+  --back-button-text: #4a1d7a;
+
   /*
    * Home topic tiles: the edge of each tile (a button) is the lightest
    * shade of its topic's hue with 3:1 against the page and both glows;
@@ -164,16 +188,11 @@
   --closest-label: #5b21b6;
   --answer-card-border: #ebd5f7;
   --shadow-violet: 0 10px 24px rgba(109, 40, 217, 0.1);
-  --shadow-dock: 0 -6px 18px rgba(42, 18, 69, 0.08);
 
   /* Reply screens (clarify, held, help and referral, no answer): pills,
      decoration and the support card's buttons. */
   --reply-pill-bg: #ffffff;
   --clarify-sparkle: rgba(192, 38, 211, 0.3);
-  --support-sparkle: rgba(255, 255, 255, 0.32);
-  --support-pill-bg: rgba(255, 255, 255, 0.16);
-  --support-glass-bg: rgba(255, 255, 255, 0.12);
-  --support-glass-border: rgba(255, 255, 255, 0.78);
 
   /* Topic tints: background and text. */
   --topic-periods-bg: #ffddee;

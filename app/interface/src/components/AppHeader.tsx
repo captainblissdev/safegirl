@@ -1,4 +1,5 @@
 import type { RefObject } from "react";
+import { QUICK_EXIT_LABEL } from "../content/uiText";
 import { ShieldHeartMark } from "./Icons";
 
 interface Props {
@@ -10,6 +11,11 @@ interface Props {
   isHelpOpen: boolean;
   /** The Help button, so App can return focus to it when the sheet closes. */
   helpButtonRef: RefObject<HTMLButtonElement>;
+  /**
+   * The help and referral screens: no Help button (the screen is the
+   * help), and the exit button reads "Quick exit". Same behaviour.
+   */
+  support?: boolean;
 }
 
 /**
@@ -22,6 +28,7 @@ export default function AppHeader({
   onOpenHelp,
   isHelpOpen,
   helpButtonRef,
+  support = false,
 }: Props) {
   return (
     <header className="app-header">
@@ -33,19 +40,21 @@ export default function AppHeader({
       </span>
 
       <div className="header-actions">
-        <button
-          ref={helpButtonRef}
-          className="btn-help"
-          type="button"
-          aria-haspopup="dialog"
-          aria-expanded={isHelpOpen}
-          onClick={onOpenHelp}
-        >
-          Help
-        </button>
+        {!support && (
+          <button
+            ref={helpButtonRef}
+            className="btn-help"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded={isHelpOpen}
+            onClick={onOpenHelp}
+          >
+            Help
+          </button>
+        )}
 
         <button className="btn-exit" type="button" onClick={onExit}>
-          Exit
+          {support ? QUICK_EXIT_LABEL : "Exit"}
         </button>
       </div>
     </header>

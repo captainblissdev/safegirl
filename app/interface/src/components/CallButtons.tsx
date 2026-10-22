@@ -23,8 +23,9 @@ function describe(number: string): string {
 }
 
 interface Props {
-  /** "light" on the held card; "dark" on the help and referral card. */
-  surface: "light" | "dark";
+  /** "held": in the held screen's white card. "support": full width
+   *  under the help or referral card. */
+  surface: "held" | "support";
 }
 
 export default function CallButtons({ surface }: Props) {
@@ -48,12 +49,16 @@ export default function CallButtons({ surface }: Props) {
   );
 }
 
-/** "In immediate danger? Call …", both emergency numbers from the constants. */
-export function EmergencyLine() {
+/**
+ * "In immediate danger? Call …", both emergency numbers from the
+ * constants; with lead, the question is bold (same words).
+ */
+export function EmergencyLine({ lead = false }: { lead?: boolean }) {
   const [first, second] = EMERGENCY_NUMBERS;
   return (
     <p className="emergency-line">
-      In immediate danger? Call{" "}
+      {lead ? <strong>In immediate danger?</strong> : "In immediate danger?"}{" "}
+      Call{" "}
       <a href={telHref(first)} aria-label={telName(first)}>
         {first}
       </a>{" "}

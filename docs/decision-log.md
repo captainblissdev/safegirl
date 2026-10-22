@@ -1511,3 +1511,53 @@ pill uses the same 3:1 pink (#C25A92) for the design's #F3C6DE.
 
 **Gutters** are unchanged: 20px from 360px up and 16px below, with the
 header aligned (from step 4b).
+
+## Reply screens aligned with the design (2026-10-22)
+
+Redesign step 7c (`fix/ui-redesign`), on Cindy's brief with every value
+given. Layout and UI copy only: every reply word, its order and
+punctuation are unchanged, and so are the helpline constants and their
+descriptions and the quick-exit behaviour.
+
+**Split for display (held, help, referral).** The first sentence (up to
+the first ".", "?" or "!" followed by a space) is the h1 and the rest a
+paragraph under it (`replySplit.ts`). A test proves, for every reply
+(held A, B and C, help, both referrals), that h1 + " " + paragraph is
+the reply exactly. The live region still says only the pill label.
+
+**Held.** The pink card holds the reply; the call buttons moved into a
+white card under it, headed "If you are in danger or someone has hurt
+you" (1195 on the violet gradient, 116 outlined). No footer line (the
+card carries the GBV call button). The ask bar is a white pill with no
+panel.
+
+**Help and referral.** A dark hero with the reply, the call buttons
+full width under it (1195 on the pink gradient, 116 outlined), the
+emergency line in a pink card ("In immediate danger?" in bold), "Need
+to leave quickly? Tap Quick exit at the top." and "Back to questions"
+(which does what "Continue chat" did). The header has no Help button
+and its exit button reads "Quick exit" (same behaviour). No footer line
+and no ask bar.
+
+**Clarify, no answer, Talk to a person.** Only the shared fixes: the
+footer line, then the ask bar as a white pill, with no panel.
+
+**No dock anywhere.** With the last sticky dock gone, the step 9 rule
+that reserved scroll padding for it was removed; nothing at the bottom
+can hide a focused control.
+
+**New copy** (`content/uiText.ts`): `CALL_CARD_HEADING`,
+`QUICK_EXIT_LABEL` "Quick exit", `QUICK_EXIT_HINT`, `BACK_TO_QUESTIONS`
+"Back to questions". Removed: `DANGER_LINE_CALL_ABOVE` (no screen with
+the call buttons shows a footer line now).
+
+**Design values changed for contrast.** The 116 button's edge #E3C4EE
+(1.57:1 on white) is #A060B8 (4.32:1 on white, 3.20:1 on the page);
+"Back to questions" edge #F0C4DD (1.14:1 on the page) is #B45F8F
+(3.12:1). No fill was darkened: white 13px text on #DB2777 is 4.60:1.
+The call buttons also get 8px top and bottom padding (the design's 0)
+so a two-line description never touches the edge at 320px.
+
+**Unconfirmed Childline sentence** ("…is free for anyone under 18"):
+still on the held A, held B, help and no-answer screens (reply text
+unchanged); not on held C, the referrals, clarify or Talk to a person.

@@ -1,4 +1,3 @@
-import DangerLine from "./DangerLine";
 import { SupportReply } from "./ReplyViews";
 
 /**
@@ -26,11 +25,11 @@ interface Props {
 
 export default function ReferralScreen({ message, onContinueChat }: Props) {
   return (
-    <SupportReply id={message} text={message} variant="referral">
-      <button className="btn-outline" type="button" onClick={onContinueChat}>
-        Continue chat
-      </button>
-      <DangerLine callButtonAbove />
-    </SupportReply>
+    <SupportReply
+      id={message}
+      text={message}
+      variant="referral"
+      onBack={onContinueChat}
+    />
   );
 }

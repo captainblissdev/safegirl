@@ -1505,22 +1505,6 @@
   font-weight: var(--weight-black);
 }
 
-/* The footer line and the ask bar stay in reach while a long answer
-   scrolls; sticky keeps their space in the flow, so nothing is hidden
-   under them. */
-.answer-dock {
-  position: sticky;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin: 0 -8px;
-  border-radius: 22px 22px 0 0;
-  padding: 10px 12px 12px;
-  background: var(--color-card);
-  box-shadow: var(--shadow-dock);
-}
-
 /* Reply screens (redesign Step 7): clarify, held, help and referral,
    no answer. */
 
@@ -1650,43 +1634,6 @@
   cursor: pointer;
 }
 
-/* Help and referral: the dark card. */
-
-.reply-card--support {
-  border-radius: 28px;
-  background: linear-gradient(
-    160deg,
-    var(--support-bg-start),
-    var(--support-bg-end)
-  );
-  box-shadow: var(--shadow);
-  color: var(--support-text);
-}
-
-.reply-card--support .reply-decor {
-  color: var(--support-sparkle);
-}
-
-.reply-card--support .reply-pill {
-  background: var(--support-pill-bg);
-  color: var(--support-text);
-}
-
-.emergency-line {
-  font-size: 15px;
-  font-weight: var(--weight-bold);
-  line-height: 1.35;
-}
-
-/* Like the footer line's link: inline, with a 44px-tall tap area. */
-.emergency-line a {
-  position: relative;
-  color: var(--support-text);
-  font-weight: var(--weight-black);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
 /* Call buttons: tap-to-call links from the helpline constants. */
 
 .call-buttons {
@@ -1703,7 +1650,9 @@
   min-height: 58px;
   border: 1.5px solid transparent;
   border-radius: 18px;
-  padding: 10px 14px;
+  /* The design's 0 16px, with 8px top and bottom so a two-line
+     description never touches the edge on a narrow phone. */
+  padding: 8px 16px;
   text-decoration: none;
 }
 
@@ -1718,32 +1667,8 @@
 }
 
 .call-button-note {
-  font-size: 14px;
-  font-weight: var(--weight-semibold);
-}
-
-.call-buttons--light .call-button--main {
-  border-color: var(--color-plum);
-  background: var(--color-plum);
-  color: var(--color-on-dark);
-}
-
-.call-buttons--light .call-button--second {
-  border-color: var(--color-control-border);
-  background: var(--color-card);
-  color: var(--held-text);
-}
-
-.call-buttons--dark .call-button--main {
-  border-color: var(--color-card);
-  background: var(--color-card);
-  color: var(--color-plum);
-}
-
-.call-buttons--dark .call-button--second {
-  border-color: var(--support-glass-border);
-  background: var(--support-glass-bg);
-  color: var(--support-text);
+  font-size: 13px;
+  font-weight: var(--weight-bold);
 }
 
 /* No answer */
@@ -1898,14 +1823,6 @@
   cursor: pointer;
 }
 
-/* While the docked footer line and ask bar are on screen, scrolling to
-   a focused control leaves room for them, so keyboard focus is never
-   hidden under the dock (WCAG 2.4.11). 40vh covers the dock even at
-   200% zoom, where it takes up to 39% of the screen. */
-html:has(.answer-dock) {
-  scroll-padding-bottom: 40vh;
-}
-
 /* Under 360px wide, every screen and the header use a 16px gutter (20px
    above), so the header's logo, Help and Exit stay on one row. */
 @media (max-width: 359px) {
@@ -2027,4 +1944,200 @@ html:has(.answer-dock) {
   background: var(--send-disabled-bg);
   box-shadow: none;
   opacity: 1;
+}
+
+/* Reply screens aligned with the design (redesign Step 7c) */
+
+/* Held: the pink card holds the reply; the calls have their own card. */
+.reply-card--held {
+  gap: 12px;
+  border: 2px solid var(--held-border);
+  border-radius: 26px;
+  padding: 18px;
+  background: var(--held-bg);
+  box-shadow: var(--held-card-shadow);
+}
+
+.reply-card--held .reply-pill {
+  color: var(--held-text);
+  font-size: 13px;
+  font-weight: var(--weight-black);
+}
+
+.reply-card--held .reply-title {
+  color: var(--held-title);
+  font-size: 18px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.45;
+}
+
+.reply-body {
+  color: var(--held-title);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.call-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1.5px solid var(--answer-card-border);
+  border-radius: 24px;
+  padding: 16px;
+  background: var(--color-card);
+  box-shadow: var(--list-card-shadow);
+}
+
+.call-card-title {
+  color: var(--color-ink);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+.call-buttons--held .call-button--main {
+  background: var(--gradient-primary);
+  color: var(--color-on-dark);
+  box-shadow: var(--call-main-shadow);
+}
+
+.call-button--second {
+  border-color: var(--call-second-edge);
+  background: var(--color-card);
+  color: var(--color-ink);
+}
+
+.call-button--second .call-button-note {
+  color: var(--color-muted);
+}
+
+.reply-link {
+  align-self: center;
+  min-height: 48px;
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+/* Help and referral. */
+.support-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  border-radius: 28px;
+  padding: 22px 20px;
+  background: var(--support-hero-bg);
+  box-shadow: var(--support-hero-shadow);
+  color: var(--color-on-dark);
+}
+
+.support-hero > :not(.hero-decor) {
+  position: relative;
+  z-index: 1;
+}
+
+.support-circle {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: var(--support-circle);
+}
+
+.support-hero .reply-pill {
+  background: var(--color-card);
+  color: var(--support-pill-text);
+  font-size: 13px;
+  font-weight: var(--weight-black);
+}
+
+.support-title {
+  color: var(--color-on-dark);
+  font-size: 27px;
+  font-weight: var(--weight-black);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.support-body {
+  color: var(--hero-sub-text);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.call-buttons--support .call-button {
+  gap: 14px;
+  min-height: 66px;
+  border-radius: 22px;
+  padding: 8px 18px;
+}
+
+.call-buttons--support .call-button-number {
+  font-size: 19px;
+}
+
+.call-buttons--support .call-button--main {
+  background: var(--support-call-bg);
+  color: var(--color-on-dark);
+  box-shadow: var(--support-call-shadow);
+}
+
+.emergency-card {
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: var(--footer-card-bg);
+  color: var(--footer-card-text);
+  font-size: 15px;
+  font-weight: var(--weight-bold);
+}
+
+.emergency-line {
+  line-height: 1.35;
+}
+
+.emergency-line strong {
+  font-weight: var(--weight-black);
+}
+
+/* Like the footer line's link: inline, with a 44px-tall tap area. */
+.emergency-line a {
+  position: relative;
+  color: var(--color-violet);
+  font-weight: var(--weight-black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.support-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-bottom: 4px;
+}
+
+.support-exit-hint {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  text-align: center;
+}
+
+.btn-back-questions {
+  min-height: 50px;
+  border: 1.5px solid var(--back-button-edge);
+  border-radius: 25px;
+  padding: 0 20px;
+  background: var(--color-card);
+  color: var(--back-button-text);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+  cursor: pointer;
 }

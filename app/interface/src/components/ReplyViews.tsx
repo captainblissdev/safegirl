@@ -1,16 +1,21 @@
 import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import type { Topic } from "../content/topics";
+import { splitReply } from "../replySplit";
 import {
+  BACK_TO_QUESTIONS,
+  CALL_CARD_HEADING,
   CLARIFY_FALLBACK,
   NO_ANSWER_RETRY,
   PERSON_MESSAGE,
+  QUICK_EXIT_HINT,
   REPLY_PILLS,
 } from "../content/uiText";
 import CallButtons, { EmergencyLine } from "./CallButtons";
 import DangerLine from "./DangerLine";
 import {
   HeartIcon,
+  HeroSparkle,
   InfoIcon,
   PeopleIcon,
   QuestionIcon,
@@ -89,7 +94,7 @@ export function ClarifyReply({
         <TopicChoices variant="grid" onTopic={onTopic} />
       </section>
       <p className="reply-note">{CLARIFY_FALLBACK}</p>
-      <div className="answer-dock">
+      <div className="screen-bottom">
         <DangerLine />
         {askBar}
       </div>
@@ -104,57 +109,77 @@ export function HeldReply({
   onAskDifferent,
 }: ReplyProps & { onAskDifferent: () => void }) {
   const headingRef = useFocusOnArrival(id);
+  const { first, rest } = splitReply(text);
   return (
     <main className="screen chat-screen reply-screen">
       <section className="reply-card reply-card--held">
         <Pill icon={<InfoIcon size={16} />} label={REPLY_PILLS.held} />
         <h1 ref={headingRef} tabIndex={-1} className="reply-title">
-          {text}
+          {first}
         </h1>
-        <CallButtons surface="light" />
+        {rest !== null && <p className="reply-body">{rest}</p>}
+      </section>
+      {/* The call buttons, in their own card. No footer line here: the
+          card carries the GBV call button. */}
+      <section className="call-card" aria-labelledby="call-card-title">
+        <h2 id="call-card-title" className="call-card-title">
+          {CALL_CARD_HEADING}
+        </h2>
+        <CallButtons surface="held" />
       </section>
       <button className="reply-link" type="button" onClick={onAskDifferent}>
         Ask a different question
       </button>
-      <div className="answer-dock">
-        <DangerLine callButtonAbove />
-        {askBar}
-      </div>
+      <div className="screen-bottom">{askBar}</div>
     </main>
   );
 }
 
 /**
- * The help reply and the referral: a dark card with the reply text, the
- * call buttons and the emergency line. Exit stays in the header.
+ * The help reply and the referral: a dark card with the reply (its first
+ * sentence as the h1), the call buttons under it, the emergency line in
+ * a pink card, and "Back to questions". No ask bar and no footer line;
+ * the header shows "Quick exit" and no Help button (App, AppHeader).
  */
 export function SupportReply({
   id,
   text,
   variant,
-  children,
+  onBack,
 }: {
   id: string;
   text: string;
   variant: "help" | "referral";
-  /** What follows the card (the ask bar, or "Continue chat"). */
-  children: ReactNode;
+  /** "Back to questions": Home (as "Continue chat" did). */
+  onBack: () => void;
 }) {
   const headingRef = useFocusOnArrival(id);
+  const { first, rest } = splitReply(text);
   return (
-    <main className="screen chat-screen reply-screen">
-      <section className="reply-card reply-card--support surface-dark">
-        <span className="reply-decor" aria-hidden="true">
-          <Sparkle size={26} />
+    <main className="screen chat-screen reply-screen support-screen">
+      <section className="support-hero surface-dark">
+        <span className="hero-decor" aria-hidden="true">
+          <span className="support-circle" />
+          <span className="hero-sparkle">
+            <HeroSparkle size={26} />
+          </span>
         </span>
         <Pill icon={<HeartIcon size={16} />} label={REPLY_PILLS[variant]} />
-        <h1 ref={headingRef} tabIndex={-1} className="reply-title">
-          {text}
+        <h1 ref={headingRef} tabIndex={-1} className="support-title">
+          {first}
         </h1>
-        <CallButtons surface="dark" />
-        <EmergencyLine />
+        {rest !== null && <p className="support-body">{rest}</p>}
       </section>
-      {children}
+      <CallButtons surface="support" />
+      <div className="emergency-card">
+        <EmergencyLine lead />
+      </div>
+      <div className="support-bottom">
+        <p className="support-exit-hint">{QUICK_EXIT_HINT}</p>
+        <button className="btn-back-questions" type="button" onClick={onBack}>
+          {BACK_TO_QUESTIONS}
+        </button>
+      </div>
     </main>
   );
 }
@@ -179,7 +204,7 @@ export function NoAnswerReply({
         <TopicChoices variant="pills" onTopic={onTopic} />
       </section>
       <p className="reply-note">{NO_ANSWER_RETRY}</p>
-      <div className="answer-dock">
+      <div className="screen-bottom">
         <DangerLine />
         {askBar}
       </div>
@@ -216,7 +241,7 @@ export function PersonReply({
         </button>
         <TopicChoices variant="pills" onTopic={onTopic} />
       </section>
-      <div className="answer-dock">
+      <div className="screen-bottom">
         <DangerLine />
         {askBar}
       </div>

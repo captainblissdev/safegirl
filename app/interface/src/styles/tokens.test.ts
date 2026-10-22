@@ -630,20 +630,7 @@ console.log(
   "\nTest 12: the reply screens (clarify, held, help and referral, no answer)",
 );
 {
-  const over = (rgba: string, hex: string) => {
-    const [r, g, b, a] = rgba
-      .replace(/[^0-9.,]/g, "")
-      .split(",")
-      .map(Number);
-    const base = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
-    return (
-      "#" +
-      [r, g, b]
-        .map((c, i) => Math.round(c * a + base[i] * (1 - a)))
-        .map((c) => c.toString(16).padStart(2, "0"))
-        .join("")
-    );
-  };
+  // The help and referral pairs moved to Test 17 (step 7c redesign).
   const page = [
     token("--color-page"),
     token("--color-card"),
@@ -735,54 +722,6 @@ console.log(
     worst(token("--color-violet"), page),
     4.5,
     '"Ask a different question" on the page',
-  );
-
-  // Help and referral: checked over the lightest stop.
-  const light = token("--support-bg-end");
-  const white = token("--support-text");
-  check(contrast(white, light), 4.5, "white text on the lightest stop");
-  check(
-    contrast(white, token("--support-bg-start")),
-    4.5,
-    "white text on the darkest stop",
-  );
-  check(
-    contrast(white, over(token("--support-pill-bg"), light)),
-    4.5,
-    "pill text on its glass, over the lightest stop",
-  );
-  check(
-    contrast(token("--color-plum"), token("--color-card")),
-    4.5,
-    "1195 button: plum on white",
-  );
-  check(
-    contrast(token("--color-card"), light),
-    3,
-    "1195 button edge (white) on the lightest stop",
-  );
-  check(
-    contrast(white, over(token("--support-glass-bg"), light)),
-    4.5,
-    "116 button text on its glass, over the lightest stop",
-  );
-  check(
-    contrast(
-      over(token("--support-glass-border"), light),
-      over(token("--support-glass-bg"), light),
-    ),
-    3,
-    "116 button edge against its own glass",
-  );
-  check(
-    contrast(over(token("--support-glass-border"), light), light),
-    3,
-    "116 button edge on the lightest stop",
-  );
-  check(
-    contrast(token("--focus-ring-on-dark"), light),
-    3,
-    "white focus ring on the lightest stop",
   );
 
   // No answer.
@@ -1080,6 +1019,161 @@ console.log("\nTest 16: Topic list and answer screen polish (step 6b)");
   );
   console.log(
     `  INFO: the design's #F3D3E6 card edge would be ${contrast("#f3d3e6", card).toFixed(2)}:1 on white`,
+  );
+}
+
+console.log("\nTest 17: reply screens aligned with the design (step 7c)");
+{
+  const over = (rgba: string, hex: string) => {
+    const [r, g, b, a] = rgba
+      .replace(/[^0-9.,]/g, "")
+      .split(",")
+      .map(Number);
+    const base = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    return (
+      "#" +
+      [r, g, b]
+        .map((c, i) => Math.round(c * a + base[i] * (1 - a)))
+        .map((c) => c.toString(16).padStart(2, "0"))
+        .join("")
+    );
+  };
+  const check = (ratio: number, min: number, what: string) =>
+    assert(ratio >= min, `${what}: ${ratio.toFixed(2)}:1`);
+  const stops = (name: string) =>
+    [...token(name).matchAll(/#[0-9a-f]{6}/g)].map((m) => m[0]);
+  const worst = (fg: string, bgs: string[]) =>
+    Math.min(...bgs.map((bg) => contrast(fg, bg)));
+  const white = token("--color-on-dark");
+  const card = token("--color-card");
+  const page = [
+    token("--color-page"),
+    card,
+    token("--glow-pink"),
+    token("--glow-lilac"),
+  ];
+
+  // Held.
+  check(
+    contrast(token("--held-title"), token("--held-bg")),
+    4.5,
+    "held h1 and paragraph #4A0D2B on #FFF0F6",
+  );
+  check(
+    contrast(token("--held-text"), card),
+    4.5,
+    "held pill #9D174D on white",
+  );
+  check(
+    contrast(token("--color-ink"), card),
+    4.5,
+    "call card heading on white",
+  );
+  check(
+    worst(white, stops("--gradient-primary")),
+    4.5,
+    "held 1195: white title and 13px description on its gradient (both ends)",
+  );
+  check(
+    contrast(token("--call-second-edge"), card),
+    3,
+    "116 button edge on the white call card",
+  );
+  check(
+    contrast(token("--color-ink"), card),
+    4.5,
+    "116 title #2A1245 on white",
+  );
+  check(
+    contrast(token("--color-muted"), card),
+    4.5,
+    "116 description #6B4F86 on white",
+  );
+  check(
+    worst(token("--color-violet"), page),
+    4.5,
+    '"Ask a different question" #6D28D9 on the page',
+  );
+  check(
+    contrast(token("--color-violet"), card),
+    3,
+    "focus ring on the call card",
+  );
+
+  // Help and referral.
+  const hero = stops("--support-hero-bg");
+  assert(
+    JSON.stringify(hero) === '["#3b0f6b","#6b21a8","#86198f"]',
+    "the hero gradient runs #3B0F6B, #6B21A8, #86198F",
+  );
+  const behind = [
+    ...hero,
+    ...hero.map((s) => over(token("--support-circle"), s)),
+  ];
+  check(worst(white, behind), 4.5, "hero h1, white, circle included");
+  check(
+    worst(token("--hero-sub-text"), behind),
+    4.5,
+    "hero paragraph #F6E9FF, circle included",
+  );
+  check(
+    contrast(token("--support-pill-text"), card),
+    4.5,
+    "hero pill #6B21A8 on white",
+  );
+  check(
+    worst(token("--focus-ring-on-dark"), hero),
+    3,
+    "white focus ring on the hero",
+  );
+  const pink = stops("--support-call-bg");
+  assert(
+    JSON.stringify(pink) === '["#db2777","#c026d3"]',
+    "the 1195 button keeps the design's #DB2777 to #C026D3 (no darkening needed)",
+  );
+  check(
+    worst(white, pink),
+    4.5,
+    "1195: white 13px description at both gradient stops",
+  );
+  check(
+    worst(token("--call-second-edge"), page),
+    3,
+    "116 button edge on the page and glows",
+  );
+  check(contrast(token("--color-ink"), card), 4.5, "116 title on white");
+  check(
+    contrast(token("--color-muted"), card),
+    4.5,
+    "116 description on white",
+  );
+  check(
+    contrast(token("--footer-card-text"), token("--footer-card-bg")),
+    4.5,
+    "emergency card text #5E2A58 on #FFE9F4",
+  );
+  check(
+    contrast(token("--color-violet"), token("--footer-card-bg")),
+    4.5,
+    "999 and 112 links on #FFE9F4",
+  );
+  check(
+    worst(token("--color-muted"), page),
+    4.5,
+    '"Need to leave quickly?" #6B4F86 on the page',
+  );
+  check(
+    worst(token("--back-button-edge"), page),
+    3,
+    '"Back to questions" edge on the page and glows',
+  );
+  check(
+    contrast(token("--back-button-text"), card),
+    4.5,
+    '"Back to questions" #4A1D7A on white',
+  );
+  console.log(
+    `  INFO: design edges: #E3C4EE ${contrast("#e3c4ee", card).toFixed(2)}:1 on white, #F0C4DD ${worst("#f0c4dd", page).toFixed(2)}:1 on the page`,
   );
 }
 
