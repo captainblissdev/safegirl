@@ -3,8 +3,9 @@
  * or "pending", docs/decision-log.md, 22 October 2026).
  *
  * Every active entry carries a status, and a missing or unknown one fails
- * the load. The pending list below is the record of what still awaits
- * clinician sign-off: change it only together with the class files.
+ * the load. The pending list below is the record of what still awaits a
+ * decision (docs/decision-log.md, "KB expansion, 22 Oct 2026"): change it
+ * only together with the class files. Pending entries are never served.
  *
  * The status is internal. It must never reach anything the user sees:
  * gateway responses, kbQuestions.json, ml_service's knowledge_base.json
@@ -20,8 +21,10 @@ const path = require("node:path");
 const {
   KB_STATUSES,
   getEntryById,
+  loadAllEntries,
   loadKnowledgeBase,
   parseKbFile,
+  retrieve,
 } = require("../src/retrievalModule");
 const { createHandleQuery } = require("../src/backend");
 const { createClassifierClient } = require("../src/classifierClient");
@@ -33,16 +36,6 @@ const readJson = (...parts) =>
 const APPROVED = [
   "KB-C1",
   "KB-C2",
-  "KB-S3",
-  "KB-P1",
-  "KB-P5",
-  "KB-P6",
-  "KB-P7",
-  "KB-G1",
-  "KB-G2",
-];
-
-const PENDING = [
   "KB-C3",
   "KB-C4",
   "KB-C5",
@@ -50,6 +43,17 @@ const PENDING = [
   "KB-C8",
   "KB-C9",
   "KB-C10",
+  "KB-C11",
+  "KB-C12",
+  "KB-C13",
+  "KB-C15",
+  "KB-C16",
+  "KB-C17",
+  "KB-C18",
+  "KB-C19",
+  "KB-C20",
+  "KB-C21",
+  "KB-S3",
   "KB-S4",
   "KB-S5",
   "KB-S6",
@@ -65,7 +69,17 @@ const PENDING = [
   "KB-S16",
   "KB-S17",
   "KB-S18",
+  "KB-S20",
+  "KB-S21",
+  "KB-P1",
+  "KB-P5",
+  "KB-P6",
+  "KB-P7",
   "KB-P8",
+  "KB-P9",
+  "KB-P10",
+  "KB-G1",
+  "KB-G2",
   "KB-G3",
   "KB-G4",
   "KB-G5",
@@ -75,9 +89,19 @@ const PENDING = [
   "KB-G9",
   "KB-G10",
   "KB-G11",
+  "KB-G12",
+  "KB-G13",
+  "KB-G14",
+  "KB-G15",
+  "KB-G16",
+  "KB-G17",
+  "KB-G18",
 ];
 
-const entries = () => Object.values(loadKnowledgeBase()).flat();
+const PENDING = ["KB-C6", "KB-C14", "KB-C22", "KB-S19"];
+
+const entries = () => Object.values(loadAllEntries()).flat();
+const served = () => Object.values(loadKnowledgeBase()).flat();
 
 /** Every key, at any depth, of a parsed JSON value. */
 function keysOf(value, keys = new Set()) {
@@ -116,14 +140,14 @@ describe("knowledge-base review status", () => {
     }
   });
 
-  it("lists every pending entry (32 of 41)", () => {
+  it("lists every pending entry (4 of 66)", () => {
     const pending = entries()
       .filter((entry) => entry.status === "pending")
       .map((entry) => entry.kbId);
     assert.deepEqual(pending, PENDING);
   });
 
-  it("lists every approved entry (9 of 41)", () => {
+  it("lists every approved entry (62 of 66)", () => {
     const approved = entries()
       .filter((entry) => entry.status === "approved")
       .map((entry) => entry.kbId);
@@ -152,6 +176,61 @@ describe("knowledge-base review status", () => {
   }
 });
 
+describe("pending entries are never served", () => {
+  const readIds = (...parts) => JSON.stringify(readJson(...parts));
+
+  it("are left out of the served knowledge base and lookups", () => {
+    const servedIds = served().map((entry) => entry.kbId);
+    assert.deepEqual(servedIds, APPROVED);
+    for (const id of PENDING) {
+      assert.equal(getEntryById(id), null, id);
+      const entry = entries().find((e) => e.kbId === id);
+      for (const category of ["contraception", "sti", "pregnancy", "general"]) {
+        const found = retrieve(category, entry.question);
+        assert.notEqual(found && found.kbId, id, `${id} via ${category}`);
+      }
+    }
+  });
+
+  it("are absent from kbQuestions.json, knowledge_base.json and Kbdata.json", () => {
+    const files = [
+      ["app", "interface", "src", "content", "kbQuestions.json"],
+      ["ml_service", "knowledge_base.json"],
+      ["app", "interface", "src", "offline", "Kbdata.json"],
+    ];
+    for (const parts of files) {
+      const text = readIds(...parts);
+      for (const id of PENDING) {
+        assert.ok(!text.includes(`"${id}"`), `${id} in ${parts.at(-1)}`);
+      }
+    }
+  });
+
+  it("cannot be served even if ml_service returns one", async () => {
+    // A stale ml_service index could still return a pending id; the
+    // gateway must not serve it (it falls back to local retrieval).
+    const pending = entries().find((e) => e.kbId === PENDING[0]);
+    const json = (body) => ({ ok: true, status: 200, json: async () => body });
+    const client = createClassifierClient({
+      fetch: async (url) =>
+        url.endsWith("/classify")
+          ? json({ intent: pending.category, confidence: 0.95, scores: {} })
+          : json({
+              results: [
+                { id: pending.kbId, class: pending.category, score: 0.99 },
+              ],
+            }),
+      config: { serviceUrl: "http://ml.test" },
+      logger: { warn: () => {} },
+    });
+    const response = await createHandleQuery({
+      classifierClient: client,
+      relevanceGate: false,
+    })(pending.question);
+    assert.notEqual(response.matchedQuestion, pending.question);
+  });
+});
+
 describe("the review status never reaches the user", () => {
   it("is not in kbQuestions.json", () => {
     assertNoStatus(
@@ -174,10 +253,10 @@ describe("the review status never reaches the user", () => {
     );
   });
 
-  it("is not in a gateway response for any of the 41 questions", async () => {
+  it("is not in a gateway response for any of the 62 served questions", async () => {
     // A fake ml_service that classes each question as its own entry's
     // class and retrieves that entry, so every answer path is exercised.
-    const byQuestion = new Map(entries().map((e) => [e.question, e]));
+    const byQuestion = new Map(served().map((e) => [e.question, e]));
     const json = (body) => ({ ok: true, status: 200, json: async () => body });
     const client = createClassifierClient({
       fetch: async (url, options) => {
@@ -219,7 +298,7 @@ describe("the review status never reaches the user", () => {
     }
     // The held-topic and vague rules may intercept a few questions first;
     // the rest must be answered, so the answer path is really covered.
-    assert.ok(answers >= 35, `${answers} answers`);
+    assert.ok(answers >= 55, `${answers} answers`);
     assert.ok(getEntryById("KB-S16").status, "status is kept in memory");
   });
 });

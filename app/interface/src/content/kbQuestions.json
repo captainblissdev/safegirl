@@ -47,6 +47,56 @@
       "question": "How does the combined contraceptive pill work, and what are the side effects?"
     },
     {
+      "id": "KB-C11",
+      "topicClass": "contraception",
+      "question": "If a boy pulls out before he finishes, can I still get pregnant?"
+    },
+    {
+      "id": "KB-C12",
+      "topicClass": "contraception",
+      "question": "How well do condoms work, and how do I use one correctly?"
+    },
+    {
+      "id": "KB-C13",
+      "topicClass": "contraception",
+      "question": "What is a female condom, and does it work?"
+    },
+    {
+      "id": "KB-C15",
+      "topicClass": "contraception",
+      "question": "What is an IUD (the coil), and how long does it last?"
+    },
+    {
+      "id": "KB-C16",
+      "topicClass": "contraception",
+      "question": "I missed my injection date. What should I do?"
+    },
+    {
+      "id": "KB-C17",
+      "topicClass": "contraception",
+      "question": "Can birth control make me gain or lose weight?"
+    },
+    {
+      "id": "KB-C18",
+      "topicClass": "contraception",
+      "question": "Can I use the pill, injection or implant if I have never had a baby?"
+    },
+    {
+      "id": "KB-C19",
+      "topicClass": "contraception",
+      "question": "I am breastfeeding. Which contraception can I use?"
+    },
+    {
+      "id": "KB-C20",
+      "topicClass": "contraception",
+      "question": "Does birth control cause cancer?"
+    },
+    {
+      "id": "KB-C21",
+      "topicClass": "contraception",
+      "question": "Can I stop or change my contraceptive method, and how soon can I get pregnant after I stop?"
+    },
+    {
       "id": "KB-S3",
       "topicClass": "sti",
       "question": "I might have been exposed to HIV. Is there something I can take to stop it?"
@@ -127,6 +177,16 @@
       "question": "Could a painless sore or a rash on my palms be syphilis?"
     },
     {
+      "id": "KB-S20",
+      "topicClass": "sti",
+      "question": "If I have an STI, does my partner need treatment too?"
+    },
+    {
+      "id": "KB-S21",
+      "topicClass": "sti",
+      "question": "I have itching, burning and a thick white discharge. Could it be a yeast infection?"
+    },
+    {
       "id": "KB-P1",
       "topicClass": "pregnancy",
       "question": "Do I have to get a pelvic exam right away at my first visit?"
@@ -150,6 +210,16 @@
       "id": "KB-P8",
       "topicClass": "pregnancy",
       "question": "How can I know if I am pregnant or not, and how do I get a pregnancy test?"
+    },
+    {
+      "id": "KB-P9",
+      "topicClass": "pregnancy",
+      "question": "I think I am pregnant. How many antenatal clinic visits do I need, and what happens at the first one?"
+    },
+    {
+      "id": "KB-P10",
+      "topicClass": "pregnancy",
+      "question": "How do I prepare for giving birth?"
     },
     {
       "id": "KB-G1",
@@ -205,6 +275,41 @@
       "id": "KB-G11",
       "topicClass": "general",
       "question": "What is a period, and why does it happen?"
+    },
+    {
+      "id": "KB-G12",
+      "topicClass": "general",
+      "question": "Is having a period dirty, shameful or a sickness?"
+    },
+    {
+      "id": "KB-G13",
+      "topicClass": "general",
+      "question": "Can I get pregnant once I have started my periods?"
+    },
+    {
+      "id": "KB-G14",
+      "topicClass": "general",
+      "question": "Is it normal that I have not started my periods yet?"
+    },
+    {
+      "id": "KB-G15",
+      "topicClass": "general",
+      "question": "What should I not use as a pad during my period?"
+    },
+    {
+      "id": "KB-G16",
+      "topicClass": "general",
+      "question": "What can I do about itching, a rash or a bad smell during my period?"
+    },
+    {
+      "id": "KB-G17",
+      "topicClass": "general",
+      "question": "Can I swim, run or play sports when I am on my period?"
+    },
+    {
+      "id": "KB-G18",
+      "topicClass": "general",
+      "question": "Is it normal to feel sick, vomit, have diarrhoea or a headache around my period?"
     }
   ]
 }

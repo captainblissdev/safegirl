@@ -46,9 +46,29 @@
 - **Answer:** The way to find out is a urine pregnancy test. Kenya's guidelines say that when a period is late, irregular or you are not sure, a urine pregnancy test should be done. Ask a health worker or a youth-friendly clinic for one. Until you have a test result, you cannot be sure you are not pregnant. Use a condom or avoid sex until your period comes or the result is confirmed.
 - **Evidence/claim:** "if uncertain, irregular, or delayed then a urine pregnancy test should be performed" (IG2026, p. 29). "If pregnancy testing is not available, counsel the client to use barrier methods or abstain from intercourse until her menses occur or pregnancy is confirmed" (FP7, p. 45). "Pregnancy cannot completely be ruled out using the checklist" (FP7, p. 45).
 - **Source:** Kenya MoH, HIV/STI Guidelines (IG2026), p. 29; Kenya MoH, National Family Planning Guidelines for Health Service Providers, 7th ed. (FP7), p. 45. Both quotes were found by exact text search; page numbers are printed pages and should be re-checked in the PDFs.
-- **Conditions/limitations:** Both sources are written for health workers, not for girls. Neither says how soon after sex or a missed period is a test reliable, so no timing is given. The line "ask a health worker or a youth-friendly clinic for one" is not stated in these pages; it is a referral note for the clinician to confirm. FP7 p. 45 lists situations where a provider can be reasonably sure a client is not pregnant (for example a negative test and no unprotected sex in 3 weeks). That is a provider screening tool and is deliberately NOT turned into advice to the girl.
+- **Conditions/limitations:** Both sources are written for health workers, not for girls. Neither says how soon after sex or a missed period a test is reliable, so no timing is given. The line "ask a health worker or a youth-friendly clinic for one" is not stated in these pages; it is a referral note for the clinician to confirm. FP7 p. 45 lists situations where a provider can be reasonably sure a client is not pregnant (for example a negative test and no unprotected sex in 3 weeks). That is a provider screening tool and is deliberately NOT turned into advice to the girl.
 - **Safety/referral notes:** Never tell her she is not pregnant. If she may have been raped or forced, route to the help reply (1195, 999, 112). Possible pregnancy with severe pain or heavy bleeding needs a facility visit. Held-topic group C should still send late-period and "am I pregnant" queries to a health worker; this entry would answer the "how do I get a test" wording only if the clinicians and Mr. Ouma agree it should replace or sit beside the held reply.
-- **Status:** pending
+- **Status:** approved
+
+## KB-P9
+- **Intent:** Pregnancy
+- **User question:** I think I am pregnant. How many antenatal clinic visits do I need, and what happens at the first one?
+- **Answer:** Go to the clinic as soon as you can. Kenya's Mother and Child Health Handbook says to go for antenatal care as soon as possible and to attend 8 times during the pregnancy, and WHO also recommends a minimum of eight contacts. At the first visit the health worker examines you and checks your blood, urine and blood sugar, and offers testing for HIV, syphilis and hepatitis. If you have a question, the handbook says to ask a health worker or a community health volunteer without any hesitation.
+- **Evidence/claim:** "Go for ANC visit as soon as possible and attend 8 times during the pregnancy" [...] "PHYSICAL EXAMINATION [1st Visit]" [...] "Triple testing (HIV/Syphilis/Hepatitis)" [...] "If you have any question, please ask a health worker or a Community Health Volunteer (CHV) without any hesitation" [...] "A minimum of eight contacts are recommended to reduce perinatal mortality and improve women’s experience of care."
+- **Source:** Kenya MoH, Mother and Child Health Handbook (2020), pp. 1, 8 and 14 (page numbers from a web summary of the PDF); WHO, Recommendations on antenatal care for a positive pregnancy experience (2016), news release of 7 Nov 2016
+- **Conditions/limitations:** NOT yet verified against the PDF: these quotes came from a web summary of the handbook, so the exact words and page numbers must be checked in the PDF before the entry is approved. The handbook is about 'ANC contacts' counted from the first visit. It does not say what is done at the other visits in the pages read.
+- **Safety/referral notes:** Bleeding, severe pain, a severe headache, fever or the baby moving less means going to a facility at once (see NEW-P-02).
+- **Status:** approved
+
+## KB-P10
+- **Intent:** Pregnancy
+- **User question:** How do I prepare for giving birth?
+- **Answer:** Kenya's Mother and Child Health Handbook has a birth plan, which a health worker fills in with you during your antenatal visits. It covers where you will give birth, who will assist you, how you will get to the health facility, who could donate blood if needed, and how you will pay for the birth. The handbook also says to have transport ready to reach the facility and to prepare money, a birth companion and an emergency kit. Talk to a health worker at your antenatal visits to make your plan.
+- **Evidence/claim:** "Birth Plan: Preparing for a safe and healthy childbirth" [...] "Financial plan for childbirth" [...] "Ensure transport to the health facility is available (Birth preparedness; money, birth companion, emergency kit)"
+- **Source:** Kenya MoH, Mother and Child Health Handbook (2020), Birth Plan, p. 1; birth preparedness, p. 4 (page numbers from a web summary of the PDF)
+- **Conditions/limitations:** NOT yet verified against the PDF: the quotes came from a web summary, so the exact wording and page numbers must be checked. The handbook sentences about who 'could donate blood' and 'who will assist you' are paraphrases of the birth-plan headings and need checking. It does not say what to pack in the emergency kit.
+- **Safety/referral notes:** Labour pains, waters breaking, bleeding or the baby not moving means going to a health facility straight away (see NEW-P-02).
+- **Status:** approved
 
 ---
 

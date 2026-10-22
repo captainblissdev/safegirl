@@ -89,6 +89,106 @@
       "source": "Kenya MoH, National Family Planning Guideline, 7th ed. (2025), \"Combined Oral Contraceptive (COCs) Pills\", p. 58 (what it is); p. 59 (effectiveness, first limitations); p. 60 (limitations, side effects); p. 61 (eligibility)",
       "conditions": "Missed-pill instructions are conditional tables (Table 4.4, p. 72) and are not summarised here (see appendix to `kb-candidates-2025-fp-guideline.md`). Serious but rare side effects (blood clots, stroke) are listed on p. 60 and are not included without a clinician. The pill does not suit everyone (medical conditions change eligibility).",
       "safetyNotes": "A health worker should check that the pill is suitable. Severe chest pain, a very bad headache, or a swollen painful leg need urgent care (not stated in the pages read; the clinician should decide whether to add warning signs)."
+    },
+    {
+      "kbId": "KB-C11",
+      "intent": "Contraception",
+      "question": "If a boy pulls out before he finishes, can I still get pregnant?",
+      "answer": "Yes. Pulling out (withdrawal) is one of the least effective ways to prevent pregnancy. Kenya's family planning guideline says that as people commonly use it, about 20 out of 100 women whose partners use withdrawal become pregnant in the first year. Even when it is done correctly every time, about 4 out of 100 become pregnant. It does not protect against STIs. A health worker can help you choose a more reliable method.",
+      "evidenceClaim": "\"one of the least effective methods, as commonly used\" [...] \"about 20 out of 100 women whose partners use withdrawal will become pregnant in the first year\" [...] \"about 4 out of 100 women whose partners use withdrawal will become pregnant in the first year\" [...] \"It does not protect against sexually transmitted infections\"",
+      "source": "Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), \"Withdrawal Method (Coitus Interruptus)\", p. 202",
+      "conditions": "The guideline does not mention pre-ejaculate (precum), so the answer does not either. The sentence about a health worker choosing a more reliable method is a referral note and is not stated in the page read.",
+      "safetyNotes": "If she had sex without protection and is worried, she should see a health worker (see the held entry on emergency contraception)."
+    },
+    {
+      "kbId": "KB-C12",
+      "intent": "Contraception",
+      "question": "How well do condoms work, and how do I use one correctly?",
+      "answer": "Kenya's family planning guideline says male condoms are 87% effective as people typically use them, and 98% effective when used correctly and every time. They also help protect against most STIs, including HIV. Use a new condom for every act of sex, check the packet is not torn or past its expiry date, unroll it all the way down the erect penis, and hold the rim while pulling out. Never reuse a condom, and do not use oil-based lubricants. Do not throw a used condom in a flush toilet.",
+      "evidenceClaim": "\"male condoms are 87% effective in typical use and much more effective, at 98%, when used correctly and consistently\" [...] \"Male and female condoms help prevent both pregnancy and most STIs (including HIV)\" [...] \"A new condom must be worn for each act of sexual intercourse\" [...] \"not use it if it is torn, damaged\" [...] \"past the expiration date\" [...] \"Cannot be used with oil-based lubricants\" [...] \"Condoms should not be reused\" [...] \"Do not dispose of the condom in a flush toilet\"",
+      "source": "Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), \"Male condom\", pp. 173 to 174 (mode of action, effectiveness, limitations); \"Condom use and disposal\", pp. 176 to 178 (Table 7.1 and the do-not list)",
+      "conditions": "The guideline describes use for a man's condom; the steps are shortened. Pages are printed pages inferred from the page footers and should be rechecked.",
+      "safetyNotes": "If a condom breaks or slips, she should see a health worker straight away. That case is the held entry NEW-C-06 and is not answered here."
+    },
+    {
+      "kbId": "KB-C13",
+      "intent": "Contraception",
+      "question": "What is a female condom, and does it work?",
+      "answer": "A female condom is a thin sheath that you wear inside the vagina. It has a ring at each end, and the open ring stays outside. Kenya's family planning guideline says it is slightly less effective than the male condom, about 79% to 95% effective. It can be put in up to eight hours before sex, it cannot be reused, and used properly and every time it helps protect against STIs, including HIV.",
+      "evidenceClaim": "\"Effectiveness ranges from 79% to 95%\" [...] \"It can be inserted eight hours before an anticipated sexual act\" [...] \"Cannot be reused\" [...] \"With consistent and proper use, condoms are highly effective for prevention against STIs, including HIV/AIDS\" [...] \"the ring at the open end holds the condom outside the vagina\"",
+      "source": "Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), \"Female condom\", p. 180",
+      "conditions": "The guideline also says female condoms are expensive; this is not in the answer. Where to get one is not in the page read.",
+      "safetyNotes": "If a condom slips or breaks, see a health worker (held entry NEW-C-06)."
+    },
+    {
+      "kbId": "KB-C15",
+      "intent": "Contraception",
+      "question": "What is an IUD (the coil), and how long does it last?",
+      "answer": "An IUD is a small, flexible plastic device that a trained health worker puts inside the womb to prevent pregnancy. Kenya's family planning guideline says copper devices protect for as long as 12 years and hormone devices for 5 years, and that they are 99% effective when used correctly. Fertility returns right away when it is taken out. Bleeding changes are common but not harmful. An IUD does not protect against STIs or HIV. For girls under 18 who have never had a baby, the guideline says an IUD can generally be provided after careful counselling on the range of methods, with follow-up, because the device is more likely to come out and there is a concern about STIs.",
+      "evidenceClaim": "\"small flexible plastic device\" [...] \"inserted into the uterine cavity to\" [...] \"Return to fertility is immediate\" [...] \"As long as 12 years\" [...] \"IU(C)D are 99% effective if used correctly and consistently\" [...] \"Does not offer protection against STI/HIV transmission\" [...] \"Requires a trained healthcare provider for insertion and removal\" [...] \"Generally, provide after\" [...] \"careful counselling on\" [...] \"increased risk of IU(C)D expulsion\" [...] \"Ensure follow-up.\"",
+      "source": "Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), Chapter 5 \"Intrauterine (Contraceptive) Devices\", pp. 134 to 135 (what it is, duration, effectiveness); p. 137 (limitations); Table 5.3 Category 2 conditions, p. 140 (younger than 18 and nulliparity); p. 154 (where it is provided)",
+      "conditions": "The age rule is a medical eligibility category 2 (benefits usually outweigh risks) and is a decision for the health worker. The guideline does not say a girl needs a parent's consent. Page numbers are printed pages inferred from the footers.",
+      "safetyNotes": "Only a trained health worker can fit or remove an IUD, so she should see a health worker for choice, fitting and removal."
+    },
+    {
+      "kbId": "KB-C16",
+      "intent": "Contraception",
+      "question": "I missed my injection date. What should I do?",
+      "answer": "Go back to the clinic, however long it has been since your appointment. Kenya's family planning guideline says that a woman who misses her injection should come back to the clinic regardless of how much time has passed. A health worker will tell you what to do next.",
+      "evidenceClaim": "\"she fails to keep the appointment date, she should be encouraged to come back to the clinic, regardless of how much time has passed since the missed appointment\"",
+      "source": "Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), \"Missed appointments\" (injectable contraceptives), p. 106",
+      "conditions": "The page read does not say whether she could already be pregnant or how long the protection lasts. The last sentence about a health worker is a referral note not stated in the page.",
+      "safetyNotes": "If she had sex without protection after the missed date, she should see a health worker soon. Emergency contraception is a held topic."
+    },
+    {
+      "kbId": "KB-C17",
+      "intent": "Contraception",
+      "question": "Can birth control make me gain or lose weight?",
+      "answer": "Kenya's family planning guideline lists weight change as a possible side effect of the combined pill, the hormonal injection and the implant. It does not say how much weight, and it does not say who is affected. If a side effect worries you, talk to a health worker.",
+      "evidenceClaim": "\"Weight change\" [...] \"Weight changes\"",
+      "source": "Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), combined oral contraceptives side effects, p. 60; injectable side effects, p. 96; implants side effects, p. 111",
+      "conditions": "The guideline lists weight change among the side effects of these methods but gives no amounts, so the answer cannot say how likely or how large. The talk-to-a-health-worker line is a referral note.",
+      "safetyNotes": "Sudden or severe weight change with other symptoms needs a health worker."
+    },
+    {
+      "kbId": "KB-C18",
+      "intent": "Contraception",
+      "question": "Can I use the pill, injection or implant if I have never had a baby?",
+      "answer": "Yes. Kenya's family planning guideline says women who have never had a baby (nulliparous women) can use combined pills, the injection, the implant and the female condom. For the combined pill the guideline gives the age range as from the first period to 40 years. A health worker will check that the method is right for you.",
+      "evidenceClaim": "\"Age: from menarche to 40 years\" [...] \"Women of any parity (parous and nulliparous)\" [...] \"All women of reproductive age, of any parity, including nulliparous women\"",
+      "source": "Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), combined pill eligibility, p. 61; injectable eligibility, p. 97; implants eligibility, p. 111; female condom eligibility, p. 181",
+      "conditions": "The medical eligibility categories can change this for a girl with a medical condition. Whether she needs a parent's consent is not stated here (see the consent question for the clinicians).",
+      "safetyNotes": "A health worker should check eligibility, especially for a girl with a medical condition or who might be pregnant."
+    },
+    {
+      "kbId": "KB-C19",
+      "intent": "Contraception",
+      "question": "I am breastfeeding. Which contraception can I use?",
+      "answer": "Breastfeeding can protect against pregnancy for a while, but only if three things are all true. Kenya's family planning guideline calls this the lactational amenorrhoea method (LAM): your periods have not come back, your baby is fed only on breast milk, and your baby is under six months old. Used this way it is up to 98% effective. When any one of the three stops being true, you need another family planning method straight away. A health worker can tell you which methods are safe while you breastfeed.",
+      "evidenceClaim": "\"The woman's menstrual periods have not resumed\" [...] \"The baby is exclusively breastfed\" [...] \"The baby is less than six months old\" [...] \"LAM is up to 98% effective if practiced during an exclusive breastfeeding period\" [...] \"When any of these three criteria is no longer met, another FP method must be introduced in a timely manner\"",
+      "source": "Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), Chapter 8 \"Lactational Amenorrhoea Method (LAM)\", pp. 186 to 187",
+      "conditions": "The page read covers LAM only. The guideline also gives rules for other methods after childbirth (for example, the combined pill has restrictions while breastfeeding), but this entry does not list them. The last sentence is a referral note and is not stated on the page.",
+      "safetyNotes": "A girl who has just had a baby should see a health worker about her method, because some methods are not suitable in the first months."
+    },
+    {
+      "kbId": "KB-C20",
+      "intent": "Contraception",
+      "question": "Does birth control cause cancer?",
+      "answer": "Kenya's family planning guideline lists protection against cancer of the ovary and of the lining of the womb as a benefit of combined pills, and says the progestin-only pill may help prevent cancer of the lining of the womb. It lists a family history of breast cancer among the conditions in which a woman can still use the combined pill without restriction (category 1). It says women who have breast cancer, or have had it, should generally not use the progestin-only pill. Tell the health worker about any cancer in you or your close family so they can help you choose.",
+      "evidenceClaim": "\"Protection against ovarian and endometrial cancer\" [...] \"May prevent endometrial cancer\" [...] \"Category 1\" [...] \"Benign breast disease, or family history of breast cancer\" [...] \"Women who have breast cancer or a history of breast cancer\"",
+      "source": "Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), combined oral contraceptives benefits, p. 59; COC eligibility, Category 1 list, p. 61; progestin-only pills benefits, p. 74; POP conditions, p. 81",
+      "conditions": "The pages read do not say whether hormonal methods change the risk of breast cancer in a healthy woman, so this answer does not say they cause it or that they are safe for it. The guideline's list of side effects was not searched for the word cancer in full. The last sentence is a referral note. The clinicians should decide how to word the breast cancer part.",
+      "safetyNotes": "Any breast lump should be seen by a health worker."
+    },
+    {
+      "kbId": "KB-C21",
+      "intent": "Contraception",
+      "question": "Can I stop or change my contraceptive method, and how soon can I get pregnant after I stop?",
+      "answer": "Yes, you can ask to stop or change your method. Kenya's family planning guideline says health workers must counsel anyone who wants to stop on how to switch in good time, so you do not get pregnant when you do not want to. An implant can be taken out any time you want. Most methods let you get pregnant again fairly soon, but the guideline says it can take about 3 to 6 months for most methods and up to 12 months after the injection. If side effects bother you, tell the health worker, because another method may suit you better.",
+      "evidenceClaim": "\"Healthcare providers have a duty to adequately counsel clients wishing to discontinue contraception about timely method-switching\" [...] \"implants can be removed anytime the client desires\" [...] \"a fairly prompt return of fertility after discontinuation\" [...] \"an average of 3 to 6 months delay in returning to fertility for most methods and sometimes up to 12 months for DMPA\" [...] \"Discontinuation or switch due to side effects\"",
+      "source": "Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), \"Return to fertility after contraception\" and discontinuation, p. 32; implants follow-up, p. 116",
+      "conditions": "Fertility returning 'fairly soon' and the 3 to 6 month figure appear together in the guideline; this answer says both. The last sentence about side effects is a referral note.",
+      "safetyNotes": "If she stops a method and does not want to be pregnant, she should start another method straight away or use condoms."
     }
   ],
   "sti": [
@@ -251,6 +351,26 @@
       "source": "Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 3.4 Table 3.8, p. 166 (primary) and p. 167 (secondary); WHO, Sexually transmitted infections fact sheet",
       "conditions": "Treatment drugs are not named. The guideline's blood-test details are not explained. Other conditions cause sores (herpes, yeast, injury; s. 3.4 p. 164, see NEW-S-13), so a sore does not by itself mean syphilis. \"Curable\" rests on WHO, as in NEW-S-02.",
       "safetyNotes": "Syphilis in pregnancy affects the baby (not covered here); a pregnant girl with a sore should see a health worker without delay."
+    },
+    {
+      "kbId": "KB-S20",
+      "intent": "STIs and HIV",
+      "question": "If I have an STI, does my partner need treatment too?",
+      "answer": "Yes. Kenya's guidelines say that people who are diagnosed with an STI should be encouraged to tell their sexual partners, and that partners should receive testing and treatment so the infection is not passed back and forth. A health worker can help, for example by notifying your partner for you or giving you a referral.",
+      "evidenceClaim": "\"Implement strategies to encourage individuals diagnosed with STIs to\" [...] \"inform their sexual partners.\" [...] \"diagnosed individuals receive appropriate testing and treatment to reduce\" [...] \"the risk of re-infection and further transmission\" [...] \"Encourage and assist with partner notification through patient referral,\"",
+      "source": "Kenya MoH/NASCOP, Integrated Guidelines (2026), STI prevention approaches table, p. 157; STI case management steps, p. 162",
+      "conditions": "The guidelines are written for health workers. Whether a partner can be treated without being seen is not explained here.",
+      "safetyNotes": "If she is afraid to tell a partner because of violence, she should talk to a health worker; call 1195, 999 or 112 if in danger."
+    },
+    {
+      "kbId": "KB-S21",
+      "intent": "STIs and HIV",
+      "question": "I have itching, burning and a thick white discharge. Could it be a yeast infection?",
+      "answer": "It could be. Kenya's guidelines describe a yeast infection (vaginal candidiasis) as causing itching or burning of the vulva, soreness, and a thick white or creamy discharge that is often like curds. It is not an STI, but its signs look like some STIs, and the same signs can also be caused by other infections, so it needs to be checked. Wet pads can encourage fungal infections like this, so change pads regularly. See a health worker for a test and treatment.",
+      "evidenceClaim": "\"It is therefore not an STI\" [...] \"Candidiasis presents with pruritus or a burning sensation of the vulva and vaginal soreness or irritation\" [...] \"it characteristically is curdy, white or creamy and thick\" [...] \"Wet pads can cause skin irritation and encourage fungal infections like candidiasis\"",
+      "source": "Kenya MoH/NASCOP, Integrated Guidelines (2026), \"Candidiasis\", p. 173; Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, \"Potential Health Risks Due to Poor Hygiene During Menstruation\", p. 19",
+      "conditions": "The guidelines are written for health workers, and the treatment is not given to the girl here. The answer does not tell her to treat herself.",
+      "safetyNotes": "Lower belly pain, a fever, sores or bleeding after sex needs a visit soon. See NEW-S-01."
     }
   ],
   "pregnancy": [
@@ -301,8 +421,28 @@
       "answer": "The way to find out is a urine pregnancy test. Kenya's guidelines say that when a period is late, irregular or you are not sure, a urine pregnancy test should be done. Ask a health worker or a youth-friendly clinic for one. Until you have a test result, you cannot be sure you are not pregnant. Use a condom or avoid sex until your period comes or the result is confirmed.",
       "evidenceClaim": "\"if uncertain, irregular, or delayed then a urine pregnancy test should be performed\" (IG2026, p. 29). \"If pregnancy testing is not available, counsel the client to use barrier methods or abstain from intercourse until her menses occur or pregnancy is confirmed\" (FP7, p. 45). \"Pregnancy cannot completely be ruled out using the checklist\" (FP7, p. 45).",
       "source": "Kenya MoH, HIV/STI Guidelines (IG2026), p. 29; Kenya MoH, National Family Planning Guidelines for Health Service Providers, 7th ed. (FP7), p. 45. Both quotes were found by exact text search; page numbers are printed pages and should be re-checked in the PDFs.",
-      "conditions": "Both sources are written for health workers, not for girls. Neither says how soon after sex or a missed period is a test reliable, so no timing is given. The line \"ask a health worker or a youth-friendly clinic for one\" is not stated in these pages; it is a referral note for the clinician to confirm. FP7 p. 45 lists situations where a provider can be reasonably sure a client is not pregnant (for example a negative test and no unprotected sex in 3 weeks). That is a provider screening tool and is deliberately NOT turned into advice to the girl.",
+      "conditions": "Both sources are written for health workers, not for girls. Neither says how soon after sex or a missed period a test is reliable, so no timing is given. The line \"ask a health worker or a youth-friendly clinic for one\" is not stated in these pages; it is a referral note for the clinician to confirm. FP7 p. 45 lists situations where a provider can be reasonably sure a client is not pregnant (for example a negative test and no unprotected sex in 3 weeks). That is a provider screening tool and is deliberately NOT turned into advice to the girl.",
       "safetyNotes": "Never tell her she is not pregnant. If she may have been raped or forced, route to the help reply (1195, 999, 112). Possible pregnancy with severe pain or heavy bleeding needs a facility visit. Held-topic group C should still send late-period and \"am I pregnant\" queries to a health worker; this entry would answer the \"how do I get a test\" wording only if the clinicians and Mr. Ouma agree it should replace or sit beside the held reply."
+    },
+    {
+      "kbId": "KB-P9",
+      "intent": "Pregnancy",
+      "question": "I think I am pregnant. How many antenatal clinic visits do I need, and what happens at the first one?",
+      "answer": "Go to the clinic as soon as you can. Kenya's Mother and Child Health Handbook says to go for antenatal care as soon as possible and to attend 8 times during the pregnancy, and WHO also recommends a minimum of eight contacts. At the first visit the health worker examines you and checks your blood, urine and blood sugar, and offers testing for HIV, syphilis and hepatitis. If you have a question, the handbook says to ask a health worker or a community health volunteer without any hesitation.",
+      "evidenceClaim": "\"Go for ANC visit as soon as possible and attend 8 times during the pregnancy\" [...] \"PHYSICAL EXAMINATION [1st Visit]\" [...] \"Triple testing (HIV/Syphilis/Hepatitis)\" [...] \"If you have any question, please ask a health worker or a Community Health Volunteer (CHV) without any hesitation\" [...] \"A minimum of eight contacts are recommended to reduce perinatal mortality and improve women’s experience of care.\"",
+      "source": "Kenya MoH, Mother and Child Health Handbook (2020), pp. 1, 8 and 14 (page numbers from a web summary of the PDF); WHO, Recommendations on antenatal care for a positive pregnancy experience (2016), news release of 7 Nov 2016",
+      "conditions": "NOT yet verified against the PDF: these quotes came from a web summary of the handbook, so the exact words and page numbers must be checked in the PDF before the entry is approved. The handbook is about 'ANC contacts' counted from the first visit. It does not say what is done at the other visits in the pages read.",
+      "safetyNotes": "Bleeding, severe pain, a severe headache, fever or the baby moving less means going to a facility at once (see NEW-P-02)."
+    },
+    {
+      "kbId": "KB-P10",
+      "intent": "Pregnancy",
+      "question": "How do I prepare for giving birth?",
+      "answer": "Kenya's Mother and Child Health Handbook has a birth plan, which a health worker fills in with you during your antenatal visits. It covers where you will give birth, who will assist you, how you will get to the health facility, who could donate blood if needed, and how you will pay for the birth. The handbook also says to have transport ready to reach the facility and to prepare money, a birth companion and an emergency kit. Talk to a health worker at your antenatal visits to make your plan.",
+      "evidenceClaim": "\"Birth Plan: Preparing for a safe and healthy childbirth\" [...] \"Financial plan for childbirth\" [...] \"Ensure transport to the health facility is available (Birth preparedness; money, birth companion, emergency kit)\"",
+      "source": "Kenya MoH, Mother and Child Health Handbook (2020), Birth Plan, p. 1; birth preparedness, p. 4 (page numbers from a web summary of the PDF)",
+      "conditions": "NOT yet verified against the PDF: the quotes came from a web summary, so the exact wording and page numbers must be checked. The handbook sentences about who 'could donate blood' and 'who will assist you' are paraphrases of the birth-plan headings and need checking. It does not say what to pack in the emergency kit.",
+      "safetyNotes": "Labour pains, waters breaking, bleeding or the baby not moving means going to a health facility straight away (see NEW-P-02)."
     }
   ],
   "general": [
@@ -400,7 +540,7 @@
       "kbId": "KB-G10",
       "intent": "General",
       "question": "How do I dispose of a used pad safely?",
-      "answer": "Kenya's school handbook says to wrap the used pad in paper, put it in a dustbin and close the lid. Keep period waste separate from other rubbish by using a sanitary bin where there is one. Throwing pads in pit latrines or toilets is shown as the wrong way, because it blocks drains and can pollute water.",
+      "answer": "Kenya's school handbook says to wrap the used pad in paper, put it in a dustbin and close the lid. Keep period waste separate from other rubbish by using a sanitary bin where there is one. Throwing pads in pit latrines or toilets is shown as the wrong way, because it blocks drains and can pollute water. If there is no bin, wrap the pad and keep it until you can dispose of it safely.",
       "evidenceClaim": "Figure 1, \"Proper storage of menstrual waste\": \"Wrap in paper\", \"Put in dustbin\", \"Close the lid\". / \"Girls and women should separate menstrual waste from the general waste by explicitly disposing of the menstrual waste in designated sanitary bins.\" / \"In the absence of bins, awareness should be raised on how to safely and hygienically handle used disposable sanitary pads.\" / The handbook's \"Improper Ways of Disposing Menstrual Waste\" figure shows \"Pit latrines\" (with pour-flush and western toilets). / Harms of improper disposal include \"Clogging of drainage system.\", water contamination, and \"Scavenging poses the risk of contracting diseases from infected menstrual waste.\"",
       "source": "Kenya MoH and MoE, MHM in Schools: A Handbook for Teachers, \"Safe Disposal of Used Menstrual Products\", pp. 24 to 25",
       "conditions": "The last sentence (\"keep it until you can dispose of it safely\") is not stated in the handbook; the clinician or Mr. Ouma should keep it or remove it. Incineration and community collection are not included. The \"improper ways\" labels come from a figure caption, so confirm them against the printed page.",
@@ -415,6 +555,76 @@
       "source": "Kenya MoH and MoE, MHM in Schools: A Handbook for Teachers, \"Menstruation Cycle\", p. 8; \"Psychological Well Being\", p. 21",
       "conditions": "Explains the cycle only; it does not say when a girl can get pregnant, which the handbook does not state. The 28-day cycle is not stated (see NEW-G-01). Pregnancy chances (during a period, first time) need another source and clinician input.",
       "safetyNotes": "None beyond NEW-G-01 (when to see a health worker)."
+    },
+    {
+      "kbId": "KB-G12",
+      "intent": "General",
+      "question": "Is having a period dirty, shameful or a sickness?",
+      "answer": "No. Kenya's school handbook says menstruation is a normal and natural part of growing up. It is not a sickness, an illness, a disease or an infection, and it is not harmful, a curse, dirty, shameful or unclean. It is nothing to be ashamed of.",
+      "evidenceClaim": "\"Menstruation is not:\" [...] \"Sickness, illness, disease, infection,\" [...] \"harmful, a curse, dirty, shameful, or\" [...] \"A normal and natural part of\" [...] \"biological maturity.\" [...] \"something to be ashamed of\"",
+      "source": "Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, \"Facts about Menstruation\", p. 10; \"Why break the Silence?\", p. 1",
+      "conditions": "This is about stigma and myths. It does not cover painful or heavy periods; those are in NEW-G-01 and NEW-G-02.",
+      "safetyNotes": "Very heavy bleeding or pain that stops usual activities needs a health worker (see NEW-G-01)."
+    },
+    {
+      "kbId": "KB-G13",
+      "intent": "General",
+      "question": "Can I get pregnant once I have started my periods?",
+      "answer": "Yes. Kenya's school handbook says menstruation is a sign that a girl can become pregnant. Once your periods have started, sex without protection can lead to pregnancy. A health worker can explain how to prevent pregnancy.",
+      "evidenceClaim": "\"Menstruation is also a sign that a\" [...] \"girl can become pregnant.\"",
+      "source": "Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, \"Facts about Menstruation\", p. 10",
+      "conditions": "The handbook does not say when in the cycle pregnancy is possible, so the answer does not either. The second and third sentences are an explanation and a referral note that are not in the page.",
+      "safetyNotes": "If she may already be pregnant, see a health worker (NEW-P-04)."
+    },
+    {
+      "kbId": "KB-G14",
+      "intent": "General",
+      "question": "Is it normal that I have not started my periods yet?",
+      "answer": "Girls start at different ages. Kenya's school handbook says the first period usually comes between 9 and 17 years of age, and some girls start as early as nine. Everyone goes through puberty differently, and in the first few years periods may not come regularly. If you are worried, talk to a health worker or a teacher you trust.",
+      "evidenceClaim": "\"occurring between 9-17 years\" [...] \"menstruation as early as nine years\" [...] \"years is not regular for some girls\" [...] \"Everyone experiences puberty differently\"",
+      "source": "Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, \"Menstruation and Semenarche\", p. 8; \"Facts about Menstruation\", p. 10",
+      "conditions": "The handbook gives the range but does not say when to see a health worker if periods have not started by a certain age; a clinician should add that. The last sentence is a referral note not in the pages read. Overlaps NEW-G-04.",
+      "safetyNotes": "A clinician should say at what age a girl with no period should see a health worker."
+    },
+    {
+      "kbId": "KB-G15",
+      "intent": "General",
+      "question": "What should I not use as a pad during my period?",
+      "answer": "Kenya's school handbook strongly discourages using cow dung, mud, leaves, tissue paper, dirty pieces of cloth, animal skin, pieces of mattress or blanket, or chicken and bird feathers, because they are unsafe and unhygienic. It also discourages sitting on soil or sand during your period. Pads, reusable pads, tampons and menstrual cups are the products the handbook describes.",
+      "evidenceClaim": "\"strongly discouraged\" [...] \"Cow dung\" [...] \"Mud\" [...] \"Tissue paper\" [...] \"Dirty pieces of cloth\" [...] \"Sitting on soil and sand during\"",
+      "source": "Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, \"Unsafe and Unhygienic Menstrual Products and Materials\", p. 17; \"Menstrual Products\", pp. 14 to 16",
+      "conditions": "The handbook does not say what to do if a girl cannot afford pads, so the answer does not either. It does not say whether clean cloth is acceptable.",
+      "safetyNotes": "Itching, a bad smell or pain after using any material should be seen by a health worker."
+    },
+    {
+      "kbId": "KB-G16",
+      "intent": "General",
+      "question": "What can I do about itching, a rash or a bad smell during my period?",
+      "answer": "Kenya's school handbook links itching and rashes to how pads are used and washed. Wet pads can irritate the skin and encourage fungal infections, and using dirty period products can lead to infections of the vagina. The handbook advises you to bath or shower at least once a day, change into clean underwear every day or when it is soiled, change your pad or other product regularly, wash your hands with soap and water before and after changing it, and clean the outside of your genitals often. Wash the vagina with water only: it cleans itself, and deodorants and too much soap can cause itching. Wipe from front to back. Some pads contain perfume and chemicals that can cause rashes. See a health worker if it does not go away.",
+      "evidenceClaim": "\"Wet pads can cause skin irritation and encourage fungal infections like candidiasis\" [...] \"Use of dirty menstrual products may cause bacterial growth leading to local infections\" [...] \"Taking a bath or shower at least\" [...] \"once a day\" [...] \"Changing of menstrual product\" [...] \"Ensuring hand washing with soap and clean water before and after\" [...] \"Washing the vagina with water on\" [...] \"external cleaning agent\" [...] \"deodorant should not be used\" [...] \"too much soap can cause itching\" [...] \"Wiping from front to back\" [...] \"perfume\" [...] \"chemicals which may cause rashes and irritation\"",
+      "source": "Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, \"Potential Health Risks Due to Poor Hygiene During Menstruation\", p. 19; \"Good hygiene practices during menstruation\", pp. 20 to 21; menstrual products table, pp. 14 to 16",
+      "conditions": "The handbook does not describe a bad smell on its own, or say what causes it, so the answer links smell only to hygiene as the handbook does. The 'see a health worker if it does not go away' line is a referral note and is not stated on the page.",
+      "safetyNotes": "A bad-smelling or coloured discharge, burning when passing urine, or a fever needs a health worker (see NEW-S-01, NEW-S-18)."
+    },
+    {
+      "kbId": "KB-G17",
+      "intent": "General",
+      "question": "Can I swim, run or play sports when I am on my period?",
+      "answer": "Kenya's school handbook lists physical exercise such as swimming, running, jogging, skipping and hula hoop as ways to ease period discomfort, along with a hot water bottle on the tummy to relieve cramps, a healthy diet and drinking plenty of water. If you use a tampon or cup, remember to change or empty it on time, and see a health worker if you get a sudden high fever, a rash or vomiting.",
+      "evidenceClaim": "\"Physical exercises such as\" [...] \"swimming, running, jogging,\" [...] \"skipping, hula hoop\" [...] \"Place hot water in a bottle on the\" [...] \"abdomen to relieve cramps\" [...] \"Drink plenty of water\" [...] \"Using a tampon longer than the\" [...] \"recommended time can cause Toxic\" [...] \"Shock Syndrome (TSS)\" [...] \"Sudden high fever\"",
+      "source": "Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, \"Management of PMS, Discomforts and Illnesses\", pp. 19 to 20",
+      "conditions": "The handbook does not say whether a girl can swim while bleeding, or which product is best for swimming. The answer does not either. Two sentences are joined across a two-column page; the quotes are exact fragments.",
+      "safetyNotes": "Toxic shock syndrome is a medical emergency (handbook p. 19): a sudden high fever, headache, vomiting, rash or confusion while using a tampon needs urgent care."
+    },
+    {
+      "kbId": "KB-G18",
+      "intent": "General",
+      "question": "Is it normal to feel sick, vomit, have diarrhoea or a headache around my period?",
+      "answer": "It can be. Kenya's school handbook lists an upset stomach, bloating, nausea, vomiting, constipation or diarrhoea, headache or backache among the symptoms of premenstrual syndrome (PMS), which begins 1 to 2 weeks before your period. It says symptoms differ from girl to girl and are strong enough in some girls to make it hard to get through the day. To ease them the handbook suggests a hot water bottle on the tummy, exercise, a healthy diet and plenty of water. Visit a doctor if the discomfort goes on for a long time.",
+      "evidenceClaim": "\"Upset stomach, bloating, nausea, vomiting, constipation or diarrhoea\" [...] \"Headache or backache\" [...] \"PMS symptoms occur\" [...] \"1 to 2 weeks before your menstruation\" [...] \"Symptoms of PMS vary from\" [...] \"girl to woman/girl\" [...] \"Please visit a doctor if you are\" [...] \"experiencing discomforts for a\" [...] \"longer period of time\"",
+      "source": "Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, \"Premenstrual Syndrome (PMS)\", p. 9; \"Management of PMS, Discomforts and Illnesses\", p. 20",
+      "conditions": "The handbook lists these as PMS symptoms. It does not cover nausea, vomiting or diarrhoea that happen during bleeding rather than before it, or what else could cause them. A girl who might be pregnant is not told to consider that here.",
+      "safetyNotes": "Vomiting or diarrhoea with a fever, severe pain or fainting needs a health worker. If she uses a tampon, see the toxic shock warning in NEW-G-15."
     }
   ]
 }

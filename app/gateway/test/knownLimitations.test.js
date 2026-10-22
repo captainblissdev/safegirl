@@ -6,9 +6,10 @@
  * cannot reach its own entry and the pipeline answers with another one.
  *
  * The fake ml_service below replays what the live V3 and retriever
- * returned on 22 October 2026 (scripts/self-retrieval-check.js). If the
- * classifier or the KB changes so that these questions get their own
- * entry, update this file and the decision log together.
+ * returned on 22 October 2026 for the 62-entry KB of Step K3
+ * (scripts/self-retrieval-check.js). If the classifier or the KB
+ * changes so that these questions get their own entry, update this file
+ * and the decision log together.
  */
 
 const { describe, it } = require("node:test");
@@ -37,8 +38,10 @@ const KB_QUESTIONS = JSON.parse(
 
 // Own entry, the live classification, and what scoped retrieval served.
 const LIMITATIONS = [
-  { id: "KB-S16", label: "general", confidence: 0.87, served: "KB-G5" },
-  { id: "KB-P1", label: "general", confidence: 0.85, served: "KB-G6" },
+  { id: "KB-C11", label: "pregnancy", confidence: 0.88, served: "KB-P8" },
+  { id: "KB-S16", label: "general", confidence: 0.87, served: "KB-G16" },
+  { id: "KB-P1", label: "general", confidence: 0.85, served: "KB-G14" },
+  { id: "KB-G13", label: "pregnancy", confidence: 0.88, served: "KB-P8" },
 ];
 
 function replayHandler({ id, label, confidence, served }) {

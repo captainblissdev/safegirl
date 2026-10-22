@@ -18,7 +18,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 3.3.1 p. 161; s. 3.5.1 Chlamydia p. 171; s. 3.5.2 Gonorrhoea p. 171; WHO, Sexually transmitted infections fact sheet
 - **Conditions/limitations:** Where a facility has no laboratory, the guideline still allows clinical diagnosis (s. 3.3.2 p. 162). No treatment or drug advice is given. The 2018 guideline (the earlier source) was replaced by the 2026 edition; the privacy sentence that came from it is dropped.
 - **Safety/referral notes:** Lower belly pain with fever, or pain during sex, needs a clinic visit soon. She should not self-treat.
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S5
 - **Intent:** STIs
@@ -28,7 +28,7 @@
 - **Source:** WHO, Sexually transmitted infections fact sheet; Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 3.3.1 p. 161; s. 3.5.1 and 3.5.2 p. 171
 - **Conditions/limitations:** The curable and not-curable statements rest on the WHO fact sheet only; IG2026 pages read do not state curability. Being cured does not protect against catching the infection again. Partner treatment is not included. The 2018 guideline citation is dropped.
 - **Safety/referral notes:** She should go to a clinic for testing and treatment rather than self-treating.
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S6
 - **Intent:** STIs
@@ -38,7 +38,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 1.5.2.5, p. 57; WHO AFRO, Kenya transitions to single-dose HPV vaccination schedule (page dated 1 November 2025)
 - **Conditions/limitations:** Sources disagree on the target age (WHO AFRO: 10-year-olds; news reports: 10 to 14). Whether it is free and whether catch-up is offered for older girls is not stated in any primary source seen, including IG2026 and FP7.
 - **Safety/referral notes:** Do not tell a girl over 14 she is ineligible. She should ask at a clinic.
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S7
 - **Intent:** STIs
@@ -48,7 +48,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 1.3.1 pp. 17 to 18; s. 1.3.3 p. 19; Table 1.15 p. 21; WHO, HIV fact sheet
 - **Conditions/limitations:** Not every facility offers every form. Some forms have extra conditions (kidney or liver checks). The pages read do not state the consent rule for 15- to 17-year-olds (Table 1.12 p. 17 says "national consent guidance"). "PrEP does not protect against other STIs" is not stated on the pages read; keep the WHO citation or remove the sentence.
 - **Safety/referral notes:** Girls under 15 who are at risk should go to a clinic or youth-friendly service for other prevention options. If she may have been exposed in the last 3 days she needs PEP urgently, not PrEP.
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S8
 - **Intent:** STIs
@@ -58,7 +58,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 3.5.1 p. 171; s. 3.5.2 p. 171; s. 3.3.1 p. 161
 - **Conditions/limitations:** The 70% figure is the guideline's figure for chlamydia in women. It is not given for other STIs. Not every untreated infection causes complications.
 - **Safety/referral notes:** Anyone who has had sex without a condom, or whose partner may have an STI, can ask for a test at a clinic. She does not have to have symptoms.
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S9
 - **Intent:** STIs
@@ -68,7 +68,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 1.6.5 p. 97
 - **Conditions/limitations:** This is about HIV only; it says nothing about other STIs. A person cannot tell her partner's viral load without the partner's own results.
 - **Safety/referral notes:** A partner of someone with HIV can ask a clinic about testing and prevention (PrEP or PEP). For other STIs, a test is still the only way to know.
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S10
 - **Intent:** STIs
@@ -78,7 +78,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 3.5.4 p. 172; s. 3.5.5 p. 172; s. 3.5.6 p. 173
 - **Conditions/limitations:** No description of normal discharge is given because none was found in the pages read. No treatments are given. This overlaps with the "discharge" gap topic, so the gynaecologist should approve it as the answer or replace it.
 - **Safety/referral notes:** Lower belly pain, fever or pain during sex needs a visit soon. A girl who may be pregnant should be seen before taking any treatment.
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S11
 - **Intent:** STIs
@@ -88,7 +88,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 1.1.1 p. 1; s. 1.1.3 p. 2
 - **Conditions/limitations:** The pages read do not state where to buy self-test kits, what they cost, or any age limit; no cost or "free" claim is made. A recent exposure can be missed by an early test (see NEW-S-10).
 - **Safety/referral notes:** If a self-test is reactive, she should go to a facility for confirmation and support, not decide on her own. A recent exposure within 72 hours needs PEP urgently (see NEW-S-06).
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S12
 - **Intent:** STIs
@@ -98,7 +98,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 1.1.7 Table 1.6 p. 12; s. 1.2.4 p. 16; s. 1.2.5 p. 16
 - **Conditions/limitations:** No single number of days is given for when a test becomes reliable. The 28-day and 12-week schedule is the PEP follow-up schedule, not a general rule for all tests.
 - **Safety/referral notes:** A possible exposure within the last 3 days is urgent: go to a facility about PEP (see NEW-S-06). Use condoms until the result is confirmed.
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S13
 - **Intent:** STIs
@@ -108,7 +108,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 3.6 pp. 178-179; s. 3.5.1 p. 171
 - **Conditions/limitations:** Treatment details are not included. The referral list in the guideline is for clinicians; the "go to hospital urgently" wording here is a simplified version for lay readers.
 - **Safety/referral notes:** Severe pelvic pain can also be an ectopic pregnancy or appendicitis, so it should never be treated at home.
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S14
 - **Intent:** STIs
@@ -118,7 +118,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 3.9 p. 182
 - **Conditions/limitations:** No treatments are given. Whether and where a girl can get the vaccine is not stated here (see NEW-S-03, still unverified).
 - **Safety/referral notes:** She should see a health worker for any growth rather than trying home treatments.
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S15
 - **Intent:** STIs
@@ -128,7 +128,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 3.4 and Table 3.8 p. 164
 - **Conditions/limitations:** No treatments or doses are given. Whether herpes can be cured is not stated in the pages read, so the answer does not say.
 - **Safety/referral notes:** Sores plus fever, or large painful swellings in the groin, need a visit soon.
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S16
 - **Intent:** STIs
@@ -138,7 +138,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 3.10.1 Pediculosis Pubis, p. 184; s. 3.10.2 Scabies, p. 185
 - **Conditions/limitations:** The guideline lists treatments (creams, lotions, tablets); none are named. "Thrush" and other causes of itching come from IG2026 s. 3.5.6 (p. 173), where candidiasis is described as "not an STI" (see NEW-S-08). Do not tell a girl that scabies means she has had sex: among children it usually is not sexually acquired.
 - **Safety/referral notes:** If itching is with sores, unusual discharge or pain, she should see a health worker. If she says she was forced, route to the existing help reply (not a topic for this entry).
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S17
 - **Intent:** STIs
@@ -148,7 +148,7 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 4.6.2 p. 192; s. 4.4 Table 4.2 and s. 4.5 p. 189; Kenya MoH, National Family Planning Guideline, 7th ed. (2025), p. 110
 - **Conditions/limitations:** The pages read do not give the vaccine schedule or catch-up rules for adolescents, so none is stated. IG2026 p. 57 says the hepatitis B vaccine is for "newborns and high-risk groups" (in a section on people living with HIV); whether a teenager is eligible needs a clinician. Hepatitis A, C and E are not covered.
 - **Safety/referral notes:** Yellow skin or eyes, dark urine or stomach pain need a health worker soon. She should not assume she is protected.
-- **Status:** pending
+- **Status:** approved
 
 ## KB-S18
 - **Intent:** STIs
@@ -158,7 +158,37 @@
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 3.4 Table 3.8, p. 166 (primary) and p. 167 (secondary); WHO, Sexually transmitted infections fact sheet
 - **Conditions/limitations:** Treatment drugs are not named. The guideline's blood-test details are not explained. Other conditions cause sores (herpes, yeast, injury; s. 3.4 p. 164, see NEW-S-13), so a sore does not by itself mean syphilis. "Curable" rests on WHO, as in NEW-S-02.
 - **Safety/referral notes:** Syphilis in pregnancy affects the baby (not covered here); a pregnant girl with a sore should see a health worker without delay.
+- **Status:** approved
+
+## KB-S19
+- **Intent:** STIs
+- **User question:** Can I take medicine after unprotected sex to stop HIV?
+- **Answer:** Yes. A medicine called PEP can prevent HIV after a possible exposure, but it must be started as soon as possible and no later than 72 hours (3 days) after. It is taken for 28 days. Go to a health facility straight away: you will be offered an HIV test and PEP if it is right for you, and you will also be checked for other STIs and hepatitis B. If the sex was forced, the same facility can give STI treatment and emergency contraception.
+- **Evidence/claim:** PEP must be started within 72 hours of exposure; sexual contact is an eligible exposure; the course is 28 days; PEP provision includes hepatitis B screening and STI evaluation; sexual assault care includes STI treatment and emergency contraception.
+- **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 1.2 p. 13; Table 1.8 p. 14; PEP management table p. 15; sexual assault care p. 16
+- **Conditions/limitations:** Medicine names and doses are deliberately not given. The 72-hour limit is firm in the guideline. The consent rule for adolescents is "in line with national consent guidance" (Table 1.12, p. 17).
+- **Safety/referral notes:** Urgent: the time limit is the point. Overlaps with the Safety Net and the held-topic rules (emergency contraception timing, sexual assault). Do not add this entry until the clinicians have approved it and the held-topic rules have been reviewed against it.
 - **Status:** pending
+
+## KB-S20
+- **Intent:** STIs and HIV
+- **User question:** If I have an STI, does my partner need treatment too?
+- **Answer:** Yes. Kenya's guidelines say that people who are diagnosed with an STI should be encouraged to tell their sexual partners, and that partners should receive testing and treatment so the infection is not passed back and forth. A health worker can help, for example by notifying your partner for you or giving you a referral.
+- **Evidence/claim:** "Implement strategies to encourage individuals diagnosed with STIs to" [...] "inform their sexual partners." [...] "diagnosed individuals receive appropriate testing and treatment to reduce" [...] "the risk of re-infection and further transmission" [...] "Encourage and assist with partner notification through patient referral,"
+- **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), STI prevention approaches table, p. 157; STI case management steps, p. 162
+- **Conditions/limitations:** The guidelines are written for health workers. Whether a partner can be treated without being seen is not explained here.
+- **Safety/referral notes:** If she is afraid to tell a partner because of violence, she should talk to a health worker; call 1195, 999 or 112 if in danger.
+- **Status:** approved
+
+## KB-S21
+- **Intent:** STIs and HIV
+- **User question:** I have itching, burning and a thick white discharge. Could it be a yeast infection?
+- **Answer:** It could be. Kenya's guidelines describe a yeast infection (vaginal candidiasis) as causing itching or burning of the vulva, soreness, and a thick white or creamy discharge that is often like curds. It is not an STI, but its signs look like some STIs, and the same signs can also be caused by other infections, so it needs to be checked. Wet pads can encourage fungal infections like this, so change pads regularly. See a health worker for a test and treatment.
+- **Evidence/claim:** "It is therefore not an STI" [...] "Candidiasis presents with pruritus or a burning sensation of the vulva and vaginal soreness or irritation" [...] "it characteristically is curdy, white or creamy and thick" [...] "Wet pads can cause skin irritation and encourage fungal infections like candidiasis"
+- **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), "Candidiasis", p. 173; Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, "Potential Health Risks Due to Poor Hygiene During Menstruation", p. 19
+- **Conditions/limitations:** The guidelines are written for health workers, and the treatment is not given to the girl here. The answer does not tell her to treat herself.
+- **Safety/referral notes:** Lower belly pain, a fever, sores or bleeding after sex needs a visit soon. See NEW-S-01.
+- **Status:** approved
 
 ---
 

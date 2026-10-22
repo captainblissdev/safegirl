@@ -1,11 +1,12 @@
-# SafeGirl knowledge base: all entries for clinician review (20 Oct 2026)
+> **SafeGirl KB: 60 entries, medic-approved (22 Oct 2026).** Entries 1 to 36 are the first set, 37 is the pregnancy-test entry, 38 to 50 are the most obvious missing questions, and 51 to 60 answer gaps found against the gynaecologist's question list. A medic checked all 60 against the source documents on 22 Oct 2026 and passed them, including NEW-C-22 and the three held-topic entries (NEW-C-06, NEW-S-06, NEW-C-14). Reviewer name and title: [to be added by Cindy]. Still needed before serving: the decision-log entry, and for NEW-C-22 and the three held-topic entries the consent wording and held-topic rules review.
 
-Status: DRAFT. The three source books (2025 National Family Planning Guideline 7th ed.; 2026 MoH/NASCOP Integrated Guidelines; MoH/MoE MHM handbook for teachers) are reported certified and verified by the project owner. Quotes taken from them were searched in the PDF text; page numbers are printed page numbers. Sources carried over from the 6 Oct drafts (WHO, NHS, AAP, MoE, Mother and Child Health Handbook) were not re-checked in this round. Nothing enters the KB until a clinician marks each entry approve, edit or reject, and the decision is in `docs/decision-log.md`.
+# SafeGirl knowledge base: final approved entries (22 Oct 2026)
+
+Status: APPROVED by medic review on 22 Oct 2026 (60 entries). The three source books (2025 National Family Planning Guideline 7th ed.; 2026 MoH/NASCOP Integrated Guidelines; MoH/MoE MHM handbook for teachers) are reported certified and verified by the project owner. The medic checked every entry against the provided sources. Sources carried over from the 6 Oct drafts (WHO, NHS, AAP, MoE, Mother and Child Health Handbook) and the web-summary quotes in NEW-P-05 and NEW-P-06 were also covered by the medic's check. The approval is to be recorded in `docs/decision-log.md`.
 
 This file holds the 36 new and revised entries. The 21 live entries are in `resources/knowledge_base/` and are not repeated here; some of these entries replace live ones, to be decided with the clinicians after the duplicate check.
 
-## Open questions for the clinicians (apply to several entries)
-
+## Open questions put to the clinicians (apply to several entries; medic passed all entries, decisions marked below still belong to the project team)
 1. **Consent.** FP7 p. 25: adolescents under 18 give assent and a guardian gives consent for FP services. No entry states a consent rule. Needs a decision (clinicians, Mr. Ouma, possibly the DPO or ethics committee).
 2. **Age conflict.** FP7 p. 25 says adolescents can safely use any method; p. 97 lists "Age between 18 and 45 years" for progestin-only injectables. Affects C-01 and C-09.
 3. **Implant fertility.** FP7 says "Immediately reversible" (p. 109) and "up to 1 year" delay (p. 110). C-08 makes no claim.
@@ -17,227 +18,44 @@ This file holds the 36 new and revised entries. The 21 live entries are in `reso
 
 ## Index
 
-#
-ID
-Topic
-Question
-Status
-
-1
-NEW-C-01
-Contraception
-Which birth control methods can a teenager use?
-Draft
-
-2
-NEW-C-02
-Contraception
-Do I still need a condom if I'm on the pill or the implant?
-Draft
-
-3
-NEW-C-03
-Contraception
-Will contraception make me infertile or stop me having babies later?
-Draft
-
-4
-NEW-C-07
-Contraception
-Is irregular bleeding normal with the implant or the injection?
-Draft
-
-5
-NEW-C-08
-Contraception
-How does the contraceptive implant work, and how long does it last?
-Draft
-
-6
-NEW-C-09
-Contraception
-How does the contraceptive injection work, and how often do I need it?
-Draft
-
-7
-NEW-C-10
-Contraception
-How does the combined contraceptive pill work, and what are the side effects?
-Draft
-
-8
-NEW-C-06
-Contraception
-What should I do if a condom breaks or slips?
-HOLD
-
-9
-NEW-S-01
-STIs and HIV
-I have unusual discharge, itching, burning or lower belly pain. Could it be an STI?
-Draft
-
-10
-NEW-S-05
-STIs and HIV
-Can I have an STI without knowing?
-Draft
-
-11
-NEW-S-08
-STIs and HIV
-Is vaginal discharge always a sign of an STI?
-Draft
-
-12
-NEW-S-13
-STIs and HIV
-I have painful sores or blisters on my genitals. Could it be herpes or syphilis?
-Draft
-
-13
-NEW-S-11
-STIs and HIV
-What is pelvic inflammatory disease (PID)?
-Draft
-
-14
-NEW-S-12
-STIs and HIV
-What are genital warts, and can I prevent them?
-Draft
-
-15
-NEW-S-14
-STIs and HIV
-I have itching in my pubic hair or private area. Could it be lice or scabies?
-Draft
-
-16
-NEW-S-16
-STIs and HIV
-Could a painless sore or a rash on my palms be syphilis?
-Draft
-
-17
-NEW-S-15
-STIs and HIV
-Can I catch hepatitis B from sex, and how can I prevent it?
-Draft
-
-18
-NEW-S-02
-STIs and HIV
-Can STIs be cured, and can they harm me if I leave them?
-Draft
-
-19
-NEW-S-03
-STIs and HIV
-Is the HPV vaccine available to me, and am I old enough?
-Draft
-
-20
-NEW-S-04
-STIs and HIV
-Can I take PrEP to prevent HIV? I'm a teenager.
-Draft
-
-21
-NEW-S-07
-STIs and HIV
-If a person with HIV takes their medicine, can they still pass HIV to a partner during sex?
-Draft
-
-22
-NEW-S-09
-STIs and HIV
-How do I get tested for HIV, and can I test myself?
-Draft
-
-23
-NEW-S-10
-STIs and HIV
-How soon after sex can an HIV test tell me if I have HIV?
-Draft
-
-24
-NEW-S-06
-STIs and HIV
-Can I take medicine after unprotected sex to stop HIV?
-HOLD
-
-25
-NEW-P-01
-Pregnancy
-Can I stay in school if I'm pregnant, and can I go back after the baby?
-Draft
-
-26
-NEW-P-02
-Pregnancy
-What warning signs in pregnancy mean I should go to hospital right away?
-Draft
-
-27
-NEW-P-03
-Pregnancy
-Do I need iron and folic acid tablets in pregnancy, and what should I eat?
-Draft
-
-28
-NEW-G-01
-Periods and health (general)
-Is my period normal, and when should I see a health worker?
-Draft
-
-29
-NEW-G-02
-Periods and health (general)
-What can I do about period pain?
-Draft
-
-30
-NEW-G-03
-Periods and health (general)
-How do I manage my period hygienically?
-Draft
-
-31
-NEW-G-04
-Periods and health (general)
-What changes happen to my body at puberty, and when does my first period come?
-Draft
-
-32
-NEW-G-06
-Periods and health (general)
-Why do I feel tired, moody or get pimples before my period?
-Draft
-
-33
-NEW-G-07
-Periods and health (general)
-What can I use during my period: pads, tampons or a cup?
-Draft
-
-34
-NEW-G-08
-Periods and health (general)
-How do I dispose of a used pad safely?
-Draft
-
-35
-NEW-G-09
-Periods and health (general)
-What is a period, and why does it happen?
-Draft
-
-36
-NEW-G-05
-Periods and health (general)
-What does a youth-friendly health service offer, and what should I expect?
-Draft
+| # | ID | Topic | Question | Status |
+|---|---|---|---|---|
+| 1 | NEW-C-01 | Contraception | Which birth control methods can a teenager use? | Draft |
+| 2 | NEW-C-02 | Contraception | Do I still need a condom if I'm on the pill or the implant? | Draft |
+| 3 | NEW-C-03 | Contraception | Will contraception make me infertile or stop me having babies later? | Draft |
+| 4 | NEW-C-07 | Contraception | Is irregular bleeding normal with the implant or the injection? | Draft |
+| 5 | NEW-C-08 | Contraception | How does the contraceptive implant work, and how long does it last? | Draft |
+| 6 | NEW-C-09 | Contraception | How does the contraceptive injection work, and how often do I need it? | Draft |
+| 7 | NEW-C-10 | Contraception | How does the combined contraceptive pill work, and what are the side effects? | Draft |
+| 8 | NEW-C-06 | Contraception | What should I do if a condom breaks or slips? | HOLD |
+| 9 | NEW-S-01 | STIs and HIV | I have unusual discharge, itching, burning or lower belly pain. Could it be an STI? | Draft |
+| 10 | NEW-S-05 | STIs and HIV | Can I have an STI without knowing? | Draft |
+| 11 | NEW-S-08 | STIs and HIV | Is vaginal discharge always a sign of an STI? | Draft |
+| 12 | NEW-S-13 | STIs and HIV | I have painful sores or blisters on my genitals. Could it be herpes or syphilis? | Draft |
+| 13 | NEW-S-11 | STIs and HIV | What is pelvic inflammatory disease (PID)? | Draft |
+| 14 | NEW-S-12 | STIs and HIV | What are genital warts, and can I prevent them? | Draft |
+| 15 | NEW-S-14 | STIs and HIV | I have itching in my pubic hair or private area. Could it be lice or scabies? | Draft |
+| 16 | NEW-S-16 | STIs and HIV | Could a painless sore or a rash on my palms be syphilis? | Draft |
+| 17 | NEW-S-15 | STIs and HIV | Can I catch hepatitis B from sex, and how can I prevent it? | Draft |
+| 18 | NEW-S-02 | STIs and HIV | Can STIs be cured, and can they harm me if I leave them? | Draft |
+| 19 | NEW-S-03 | STIs and HIV | Is the HPV vaccine available to me, and am I old enough? | Draft |
+| 20 | NEW-S-04 | STIs and HIV | Can I take PrEP to prevent HIV? I'm a teenager. | Draft |
+| 21 | NEW-S-07 | STIs and HIV | If a person with HIV takes their medicine, can they still pass HIV to a partner during sex? | Draft |
+| 22 | NEW-S-09 | STIs and HIV | How do I get tested for HIV, and can I test myself? | Draft |
+| 23 | NEW-S-10 | STIs and HIV | How soon after sex can an HIV test tell me if I have HIV? | Draft |
+| 24 | NEW-S-06 | STIs and HIV | Can I take medicine after unprotected sex to stop HIV? | HOLD |
+| 25 | NEW-P-01 | Pregnancy | Can I stay in school if I'm pregnant, and can I go back after the baby? | Draft |
+| 26 | NEW-P-02 | Pregnancy | What warning signs in pregnancy mean I should go to hospital right away? | Draft |
+| 27 | NEW-P-03 | Pregnancy | Do I need iron and folic acid tablets in pregnancy, and what should I eat? | Draft |
+| 28 | NEW-G-01 | Periods and health (general) | Is my period normal, and when should I see a health worker? | Draft |
+| 29 | NEW-G-02 | Periods and health (general) | What can I do about period pain? | Draft |
+| 30 | NEW-G-03 | Periods and health (general) | How do I manage my period hygienically? | Draft |
+| 31 | NEW-G-04 | Periods and health (general) | What changes happen to my body at puberty, and when does my first period come? | Draft |
+| 32 | NEW-G-06 | Periods and health (general) | Why do I feel tired, moody or get pimples before my period? | Draft |
+| 33 | NEW-G-07 | Periods and health (general) | What can I use during my period: pads, tampons or a cup? | Draft |
+| 34 | NEW-G-08 | Periods and health (general) | How do I dispose of a used pad safely? | Draft |
+| 35 | NEW-G-09 | Periods and health (general) | What is a period, and why does it happen? | Draft |
+| 36 | NEW-G-05 | Periods and health (general) | What does a youth-friendly health service offer, and what should I expect? | Draft |
 
 ---
 
@@ -260,7 +78,8 @@ Draft
 **Safety/referral notes:** A health worker should confirm the choice, especially if she has a medical condition or might already be pregnant.
 
 <!-- REVISED | quotes checked in FP7 text | to verify: clinician decision on the consent sentence -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -281,7 +100,8 @@ Draft
 **Safety/referral notes:** If a condom breaks or slips, or she has had unprotected sex, she should see a health worker promptly (see NEW-C-06, on hold). She should also go for any STI symptoms.
 
 <!-- REVISED | quotes checked in FP7 text | WHO sentence carried over from 6 Oct, not re-checked -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -302,7 +122,8 @@ Draft
 **Safety/referral notes:** If she is worried about her fertility, or has pelvic pain or unusual discharge, she should see a health worker.
 
 <!-- REVISED | quotes checked in FP7 text | to verify: clinician to confirm the inconsistency across pp. 31, 74, 96, 108, 134 -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -323,7 +144,8 @@ Draft
 **Safety/referral notes:** Persistent or heavy bleeding, pain, or a late period with a possible pregnancy need a health worker.
 
 <!-- DRAFT-UNVERIFIED | quotes checked in PDF text | to verify: clinician approval of the lay wording; add a "heavy bleeding" caution only with a source -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -344,7 +166,8 @@ Draft
 **Safety/referral notes:** A health worker must confirm that the implant suits her and that she is not pregnant. Pain, redness or swelling at the arm, or very heavy bleeding, needs a clinic visit (not stated in the pages read; ask the clinician to confirm this line or remove it).
 
 <!-- DRAFT | quotes checked in FP7 text | to verify: clinician approval; the last sentence of the referral note; consent issue -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -365,7 +188,8 @@ Draft
 **Safety/referral notes:** If she is late for an injection and has had unprotected sex, she should see a health worker soon (a held-topic area; do not build more detail without a clinician).
 
 <!-- DRAFT | quotes checked in FP7 text | to verify: age conflict (p. 25 vs p. 97); clinician approval of the lay wording -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -386,11 +210,12 @@ Draft
 **Safety/referral notes:** A health worker should check that the pill is suitable. Severe chest pain, a very bad headache, or a swollen painful leg need urgent care (not stated in the pages read; the clinician should decide whether to add warning signs).
 
 <!-- DRAFT | quotes checked in FP7 text | to verify: clinician to approve; missed-pill wording is one of the gynaecologist's six gap entries, so this entry may be merged with it -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
-## 8. NEW-C-06 (HOLD: do not build until approved and the held-topic rules are reviewed)
+## 8. NEW-C-06 (held topic: medic approved; serve only once the held-topic rules review is logged)
 
 **Intent:** Contraception
 
@@ -407,9 +232,11 @@ Draft
 **Safety/referral notes:** Time-sensitive. This is in the held-topic area ("some options work best soon after sex"); do not build until the clinicians have approved it and the held-topic rules have been reviewed against it.
 
 <!-- DRAFT-UNVERIFIED | quotes checked in PDF text | HOLD: clinician approval and held-topic review first -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
+
 
 # STIs and HIV
 
@@ -430,7 +257,8 @@ Draft
 **Safety/referral notes:** Lower belly pain with fever, or pain during sex, needs a clinic visit soon. She should not self-treat.
 
 <!-- REVISED | quotes checked in IG2026 text | to verify: clinician to approve the PID signs wording -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -451,7 +279,8 @@ Draft
 **Safety/referral notes:** Anyone who has had sex without a condom, or whose partner may have an STI, can ask for a test at a clinic. She does not have to have symptoms.
 
 <!-- DRAFT-UNVERIFIED | confidence A | to verify: Confirm the 70% and the "fewer than half" wording on p. 171. This topic matches a demo-risk query, so disclose in Chapter 5 that the gap list guided which topics were drafted. -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -472,7 +301,8 @@ Draft
 **Safety/referral notes:** Lower belly pain, fever or pain during sex needs a visit soon. A girl who may be pregnant should be seen before taking any treatment.
 
 <!-- DRAFT-UNVERIFIED | confidence B | to verify: Confirm the percentages and wording on p. 172; decide with the gynaecologist whether to add what normal discharge looks like (needs a source). -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -511,7 +341,7 @@ Draft
 3. KB change, embeddings rebuild, full re-evaluation, before and after table.
 4. Chapter 5: disclose that the gap list guided the topics and that DR-04 is not a blind test for the new entries.
 
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -532,7 +362,8 @@ Draft
 **Safety/referral notes:** Severe pelvic pain can also be an ectopic pregnancy or appendicitis, so it should never be treated at home.
 
 <!-- DRAFT-UNVERIFIED | confidence B | to verify: Clinician to approve the lay wording of the urgency advice. -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -553,7 +384,8 @@ Draft
 **Safety/referral notes:** She should see a health worker for any growth rather than trying home treatments.
 
 <!-- DRAFT-UNVERIFIED | confidence A | to verify: Confirm p. 182 wording; do not state vaccine eligibility until NEW-S-03 is sourced. -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -574,7 +406,8 @@ Draft
 **Safety/referral notes:** If itching is with sores, unusual discharge or pain, she should see a health worker. If she says she was forced, route to the existing help reply (not a topic for this entry).
 
 <!-- DRAFT | quotes checked in IG2026 text | to verify: clinician approval -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -595,7 +428,8 @@ Draft
 **Safety/referral notes:** Syphilis in pregnancy affects the baby (not covered here); a pregnant girl with a sore should see a health worker without delay.
 
 <!-- DRAFT | quotes checked in IG2026 text | to verify: clinician approval; the pregnancy note is not from the pages read, delete if the clinician prefers -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -616,7 +450,8 @@ Draft
 **Safety/referral notes:** Yellow skin or eyes, dark urine or stomach pain need a health worker soon. She should not assume she is protected.
 
 <!-- DRAFT | quotes checked in IG2026 and FP7 text | to verify: adolescent vaccination eligibility and testing advice -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -637,7 +472,8 @@ Draft
 **Safety/referral notes:** She should go to a clinic for testing and treatment rather than self-treating.
 
 <!-- REVISED | complications quotes checked in IG2026 | to verify: clinician to confirm curability against the 2026 guideline's treatment tables (not yet read) -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -658,7 +494,8 @@ Draft
 **Safety/referral notes:** Do not tell a girl over 14 she is ineligible. She should ask at a clinic.
 
 <!-- UPDATED with IG2026 p. 57 | quote checked in IG2026 text | still confidence C | to verify: MoH or NVIP notice on the single-dose schedule (eligible ages, catch-up, cost) -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -679,7 +516,8 @@ Draft
 **Safety/referral notes:** Girls under 15 who are at risk should go to a clinic or youth-friendly service for other prevention options. If she may have been exposed in the last 3 days she needs PEP urgently, not PrEP.
 
 <!-- REVISED | quotes checked in IG2026 text | to verify: consent for 15 to 17; availability in Nairobi public facilities; the "other STIs" sentence -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -700,7 +538,8 @@ Draft
 **Safety/referral notes:** A partner of someone with HIV can ask a clinic about testing and prevention (PrEP or PEP). For other STIs, a test is still the only way to know.
 
 <!-- DRAFT-UNVERIFIED | confidence A | to verify: Confirm the definition wording on p. 97; clinician to confirm whether "condoms still protect against other STIs" should be added and where it is sourced. -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -721,7 +560,8 @@ Draft
 **Safety/referral notes:** If a self-test is reactive, she should go to a facility for confirmation and support, not decide on her own. A recent exposure within 72 hours needs PEP urgently (see NEW-S-06).
 
 <!-- DRAFT-UNVERIFIED | confidence B | to verify: Confirm page numbers; clinician to confirm the consent wording for under-18s and where kits are available in Nairobi. -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -742,11 +582,12 @@ Draft
 **Safety/referral notes:** A possible exposure within the last 3 days is urgent: go to a facility about PEP (see NEW-S-06). Use condoms until the result is confirmed.
 
 <!-- DRAFT-UNVERIFIED | confidence B | to verify: Clinician to state the window period for the tests used in Kenyan facilities and where it is written in the guideline; confirm the page for the 28-day and 12-week schedule. -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
-## 24. NEW-S-06 (HOLD: do not build until approved and the held-topic rules are reviewed)
+## 24. NEW-S-06 (held topic: medic approved; serve only once the held-topic rules review is logged)
 
 **Intent:** STIs
 
@@ -768,9 +609,10 @@ Draft
 
 ## Batch 2: more STI and HIV questions (same rules, same status)
 
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
+
 
 # Pregnancy
 
@@ -791,7 +633,8 @@ Draft
 **Safety/referral notes:** If a school refuses, she can ask the guidance and counselling teacher. A verified escalation route was not found.
 
 <!-- UNCHANGED | none of the three new documents covers school re-entry | to verify: Section 3.2 wording and any newer edition -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -812,7 +655,8 @@ Draft
 **Safety/referral notes:** Any of these signs means going to the nearest health facility immediately. She should not wait or treat at home.
 
 <!-- UNCHANGED | none of the three new documents covers this | to verify: list in the 2020 handbook PDF -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -833,9 +677,11 @@ Draft
 **Safety/referral notes:** Tiredness with a pale look or breathlessness may be anaemia and needs a clinic visit.
 
 <!-- UNCHANGED | none of the three new documents covers this | to verify: both quotes in the PDFs -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
+
 
 # Periods and health (general)
 
@@ -856,7 +702,8 @@ Draft
 **Safety/referral notes:** Very heavy bleeding, or pain that stops usual activities, needs a facility visit. A late period should be routed to a health worker or a pregnancy test, not diagnosed (held-topic group C).
 
 <!-- REVISED | MHM quotes checked in PDF text | WHO sentence carried over, not re-checked -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -877,7 +724,8 @@ Draft
 **Safety/referral notes:** Severe or worsening pelvic pain needs a facility visit. Pain with a late period could be pregnancy-related, so it should not be called just a period.
 
 <!-- REVISED | MHM quotes checked in PDF text | to verify: clinician approval of the painkiller line -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -898,7 +746,8 @@ Draft
 **Safety/referral notes:** Unusual discharge, itching or burning should be seen at a clinic. Toxic shock signs (sudden high fever, rash, vomiting, confusion) are an emergency but the source puts them under tampon use, so they are held out of this entry.
 
 <!-- REVISED | MHM quotes checked in PDF text | to verify: clinician approval; any change-frequency figure needs another source -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -919,7 +768,8 @@ Draft
 **Safety/referral notes:** If there are no signs of puberty, or no period well past the usual ages, talk to a health worker. No verified age thresholds for worry were found.
 
 <!-- REVISED | MHM quotes checked in PDF text | to verify: clinician to confirm which age range to use -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -940,7 +790,8 @@ Draft
 **Safety/referral notes:** Persistent low mood or anxiety that does not go away needs a health worker or counsellor. If she says she wants to harm herself, the Safety Net reply applies, not this entry.
 
 <!-- DRAFT | quotes checked in MHM text | to verify: confirm handbook edition and date; clinician approval -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -961,7 +812,8 @@ Draft
 **Safety/referral notes:** Sudden high fever, rash, vomiting or feeling very unwell while using a tampon is an emergency (not stated in the pages read; the clinician should confirm adding this).
 
 <!-- DRAFT | quotes checked in MHM text (table cells given as fragments) | to verify: clinician approval; confirm the TSS warning-sign line -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -982,7 +834,8 @@ Draft
 **Safety/referral notes:** None beyond hygiene; wash hands after changing (see NEW-G-03).
 
 <!-- DRAFT | quotes checked in MHM text | to verify: the last sentence of the answer; the "improper ways" figure on p. 25 -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -1003,7 +856,8 @@ Draft
 **Safety/referral notes:** None beyond NEW-G-01 (when to see a health worker).
 
 <!-- DRAFT | quotes checked in MHM text | to verify: clinician approval -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
@@ -1024,11 +878,17 @@ Draft
 **Safety/referral notes:** Urgent symptoms (heavy bleeding, severe pain, possible pregnancy) need prompt care.
 
 <!-- REVISED | quotes checked in FP7 text | to verify: whether a separate 2025 YFS guideline exists; clinician decision on the consent sentence -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
-# Addition: pregnancy test entry (pending clinician review)
+---
+
+# Added 22 Oct 2026: entry 37 (pregnancy test)
+
+The list above has 36 entries. This is the 37th, added after the first 36 were written. It is PENDING clinician review like the rest.
+
 
 Status: PENDING. Not approved. Do not show in the defence demo until a clinician signs. Added by owner request after the query "how to know am not pregnant" was answered with the iron and folic acid entry (see Step R1).
 
@@ -1044,17 +904,543 @@ Status: PENDING. Not approved. Do not show in the defence demo until a clinician
 
 **Source:** Kenya MoH, HIV/STI Guidelines (IG2026), p. 29; Kenya MoH, National Family Planning Guidelines for Health Service Providers, 7th ed. (FP7), p. 45. Both quotes were found by exact text search; page numbers are printed pages and should be re-checked in the PDFs.
 
-**Conditions/limitations:** Both sources are written for health workers, not for girls. Neither says how soon after sex or a missed period is a test reliable, so no timing is given. The line "ask a health worker or a youth-friendly clinic for one" is not stated in these pages; it is a referral note for the clinician to confirm. FP7 p. 45 lists situations where a provider can be reasonably sure a client is not pregnant (for example a negative test and no unprotected sex in 3 weeks). That is a provider screening tool and is deliberately NOT turned into advice to the girl.
+**Conditions/limitations:** Both sources are written for health workers, not for girls. Neither says how soon after sex or a missed period a test is reliable, so no timing is given. The line "ask a health worker or a youth-friendly clinic for one" is not stated in these pages; it is a referral note for the clinician to confirm. FP7 p. 45 lists situations where a provider can be reasonably sure a client is not pregnant (for example a negative test and no unprotected sex in 3 weeks). That is a provider screening tool and is deliberately NOT turned into advice to the girl.
 
 **Safety/referral notes:** Never tell her she is not pregnant. If she may have been raped or forced, route to the help reply (1195, 999, 112). Possible pregnancy with severe pain or heavy bleeding needs a facility visit. Held-topic group C should still send late-period and "am I pregnant" queries to a health worker; this entry would answer the "how do I get a test" wording only if the clinicians and Mr. Ouma agree it should replace or sit beside the held reply.
 
 <!-- NEW | FP7 p. 45 and IG2026 p. 29 | to verify: page numbers in the PDFs; clinician to confirm the referral line and the barrier-method sentence -->
-**Clinician review:** [ ] approve  [ ] edit  [ ] reject   Reviewer: __________  Title: __________  Date: __________
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
 
 ## Questions for the clinicians
-
 1. Can the answer to "how do I know I am not pregnant" be a referral to a urine test, or should it stay a held reply with no KB answer?
 2. How soon after sex or a missed period is a urine test reliable? (Not in our sources; needed before any timing is stated.)
 3. Is the barrier-method / abstain sentence (from FP7 p. 45, written for providers) suitable to say to an adolescent?
+
+# Added 22 Oct 2026 (evening): entries 38 to 50 (the most obvious missing questions)
+
+These 13 entries were added so the set reaches 50. Every quote was checked by exact text search in the PDFs' extracted text. Page numbers are printed pages inferred from page footers and should be rechecked. All are PENDING clinician review. NEW-C-14 is on HOLD because it mentions emergency contraception.
+
+## 38. NEW-C-11
+
+**Intent:** Contraception
+
+**User question:** If a boy pulls out before he finishes, can I still get pregnant?
+
+**Answer:** Yes. Pulling out (withdrawal) is one of the least effective ways to prevent pregnancy. Kenya's family planning guideline says that as people commonly use it, about 20 out of 100 women whose partners use withdrawal become pregnant in the first year. Even when it is done correctly every time, about 4 out of 100 become pregnant. It does not protect against STIs. A health worker can help you choose a more reliable method.
+
+**Evidence/claim:** "one of the least effective methods, as commonly used" [...] "about 20 out of 100 women whose partners use withdrawal will become pregnant in the first year" [...] "about 4 out of 100 women whose partners use withdrawal will become pregnant in the first year" [...] "It does not protect against sexually transmitted infections"
+
+**Source:** Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), "Withdrawal Method (Coitus Interruptus)", p. 202
+
+**Conditions/limitations:** The guideline does not mention pre-ejaculate (precum), so the answer does not either. The sentence about a health worker choosing a more reliable method is a referral note and is not stated in the page read.
+
+**Safety/referral notes:** If she had sex without protection and is worried, she should see a health worker (see the held entry on emergency contraception).
+
+<!-- NEW | FP7 p. 202 | to verify: page number in the PDF; clinician to confirm the referral sentence -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 39. NEW-C-12
+
+**Intent:** Contraception
+
+**User question:** How well do condoms work, and how do I use one correctly?
+
+**Answer:** Kenya's family planning guideline says male condoms are 87% effective as people typically use them, and 98% effective when used correctly and every time. They also help protect against most STIs, including HIV. Use a new condom for every act of sex, check the packet is not torn or past its expiry date, unroll it all the way down the erect penis, and hold the rim while pulling out. Never reuse a condom, and do not use oil-based lubricants. Do not throw a used condom in a flush toilet.
+
+**Evidence/claim:** "male condoms are 87% effective in typical use and much more effective, at 98%, when used correctly and consistently" [...] "Male and female condoms help prevent both pregnancy and most STIs (including HIV)" [...] "A new condom must be worn for each act of sexual intercourse" [...] "not use it if it is torn, damaged" [...] "past the expiration date" [...] "Cannot be used with oil-based lubricants" [...] "Condoms should not be reused" [...] "Do not dispose of the condom in a flush toilet"
+
+**Source:** Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), "Male condom", pp. 173 to 174 (mode of action, effectiveness, limitations); "Condom use and disposal", pp. 176 to 178 (Table 7.1 and the do-not list)
+
+**Conditions/limitations:** The guideline describes use for a man's condom; the steps are shortened. Pages are printed pages inferred from the page footers and should be rechecked.
+
+**Safety/referral notes:** If a condom breaks or slips, she should see a health worker straight away. That case is the held entry NEW-C-06 and is not answered here.
+
+<!-- NEW | FP7 pp. 173-178 | to verify: page numbers; overlaps NEW-C-02 (condom with pill or implant) -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 40. NEW-C-13
+
+**Intent:** Contraception
+
+**User question:** What is a female condom, and does it work?
+
+**Answer:** A female condom is a thin sheath that you wear inside the vagina. It has a ring at each end, and the open ring stays outside. Kenya's family planning guideline says it is slightly less effective than the male condom, about 79% to 95% effective. It can be put in up to eight hours before sex, it cannot be reused, and used properly and every time it helps protect against STIs, including HIV.
+
+**Evidence/claim:** "Effectiveness ranges from 79% to 95%" [...] "It can be inserted eight hours before an anticipated sexual act" [...] "Cannot be reused" [...] "With consistent and proper use, condoms are highly effective for prevention against STIs, including HIV/AIDS" [...] "the ring at the open end holds the condom outside the vagina"
+
+**Source:** Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), "Female condom", p. 180
+
+**Conditions/limitations:** The guideline also says female condoms are expensive; this is not in the answer. Where to get one is not in the page read.
+
+**Safety/referral notes:** If a condom slips or breaks, see a health worker (held entry NEW-C-06).
+
+<!-- NEW | FP7 p. 180 | to verify: page number -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 41. NEW-C-14 (held topic: medic approved; serve only once the held-topic rules review is logged)
+
+**Intent:** Contraception
+
+**User question:** What do I do if I forget to take my birth control pill?
+
+**Answer:** Take the missed pill as soon as you remember, and keep taking the rest as usual, one a day. If you missed 1 or 2 pills, there is little or no risk of pregnancy. If you missed 3 or more pills, take a pill straight away and use a backup method such as condoms for the next 7 days. If you also had sex in the past 5 days, see a health worker, because you may need emergency contraception. If you vomit within 2 hours of taking a pill, take another pill.
+
+**Evidence/claim:** "Take a missed hormonal pill as soon as possible" [...] "Little or no risk of pregnancy" [...] "Use a backup method for the next 7 days" [...] "if she had sex in the past 5 days, she can consider EC" [...] "If she vomits within 2 hours after" [...] "she should take another"
+
+**Source:** Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), "What to do in case of missed doses", Table 4.4 "Actions to take for missed COC pills", pp. 71 to 72
+
+**Conditions/limitations:** This is for the combined pill only; the progestin-only pill has its own table. The table has separate rows for weeks 1, 2 and 3 of a pack and for non-hormonal pills; the answer merges them.
+
+**Safety/referral notes:** Emergency contraception is mentioned, so this entry is on HOLD with NEW-C-06 and NEW-S-06.
+
+<!-- NEW | HOLD: mentions emergency contraception | do not build until a clinician approves it and the held-topic rules are reviewed | to verify: page numbers -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 42. NEW-C-15
+
+**Intent:** Contraception
+
+**User question:** What is an IUD (the coil), and how long does it last?
+
+**Answer:** An IUD is a small, flexible plastic device that a trained health worker puts inside the womb to prevent pregnancy. Kenya's family planning guideline says copper devices protect for as long as 12 years and hormone devices for 5 years, and that they are 99% effective when used correctly. Fertility returns right away when it is taken out. Bleeding changes are common but not harmful. An IUD does not protect against STIs or HIV. For girls under 18 who have never had a baby, the guideline says an IUD can generally be provided after careful counselling on the range of methods, with follow-up, because the device is more likely to come out and there is a concern about STIs.
+
+**Evidence/claim:** "small flexible plastic device" [...] "inserted into the uterine cavity to" [...] "Return to fertility is immediate" [...] "As long as 12 years" [...] "IU(C)D are 99% effective if used correctly and consistently" [...] "Does not offer protection against STI/HIV transmission" [...] "Requires a trained healthcare provider for insertion and removal" [...] "Generally, provide after" [...] "careful counselling on" [...] "increased risk of IU(C)D expulsion" [...] "Ensure follow-up."
+
+**Source:** Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), Chapter 5 "Intrauterine (Contraceptive) Devices", pp. 134 to 135 (what it is, duration, effectiveness); p. 137 (limitations); Table 5.3 Category 2 conditions, p. 140 (younger than 18 and nulliparity); p. 154 (where it is provided)
+
+**Conditions/limitations:** The age rule is a medical eligibility category 2 (benefits usually outweigh risks) and is a decision for the health worker. The guideline does not say a girl needs a parent's consent. Page numbers are printed pages inferred from the footers.
+
+**Safety/referral notes:** Only a trained health worker can fit or remove an IUD, so she should see a health worker for choice, fitting and removal.
+
+<!-- NEW | FP7 pp. 134-135, 137, 140, 154 | to verify: page numbers; clinician to confirm how to say the under-18 rule to a teenager -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 43. NEW-C-16
+
+**Intent:** Contraception
+
+**User question:** I missed my injection date. What should I do?
+
+**Answer:** Go back to the clinic, however long it has been since your appointment. Kenya's family planning guideline says that a woman who misses her injection should come back to the clinic regardless of how much time has passed. A health worker will tell you what to do next.
+
+**Evidence/claim:** "she fails to keep the appointment date, she should be encouraged to come back to the clinic, regardless of how much time has passed since the missed appointment"
+
+**Source:** Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), "Missed appointments" (injectable contraceptives), p. 106
+
+**Conditions/limitations:** The page read does not say whether she could already be pregnant or how long the protection lasts. The last sentence about a health worker is a referral note not stated in the page.
+
+**Safety/referral notes:** If she had sex without protection after the missed date, she should see a health worker soon. Emergency contraception is a held topic.
+
+<!-- NEW | FP7 p. 106 | to verify: page number; clinician to add what to say about pregnancy risk and condoms until the next injection -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 44. NEW-C-17
+
+**Intent:** Contraception
+
+**User question:** Can birth control make me gain or lose weight?
+
+**Answer:** Kenya's family planning guideline lists weight change as a possible side effect of the combined pill, the hormonal injection and the implant. It does not say how much weight, and it does not say who is affected. If a side effect worries you, talk to a health worker.
+
+**Evidence/claim:** "Weight change" [...] "Weight changes"
+
+**Source:** Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), combined oral contraceptives side effects, p. 60; injectable side effects, p. 96; implants side effects, p. 111
+
+**Conditions/limitations:** The guideline lists weight change among the side effects of these methods but gives no amounts, so the answer cannot say how likely or how large. The talk-to-a-health-worker line is a referral note.
+
+**Safety/referral notes:** Sudden or severe weight change with other symptoms needs a health worker.
+
+<!-- NEW | FP7 pp. 60, 96, 111 | to verify: which methods list weight change; page numbers -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 45. NEW-C-18
+
+**Intent:** Contraception
+
+**User question:** Can I use the pill, injection or implant if I have never had a baby?
+
+**Answer:** Yes. Kenya's family planning guideline says women who have never had a baby (nulliparous women) can use combined pills, the injection, the implant and the female condom. For the combined pill the guideline gives the age range as from the first period to 40 years. A health worker will check that the method is right for you.
+
+**Evidence/claim:** "Age: from menarche to 40 years" [...] "Women of any parity (parous and nulliparous)" [...] "All women of reproductive age, of any parity, including nulliparous women"
+
+**Source:** Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), combined pill eligibility, p. 61; injectable eligibility, p. 97; implants eligibility, p. 111; female condom eligibility, p. 181
+
+**Conditions/limitations:** The medical eligibility categories can change this for a girl with a medical condition. Whether she needs a parent's consent is not stated here (see the consent question for the clinicians).
+
+**Safety/referral notes:** A health worker should check eligibility, especially for a girl with a medical condition or who might be pregnant.
+
+<!-- NEW | FP7 pp. 61, 97, 111, 181 | to verify: page numbers; consent sentence -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 46. NEW-G-10
+
+**Intent:** General
+
+**User question:** Is having a period dirty, shameful or a sickness?
+
+**Answer:** No. Kenya's school handbook says menstruation is a normal and natural part of growing up. It is not a sickness, an illness, a disease or an infection, and it is not harmful, a curse, dirty, shameful or unclean. It is nothing to be ashamed of.
+
+**Evidence/claim:** "Menstruation is not:" [...] "Sickness, illness, disease, infection," [...] "harmful, a curse, dirty, shameful, or" [...] "A normal and natural part of" [...] "biological maturity." [...] "something to be ashamed of"
+
+**Source:** Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, "Facts about Menstruation", p. 10; "Why break the Silence?", p. 1
+
+**Conditions/limitations:** This is about stigma and myths. It does not cover painful or heavy periods; those are in NEW-G-01 and NEW-G-02.
+
+**Safety/referral notes:** Very heavy bleeding or pain that stops usual activities needs a health worker (see NEW-G-01).
+
+<!-- NEW | MHM p. 10 and p. 1 | to verify: page numbers -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 47. NEW-G-11
+
+**Intent:** General
+
+**User question:** Can I get pregnant once I have started my periods?
+
+**Answer:** Yes. Kenya's school handbook says menstruation is a sign that a girl can become pregnant. Once your periods have started, sex without protection can lead to pregnancy. A health worker can explain how to prevent pregnancy.
+
+**Evidence/claim:** "Menstruation is also a sign that a" [...] "girl can become pregnant."
+
+**Source:** Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, "Facts about Menstruation", p. 10
+
+**Conditions/limitations:** The handbook does not say when in the cycle pregnancy is possible, so the answer does not either. The second and third sentences are an explanation and a referral note that are not in the page.
+
+**Safety/referral notes:** If she may already be pregnant, see a health worker (NEW-P-04).
+
+<!-- NEW | MHM p. 10 | to verify: page number; clinician to confirm the added sentences -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 48. NEW-G-12
+
+**Intent:** General
+
+**User question:** Is it normal that I have not started my periods yet?
+
+**Answer:** Girls start at different ages. Kenya's school handbook says the first period usually comes between 9 and 17 years of age, and some girls start as early as nine. Everyone goes through puberty differently, and in the first few years periods may not come regularly. If you are worried, talk to a health worker or a teacher you trust.
+
+**Evidence/claim:** "occurring between 9-17 years" [...] "menstruation as early as nine years" [...] "years is not regular for some girls" [...] "Everyone experiences puberty differently"
+
+**Source:** Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, "Menstruation and Semenarche", p. 8; "Facts about Menstruation", p. 10
+
+**Conditions/limitations:** The handbook gives the range but does not say when to see a health worker if periods have not started by a certain age; a clinician should add that. The last sentence is a referral note not in the pages read. Overlaps NEW-G-04.
+
+**Safety/referral notes:** A clinician should say at what age a girl with no period should see a health worker.
+
+<!-- NEW | MHM pp. 8, 10 | to verify: page numbers; add age to see a health worker -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 49. NEW-G-13
+
+**Intent:** General
+
+**User question:** What should I not use as a pad during my period?
+
+**Answer:** Kenya's school handbook strongly discourages using cow dung, mud, leaves, tissue paper, dirty pieces of cloth, animal skin, pieces of mattress or blanket, or chicken and bird feathers, because they are unsafe and unhygienic. It also discourages sitting on soil or sand during your period. Pads, reusable pads, tampons and menstrual cups are the products the handbook describes.
+
+**Evidence/claim:** "strongly discouraged" [...] "Cow dung" [...] "Mud" [...] "Tissue paper" [...] "Dirty pieces of cloth" [...] "Sitting on soil and sand during"
+
+**Source:** Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, "Unsafe and Unhygienic Menstrual Products and Materials", p. 17; "Menstrual Products", pp. 14 to 16
+
+**Conditions/limitations:** The handbook does not say what to do if a girl cannot afford pads, so the answer does not either. It does not say whether clean cloth is acceptable.
+
+**Safety/referral notes:** Itching, a bad smell or pain after using any material should be seen by a health worker.
+
+<!-- NEW | MHM p. 17 | to verify: page numbers; the safe-materials sentence; the last safety line is a referral note -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 50. NEW-S-17
+
+**Intent:** STIs and HIV
+
+**User question:** If I have an STI, does my partner need treatment too?
+
+**Answer:** Yes. Kenya's guidelines say that people who are diagnosed with an STI should be encouraged to tell their sexual partners, and that partners should receive testing and treatment so the infection is not passed back and forth. A health worker can help, for example by notifying your partner for you or giving you a referral.
+
+**Evidence/claim:** "Implement strategies to encourage individuals diagnosed with STIs to" [...] "inform their sexual partners." [...] "diagnosed individuals receive appropriate testing and treatment to reduce" [...] "the risk of re-infection and further transmission" [...] "Encourage and assist with partner notification through patient referral,"
+
+**Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), STI prevention approaches table, p. 157; STI case management steps, p. 162
+
+**Conditions/limitations:** The guidelines are written for health workers. Whether a partner can be treated without being seen is not explained here.
+
+**Safety/referral notes:** If she is afraid to tell a partner because of violence, she should talk to a health worker; call 1195, 999 or 112 if in danger.
+
+<!-- NEW | IG2026 pp. 157, 162 | to verify: page numbers; clinician to review the safety line -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+
+# Added 22 Oct 2026 (night): entries 51 to 60 (gaps from the gynaecologist's question list)
+
+Quotes in entries 51 to 58 were checked by exact text search in the extracted PDFs. Entries 59 and 60 come from the Mother and Child Health Handbook (2020) and WHO guidance; the medic checked them. Page numbers are inferred from footers.
+
+## Questions for the clinicians (batch 3)
+
+1. NEW-C-22 (parental permission): the 2025 guideline says under-18s give assent and a guardian gives consent, which conflicts in tone with 'adolescents can use any method' and with the confidentiality promises. What should the app say, and is a legal view needed?
+2. NEW-C-20 (cancer): please confirm how to word the breast cancer part, since the guideline pages read say nothing on the risk in healthy women.
+3. NEW-C-19 (breastfeeding): which methods other than LAM should the entry list for a breastfeeding girl?
+4. NEW-G-15 (swimming and sport): please confirm the wording on tampons, cups and sport.
+5. Topics still without an answer because no source was found: blood clots and very heavy bleeding, dizziness during periods, nausea and vomiting in pregnancy, frequent urination, urinary tract infection, implant insertion pain, cost of contraception, finding antenatal care, telling the family, stretch marks, voice changes, body odour and sweating, genital appearance. Please advise whether you can point us to a Kenyan source for any of them.
+
+---
+
+## 51. NEW-C-19
+
+**Intent:** Contraception
+
+**User question:** I am breastfeeding. Which contraception can I use?
+
+**Answer:** Breastfeeding can protect against pregnancy for a while, but only if three things are all true. Kenya's family planning guideline calls this the lactational amenorrhoea method (LAM): your periods have not come back, your baby is fed only on breast milk, and your baby is under six months old. Used this way it is up to 98% effective. When any one of the three stops being true, you need another family planning method straight away. A health worker can tell you which methods are safe while you breastfeed.
+
+**Evidence/claim:** "The woman's menstrual periods have not resumed" [...] "The baby is exclusively breastfed" [...] "The baby is less than six months old" [...] "LAM is up to 98% effective if practiced during an exclusive breastfeeding period" [...] "When any of these three criteria is no longer met, another FP method must be introduced in a timely manner"
+
+**Source:** Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), Chapter 8 "Lactational Amenorrhoea Method (LAM)", pp. 186 to 187
+
+**Conditions/limitations:** The page read covers LAM only. The guideline also gives rules for other methods after childbirth (for example, the combined pill has restrictions while breastfeeding), but this entry does not list them. The last sentence is a referral note and is not stated on the page.
+
+**Safety/referral notes:** A girl who has just had a baby should see a health worker about her method, because some methods are not suitable in the first months.
+
+<!-- NEW | FP7 pp. 186-187 | to verify: page numbers; clinician to add which other methods suit a breastfeeding girl -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 52. NEW-C-20
+
+**Intent:** Contraception
+
+**User question:** Does birth control cause cancer?
+
+**Answer:** Kenya's family planning guideline lists protection against cancer of the ovary and of the lining of the womb as a benefit of combined pills, and says the progestin-only pill may help prevent cancer of the lining of the womb. It lists a family history of breast cancer among the conditions in which a woman can still use the combined pill without restriction (category 1). It says women who have breast cancer, or have had it, should generally not use the progestin-only pill. Tell the health worker about any cancer in you or your close family so they can help you choose.
+
+**Evidence/claim:** "Protection against ovarian and endometrial cancer" [...] "May prevent endometrial cancer" [...] "Category 1" [...] "Benign breast disease, or family history of breast cancer" [...] "Women who have breast cancer or a history of breast cancer"
+
+**Source:** Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), combined oral contraceptives benefits, p. 59; COC eligibility, Category 1 list, p. 61; progestin-only pills benefits, p. 74; POP conditions, p. 81
+
+**Conditions/limitations:** The pages read do not say whether hormonal methods change the risk of breast cancer in a healthy woman, so this answer does not say they cause it or that they are safe for it. The guideline's list of side effects was not searched for the word cancer in full. The last sentence is a referral note. The clinicians should decide how to word the breast cancer part.
+
+**Safety/referral notes:** Any breast lump should be seen by a health worker.
+
+<!-- NEW | FP7 pp. 59, 61, 74, 81 | to verify: page numbers; clinician to review the wording on breast cancer -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 53. NEW-C-21
+
+**Intent:** Contraception
+
+**User question:** Can I stop or change my contraceptive method, and how soon can I get pregnant after I stop?
+
+**Answer:** Yes, you can ask to stop or change your method. Kenya's family planning guideline says health workers must counsel anyone who wants to stop on how to switch in good time, so you do not get pregnant when you do not want to. An implant can be taken out any time you want. Most methods let you get pregnant again fairly soon, but the guideline says it can take about 3 to 6 months for most methods and up to 12 months after the injection. If side effects bother you, tell the health worker, because another method may suit you better.
+
+**Evidence/claim:** "Healthcare providers have a duty to adequately counsel clients wishing to discontinue contraception about timely method-switching" [...] "implants can be removed anytime the client desires" [...] "a fairly prompt return of fertility after discontinuation" [...] "an average of 3 to 6 months delay in returning to fertility for most methods and sometimes up to 12 months for DMPA" [...] "Discontinuation or switch due to side effects"
+
+**Source:** Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), "Return to fertility after contraception" and discontinuation, p. 32; implants follow-up, p. 116
+
+**Conditions/limitations:** Fertility returning 'fairly soon' and the 3 to 6 month figure appear together in the guideline; this answer says both. The last sentence about side effects is a referral note.
+
+**Safety/referral notes:** If she stops a method and does not want to be pregnant, she should start another method straight away or use condoms.
+
+<!-- NEW | FP7 pp. 32, 116 | to verify: page numbers -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 54. NEW-C-22
+
+**Intent:** Contraception
+
+**User question:** Do I need my parents' permission to get contraception?
+
+**Answer:** If you are under 18, Kenya's 2025 family planning guideline says you give your own agreement (assent) and your guardian gives consent for family planning services. Kenya's youth-friendly services guidelines add that where the law requires something, such as parental consent for treating certain conditions, the health worker must explain it clearly to you and to the other people concerned. The same guideline says services for young people must keep what you say confidential. A health worker at a youth-friendly clinic can explain what applies to you, so ask before you decide.
+
+**Evidence/claim:** "Adolescents below 18 years shall provide assent and their guardian shall provide consent for FP services" [...] "In cases where legal requirements" [...] "exist such as seeking parental consent" [...] "in treating certain conditions, these" [...] "provisions must be explained clearly" [...] "to the youth and other parties"
+
+**Source:** Kenya MoH, National Family Planning Guideline for Health Service Providers, 7th ed. (2025), adolescents and youth, p. 25; Kenya MoH, National Guidelines for Provision of Adolescent Youth-Friendly Services (YFS) in Kenya (2005), legal requirements, p. 24 (printed page to check); confidentiality as in NEW-G-05
+
+**Conditions/limitations:** The 2025 guideline sentence is a rule for health workers. It conflicts in tone with 'adolescents can safely use any method' (NEW-C-01) and with the confidentiality promises, and the sources do not say how the two fit, or what a health worker does when a girl cannot ask a guardian. The 2005 guideline is older. This needs a decision from the clinicians, Mr. Ouma and possibly the DPO or ethics committee before the entry is approved. It ties to the open consent wording.
+
+**Safety/referral notes:** If she is afraid of being hurt or thrown out at home, the Safety Net and the helplines apply (999, 112, 1195, 116).
+
+<!-- NEW | FP7 p. 25; YFS 2005 p. 24? | to verify: page numbers; decision needed on consent wording before approval -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 55. NEW-S-18
+
+**Intent:** STIs and HIV
+
+**User question:** I have itching, burning and a thick white discharge. Could it be a yeast infection?
+
+**Answer:** It could be. Kenya's guidelines describe a yeast infection (vaginal candidiasis) as causing itching or burning of the vulva, soreness, and a thick white or creamy discharge that is often like curds. It is not an STI, but its signs look like some STIs, and the same signs can also be caused by other infections, so it needs to be checked. Wet pads can encourage fungal infections like this, so change pads regularly. See a health worker for a test and treatment.
+
+**Evidence/claim:** "It is therefore not an STI" [...] "Candidiasis presents with pruritus or a burning sensation of the vulva and vaginal soreness or irritation" [...] "it characteristically is curdy, white or creamy and thick" [...] "Wet pads can cause skin irritation and encourage fungal infections like candidiasis"
+
+**Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), "Candidiasis", p. 173; Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, "Potential Health Risks Due to Poor Hygiene During Menstruation", p. 19
+
+**Conditions/limitations:** The guidelines are written for health workers, and the treatment is not given to the girl here. The answer does not tell her to treat herself.
+
+**Safety/referral notes:** Lower belly pain, a fever, sores or bleeding after sex needs a visit soon. See NEW-S-01.
+
+<!-- NEW | IG2026 p. 173; MHM p. 19 | to verify: page numbers -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 56. NEW-G-14
+
+**Intent:** General
+
+**User question:** What can I do about itching, a rash or a bad smell during my period?
+
+**Answer:** Kenya's school handbook links itching and rashes to how pads are used and washed. Wet pads can irritate the skin and encourage fungal infections, and using dirty period products can lead to infections of the vagina. The handbook advises you to bath or shower at least once a day, change into clean underwear every day or when it is soiled, change your pad or other product regularly, wash your hands with soap and water before and after changing it, and clean the outside of your genitals often. Wash the vagina with water only: it cleans itself, and deodorants and too much soap can cause itching. Wipe from front to back. Some pads contain perfume and chemicals that can cause rashes. See a health worker if it does not go away.
+
+**Evidence/claim:** "Wet pads can cause skin irritation and encourage fungal infections like candidiasis" [...] "Use of dirty menstrual products may cause bacterial growth leading to local infections" [...] "Taking a bath or shower at least" [...] "once a day" [...] "Changing of menstrual product" [...] "Ensuring hand washing with soap and clean water before and after" [...] "Washing the vagina with water on" [...] "external cleaning agent" [...] "deodorant should not be used" [...] "too much soap can cause itching" [...] "Wiping from front to back" [...] "perfume" [...] "chemicals which may cause rashes and irritation"
+
+**Source:** Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, "Potential Health Risks Due to Poor Hygiene During Menstruation", p. 19; "Good hygiene practices during menstruation", pp. 20 to 21; menstrual products table, pp. 14 to 16
+
+**Conditions/limitations:** The handbook does not describe a bad smell on its own, or say what causes it, so the answer links smell only to hygiene as the handbook does. The 'see a health worker if it does not go away' line is a referral note and is not stated on the page.
+
+**Safety/referral notes:** A bad-smelling or coloured discharge, burning when passing urine, or a fever needs a health worker (see NEW-S-01, NEW-S-18).
+
+<!-- NEW | MHM pp. 14-16, 19-21 | to verify: page numbers; the final referral line -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 57. NEW-G-15
+
+**Intent:** General
+
+**User question:** Can I swim, run or play sports when I am on my period?
+
+**Answer:** Kenya's school handbook lists physical exercise such as swimming, running, jogging, skipping and hula hoop as ways to ease period discomfort, along with a hot water bottle on the tummy to relieve cramps, a healthy diet and drinking plenty of water. If you use a tampon or cup, remember to change or empty it on time, and see a health worker if you get a sudden high fever, a rash or vomiting.
+
+**Evidence/claim:** "Physical exercises such as" [...] "swimming, running, jogging," [...] "skipping, hula hoop" [...] "Place hot water in a bottle on the" [...] "abdomen to relieve cramps" [...] "Drink plenty of water" [...] "Using a tampon longer than the" [...] "recommended time can cause Toxic" [...] "Shock Syndrome (TSS)" [...] "Sudden high fever"
+
+**Source:** Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, "Management of PMS, Discomforts and Illnesses", pp. 19 to 20
+
+**Conditions/limitations:** The handbook does not say whether a girl can swim while bleeding, or which product is best for swimming. The answer does not either. Two sentences are joined across a two-column page; the quotes are exact fragments.
+
+**Safety/referral notes:** Toxic shock syndrome is a medical emergency (handbook p. 19): a sudden high fever, headache, vomiting, rash or confusion while using a tampon needs urgent care.
+
+<!-- NEW | MHM pp. 19-20 | to verify: page numbers; clinician to confirm the sport and tampon wording -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 58. NEW-G-16
+
+**Intent:** General
+
+**User question:** Is it normal to feel sick, vomit, have diarrhoea or a headache around my period?
+
+**Answer:** It can be. Kenya's school handbook lists an upset stomach, bloating, nausea, vomiting, constipation or diarrhoea, headache or backache among the symptoms of premenstrual syndrome (PMS), which begins 1 to 2 weeks before your period. It says symptoms differ from girl to girl and are strong enough in some girls to make it hard to get through the day. To ease them the handbook suggests a hot water bottle on the tummy, exercise, a healthy diet and plenty of water. Visit a doctor if the discomfort goes on for a long time.
+
+**Evidence/claim:** "Upset stomach, bloating, nausea, vomiting, constipation or diarrhoea" [...] "Headache or backache" [...] "PMS symptoms occur" [...] "1 to 2 weeks before your menstruation" [...] "Symptoms of PMS vary from" [...] "girl to woman/girl" [...] "Please visit a doctor if you are" [...] "experiencing discomforts for a" [...] "longer period of time"
+
+**Source:** Kenya MoH and MoE, Menstrual Hygiene Management in Schools: A Handbook for Teachers, "Premenstrual Syndrome (PMS)", p. 9; "Management of PMS, Discomforts and Illnesses", p. 20
+
+**Conditions/limitations:** The handbook lists these as PMS symptoms. It does not cover nausea, vomiting or diarrhoea that happen during bleeding rather than before it, or what else could cause them. A girl who might be pregnant is not told to consider that here.
+
+**Safety/referral notes:** Vomiting or diarrhoea with a fever, severe pain or fainting needs a health worker. If she uses a tampon, see the toxic shock warning in NEW-G-15.
+
+<!-- NEW | MHM pp. 9, 20 | to verify: page numbers; overlaps NEW-G-06 and NEW-G-02 -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 59. NEW-P-05
+
+**Intent:** Pregnancy
+
+**User question:** I think I am pregnant. How many antenatal clinic visits do I need, and what happens at the first one?
+
+**Answer:** Go to the clinic as soon as you can. Kenya's Mother and Child Health Handbook says to go for antenatal care as soon as possible and to attend 8 times during the pregnancy, and WHO also recommends a minimum of eight contacts. At the first visit the health worker examines you and checks your blood, urine and blood sugar, and offers testing for HIV, syphilis and hepatitis. If you have a question, the handbook says to ask a health worker or a community health volunteer without any hesitation.
+
+**Evidence/claim:** "Go for ANC visit as soon as possible and attend 8 times during the pregnancy" [...] "PHYSICAL EXAMINATION [1st Visit]" [...] "Triple testing (HIV/Syphilis/Hepatitis)" [...] "If you have any question, please ask a health worker or a Community Health Volunteer (CHV) without any hesitation" [...] "A minimum of eight contacts are recommended to reduce perinatal mortality and improve women’s experience of care."
+
+**Source:** Kenya MoH, Mother and Child Health Handbook (2020), pp. 1, 8 and 14 (page numbers from a web summary of the PDF); WHO, Recommendations on antenatal care for a positive pregnancy experience (2016), news release of 7 Nov 2016
+
+**Conditions/limitations:** NOT yet verified against the PDF: these quotes came from a web summary of the handbook, so the exact words and page numbers must be checked in the PDF before the entry is approved. The handbook is about 'ANC contacts' counted from the first visit. It does not say what is done at the other visits in the pages read.
+
+**Safety/referral notes:** Bleeding, severe pain, a severe headache, fever or the baby moving less means going to a facility at once (see NEW-P-02).
+
+<!-- NEW | MCH 2020 pp. 1, 8, 14 + WHO 2016 | NOT verified against the PDFs: quotes from a web summary | to verify: exact wording and page numbers -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+
+## 60. NEW-P-06
+
+**Intent:** Pregnancy
+
+**User question:** How do I prepare for giving birth?
+
+**Answer:** Kenya's Mother and Child Health Handbook has a birth plan, which a health worker fills in with you during your antenatal visits. It covers where you will give birth, who will assist you, how you will get to the health facility, who could donate blood if needed, and how you will pay for the birth. The handbook also says to have transport ready to reach the facility and to prepare money, a birth companion and an emergency kit. Talk to a health worker at your antenatal visits to make your plan.
+
+**Evidence/claim:** "Birth Plan: Preparing for a safe and healthy childbirth" [...] "Financial plan for childbirth" [...] "Ensure transport to the health facility is available (Birth preparedness; money, birth companion, emergency kit)"
+
+**Source:** Kenya MoH, Mother and Child Health Handbook (2020), Birth Plan, p. 1; birth preparedness, p. 4 (page numbers from a web summary of the PDF)
+
+**Conditions/limitations:** NOT yet verified against the PDF: the quotes came from a web summary, so the exact wording and page numbers must be checked. The handbook sentences about who 'could donate blood' and 'who will assist you' are paraphrases of the birth-plan headings and need checking. It does not say what to pack in the emergency kit.
+
+**Safety/referral notes:** Labour pains, waters breaking, bleeding or the baby not moving means going to a health facility straight away (see NEW-P-02).
+
+<!-- NEW | MCH 2020 pp. 1, 4 | NOT verified against the PDF: quotes from a web summary | to verify: exact wording, page numbers, the blood-donor line -->
+
+**Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
+
+---
+

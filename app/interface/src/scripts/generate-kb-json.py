@@ -36,7 +36,8 @@ OUT_PATH = os.path.join(
 )
 
 # Review status every entry must carry. Validated so a missing or unknown
-# status fails the export, but never written to Kbdata.json.
+# status fails the export. Only approved entries are written to
+# Kbdata.json, and the status itself never is.
 KB_STATUSES = ("approved", "pending")
 
 ACTIVE_CATEGORIES = [
@@ -78,6 +79,9 @@ def parse_kb_file(path):
                 f"{os.path.basename(path)}: {id_match.group(1)} has {found} "
                 f"(expected one of {list(KB_STATUSES)})."
             )
+
+        if status != "approved":
+            continue
 
         entries.append(
             {

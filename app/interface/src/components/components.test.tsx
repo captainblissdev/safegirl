@@ -1081,9 +1081,9 @@ console.log("\nTest 29: the Topic list for each topic");
     );
   }
   assert(
-    KB_QUESTIONS.length === 41 &&
+    KB_QUESTIONS.length === 62 &&
       KB_QUESTIONS.every((item) => Object.keys(item).length === 3),
-    "41 questions with id, class and question only (no answers)",
+    "62 questions with id, class and question only (no answers)",
   );
 }
 
@@ -2290,7 +2290,7 @@ console.log("\nTest 50: Topic list and answer screen polish (step 6b)");
     `header card: the icon tile, the h1 and "${TOPIC_LIST_HINT}"`,
   );
   assert(
-    list.includes('<p class="sr-only topic-count">16 questions</p>') &&
+    list.includes('<p class="sr-only topic-count">18 questions</p>') &&
       list.indexOf("sr-only topic-count") <
         list.indexOf('<ul class="topic-questions"'),
     "the question count stays, for screen readers only, before the list",
