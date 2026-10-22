@@ -67,32 +67,40 @@ STYLES = (
 )
 DESIGN_RULE = "design rule"
 KB_ID = re.compile(r"^KB-[A-Z]+\d+$")
-# A document source is "<document>, <locator>", several joined by ";".
-# The locator is a page (p. 9, pp. 14-16), a numbered section
-# (Section 3.2), or a section name ("warning signs section"). A section
-# name with no page passes with a warning: the page is to be added.
-LOCATOR_PAGE = re.compile(r"^\S.*?,\s*(p|pp|page|pages)\.?\s*\d", re.IGNORECASE)
-LOCATOR_SECTION = re.compile(r"^\S.*?,\s*section\s+[\dA-Z]", re.IGNORECASE)
-LOCATOR_SECTION_NAME = re.compile(r"^\S.*?,[^,]*\bsection\b[^,]*$", re.IGNORECASE)
+# A document source is "<document>, <locator>", several parts joined by
+# ";", each with its own document name. A valid locator contains a page
+# (p. 161, pp. 172-173, pp. 8, 10), optionally after a section and/or a
+# table: "s. 3.3.1 p. 161", "Section 2 p. 9", "s. 3.4 Table 3.8 p. 164".
+# A section with no page, numbered ("Section 3.2") or named ("warning
+# signs section"), passes with a warning: the page is to be added.
+# Anything else fails.
+_SECTION = r"(?:s\.|section)\s*\d+(?:\.\d+)*(?:\s*[-–]\s*\d+(?:\.\d+)*)?"
+_TABLE = r"table\s*\d+(?:\.\d+)*"
+_PAGE = r"(?:p\.|page)\s*\d+(?:\s*[-–]\s*\d+)?|(?:pp\.|pages)\s*\d+(?:\s*[-–]\s*\d+)?(?:\s*,\s*\d+(?:\s*[-–]\s*\d+)?)*"
+_DOCUMENT = r"(?P<document>.*[A-Za-z].*?)"
+LOCATOR_PAGE = re.compile(
+    rf"^{_DOCUMENT},\s*(?:{_SECTION}\s+)?(?:{_TABLE}\s+)?(?:{_PAGE})$", re.IGNORECASE
+)
+LOCATOR_SECTION_ONLY = re.compile(rf"^{_DOCUMENT},\s*{_SECTION}$", re.IGNORECASE)
+LOCATOR_SECTION_NAME = re.compile(rf"^{_DOCUMENT},[^,]*\bsection\b[^,]*$", re.IGNORECASE)
 
 
 def source_locator(source: str) -> str:
-    """'page', 'section' or 'section_name' for a document source (the
-    weakest of its ";"-separated parts), or 'none' if a part has no
-    locator."""
+    """'page' when every ";"-separated part has a page; 'section' when
+    some part has only a section (numbered or named); 'none' when a part
+    has no locator or no document name of its own."""
     kinds = []
     for part in (p.strip() for p in source.split(";")):
         if LOCATOR_PAGE.match(part):
             kinds.append("page")
-        elif LOCATOR_SECTION.match(part):
+        elif LOCATOR_SECTION_ONLY.match(part) or LOCATOR_SECTION_NAME.match(part):
             kinds.append("section")
-        elif LOCATOR_SECTION_NAME.match(part):
-            kinds.append("section_name")
         else:
             return "none"
-    if "section_name" in kinds:
-        return "section_name"
-    return kinds[0] if kinds else "none"
+    if not kinds:
+        return "none"
+    return "section" if "section" in kinds else "page"
+
 
 COSINE_LIMIT = 0.95
 RATIO_LIMIT = 0.85
@@ -367,9 +375,10 @@ def check_schema(header, rows, kb_ids, test_items, report):
             if locator == "none":
                 report.fail(
                     f"{where}: source {source!r} is neither a KB id nor "
-                    "'<document>, <locator>' (p., pp., Section or a section name)"
+                    "'<document>, <locator>' with a page (p. or pp., optionally after "
+                    "s./Section and Table), or a section; each ';' part needs its own document"
                 )
-            elif locator == "section_name":
+            elif locator == "section":
                 report.warn(f"{where}: source {source!r} names a section but no page; add the page later")
 
 

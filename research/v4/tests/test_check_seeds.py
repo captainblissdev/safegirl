@@ -112,23 +112,36 @@ class Schema(CheckerCase):
             "MoH Handbook for Teachers, p. 9",
             "MoH Handbook for Teachers, pp. 14-16",
             "MoH Handbook for Teachers, pp. 8, 10",
-            "School Re-Entry Guidelines (2020), Section 3.2",
+            "MoH/NASCOP Integrated Guidelines (2026), s. 3.3.1 p. 161",
+            "MoH/NASCOP Integrated Guidelines (2026), s. 3.5.1-3.5.2 p. 171",
+            "MoH/NASCOP Integrated Guidelines (2026), s. 3.5.4-3.5.6 pp. 172-173",
+            "MoH/NASCOP Integrated Guidelines (2026), s. 3.4 Table 3.8 p. 164",
+            "School Re-Entry Guidelines (2020), Section 3 p. 12",
+            "HIV/STI Guidelines, Table 2.1 p. 30",
             "HIV/STI Guidelines, p. 29; FP Guidelines 7th ed., p. 45",
+            "NASCOP Guidelines, s. 1.1.1 p. 1; NASCOP Guidelines, s. 1.1.3 p. 2",
         ]
         warned = [
             "Mother and Child Health Handbook (2020), warning signs section",
+            "School Re-Entry Guidelines (2020), Section 3.2",
+            "NASCOP Guidelines, s. 3.3.1",
             "Handbook, p. 4; Mother and Child Health Handbook, nutrition section",
         ]
         failing = [
-            "a leaflet",
-            "p. 12",
-            "Mother and Child Health Handbook, warning signs",
-            "Handbook, p. 4; another leaflet",
+            "a leaflet",  # no locator
+            "p. 12",  # no document
+            "Mother and Child Health Handbook, warning signs",  # neither page nor section
+            "Handbook, p. 4; another leaflet",  # second part has no locator
+            "NASCOP Guidelines, s. 1.1.1 p. 1; s. 1.1.3 p. 2",  # second part has no document
+            "HIV/STI Guidelines, Table 3.8",  # table with no page
+            "HIV/STI Guidelines, p.",  # page with no number
+            "HIV/STI Guidelines, p. 9 onwards",  # text after the page
             "KB candidate NEW-G-01",
         ]
         words = iter(
             "apple birch cloud dune eagle fern grove harbor islet jasmine knoll lagoon "
-            "mesa nutmeg oasis prairie quill reef summit thistle".split()
+            "mesa nutmeg oasis prairie quill reef summit thistle umber violet willow "
+            "xenon yarrow zinnia".split()
         )
         rows = [
             seed(f"V4-{kind}{i}", f"{next(words)} question?", cls="general", source=src)

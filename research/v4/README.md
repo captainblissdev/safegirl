@@ -30,7 +30,7 @@ nothing here changes the V3 data (`resources/seeds/`, `resources/reviewed/`,
 | `secondary_class` | test items only | Empty on a training seed (see rule 3). On a test item, another class from the same list, different from `primary_class`. |
 | `style` | yes | `formal`, `colloquial`, `symptom_only`, `euphemism`, `myth_or_worry` or `short_or_misspelt`. |
 | `boundary` | no | The class boundary the item is written to probe, as `<class>_vs_<class>`, e.g. `pregnancy_vs_general`. Both classes from the list above. |
-| `source` | yes | For the four topic classes: an active KB entry id (`KB-S9`) or `<document>, <locator>`, several joined by `;`. The locator is a page (`p. 9`, `pp. 14-16`), a numbered section (`Section 3.2`) or a section name (`warning signs section`); a section name with no page passes with a warning, as the page is still to be added. For `out_of_scope` and `vague`: `design rule`. |
+| `source` | yes | For the four topic classes: an active KB entry id (`KB-S9`) or `<document>, <locator>`, several parts joined by `;`, each part with its own document name. A valid locator contains a page (`p. 161`, `pp. 172-173`, `pp. 8, 10`), optionally after a section and/or a table: `MoH/NASCOP Integrated Guidelines (2026), s. 3.3.1 p. 161`, `..., s. 3.4 Table 3.8 p. 164`, `..., Section 2 p. 9`. A section with no page, numbered (`Section 3.2`, `s. 3.3.1`) or named (`warning signs section`), passes with a warning: the page is still to be added. Anything else fails, including a part with no document (`...; s. 1.1.3 p. 2`) and a table with no page. For `out_of_scope` and `vague`: `design rule`. |
 | `notes` | no | Free text: why the item exists, what it probes. |
 
 ## Labelling rules
@@ -78,8 +78,8 @@ It needs Node (for the gateway's held-topic and Safety Net rules) and the
 - schema: missing or extra columns, a value outside the lists above, a
   duplicate or empty `seed_id`, an empty `text` or `source`, a `source`
   that is neither an active KB id, `<document>, <locator>` (every
-  `;`-separated part with a locator), nor `design rule` for
-  `out_of_scope` and `vague`;
+  `;`-separated part with its own document and a page or a section),
+  nor `design rule` for `out_of_scope` and `vague`;
 - exact or near duplicates inside the file;
 - near duplicates of the V3 training pool (seeds and reviewed
   paraphrases) and of the 220 deleted V1 paraphrases

@@ -23,7 +23,7 @@ close to a training item (V3 seeds, cosine 0.95-0.97): 3
 train overlap (this file): 0 KB question(s)
 close to a training item (this file, cosine 0.95-0.97): 0
 
-warnings (15):
+warnings (18):
   schema: SEED-V4-PREG-001: source 'MoH Mother and Child Health Handbook (2020), warning signs section' names a section but no page; add the page later
   schema: SEED-V4-PREG-002: source 'MoH Mother and Child Health Handbook (2020), warning signs section' names a section but no page; add the page later
   schema: SEED-V4-PREG-003: source 'MoH Mother and Child Health Handbook (2020), warning signs section' names a section but no page; add the page later
@@ -31,6 +31,9 @@ warnings (15):
   schema: SEED-V4-PREG-005: source 'MoH Mother and Child Health Handbook (2020), nutrition and supplements section' names a section but no page; add the page later
   schema: SEED-V4-PREG-006: source 'MoH Mother and Child Health Handbook (2020), nutrition and supplements section' names a section but no page; add the page later
   schema: SEED-V4-PREG-007: source 'MoH Mother and Child Health Handbook (2020), nutrition and supplements section' names a section but no page; add the page later
+  schema: SEED-V4-PREG-008: source 'MoE National Guidelines for School Re-Entry (2020), Section 3.2' names a section but no page; add the page later
+  schema: SEED-V4-PREG-009: source 'MoE National Guidelines for School Re-Entry (2020), Section 3.2' names a section but no page; add the page later
+  schema: SEED-V4-PREG-010: source 'MoE National Guidelines for School Re-Entry (2020), Section 3.2' names a section but no page; add the page later
   held topic: SEED-V4-PREG-012 matches held-topic group C; passed by its notes ('held-topic phrasing, label is topic only')
   held topic: SEED-V4-PREG-013 matches held-topic group C; passed by its notes ('held-topic phrasing, label is topic only')
   counts: contraception has 0 seeds (under 25)
