@@ -32,8 +32,8 @@ interface Props {
  * The frame of every screen: the header (logo, Help, Exit) first, then
  * the screen, then the footer line with the GBV helpline. Every screen in
  * App.tsx, the splash included, is rendered inside it, so none can lose
- * the header's Exit button or the footer line. The Help sheet opens over
- * any screen.
+ * the header's Exit button or the footer line. The Help sheet opens on
+ * any screen, as the page under the header.
  */
 export default function AppShell({
   onExit,
@@ -52,18 +52,19 @@ export default function AppShell({
         helpButtonRef={help.buttonRef}
         support={support}
       />
-      {children}
-      {!footerInContent && (
-        <footer className="app-footer">
-          <DangerLine />
-        </footer>
-      )}
+      {/* While the Help sheet is open, the screen stays mounted but hidden
+          (its state is kept), and the sheet is the page under the header,
+          whose Exit stays in view. */}
+      <div className="shell-content" hidden={help.isOpen}>
+        {children}
+        {!footerInContent && (
+          <footer className="app-footer">
+            <DangerLine />
+          </footer>
+        )}
+      </div>
       {help.isOpen && (
-        <HelpSheet
-          onClose={help.onClose}
-          onExit={onExit}
-          onTopic={help.onTopic}
-        />
+        <HelpSheet onClose={help.onClose} onTopic={help.onTopic} />
       )}
     </div>
   );

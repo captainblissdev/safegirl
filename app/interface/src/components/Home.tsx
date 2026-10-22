@@ -1,6 +1,6 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { TOPICS, type Topic } from "../content/topics";
-import { HERO_PILL, SOURCES_LINE } from "../content/uiText";
+import { ANONYMOUS_LINE, HERO_PILL, SOURCES_LINE } from "../content/uiText";
 import DangerLine from "./DangerLine";
 import { HeroSparkle, SmallLockIcon } from "./Icons";
 import { TOPIC_ICONS } from "./topicIcons";
@@ -80,7 +80,7 @@ export default function Home({ askBar, onTopic }: Props) {
 
       <footer className="home-footer">
         <p className="home-anonymous">
-          <SmallLockIcon size={15} /> Anonymous. We never ask for your name.
+          <SmallLockIcon size={15} /> {ANONYMOUS_LINE}
         </p>
         <DangerLine />
       </footer>

@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 223 cases: 203 Pass, 19 Fail, 1 Not run. Two of the
+**Totals:** 228 cases: 208 Pass, 19 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -314,6 +314,11 @@ entry.
 | TC-221 | NFR (accessibility) | Focus on clarify, help and referral | No outline on the h1 focused on arrival; a ring on a Tab-focused control | As expected at all four widths (browser check, 222 of 222) | Pass |
 | TC-222 | NFR (usability) | Clarify, help and referral at 320, 360, 390 and 430px | No horizontal overflow, nothing clipped, gutters 20px (16px under 360px) | As expected (browser check; `clarify-after-7d-*.png`, `referral-after-7d-*.png`, `help-after-7d-390.png`); step 7b, 7c, 8 and 9 checks re-run with no regressions | Pass |
 | TC-223 | NFR (accessibility) | Step 7d contrast | Text 4.5:1; control edges and icons 3:1 | Bubble 8.72; clarify h1 13.60; "Pick the closest" 5.60; topic borders 4.97 to 5.85; ask pill edge 3.04 on the page; 1195 description 5.87; 116 edge 3.04; 999 and 112 edge 4.37, text 10.63; Back to questions edge 3.04 (`styles/tokens.test.ts`, Test 18) | Pass |
+| TC-224 | NFR (accessibility) | The Help sheet's structure and focus | h1 "Help"; focus on "Close help" on open (as built); Close help and Escape close it and return focus to Help; double Escape still exits; the header's Exit stays visible and works with the sheet open | As expected (`components.test.tsx`, Tests 23 and 53; browser check) | Pass |
+| TC-225 | FR-04 | The sheet's helplines | 1195, 116, 999 and 112 from the constants; the 1195 note as verified (now a constant); the 116 note equals `SUPPORT_SECTIONS` exactly, with no "free" | As expected: "Childline Kenya. For anyone under 18." (Tests 23 and 53; browser check) | Pass |
+| TC-226 | FR-03 | The sheet's topic pills | Each opens its Topic list and closes the sheet; they wrap | As expected for all four (browser check) | Pass |
+| TC-227 | NFR (usability) | The sheet at 320, 360, 390 and 430px, and 320 by 568 | No horizontal overflow or clipping; close button 44 by 44; the sheet below the header; every control shows its ring when tabbed (white inside the 1195 button); scrolls to the anonymous line at 320 by 568 | As expected, 45 of 45 (browser check; `help-sheet-after-390.png`, `help-sheet-after-320.png`); step 7b, 7d, 8 and 9 checks re-run with no regressions | Pass |
+| TC-228 | NFR (accessibility) | Step 3c contrast | Text 4.5:1; control edges, icons and focus 3:1 | Help 10.59; how-it-works text 5.42; tips 12.52; 1195 note 12.29; 116 note 6.80; edges 3.04; pill borders 3.07 to 3.14; emergency 9.35 (`styles/tokens.test.ts`, Test 19) | Pass |
 
 ## Defects and retests
 

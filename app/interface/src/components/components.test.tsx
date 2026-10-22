@@ -19,6 +19,8 @@ import {
   TOPIC_LIST_PLACEHOLDER,
   BACK_TO_QUESTIONS,
   CALL_CARD_HEADING,
+  ANONYMOUS_LINE,
+  GBV_HELP_SHEET_NOTE,
   CLARIFY_MORE_WORDS,
   CLARIFY_PICK_LABEL,
   CLARIFY_PLACEHOLDER,
@@ -744,11 +746,7 @@ console.log("\nTest 22: the splash is a full-bleed screen of its own");
 console.log("\nTest 23: the Help sheet");
 {
   const html = renderToStaticMarkup(
-    <HelpSheet
-      onClose={() => undefined}
-      onExit={() => undefined}
-      onTopic={() => undefined}
-    />,
+    <HelpSheet onClose={() => undefined} onTopic={() => undefined} />,
   );
   assert(
     html.includes('role="dialog"') &&
@@ -764,8 +762,9 @@ console.log("\nTest 23: the Help sheet");
     "a labelled close button",
   );
   assert(
-    html.includes('<button class="btn-exit" type="button">Exit</button>'),
-    "the sheet has its own Exit button (it covers the header)",
+    !html.includes("btn-exit") &&
+      html.includes('<h1 id="help-sheet-title">Help</h1>'),
+    "the sheet's own h1 \"Help\"; no duplicate Exit (the header's Exit stays in view)",
   );
   for (const heading of [
     "How SafeGirl works",
@@ -773,27 +772,47 @@ console.log("\nTest 23: the Help sheet");
     "Need to talk to someone?",
     "Topics",
   ]) {
-    assert(html.includes(`>${heading}</h3>`), `section: ${heading}`);
+    assert(html.includes(`>${heading}</h2>`), `section: ${heading}`);
   }
   assert(
     html.includes(
-      `<a class="btn-call" href="${telHref(GBV_HELPLINE)}" aria-label="${telName(GBV_HELPLINE, `Call ${GBV_HELPLINE}`)}">Call ${GBV_HELPLINE}</a><span>GBV helpline. Free, 24 hours, English and Kiswahili.</span>`,
-    ),
-    "1195: tap-to-call from the constant, with the checked wording",
+      `<a class="help-call help-call--main" href="${telHref(GBV_HELPLINE)}"><span class="help-call-icon"><svg`,
+    ) &&
+      html.includes(
+        `<span class="help-call-title">Call ${GBV_HELPLINE}</span><span class="help-call-note">${GBV_HELP_SHEET_NOTE}</span>`,
+      ) &&
+      GBV_HELP_SHEET_NOTE ===
+        "GBV helpline. Free, 24 hours, English and Kiswahili.",
+    "1195: tap-to-call from the constant, with the checked wording (now a constant)",
   );
+  const childlineNote = (() => {
+    const contact = SUPPORT_SECTIONS.flatMap((x) => x.contacts).find((c) =>
+      c.numbers.includes(CHILDLINE_KENYA),
+    );
+    return `${contact?.label}. ${contact?.note}`;
+  })();
   assert(
     html.includes(
-      `<a class="btn-call" href="${telHref(CHILDLINE_KENYA)}" aria-label="${telName(CHILDLINE_KENYA, `Call ${CHILDLINE_KENYA}`)}">Call ${CHILDLINE_KENYA}</a><span>Childline Kenya, for children and young people.</span>`,
-    ),
-    "116: tap-to-call from the constant",
+      `<a class="help-call help-call--second" href="${telHref(CHILDLINE_KENYA)}"><span class="help-call-icon"><svg`,
+    ) &&
+      html.includes(
+        `<span class="help-call-title">Call ${CHILDLINE_KENYA}</span><span class="help-call-note">${childlineNote}</span>`,
+      ),
+    `116: tap-to-call from the constant; its note is SUPPORT_SECTIONS word for word ("${childlineNote}")`,
   );
   const childline = html.slice(
     html.indexOf(telHref(CHILDLINE_KENYA)),
     html.indexOf("</li>", html.indexOf(telHref(CHILDLINE_KENYA))),
   );
   assert(
-    !/free|18|under/i.test(childline.replace(CHILDLINE_KENYA, "")),
-    "the 116 line claims no cost and no age limit",
+    !/free/i.test(childline) || /free/i.test(childlineNote),
+    'the 116 note says "free" only if the constant does (it does not)',
+  );
+  assert(
+    html
+      .trimEnd()
+      .endsWith(`<p class="help-footer">${ANONYMOUS_LINE}</p></div>`),
+    "the anonymous line closes the sheet",
   );
   const [a, b] = EMERGENCY_NUMBERS;
   assert(
@@ -831,11 +850,7 @@ console.log("\nTest 24: no copy claims clinician review");
       <Splash onContinue={() => undefined} onExit={() => undefined} />,
     ),
     renderToStaticMarkup(
-      <HelpSheet
-        onClose={() => undefined}
-        onExit={() => undefined}
-        onTopic={() => undefined}
-      />,
+      <HelpSheet onClose={() => undefined} onTopic={() => undefined} />,
     ),
     renderToStaticMarkup(<SupportContent />),
     renderToStaticMarkup(<SessionEnd onStartNew={() => undefined} />),
@@ -895,11 +910,7 @@ console.log("\nTest 26: one sources line, used everywhere it appears");
     <Splash onContinue={() => undefined} onExit={() => undefined} />,
   );
   const sheet = renderToStaticMarkup(
-    <HelpSheet
-      onClose={() => undefined}
-      onExit={() => undefined}
-      onTopic={() => undefined}
-    />,
+    <HelpSheet onClose={() => undefined} onTopic={() => undefined} />,
   );
   assert(splash.includes(SOURCES_LINE), "on the splash");
   assert(sheet.includes(SOURCES_LINE), "in the Help sheet");
@@ -1975,8 +1986,10 @@ console.log("\nTest 44: the topic grid and the footer line fit narrow phones");
   assert(
     rule(".danger-line").includes("line-height: 1.35;") &&
       !rule(".danger-line a").includes("min-height") &&
-      css.includes(".danger-line a::after,\n.emergency-line a::after {") &&
-      rule(".emergency-line a::after").includes("height: var(--tap-target);") &&
+      css.includes(
+        ".danger-line a::after,\n.emergency-line a::after,\n.help-emergency a::after {",
+      ) &&
+      rule(".help-emergency a::after").includes("height: var(--tap-target);") &&
       rule(".emergency-line").includes("line-height: 1.35;") &&
       !rule(".emergency-line a").includes("min-height"),
     "footer and emergency lines: line-height 1.35; their links keep a 44px-tall tap area",
@@ -2095,9 +2108,7 @@ console.log("\nTest 46: every phone link's name says which service it calls");
   );
   const noop = () => undefined;
   const pages = [
-    renderToStaticMarkup(
-      <HelpSheet onClose={noop} onExit={noop} onTopic={noop} />,
-    ),
+    renderToStaticMarkup(<HelpSheet onClose={noop} onTopic={noop} />),
     renderToStaticMarkup(<SupportContent />),
     renderToStaticMarkup(
       <ReferralScreen message={ABUSE_REFERRAL_MESSAGE} onContinueChat={noop} />,
@@ -2594,6 +2605,86 @@ console.log("\nTest 52: clarify and help/referral boards (step 7d)");
         "utf8",
       ).includes("onBack={onContinueChat}"),
     '"Back to questions" keeps the old Continue chat behaviour',
+  );
+}
+
+console.log("\nTest 53: the Help sheet as a page under the header (step 3c)");
+{
+  const noop = () => undefined;
+  const open = renderToStaticMarkup(
+    <AppShell
+      onExit={noop}
+      help={{ ...closedHelp, isOpen: true }}
+      footerInContent
+    >
+      <main className="screen">behind</main>
+    </AppShell>,
+  );
+  assert(
+    open.includes('<button class="btn-exit" type="button">Exit</button>') &&
+      open.indexOf("btn-exit") < open.indexOf('role="dialog"'),
+    "with the sheet open, the header's Exit stays in view, before the sheet",
+  );
+  assert(
+    open.includes(
+      '<div class="shell-content" hidden=""><main class="screen">behind</main></div>',
+    ),
+    "the screen behind stays mounted but hidden",
+  );
+  const closed = renderToStaticMarkup(
+    <AppShell onExit={noop} help={closedHelp} footerInContent>
+      <main className="screen">behind</main>
+    </AppShell>,
+  );
+  assert(
+    closed.includes(
+      '<div class="shell-content"><main class="screen">behind</main></div>',
+    ) && !closed.includes('role="dialog"'),
+    "closed: the screen shows, no sheet",
+  );
+  const html = renderToStaticMarkup(
+    <HelpSheet onClose={noop} onTopic={noop} />,
+  );
+  const [a, b] = EMERGENCY_NUMBERS;
+  for (const n of [GBV_HELPLINE, CHILDLINE_KENYA, a, b]) {
+    assert(
+      html.includes(`href="${telHref(n)}"`),
+      `${n}: href from the constant`,
+    );
+  }
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    /const closeHelp = \(\) => \{\s*setIsHelpOpen\(false\);\s*helpButtonRef\.current\?\.focus\(\);/.test(
+      app,
+    ) &&
+      /const handleHelpTopic = \(next: Topic\) => \{\s*setIsHelpOpen\(false\);\s*openTopic\(next, "help"\);/.test(
+        app,
+      ),
+    "closing returns focus to Help; a topic pill closes the sheet and opens its list (unchanged)",
+  );
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  assert(
+    rule(".btn-close").includes("width: 44px;") &&
+      rule(".btn-close").includes("height: 44px;") &&
+      rule(".btn-close").includes(
+        "border: 1.5px solid var(--sheet-control-edge);",
+      ),
+    "the close button: 44 by 44, with the 3:1 edge",
+  );
+  assert(
+    rule(".help-call--main:focus-visible").includes(
+      "outline-color: var(--focus-ring-on-dark);",
+    ) &&
+      rule(".help-call--main:focus-visible").includes("outline-offset: -5px;"),
+    "the dark 1195 button: a white ring drawn inside it",
+  );
+  assert(
+    rule(".help-sheet .topic-choices").includes("flex-wrap: wrap;"),
+    "the topic pills wrap",
   );
 }
 

@@ -113,3 +113,14 @@ export const CLARIFY_MORE_WORDS =
 
 /** The clarify screen's ask bar placeholder (step 7d). */
 export const CLARIFY_PLACEHOLDER = "Add a few more words";
+
+/**
+ * The Help sheet's GBV helpline note, as verified by Cindy's call on 20
+ * October 2026 (docs/decision-log.md, "Quick exit"). Moved out of the
+ * component in step 3c; wording unchanged.
+ */
+export const GBV_HELP_SHEET_NOTE =
+  "GBV helpline. Free, 24 hours, English and Kiswahili.";
+
+/** On Home's footer card and at the foot of the Help sheet (step 3c). */
+export const ANONYMOUS_LINE = "Anonymous. We never ask for your name.";

@@ -1600,3 +1600,47 @@ pills keep #C25A92 (3.00:1 on the page).
 
 **Unconfirmed Childline sentence** ("…is free for anyone under 18"):
 unchanged; still on the held A, held B, help and no-answer screens.
+
+## Help sheet to the redesigned board (2026-10-22)
+
+Redesign step 3c (`fix/ui-redesign`), on Cindy's brief. Styling and UI
+copy only; the helpline constants and their descriptions, every reply
+text and the quick-exit behaviour are unchanged.
+
+**A page under the header.** The sheet was a modal overlay that covered
+the header, so it carried its own Exit. It is now the page under the
+app header: the screen behind stays mounted but hidden (its state is
+kept), and the header's Exit stays in view and tappable, so the sheet
+no longer duplicates it. It is still a modal dialog (`aria-modal`,
+labelled by its h1 "Help"); focus still moves to its close button on
+open and stays inside it on Tab; Escape and "Close help" close it and
+return focus to the Help button; double Escape still exits; a topic
+pill still closes it and opens that Topic list. The brief's tests ask
+for focus on the h1 on open; the brief also freezes focus handling, so
+focus stays on the close button as built (a one-line change if wanted).
+
+**Layout.** The board's "How SafeGirl works" gradient card, the tips
+card, the 1195 (plum) and 116 (outlined) call buttons with icon tiles,
+the pink emergency line, wrapping topic pills in each topic's colour,
+and the anonymous line at the foot.
+
+**Wording.** Kept as built: the section heading "Topics" (the board
+says "Browse topics"); the anonymous line "Anonymous. We never ask for
+your name." (the board adds "\"Exit\" closes SafeGirl quickly."); both
+how-it-works paragraphs. Moved into constants without changing a word:
+the 1195 note `GBV_HELP_SHEET_NOTE` ("GBV helpline. Free, 24 hours,
+English and Kiswahili.", as verified by Cindy's call on 20 October) and
+`ANONYMOUS_LINE` (now shared with Home). Changed as briefed: the 116
+note is now `SUPPORT_SECTIONS` word for word, "Childline Kenya. For
+anyone under 18." (it was "Childline Kenya, for children and young
+people.", written in step 3 to avoid an age claim); it has no "free".
+
+**Contrast.** Close button and 116 edges #9A6AB5 (3.04:1 on the page).
+Topic pill borders, lightened from each text colour while keeping 3:1 on
+the page: periods #BA5D82 (3.12), pregnancy #8F68CD (3.09),
+contraception #AA5EB1 (3.14), STIs #BE5E78 (3.07). No fill darkened.
+The 1195 button's focus ring is white and drawn inside it.
+
+**Wide screens.** The aside "Need more support?" (`SupportContent`) is
+different content (local services, helplines and emergency guidance as
+a list), so it was not restyled.

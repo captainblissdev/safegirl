@@ -130,6 +130,29 @@
   --clarify-card-shadow: 0 10px 24px rgba(109, 40, 217, 0.12);
   --clarify-more-bg: rgba(255, 255, 255, 0.7);
   --clarify-pill-edge: #9a6ab5;
+
+  /* Help sheet (step 3c). */
+  --help-how-bg: linear-gradient(135deg, #5b21b6, #a21caf);
+  --help-how-bg-start: #5b21b6;
+  --help-how-bg-end: #a21caf;
+  --help-how-shadow: 0 12px 26px rgba(109, 40, 217, 0.25);
+  --tips-text: #3a2d52;
+  --sheet-control-edge: #9a6ab5;
+  --close-icon: #4a1d7a;
+  --help-call-shadow: 0 10px 22px rgba(59, 15, 107, 0.25);
+  --help-call-tile: rgba(255, 255, 255, 0.18);
+  --help-call-second-tile: #ffe4f1;
+  --help-call-second-icon: #be185d;
+  /* Topic pills: text, and a lighter tint of it for the border that
+     still reaches 3:1 on the page and its glows. */
+  --pill-periods-text: #9d174d;
+  --pill-periods-edge: #ba5d82;
+  --pill-pregnancy-text: #5b21b6;
+  --pill-pregnancy-edge: #8f68cd;
+  --pill-contraception-text: #86198f;
+  --pill-contraception-edge: #aa5eb1;
+  --pill-sti-text: #9f1239;
+  --pill-sti-edge: #be5e78;
   --back-button-text: #4a1d7a;
 
   /*

@@ -22,3 +22,11 @@ export function telName(number: string, visible: string = number): string {
   );
   return contact ? `${visible}, ${contact.label}` : visible;
 }
+
+/** The label and note SUPPORT_SECTIONS gives a number, word for word. */
+export function contactNote(number: string): string {
+  const contact = SUPPORT_SECTIONS.flatMap((section) => section.contacts).find(
+    (item) => item.numbers.includes(number),
+  );
+  return contact ? `${contact.label}. ${contact.note}` : "";
+}

@@ -296,7 +296,7 @@ console.log("\nTest 6: control edges and the header's new pairs");
     ".btn-exit",
   ]) {
     const rule = new RegExp(
-      `\\${control}\\s*\\{[^}]*border: [^;]*var\\(--(control-border|primary|color-plum|color-control-border|list-edge)\\)`,
+      `\\${control}\\s*\\{[^}]*border: [^;]*var\\(--(control-border|primary|color-plum|color-control-border|list-edge|sheet-control-edge)\\)`,
     );
     assert(rule.test(app), `${control} has a 3:1 edge, not the card border`);
   }
@@ -1299,6 +1299,107 @@ console.log("\nTest 18: clarify and help/referral boards (step 7d)");
     contrast(token("--color-violet"), token("--footer-card-bg")),
     3,
     "focus ring on the pink card",
+  );
+}
+
+console.log("\nTest 19: the Help sheet (step 3c)");
+{
+  const check = (ratio: number, min: number, what: string) =>
+    assert(ratio >= min, `${what}: ${ratio.toFixed(2)}:1`);
+  const worst = (fg: string, bgs: string[]) =>
+    Math.min(...bgs.map((bg) => contrast(fg, bg)));
+  const card = token("--color-card");
+  const page = [
+    token("--color-page"),
+    card,
+    token("--glow-pink"),
+    token("--glow-lilac"),
+  ];
+  const how = [token("--help-how-bg-start"), token("--help-how-bg-end")];
+  check(worst(token("--color-plum"), page), 4.5, 'h1 "Help" on the page');
+  check(
+    worst(token("--sheet-control-edge"), page),
+    3,
+    "close button edge #9A6AB5 on the page",
+  );
+  check(contrast(token("--close-icon"), card), 3, "close X #4A1D7A on white");
+  check(
+    worst(token("--color-on-dark"), how),
+    4.5,
+    '"How SafeGirl works" white on its gradient',
+  );
+  check(
+    worst(token("--hero-sub-text"), how),
+    4.5,
+    "how-it-works text #F6E9FF at both stops",
+  );
+  check(contrast(token("--tips-text"), card), 4.5, "tips #3A2D52 on white");
+  check(worst(token("--color-ink"), page), 4.5, "section headings on the page");
+  check(
+    contrast(token("--color-on-dark"), token("--color-plum")),
+    4.5,
+    "1195 title, white on #3B0F6B",
+  );
+  check(
+    contrast(token("--hero-sub-text"), token("--color-plum")),
+    4.5,
+    "1195 note #F6E9FF on #3B0F6B",
+  );
+  check(
+    contrast(token("--focus-ring-on-dark"), token("--color-plum")),
+    3,
+    "white focus ring inside the 1195 button",
+  );
+  check(
+    worst(token("--sheet-control-edge"), page),
+    3,
+    "116 edge #9A6AB5 on the page",
+  );
+  check(contrast(token("--color-ink"), card), 4.5, "116 title on white");
+  check(
+    contrast(token("--color-muted"), card),
+    4.5,
+    "116 note #6B4F86 on white",
+  );
+  check(
+    contrast(
+      token("--help-call-second-icon"),
+      token("--help-call-second-tile"),
+    ),
+    3,
+    "116 icon #BE185D on #FFE4F1",
+  );
+  check(
+    contrast(token("--footer-card-text"), token("--footer-card-bg")),
+    4.5,
+    "emergency line #5E2A58 on #FFE9F4",
+  );
+  check(
+    contrast(token("--color-violet"), token("--footer-card-bg")),
+    4.5,
+    "999 and 112 links on #FFE9F4",
+  );
+  for (const t of ["periods", "pregnancy", "contraception", "sti"]) {
+    check(
+      contrast(token(`--pill-${t}-text`), card),
+      4.5,
+      `${t} pill text on white`,
+    );
+    check(
+      worst(token(`--pill-${t}-edge`), page),
+      3,
+      `${t} pill border on the page`,
+    );
+    check(
+      contrast(token(`--pill-${t}-edge`), card),
+      3,
+      `${t} pill border against its white fill`,
+    );
+  }
+  check(
+    worst(token("--color-muted"), page),
+    4.5,
+    "the anonymous line #6B4F86 on the page",
   );
 }
 

@@ -395,121 +395,6 @@
   background: var(--lilac);
 }
 
-/* Help sheet (redesign Step 3): a modal panel over any screen */
-
-.sheet-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  background: var(--overlay);
-}
-
-.help-sheet {
-  width: min(100%, 560px);
-  max-height: 92vh;
-  overflow-y: auto;
-  border-radius: var(--radius-card-large) var(--radius-card-large) 0 0;
-  padding: 22px 22px 28px;
-  background: var(--color-card);
-  color: var(--color-ink);
-  box-shadow: var(--shadow);
-}
-
-.help-sheet section {
-  padding: 16px 0;
-  border-top: 1px solid var(--color-card-border);
-}
-
-.help-sheet h3 {
-  margin-bottom: 8px;
-  color: var(--color-plum);
-  font-size: 1.05rem;
-  font-weight: var(--weight-extrabold);
-}
-
-.help-sheet p + p {
-  margin-top: 8px;
-}
-
-.help-sheet-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 8px;
-}
-
-.help-sheet-head h2 {
-  flex: 1;
-  color: var(--color-plum);
-  font-size: 1.35rem;
-  font-weight: var(--weight-black);
-}
-
-.help-tips {
-  padding-left: 20px;
-}
-
-.help-calls {
-  display: grid;
-  gap: 10px;
-  list-style: none;
-}
-
-.help-calls li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Tap-to-call: an outlined pill with a 3:1 violet edge. */
-.btn-call {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--tap-target);
-  min-width: var(--tap-target);
-  border: 2px solid var(--color-violet);
-  border-radius: 999px;
-  padding: 0 16px;
-  color: var(--color-violet);
-  font-weight: var(--weight-extrabold);
-  text-decoration: none;
-}
-
-.help-emergency {
-  margin-top: 12px;
-  font-weight: var(--weight-semibold);
-}
-
-.help-emergency a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--tap-target);
-  min-width: var(--tap-target);
-  margin: 0 -4px;
-  padding: 0 4px;
-  color: var(--color-violet);
-  font-weight: var(--weight-black);
-}
-
-.btn-close {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--control-border);
-  border-radius: 50%;
-  background: var(--card);
-  color: var(--ink);
-  cursor: pointer;
-}
-
 /* Help options, shared by the dialog, the referral and the side panel. */
 
 .support-section {
@@ -774,7 +659,8 @@
  * text, so "1195," reads without a gap at any font size.
  */
 .danger-line a::after,
-.emergency-line a::after {
+.emergency-line a::after,
+.help-emergency a::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -1861,7 +1747,8 @@
   }
 
   .topic-screen,
-  .answer-screen {
+  .answer-screen,
+  .help-sheet {
     padding-right: 4px;
     padding-left: 4px;
   }
@@ -2267,4 +2154,256 @@
   font-size: 19px;
   font-weight: var(--weight-black);
   text-decoration: none;
+}
+
+/* Help sheet (redesign Step 3c): a page under the header */
+
+.shell-content {
+  display: contents;
+}
+
+.shell-content[hidden] {
+  display: none;
+}
+
+.help-sheet {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  gap: 14px;
+  width: min(100%, 720px);
+  margin: 0 auto;
+  padding: 0 8px 16px;
+  color: var(--color-ink);
+}
+
+.help-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  padding-top: 16px;
+  box-sizing: content-box;
+}
+
+.help-sheet-head h1 {
+  color: var(--color-plum);
+  font-size: 24px;
+  font-weight: var(--weight-black);
+  letter-spacing: -0.01em;
+}
+
+.btn-close {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid var(--sheet-control-edge);
+  border-radius: 50%;
+  background: var(--color-card);
+  color: var(--close-icon);
+  cursor: pointer;
+}
+
+.help-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.help-card--how {
+  border-radius: 26px;
+  padding: 16px 18px;
+  background: var(--help-how-bg);
+  box-shadow: var(--help-how-shadow);
+  color: var(--color-on-dark);
+}
+
+.help-card--how h2 {
+  font-size: 17px;
+  font-weight: var(--weight-black);
+}
+
+.help-card--how p {
+  color: var(--hero-sub-text);
+  font-size: 14.5px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.5;
+}
+
+.help-card--tips {
+  border: 1.5px solid var(--color-card-border);
+  border-radius: 22px;
+  padding: 14px 16px;
+  background: var(--color-card);
+}
+
+.help-sheet h2 {
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+.help-card--how h2 {
+  font-size: 17px;
+}
+
+.help-tips {
+  display: grid;
+  gap: 6px;
+  padding-left: 20px;
+  color: var(--tips-text);
+  font-size: 14.5px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.45;
+}
+
+.help-talk,
+.help-topics {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.help-calls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+}
+
+.help-call {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  border: 1.5px solid transparent;
+  border-radius: 22px;
+  padding: 10px 16px;
+  text-decoration: none;
+}
+
+.help-call-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+}
+
+.help-call-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.help-call-title {
+  font-size: 17px;
+  font-weight: var(--weight-black);
+}
+
+.help-call-note {
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+}
+
+.help-call--main {
+  background: var(--color-plum);
+  box-shadow: var(--help-call-shadow);
+  color: var(--color-on-dark);
+}
+
+.help-call--main .help-call-icon {
+  background: var(--help-call-tile);
+}
+
+.help-call--main .help-call-note {
+  color: var(--hero-sub-text);
+}
+
+/* On the dark button the ring is white and drawn inside it, so it shows
+   against the plum and not against the light page. */
+.help-call--main:focus-visible {
+  outline-color: var(--focus-ring-on-dark);
+  outline-offset: -5px;
+}
+
+.help-call--second {
+  border-color: var(--sheet-control-edge);
+  background: var(--color-card);
+  color: var(--color-ink);
+}
+
+.help-call--second .help-call-icon {
+  background: var(--help-call-second-tile);
+  color: var(--help-call-second-icon);
+}
+
+.help-call--second .help-call-note {
+  color: var(--color-muted);
+}
+
+.help-emergency {
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: var(--footer-card-bg);
+  color: var(--footer-card-text);
+  font-size: 13.5px;
+  font-weight: var(--weight-bold);
+  line-height: 1.5;
+}
+
+.help-emergency a {
+  position: relative;
+  color: var(--color-violet);
+  font-weight: var(--weight-black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* The topic pills wrap, each in its topic's colour. */
+.help-sheet .topic-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.help-sheet .topic-choices--pills .topic-choice {
+  width: auto;
+  min-height: var(--tap-target);
+  border-radius: 22px;
+  padding: 0 16px;
+  font-size: 15px;
+  font-weight: var(--weight-extrabold);
+}
+
+.help-sheet .topic-choice--general {
+  border-color: var(--pill-periods-edge);
+  color: var(--pill-periods-text);
+}
+
+.help-sheet .topic-choice--pregnancy {
+  border-color: var(--pill-pregnancy-edge);
+  color: var(--pill-pregnancy-text);
+}
+
+.help-sheet .topic-choice--contraception {
+  border-color: var(--pill-contraception-edge);
+  color: var(--pill-contraception-text);
+}
+
+.help-sheet .topic-choice--sti {
+  border-color: var(--pill-sti-edge);
+  color: var(--pill-sti-text);
+}
+
+.help-footer {
+  margin-top: auto;
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+  line-height: 1.5;
+  text-align: center;
 }

@@ -1,9 +1,8 @@
-import { telHref, telName } from "../content/telHref";
+import { contactNote, telHref, telName } from "../content/telHref";
 import {
   CHILDLINE_KENYA,
   EMERGENCY_NUMBERS,
   GBV_HELPLINE,
-  SUPPORT_SECTIONS,
 } from "../offline/helpContent";
 import { PhoneIcon } from "./Icons";
 
@@ -13,14 +12,6 @@ import { PhoneIcon } from "./Icons";
  * from the helpline constants, and its description is the constant's own
  * label and note (SUPPORT_SECTIONS); no number or wording is typed here.
  */
-
-/** The label and note SUPPORT_SECTIONS gives a number. */
-function describe(number: string): string {
-  const contact = SUPPORT_SECTIONS.flatMap((section) => section.contacts).find(
-    (item) => item.numbers.includes(number),
-  );
-  return contact ? `${contact.label}. ${contact.note}` : "";
-}
 
 interface Props {
   /** "held": in the held screen's white card. "support": full width
@@ -40,7 +31,7 @@ export default function CallButtons({ surface }: Props) {
             <PhoneIcon size={surface === "support" ? 26 : 20} />
             <span className="call-button-text">
               <span className="call-button-number">Call {number}</span>
-              <span className="call-button-note">{describe(number)}</span>
+              <span className="call-button-note">{contactNote(number)}</span>
             </span>
           </a>
         </li>
