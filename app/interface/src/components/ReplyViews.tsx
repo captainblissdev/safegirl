@@ -6,12 +6,14 @@ import {
   BACK_TO_QUESTIONS,
   CALL_CARD_HEADING,
   CLARIFY_FALLBACK,
+  CLARIFY_MORE_WORDS,
+  CLARIFY_PICK_LABEL,
   NO_ANSWER_RETRY,
   PERSON_MESSAGE,
   QUICK_EXIT_HINT,
   REPLY_PILLS,
 } from "../content/uiText";
-import CallButtons, { EmergencyLine } from "./CallButtons";
+import CallButtons, { EmergencyButtons, EmergencyLine } from "./CallButtons";
 import DangerLine from "./DangerLine";
 import {
   HeartIcon,
@@ -81,8 +83,10 @@ export function ClarifyReply({
 }: ReplyProps & { asked: string; onTopic: (topic: Topic) => void }) {
   const headingRef = useFocusOnArrival(id);
   return (
-    <main className="screen chat-screen reply-screen">
-      <YouAsked text={asked} />
+    <main className="screen chat-screen reply-screen clarify-screen">
+      {/* Her message as a chat bubble: plain text (React escapes it). */}
+      <h2 className="sr-only">You asked</h2>
+      <p className="ask-bubble">{asked}</p>
       <section className="reply-card reply-card--clarify">
         <span className="reply-decor" aria-hidden="true">
           <Sparkle size={22} />
@@ -91,9 +95,13 @@ export function ClarifyReply({
         <h1 ref={headingRef} tabIndex={-1} className="reply-title">
           {text}
         </h1>
+        <p className="clarify-pick">{CLARIFY_PICK_LABEL}</p>
         <TopicChoices variant="grid" onTopic={onTopic} />
       </section>
-      <p className="reply-note">{CLARIFY_FALLBACK}</p>
+      <div className="clarify-more">
+        <p className="clarify-more-words">{CLARIFY_MORE_WORDS}</p>
+        <p className="reply-note">{CLARIFY_FALLBACK}</p>
+      </div>
       <div className="screen-bottom">
         <DangerLine />
         {askBar}
@@ -161,7 +169,7 @@ export function SupportReply({
         <span className="hero-decor" aria-hidden="true">
           <span className="support-circle" />
           <span className="hero-sparkle">
-            <HeroSparkle size={26} />
+            <HeroSparkle size={24} />
           </span>
         </span>
         <Pill icon={<HeartIcon size={16} />} label={REPLY_PILLS[variant]} />
@@ -173,6 +181,7 @@ export function SupportReply({
       <CallButtons surface="support" />
       <div className="emergency-card">
         <EmergencyLine lead />
+        <EmergencyButtons />
       </div>
       <div className="support-bottom">
         <p className="support-exit-hint">{QUICK_EXIT_HINT}</p>

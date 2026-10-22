@@ -1584,27 +1584,36 @@
 /* Clarify */
 
 .reply-card--clarify {
-  border-radius: 26px;
+  gap: 14px;
+  border-radius: 8px 26px 26px 26px;
+  padding: 18px 16px 16px;
   background: linear-gradient(
     135deg,
     var(--clarify-bg-start),
     var(--clarify-bg-end)
   );
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--clarify-card-shadow);
   color: var(--color-ink);
 }
 
 .reply-card--clarify .reply-decor {
+  top: 16px;
+  right: 18px;
   color: var(--clarify-sparkle);
+  opacity: 0.55;
 }
 
 .reply-card--clarify .reply-pill {
   color: var(--clarify-text);
+  font-size: 13px;
+  font-weight: var(--weight-black);
 }
 
 .reply-card--clarify .reply-title {
+  color: var(--color-ink);
   font-size: 19px;
-  line-height: 1.35;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.4;
 }
 
 /* Held topic */
@@ -1723,24 +1732,38 @@
   overflow-wrap: anywhere;
 }
 
-/* The grid measures its own width: when two columns cannot hold the
-   icon tile beside the longest label ("Contraception"), the icon sits
-   above the label instead, so no word is broken. */
-.topic-choices--grid {
-  container-type: inline-size;
-}
-
+/* Clarify's grid (step 7d): each button a column, the icon tile above
+   the label, so even "Contraception" fits whole at 320px. The border is
+   the topic's own colour (3:1 or more on the card). */
 .topic-choices--grid .topic-choice {
-  min-height: 58px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 84px;
   border-radius: 18px;
+  padding: 10px 12px;
 }
 
-@container (max-width: 359px) {
-  .topic-choices--grid .topic-choice {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
+.topic-choices--grid .topic-choice-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+}
+
+.topic-choices--grid .topic-choice--general {
+  border-color: var(--topic-periods-text);
+}
+
+.topic-choices--grid .topic-choice--pregnancy {
+  border-color: var(--topic-pregnancy-text);
+}
+
+.topic-choices--grid .topic-choice--contraception {
+  border-color: var(--topic-contraception-text);
+}
+
+.topic-choices--grid .topic-choice--sti {
+  border-color: var(--topic-sti-text);
 }
 
 .topic-choices--pills .topic-choice {
@@ -2140,4 +2163,108 @@
   font-size: 15px;
   font-weight: var(--weight-black);
   cursor: pointer;
+}
+
+/* Clarify and help/referral to the redesigned boards (Step 7d) */
+
+.clarify-screen {
+  gap: 14px;
+}
+
+/* Her message, as a chat bubble on the right. */
+.ask-bubble {
+  align-self: flex-end;
+  max-width: 84%;
+  margin-top: 6px;
+  border-radius: 22px 22px 6px 22px;
+  padding: 12px 18px;
+  background: var(--bubble-bg);
+  box-shadow: var(--bubble-shadow);
+  color: var(--color-on-dark);
+  font-size: 17px;
+  font-weight: var(--weight-extrabold);
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.clarify-pick {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: var(--weight-black);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.clarify-more {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: var(--clarify-more-bg);
+}
+
+.clarify-more-words {
+  color: var(--color-ink);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+  line-height: 1.5;
+}
+
+.clarify-more .reply-note {
+  font-size: 14px;
+}
+
+.clarify-screen .ask-pill-bar {
+  border-color: var(--clarify-pill-edge);
+}
+
+/* Help and referral. */
+.support-hero {
+  margin-top: 4px;
+}
+
+.support-hero .hero-sparkle {
+  opacity: 0.85;
+}
+
+.support-title {
+  max-width: 300px;
+}
+
+.call-buttons--support .call-button--second svg {
+  color: var(--call-second-icon);
+}
+
+.emergency-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 20px;
+}
+
+.emergency-card .emergency-line {
+  line-height: 1.4;
+}
+
+.emergency-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  list-style: none;
+}
+
+.emergency-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  border: 1.5px solid var(--emergency-button-edge);
+  border-radius: 16px;
+  background: var(--color-card);
+  color: var(--emergency-button-text);
+  font-size: 19px;
+  font-weight: var(--weight-black);
+  text-decoration: none;
 }

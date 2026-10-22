@@ -1128,8 +1128,8 @@ console.log("\nTest 17: reply screens aligned with the design (step 7c)");
   );
   const pink = stops("--support-call-bg");
   assert(
-    JSON.stringify(pink) === '["#db2777","#c026d3"]',
-    "the 1195 button keeps the design's #DB2777 to #C026D3 (no darkening needed)",
+    JSON.stringify(pink) === '["#c2185b","#a21caf"]',
+    "the 1195 button runs #C2185B to #A21CAF (step 7d; no darkening needed)",
   );
   check(
     worst(white, pink),
@@ -1174,6 +1174,131 @@ console.log("\nTest 17: reply screens aligned with the design (step 7c)");
   );
   console.log(
     `  INFO: design edges: #E3C4EE ${contrast("#e3c4ee", card).toFixed(2)}:1 on white, #F0C4DD ${worst("#f0c4dd", page).toFixed(2)}:1 on the page`,
+  );
+}
+
+console.log("\nTest 18: clarify and help/referral boards (step 7d)");
+{
+  const over = (rgba: string, hex: string) => {
+    const [r, g, b, a] = rgba
+      .replace(/[^0-9.,]/g, "")
+      .split(",")
+      .map(Number);
+    const base = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    return (
+      "#" +
+      [r, g, b]
+        .map((c, i) => Math.round(c * a + base[i] * (1 - a)))
+        .map((c) => c.toString(16).padStart(2, "0"))
+        .join("")
+    );
+  };
+  const check = (ratio: number, min: number, what: string) =>
+    assert(ratio >= min, `${what}: ${ratio.toFixed(2)}:1`);
+  const worst = (fg: string, bgs: string[]) =>
+    Math.min(...bgs.map((bg) => contrast(fg, bg)));
+  const white = token("--color-on-dark");
+  const card = token("--color-card");
+  const page = [
+    token("--color-page"),
+    card,
+    token("--glow-pink"),
+    token("--glow-lilac"),
+  ];
+  const clarify = [token("--clarify-bg-start"), token("--clarify-bg-end")];
+
+  check(
+    worst(white, [token("--bubble-bg-start"), token("--bubble-bg-end")]),
+    4.5,
+    "her bubble: white on #3B0F6B to #6B21A8",
+  );
+  check(
+    contrast(token("--clarify-text"), card),
+    4.5,
+    "clarify pill #86198F on white",
+  );
+  check(
+    worst(token("--color-ink"), clarify),
+    4.5,
+    "clarify h1 #2A1245 on the card",
+  );
+  check(
+    worst(token("--color-muted"), clarify),
+    4.5,
+    '"Pick the closest" #6B4F86 on the card',
+  );
+  for (const tint of ["periods", "pregnancy", "contraception", "sti"]) {
+    check(
+      worst(token(`--topic-${tint}-text`), clarify),
+      3,
+      `${tint} button border on the card`,
+    );
+    check(
+      contrast(token(`--topic-${tint}-text`), token(`--topic-${tint}-bg`)),
+      3,
+      `${tint} icon on its tile`,
+    );
+  }
+  check(contrast(token("--color-ink"), card), 4.5, "topic labels on white");
+  const more = page.map((bg) => over(token("--clarify-more-bg"), bg));
+  check(
+    worst(token("--color-ink"), more),
+    4.5,
+    '"Not sure which one?" on its block',
+  );
+  check(
+    worst(token("--color-muted"), more),
+    4.5,
+    '"Something else?" on its block',
+  );
+  check(
+    contrast(token("--clarify-pill-edge"), card),
+    3,
+    "clarify ask pill edge #9A6AB5 on white",
+  );
+  check(
+    worst(token("--clarify-pill-edge"), page),
+    3,
+    "clarify ask pill edge on the page",
+  );
+  const call = [...token("--support-call-bg").matchAll(/#[0-9a-f]{6}/g)].map(
+    (m) => m[0],
+  );
+  check(worst(white, call), 4.5, "1195 description, white 13px at both stops");
+  check(
+    contrast(token("--call-second-icon"), card),
+    3,
+    "116 icon #A21CAF on white",
+  );
+  check(
+    worst(token("--call-second-edge"), page),
+    3,
+    "116 edge #9A6AB5 on the page",
+  );
+  check(
+    contrast(token("--emergency-button-edge"), token("--footer-card-bg")),
+    3,
+    "999 and 112 button edge #B8447E on the pink card",
+  );
+  check(
+    contrast(token("--emergency-button-text"), card),
+    4.5,
+    "999 and 112 #7A0E45 on white",
+  );
+  check(
+    contrast(token("--footer-card-text"), token("--footer-card-bg")),
+    4.5,
+    "emergency line #5E2A58 on #FFE9F4",
+  );
+  check(
+    worst(token("--back-button-edge"), page),
+    3,
+    '"Back to questions" edge #9A6AB5 on the page',
+  );
+  check(
+    contrast(token("--color-violet"), token("--footer-card-bg")),
+    3,
+    "focus ring on the pink card",
   );
 }
 

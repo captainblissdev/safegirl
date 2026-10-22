@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 218 cases: 198 Pass, 19 Fail, 1 Not run. Two of the
+**Totals:** 223 cases: 203 Pass, 19 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -309,6 +309,11 @@ entry.
 | TC-216 | FR-04, FR-05 | Help and referral | The pink emergency card with 999 and 112 from the constants; no ask bar; "Back to questions" goes Home; header without Help, exit reads "Quick exit" and still leaves at once | As expected (Test 51; browser check: Quick exit to `https://www.google.com/`) | Pass |
 | TC-217 | NFR (usability) | The reply screens at 320, 360, 390 and 430px | No horizontal overflow, nothing clipped, gutters 20px (16px under 360px); ask bars as white pills with no panel | 218 of 218 browser checks; step 4b, 6b, 7b, 8 and 9 checks re-run with no regressions | Pass |
 | TC-218 | NFR (accessibility) | Step 7c contrast | Text 4.5:1; control edges and focus 3:1 | Held text 13.77; 1195 description 4.71 (held) and 4.60 (help, no darkening); hero paragraph 4.99 over the circle; 116 edge 4.32 on white, 3.20 on the page (design 1.57, darkened); emergency card 9.35, links 6.16; Back to questions edge 3.12 (design 1.14, darkened) (`styles/tokens.test.ts`, Test 17) | Pass |
+| TC-219 | FR-03 | Clarify | Her text in a bubble, escaped (`<b>x</b>`), after a hidden "You asked" h2; one h1 (the reply), focused; "Pick the closest"; four column buttons in a `minmax(0, 1fr)` grid, each label whole and opening its Topic list; the two lines under the card; the footer line (1195 from the constant), then the ask pill with "Add a few more words" | As expected (`components.test.tsx`, Tests 38 and 52; browser check at 320, 360, 390 and 430px; step 7b grid check 148 of 148) | Pass |
+| TC-220 | FR-04, FR-05 | Help and referral | No Help button, "Quick exit"; no ask bar or footer line; the h1 is the first sentence and h1 + " " + paragraph is the reply; 1195, 116, 999 and 112 from the constants, all outside the hero; two emergency buttons; "Back to questions" keeps the Continue chat behaviour | As expected (Tests 39, 51 and 52; browser check: Quick exit to `https://www.google.com/`) | Pass |
+| TC-221 | NFR (accessibility) | Focus on clarify, help and referral | No outline on the h1 focused on arrival; a ring on a Tab-focused control | As expected at all four widths (browser check, 222 of 222) | Pass |
+| TC-222 | NFR (usability) | Clarify, help and referral at 320, 360, 390 and 430px | No horizontal overflow, nothing clipped, gutters 20px (16px under 360px) | As expected (browser check; `clarify-after-7d-*.png`, `referral-after-7d-*.png`, `help-after-7d-390.png`); step 7b, 7c, 8 and 9 checks re-run with no regressions | Pass |
+| TC-223 | NFR (accessibility) | Step 7d contrast | Text 4.5:1; control edges and icons 3:1 | Bubble 8.72; clarify h1 13.60; "Pick the closest" 5.60; topic borders 4.97 to 5.85; ask pill edge 3.04 on the page; 1195 description 5.87; 116 edge 3.04; 999 and 112 edge 4.37, text 10.63; Back to questions edge 3.04 (`styles/tokens.test.ts`, Test 18) | Pass |
 
 ## Defects and retests
 

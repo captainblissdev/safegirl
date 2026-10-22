@@ -102,9 +102,10 @@
   --held-card-shadow: 0 10px 24px rgba(219, 39, 119, 0.14);
   --held-title: #4a0d2b;
   --call-main-shadow: 0 8px 16px rgba(192, 38, 211, 0.3);
-  /* The design's #e3c4ee edge on the 116 button is 1.57:1; it marks a
-     control, so it is darkened to 3:1 on white and on the page. */
-  --call-second-edge: #a060b8;
+  /* The 116 button's edge (step 7d's #9a6ab5): 4.12:1 on white, 3.04:1
+     on the page. */
+  --call-second-edge: #9a6ab5;
+  --call-second-icon: #a21caf;
   --support-hero-bg: linear-gradient(
     135deg,
     #3b0f6b 0%,
@@ -114,12 +115,21 @@
   --support-hero-shadow: 0 14px 28px rgba(59, 15, 107, 0.3);
   --support-circle: rgba(244, 114, 182, 0.3);
   --support-pill-text: #6b21a8;
-  /* White 13px text on #db2777 is 4.60:1, so the design's start stays. */
-  --support-call-bg: linear-gradient(135deg, #db2777, #c026d3);
-  --support-call-shadow: 0 10px 20px rgba(219, 39, 119, 0.32);
-  /* The design's #f0c4dd edge is 1.14:1 on the page; "Back to
-     questions" is a control, so its edge is darkened to 3:1. */
-  --back-button-edge: #b45f8f;
+  /* White 13px text: 5.87:1 on #c2185b, 6.32:1 on #a21caf. */
+  --support-call-bg: linear-gradient(135deg, #c2185b, #a21caf);
+  --support-call-shadow: 0 10px 20px rgba(194, 24, 91, 0.3);
+  --back-button-edge: #9a6ab5;
+  /* The emergency card's 999 and 112 buttons (step 7d). */
+  --emergency-button-edge: #b8447e;
+  --emergency-button-text: #7a0e45;
+  /* Clarify (step 7d): her message, the card, the sparkle, the ask pill. */
+  --bubble-bg: linear-gradient(135deg, #3b0f6b, #6b21a8);
+  --bubble-bg-start: #3b0f6b;
+  --bubble-bg-end: #6b21a8;
+  --bubble-shadow: 0 8px 18px rgba(59, 15, 107, 0.22);
+  --clarify-card-shadow: 0 10px 24px rgba(109, 40, 217, 0.12);
+  --clarify-more-bg: rgba(255, 255, 255, 0.7);
+  --clarify-pill-edge: #9a6ab5;
   --back-button-text: #4a1d7a;
 
   /*
@@ -192,7 +202,7 @@
   /* Reply screens (clarify, held, help and referral, no answer): pills,
      decoration and the support card's buttons. */
   --reply-pill-bg: #ffffff;
-  --clarify-sparkle: rgba(192, 38, 211, 0.3);
+  --clarify-sparkle: #c026d3;
 
   /* Topic tints: background and text. */
   --topic-periods-bg: #ffddee;

@@ -1561,3 +1561,42 @@ so a two-line description never touches the edge at 320px.
 **Unconfirmed Childline sentence** ("…is free for anyone under 18"):
 still on the held A, held B, help and no-answer screens (reply text
 unchanged); not on held C, the referrals, clarify or Talk to a person.
+
+## Clarify and help/referral to the redesigned boards (2026-10-22)
+
+Redesign step 7d (`fix/ui-redesign`), on Cindy's brief, replacing the
+clarify and help/referral parts of step 7c where they differ. Layout and
+UI copy only: every reply word, the helpline constants and their
+descriptions, and the quick-exit behaviour are unchanged.
+
+**Clarify.** Her message is a chat bubble on the right (plain text,
+escaped), after a visually hidden "You asked" h2; the visible label is
+gone. The reply card takes the board's shape and sparkle; inside it,
+"Pick the closest" and the four topic buttons, now always a column
+(icon tile above the label), 84px, bordered in each topic's own colour,
+in a `minmax(0, 1fr)` grid. Under the card: "Not sure which one? Type it
+again with a few more words." and the existing fallback line. Then the
+footer line and the ask pill (edge #9A6AB5), placeholder "Add a few more
+words".
+
+**Help and referral.** The hero gets the board's spacing, a 24px
+sparkle and a 300px heading width; the 1195 button runs #C2185B to
+#A21CAF; the 116 button and "Back to questions" use the #9A6AB5 edge.
+The emergency card now has two buttons, one per number from
+`EMERGENCY_NUMBERS`; its line ("In immediate danger?" in bold, then
+"Call 999 or 112.") keeps the same words but its numbers are plain text,
+so each number is a tap target once. No ask bar and no footer line, as
+in 7c.
+
+**New copy** (`content/uiText.ts`): `CLARIFY_PICK_LABEL` "Pick the
+closest", `CLARIFY_MORE_WORDS`, `CLARIFY_PLACEHOLDER` "Add a few more
+words".
+
+**Contrast.** No fill was darkened: white 13px text is 5.87:1 on
+#C2185B and 6.32:1 on #A21CAF. The #9A6AB5 edges are 4.12:1 on white
+and 3.04:1 on the page; the 999 and 112 buttons' edge #B8447E is 4.37:1
+on the pink card. The clarify ask pill alone uses #9A6AB5; the other ask
+pills keep #C25A92 (3.00:1 on the page).
+
+**Unconfirmed Childline sentence** ("…is free for anyone under 18"):
+unchanged; still on the held A, held B, help and no-answer screens.

@@ -103,3 +103,13 @@ export const QUICK_EXIT_HINT =
 
 /** Leaves the help or referral screen (was "Continue chat"; step 7c). */
 export const BACK_TO_QUESTIONS = "Back to questions";
+
+/** Above the clarify screen's topic buttons (step 7d). */
+export const CLARIFY_PICK_LABEL = "Pick the closest";
+
+/** Under the clarify card, before the fallback line (step 7d). */
+export const CLARIFY_MORE_WORDS =
+  "Not sure which one? Type it again with a few more words.";
+
+/** The clarify screen's ask bar placeholder (step 7d). */
+export const CLARIFY_PLACEHOLDER = "Add a few more words";

@@ -19,6 +19,9 @@ import {
   TOPIC_LIST_PLACEHOLDER,
   BACK_TO_QUESTIONS,
   CALL_CARD_HEADING,
+  CLARIFY_MORE_WORDS,
+  CLARIFY_PICK_LABEL,
+  CLARIFY_PLACEHOLDER,
   QUICK_EXIT_HINT,
   QUICK_EXIT_LABEL,
   REPLY_PILLS,
@@ -1583,9 +1586,13 @@ console.log(
     if (echoes) {
       assert(
         html.includes(
-          '<p class="you-asked-label">You asked</p><p class="you-asked-text">&lt;b&gt;x&lt;/b&gt;</p>',
+          name === "clarify"
+            ? '<h2 class="sr-only">You asked</h2><p class="ask-bubble">&lt;b&gt;x&lt;/b&gt;</p>'
+            : '<p class="you-asked-label">You asked</p><p class="you-asked-text">&lt;b&gt;x&lt;/b&gt;</p>',
         ),
-        `${name}: "You asked" and her text, as plain text`,
+        name === "clarify"
+          ? 'clarify: her text in a bubble, as plain text, after a hidden "You asked" h2'
+          : `${name}: "You asked" and her text, as plain text`,
       );
     } else {
       assert(
@@ -1655,8 +1662,12 @@ console.log(
     const [first, second] = EMERGENCY_NUMBERS;
     assert(
       html.includes(
-        `<div class="emergency-card"><p class="emergency-line"><strong>In immediate danger?</strong> Call <a href="${telHref(first)}" aria-label="${telName(first)}">${first}</a> or <a href="${telHref(second)}" aria-label="${telName(second)}">${second}</a>.</p></div>`,
-      ),
+        `<div class="emergency-card"><p class="emergency-line"><strong>In immediate danger?</strong> Call ${first} or ${second}.</p><ul class="emergency-buttons"><li><a class="emergency-button" href="${telHref(first)}" aria-label="${telName(first)}"><svg`,
+      ) &&
+        html.includes(
+          `</svg>${first}</a></li><li><a class="emergency-button" href="${telHref(second)}" aria-label="${telName(second)}"><svg`,
+        ) &&
+        html.includes(`</svg>${second}</a></li></ul></div>`),
       `${name}: the pink card: "In immediate danger?" (bold) "Call ${first} or ${second}." from the constants`,
     );
     assert(
@@ -1939,10 +1950,10 @@ console.log("\nTest 44: the topic grid and the footer line fit narrow phones");
     "labels wrap; nothing forbids it",
   );
   assert(
-    rule(".topic-choices--grid .topic-choice").includes("min-height: 58px;") &&
+    rule(".topic-choices--grid .topic-choice").includes("min-height: 84px;") &&
       rule(".topic-choice-icon").includes("flex: none;") &&
-      rule(".topic-choice-icon").includes("width: 32px;"),
-    "grid buttons keep 58px and the 32px icon tile, which does not shrink",
+      rule(".topic-choices--grid .topic-choice-icon").includes("width: 34px;"),
+    "grid buttons are 84px with a 34px icon tile that does not shrink (step 7d)",
   );
   assert(
     /@media \(max-width: 359px\) \{\s*\.topic-choice \{\s*font-size: 14px;/.test(
@@ -1951,11 +1962,10 @@ console.log("\nTest 44: the topic grid and the footer line fit narrow phones");
     "under 360px the label is 14px",
   );
   assert(
-    rule(".topic-choices--grid").includes("container-type: inline-size;") &&
-      css.includes(
-        "@container (max-width: 359px) {\n  .topic-choices--grid .topic-choice {\n    flex-direction: column;",
-      ),
-    "a grid too narrow for icon and label side by side puts the icon above, so no word breaks",
+    rule(".topic-choices--grid .topic-choice").includes(
+      "flex-direction: column;",
+    ),
+    "each grid button is a column, the icon above the label, so no word breaks (step 7d)",
   );
   assert(
     rule(".reply-card").includes("overflow: visible;") &&
@@ -2405,8 +2415,12 @@ console.log("\nTest 51: reply screens aligned with the design (step 7c)");
     const [a, b] = EMERGENCY_NUMBERS;
     assert(
       html.includes(
-        `<div class="emergency-card"><p class="emergency-line"><strong>In immediate danger?</strong> Call <a href="${telHref(a)}" aria-label="${telName(a)}">${a}</a> or <a href="${telHref(b)}" aria-label="${telName(b)}">${b}</a>.</p></div>`,
-      ),
+        `<div class="emergency-card"><p class="emergency-line"><strong>In immediate danger?</strong> Call ${a} or ${b}.</p><ul class="emergency-buttons"><li><a class="emergency-button" href="${telHref(a)}" aria-label="${telName(a)}"><svg`,
+      ) &&
+        html.includes(
+          `</svg>${a}</a></li><li><a class="emergency-button" href="${telHref(b)}" aria-label="${telName(b)}"><svg`,
+        ) &&
+        html.includes(`</svg>${b}</a></li></ul></div>`),
       `${name}: the pink emergency card with ${a} and ${b} from the constants`,
     );
     assert(
@@ -2471,6 +2485,116 @@ console.log("\nTest 51: reply screens aligned with the design (step 7c)");
       `${name}: the footer line, then the ask bar as a white pill, no panel`,
     );
   }
+}
+
+console.log("\nTest 52: clarify and help/referral boards (step 7d)");
+{
+  const clarify = renderReply(VAGUE_QUERY_MESSAGE, {
+    outcome: "clarification",
+    kind: "vague",
+  });
+  assert(
+    clarify.includes(
+      '<h2 class="sr-only">You asked</h2><p class="ask-bubble">&lt;b&gt;x&lt;/b&gt;</p>',
+    ) && !clarify.includes("you-asked-label"),
+    "clarify: a hidden h2, then her text in a bubble, escaped; no visible label",
+  );
+  assert(
+    clarify.split("<h1").length === 2 &&
+      clarify.includes(
+        `<h1 tabindex="-1" class="reply-title">${escapeHtml(VAGUE_QUERY_MESSAGE)}</h1>`,
+      ),
+    "clarify: one h1, the reply, focusable",
+  );
+  assert(
+    clarify.includes(
+      `<p class="clarify-pick">${CLARIFY_PICK_LABEL}</p><ul class="topic-choices topic-choices--grid">`,
+    ),
+    `clarify: "${CLARIFY_PICK_LABEL}", then the four buttons`,
+  );
+  assert(
+    clarify.includes(
+      `<div class="clarify-more"><p class="clarify-more-words">${CLARIFY_MORE_WORDS}</p><p class="reply-note">${CLARIFY_FALLBACK}</p></div>`,
+    ),
+    "clarify: the two lines under the card",
+  );
+  const bottom = clarify.slice(clarify.indexOf('<div class="screen-bottom">'));
+  assert(
+    bottom.includes(`href="${telHref(GBV_HELPLINE)}"`) &&
+      bottom.indexOf('class="danger-line"') <
+        bottom.indexOf('<div class="ask-pill-bar">') &&
+      bottom.includes(`placeholder="${CLARIFY_PLACEHOLDER}"`) &&
+      bottom.includes('aria-label="Ask"'),
+    `clarify: the footer line (1195 from the constant), then the ask pill, "${CLARIFY_PLACEHOLDER}"`,
+  );
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  assert(
+    rule(".topic-choices").includes(
+      "grid-template-columns: repeat(2, minmax(0, 1fr));",
+    ) &&
+      rule(".topic-choices--grid .topic-choice").includes(
+        "flex-direction: column;",
+      ) &&
+      rule(".topic-choices--grid .topic-choice").includes("min-height: 84px;"),
+    "clarify: column buttons in a minmax(0, 1fr) grid",
+  );
+  for (const [name, text, render] of [
+    [
+      "help",
+      SIGNPOSTING_MESSAGE,
+      () =>
+        renderReply(SIGNPOSTING_MESSAGE, {
+          outcome: "signposting",
+          kind: "help",
+        }),
+    ],
+    [
+      "referral",
+      ABUSE_REFERRAL_MESSAGE,
+      () => referral(ABUSE_REFERRAL_MESSAGE),
+    ],
+  ] as [string, string, () => string][]) {
+    const html = render();
+    const { first, rest } = splitReply(text);
+    assert(
+      `${first} ${rest}` === text &&
+        html.includes(
+          `<h1 tabindex="-1" class="support-title">${escapeHtml(first)}</h1>`,
+        ) &&
+        html.includes(`<p class="support-body">${escapeHtml(rest ?? "")}</p>`),
+      `${name}: the h1 is the first sentence; h1 + " " + paragraph is the reply`,
+    );
+    const hero = html.slice(
+      html.indexOf('<section class="support-hero'),
+      html.indexOf("</section>"),
+    );
+    const [a, b] = EMERGENCY_NUMBERS;
+    assert(
+      !hero.includes("tel:") &&
+        [GBV_HELPLINE, CHILDLINE_KENYA, a, b].every((n) =>
+          html.includes(`href="${telHref(n)}"`),
+        ) &&
+        html.split('class="emergency-button"').length === 3,
+      `${name}: 1195, 116, ${a} and ${b} from the constants, all outside the hero; two emergency buttons`,
+    );
+    assert(
+      !html.includes('class="danger-line"') && !html.includes("<input"),
+      `${name}: no footer line and no ask bar`,
+    );
+  }
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes('onContinueChat={() => setScreen("chat")}') &&
+      readFileSync(
+        new URL("./ReferralScreen.tsx", import.meta.url),
+        "utf8",
+      ).includes("onBack={onContinueChat}"),
+    '"Back to questions" keeps the old Continue chat behaviour',
+  );
 }
 
 console.log("\nAll component tests passed.");

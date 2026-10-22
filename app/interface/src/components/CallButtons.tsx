@@ -37,7 +37,7 @@ export default function CallButtons({ surface }: Props) {
             className={`call-button ${index === 0 ? "call-button--main" : "call-button--second"}`}
             href={telHref(number)}
           >
-            <PhoneIcon size={20} />
+            <PhoneIcon size={surface === "support" ? 26 : 20} />
             <span className="call-button-text">
               <span className="call-button-number">Call {number}</span>
               <span className="call-button-note">{describe(number)}</span>
@@ -51,14 +51,22 @@ export default function CallButtons({ surface }: Props) {
 
 /**
  * "In immediate danger? Call …", both emergency numbers from the
- * constants; with lead, the question is bold (same words).
+ * constants. With lead (the help and referral screens), the question is
+ * bold and the numbers are plain text: the two buttons under the line
+ * (EmergencyButtons) are the tap targets, so nothing is a link twice.
  */
 export function EmergencyLine({ lead = false }: { lead?: boolean }) {
   const [first, second] = EMERGENCY_NUMBERS;
+  if (lead) {
+    return (
+      <p className="emergency-line">
+        <strong>In immediate danger?</strong> Call {first} or {second}.
+      </p>
+    );
+  }
   return (
     <p className="emergency-line">
-      {lead ? <strong>In immediate danger?</strong> : "In immediate danger?"}{" "}
-      Call{" "}
+      In immediate danger? Call{" "}
       <a href={telHref(first)} aria-label={telName(first)}>
         {first}
       </a>{" "}
@@ -68,5 +76,25 @@ export function EmergencyLine({ lead = false }: { lead?: boolean }) {
       </a>
       .
     </p>
+  );
+}
+
+/** Two tap-to-call buttons, one per emergency number, from the constants. */
+export function EmergencyButtons() {
+  return (
+    <ul className="emergency-buttons">
+      {EMERGENCY_NUMBERS.map((number) => (
+        <li key={number}>
+          <a
+            className="emergency-button"
+            href={telHref(number)}
+            aria-label={telName(number)}
+          >
+            <PhoneIcon size={20} />
+            {number}
+          </a>
+        </li>
+      ))}
+    </ul>
   );
 }

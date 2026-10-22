@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  CLARIFY_PLACEHOLDER,
   LIMITED_MODE_NOTICE,
   PLACEHOLDER_EXAMPLES,
   PLACEHOLDER_ROTATE_MS,
@@ -112,9 +113,11 @@ export default function ChatInterface({
       placeholder={
         isHome
           ? PLACEHOLDER_EXAMPLES[placeholderIndex]
-          : ownScreen
-            ? "Ask something else…"
-            : "Ask about your body or health…"
+          : view === "clarify"
+            ? CLARIFY_PLACEHOLDER
+            : ownScreen
+              ? "Ask something else…"
+              : "Ask about your body or health…"
       }
       inputRef={inputRef}
       label={ownScreen ? "Ask something else" : undefined}
