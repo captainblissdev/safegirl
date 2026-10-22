@@ -36,7 +36,8 @@ OUTPUT = Path(__file__).resolve().parent / "fold_assignment_v4.csv"
 
 
 def read_csv(path):
-    with open(path, encoding="utf-8", newline="") as f:
+    # utf-8-sig: a file saved by Excel starts with a BOM; strip it.
+    with open(path, encoding="utf-8-sig", newline="") as f:
         return list(csv.DictReader(f))
 
 

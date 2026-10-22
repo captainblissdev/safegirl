@@ -83,7 +83,8 @@ Embed = Callable[[Sequence[str]], "object"]
 
 
 def read_csv(path: Path) -> tuple[list[str], list[dict[str, str]]]:
-    with open(path, encoding="utf-8", newline="") as f:
+    # utf-8-sig: a file saved by Excel starts with a BOM; strip it.
+    with open(path, encoding="utf-8-sig", newline="") as f:
         reader = csv.DictReader(f)
         return list(reader.fieldnames or []), list(reader)
 

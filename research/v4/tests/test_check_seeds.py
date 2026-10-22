@@ -51,6 +51,12 @@ class Schema(CheckerCase):
         report = self.run_check(GOOD)
         self.assertEqual(report.failures, [])
 
+    def test_a_utf8_bom_is_ignored(self):
+        write_csv(self.file, SEED_HEADER, GOOD)
+        self.file.write_bytes(b"\xef\xbb\xbf" + self.file.read_bytes())
+        report = check_seeds.check_file(self.file, self.root, fake_embed, fake_rules)
+        self.assertEqual(report.failures, [])
+
     def test_columns_must_match(self):
         failures = self.failures([r[:-1] for r in GOOD], header=SEED_HEADER[:-1])
         self.assertIn("schema: columns must be exactly", failures)
