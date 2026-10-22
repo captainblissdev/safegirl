@@ -41,6 +41,7 @@ const LIMITATIONS = [
   { id: "KB-C11", label: "pregnancy", confidence: 0.88, served: "KB-P8" },
   { id: "KB-S16", label: "general", confidence: 0.87, served: "KB-G16" },
   { id: "KB-P1", label: "general", confidence: 0.85, served: "KB-G14" },
+  { id: "KB-P9", label: "general", confidence: 0.77, served: "KB-G14" },
   { id: "KB-G13", label: "pregnancy", confidence: 0.88, served: "KB-P8" },
 ];
 

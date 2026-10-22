@@ -6,8 +6,24 @@ Status: APPROVED by medic review on 22 Oct 2026 (60 entries). The three source b
 
 This file holds the 36 new and revised entries. The 21 live entries are in `resources/knowledge_base/` and are not repeated here; some of these entries replace live ones, to be decided with the clinicians after the duplicate check.
 
+## Wording resolutions (22 Oct 2026)
+
+The medic passed all 60 entries and left the wording to the project team, because the answers come from guidelines they found correct. The team changed wording only, with no change in clinical content, to remove conflicts and provider language. To be recorded in `docs/decision-log.md`.
+
+| Entry | Change | Reason |
+|---|---|---|
+| NEW-C-09 | Fertility after the injection now reads "four months or longer, and sometimes up to 12 months"; source p. 32 added | Matches NEW-C-03 and NEW-C-21; both figures are in the guideline (pp. 95 and 32) |
+| NEW-C-03 | Removed "(DMPA)" | Provider term |
+| NEW-C-18 | "Nulliparous" removed; "for your age and health" added | Provider term; avoids a flat age rule next to the injection age conflict |
+| NEW-C-19 | Named "the breastfeeding method (LAM)" | Plain language |
+| NEW-C-20 | "(category 1)" removed; progestin-only pill explained | Provider language |
+| NEW-S-09 | "Reactive" changed to "positive" | Provider term |
+| NEW-P-05 | Question no longer starts "I think I am pregnant" | The held-topic rules caught it, so the topic list showed the signpost instead of the answer |
+| NEW-C-09 (Conditions) | Adds the NEW-C-21 reference and the combined injectable figure (about 5 months, from the guideline) | Records that the guideline's figures vary; not shown to the user |
+| NEW-P-05, NEW-P-06 (Conditions) | "Not yet verified" note replaced by "medic checked the entry against the sources on 22 Oct 2026" | The medic has now checked these two; not shown to the user |
+
 ## Open questions put to the clinicians (apply to several entries; medic passed all entries, decisions marked below still belong to the project team)
-1. **Consent.** FP7 p. 25: adolescents under 18 give assent and a guardian gives consent for FP services. No entry states a consent rule. Needs a decision (clinicians, Mr. Ouma, possibly the DPO or ethics committee).
+1. **Consent.** FP7 p. 25: adolescents under 18 give assent and a guardian gives consent for FP services. The medic confirmed this holds (22 Oct 2026). NEW-C-22 now states the rule. Still open: how the app words it next to the confidentiality promises and NEW-C-01 ("adolescents can use any method"). Needs a decision (Mr. Ouma, possibly the DPO or ethics committee).
 2. **Age conflict.** FP7 p. 25 says adolescents can safely use any method; p. 97 lists "Age between 18 and 45 years" for progestin-only injectables. Affects C-01 and C-09.
 3. **Implant fertility.** FP7 says "Immediately reversible" (p. 109) and "up to 1 year" delay (p. 110). C-08 makes no claim.
 4. **Return to fertility figures** differ across FP7 pp. 31, 74, 96, 108, 134 (C-03).
@@ -111,7 +127,7 @@ This file holds the 36 new and revised entries. The 21 live entries are in `reso
 
 **User question:** Will contraception make me infertile or stop me having babies later?
 
-**Answer:** No. WHO states that modern contraceptive methods do not cause infertility. Kenya's 2025 guideline says fertility comes back fairly quickly after you stop: on average it can take 3 to 6 months for most methods, and sometimes up to 12 months after the injection (DMPA). If it takes much longer, a health worker can look for other causes.
+**Answer:** No. WHO states that modern contraceptive methods do not cause infertility. Kenya's 2025 guideline says fertility comes back fairly quickly after you stop: on average it can take 3 to 6 months for most methods, and sometimes up to 12 months after the injection. If it takes much longer, a health worker can look for other causes.
 
 **Evidence/claim:** WHO: modern contraceptive methods do not cause infertility. "After stopping a contraceptive, a woman may expect an average of 3 to 6 months delay in returning to fertility for most methods and sometimes up to 12 months for DMPA." / "In cases of prolonged delay in the return to fertility, underlying causes of female sub-fertility or infertility may need to be considered…"
 
@@ -177,13 +193,13 @@ This file holds the 36 new and revised entries. The 21 live entries are in `reso
 
 **User question:** How does the contraceptive injection work, and how often do I need it?
 
-**Answer:** The injection is given by a health worker. The most common kind is given every three months (13 weeks); another kind is given every two months. Kenya's 2025 guideline says it is 99% effective if you get each injection on time, and that the risk of pregnancy is highest when you are late or miss one. Changes in bleeding are common: irregular, heavy or long bleeding, light spotting, or no periods at all. It can take four months or longer for your fertility to return after you stop. It does not protect against STIs, so use condoms too if you are at risk.
+**Answer:** The injection is given by a health worker. The most common kind is given every three months (13 weeks); another kind is given every two months. Kenya's 2025 guideline says it is 99% effective if you get each injection on time, and that the risk of pregnancy is highest when you are late or miss one. Changes in bleeding are common: irregular, heavy or long bleeding, light spotting, or no periods at all. After you stop, it can take longer to get pregnant than with most other methods: four months or longer, and sometimes up to 12 months. It does not protect against STIs, so use condoms too if you are at risk.
 
-**Evidence/claim:** "Given every three months (13 weeks)" (DMPA) and "Given every two months" (NET-EN), Table 4.11. / "Effectiveness depends on receiving injections on time. Risk of pregnancy is greatest when a woman is late for or misses an injection." / "POIC is 99% effective if used correctly and consistently" / Side effects include "irregular bleeding", "heavy and prolonged bleeding", "light spotting or bleeding", "amenorrhoea, especially after one year of use". / "Return of fertility may be delayed for four months or longer after discontinuation" / "They offer no protection against STIs, including hepatitis B and HIV; individuals at risk for these should use condoms in addition to injectable contraceptives"
+**Evidence/claim:** "Given every three months (13 weeks)" (DMPA) and "Given every two months" (NET-EN), Table 4.11. / "Effectiveness depends on receiving injections on time. Risk of pregnancy is greatest when a woman is late for or misses an injection." / "POIC is 99% effective if used correctly and consistently" / Side effects include "irregular bleeding", "heavy and prolonged bleeding", "light spotting or bleeding", "amenorrhoea, especially after one year of use". / "Return of fertility may be delayed for four months or longer after discontinuation" / "sometimes up to 12 months for DMPA" / "They offer no protection against STIs, including hepatitis B and HIV; individuals at risk for these should use condoms in addition to injectable contraceptives"
 
-**Source:** Kenya MoH, National Family Planning Guideline, 7th ed. (2025), "Injectable contraceptives", p. 94 (Table 4.11); p. 95 (effectiveness); p. 96 (limitations and side effects)
+**Source:** Kenya MoH, National Family Planning Guideline, 7th ed. (2025), "Injectable contraceptives", p. 94 (Table 4.11); p. 95 (effectiveness); p. 96 (limitations and side effects); p. 32 (return to fertility, up to 12 months for DMPA)
 
-**Conditions/limitations:** No age is stated (see conflict 1 above). The self-injected kind (DMPA-SC) is not covered. The grace period for late injections is not given. Return-to-fertility wording matches NEW-C-03; the guideline's own figures vary (pp. 31, 96, 108).
+**Conditions/limitations:** No age is stated (see conflict 1 above). The self-injected kind (DMPA-SC) is not covered. The grace period for late injections is not given. Return-to-fertility wording now matches NEW-C-03 and NEW-C-21 (four months or longer, sometimes up to 12 months); the guideline's own figures vary (pp. 31, 96, 108), and the combined injectable is given as about 5 months.
 
 **Safety/referral notes:** If she is late for an injection and has had unprotected sex, she should see a health worker soon (a held-topic area; do not build more detail without a clinician).
 
@@ -549,7 +565,7 @@ This file holds the 36 new and revised entries. The 21 live entries are in `reso
 
 **User question:** How do I get tested for HIV, and can I test myself?
 
-**Answer:** You can be tested at a health facility, and a health worker should ask for your consent first. Kenya's guidelines also approve HIV self-test kits, where you collect your own sample (from your mouth or a drop of blood) and read the result yourself. A self-test that shows a reactive result must be confirmed at a health facility with the national tests. If you test negative, a health worker can talk to you about ways to stay protected.
+**Answer:** You can be tested at a health facility, and a health worker should ask for your consent first. Kenya's guidelines also approve HIV self-test kits, where you collect your own sample (from your mouth or a drop of blood) and read the result yourself. If a self-test shows a positive result, it must be confirmed at a health facility with the national tests. If you test negative, a health worker can talk to you about ways to stay protected.
 
 **Evidence/claim:** HIV testing is offered with informed consent. HIV self-testing uses Ministry of Health-approved kits (oral or blood-based) and is particularly effective for reaching adolescents; a reactive self-test must be confirmed through the national testing algorithm. HIV-negative clients are linked to prevention services.
 
@@ -1083,7 +1099,7 @@ These 13 entries were added so the set reaches 50. Every quote was checked by ex
 
 **User question:** Can I use the pill, injection or implant if I have never had a baby?
 
-**Answer:** Yes. Kenya's family planning guideline says women who have never had a baby (nulliparous women) can use combined pills, the injection, the implant and the female condom. For the combined pill the guideline gives the age range as from the first period to 40 years. A health worker will check that the method is right for you.
+**Answer:** Yes. Kenya's family planning guideline says you can use combined pills, the injection, the implant and the female condom even if you have never had a baby. For the combined pill it lists ages from your first period up to 40 years. A health worker will check which method is right for your age and health.
 
 **Evidence/claim:** "Age: from menarche to 40 years" [...] "Women of any parity (parous and nulliparous)" [...] "All women of reproductive age, of any parity, including nulliparous women"
 
@@ -1230,7 +1246,7 @@ Quotes in entries 51 to 58 were checked by exact text search in the extracted PD
 
 **User question:** I am breastfeeding. Which contraception can I use?
 
-**Answer:** Breastfeeding can protect against pregnancy for a while, but only if three things are all true. Kenya's family planning guideline calls this the lactational amenorrhoea method (LAM): your periods have not come back, your baby is fed only on breast milk, and your baby is under six months old. Used this way it is up to 98% effective. When any one of the three stops being true, you need another family planning method straight away. A health worker can tell you which methods are safe while you breastfeed.
+**Answer:** Breastfeeding can protect against pregnancy for a while, but only if three things are all true. Kenya's family planning guideline calls this the breastfeeding method (LAM, the lactational amenorrhoea method): your periods have not come back, your baby is fed only on breast milk, and your baby is under six months old. Used this way it is up to 98% effective. When any one of the three stops being true, you need another family planning method straight away. A health worker can tell you which methods are safe while you breastfeed.
 
 **Evidence/claim:** "The woman's menstrual periods have not resumed" [...] "The baby is exclusively breastfed" [...] "The baby is less than six months old" [...] "LAM is up to 98% effective if practiced during an exclusive breastfeeding period" [...] "When any of these three criteria is no longer met, another FP method must be introduced in a timely manner"
 
@@ -1252,7 +1268,7 @@ Quotes in entries 51 to 58 were checked by exact text search in the extracted PD
 
 **User question:** Does birth control cause cancer?
 
-**Answer:** Kenya's family planning guideline lists protection against cancer of the ovary and of the lining of the womb as a benefit of combined pills, and says the progestin-only pill may help prevent cancer of the lining of the womb. It lists a family history of breast cancer among the conditions in which a woman can still use the combined pill without restriction (category 1). It says women who have breast cancer, or have had it, should generally not use the progestin-only pill. Tell the health worker about any cancer in you or your close family so they can help you choose.
+**Answer:** Kenya's family planning guideline lists protection against cancer of the ovary and of the lining of the womb as a benefit of combined pills, and says the progestin-only pill (a pill with one hormone) may help prevent cancer of the lining of the womb. It lists a family history of breast cancer among the conditions in which a woman can still use the combined pill. It says women who have breast cancer, or have had it, should generally not use the progestin-only pill. Tell the health worker about any cancer in you or your close family so they can help you choose.
 
 **Evidence/claim:** "Protection against ovarian and endometrial cancer" [...] "May prevent endometrial cancer" [...] "Category 1" [...] "Benign breast disease, or family history of breast cancer" [...] "Women who have breast cancer or a history of breast cancer"
 
@@ -1404,7 +1420,7 @@ Quotes in entries 51 to 58 were checked by exact text search in the extracted PD
 
 **Intent:** Pregnancy
 
-**User question:** I think I am pregnant. How many antenatal clinic visits do I need, and what happens at the first one?
+**User question:** How many antenatal clinic visits do I need, and what happens at the first one?
 
 **Answer:** Go to the clinic as soon as you can. Kenya's Mother and Child Health Handbook says to go for antenatal care as soon as possible and to attend 8 times during the pregnancy, and WHO also recommends a minimum of eight contacts. At the first visit the health worker examines you and checks your blood, urine and blood sugar, and offers testing for HIV, syphilis and hepatitis. If you have a question, the handbook says to ask a health worker or a community health volunteer without any hesitation.
 
@@ -1412,11 +1428,11 @@ Quotes in entries 51 to 58 were checked by exact text search in the extracted PD
 
 **Source:** Kenya MoH, Mother and Child Health Handbook (2020), pp. 1, 8 and 14 (page numbers from a web summary of the PDF); WHO, Recommendations on antenatal care for a positive pregnancy experience (2016), news release of 7 Nov 2016
 
-**Conditions/limitations:** NOT yet verified against the PDF: these quotes came from a web summary of the handbook, so the exact words and page numbers must be checked in the PDF before the entry is approved. The handbook is about 'ANC contacts' counted from the first visit. It does not say what is done at the other visits in the pages read.
+**Conditions/limitations:** The quotes were taken from a web summary of the handbook and WHO guidance; the medic checked the entry against the sources on 22 Oct 2026. Page numbers are from the summary. The handbook is about 'ANC contacts' counted from the first visit. It does not say what is done at the other visits in the pages read.
 
 **Safety/referral notes:** Bleeding, severe pain, a severe headache, fever or the baby moving less means going to a facility at once (see NEW-P-02).
 
-<!-- NEW | MCH 2020 pp. 1, 8, 14 + WHO 2016 | NOT verified against the PDFs: quotes from a web summary | to verify: exact wording and page numbers -->
+<!-- NEW | MCH 2020 pp. 1, 8, 14 + WHO 2016 | quotes from a web summary; medic checked against the sources 22 Oct 2026 -->
 
 **Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
@@ -1434,13 +1450,12 @@ Quotes in entries 51 to 58 were checked by exact text search in the extracted PD
 
 **Source:** Kenya MoH, Mother and Child Health Handbook (2020), Birth Plan, p. 1; birth preparedness, p. 4 (page numbers from a web summary of the PDF)
 
-**Conditions/limitations:** NOT yet verified against the PDF: the quotes came from a web summary, so the exact wording and page numbers must be checked. The handbook sentences about who 'could donate blood' and 'who will assist you' are paraphrases of the birth-plan headings and need checking. It does not say what to pack in the emergency kit.
+**Conditions/limitations:** The quotes were taken from a web summary of the handbook; the medic checked the entry against the sources on 22 Oct 2026. The handbook sentences about who 'could donate blood' and 'who will assist you' are paraphrases of the birth-plan headings and need checking. It does not say what to pack in the emergency kit.
 
 **Safety/referral notes:** Labour pains, waters breaking, bleeding or the baby not moving means going to a health facility straight away (see NEW-P-02).
 
-<!-- NEW | MCH 2020 pp. 1, 4 | NOT verified against the PDF: quotes from a web summary | to verify: exact wording, page numbers, the blood-donor line -->
+<!-- NEW | MCH 2020 pp. 1, 4 | quotes from a web summary; medic checked against the sources 22 Oct 2026 -->
 
 **Clinician review:** [x] approve  [ ] edit  [ ] reject   Reviewer: [name to be added]  Title: [to be added]  Date: 22 Oct 2026
 
 ---
-

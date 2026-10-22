@@ -83,7 +83,7 @@
 ## KB-S11
 - **Intent:** STIs
 - **User question:** How do I get tested for HIV, and can I test myself?
-- **Answer:** You can be tested at a health facility, and a health worker should ask for your consent first. Kenya's guidelines also approve HIV self-test kits, where you collect your own sample (from your mouth or a drop of blood) and read the result yourself. A self-test that shows a reactive result must be confirmed at a health facility with the national tests. If you test negative, a health worker can talk to you about ways to stay protected.
+- **Answer:** You can be tested at a health facility, and a health worker should ask for your consent first. Kenya's guidelines also approve HIV self-test kits, where you collect your own sample (from your mouth or a drop of blood) and read the result yourself. If a self-test shows a positive result, it must be confirmed at a health facility with the national tests. If you test negative, a health worker can talk to you about ways to stay protected.
 - **Evidence/claim:** HIV testing is offered with informed consent. HIV self-testing uses Ministry of Health-approved kits (oral or blood-based) and is particularly effective for reaching adolescents; a reactive self-test must be confirmed through the national testing algorithm. HIV-negative clients are linked to prevention services.
 - **Source:** Kenya MoH/NASCOP, Integrated Guidelines (2026), s. 1.1.1 p. 1; s. 1.1.3 p. 2
 - **Conditions/limitations:** The pages read do not state where to buy self-test kits, what they cost, or any age limit; no cost or "free" claim is made. A recent exposure can be missed by an early test (see NEW-S-10).

@@ -140,7 +140,7 @@ Rules:
 | NEW-P-02 | KB-P6 | replaces the live entry, same id | approved | What warning signs in pregnancy mean I should go to hospital right away? |
 | NEW-P-03 | KB-P7 | replaces the live entry, same id | approved | Do I need iron and folic acid tablets in pregnancy, and what should I eat? |
 | NEW-P-04 | KB-P8 | new entry | approved | How can I know if I am pregnant or not, and how do I get a pregnancy test? |
-| NEW-P-05 | KB-P9 | new entry | approved | I think I am pregnant. How many antenatal clinic visits do I need, and what happens at the first one? |
+| NEW-P-05 | KB-P9 | new entry | approved | How many antenatal clinic visits do I need, and what happens at the first one? |
 | NEW-P-06 | KB-P10 | new entry | approved | How do I prepare for giving birth? |
 | NEW-G-01 | KB-G3 | replaces the live entry, same id | approved | Is my period normal, and when should I see a health worker? |
 | NEW-G-02 | KB-G4 | replaces the live entry, same id | approved | What can I do about period pain? |

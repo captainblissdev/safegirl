@@ -1846,3 +1846,49 @@ is open (K2b).
 - The health-term list for the vague rule was not rebuilt; its drift
   test still fails (abortion, nurse, pharmacies, sexuality are no longer
   KB words).
+
+## KB wording resolved, 22 Oct 2026
+
+Step K4 (`kb/integrate-candidates`, not merged). The medic passed all 60
+entries and delegated the wording to the project team. The team changed
+wording only, **with no change in clinical content**, to remove
+conflicts and provider language. The changes are listed in the "Wording
+resolutions (22 Oct 2026)" table at the top of
+`resources/knowledge_base/kb-final-60-approved-2026-10-22.md`, which
+stays the source of truth; the class files and `knowledge_base.json`,
+`kbQuestions.json` and `Kbdata.json` are rebuilt from it.
+
+Entries changed (12 fields in 9 entries; all other text unchanged):
+
+| Entry | Field | Change |
+|---|---|---|
+| NEW-C-03 (KB-C5) | Answer | "(DMPA)" removed |
+| NEW-C-09 (KB-C9) | Answer | fertility after the injection now "four months or longer, and sometimes up to 12 months", matching KB-C5 and KB-C21 |
+| NEW-C-09 (KB-C9) | Evidence/claim, Source | the p. 32 quote and page added |
+| NEW-C-09 (KB-C9) | Conditions | the NEW-C-21 reference and the combined injectable figure (about 5 months, from the guideline) added |
+| NEW-C-18 (KB-C18) | Answer | "nulliparous" removed; "for your age and health" added |
+| NEW-C-19 (KB-C19) | Answer | named "the breastfeeding method (LAM)" |
+| NEW-C-20 (KB-C20) | Answer | "(category 1)" removed; the progestin-only pill explained |
+| NEW-S-09 (KB-S11) | Answer | "reactive" changed to "positive" |
+| NEW-P-05 (KB-P9) | User question | no longer starts "I think I am pregnant" |
+| NEW-P-05 (KB-P9) | Conditions | "not yet verified" note replaced by "the medic checked the entry against the sources on 22 Oct 2026" |
+| NEW-P-06 (KB-P10) | Conditions | the same note replaced |
+
+Outside the entries, the file also records the medic's confirmation of
+the consent rule (open question 1) and updates the HTML review comments
+of NEW-P-05 and NEW-P-06; none of that reaches the build.
+
+Unchanged: the review marks, the pending set (KB-C6, KB-C14, KB-S19,
+KB-C22), the gate (0.8439), the thresholds, the classifier and every
+rule. `release:check` passes.
+
+**Effects found on rebuilding:**
+
+- KB-P9's question no longer matches held-topic group C, but V3 classes
+  it general (0.773), so tapping it in the Topic list is answered with
+  KB-G14, not KB-P9 (unscoped, KB-P9 is top). It joins KB-C11, KB-S16,
+  KB-P1 and KB-G13 as a mis-scoped entry (`knownLimitations.test.js`).
+- KB-C4 ("Do I still need a condom if I'm on the pill or the implant?")
+  now loses to KB-C18 even unscoped (0.893, rank 2): the reworded KB-C18
+  answer names pills, the injection, the implant and the female condom.
+- Self-retrieval: 56 of 62 questions get their own entry.

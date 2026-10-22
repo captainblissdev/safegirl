@@ -52,11 +52,11 @@
 
 ## KB-P9
 - **Intent:** Pregnancy
-- **User question:** I think I am pregnant. How many antenatal clinic visits do I need, and what happens at the first one?
+- **User question:** How many antenatal clinic visits do I need, and what happens at the first one?
 - **Answer:** Go to the clinic as soon as you can. Kenya's Mother and Child Health Handbook says to go for antenatal care as soon as possible and to attend 8 times during the pregnancy, and WHO also recommends a minimum of eight contacts. At the first visit the health worker examines you and checks your blood, urine and blood sugar, and offers testing for HIV, syphilis and hepatitis. If you have a question, the handbook says to ask a health worker or a community health volunteer without any hesitation.
 - **Evidence/claim:** "Go for ANC visit as soon as possible and attend 8 times during the pregnancy" [...] "PHYSICAL EXAMINATION [1st Visit]" [...] "Triple testing (HIV/Syphilis/Hepatitis)" [...] "If you have any question, please ask a health worker or a Community Health Volunteer (CHV) without any hesitation" [...] "A minimum of eight contacts are recommended to reduce perinatal mortality and improve women’s experience of care."
 - **Source:** Kenya MoH, Mother and Child Health Handbook (2020), pp. 1, 8 and 14 (page numbers from a web summary of the PDF); WHO, Recommendations on antenatal care for a positive pregnancy experience (2016), news release of 7 Nov 2016
-- **Conditions/limitations:** NOT yet verified against the PDF: these quotes came from a web summary of the handbook, so the exact words and page numbers must be checked in the PDF before the entry is approved. The handbook is about 'ANC contacts' counted from the first visit. It does not say what is done at the other visits in the pages read.
+- **Conditions/limitations:** The quotes were taken from a web summary of the handbook and WHO guidance; the medic checked the entry against the sources on 22 Oct 2026. Page numbers are from the summary. The handbook is about 'ANC contacts' counted from the first visit. It does not say what is done at the other visits in the pages read.
 - **Safety/referral notes:** Bleeding, severe pain, a severe headache, fever or the baby moving less means going to a facility at once (see NEW-P-02).
 - **Status:** approved
 
@@ -66,7 +66,7 @@
 - **Answer:** Kenya's Mother and Child Health Handbook has a birth plan, which a health worker fills in with you during your antenatal visits. It covers where you will give birth, who will assist you, how you will get to the health facility, who could donate blood if needed, and how you will pay for the birth. The handbook also says to have transport ready to reach the facility and to prepare money, a birth companion and an emergency kit. Talk to a health worker at your antenatal visits to make your plan.
 - **Evidence/claim:** "Birth Plan: Preparing for a safe and healthy childbirth" [...] "Financial plan for childbirth" [...] "Ensure transport to the health facility is available (Birth preparedness; money, birth companion, emergency kit)"
 - **Source:** Kenya MoH, Mother and Child Health Handbook (2020), Birth Plan, p. 1; birth preparedness, p. 4 (page numbers from a web summary of the PDF)
-- **Conditions/limitations:** NOT yet verified against the PDF: the quotes came from a web summary, so the exact wording and page numbers must be checked. The handbook sentences about who 'could donate blood' and 'who will assist you' are paraphrases of the birth-plan headings and need checking. It does not say what to pack in the emergency kit.
+- **Conditions/limitations:** The quotes were taken from a web summary of the handbook; the medic checked the entry against the sources on 22 Oct 2026. The handbook sentences about who 'could donate blood' and 'who will assist you' are paraphrases of the birth-plan headings and need checking. It does not say what to pack in the emergency kit.
 - **Safety/referral notes:** Labour pains, waters breaking, bleeding or the baby not moving means going to a health facility straight away (see NEW-P-02).
 - **Status:** approved
 
