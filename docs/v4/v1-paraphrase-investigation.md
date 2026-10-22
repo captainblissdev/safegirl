@@ -97,11 +97,13 @@ Paraphrases failing each check (one paraphrase can fail several):
 ## Related: the current V3 seeds
 
 The same held-topic rule, run on the 211 current V3 seeds, matches 28
-of them (groups A, B and C, all contraception or pregnancy), including
-the parent seeds of the 29 held-topic paraphrases above. The held-topic
-rule was written on 20 October 2026, after V3 was trained, so V3 learnt
-from these seeds; the gateway now signposts such questions before the
-classifier runs. The Safety Net flags one V3 seed (SEED-PREG-06).
+of them (15 contraception, 11 pregnancy, 2 general; listed in
+`research/v4/v3_seeds_held_topic.csv`), including the parent seeds of
+the 29 held-topic paraphrases above. The held-topic rule was written on
+20 October 2026, after V3 was trained, so V3 learnt from these seeds;
+the gateway now signposts such questions before the classifier runs.
+The Safety Net flags one V3 seed, SEED-PREG-06, which the held-topic
+rule does not match.
 
 ## What this means for V4
 
