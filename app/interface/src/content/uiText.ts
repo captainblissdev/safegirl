@@ -4,9 +4,11 @@
 
 /**
  * Where the answers come from: the one place this line is written. Used
- * on the splash, in the Help sheet and on Home. "Most", because four of
- * the 21 knowledge-base entries cite other sources (KB-P5, KB-G6, KB-G3,
- * KB-G4; docs/decision-log.md, "Splash and Help sheet").
+ * on the splash, in the Help sheet and on Home. "Most", because one of
+ * the 62 served knowledge-base entries cites neither (KB-P5, a Ministry
+ * of Education guideline), and some others cite further sources too
+ * (docs/decision-log.md, "Splash and Help sheet"; counts as of "KB
+ * expansion, 22 Oct 2026").
  */
 export const SOURCES_LINE =
   "Most answers come from Kenyan Ministry of Health and WHO guidance.";

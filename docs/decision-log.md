@@ -1783,3 +1783,66 @@ rule itself is unchanged.
 Self-retrieval on 22 October 2026: 39 of 41 questions get their own
 entry both unscoped and with live scoping; the two failures are KB-S16
 and KB-P1 above. 16 entries are near-misses (margin under 0.03).
+
+## KB expansion, 22 Oct 2026
+
+Step K3 (`kb/integrate-candidates`, not merged). Decision owner: project
+owner. This supersedes the K2a statuses in "Knowledge base integrated
+before clinician sign-off (2026-10-22)" above.
+
+**Medic verification.** All 60 candidate entries in
+`resources/knowledge_base/kb-final-60-approved-2026-10-22.md` were
+checked against the source documents by a medic on 22 October 2026 and
+marked `[x] approve`.
+Reviewer: [reviewer name and title: to be added by Cindy].
+That file is now the only candidate source;
+`incoming/kb-candidate-entries.md` (37 entries) is removed. Entry text is
+copied verbatim (the review lines are not), and Status is derived from
+the review mark (`docs/kb/id-mapping-2026-10-22.md`).
+
+**56 entries approved after medic verification against the sources**,
+joining the 6 earlier entries no candidate replaced (KB-C1, KB-C2, KB-S3,
+KB-P1, KB-G1, KB-G2): **62 entries are served** (contraception 19, STIs
+18, pregnancy 7, general 18).
+
+**4 remain pending**, whatever their review mark:
+
+- KB-C6 (NEW-C-06, condom breaks or slips), KB-C14 (NEW-C-14, a
+  forgotten pill) and KB-S19 (NEW-S-06, medicine after unprotected sex):
+  the held-topic rules for these subjects have not been reviewed.
+- KB-C22 (NEW-C-22, parents' permission for contraception): the consent
+  wording is an open decision.
+
+**Pending entries are never served** (a change from K2a, where pending
+entries were served but kept out of the demo): the gateway, ml_service's
+`knowledge_base.json`, `kbQuestions.json` and the offline `Kbdata.json`
+hold approved entries only (`kbStatus.test.js`). `release:check` passes.
+
+**NEW-G-08 (KB-G10)** includes its last sentence again ("If there is no
+bin, wrap the pad…"): K2a left it out as unverified, and the medic has
+now verified it. NEW-P-04 (KB-P8) has a wording fix in its Conditions.
+
+**Gate unchanged** at 0.8439, as are the thresholds (0.35 / 0.5), the
+classifier, the Safety Net and the held-topic and vague rules. On the 35
+labelled development-set questions
+([`docs/kb-integration-eval-2026-10-22.md`](kb-integration-eval-2026-10-22.md)),
+correct replies fall from 29 to 23 under labels that predate the new
+entries: nine replies change, and wrong answers now score up to 0.8947,
+inside the range of correct ones. Re-validating the gate on the larger KB
+is open (K2b).
+
+**Also recorded:**
+
+- Self-retrieval: 58 of 62 questions get their own entry; KB-C11,
+  KB-S16, KB-P1 and KB-G13 are classed outside their class and answered
+  with another entry (`knownLimitations.test.js`).
+- KB-P9's question ("I think I am pregnant…") is caught by held-topic
+  group C, so tapping it gives the held-topic signpost, not its answer.
+- Sealed-set guard (`research/v4/check_kb_vs_sealed.py`): two KB
+  questions reach cosine 0.95 with the sealed set, KB-C14 (0.961,
+  pending) and KB-G9 (0.954). No text was changed.
+- Health terms and numbers new to the KB, for review:
+  [`docs/kb-health-terms-diff-2026-10-22.md`](kb-health-terms-diff-2026-10-22.md).
+- The health-term list for the vague rule was not rebuilt; its drift
+  test still fails (abortion, nurse, pharmacies, sexuality are no longer
+  KB words).
