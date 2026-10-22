@@ -91,6 +91,19 @@ at cosine >= 0.97), in V3 (the four known ones: KB-S8, KB-G1, KB-G2,
 KB-S12) or in the new file, with the KB questions close to one (0.95 to
 0.97) listed under them.
 
+### Sealed set
+
+```
+.venv/Scripts/python.exe -I research/v4/check_seeds.py SEEDS.csv --sealed PATH
+```
+
+`PATH` is a CSV with columns `id,text`, kept **outside the repository**.
+Each seed is compared with it on the same thresholds; a near duplicate
+fails and is printed as seed_id, sealed id and similarity only. The
+sealed text and the path are never printed, so neither can reach a log,
+report, fixture or commit. `sealed/` and `*sealed*.csv` are in
+`.gitignore` as a second guard. Tests use synthetic sealed sets only.
+
 ## Folds
 
 ```

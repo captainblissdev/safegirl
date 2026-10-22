@@ -20,3 +20,7 @@ app/gateway/firebase-service-account.json
 ml_service/final/
 ml_service/final/
 ml_service/venv/
+
+# Sealed evaluation sets stay outside the repository (research/v4/README.md)
+sealed/
+*sealed*.csv

@@ -200,6 +200,76 @@ class RulesCountsAndOverlap(CheckerCase):
         self.assertEqual(check_seeds.main([missing], fake_embed, fake_rules, self.root, io.StringIO()), 2)
 
 
+class Sealed(CheckerCase):
+    """--sealed: ids and scores only, never the sealed text or path."""
+
+    SEALED_TEXT = "Opal sunrise trellis quartz amber?"
+
+    def setUp(self):
+        super().setUp()
+        self.sealed = Path(self.tmp.name) / "private-dir-x9" / "held-out.csv"
+        write_csv(self.sealed, ["id", "text"], [["S-07", self.SEALED_TEXT], ["S-08", "Mango cobalt tidal?"]])
+
+    def run_main(self, rows, sealed_path=None):
+        write_csv(self.file, SEED_HEADER, rows)
+        out = io.StringIO()
+        code = check_seeds.main(
+            [str(self.file), "--sealed", str(sealed_path or self.sealed)],
+            fake_embed,
+            fake_rules,
+            self.root,
+            out,
+        )
+        return code, out.getvalue()
+
+    def assert_nothing_sealed_printed(self, printed):
+        self.assertNotIn(self.SEALED_TEXT, printed)
+        self.assertNotIn("Mango cobalt tidal", printed)
+        self.assertNotIn("private-dir-x9", printed)
+        self.assertNotIn("held-out", printed)
+
+    def test_a_near_duplicate_fails_with_ids_and_score_only(self):
+        code, printed = self.run_main(GOOD + [seed("V4-9", "amber quartz trellis sunrise opal")])
+        self.assertEqual(code, 1)
+        self.assertIn("sealed: V4-9 ~ sealed S-07 (cosine 1.000, ratio <0.85)", printed)
+        self.assertNotIn("V4-1 ~ sealed", printed)
+        self.assert_nothing_sealed_printed(printed)
+
+    def test_character_ratio_also_counts(self):
+        code, printed = self.run_main([seed("V4-9", "Opal sunrise trellis quartz ambers")])
+        self.assertIn("sealed: V4-9 ~ sealed S-07", printed)
+        self.assert_nothing_sealed_printed(printed)
+
+    def test_no_match_passes_and_reports_only_the_count(self):
+        code, printed = self.run_main(GOOD)
+        self.assertEqual(code, 0, printed)
+        self.assertIn("sealed set: 2 items compared", printed)
+        self.assert_nothing_sealed_printed(printed)
+
+    def test_unusable_sealed_files_stop_without_naming_the_path(self):
+        missing = Path(self.tmp.name) / "private-dir-x9" / "held-out-missing.csv"
+        code, printed = self.run_main(GOOD, missing)
+        self.assertEqual(code, 2)
+        self.assertIn("the sealed set file was not found", printed)
+        self.assert_nothing_sealed_printed(printed)
+
+        write_csv(self.sealed, ["id", "query"], [["S-07", self.SEALED_TEXT]])
+        code, printed = self.run_main(GOOD)
+        self.assertEqual(code, 2)
+        self.assertIn("exactly the columns id,text", printed)
+        self.assert_nothing_sealed_printed(printed)
+
+        write_csv(self.sealed, ["id", "text"], [["S-07", self.SEALED_TEXT], ["S-07", "Mango cobalt tidal?"]])
+        code, printed = self.run_main(GOOD)
+        self.assertEqual(code, 2)
+        self.assertIn("duplicate ids", printed)
+        self.assert_nothing_sealed_printed(printed)
+
+    def test_without_the_option_no_sealed_check_runs(self):
+        report = self.run_check(GOOD)
+        self.assertFalse(any("sealed" in line for line in report.info + report.failures))
+
+
 class GatewayRules(unittest.TestCase):
     """The real held-topic rule and Safety Net, through Node."""
 

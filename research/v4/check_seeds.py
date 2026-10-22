@@ -17,6 +17,11 @@ DR-04 is read only for the comparison, and only its row numbers are ever
 printed. The same goes for the development set and
 relevance_validation.csv, reported by their row ids.
 
+--sealed PATH adds a sealed set kept outside the repository: a CSV with
+columns id,text. A seed near a sealed item fails, reported as seed_id,
+sealed id and similarity only. The sealed text and PATH itself are never
+printed, so neither can reach a log or report.
+
 Self-contained on purpose: under ``python -I`` the script's own directory
 is not on sys.path, so it imports nothing from research/.
 """
@@ -399,7 +404,41 @@ def train_overlap(rows, refs, kb, embed, report):
         report.info.extend(close)
 
 
-def check_file(path, root=REPO, embed=None, rules=None, test_items=False):
+class SealedSetError(Exception):
+    """The sealed set cannot be used. The message never names the path."""
+
+
+def read_sealed(path: Path) -> list[tuple[str, str]]:
+    """(id, text) pairs of a sealed CSV with columns id,text.
+
+    Errors say what is wrong without the path or any text, since this
+    output may be pasted into a log or report.
+    """
+    try:
+        header, rows = read_csv(path)
+    except FileNotFoundError:
+        raise SealedSetError("the sealed set file was not found") from None
+    except (OSError, UnicodeDecodeError, csv.Error):
+        raise SealedSetError("the sealed set file cannot be read as UTF-8 CSV") from None
+    if header != ["id", "text"]:
+        raise SealedSetError("the sealed set must have exactly the columns id,text")
+    ids = [row["id"].strip() for row in rows]
+    if any(not i for i in ids) or any(not (row["text"] or "").strip() for row in rows):
+        raise SealedSetError("the sealed set has a row with an empty id or text")
+    if len(set(ids)) != len(ids):
+        raise SealedSetError("the sealed set has duplicate ids")
+    return [(row["id"].strip(), row["text"]) for row in rows]
+
+
+def check_sealed(rows, sealed, embed, report):
+    """Near duplicates of the sealed set: ids and scores only."""
+    texts = [row["text"] for row in rows]
+    for i, j, cosine, ratio in near_pairs(texts, [t for _, t in sealed], embed):
+        report.fail(f"sealed: {rows[i]['seed_id']} ~ sealed {sealed[j][0]} ({show(cosine, ratio)})")
+    report.note(f"sealed set: {len(sealed)} items compared")
+
+
+def check_file(path, root=REPO, embed=None, rules=None, test_items=False, sealed=None):
     report = Report()
     header, rows = read_csv(path)
     kb = active_kb(root)
@@ -410,6 +449,8 @@ def check_file(path, root=REPO, embed=None, rules=None, test_items=False):
     rules = rules or gateway_rules(root)
     refs = reference_sets(root)
     check_duplicates(rows, refs, embed, report)
+    if sealed is not None:
+        check_sealed(rows, sealed, embed, report)
     check_rules(rows, rules, report)
     check_counts(rows, test_items, report)
     train_overlap(rows, refs, kb, embed, report)
@@ -424,12 +465,26 @@ def main(argv=None, embed=None, rules=None, root=REPO, out=sys.stdout):
         action="store_true",
         help="the file holds test items: secondary_class allowed, no per-class minimum",
     )
+    parser.add_argument(
+        "--sealed",
+        type=Path,
+        metavar="PATH",
+        help="a sealed set (CSV: id,text) kept outside the repository; "
+        "only ids and scores are printed, never its text or path",
+    )
     args = parser.parse_args(argv)
     if not args.seeds.exists():
         print(f"no such file: {args.seeds}", file=out)
         return 2
+    sealed = None
+    if args.sealed is not None:
+        try:
+            sealed = read_sealed(args.sealed)
+        except SealedSetError as error:
+            print(f"cannot run the check: {error}", file=out)
+            return 2
     try:
-        report = check_file(args.seeds, root, embed, rules, args.test_items)
+        report = check_file(args.seeds, root, embed, rules, args.test_items, sealed)
     except (OSError, subprocess.CalledProcessError) as error:
         print(f"cannot run the check: {error}", file=out)
         return 2
