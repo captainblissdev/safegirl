@@ -15,6 +15,9 @@ nothing here changes the V3 data (`resources/seeds/`, `resources/reviewed/`,
 | `v3_pool_exclusions.csv` | V3 pool items V4 must not train on, with the reason. |
 | `seeds_without_paraphrases.csv` | The 55 V3 seeds with no reviewed paraphrase. |
 | `v3_fold_balance.md` | Class balance of the V3 folds. |
+| `v3_seeds_held_topic.csv` | The 28 V3 seeds the held-topic rule matches. |
+| `v1_paraphrases_restore_candidates.csv` | The 220 deleted V1 paraphrases, each a restore candidate or excluded, with reasons. |
+| `seeds_v4_batch*.csv` | V4 seed batches, each checked with `check_seeds.py` before use. |
 | `tests/` | Unit tests with small synthetic fixtures. |
 
 ## Seed schema
@@ -78,7 +81,8 @@ It needs Node (for the gateway's held-topic and Safety Net rules) and the
   `design rule` for `out_of_scope` and `vague`;
 - exact or near duplicates inside the file;
 - near duplicates of the V3 training pool (seeds and reviewed
-  paraphrases);
+  paraphrases) and of the 220 deleted V1 paraphrases
+  (`v1_paraphrases_restore_candidates.csv`, all rows);
 - near duplicates of DR-04 (reported by row number only; its text is
   never printed);
 - near duplicates of `relevance_validation.csv` or the development set;
@@ -91,9 +95,12 @@ It needs Node (for the gateway's held-topic and Safety Net rules) and the
 It reports, without failing: counts per class and per class x style
 (warning under 25 seeds in a class), items the Safety Net flags, and
 "train overlap": KB questions that are also training items (best match
-at cosine >= 0.97), in V3 (the four known ones: KB-S8, KB-G1, KB-G2,
-KB-S12) or in the new file, with the KB questions close to one (0.95 to
-0.97) listed under them.
+at cosine >= 0.97), among the V3 seeds or in the new file, with the KB
+questions close to one (0.95 to 0.97) listed under them. The list is
+computed by the checker for the KB as it is at the time of the run; it
+is not a fixed list, and it changes when the KB changes. (On the 41-entry
+KB of the `kb/integrate-candidates` branch it was KB-S8, KB-G1, KB-G2 and
+KB-S12; the KB on this branch gives a different list.)
 
 ### Sealed set
 

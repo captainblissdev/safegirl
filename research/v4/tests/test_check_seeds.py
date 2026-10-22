@@ -139,6 +139,10 @@ class Duplicates(CheckerCase):
         self.assertIn("V3 training pool: V4-1 ~ V3 seed SEED-STI-01", failures)
         self.assertIn("V3 training pool: V4-2 ~ V3 paraphrase SEED-STI-01-P1", failures)
 
+    def test_deleted_v1_paraphrases(self):
+        failures = self.failures([seed("V4-1", "Thyme pine cedar basil walnut?")])
+        self.assertIn("V1 paraphrases: V4-1 ~ V1 paraphrase SEED-GEN-01-P1", failures)
+
     def test_dr04_reported_by_row_number_only(self):
         report = self.run_check([seed("V4-1", "Romeo quebec papa dr04 secret?")])
         failures = "\n".join(report.failures)

@@ -10,7 +10,7 @@ failure, 2 when the check cannot run (missing file, no Node).
 
 Failures: schema and allowed values; duplicate or empty seed_id; missing
 or unusable source; exact or near duplicates inside the file; near
-duplicates of the V3 training pool, DR-04, relevance_validation.csv or
+duplicates of the V3 training pool, the deleted V1 paraphrases, DR-04, relevance_validation.csv or
 the development set; an item the held-topic rule matches, unless its
 notes say HELD_TOPIC_OVERRIDE (then it is a warning).
 
@@ -69,8 +69,9 @@ DOCUMENT_PAGE = re.compile(r"\S.*\b(p|pp|page|pages)\.?\s*\d+", re.IGNORECASE)
 COSINE_LIMIT = 0.95
 RATIO_LIMIT = 0.85
 # A KB question whose best training match reaches this is the same
-# question as a training item ("train overlap"): in V3, KB-S8, KB-G1,
-# KB-G2 and KB-S12. Matches from COSINE_LIMIT up to it are listed as close.
+# question as a training item ("train overlap"). The list is computed
+# for the current KB on every run, not fixed. Matches from COSINE_LIMIT
+# up to it are listed as close.
 TRAIN_OVERLAP_LIMIT = 0.97
 MIN_PER_CLASS = 25
 E5_MODEL = "intfloat/multilingual-e5-small"
@@ -135,8 +136,18 @@ def reference_sets(root: Path) -> dict[str, list[tuple[str, str]]]:
         (f"development set {row['id']}", row["query"])
         for row in read_csv(res / "eval" / "retrieval_eval_set.csv")[1]
     ]
+    # The 220 V1 paraphrases deleted from the V3 pool (all of them, restore
+    # candidates and excluded alike): a V4 seed must not repeat one, in
+    # case they come back. Absent before Step V4-3, so optional.
+    v1_file = root / "research" / "v4" / "v1_paraphrases_restore_candidates.csv"
+    v1 = (
+        [(f"V1 paraphrase {row['paraphrase_id']}", row["text"]) for row in read_csv(v1_file)[1]]
+        if v1_file.exists()
+        else []
+    )
     return {
         "V3 training pool": v3,
+        "V1 paraphrases": v1,
         "DR-04": dr04,
         "relevance_validation.csv": relevance,
         "development set": dev,

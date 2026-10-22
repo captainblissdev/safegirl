@@ -81,6 +81,11 @@ def make_repo(root):
         ["id", "query", "group"],
         [["Q01", "Zulu amber bronze copper dune?", "clear"]],
     )
+    write_csv(
+        Path(root) / "research" / "v4" / "v1_paraphrases_restore_candidates.csv",
+        ["paraphrase_id", "seed_id", "class", "text", "status", "reasons", "near_dup_group"],
+        [["SEED-GEN-01-P1", "SEED-GEN-01", "general", "Walnut basil cedar pine thyme?", "candidate", "", ""]],
+    )
     kb = res / "knowledge_base"
     kb.mkdir(parents=True, exist_ok=True)
     (kb / "sti.md").write_text(
