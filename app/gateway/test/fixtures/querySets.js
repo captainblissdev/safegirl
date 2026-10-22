@@ -74,7 +74,7 @@ const DR04 = readCsv(
 ).map((row) => row.text);
 
 /**
- * The example questions the interface offers: the 21 knowledge-base
+ * The example questions the interface offers: the 41 knowledge-base
  * questions of the Topic list and the answer screen's related questions
  * (app/interface/src/content/kbQuestions.json). They replaced the 13
  * example chips and follow-ups, removed in redesign Step 6.

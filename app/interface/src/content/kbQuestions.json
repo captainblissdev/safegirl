@@ -27,6 +27,26 @@
       "question": "Will contraception make me infertile or stop me having babies later?"
     },
     {
+      "id": "KB-C7",
+      "topicClass": "contraception",
+      "question": "Is irregular bleeding normal with the implant or the injection?"
+    },
+    {
+      "id": "KB-C8",
+      "topicClass": "contraception",
+      "question": "How does the contraceptive implant work, and how long does it last?"
+    },
+    {
+      "id": "KB-C9",
+      "topicClass": "contraception",
+      "question": "How does the contraceptive injection work, and how often do I need it?"
+    },
+    {
+      "id": "KB-C10",
+      "topicClass": "contraception",
+      "question": "How does the combined contraceptive pill work, and what are the side effects?"
+    },
+    {
       "id": "KB-S3",
       "topicClass": "sti",
       "question": "I might have been exposed to HIV. Is there something I can take to stop it?"
@@ -52,6 +72,61 @@
       "question": "Can I take PrEP to prevent HIV? I'm a teenager."
     },
     {
+      "id": "KB-S8",
+      "topicClass": "sti",
+      "question": "Can I have an STI without knowing?"
+    },
+    {
+      "id": "KB-S9",
+      "topicClass": "sti",
+      "question": "If a person with HIV takes their medicine, can they still pass HIV to a partner during sex?"
+    },
+    {
+      "id": "KB-S10",
+      "topicClass": "sti",
+      "question": "Is vaginal discharge always a sign of an STI?"
+    },
+    {
+      "id": "KB-S11",
+      "topicClass": "sti",
+      "question": "How do I get tested for HIV, and can I test myself?"
+    },
+    {
+      "id": "KB-S12",
+      "topicClass": "sti",
+      "question": "How soon after sex can an HIV test tell me if I have HIV?"
+    },
+    {
+      "id": "KB-S13",
+      "topicClass": "sti",
+      "question": "What is pelvic inflammatory disease (PID)?"
+    },
+    {
+      "id": "KB-S14",
+      "topicClass": "sti",
+      "question": "What are genital warts, and can I prevent them?"
+    },
+    {
+      "id": "KB-S15",
+      "topicClass": "sti",
+      "question": "I have painful sores or blisters on my genitals. Could it be herpes or syphilis?"
+    },
+    {
+      "id": "KB-S16",
+      "topicClass": "sti",
+      "question": "I have itching in my pubic hair or private area. Could it be lice or scabies?"
+    },
+    {
+      "id": "KB-S17",
+      "topicClass": "sti",
+      "question": "Can I catch hepatitis B from sex, and how can I prevent it?"
+    },
+    {
+      "id": "KB-S18",
+      "topicClass": "sti",
+      "question": "Could a painless sore or a rash on my palms be syphilis?"
+    },
+    {
       "id": "KB-P1",
       "topicClass": "pregnancy",
       "question": "Do I have to get a pelvic exam right away at my first visit?"
@@ -70,6 +145,11 @@
       "id": "KB-P7",
       "topicClass": "pregnancy",
       "question": "Do I need iron and folic acid tablets in pregnancy, and what should I eat?"
+    },
+    {
+      "id": "KB-P8",
+      "topicClass": "pregnancy",
+      "question": "How can I know if I am pregnant or not, and how do I get a pregnancy test?"
     },
     {
       "id": "KB-G1",
@@ -105,6 +185,26 @@
       "id": "KB-G7",
       "topicClass": "general",
       "question": "What does a youth-friendly health service offer, and what should I expect?"
+    },
+    {
+      "id": "KB-G8",
+      "topicClass": "general",
+      "question": "Why do I feel tired, moody or get pimples before my period?"
+    },
+    {
+      "id": "KB-G9",
+      "topicClass": "general",
+      "question": "What can I use during my period: pads, tampons or a cup?"
+    },
+    {
+      "id": "KB-G10",
+      "topicClass": "general",
+      "question": "How do I dispose of a used pad safely?"
+    },
+    {
+      "id": "KB-G11",
+      "topicClass": "general",
+      "question": "What is a period, and why does it happen?"
     }
   ]
 }
