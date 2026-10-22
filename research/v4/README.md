@@ -86,8 +86,10 @@ It needs Node (for the gateway's held-topic and Safety Net rules) and the
 
 It reports, without failing: counts per class and per class x style
 (warning under 25 seeds in a class), items the Safety Net flags, and
-"train overlap": KB questions that are also training items, in V3 (the
-four known ones: KB-S8, KB-G1, KB-G2, KB-S12) or in the new file.
+"train overlap": KB questions that are also training items (best match
+at cosine >= 0.97), in V3 (the four known ones: KB-S8, KB-G1, KB-G2,
+KB-S12) or in the new file, with the KB questions close to one (0.95 to
+0.97) listed under them.
 
 ## Folds
 
