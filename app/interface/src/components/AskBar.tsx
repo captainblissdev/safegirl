@@ -10,7 +10,11 @@ import { ArrowUpIcon, SendIcon } from "./Icons";
  */
 
 interface Props {
-  variant: "hero" | "bar";
+  /**
+   * "hero": Home's ask card. "pill": a white pill of its own (Topic
+   * list, answer screen). "bar": the plain bar (other reply screens).
+   */
+  variant: "hero" | "pill" | "bar";
   value: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
@@ -23,6 +27,7 @@ interface Props {
 
 const COPY = {
   hero: { label: ASK_LABEL, send: ASK_SEND_NAME },
+  pill: { label: "Ask a question", send: "Ask" },
   bar: { label: "Ask a question", send: "Send question" },
 } as const;
 
@@ -62,7 +67,7 @@ export default function AskBar({
         disabled={disabled || !value.trim()}
         aria-label={copy.send}
       >
-        {variant === "hero" ? <ArrowUpIcon /> : <SendIcon />}
+        {variant === "bar" ? <SendIcon /> : <ArrowUpIcon />}
       </button>
     </>
   );
@@ -73,6 +78,13 @@ export default function AskBar({
         {label ?? copy.label}
       </label>
       <div className="ask-field">{field}</div>
+    </div>
+  ) : variant === "pill" ? (
+    <div className="ask-pill-bar">
+      <label className="sr-only" htmlFor="chat-input">
+        {label ?? copy.label}
+      </label>
+      {field}
     </div>
   ) : (
     <div className="input-row">

@@ -26,7 +26,7 @@ No new test was written and no evaluation was re-run for this file.
 - **Fail:** it does not. Failures are kept, not removed.
 - **Not run:** no test or recorded result exists.
 
-**Totals:** 207 cases: 187 Pass, 19 Fail, 1 Not run. Two of the
+**Totals:** 212 cases: 192 Pass, 19 Fail, 1 Not run. Two of the
 failures (TC-042, TC-043) pass on retest after a fix, and TC-063 is
 retested as TC-064; the other 10 failures are open.
 
@@ -298,6 +298,11 @@ entry.
 | TC-205 | FR-05 | The footer card's 1195 link | `tel:` href from the constant; 44px tap area | As expected (Test 48; browser check) | Pass |
 | TC-206 | NFR (usability) | Home at 320, 360, 390 and 430px | No horizontal overflow; no clipped text or broken word; the sparkle touches no text; nothing under the header; header on one row; gutters 20px (16px under 360px) | As expected (browser check; `home-after-4b-390.png`, `home-after-4b-320.png`). Step 7b and step 9 checks re-run: no regressions | Pass |
 | TC-207 | NFR (accessibility) | Home contrast | Text 4.5:1; control edges, icons and focus 3:1 | Headline 4.71 (over the circles); paragraph 4.52; pill 7.88; label 6.80; field edge 3.69 (design value 1.37, darkened); placeholder 6.17; typed text 15.00; send arrow 4.71, disabled 4.23; footer text 9.35, link 6.16; subtitle 6.80 (`styles/tokens.test.ts`, Test 14) | Pass |
+| TC-208 | FR-03 | The Topic list's header card and footnote | The icon tile, the h1 and "Tap a question to read the answer."; the count for screen readers only; the footnote under the list | As expected (`components.test.tsx`, Test 50; browser check at 320, 360, 390 and 430px) | Pass |
+| TC-209 | NFR (accessibility) | Programmatic focus | The h1 focused when a screen or reply arrives shows no ring; a Tab-focused question row does | As expected on the Topic list and the answer screen at all four widths (browser check; Test 50) | Pass |
+| TC-210 | FR-01, FR-05 | The bottom of the Topic list and the answer screen | The footer line (tel: link from the constant, 44px tap area), then a white ask pill; no panel, not sticky; placeholders "Or type your own question" and "Ask something else…"; send named "Ask"; End session below it on the answer screen | As expected (Test 50; browser check) | Pass |
+| TC-211 | NFR (usability) | Both screens at 320, 360, 390 and 430px (a short and a long answer) | No horizontal overflow, nothing clipped, gutters 20px (16px under 360px) | As expected (browser check; `topic-after-6b-*.png`, `answer-after-6b-*.png`, `answer-long-after-6b-390.png`); step 7b and step 9 checks re-run with no regressions | Pass |
+| TC-212 | NFR (accessibility) | Step 6b contrast | Text 4.5:1; control edges and icons 3:1 | Topic h1 11.02; hint 8.30; question card edge 4.06 against the rows, 3.00 on the page (design value 1.38, darkened); footnote 5.03; footer line 7.97; closest label 7.35; Answer pill 7.54; source 6.80; ask pill edge 3.00 on the page (`styles/tokens.test.ts`, Test 16) | Pass |
 
 ## Defects and retests
 

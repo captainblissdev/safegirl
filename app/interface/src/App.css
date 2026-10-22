@@ -1307,7 +1307,7 @@
   padding: 0 4px;
   background: none;
   color: var(--color-violet);
-  font-size: 1rem;
+  font-size: 15px;
   font-weight: var(--weight-extrabold);
   cursor: pointer;
 }
@@ -1316,61 +1316,63 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  overflow: hidden;
+  border-radius: 26px;
+  padding: 18px;
+  background: var(--topic-head-bg);
 }
 
 .topic-head-icon {
   display: grid;
-  flex: 0 0 52px;
+  flex: 0 0 56px;
   place-items: center;
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: var(--color-card);
+  box-shadow: var(--topic-head-tile-shadow);
 }
 
 .topic-head--general .topic-head-icon {
-  background: var(--topic-periods-bg);
   color: var(--topic-periods-text);
 }
 
 .topic-head--pregnancy .topic-head-icon {
-  background: var(--topic-pregnancy-bg);
   color: var(--topic-pregnancy-text);
 }
 
 .topic-head--contraception .topic-head-icon {
-  background: var(--topic-contraception-bg);
   color: var(--topic-contraception-text);
 }
 
 .topic-head--sti .topic-head-icon {
-  background: var(--topic-sti-bg);
   color: var(--topic-sti-text);
 }
 
 .topic-title {
   color: var(--color-plum);
-  font-size: 1.5rem;
+  font-size: 26px;
   font-weight: var(--weight-black);
   line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 
 .topic-count {
-  color: var(--color-muted);
-  font-size: 14px;
-  font-weight: var(--weight-semibold);
+  /* Read by screen readers only (it also has .sr-only). */
 }
 
 /* The list card: its edge is the 3:1 control border. */
 .topic-questions {
   overflow: hidden;
-  border: 1.5px solid var(--color-control-border);
-  border-radius: 22px;
+  border: 1.5px solid var(--list-edge);
+  border-radius: 24px;
   background: var(--color-card);
+  box-shadow: var(--list-card-shadow);
   list-style: none;
 }
 
 .topic-questions li + li {
-  border-top: 1px solid var(--color-card-border);
+  border-top: 1px solid var(--list-row-divider);
 }
 
 .topic-question {
@@ -1381,10 +1383,10 @@
   width: 100%;
   min-height: var(--tap-target);
   border: 0;
-  padding: 12px 14px;
+  padding: 14px 16px;
   background: none;
   color: var(--color-ink);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: var(--weight-extrabold);
   line-height: 1.35;
   text-align: left;
@@ -1398,10 +1400,10 @@
 
 .topic-question-go {
   display: grid;
-  flex: 0 0 28px;
+  flex: 0 0 30px;
   place-items: center;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: var(--chevron-tile-bg);
   color: var(--color-rose-text);
@@ -1412,7 +1414,6 @@
 .answer-screen {
   justify-content: flex-start;
   gap: 14px;
-  min-height: 0;
   padding: 8px 8px 0;
 }
 
@@ -1421,8 +1422,9 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  border: 0;
   border-radius: 18px;
-  padding: 14px 16px;
+  padding: 12px 14px;
   background: var(--closest-bg);
 }
 
@@ -1430,7 +1432,7 @@
   color: var(--closest-label);
   font-size: 12px;
   font-weight: var(--weight-black);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -1438,7 +1440,7 @@
   color: var(--color-ink);
   font-size: 15px;
   font-weight: var(--weight-extrabold);
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .answer-card {
@@ -1458,14 +1460,14 @@
   align-items: center;
   gap: 6px;
   border-radius: 999px;
-  padding: 5px 12px;
+  padding: 5px 12px 5px 10px;
   background: linear-gradient(
-    90deg,
+    135deg,
     var(--answer-bg-start),
     var(--answer-bg-end)
   );
   color: var(--answer-text);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: var(--weight-black);
 }
 
@@ -1483,12 +1485,12 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  border-top: 1px solid var(--color-card-border);
-  padding-top: 12px;
+  border-top: 1px solid var(--answer-meta-border);
+  padding-top: 10px;
   color: var(--color-muted);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: var(--weight-semibold);
-  line-height: 1.4;
+  line-height: 1.45;
 }
 
 .related {
@@ -1499,7 +1501,7 @@
 
 .related-title {
   color: var(--color-plum);
-  font-size: 1rem;
+  font-size: 15px;
   font-weight: var(--weight-black);
 }
 
@@ -1928,4 +1930,101 @@ html:has(.answer-dock) {
   .topic-tile-label {
     font-size: 15px;
   }
+}
+
+/* Topic list and answer screen (redesign Step 6b) */
+
+.topic-hint {
+  margin-top: 4px;
+  color: var(--footer-card-text);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+}
+
+.topic-footnote {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.5;
+}
+
+.answer-source strong {
+  color: var(--color-ink);
+  font-weight: var(--weight-black);
+}
+
+/* Related questions: a smaller version of the Topic list card. */
+.topic-questions--related {
+  border-radius: 20px;
+}
+
+.topic-questions--related .topic-question {
+  padding: 12px 14px;
+  font-size: 15px;
+}
+
+.topic-questions--related .topic-question-go {
+  flex-basis: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+/* The end of the Topic list and the answer screen: the footer line as
+   plain text, then the ask bar as a white pill of its own. Not sticky,
+   no panel; on a short screen it sits at the bottom. */
+.screen-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-bottom: 4px;
+}
+
+.screen-bottom .danger-line {
+  color: var(--footer-card-text);
+  font-size: 13px;
+  font-weight: var(--weight-bold);
+}
+
+/* The ask pill: its edge marks a control, so it is the 3:1 pink. */
+.ask-pill-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid var(--ask-field-edge);
+  border-radius: 30px;
+  padding: 6px 6px 6px 18px;
+  background: var(--color-card);
+  box-shadow: var(--ask-bar-shadow);
+}
+
+.ask-pill-bar input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  text-overflow: ellipsis;
+}
+
+.ask-pill-bar input::placeholder {
+  color: var(--color-muted);
+}
+
+.ask-pill-bar .btn-send {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  background: var(--gradient-primary);
+  color: var(--color-on-dark);
+  box-shadow: var(--send-shadow);
+}
+
+.ask-pill-bar .btn-send:disabled {
+  background: var(--send-disabled-bg);
+  box-shadow: none;
+  opacity: 1;
 }

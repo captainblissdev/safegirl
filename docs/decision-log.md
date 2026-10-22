@@ -1474,3 +1474,40 @@ After: content and header 20px from 360px up. Under 360px both are 16px
 (the header's logo, Help and Exit need 283px on one row; a 20px gutter
 leaves 280px at 320px), and tile titles drop from 16 to 15px, because
 "Contraception" at 16px is wider than a tile at 320px.
+
+## Topic list and answer screen polish (2026-10-22)
+
+Redesign step 6b (`fix/ui-redesign`), on Cindy's brief with every value
+given. Layout and UI copy only; no reply, KB, held or help text,
+helpline constant, gate, threshold or Safety Net pattern changed.
+
+**Topic list.** A header card (pink-to-lilac gradient) with the topic
+icon on a white tile, the h1 and "Tap a question to read the answer."
+The question count stays for screen readers only. The question card
+(radius 24, soft shadow) has 16px rows and 30px chevron circles; under
+it, "More questions are being reviewed with doctors and nurses before
+they are added." Then the footer line as plain text and the ask bar as
+a white pill, placeholder "Or type your own question".
+
+**Answer screen.** The closest-question box loses any border or ring;
+the answer card, pill and source block take the given sizes, with
+"Source:" in bold (the source text itself unchanged). The related
+questions use a smaller version of the question card. The white panel
+behind the footer line and ask bar is gone: they are no longer sticky
+and sit at the end of the content, or at the bottom of a short screen.
+The ask bar is a white pill named "Ask" with the 48px gradient button.
+
+**Focus.** Headings and containers that only code focuses
+(`tabindex="-1"`) show no ring; every control keeps its ring. Checked at
+four widths: the focused h1 has no outline, a Tab-focused row has one.
+
+**Design values changed for contrast.** The question cards' edge
+#F3D3E6 (1.38:1 on white) marks the question buttons, so it is #C25A92
+(4.06:1 against the rows, 3.00:1 on the page and its glows); the ask
+pill uses the same 3:1 pink (#C25A92) for the design's #F3C6DE.
+
+**New copy** (constants in `content/uiText.ts`): `TOPIC_LIST_HINT`,
+`TOPIC_LIST_FOOTNOTE`, `TOPIC_LIST_PLACEHOLDER`.
+
+**Gutters** are unchanged: 20px from 360px up and 16px below, with the
+header aligned (from step 4b).

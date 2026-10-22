@@ -296,7 +296,7 @@ console.log("\nTest 6: control edges and the header's new pairs");
     ".btn-exit",
   ]) {
     const rule = new RegExp(
-      `\\${control}\\s*\\{[^}]*border: [^;]*var\\(--(control-border|primary|color-plum|color-control-border)\\)`,
+      `\\${control}\\s*\\{[^}]*border: [^;]*var\\(--(control-border|primary|color-plum|color-control-border|list-edge)\\)`,
     );
     assert(rule.test(app), `${control} has a 3:1 edge, not the card border`);
   }
@@ -961,6 +961,125 @@ console.log("\nTest 14: Home polish (step 4b)");
     contrast(token("--color-muted"), token("--color-card")),
     4.5,
     "topic subtitle #6B4F86 on white",
+  );
+}
+
+console.log("\nTest 16: Topic list and answer screen polish (step 6b)");
+{
+  const check = (ratio: number, min: number, what: string) =>
+    assert(ratio >= min, `${what}: ${ratio.toFixed(2)}:1`);
+  const head = [token("--topic-head-bg-start"), token("--topic-head-bg-end")];
+  const card = token("--color-card");
+  const page = [
+    token("--color-page"),
+    card,
+    token("--glow-pink"),
+    token("--glow-lilac"),
+  ];
+  const worst = (fg: string, bgs: string[]) =>
+    Math.min(...bgs.map((bg) => contrast(fg, bg)));
+  check(
+    worst(token("--color-plum"), head),
+    4.5,
+    "Topic list h1 #3B0F6B on the header card",
+  );
+  check(
+    worst(token("--footer-card-text"), head),
+    4.5,
+    "hint #5E2A58 on the header card",
+  );
+  for (const tint of ["periods", "pregnancy", "contraception", "sti"]) {
+    check(
+      contrast(token(`--topic-${tint}-text`), card),
+      3,
+      `${tint} icon on its white tile`,
+    );
+  }
+  check(
+    worst(token("--color-violet"), page),
+    4.5,
+    '"All topics" #6D28D9 on the page',
+  );
+  check(
+    contrast(token("--list-edge"), card),
+    3,
+    "question card edge against its white rows",
+  );
+  check(
+    worst(token("--list-edge"), page),
+    3,
+    "question card edge on the page and glows",
+  );
+  check(
+    contrast(token("--color-ink"), card),
+    4.5,
+    "question rows #2A1245 on white",
+  );
+  check(
+    contrast(token("--color-rose-text"), token("--chevron-tile-bg")),
+    3,
+    "chevron on its #FFE4F1 circle",
+  );
+  check(
+    worst(token("--color-muted"), page),
+    4.5,
+    "footnote #6B4F86 on the page",
+  );
+  check(
+    worst(token("--footer-card-text"), page),
+    4.5,
+    "footer line #5E2A58 on the page",
+  );
+  check(
+    worst(token("--color-violet"), page),
+    4.5,
+    "footer line's 1195 link on the page",
+  );
+  check(
+    contrast(token("--closest-label"), token("--closest-bg")),
+    4.5,
+    "closest label #5B21B6 on #EEE4FF",
+  );
+  check(
+    contrast(token("--color-ink"), token("--closest-bg")),
+    4.5,
+    "closest question #2A1245 on #EEE4FF",
+  );
+  check(
+    worst(token("--answer-text"), [
+      token("--answer-bg-start"),
+      token("--answer-bg-end"),
+    ]),
+    4.5,
+    "Answer pill #5B21B6 on its gradient",
+  );
+  check(
+    contrast(token("--color-muted"), card),
+    4.5,
+    "source and disclaimer #6B4F86 on white",
+  );
+  check(
+    contrast(token("--color-ink"), card),
+    4.5,
+    '"Source:" #2A1245 on white',
+  );
+  check(
+    contrast(token("--ask-field-edge"), card),
+    3,
+    "ask pill edge against its white fill",
+  );
+  check(
+    worst(token("--ask-field-edge"), page),
+    3,
+    "ask pill edge on the page and glows",
+  );
+  check(
+    contrast(token("--color-muted"), card),
+    4.5,
+    "ask pill placeholder on white",
+  );
+  console.log(
+    `  INFO: the design's #F3D3E6 card edge would be ${contrast("#f3d3e6", card).toFixed(2)}:1 on white`,
   );
 }
 

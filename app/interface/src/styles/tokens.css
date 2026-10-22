@@ -84,6 +84,20 @@
   --footer-card-text: #5e2a58;
   --topic-card-shadow: 0 6px 16px rgba(190, 24, 93, 0.08);
 
+  /* Topic list and answer screen (step 6b). */
+  --topic-head-bg: linear-gradient(135deg, #ffdce4, #f4d9fb);
+  --topic-head-bg-start: #ffdce4;
+  --topic-head-bg-end: #f4d9fb;
+  --topic-head-tile-shadow: 0 6px 14px rgba(190, 18, 60, 0.16);
+  --list-card-shadow: 0 8px 20px rgba(109, 40, 217, 0.08);
+  --list-row-divider: #f8e4ee;
+  /* The design's list and related-question cards use #f3d3e6 (about
+     1.3:1); they hold the question buttons, so their edge marks a
+     control and is darkened to the 3:1 pink of the ask field. */
+  --list-edge: #c25a92;
+  --answer-meta-border: #f6e3ef;
+  --ask-bar-shadow: 0 8px 20px rgba(109, 40, 217, 0.1);
+
   /*
    * Home topic tiles: the edge of each tile (a button) is the lightest
    * shade of its topic's hue with 3:1 against the page and both glows;
@@ -148,8 +162,8 @@
      and its text stands on white); the shadow is a soft violet. */
   --closest-bg: #eee4ff;
   --closest-label: #5b21b6;
-  --answer-card-border: #e9d8fd;
-  --shadow-violet: 0 10px 28px rgba(109, 40, 217, 0.14);
+  --answer-card-border: #ebd5f7;
+  --shadow-violet: 0 10px 24px rgba(109, 40, 217, 0.1);
   --shadow-dock: 0 -6px 18px rgba(42, 18, 69, 0.08);
 
   /* Reply screens (clarify, held, help and referral, no answer): pills,

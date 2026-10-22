@@ -59,7 +59,9 @@ export default function AnswerView({ turn, onSend, back, askBar }: Props) {
         <p className="answer-text">{turn.text}</p>
         <div className="answer-meta">
           {turn.source && (
-            <p className="answer-source">Source: {turn.source}</p>
+            <p className="answer-source">
+              <strong>Source:</strong> {turn.source}
+            </p>
           )}
           <p className="answer-disclaimer">{ANSWER_DISCLAIMER}</p>
         </div>
@@ -70,7 +72,7 @@ export default function AnswerView({ turn, onSend, back, askBar }: Props) {
           <h2 id="related-title" className="related-title">
             Related questions
           </h2>
-          <ul className="topic-questions">
+          <ul className="topic-questions topic-questions--related">
             {related.map((question) => (
               <li key={question}>
                 <button
@@ -89,7 +91,9 @@ export default function AnswerView({ turn, onSend, back, askBar }: Props) {
         </section>
       )}
 
-      <div className="answer-dock">
+      {/* Not sticky and no panel: the end of the content, or the bottom
+          of a short screen. */}
+      <div className="screen-bottom">
         <DangerLine />
         {askBar}
       </div>

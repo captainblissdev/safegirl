@@ -88,3 +88,13 @@ export const ASK_LABEL = "Type your question";
 
 /** The accessible name of Home's send button (step 4b). */
 export const ASK_SEND_NAME = "Get an answer";
+
+/** Under the Topic list's title (step 6b). */
+export const TOPIC_LIST_HINT = "Tap a question to read the answer.";
+
+/** Under the Topic list's questions (step 6b). */
+export const TOPIC_LIST_FOOTNOTE =
+  "More questions are being reviewed with doctors and nurses before they are added.";
+
+/** The Topic list's ask bar placeholder (step 6b). */
+export const TOPIC_LIST_PLACEHOLDER = "Or type your own question";

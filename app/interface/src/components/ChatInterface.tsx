@@ -104,7 +104,7 @@ export default function ChatInterface({
 
   const askBar = (
     <AskBar
-      variant={isHome ? "hero" : "bar"}
+      variant={isHome ? "hero" : view === "answer" ? "pill" : "bar"}
       value={draft}
       onChange={setDraft}
       onSubmit={handleSend}

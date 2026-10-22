@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { questionsFor } from "../content/kbQuestions";
+import {
+  TOPIC_LIST_FOOTNOTE,
+  TOPIC_LIST_HINT,
+  TOPIC_LIST_PLACEHOLDER,
+} from "../content/uiText";
 import type { Topic } from "../content/topics";
 import AskBar from "./AskBar";
 import DangerLine from "./DangerLine";
@@ -70,19 +75,20 @@ export default function TopicList({
 
       <div className={`topic-head topic-head--${topic.topicClass}`}>
         <span className="topic-head-icon">
-          <Icon size={26} />
+          <Icon size={28} />
         </span>
         <div>
           <h1 ref={headingRef} tabIndex={-1} className="topic-title">
             {topic.label}
           </h1>
-          <p className="topic-count">
-            {questions.length}{" "}
-            {questions.length === 1 ? "question" : "questions"}
-          </p>
+          <p className="topic-hint">{TOPIC_LIST_HINT}</p>
         </div>
       </div>
 
+      {/* The count, for screen readers only. */}
+      <p className="sr-only topic-count">
+        {questions.length} {questions.length === 1 ? "question" : "questions"}
+      </p>
       <ul className="topic-questions" aria-label={`${topic.label} questions`}>
         {questions.map((item) => (
           <li key={item.id}>
@@ -101,18 +107,21 @@ export default function TopicList({
         ))}
       </ul>
 
-      <DangerLine />
+      <p className="topic-footnote">{TOPIC_LIST_FOOTNOTE}</p>
 
-      <AskBar
-        variant="bar"
-        label="Ask something else"
-        value={draft}
-        onChange={setDraft}
-        onSubmit={ask}
-        disabled={false}
-        placeholder="Ask something else…"
-        inputRef={inputRef}
-      />
+      <div className="screen-bottom">
+        <DangerLine />
+        <AskBar
+          variant="pill"
+          label="Ask something else"
+          value={draft}
+          onChange={setDraft}
+          onSubmit={ask}
+          disabled={false}
+          placeholder={TOPIC_LIST_PLACEHOLDER}
+          inputRef={inputRef}
+        />
+      </div>
     </main>
   );
 }

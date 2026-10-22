@@ -15,6 +15,9 @@ import {
   HERO_PILL,
   ASK_LABEL,
   ASK_SEND_NAME,
+  TOPIC_LIST_FOOTNOTE,
+  TOPIC_LIST_HINT,
+  TOPIC_LIST_PLACEHOLDER,
   REPLY_PILLS,
 } from "../content/uiText";
 import {
@@ -581,7 +584,7 @@ console.log(
       );
     } else if (name.startsWith("chat")) {
       const lineAt = html.indexOf('class="danger-line"');
-      const barAt = html.indexOf('class="input-row"');
+      const barAt = html.search(/class="(input-row|ask-pill-bar)"/);
       assert(
         lineAt > -1 &&
           barAt > lineAt &&
@@ -1016,7 +1019,9 @@ console.log("\nTest 29: the Topic list for each topic");
       `${topic.label}: the label is the h1, focusable for the move on open`,
     );
     assert(
-      html.includes(`<p class="topic-count">${data.length} questions</p>`),
+      html.includes(
+        `<p class="sr-only topic-count">${data.length} questions</p>`,
+      ),
       `${topic.label}: "${data.length} questions", from the data`,
     );
     const rows = [
@@ -1038,7 +1043,7 @@ console.log("\nTest 29: the Topic list for each topic");
       `${topic.label}: an "All topics" back link`,
     );
     const lineAt = html.indexOf('class="danger-line"');
-    const barAt = html.indexOf('<div class="input-row">');
+    const barAt = html.indexOf('<div class="ask-pill-bar">');
     assert(
       lineAt > html.lastIndexOf("topic-question") && lineAt < barAt,
       `${topic.label}: the footer line under the list, then the ask bar`,
@@ -1195,7 +1200,7 @@ console.log("\nTest 32: the source as sent, then the shared disclaimer");
 {
   const withSource = renderAnswer(answerTurn());
   const sourceAt = withSource.indexOf(
-    '<p class="answer-source">Source: Kenya MOH (2015); WHO (2018)</p>',
+    '<p class="answer-source"><strong>Source:</strong> Kenya MOH (2015); WHO (2018)</p>',
   );
   const disclaimerAt = withSource.indexOf(
     `<p class="answer-disclaimer">${ANSWER_DISCLAIMER}</p>`,
@@ -1360,7 +1365,7 @@ console.log("\nTest 35: back link, ask bar and frame of the answer screen");
   );
   const html = renderAnswer(answerTurn());
   const lineAt = html.indexOf('class="danger-line"');
-  const barAt = html.indexOf('<div class="input-row">');
+  const barAt = html.indexOf('<div class="ask-pill-bar">');
   assert(
     lineAt > html.lastIndexOf("topic-question") && barAt > lineAt,
     "the footer line after the related questions, then the ask bar",
@@ -2219,6 +2224,94 @@ console.log("\nTest 48: Home polish (step 4b)");
     narrow.includes("column-gap: 8px;") &&
       narrow.includes(".topic-tile-label {\n    font-size: 15px;"),
     "under 360px: a 16px gutter, the header on one row, tile titles at 15px",
+  );
+}
+
+console.log("\nTest 50: Topic list and answer screen polish (step 6b)");
+{
+  const list = renderToStaticMarkup(
+    <TopicList
+      topic={TOPICS[3]}
+      onAsk={() => undefined}
+      onBack={() => undefined}
+    />,
+  );
+  assert(
+    list.includes(
+      '<div class="topic-head topic-head--sti"><span class="topic-head-icon"><svg',
+    ) && list.includes(`<p class="topic-hint">${TOPIC_LIST_HINT}</p>`),
+    `header card: the icon tile, the h1 and "${TOPIC_LIST_HINT}"`,
+  );
+  assert(
+    list.includes('<p class="sr-only topic-count">5 questions</p>') &&
+      list.indexOf("sr-only topic-count") <
+        list.indexOf('<ul class="topic-questions"'),
+    "the question count stays, for screen readers only, before the list",
+  );
+  assert(
+    list.includes(`<p class="topic-footnote">${TOPIC_LIST_FOOTNOTE}</p>`) &&
+      list.indexOf("topic-footnote") > list.indexOf("</ul>"),
+    "the footnote under the list",
+  );
+  const bottom = list.slice(list.indexOf('<div class="screen-bottom">'));
+  assert(
+    bottom.includes('class="danger-line"') &&
+      bottom.indexOf('class="danger-line"') <
+        bottom.indexOf('<div class="ask-pill-bar">') &&
+      bottom.includes(`href="${telHref(GBV_HELPLINE)}"`),
+    "the footer line (its tel: link from the constant), then the ask pill",
+  );
+  assert(
+    bottom.includes(`placeholder="${TOPIC_LIST_PLACEHOLDER}"`) &&
+      bottom.includes('aria-label="Ask"'),
+    `Topic list placeholder "${TOPIC_LIST_PLACEHOLDER}"; send button named "Ask"`,
+  );
+  const answer = renderAnswer(answerTurn());
+  assert(
+    answer.includes('<h1 tabindex="-1" class="closest">') &&
+      answer.includes('<p class="answer-source"><strong>Source:</strong> '),
+    'the closest-question box is the focusable h1; "Source:" in bold',
+  );
+  assert(
+    answer.includes('<ul class="topic-questions topic-questions--related">'),
+    "related questions in their own, smaller card",
+  );
+  const end = answer.slice(answer.indexOf('<div class="screen-bottom">'));
+  assert(
+    !answer.includes("answer-dock") &&
+      end.indexOf('class="danger-line"') <
+        end.indexOf('<div class="ask-pill-bar">') &&
+      end.includes('placeholder="Ask something else…"'),
+    "answer screen: no panel; the footer line, then the ask pill (placeholder unchanged)",
+  );
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  assert(
+    rule(".screen-bottom").includes("margin-top: auto;") &&
+      !/background|position: sticky|box-shadow/.test(rule(".screen-bottom")),
+    "the bottom area: not sticky, no panel background, at the bottom of a short screen",
+  );
+  assert(
+    rule(".ask-pill-bar").includes(
+      "border: 1.5px solid var(--ask-field-edge);",
+    ) &&
+      rule(".topic-questions").includes(
+        "border: 1.5px solid var(--list-edge);",
+      ),
+    "control edges: the ask pill and the question cards use the 3:1 pink",
+  );
+  const index = readFileSync(new URL("../index.css", import.meta.url), "utf8");
+  assert(
+    /\[tabindex="-1"\]:focus,\s*\[tabindex="-1"\]:focus-visible \{\s*outline: none;/.test(
+      index,
+    ) &&
+      /:focus-visible \{\s*outline: var\(--focus-ring-width\) solid var\(--focus-ring-color\);/.test(
+        index,
+      ),
+    "no ring on what only code focuses; every control keeps its ring",
   );
 }
 

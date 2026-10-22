@@ -82,6 +82,17 @@ body {
   outline-color: var(--focus-ring-on-dark);
 }
 
+/*
+ * Headings and containers that only code focuses (tabindex="-1", when a
+ * screen or a reply arrives) show no ring: they are not controls, and
+ * the polite live region and the focus position already tell a screen
+ * reader where she is. Every real control keeps its ring.
+ */
+[tabindex="-1"]:focus,
+[tabindex="-1"]:focus-visible {
+  outline: none;
+}
+
 /* Motion is off for anyone who asks their device for reduced motion. */
 @media (prefers-reduced-motion: reduce) {
   *,
