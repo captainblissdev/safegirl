@@ -1,0 +1,141 @@
+{
+ "candidate": "lr_e5_base_C0.1",
+ "config": {
+  "model": "LogisticRegression",
+  "features": "multilingual-e5-small, 'query: ', normalized",
+  "penalty": "l2 (sklearn default)",
+  "C": 0.1,
+  "class_weight": "balanced",
+  "max_iter": 2000,
+  "random_state": 42,
+  "training_set": "base",
+  "v1_rows": 0
+ },
+ "per_fold_macro_f1": {
+  "1": 0.7646318004493754,
+  "2": 0.8469763365202742,
+  "3": 0.7116445521478892,
+  "4": 0.7670608984334475,
+  "5": 0.7848127756849866
+ },
+ "macro_f1_mean": 0.7750252726471946,
+ "macro_f1_sd": 0.048634663718733755,
+ "pooled_macro_f1": 0.7719172712812568,
+ "pooled_per_class": {
+  "contraception": {
+   "precision": 0.8552631578947368,
+   "recall": 0.8552631578947368,
+   "f1": 0.8552631578947367,
+   "support": 76
+  },
+  "sti": {
+   "precision": 0.8780487804878049,
+   "recall": 0.8780487804878049,
+   "f1": 0.8780487804878049,
+   "support": 82
+  },
+  "pregnancy": {
+   "precision": 0.8108108108108109,
+   "recall": 0.8,
+   "f1": 0.8053691275167786,
+   "support": 75
+  },
+  "general": {
+   "precision": 0.85,
+   "recall": 0.5604395604395604,
+   "f1": 0.6754966887417219,
+   "support": 91
+  },
+  "out_of_scope": {
+   "precision": 0.6190476190476191,
+   "recall": 0.896551724137931,
+   "f1": 0.732394366197183,
+   "support": 29
+  },
+  "vague": {
+   "precision": 0.5434782608695652,
+   "recall": 0.9259259259259259,
+   "f1": 0.6849315068493151,
+   "support": 27
+  }
+ },
+ "sti_recall": 0.8780487804878049,
+ "pregnancy_recall": 0.8,
+ "confident_wrong": 0.0,
+ "confident_wrong_is_plain_error_rate": false,
+ "ece": 0.5512836647268973,
+ "confusion": {
+  "labels": [
+   "contraception",
+   "sti",
+   "pregnancy",
+   "general",
+   "out_of_scope",
+   "vague"
+  ],
+  "matrix": [
+   [
+    65,
+    1,
+    4,
+    2,
+    1,
+    3
+   ],
+   [
+    1,
+    72,
+    1,
+    3,
+    1,
+    4
+   ],
+   [
+    4,
+    1,
+    60,
+    4,
+    2,
+    4
+   ],
+   [
+    5,
+    7,
+    8,
+    51,
+    10,
+    10
+   ],
+   [
+    1,
+    1,
+    1,
+    0,
+    26,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    0,
+    2,
+    25
+   ]
+  ]
+ },
+ "n": 380,
+ "environment": {
+  "python": "3.14.6",
+  "packages": {
+   "scikit-learn": "1.9.0",
+   "numpy": "2.5.3",
+   "pandas": "3.0.5",
+   "torch": "2.9.0",
+   "transformers": "5.0.0",
+   "sentence-transformers": "6.1.0"
+  },
+  "git_commit": "1629cd7acde97f103034f37cfbbca76252dd35f0",
+  "fold_file_sha256": "9fa96d80c22d020b62ada028d87c0679004c0d68be87e6b2f40d4bff46361cbf"
+ }
+}

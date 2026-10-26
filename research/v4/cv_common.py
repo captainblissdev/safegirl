@@ -246,7 +246,8 @@ def write_results(name: str, oof: list[dict], config: dict, has_confidence: bool
     out_dir.mkdir(parents=True, exist_ok=True)
     summary = {"candidate": name, "config": config, **summarise(oof, has_confidence),
                "environment": environment(root)}
-    (out_dir / f"cv_{name}.json").write_text(json.dumps(summary, indent=1), encoding="utf-8")
+    (out_dir / f"cv_{name}.json").write_text(json.dumps(summary, indent=1) + "\n", encoding="utf-8",
+                                                  newline="\n")
     with open(out_dir / f"cv_{name}_oof.csv", "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f, lineterminator="\n")
         w.writerow(["seed_id", "fold", "true", "pred", "confidence"])

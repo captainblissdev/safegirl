@@ -1,0 +1,80 @@
+{
+ "grid": [
+  {
+   "candidate": "lr_e5_base_C0.1",
+   "set": "base",
+   "C": 0.1,
+   "macro_f1_mean": 0.7750252726471946,
+   "macro_f1_sd": 0.048634663718733755,
+   "sti_recall": 0.8780487804878049,
+   "pregnancy_recall": 0.8,
+   "confident_wrong": 0.0,
+   "ece": 0.5512836647268973
+  },
+  {
+   "candidate": "lr_e5_base_C1",
+   "set": "base",
+   "C": 1,
+   "macro_f1_mean": 0.8339273444890049,
+   "macro_f1_sd": 0.06637081750820041,
+   "sti_recall": 0.8902439024390244,
+   "pregnancy_recall": 0.8266666666666667,
+   "confident_wrong": 0.010526315789473684,
+   "ece": 0.3374981308453961
+  },
+  {
+   "candidate": "lr_e5_base_C10",
+   "set": "base",
+   "C": 10,
+   "macro_f1_mean": 0.8605653358246926,
+   "macro_f1_sd": 0.061562996464193546,
+   "sti_recall": 0.926829268292683,
+   "pregnancy_recall": 0.8266666666666667,
+   "confident_wrong": 0.06842105263157895,
+   "ece": 0.1176957209643565
+  },
+  {
+   "candidate": "lr_e5_v1_C0.1",
+   "set": "v1",
+   "C": 0.1,
+   "macro_f1_mean": 0.790565211496376,
+   "macro_f1_sd": 0.05591505594487138,
+   "sti_recall": 0.8658536585365854,
+   "pregnancy_recall": 0.8133333333333334,
+   "confident_wrong": 0.0,
+   "ece": 0.5604011412906019
+  },
+  {
+   "candidate": "lr_e5_v1_C1",
+   "set": "v1",
+   "C": 1,
+   "macro_f1_mean": 0.842975921600161,
+   "macro_f1_sd": 0.05731843042071784,
+   "sti_recall": 0.9146341463414634,
+   "pregnancy_recall": 0.8266666666666667,
+   "confident_wrong": 0.010526315789473684,
+   "ece": 0.33257917071643633
+  },
+  {
+   "candidate": "lr_e5_v1_C10",
+   "set": "v1",
+   "C": 10,
+   "macro_f1_mean": 0.8587530009771226,
+   "macro_f1_sd": 0.07627038692986693,
+   "sti_recall": 0.9512195121951219,
+   "pregnancy_recall": 0.8133333333333334,
+   "confident_wrong": 0.06315789473684211,
+   "ece": 0.10634573054941077
+  }
+ ],
+ "v1_ablation": {
+  "best_macro_f1": {
+   "base": 0.8605653358246926,
+   "v1": 0.8587530009771226
+  },
+  "gain_with_v1": -0.0018123348475700407,
+  "winner_exact": "base",
+  "winner_tie_window_0.01": "base"
+ },
+ "v1_rows": 196
+}
