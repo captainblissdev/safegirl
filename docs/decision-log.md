@@ -1860,3 +1860,12 @@ so the frozen V3 run stays reproducible.
 about using the service: SEED-V4-VAG-017-P3 ~ SEED-GEN-09 (0.932) and
 SEED-V4-VAG-023-P3 ~ SEED-GEN-08 (0.930). They are disclosed and kept for
 now.
+
+**Closed (2026-10-26).** After the CON-019-P3 reword the refreshed
+report holds 105 pairs (the three CON-019-P3 pairs dropped out). The two
+vague pairs above and the three other remaining V4 pairs (SEED-PREG-12
+~ SEED-V4-CON-005-P1, SEED-PREG-37 ~ SEED-V4-GEN-032-P3, SEED-V4-CON-008-P1
+~ SEED-V4-GEN-012-P1; cosine 0.930 to 0.935) were read: each pair
+differs in meaning (similar wording, a different question), so none is a
+label conflict. They are disclosed and nothing is changed. DR-05 is
+closed.
