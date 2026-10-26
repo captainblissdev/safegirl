@@ -1,0 +1,9 @@
+sealed set: 205 items compared
+paraphrases: 224; seeds: 56 (0 with the held-topic override)
+compared with 113 other seeds (--compare-seeds, no count rule)
+per class: out_of_scope 116, vague 108
+
+warnings (0):
+failures (0):
+
+passed

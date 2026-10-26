@@ -1,0 +1,50 @@
+V4 fold assignment: summary (2026-10-26)
+fold file: research/v4/fold_assignment_v4.csv
+sha256: 9fa96d80c22d020b62ada028d87c0679004c0d68be87e6b2f40d4bff46361cbf
+seeds: 380 (v4 169, v3 211); 5 folds; stratified by primary_class x style; random seed 20261022
+paraphrases: 1242 in the reviewed files; 3 dropped by exclusions (SEED-PREG-19-P2, SEED-PREG-21-P3, SEED-STI-29-P1); 1239 counted below
+seeds dropped by exclusions: 0
+paraphrases whose seed is in no fold: 0
+
+Seeds per fold and class
+  fold    contraception            sti      pregnancy        general   out_of_scope          vague   total
+  1                  16             16             15             18              6              5      76
+  2                  15             17             15             19              5              5      76
+  3                  15             17             15             18              6              5      76
+  4                  15             16             15             18              6              6      76
+  5                  15             16             15             18              6              6      76
+  all                76             82             75             91             29             27     380
+  by source: fold 1: v4 33, v3 43; fold 2: v4 35, v3 41; fold 3: v4 34, v3 42; fold 4: v4 34, v3 42; fold 5: v4 33, v3 43
+
+Paraphrases per fold and class (after exclusions)
+  fold    contraception            sti      pregnancy        general   out_of_scope          vague   total
+  1                  51             39             29             56             24             20     219
+  2                  54             58             47             68             20             20     267
+  3                  44             49             50             61             24             20     248
+  4                  51             54             48             68             24             24     269
+  5                  39             44             43             62             24             24     236
+  all               239            244            217            315            116            108    1239
+
+Seeds with no paraphrase per fold (after exclusions)
+  fold 1: 18 (v3 16, v4 2); fold 2: 8 (v3 8, v4 0); fold 3: 11 (v3 11, v4 0); fold 4: 6 (v3 6, v4 0); fold 5: 15 (v3 14, v4 1); total 58
+
+Same-class near duplicates (e5 cosine >= 0.95) in different folds: 19 pairs (disclosed, not changed)
+  SEED-STI-11 (fold 1) ~ SEED-STI-28 (fold 4) [sti] 0.9651
+  SEED-V4-CON-005-P1 (fold 1) ~ SEED-V4-CON-027-P1 (fold 5) [contraception] 0.9644
+  SEED-V4-VAG-017-P1 (fold 4) ~ SEED-V4-VAG-021-P1 (fold 5) [vague] 0.9628
+  SEED-STI-11 (fold 1) ~ SEED-STI-28-P4 (fold 4) [sti] 0.9610
+  SEED-STI-01 (fold 2) ~ SEED-STI-11 (fold 1) [sti] 0.9562
+  SEED-STI-15 (fold 4) ~ SEED-STI-35-P3 (fold 2) [sti] 0.9552
+  SEED-STI-21 (fold 2) ~ SEED-STI-27-P2 (fold 3) [sti] 0.9542
+  SEED-V4-VAG-017-P4 (fold 4) ~ SEED-V4-VAG-021-P1 (fold 5) [vague] 0.9540
+  SEED-STI-15 (fold 4) ~ SEED-STI-35 (fold 2) [sti] 0.9528
+  SEED-STI-21 (fold 2) ~ SEED-STI-27-P4 (fold 3) [sti] 0.9527
+  SEED-STI-21-P1 (fold 2) ~ SEED-STI-27-P2 (fold 3) [sti] 0.9525
+  SEED-STI-33 (fold 4) ~ SEED-STI-34 (fold 2) [sti] 0.9522
+  SEED-STI-15 (fold 4) ~ SEED-STI-35-P2 (fold 2) [sti] 0.9518
+  SEED-STI-21-P3 (fold 2) ~ SEED-STI-27 (fold 3) [sti] 0.9516
+  SEED-STI-21-P3 (fold 2) ~ SEED-STI-27-P1 (fold 3) [sti] 0.9514
+  SEED-STI-11 (fold 1) ~ SEED-STI-28-P1 (fold 4) [sti] 0.9512
+  SEED-STI-21-P3 (fold 2) ~ SEED-STI-27-P2 (fold 3) [sti] 0.9512
+  SEED-STI-21-P1 (fold 2) ~ SEED-STI-27-P4 (fold 3) [sti] 0.9510
+  SEED-STI-21-P3 (fold 2) ~ SEED-STI-27-P4 (fold 3) [sti] 0.9504

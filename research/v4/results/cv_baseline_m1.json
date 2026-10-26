@@ -1,0 +1,135 @@
+{
+ "candidate": "baseline_m1",
+ "config": {
+  "model": "frozen keyword baseline",
+  "mapping": "baseline_m1",
+  "baseline_file": "research/experiments/baseline_classifier.py"
+ },
+ "per_fold_macro_f1": {
+  "1": 0.5323193622044197,
+  "2": 0.5360863130607291,
+  "3": 0.514459452301499,
+  "4": 0.49277283706631536,
+  "5": 0.5072249589490969
+ },
+ "macro_f1_mean": 0.516572584716412,
+ "macro_f1_sd": 0.01793751668605243,
+ "pooled_macro_f1": 0.517575115605415,
+ "pooled_per_class": {
+  "contraception": {
+   "precision": 0.9444444444444444,
+   "recall": 0.8947368421052632,
+   "f1": 0.918918918918919,
+   "support": 76
+  },
+  "sti": {
+   "precision": 0.9538461538461539,
+   "recall": 0.7560975609756098,
+   "f1": 0.8435374149659864,
+   "support": 82
+  },
+  "pregnancy": {
+   "precision": 0.9038461538461539,
+   "recall": 0.6266666666666667,
+   "f1": 0.7401574803149606,
+   "support": 75
+  },
+  "general": {
+   "precision": 0.44502617801047123,
+   "recall": 0.9340659340659341,
+   "f1": 0.6028368794326241,
+   "support": 91
+  },
+  "out_of_scope": {
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "support": 29
+  },
+  "vague": {
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "support": 27
+  }
+ },
+ "sti_recall": 0.7560975609756098,
+ "pregnancy_recall": 0.6266666666666667,
+ "confident_wrong": 0.3105263157894737,
+ "confident_wrong_is_plain_error_rate": true,
+ "ece": null,
+ "confusion": {
+  "labels": [
+   "contraception",
+   "sti",
+   "pregnancy",
+   "general",
+   "out_of_scope",
+   "vague"
+  ],
+  "matrix": [
+   [
+    68,
+    0,
+    2,
+    6,
+    0,
+    0
+   ],
+   [
+    1,
+    62,
+    0,
+    19,
+    0,
+    0
+   ],
+   [
+    2,
+    1,
+    47,
+    25,
+    0,
+    0
+   ],
+   [
+    1,
+    2,
+    3,
+    85,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    29,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    27,
+    0,
+    0
+   ]
+  ]
+ },
+ "n": 380,
+ "environment": {
+  "python": "3.14.6",
+  "packages": {
+   "scikit-learn": "1.9.0",
+   "numpy": "2.5.3",
+   "pandas": "3.0.5",
+   "torch": "2.9.0",
+   "transformers": "5.0.0",
+   "sentence-transformers": "6.1.0"
+  },
+  "git_commit": "61b4c0ec25a2201ee9c2e4df17f9b120c08e5e74",
+  "fold_file_sha256": "9fa96d80c22d020b62ada028d87c0679004c0d68be87e6b2f40d4bff46361cbf"
+ }
+}

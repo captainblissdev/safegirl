@@ -15,6 +15,9 @@ nothing here changes the V3 data (`resources/seeds/`, `resources/reviewed/`,
 | `check_paraphrases.py` | Checks a paraphrase file before manual review; exits non-zero on any failure. |
 | `sheng_swahili_markers.txt` | The Swahili and Sheng marker list `check_paraphrases.py` uses. |
 | `v3_pool_exclusions.csv` | V3 pool items V4 must not train on, with the reason. |
+| `review_dr05.py` | Lists cross-class near-duplicates across the V3, V4 and V1 texts (DR-05). |
+| `dr05_ambiguity_report.csv` | Its output: ids, classes, tags and cosine, no text. |
+| `dr05_exclusions.csv` | Items dropped from V4 training after the DR-05 review. |
 | `seeds_without_paraphrases.csv` | The 55 V3 seeds with no reviewed paraphrase. |
 | `v3_fold_balance.md` | Class balance of the V3 folds. |
 | `v3_seeds_held_topic.csv` | The 28 V3 seeds the held-topic rule matches. |
@@ -130,8 +133,12 @@ report, fixture or commit. `sealed/` and `*sealed*.csv` are in
 ## Checking a paraphrase file
 
 ```
-.venv/Scripts/python.exe -I research/v4/check_paraphrases.py resources/generated/v4_batch4_paraphrases.csv --seeds research/v4/seeds_v4_batch4.csv [--sealed PATH]
+.venv/Scripts/python.exe -I research/v4/check_paraphrases.py resources/generated/v4_batch4_paraphrases.csv --seeds research/v4/seeds_v4_batch4.csv --compare-seeds research/v4/seeds_v4_batch1.csv --compare-seeds research/v4/seeds_v4_batch2.csv --compare-seeds research/v4/seeds_v4_batch3.csv [--sealed PATH]
 ```
+
+`--seeds` names the seed file(s) the paraphrases belong to: the count rule
+applies to those seeds. `--compare-seeds` names the other batches, used
+only to catch a paraphrase close to a seed it does not belong to.
 
 Paraphrases are generated under the V2 paraphrasing protocol (decision
 log, 2026-09-18 and "V4 paraphrasing: protocol applied (2026-10-26)")
@@ -159,17 +166,40 @@ which was never committed to the repository. It is a recorded addition,
 not a copy of the V2 list (decision log, "V4 paraphrasing: protocol
 applied (2026-10-26)").
 
+## DR-05 ambiguity review
+
+```
+.venv/Scripts/python.exe -I research/v4/review_dr05.py
+```
+
+lists every pair of texts with different class labels at e5 cosine 0.93
+or above, across the V3 pool, the V4 seeds and paraphrases and the V1
+restore candidates, in `dr05_ambiguity_report.csv`. Pairs at 0.95 or
+above are resolved; pairs from 0.93 to 0.95 are disclosed only
+(decision log, "V4 DR-05 ambiguity review (2026-10-26)").
+
+`dr05_exclusions.csv` lists the items the review resolved by exclusion.
+**V4 training and the V1-paraphrase ablation must drop these ids.** An
+exclusion applies to that exact item id only, not to the rest of its
+seed. `v3_pool_exclusions.csv`, which the seed and paraphrase checkers
+use, is unchanged, and no V3 data file is edited.
+
 ## Folds
 
 ```
-.venv/Scripts/python.exe -I research/v4/make_folds.py research/v4/seeds_v4.csv
+.venv/Scripts/python.exe -I research/v4/make_folds.py research/v4/seeds_v4_batch1.csv research/v4/seeds_v4_batch2.csv research/v4/seeds_v4_batch3.csv research/v4/seeds_v4_batch4.csv --v3-seeds resources/seeds/seeds.csv --paraphrases resources/reviewed/v4/*.csv resources/reviewed/*.csv
 ```
 
 Whole seeds go to 5 folds, stratified by `primary_class` x `style`, with
-a fixed random seed, so the same file always gives the same folds.
+a fixed random seed, so the same files always give the same folds. With
+`--v3-seeds`, the V3 seeds join the same folds: their `class` becomes
+`primary_class` and their style is the placeholder `v3_unlabelled` (V3
+seeds have no phrasing style); every V3 seed is included, also those with
+no paraphrases. The output has a `source` column (`v3` or `v4`).
 Paraphrases are never assigned on their own: each one takes its seed's
 fold. With `--paraphrases FILE ...`, the builder checks every paraphrase
-names a seed in the file.
+names a seed in the files. Exclusions are applied at training time, not
+here.
 
 ## Tests
 

@@ -1820,3 +1820,124 @@ research/v4/check_paraphrases.py (sealed set, DR-04, dev set,
 relevance_validation, held-topic rules and Safety Net) before
 manual review. Counts per batch are in docs/ai-use-log.md.
 Marker list: V2's was never committed; research/v4/sheng_swahili_markers.txt (2026-10-26) is a recorded addition.
+
+## V4 DR-05 ambiguity review (2026-10-26)
+
+Duplicate and ambiguity review (DR-05) of the V4 training data, before
+training. `research/v4/review_dr05.py` pooled **1,841 texts** with their
+class labels: the V3 training pool minus `v3_pool_exclusions.csv` (788),
+the V4 seeds (169), the reviewed V4 paraphrases (664) and the 220 V1
+restore candidates. `out_of_scope` and `vague` count as classes.
+It found **108 pairs** with different class labels at e5 cosine 0.93 or
+above (`research/v4/dr05_ambiguity_report.csv`, ids and scores only), and
+no exact duplicate text across classes.
+
+**Rule.** Cross-class pairs at cosine 0.95 or above are resolved; pairs
+from 0.93 to 0.95 are disclosed only. Six pairs reach 0.95.
+
+**Resolved by exclusion** (`research/v4/dr05_exclusions.csv`; V4 training
+and the V1-paraphrase ablation drop these exact ids, not the rest of
+their seeds):
+
+- SEED-CONTRA-12-P4 (V1 candidate, contraception): near the three
+  paraphrases of SEED-PREG-18 (pregnancy), 0.951 to 0.964.
+- SEED-CONTRA-01-P4 (V1 candidate, contraception): near SEED-GEN-02-P01
+  and -P04 (general), 0.952 to 0.955.
+- SEED-PREG-21-P3 and SEED-STI-29-P1 (both V3; pregnancy and sti): near
+  each other, 0.954.
+
+**Reworded.** SEED-V4-CON-019-P3 ("Can I use more than one condom at once
+to be extra safe?") was close to SEED-STI-33 and its paraphrases (more
+than one STI at once; 0.932 to 0.942). It now reads "does putting a
+second condom over the first make sex safer" and passes
+`check_paraphrases.py`.
+
+**V3 data is not edited.** The two V3 items are excluded for V4 only;
+the V3 files, `v3_pool_exclusions.csv` and the V3 readers are unchanged,
+so the frozen V3 run stays reproducible.
+
+**Under review.** Two V4 vague paraphrases sit near general V3 seeds
+about using the service: SEED-V4-VAG-017-P3 ~ SEED-GEN-09 (0.932) and
+SEED-V4-VAG-023-P3 ~ SEED-GEN-08 (0.930). They are disclosed and kept for
+now.
+
+**Closed (2026-10-26).** After the CON-019-P3 reword the refreshed
+report holds 105 pairs (the three CON-019-P3 pairs dropped out). The two
+vague pairs above and the three other remaining V4 pairs (SEED-PREG-12
+~ SEED-V4-CON-005-P1, SEED-PREG-37 ~ SEED-V4-GEN-032-P3, SEED-V4-CON-008-P1
+~ SEED-V4-GEN-012-P1; cosine 0.930 to 0.935) were read: each pair
+differs in meaning (similar wording, a different question), so none is a
+label conflict. They are disclosed and nothing is changed. DR-05 is
+closed.
+
+## V4 pre-registration: clarifications (2026-10-26)
+
+Clarifications to "V4 triage classifier: pre-registration (26 Oct
+2026)", made before any V4 training or cross-validation.
+
+- **The V3 pool joins the V4 folds.** The 211 V3 seeds
+  (`resources/seeds/seeds.csv`) and their reviewed paraphrases are
+  folded together with the 169 V4 seeds, at seed level, by
+  `research/v4/make_folds.py --v3-seeds`. Every V3 seed is included,
+  also the 55 with no paraphrases.
+- **V3 seeds have no phrasing style**, so they are stratified by class
+  only, with the placeholder style `v3_unlabelled`; V4 seeds are
+  stratified by class and style. The fold file's `source` column says
+  which is which.
+- **DR-05 exclusions apply at training time**, not at fold time: the ids
+  in `research/v4/dr05_exclusions.csv` and
+  `research/v4/v3_pool_exclusions.csv` keep their seed's fold and are
+  dropped from training.
+- **The fold file** `research/v4/fold_assignment_v4.csv` (380 seeds, 5
+  folds of 76) has sha256
+  9fa96d80c22d020b62ada028d87c0679004c0d68be87e6b2f40d4bff46361cbf.
+  Its summary, with counts per fold and class and the 19 same-class
+  near-duplicate pairs that fall in different folds (disclosed, not
+  changed), is `research/v4/fold_assignment_v4.summary.txt`.
+- **The folds are frozen from this commit.** No V4 training or
+  cross-validation has run.
+
+## V4 pre-registration: clarification 2 (2026-10-26)
+
+Written before any CV run.
+
+1. Evaluation unit in CV: the seeds of the held-out fold, original
+   wording only. Paraphrases of held-out seeds are never scored in the
+   primary result. Training rows: seeds of the other folds plus their
+   paraphrases, minus ids in dr05_exclusions.csv and
+   v3_pool_exclusions.csv. A paraphrase always follows its seed's fold.
+2. Baseline comparator. The frozen keyword baseline cannot output
+   out_of_scope or vague (and can output gbv), which would cap its
+   macro-F1 and make the 0.05 margin trivially easy. Two mappings are
+   fixed now: M1 raw: label as is, gbv -> general. M2 pipeline-style:
+   the existing vague-query rule first -> vague; else zero keyword
+   hits -> out_of_scope; gbv -> general; else the baseline label. The
+   baseline code is not changed. The mapping with the higher CV
+   macro-F1 is "the baseline" for the sealed decision; both are
+   reported. Neither mapping changes after results are seen.
+3. Selection: highest mean-over-folds macro-F1. Candidates within 0.01
+   of the best count as tied; among tied, lowest confident-wrong rate
+   (wrong with top probability > 0.5); if still tied, the simpler
+   model. The baseline has no probability, so its rate is its plain
+   error rate, flagged as such. ECE uses 10 equal-width bins.
+   Selection optimism (small grid tuned on the same folds) is
+   disclosed in Chapter 5.
+4. Grids fixed now. Logistic regression on e5 embeddings: L2,
+   C in {0.1, 1, 10}, class_weight balanced, max_iter 2000, seed 42.
+   DistilBERT (step 2): distilbert-base-multilingual-cased, lr in
+   {5e-6, 1e-5}, max 8 epochs, batch 16, max length 64, weight decay
+   0.01, label smoothing 0.1, balanced class weights computed from
+   training rows, seed 42. Early stopping and best-epoch choice use an
+   INNER validation fold (one of the four training folds, seed-level),
+   never the held-out fold. Hybrid (step 3): logistic regression on
+   [e5 embedding, keyword hit counts for the baseline's classes,
+   vague-rule flag], scalers fitted inside the training folds, same C
+   grid.
+5. V1-paraphrase ablation: with and without
+   research/v4/v1_paraphrases_restore_candidates.csv, decided by CV
+   macro-F1 on logistic regression; ties go to the smaller set; the
+   winner applies to all candidates.
+6. Thresholds are calibrated on CV out-of-fold predictions only.
+
+Note for Chapter 5: V3's CV picked its best epoch on the held-out fold,
+so V3's CV score is slightly optimistic.

@@ -1,0 +1,141 @@
+seed_id,paraphrase_id,class,text
+SEED-V4-GEN-001,SEED-V4-GEN-001-P1,general,What is the usual amount of blood lost over an entire period?
+SEED-V4-GEN-001,SEED-V4-GEN-001-P2,general,what is a normal amount of bleeding over the full length of a period
+SEED-V4-GEN-001,SEED-V4-GEN-001-P3,general,"total blood flow in one menstrual cycle, what counts as normal"
+SEED-V4-GEN-001,SEED-V4-GEN-001-P4,general,how much do girls normally bleed in one period
+SEED-V4-GEN-002,SEED-V4-GEN-002-P1,general,Is it fine that the length of my menstrual cycle changes from month to month?
+SEED-V4-GEN-002,SEED-V4-GEN-002-P2,general,does it matter that one month my cycle is longer and the next month shorter
+SEED-V4-GEN-002,SEED-V4-GEN-002-P3,general,Can cycle length vary each month without it being a problem?
+SEED-V4-GEN-002,SEED-V4-GEN-002-P4,general,"cycle keeps changing length, should i worry"
+SEED-V4-GEN-003,SEED-V4-GEN-003-P1,general,Is a menstrual cycle of 35 days normal or too long?
+SEED-V4-GEN-003,SEED-V4-GEN-003-P2,general,"my cycle is 35 days long, is something wrong"
+SEED-V4-GEN-003,SEED-V4-GEN-003-P3,general,does a 35 day gap between periods count as normal
+SEED-V4-GEN-003,SEED-V4-GEN-003-P4,general,35 days between periods ok?
+SEED-V4-GEN-004,SEED-V4-GEN-004-P1,general,Which medicine or remedy helps with strong menstrual cramps?
+SEED-V4-GEN-004,SEED-V4-GEN-004-P2,general,"period pains are really bad, what can i do to ease them"
+SEED-V4-GEN-004,SEED-V4-GEN-004-P3,general,"cramps so bad on my period, need somethin to take"
+SEED-V4-GEN-004,SEED-V4-GEN-004-P4,general,what helps when cramps are very painful
+SEED-V4-GEN-005,SEED-V4-GEN-005-P1,general,Do hot water bottles really ease period cramps?
+SEED-V4-GEN-005,SEED-V4-GEN-005-P2,general,is putting something warm on my tummy good for cramps
+SEED-V4-GEN-005,SEED-V4-GEN-005-P3,general,Can heat applied to the lower abdomen reduce menstrual cramps?
+SEED-V4-GEN-005,SEED-V4-GEN-005-P4,general,"hot compress for cramps, does it work"
+SEED-V4-GEN-006,SEED-V4-GEN-006-P1,general,"When I have cramps, is it better to exercise or to drink more water?"
+SEED-V4-GEN-006,SEED-V4-GEN-006-P2,general,is exercising or drinking extra water what i should do when i have cramps
+SEED-V4-GEN-006,SEED-V4-GEN-006-P3,general,Will drinking water or doing some exercise ease cramps?
+SEED-V4-GEN-006,SEED-V4-GEN-006-P4,general,"cramps today, should i move around or just drink water"
+SEED-V4-GEN-007,SEED-V4-GEN-007-P1,general,How can I keep myself clean at school while I'm on my period?
+SEED-V4-GEN-007,SEED-V4-GEN-007-P2,general,what should i do to stay fresh at school during my period
+SEED-V4-GEN-007,SEED-V4-GEN-007-P3,general,Tips for good hygiene on school days when menstruating
+SEED-V4-GEN-007,SEED-V4-GEN-007-P4,general,"staying clean on my period in school, how"
+SEED-V4-GEN-008,SEED-V4-GEN-008-P1,general,Is it okay to wear a pad while sleeping through the night?
+SEED-V4-GEN-008,SEED-V4-GEN-008-P2,general,can i go to bed with my pad on until morning
+SEED-V4-GEN-008,SEED-V4-GEN-008-P3,general,Is wearing a sanitary pad overnight safe?
+SEED-V4-GEN-008,SEED-V4-GEN-008-P4,general,pad on overnight ok or not
+SEED-V4-GEN-009,SEED-V4-GEN-009-P1,general,How frequently should I clean my private parts during menstruation?
+SEED-V4-GEN-009,SEED-V4-GEN-009-P2,general,how many times should i wash my private area while on my period
+SEED-V4-GEN-009,SEED-V4-GEN-009-P3,general,genital hygiene while menstruating: how often should the area be washed
+SEED-V4-GEN-009,SEED-V4-GEN-009-P4,general,"washing my private area during periods, how often"
+SEED-V4-GEN-010,SEED-V4-GEN-010-P1,general,How do girls' bodies change when they reach puberty?
+SEED-V4-GEN-010,SEED-V4-GEN-010-P2,general,what happens to a girl's body when she goes through puberty
+SEED-V4-GEN-010,SEED-V4-GEN-010-P3,general,Can you list the physical changes girls go through in puberty?
+SEED-V4-GEN-010,SEED-V4-GEN-010-P4,general,"puberty in girls, what changes"
+SEED-V4-GEN-011,SEED-V4-GEN-011-P1,general,Why am I sweating more and smelling stronger these days?
+SEED-V4-GEN-011,SEED-V4-GEN-011-P2,general,"my body odour got stronger and i sweat a lot, why"
+SEED-V4-GEN-011,SEED-V4-GEN-011-P3,general,why do i sweat a lot and have a stronger smell compared with before
+SEED-V4-GEN-011,SEED-V4-GEN-011-P4,general,sweating and smelling more lately
+SEED-V4-GEN-012,SEED-V4-GEN-012-P1,general,"I see a clear or whitish fluid in my panties but my periods haven't started, is that normal?"
+SEED-V4-GEN-012,SEED-V4-GEN-012-P2,general,"there is clear or white wetness in my underwear and i have never had a period, is that okay"
+SEED-V4-GEN-012,SEED-V4-GEN-012-P3,general,Is it normal to have a clear or white wetness in my underwear before I get my first period?
+SEED-V4-GEN-012,SEED-V4-GEN-012-P4,general,"There is clear or whitish stuff on my underwear and I have not started menstruating yet, is that normal?"
+SEED-V4-GEN-013,SEED-V4-GEN-013-P1,general,"I get acne and mood changes before my period, is this PMS?"
+SEED-V4-GEN-013,SEED-V4-GEN-013-P2,general,are spots on my face and mood swings before periods a sign of pms
+SEED-V4-GEN-013,SEED-V4-GEN-013-P3,general,Does breaking out and feeling moody before my period mean I have PMS?
+SEED-V4-GEN-013,SEED-V4-GEN-013-P4,general,"pimples and moody before period, pms?"
+SEED-V4-GEN-014,SEED-V4-GEN-014-P1,general,Why do I feel bloated and crave food before my period?
+SEED-V4-GEN-014,SEED-V4-GEN-014-P2,general,"food cravings and a swollen tummy before menstruation, what causes it"
+SEED-V4-GEN-014,SEED-V4-GEN-014-P3,general,What explains the bloating and cravings I get before my period?
+SEED-V4-GEN-014,SEED-V4-GEN-014-P4,general,why do i crave food and feel puffed up before my period
+SEED-V4-GEN-015,SEED-V4-GEN-015-P1,general,what does pms mean
+SEED-V4-GEN-015,SEED-V4-GEN-015-P2,general,Can you tell me what premenstrual syndrome is?
+SEED-V4-GEN-015,SEED-V4-GEN-015-P3,general,explain pms to me
+SEED-V4-GEN-015,SEED-V4-GEN-015-P4,general,pms meaning and what it is
+SEED-V4-GEN-016,SEED-V4-GEN-016-P1,general,How do I insert a tampon for the very first time?
+SEED-V4-GEN-016,SEED-V4-GEN-016-P2,general,"first time using a tampon, how do i put it in"
+SEED-V4-GEN-016,SEED-V4-GEN-016-P3,general,What are the steps for putting in a tampon as a beginner?
+SEED-V4-GEN-016,SEED-V4-GEN-016-P4,general,tampon insertion for beginners
+SEED-V4-GEN-017,SEED-V4-GEN-017-P1,general,Can a teenager safely use a menstrual cup?
+SEED-V4-GEN-017,SEED-V4-GEN-017-P2,general,is a menstrual cup safe to use when you are still a teenager
+SEED-V4-GEN-017,SEED-V4-GEN-017-P3,general,Are menstrual cups okay for girls my age?
+SEED-V4-GEN-017,SEED-V4-GEN-017-P4,general,"menstrual cup for a teen, is it safe"
+SEED-V4-GEN-018,SEED-V4-GEN-018-P1,general,"Which costs less, disposable pads or reusable ones?"
+SEED-V4-GEN-018,SEED-V4-GEN-018-P2,general,"reusable pads or normal pads, which saves more money"
+SEED-V4-GEN-018,SEED-V4-GEN-018-P3,general,Is it cheaper to buy washable pads than disposable pads?
+SEED-V4-GEN-018,SEED-V4-GEN-018-P4,general,cost of reusable pads compared with ordinary pads
+SEED-V4-GEN-019,SEED-V4-GEN-019-P1,general,Is it okay to flush a used tampon down the toilet?
+SEED-V4-GEN-019,SEED-V4-GEN-019-P2,general,can used tampons go in the toilet
+SEED-V4-GEN-019,SEED-V4-GEN-019-P3,general,Should I throw away a used tampon or flush it?
+SEED-V4-GEN-019,SEED-V4-GEN-019-P4,general,"flushing tampons, ok or not"
+SEED-V4-GEN-020,SEED-V4-GEN-020-P1,general,How can I dispose of used pads at school privately?
+SEED-V4-GEN-020,SEED-V4-GEN-020-P2,general,where do i throw my used pad at school so no one notices
+SEED-V4-GEN-020,SEED-V4-GEN-020-P3,general,What is a discreet way to get rid of a used sanitary pad in the school toilets?
+SEED-V4-GEN-020,SEED-V4-GEN-020-P4,general,disposing of pads at school quietly
+SEED-V4-GEN-021,SEED-V4-GEN-021-P1,general,What is the source of the menstrual blood and what becomes of the egg?
+SEED-V4-GEN-021,SEED-V4-GEN-021-P2,general,"during a period where does the blood come from, and what about the egg"
+SEED-V4-GEN-021,SEED-V4-GEN-021-P3,general,What happens to the egg and where does period blood come from?
+SEED-V4-GEN-021,SEED-V4-GEN-021-P4,general,"period blood, where is it from and what happens to the egg"
+SEED-V4-GEN-022,SEED-V4-GEN-022-P1,general,Why do girls bleed once a month?
+SEED-V4-GEN-022,SEED-V4-GEN-022-P2,general,what is the reason for monthly bleeding
+SEED-V4-GEN-022,SEED-V4-GEN-022-P3,general,Why do I have a period every month?
+SEED-V4-GEN-022,SEED-V4-GEN-022-P4,general,why monthly bleeding happens
+SEED-V4-GEN-023,SEED-V4-GEN-023-P1,general,What services are available to teenagers at a hospital youth corner?
+SEED-V4-GEN-023,SEED-V4-GEN-023-P2,general,what do they offer young people at the youth friendly corner of a clinic
+SEED-V4-GEN-023,SEED-V4-GEN-023-P3,general,Which help can an adolescent receive in the youth corner at a health facility?
+SEED-V4-GEN-023,SEED-V4-GEN-023-P4,general,"youth corner at the hospital, what is it for"
+SEED-V4-GEN-024,SEED-V4-GEN-024-P1,general,Must a parent or adult accompany me when I see a health worker about period problems?
+SEED-V4-GEN-024,SEED-V4-GEN-024-P2,general,can i go alone to the clinic for problems with my periods
+SEED-V4-GEN-024,SEED-V4-GEN-024-P3,general,Is an adult required to be present if I visit a health worker about menstrual issues?
+SEED-V4-GEN-024,SEED-V4-GEN-024-P4,general,"going to a health worker about my period alone, allowed?"
+SEED-V4-PREG-001,SEED-V4-PREG-001-P1,pregnancy,"My baby has been kicking far less than usual, should I go to the hospital?"
+SEED-V4-PREG-001,SEED-V4-PREG-001-P2,pregnancy,"the baby in my tummy is not moving as much, do i need to go to a clinic"
+SEED-V4-PREG-001,SEED-V4-PREG-001-P3,pregnancy,Is reduced fetal movement a reason to go to the hospital?
+SEED-V4-PREG-001,SEED-V4-PREG-001-P4,pregnancy,"baby moves less now, should i get checked"
+SEED-V4-PREG-002,SEED-V4-PREG-002-P1,pregnancy,"I am pregnant and have vaginal bleeding with severe abdominal pain, what should I do?"
+SEED-V4-PREG-002,SEED-V4-PREG-002-P2,pregnancy,"blood and bad stomach pain during pregnancy, what now"
+SEED-V4-PREG-002,SEED-V4-PREG-002-P3,pregnancy,What should a pregnant woman do if she has bleeding and strong belly pain?
+SEED-V4-PREG-002,SEED-V4-PREG-002-P4,pregnancy,"bleeding together with really strong stomach pain while expecting, what should i do"
+SEED-V4-PREG-003,SEED-V4-PREG-003-P1,pregnancy,"My face and hands are swollen and I have a severe headache in pregnancy, is this serious?"
+SEED-V4-PREG-003,SEED-V4-PREG-003-P2,pregnancy,"puffy face, swollen hands and headache while expecting, should i worry"
+SEED-V4-PREG-003,SEED-V4-PREG-003-P3,pregnancy,Are swelling of the face and hands together with a bad headache dangerous during pregnancy?
+SEED-V4-PREG-003,SEED-V4-PREG-003-P4,pregnancy,"swelling and headache in pregnancy, serious or not"
+SEED-V4-PREG-004,SEED-V4-PREG-004-P1,pregnancy,What warning signs in pregnancy mean I must go to the clinic urgently?
+SEED-V4-PREG-004,SEED-V4-PREG-004-P2,pregnancy,pregnant and wondering what symptoms are serious enough to get to a health facility straight away
+SEED-V4-PREG-004,SEED-V4-PREG-004-P3,pregnancy,Which symptoms during pregnancy need immediate medical attention?
+SEED-V4-PREG-004,SEED-V4-PREG-004-P4,pregnancy,which pregnancy symptoms call for going to the hospital without delay
+SEED-V4-PREG-005,SEED-V4-PREG-005-P1,pregnancy,How many different food groups should a pregnant woman eat daily?
+SEED-V4-PREG-005,SEED-V4-PREG-005-P2,pregnancy,"what should i eat every day while pregnant, how many food groups"
+SEED-V4-PREG-005,SEED-V4-PREG-005-P3,pregnancy,Does my daily diet in pregnancy need a certain number of food groups?
+SEED-V4-PREG-005,SEED-V4-PREG-005-P4,pregnancy,food groups per day during pregnancy
+SEED-V4-PREG-006,SEED-V4-PREG-006-P1,pregnancy,Where do pregnant women get iron and folic acid tablets?
+SEED-V4-PREG-006,SEED-V4-PREG-006-P2,pregnancy,who provides iron and folic acid supplements when you are expecting
+SEED-V4-PREG-006,SEED-V4-PREG-006-P3,pregnancy,Which health worker gives iron and folic acid during pregnancy?
+SEED-V4-PREG-006,SEED-V4-PREG-006-P4,pregnancy,"iron and folic acid pills for pregnancy, who gives them"
+SEED-V4-PREG-007,SEED-V4-PREG-007-P1,pregnancy,Why is folic acid given to pregnant women?
+SEED-V4-PREG-007,SEED-V4-PREG-007-P2,pregnancy,what is the reason pregnant women are given folic acid
+SEED-V4-PREG-007,SEED-V4-PREG-007-P3,pregnancy,What is the purpose of taking folic acid while pregnant?
+SEED-V4-PREG-007,SEED-V4-PREG-007-P4,pregnancy,"folic acid, why take it in pregnancy"
+SEED-V4-PREG-008,SEED-V4-PREG-008-P1,pregnancy,"When I go back to school after having my baby, which class will I join?"
+SEED-V4-PREG-008,SEED-V4-PREG-008-P2,pregnancy,which form will i be placed in on returning to school after delivery
+SEED-V4-PREG-008,SEED-V4-PREG-008-P3,pregnancy,"After giving birth, in what class am I placed when I resume school?"
+SEED-V4-PREG-008,SEED-V4-PREG-008-P4,pregnancy,"returning to school after the baby, which class do i go back to"
+SEED-V4-PREG-009,SEED-V4-PREG-009-P1,pregnancy,Is a pregnant student forbidden from attending school?
+SEED-V4-PREG-009,SEED-V4-PREG-009-P2,pregnancy,can a girl who is expecting continue going to school
+SEED-V4-PREG-009,SEED-V4-PREG-009-P3,pregnancy,Does school policy stop pregnant girls from coming to class?
+SEED-V4-PREG-009,SEED-V4-PREG-009-P4,pregnancy,"pregnant student, allowed in school or not"
+SEED-V4-PREG-010,SEED-V4-PREG-010-P1,pregnancy,Can a girl who has given birth sit national examinations?
+SEED-V4-PREG-010,SEED-V4-PREG-010-P2,pregnancy,can a student mother sit her national exams
+SEED-V4-PREG-010,SEED-V4-PREG-010-P3,pregnancy,Are teenage mothers permitted to take national exams?
+SEED-V4-PREG-010,SEED-V4-PREG-010-P4,pregnancy,"national exams after having a baby, allowed?"
+SEED-V4-PREG-011,SEED-V4-PREG-011-P1,pregnancy,"A pregnancy test on my urine shows two lines, what is my next step?"
+SEED-V4-PREG-011,SEED-V4-PREG-011-P2,pregnancy,"two lines on the pregnancy test, what should i do now"
+SEED-V4-PREG-011,SEED-V4-PREG-011-P3,pregnancy,My home pregnancy test came out with two lines. What do I do next?
+SEED-V4-PREG-011,SEED-V4-PREG-011-P4,pregnancy,"positive urine test with two lines, next steps"

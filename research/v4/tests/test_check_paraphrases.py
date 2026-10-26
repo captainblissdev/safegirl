@@ -109,6 +109,60 @@ class Structure(ParaphraseCase):
         self.assertIn("the marker check did not run", "\n".join(report.warnings))
 
 
+class CompareSeeds(ParaphraseCase):
+    """--seeds carry the count rule; --compare-seeds are compared only."""
+
+    def setUp(self):
+        super().setUp()
+        self.other = Path(self.tmp.name) / "other_batch.csv"
+        write_csv(self.other, SEED_HEADER, [
+            seed("S-O", "Garnet harbor islet jasmine?", cls="general", source="Doc, p. 5"),
+            seed("S-Q", "Kestrel lagoon marigold?", cls="pregnancy", source="Doc, p. 6", notes=NOTE),
+        ])
+
+    def run_with(self, rows):
+        write_csv(self.file, HEADER, rows)
+        return check_paraphrases.check_file(
+            self.file, [self.seeds], self.root, fake_embed, fake_rules, None, self.markers,
+            compare_paths=[self.other],
+        )
+
+    def test_no_count_rule_for_compare_seeds(self):
+        report = self.run_with(paraphrases())
+        self.assertEqual(report.failures, [])
+        self.assertIn("compared with 2 other seeds", "\n".join(report.info))
+
+    def test_the_count_rule_still_applies_to_seeds(self):
+        failures = "\n".join(self.run_with(paraphrases()[:-1]).failures)
+        self.assertIn("count: S-B has 3 paraphrases, expected 4", failures)
+        self.assertNotIn("S-O", failures)
+        self.assertNotIn("S-Q", failures)
+
+    def test_near_a_compare_seed_fails(self):
+        rows = paraphrases({4: ["S-B", "S-B-P1", "general", "jasmine islet harbor garnet"]})
+        self.assertIn("other seed: S-B-P1 ~ S-O", "\n".join(self.run_with(rows).failures))
+
+    def test_a_paraphrase_of_a_compare_seed_is_not_its_own(self):
+        rows = paraphrases({0: ["S-O", "S-O-P1", "general", "Question about bronze cedar dune here?"]})
+        failures = "\n".join(self.run_with(rows).failures)
+        self.assertIn("S-O-P1: seed_id S-O is not in the --seeds files", failures)
+
+    def test_main_takes_compare_seeds(self):
+        write_csv(self.file, HEADER, paraphrases())
+        out = io.StringIO()
+        code = check_paraphrases.main(
+            [str(self.file), "--seeds", str(self.seeds), "--compare-seeds", str(self.other)],
+            fake_embed, fake_rules, self.root, out, self.markers,
+        )
+        self.assertEqual(code, 0, out.getvalue())
+        missing = str(Path(self.tmp.name) / "absent_seeds.csv")
+        code = check_paraphrases.main(
+            [str(self.file), "--seeds", str(self.seeds), "--compare-seeds", missing],
+            fake_embed, fake_rules, self.root, io.StringIO(), self.markers,
+        )
+        self.assertEqual(code, 2)
+
+
 class NearDuplicatesAndRules(ParaphraseCase):
     def test_protected_and_training_pools(self):
         failures = self.failures(paraphrases({

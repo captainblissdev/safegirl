@@ -3,7 +3,14 @@
 Run from the repository root, in isolated mode:
 
     .venv/Scripts/python.exe -I research/v4/check_paraphrases.py PARAPHRASES.csv \
-        --seeds research/v4/seeds_v4_batch4.csv [--seeds ...] [--sealed PATH]
+        --seeds research/v4/seeds_v4_batch4.csv [--seeds ...] \
+        [--compare-seeds research/v4/seeds_v4_batch1.csv ...] [--sealed PATH]
+
+--seeds files hold the seeds this file's paraphrases belong to: every
+paraphrase must name one of them, and the count rule applies to each of
+them. --compare-seeds files hold other seeds (for example the other
+batches), used only to find paraphrases close to a seed they do not
+belong to; no count rule applies to them.
 
 PARAPHRASES.csv has the columns seed_id,paraphrase_id,class,text. Exit
 status: 0 when every check passes (warnings allowed), 1 on any failure, 2
@@ -17,9 +24,9 @@ a. The V2 paraphrasing protocol's automated checks (decision log,
    characters; none identical to its seed; no Swahili or Sheng markers.
 b. Near duplicates (e5 cosine >= 0.95 or character ratio >= 0.85) of the
    sealed set, DR-04, relevance_validation.csv, the development set, the
-   V3 training pool, the 220 deleted V1 paraphrases, and the other seeds
-   of the --seeds files (a paraphrase is meant to be close to its own
-   seed, so that one is not compared).
+   V3 training pool, the 220 deleted V1 paraphrases, and every other
+   seed of the --seeds and --compare-seeds files (a paraphrase is meant
+   to be close to its own seed, so that one is not compared).
 c. The gateway's held-topic rule (groups A, B, C) and Safety Net: no
    paraphrase may match either. Unlike a seed, a paraphrase has no
    override.
@@ -126,7 +133,7 @@ def check_structure(header, rows, seeds, markers, report):
     return True
 
 
-def check_near(rows, seeds, refs, sealed, embed, report):
+def check_near(rows, seeds, refs, sealed, embed, report, compare=None):
     texts = [r["text"] for r in rows]
     pids = [r["paraphrase_id"] for r in rows]
     pools = dict(refs)
@@ -140,8 +147,9 @@ def check_near(rows, seeds, refs, sealed, embed, report):
                 report.fail(f"duplicate: {pids[i]} is the text of {exact[cs.normalise(t)]}")
         for i, j, cosine, ratio in cs.near_pairs(texts, pool_texts, embed):
             report.fail(f"{name}: {pids[i]} ~ {pool[j][0]} ({cs.show(cosine, ratio)})")
-    seed_ids = list(seeds)
-    seed_texts = [seeds[s]["text"] for s in seed_ids]
+    others = {**(compare or {}), **seeds}
+    seed_ids = list(others)
+    seed_texts = [others[s]["text"] for s in seed_ids]
     for i, j, cosine, ratio in cs.near_pairs(texts, seed_texts, embed):
         if rows[i]["seed_id"] == seed_ids[j]:
             continue  # its own seed: a paraphrase is meant to be close
@@ -170,18 +178,22 @@ def load_seeds(paths):
     return seeds
 
 
-def check_file(path, seed_paths, root=REPO, embed=None, rules=None, sealed=None, markers_file=MARKERS_FILE):
+def check_file(path, seed_paths, root=REPO, embed=None, rules=None, sealed=None, markers_file=MARKERS_FILE,
+               compare_paths=()):
     report = cs.Report()
     header, rows = cs.read_csv(path)
     seeds = load_seeds(seed_paths)
+    compare = {sid: s for sid, s in load_seeds(compare_paths).items() if sid not in seeds}
     if not check_structure(header, rows, seeds, read_markers(markers_file), report):
         return report
     embed = cs.cached(embed or cs.e5_embedder())
     rules = rules or cs.gateway_rules(root)
-    check_near(rows, seeds, cs.reference_sets(root), sealed, embed, report)
+    check_near(rows, seeds, cs.reference_sets(root), sealed, embed, report, compare)
     check_rules(rows, rules, report)
     held = sum(1 for s in seeds.values() if cs.HELD_TOPIC_OVERRIDE in (s.get("notes") or ""))
     report.note(f"paraphrases: {len(rows)}; seeds: {len(seeds)} ({held} with the held-topic override)")
+    if compare_paths:
+        report.note(f"compared with {len(compare)} other seeds (--compare-seeds, no count rule)")
     by_class = Counter(r["class"] for r in rows)
     report.note("per class: " + ", ".join(f"{c} {by_class[c]}" for c in cs.CLASSES if by_class[c]))
     return report
@@ -191,12 +203,16 @@ def main(argv=None, embed=None, rules=None, root=REPO, out=sys.stdout, markers_f
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("paraphrases", type=Path)
     parser.add_argument("--seeds", type=Path, action="append", required=True, metavar="PATH",
-                        help="a V4 seed file the paraphrases belong to (repeatable)")
+                        help="a V4 seed file the paraphrases belong to; the count rule applies "
+                        "to its seeds (repeatable)")
+    parser.add_argument("--compare-seeds", type=Path, action="append", default=[], metavar="PATH",
+                        help="a V4 seed file used only for the near-duplicate comparison, with "
+                        "no count rule (repeatable)")
     parser.add_argument("--sealed", type=Path, metavar="PATH",
                         help="a sealed set (CSV: id,text) kept outside the repository; "
                         "only ids and scores are printed, never its text or path")
     args = parser.parse_args(argv)
-    for p in [args.paraphrases, *args.seeds]:
+    for p in [args.paraphrases, *args.seeds, *args.compare_seeds]:
         if not p.exists():
             print(f"no such file: {p}", file=out)
             return 2
@@ -208,7 +224,8 @@ def main(argv=None, embed=None, rules=None, root=REPO, out=sys.stdout, markers_f
             print(f"cannot run the check: {error}", file=out)
             return 2
     try:
-        report = check_file(args.paraphrases, args.seeds, root, embed, rules, sealed, markers_file)
+        report = check_file(args.paraphrases, args.seeds, root, embed, rules, sealed, markers_file,
+                            args.compare_seeds)
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         print(f"cannot run the check: {error}", file=out)
         return 2
