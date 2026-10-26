@@ -2076,7 +2076,8 @@ written by `research/v4/cv_selection.py`.
     spread: the sd is 0.0507 and 0.0616. Per fold the difference runs
     from -0.0361 to +0.0714, and the winner is ahead in 3 of 5 folds.
   - (d) The candidate list grew after the first results (deviations
-    1 and 2). Seven more settings were tried, which increases
+    1 and 2). Three more settings were tried (DistilBERT at lr 2e-5
+    and 3e-5, and DistilBERT + keyword at 3e-5), which increases
     selection optimism.
   - (e) CV is optimistic. 19 same-class near-duplicate pairs (e5
     cosine >= 0.95) fall in different folds
