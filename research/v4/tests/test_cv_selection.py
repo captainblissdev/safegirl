@@ -26,10 +26,24 @@ class Rule(unittest.TestCase):
                                     "bert": cand(0.90, 0.1, 2)})
         self.assertEqual((winner, steps["decided_by"]), ("lr", "simpler model"))
 
+    def test_simplicity_order(self):
+        rank = {c: spec["simplicity"] for c, spec in sel.CANDIDATES.items()}
+        self.assertEqual(sorted((r, c) for c, r in rank.items() if r is not None),
+                         [(0, "LR on e5 (no V1)"), (1, "hybrid e5"), (2, "DistilBERT"), (3, "DistilBERT + keyword")])
+
+    def test_setting_tie_goes_to_the_lower_c_or_lr(self):
+        runs = [{"candidate": "C0.1", "macro_f1_mean": 0.8}, {"candidate": "C1", "macro_f1_mean": 0.9},
+                {"candidate": "C10", "macro_f1_mean": 0.9}]
+        self.assertEqual(sel.pick_best(runs)["candidate"], "C1")
+        self.assertEqual(sel.pick_best(runs[:1])["candidate"], "C0.1")
+
     def test_real_results(self):
-        winner, steps = sel.select(sel.best_settings())
-        self.assertEqual(winner, "hybrid")
-        self.assertEqual(sel.best_settings()["LR on e5 (no V1)"]["setting"], "lr_e5_base_C10")
+        best = sel.best_settings()
+        winner, steps = sel.select(best)
+        self.assertEqual(winner, "hybrid e5")
+        self.assertEqual(best["LR on e5 (no V1)"]["setting"], "lr_e5_base_C10")
+        self.assertEqual(best["DistilBERT"]["setting"], "distilbert_lr3e-5")
+        self.assertNotIn("baseline M1", best, "M1 is reference only")
 
 
 if __name__ == "__main__":

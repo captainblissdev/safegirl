@@ -9,8 +9,13 @@ The rule is docs/decision-log.md, "V4 pre-registration: clarification 2
 (2026-10-26)", item 3: highest mean-over-folds macro-F1; candidates
 within 0.01 of the best count as tied; among tied, the lowest
 confident-wrong rate; if still tied, the simpler model (LR on e5 <
-hybrid < DistilBERT). Each candidate enters at its best setting by
-mean macro-F1. The baseline is M2, "the baseline" by step 1.
+hybrid e5 < DistilBERT < DistilBERT + keyword). Each family enters at
+its best setting by mean macro-F1; a tie between settings goes to the
+lower C or lower lr. The baseline is M2, "the baseline" by step 1; M1
+is listed for reference and is not a candidate.
+
+The DistilBERT lr 2e-5 and 3e-5 runs (deviation 1) and DistilBERT +
+keyword (deviation 2) are in docs/decision-log.md.
 
 The paired per-fold comparison and the winner's details are reported
 for the record and are not part of the rule.
@@ -29,26 +34,44 @@ RESULTS = HERE / "results"
 TIE = 0.01
 CLASSES = ("contraception", "sti", "pregnancy", "general", "out_of_scope", "vague")
 
-# candidate -> its result files (settings); simplicity rank for the last tie-break
+# family -> its result files (settings, lowest C or lr first); simplicity
+# rank for the last tie-break
 CANDIDATES = {
     "baseline M2": {"files": ["baseline_m2"], "simplicity": None},
     "LR on e5 (no V1)": {"files": ["lr_e5_base_C0.1", "lr_e5_base_C1", "lr_e5_base_C10"], "simplicity": 0},
-    "DistilBERT": {"files": ["distilbert_lr5e-6", "distilbert_lr1e-5"], "simplicity": 2},
-    "hybrid": {"files": ["hybrid_C0.1", "hybrid_C1", "hybrid_C10"], "simplicity": 1},
+    "hybrid e5": {"files": ["hybrid_C0.1", "hybrid_C1", "hybrid_C10"], "simplicity": 1},
+    "DistilBERT": {"files": ["distilbert_lr5e-6", "distilbert_lr1e-5", "distilbert_lr2e-5", "distilbert_lr3e-5"],
+                   "simplicity": 2},
+    "DistilBERT + keyword": {"files": ["distilbert_kw_lr3e-5"], "simplicity": 3},
 }
+# listed for reference only, not a candidate
+REFERENCE = {"baseline M1": "baseline_m1"}
 
 
 def read(name, results=RESULTS):
     return json.loads((results / f"cv_{name}.json").read_text(encoding="utf-8"))
 
 
+def pick_best(runs):
+    """The run with the highest mean macro-F1; runs are ordered lowest C
+    or lr first, and a tie goes to the earlier (lower) one."""
+    best = runs[0]
+    for r in runs[1:]:
+        if r["macro_f1_mean"] > best["macro_f1_mean"]:
+            best = r
+    return best
+
+
 def best_settings(results=RESULTS):
     out = {}
     for cand, spec in CANDIDATES.items():
-        runs = [read(f, results) for f in spec["files"]]
-        best = max(runs, key=lambda r: r["macro_f1_mean"])
+        best = pick_best([read(f, results) for f in spec["files"]])
         out[cand] = {"setting": best["candidate"], "summary": best, "simplicity": spec["simplicity"]}
     return out
+
+
+def reference(results=RESULTS):
+    return {name: {"setting": f, "summary": read(f, results), "simplicity": None} for name, f in REFERENCE.items()}
 
 
 def select(best, tie=TIE):
@@ -94,19 +117,23 @@ def details(summary):
             "top_confusions": [{"true": t, "pred": p, "count": n} for t, p, n in off[:5]]}
 
 
-def markdown(best, steps, pair, info):
+def table_row(c, b):
+    s = b["summary"]
+    cw = f"{s['confident_wrong']:.3f}" + (" (plain error rate)" if s["confident_wrong_is_plain_error_rate"] else "")
+    ece = "n/a" if s["ece"] is None else f"{s['ece']:.3f}"
+    return (f"| {c} | {b['setting']} | {s['macro_f1_mean']:.4f} +/- {s['macro_f1_sd']:.4f} | "
+            f"{s['sti_recall']:.3f} | {s['pregnancy_recall']:.3f} | {cw} | {ece} |")
+
+
+def markdown(best, steps, pair, info, ref):
     winner = steps["winner"]
     lines = ["# V4 CV selection", "",
              "Rule: docs/decision-log.md, clarification 2, item 3. Held-out seeds only (380), "
              "folds research/v4/fold_assignment_v4.csv.", "",
              "| Candidate | Best setting | Mean macro-F1 +/- sd | STI recall | Pregnancy recall | "
              "Confident-wrong | ECE |", "|---|---|---|---|---|---|---|"]
-    for c, b in best.items():
-        s = b["summary"]
-        cw = f"{s['confident_wrong']:.3f}" + (" (plain error rate)" if s["confident_wrong_is_plain_error_rate"] else "")
-        ece = "n/a" if s["ece"] is None else f"{s['ece']:.3f}"
-        lines.append(f"| {c} | {b['setting']} | {s['macro_f1_mean']:.4f} +/- {s['macro_f1_sd']:.4f} | "
-                     f"{s['sti_recall']:.3f} | {s['pregnancy_recall']:.3f} | {cw} | {ece} |")
+    lines += [table_row(c, b) for c, b in best.items()]
+    lines += [table_row(f"{c} (reference, not a candidate)", b) for c, b in ref.items()]
     lines += ["", "## Decision", "",
               f"1. Best mean macro-F1: {steps['best_macro_f1']:.4f} ({winner}).",
               f"2. Within 0.01 of it (>= {steps['tie_threshold']:.4f}): {', '.join(steps['tied'])}.",
@@ -141,16 +168,19 @@ def markdown(best, steps, pair, info):
 
 def main():
     best = best_settings()
+    ref = reference()
     winner, steps = select(best)
     pair = paired(best, winner)
     info = details(best[winner]["summary"])
-    table = {c: {"setting": b["setting"], **{k: b["summary"][k] for k in (
-        "macro_f1_mean", "macro_f1_sd", "per_fold_macro_f1", "sti_recall", "pregnancy_recall",
-        "confident_wrong", "confident_wrong_is_plain_error_rate", "ece")}} for c, b in best.items()}
-    out = {"rule": "docs/decision-log.md, clarification 2, item 3", "candidates": table, "decision": steps,
-           "paired_per_fold": pair, "winner_details": info}
+    keys = ("macro_f1_mean", "macro_f1_sd", "per_fold_macro_f1", "sti_recall", "pregnancy_recall",
+            "confident_wrong", "confident_wrong_is_plain_error_rate", "ece")
+    table = {c: {"setting": b["setting"], **{k: b["summary"][k] for k in keys}} for c, b in best.items()}
+    out = {"rule": "docs/decision-log.md, clarification 2, item 3", "candidates": table,
+           "settings_considered": {c: spec["files"] for c, spec in CANDIDATES.items()},
+           "reference": {c: {"setting": b["setting"], **{k: b["summary"][k] for k in keys}} for c, b in ref.items()},
+           "decision": steps, "paired_per_fold": pair, "winner_details": info}
     (RESULTS / "cv_selection.json").write_text(json.dumps(out, indent=1) + "\n", encoding="utf-8", newline="\n")
-    md = markdown(best, steps, pair, info)
+    md = markdown(best, steps, pair, info, ref)
     (RESULTS / "cv_selection.md").write_text(md, encoding="utf-8", newline="\n")
     print(md)
     return 0

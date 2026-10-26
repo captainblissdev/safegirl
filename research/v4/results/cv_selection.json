@@ -35,24 +35,7 @@
    "confident_wrong_is_plain_error_rate": false,
    "ece": 0.1176957209643565
   },
-  "DistilBERT": {
-   "setting": "distilbert_lr1e-5",
-   "macro_f1_mean": 0.7608903757494021,
-   "macro_f1_sd": 0.02622119580623156,
-   "per_fold_macro_f1": {
-    "1": 0.7458558710840658,
-    "2": 0.7921698512215753,
-    "3": 0.7425352425352424,
-    "4": 0.737383034294799,
-    "5": 0.786507879611328
-   },
-   "sti_recall": 0.8170731707317073,
-   "pregnancy_recall": 0.7466666666666667,
-   "confident_wrong": 0.10789473684210527,
-   "confident_wrong_is_plain_error_rate": false,
-   "ece": 0.09540415684643547
-  },
-  "hybrid": {
+  "hybrid e5": {
    "setting": "hybrid_C10",
    "macro_f1_mean": 0.8835196370409516,
    "macro_f1_sd": 0.05068781530298449,
@@ -68,19 +51,96 @@
    "confident_wrong": 0.05526315789473684,
    "confident_wrong_is_plain_error_rate": false,
    "ece": 0.06564933071647636
+  },
+  "DistilBERT": {
+   "setting": "distilbert_lr3e-5",
+   "macro_f1_mean": 0.7883486060742653,
+   "macro_f1_sd": 0.08317058729760908,
+   "per_fold_macro_f1": {
+    "1": 0.8691271963330786,
+    "2": 0.8353937728937728,
+    "3": 0.6952325452325452,
+    "4": 0.7015035890035889,
+    "5": 0.8404859269083408
+   },
+   "sti_recall": 0.8414634146341463,
+   "pregnancy_recall": 0.7866666666666666,
+   "confident_wrong": 0.14210526315789473,
+   "confident_wrong_is_plain_error_rate": false,
+   "ece": 0.0531732708999985
+  },
+  "DistilBERT + keyword": {
+   "setting": "distilbert_kw_lr3e-5",
+   "macro_f1_mean": 0.7866191371043985,
+   "macro_f1_sd": 0.0643704408268678,
+   "per_fold_macro_f1": {
+    "1": 0.8158900836320191,
+    "2": 0.8484873364183709,
+    "3": 0.7503156565656565,
+    "4": 0.6918650793650793,
+    "5": 0.8265375295408665
+   },
+   "sti_recall": 0.8536585365853658,
+   "pregnancy_recall": 0.7866666666666666,
+   "confident_wrong": 0.14736842105263157,
+   "confident_wrong_is_plain_error_rate": false,
+   "ece": 0.07515288418845126
+  }
+ },
+ "settings_considered": {
+  "baseline M2": [
+   "baseline_m2"
+  ],
+  "LR on e5 (no V1)": [
+   "lr_e5_base_C0.1",
+   "lr_e5_base_C1",
+   "lr_e5_base_C10"
+  ],
+  "hybrid e5": [
+   "hybrid_C0.1",
+   "hybrid_C1",
+   "hybrid_C10"
+  ],
+  "DistilBERT": [
+   "distilbert_lr5e-6",
+   "distilbert_lr1e-5",
+   "distilbert_lr2e-5",
+   "distilbert_lr3e-5"
+  ],
+  "DistilBERT + keyword": [
+   "distilbert_kw_lr3e-5"
+  ]
+ },
+ "reference": {
+  "baseline M1": {
+   "setting": "baseline_m1",
+   "macro_f1_mean": 0.516572584716412,
+   "macro_f1_sd": 0.01793751668605243,
+   "per_fold_macro_f1": {
+    "1": 0.5323193622044197,
+    "2": 0.5360863130607291,
+    "3": 0.514459452301499,
+    "4": 0.49277283706631536,
+    "5": 0.5072249589490969
+   },
+   "sti_recall": 0.7560975609756098,
+   "pregnancy_recall": 0.6266666666666667,
+   "confident_wrong": 0.3105263157894737,
+   "confident_wrong_is_plain_error_rate": true,
+   "ece": null
   }
  },
  "decision": {
   "best_macro_f1": 0.8835196370409516,
   "tie_threshold": 0.8735196370409516,
   "tied": [
-   "hybrid"
+   "hybrid e5"
   ],
   "confident_wrong_of_tied": {
-   "hybrid": 0.05526315789473684
+   "hybrid e5": 0.05526315789473684
   },
   "decided_by": "macro-F1",
-  "winner": "hybrid"
+  "winner": "hybrid e5"
  },
  "paired_per_fold": {
   "baseline M2": {
@@ -109,13 +169,25 @@
   },
   "DistilBERT": {
    "per_fold_diff": {
-    "1": 0.10088532724917931,
-    "2": 0.14686582574513618,
-    "3": 0.1544817157720385,
-    "4": 0.0793209588797823,
-    "5": 0.13159247881161118
+    "1": -0.02238599799983343,
+    "2": 0.10364190407293872,
+    "3": 0.2017844130747357,
+    "4": 0.11520040417099242,
+    "5": 0.07761443151459835
    },
-   "mean_diff": 0.1226292612915495,
+   "mean_diff": 0.09517103096668636,
+   "folds_winner_ahead": 4,
+   "folds": 5
+  },
+  "DistilBERT + keyword": {
+   "per_fold_diff": {
+    "1": 0.030851114701226034,
+    "2": 0.0905483405483406,
+    "3": 0.14670130174162443,
+    "4": 0.12483891380950196,
+    "5": 0.09156282888207268
+   },
+   "mean_diff": 0.09690049993655314,
    "folds_winner_ahead": 5,
    "folds": 5
   }
