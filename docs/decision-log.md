@@ -2002,3 +2002,30 @@ paraphrases. Files: `research/v4/results/cv_selection.json` and
   selection rule (clarification 2, item 3) is unchanged.
 - **Disclosure for Chapter 5.** The DistilBERT grid grew after the
   first CV results were seen. The sealed set has not been opened.
+
+## V4 pre-registration: deviation 2 (2026-10-26), before the sealed set is opened
+
+- **Reason.** The pre-registration names a "hybrid of keyword evidence
+  and the model". This project's classifier is a fine-tuned
+  DistilBERT, so a DistilBERT hybrid is a fair candidate alongside the
+  e5 hybrid.
+- **Definition.** DistilBERT keeps its own pre_classifier, ReLU and
+  dropout. The final classifier layer becomes Linear(768 + 6, 6). Its
+  input is the 768-wide first-token representation concatenated with
+  6 features: the 5 keyword hit counts from explain_baseline and the
+  vague-rule flag from vague_rule.py, in the same order as the e5
+  hybrid. The 6 features are scaled with a StandardScaler fitted on
+  that fold's training rows only.
+- **Learning rate.** The one with the highest mean macro-F1 among the
+  four plain DistilBERT runs (5e-6, 1e-5, 2e-5, 3e-5); a tie goes to
+  the lower rate. There is no other grid. Max 12 epochs.
+- **Unchanged from steps 2 and 3c:**
+  - the inner validation fold and patience 2;
+  - label smoothing 0.1, weight decay 0.01;
+  - balanced class weights;
+  - batch 16, max length 64, warmup 10%, seed 42;
+  - no V1 restore paraphrases.
+- **Selection rule unchanged.**
+- **Disclosure for Chapter 5.** The candidate list grew after the
+  first CV results were seen, and more candidates mean a larger
+  selection optimism. The sealed set has not been opened.
