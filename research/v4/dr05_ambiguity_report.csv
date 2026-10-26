@@ -21,7 +21,6 @@ SEED-PREG-21-P4,pregnancy,v3,SEED-STI-29,sti,v3,0.9431
 SEED-GEN-17,general,v3,SEED-STI-21-P1,sti,v3,0.9429
 SEED-GEN-17-P2,general,v3,SEED-STI-21-P1,sti,v3,0.9424
 SEED-PREG-12-P3,pregnancy,v1_cand,SEED-STI-14-P01,sti,v1_cand,0.9424
-SEED-STI-33-P2,sti,v3,SEED-V4-CON-019-P3,contraception,v4_para,0.9424
 SEED-GEN-17-P2,general,v3,SEED-STI-21,sti,v3,0.942
 SEED-GEN-17-P3,general,v3,SEED-STI-21,sti,v3,0.9419
 SEED-GEN-17-P1,general,v3,SEED-STI-21-P4,sti,v3,0.9418
@@ -53,7 +52,6 @@ SEED-GEN-17-P2,general,v3,SEED-STI-21-P2,sti,v3,0.9385
 SEED-PREG-12-P3,pregnancy,v1_cand,SEED-STI-04-P04,sti,v1_cand,0.9384
 SEED-CONTRA-37-P4,contraception,v3,SEED-PREG-16-P1,general,v3,0.9382
 SEED-CONTRA-01-P3,contraception,v1_cand,SEED-STI-02-P02,sti,v1_cand,0.938
-SEED-STI-33,sti,v3,SEED-V4-CON-019-P3,contraception,v4_para,0.938
 SEED-GEN-17-P3,general,v3,SEED-STI-21-P2,sti,v3,0.9378
 SEED-CONTRA-13-P3,contraception,v1_cand,SEED-PREG-15-P4,pregnancy,v1_cand,0.9377
 SEED-PREG-21-P1,pregnancy,v3,SEED-STI-29,sti,v3,0.9377
@@ -90,7 +88,6 @@ SEED-PREG-17-P1,pregnancy,v3,SEED-STI-22-P2,sti,v3,0.9321
 SEED-CONTRA-37,contraception,v3,SEED-PREG-16,general,v3,0.932
 SEED-CONTRA-13-P1,contraception,v1_cand,SEED-PREG-31-P3,pregnancy,v3,0.9319
 SEED-PREG-21-P2,pregnancy,v3,SEED-STI-29-P4,sti,v3,0.9318
-SEED-STI-33-P1,sti,v3,SEED-V4-CON-019-P3,contraception,v4_para,0.9318
 SEED-CONTRA-01,contraception,v3,SEED-STI-02,sti,v3,0.9317
 SEED-PREG-21-P3,pregnancy,v3,SEED-STI-29-P3,sti,v3,0.9317
 SEED-PREG-11-P2,pregnancy,v1_cand,SEED-CONTRA-44-P1,contraception,v3,0.9316
