@@ -13,6 +13,7 @@ nothing here changes the V3 data (`resources/seeds/`, `resources/reviewed/`,
 | `check_seeds.py` | Checks a seed file; exits non-zero on any failure. |
 | `make_folds.py` | Assigns whole seeds to 5 folds; writes `fold_assignment_v4.csv`. |
 | `check_paraphrases.py` | Checks a paraphrase file before manual review; exits non-zero on any failure. |
+| `sheng_swahili_markers.txt` | The Swahili and Sheng marker list `check_paraphrases.py` uses. |
 | `v3_pool_exclusions.csv` | V3 pool items V4 must not train on, with the reason. |
 | `seeds_without_paraphrases.csv` | The 55 V3 seeds with no reviewed paraphrase. |
 | `v3_fold_balance.md` | Class balance of the V3 folds. |
@@ -150,9 +151,13 @@ into `resources/generated/`, and only reviewed files move to
   paraphrases).
 
 It prints ids, scores and counts only. The marker check reads
-`research/v4/sheng_swahili_markers.txt`; the V2 marker list was never
-committed, so until that file exists the check is skipped with a
-warning.
+`research/v4/sheng_swahili_markers.txt`; if that file is missing, the
+check is skipped with a warning.
+
+`sheng_swahili_markers.txt` (2026-10-26) replaces the V2 marker list,
+which was never committed to the repository. It is a recorded addition,
+not a copy of the V2 list (decision log, "V4 paraphrasing: protocol
+applied (2026-10-26)").
 
 ## Folds
 

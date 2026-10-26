@@ -1819,3 +1819,4 @@ not multiplied. Every paraphrase file must pass
 research/v4/check_paraphrases.py (sealed set, DR-04, dev set,
 relevance_validation, held-topic rules and Safety Net) before
 manual review. Counts per batch are in docs/ai-use-log.md.
+Marker list: V2's was never committed; research/v4/sheng_swahili_markers.txt (2026-10-26) is a recorded addition.
