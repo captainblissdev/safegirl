@@ -1,0 +1,5 @@
+item_id,tag,reason,date
+SEED-CONTRA-12-P4,v1_cand,cross-class near-duplicate of SEED-PREG-18 paraphrases (0.951-0.964); label ambiguous,2026-10-26
+SEED-CONTRA-01-P4,v1_cand,cross-class near-duplicate of SEED-GEN-02-P01 and -P04 (0.952-0.955); label ambiguous,2026-10-26
+SEED-PREG-21-P3,v3,cross-class near-duplicate of SEED-STI-29-P1 (0.954); label ambiguous,2026-10-26
+SEED-STI-29-P1,v3,cross-class near-duplicate of SEED-PREG-21-P3 (0.954); label ambiguous,2026-10-26

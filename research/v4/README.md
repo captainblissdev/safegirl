@@ -15,6 +15,9 @@ nothing here changes the V3 data (`resources/seeds/`, `resources/reviewed/`,
 | `check_paraphrases.py` | Checks a paraphrase file before manual review; exits non-zero on any failure. |
 | `sheng_swahili_markers.txt` | The Swahili and Sheng marker list `check_paraphrases.py` uses. |
 | `v3_pool_exclusions.csv` | V3 pool items V4 must not train on, with the reason. |
+| `review_dr05.py` | Lists cross-class near-duplicates across the V3, V4 and V1 texts (DR-05). |
+| `dr05_ambiguity_report.csv` | Its output: ids, classes, tags and cosine, no text. |
+| `dr05_exclusions.csv` | Items dropped from V4 training after the DR-05 review. |
 | `seeds_without_paraphrases.csv` | The 55 V3 seeds with no reviewed paraphrase. |
 | `v3_fold_balance.md` | Class balance of the V3 folds. |
 | `v3_seeds_held_topic.csv` | The 28 V3 seeds the held-topic rule matches. |
@@ -162,6 +165,24 @@ check is skipped with a warning.
 which was never committed to the repository. It is a recorded addition,
 not a copy of the V2 list (decision log, "V4 paraphrasing: protocol
 applied (2026-10-26)").
+
+## DR-05 ambiguity review
+
+```
+.venv/Scripts/python.exe -I research/v4/review_dr05.py
+```
+
+lists every pair of texts with different class labels at e5 cosine 0.93
+or above, across the V3 pool, the V4 seeds and paraphrases and the V1
+restore candidates, in `dr05_ambiguity_report.csv`. Pairs at 0.95 or
+above are resolved; pairs from 0.93 to 0.95 are disclosed only
+(decision log, "V4 DR-05 ambiguity review (2026-10-26)").
+
+`dr05_exclusions.csv` lists the items the review resolved by exclusion.
+**V4 training and the V1-paraphrase ablation must drop these ids.** An
+exclusion applies to that exact item id only, not to the rest of its
+seed. `v3_pool_exclusions.csv`, which the seed and paraphrase checkers
+use, is unchanged, and no V3 data file is edited.
 
 ## Folds
 

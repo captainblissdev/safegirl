@@ -1820,3 +1820,43 @@ research/v4/check_paraphrases.py (sealed set, DR-04, dev set,
 relevance_validation, held-topic rules and Safety Net) before
 manual review. Counts per batch are in docs/ai-use-log.md.
 Marker list: V2's was never committed; research/v4/sheng_swahili_markers.txt (2026-10-26) is a recorded addition.
+
+## V4 DR-05 ambiguity review (2026-10-26)
+
+Duplicate and ambiguity review (DR-05) of the V4 training data, before
+training. `research/v4/review_dr05.py` pooled **1,841 texts** with their
+class labels: the V3 training pool minus `v3_pool_exclusions.csv` (788),
+the V4 seeds (169), the reviewed V4 paraphrases (664) and the 220 V1
+restore candidates. `out_of_scope` and `vague` count as classes.
+It found **108 pairs** with different class labels at e5 cosine 0.93 or
+above (`research/v4/dr05_ambiguity_report.csv`, ids and scores only), and
+no exact duplicate text across classes.
+
+**Rule.** Cross-class pairs at cosine 0.95 or above are resolved; pairs
+from 0.93 to 0.95 are disclosed only. Six pairs reach 0.95.
+
+**Resolved by exclusion** (`research/v4/dr05_exclusions.csv`; V4 training
+and the V1-paraphrase ablation drop these exact ids, not the rest of
+their seeds):
+
+- SEED-CONTRA-12-P4 (V1 candidate, contraception): near the three
+  paraphrases of SEED-PREG-18 (pregnancy), 0.951 to 0.964.
+- SEED-CONTRA-01-P4 (V1 candidate, contraception): near SEED-GEN-02-P01
+  and -P04 (general), 0.952 to 0.955.
+- SEED-PREG-21-P3 and SEED-STI-29-P1 (both V3; pregnancy and sti): near
+  each other, 0.954.
+
+**Reworded.** SEED-V4-CON-019-P3 ("Can I use more than one condom at once
+to be extra safe?") was close to SEED-STI-33 and its paraphrases (more
+than one STI at once; 0.932 to 0.942). It now reads "does putting a
+second condom over the first make sex safer" and passes
+`check_paraphrases.py`.
+
+**V3 data is not edited.** The two V3 items are excluded for V4 only;
+the V3 files, `v3_pool_exclusions.csv` and the V3 readers are unchanged,
+so the frozen V3 run stays reproducible.
+
+**Under review.** Two V4 vague paraphrases sit near general V3 seeds
+about using the service: SEED-V4-VAG-017-P3 ~ SEED-GEN-09 (0.932) and
+SEED-V4-VAG-023-P3 ~ SEED-GEN-08 (0.930). They are disclosed and kept for
+now.
