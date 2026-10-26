@@ -89,6 +89,77 @@ class Paraphrases(unittest.TestCase):
             make_folds.fold_of_examples(folds, [{"seed_id": "V4-999", "paraphrase_id": "V4-999-P1", "text": "x"}])
 
 
+class V3AndV4Together(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self.tmp.name)
+        write_csv(self.dir / "b1.csv", SEED_HEADER,
+                  [seed(f"V4-A{i}", f"Question a{i}?", style=STYLES[i % 6]) for i in range(10)])
+        write_csv(self.dir / "b2.csv", SEED_HEADER,
+                  [seed(f"V4-B{i}", f"Question b{i}?", cls="vague", style="colloquial",
+                        source="design rule") for i in range(5)])
+        write_csv(self.dir / "v3.csv", ["seed_id", "class", "text"],
+                  [[f"SEED-STI-{i:02d}", "sti", f"V3 question {i}?"] for i in range(1, 8)]
+                  + [[f"SEED-GEN-{i:02d}", "general", f"V3 general {i}?"] for i in range(1, 4)])
+        write_csv(self.dir / "v3_para.csv", ["seed_id", "paraphrase_id", "class", "text"],
+                  [["SEED-STI-01", "SEED-STI-01-P1", "sti", "x"]])
+        self.out = self.dir / "folds.csv"
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def run_main(self, extra=()):
+        out = io.StringIO()
+        code = make_folds.main(
+            [str(self.dir / "b1.csv"), str(self.dir / "b2.csv"), "--v3-seeds", str(self.dir / "v3.csv"),
+             "--out", str(self.out), *extra], out)
+        return code, out.getvalue()
+
+    def rows(self):
+        with open(self.out, encoding="utf-8", newline="") as f:
+            return list(csv.DictReader(f))
+
+    def test_several_seed_files_and_the_v3_seeds(self):
+        code, printed = self.run_main(["--paraphrases", str(self.dir / "v3_para.csv")])
+        self.assertEqual(code, 0, printed)
+        self.assertIn("25 seeds (v4 15, v3 10)", printed)
+        rows = self.rows()
+        self.assertEqual(list(rows[0].keys()), make_folds.COLUMNS)
+        self.assertEqual(len(rows), 25)
+        self.assertEqual(Counter(r["source"] for r in rows), Counter({"v4": 15, "v3": 10}))
+        v3 = [r for r in rows if r["source"] == "v3"]
+        self.assertTrue(all(r["style"] == "v3_unlabelled" for r in v3))
+        self.assertEqual(Counter(r["primary_class"] for r in v3), Counter({"sti": 7, "general": 3}))
+        # Every V3 seed is assigned, with or without paraphrases.
+        self.assertEqual({r["seed_id"] for r in v3},
+                         {f"SEED-STI-{i:02d}" for i in range(1, 8)} | {f"SEED-GEN-{i:02d}" for i in range(1, 4)})
+
+    def test_stratified_by_class_and_style_and_deterministic(self):
+        self.run_main()
+        first = self.out.read_text(encoding="utf-8")
+        rows = self.rows()
+        strata = {}
+        for r in rows:
+            strata.setdefault((r["primary_class"], r["style"]), [0] * 5)[int(r["fold"]) - 1] += 1
+        for key, counts in strata.items():
+            self.assertLessEqual(max(counts) - min(counts), 1, key)
+        self.run_main()
+        self.assertEqual(self.out.read_text(encoding="utf-8"), first)
+
+    def test_paraphrases_must_name_a_folded_seed(self):
+        write_csv(self.dir / "bad.csv", ["seed_id", "paraphrase_id", "class", "text"],
+                  [["SEED-STI-99", "SEED-STI-99-P1", "sti", "x"]])
+        code, printed = self.run_main(["--paraphrases", str(self.dir / "bad.csv")])
+        self.assertEqual(code, 1)
+        self.assertIn("SEED-STI-99", printed)
+
+    def test_a_seed_id_in_two_files_fails(self):
+        write_csv(self.dir / "b2.csv", SEED_HEADER, [seed("V4-A1", "Duplicate?")])
+        code, printed = self.run_main()
+        self.assertEqual(code, 1)
+        self.assertIn("duplicate seed_id", printed)
+
+
 class CommandLine(unittest.TestCase):
     def test_writes_the_assignment_and_checks_paraphrases(self):
         with tempfile.TemporaryDirectory() as tmp:

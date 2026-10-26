@@ -187,14 +187,19 @@ use, is unchanged, and no V3 data file is edited.
 ## Folds
 
 ```
-.venv/Scripts/python.exe -I research/v4/make_folds.py research/v4/seeds_v4.csv
+.venv/Scripts/python.exe -I research/v4/make_folds.py research/v4/seeds_v4_batch1.csv research/v4/seeds_v4_batch2.csv research/v4/seeds_v4_batch3.csv research/v4/seeds_v4_batch4.csv --v3-seeds resources/seeds/seeds.csv --paraphrases resources/reviewed/v4/*.csv resources/reviewed/*.csv
 ```
 
 Whole seeds go to 5 folds, stratified by `primary_class` x `style`, with
-a fixed random seed, so the same file always gives the same folds.
+a fixed random seed, so the same files always give the same folds. With
+`--v3-seeds`, the V3 seeds join the same folds: their `class` becomes
+`primary_class` and their style is the placeholder `v3_unlabelled` (V3
+seeds have no phrasing style); every V3 seed is included, also those with
+no paraphrases. The output has a `source` column (`v3` or `v4`).
 Paraphrases are never assigned on their own: each one takes its seed's
 fold. With `--paraphrases FILE ...`, the builder checks every paraphrase
-names a seed in the file.
+names a seed in the files. Exclusions are applied at training time, not
+here.
 
 ## Tests
 
