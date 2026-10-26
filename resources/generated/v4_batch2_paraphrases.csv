@@ -4,15 +4,15 @@ SEED-V4-CON-001,SEED-V4-CON-001-P2,contraception,are side effects of family plan
 SEED-V4-CON-001,SEED-V4-CON-001-P3,contraception,Are young girls more affected by contraceptive side effects than older women?
 SEED-V4-CON-001,SEED-V4-CON-001-P4,contraception,"teen vs adult side effects of contraception, is there a difference"
 SEED-V4-CON-002,SEED-V4-CON-002-P1,contraception,Are all contraceptive methods suitable for adolescents or only some of them?
-SEED-V4-CON-002,SEED-V4-CON-002-P2,contraception,which family planning methods can a teenager use
+SEED-V4-CON-002,SEED-V4-CON-002-P2,contraception,is every contraceptive method open to teenagers or just a few
 SEED-V4-CON-002,SEED-V4-CON-002-P3,contraception,Can a girl my age pick any method of contraception?
 SEED-V4-CON-002,SEED-V4-CON-002-P4,contraception,"teenagers and contraception, any methods they cannot use"
 SEED-V4-CON-003,SEED-V4-CON-003-P1,contraception,Will the implant protect me against sexually transmitted infections?
-SEED-V4-CON-003,SEED-V4-CON-003-P2,contraception,if i have the implant do i still need to worry about infections
+SEED-V4-CON-003,SEED-V4-CON-003-P2,contraception,"with an implant in my arm, can i still catch a sexually transmitted infection"
 SEED-V4-CON-003,SEED-V4-CON-003-P3,contraception,Does the contraceptive implant prevent STIs?
-SEED-V4-CON-003,SEED-V4-CON-003-P4,contraception,"implant and infections, am i protected"
+SEED-V4-CON-003,SEED-V4-CON-003-P4,contraception,"implant and stis, am i protected from them"
 SEED-V4-CON-004,SEED-V4-CON-004-P1,contraception,Is a condom the only way to prevent infections during sex?
-SEED-V4-CON-004,SEED-V4-CON-004-P2,contraception,what protects me from sexually transmitted infections apart from condoms
+SEED-V4-CON-004,SEED-V4-CON-004-P2,contraception,"when it comes to sex, are condoms the sole thing that keeps stis away"
 SEED-V4-CON-004,SEED-V4-CON-004-P3,contraception,Are condoms the sole method that guards against STIs?
 SEED-V4-CON-004,SEED-V4-CON-004-P4,contraception,"only condoms stop stis, true or not"
 SEED-V4-CON-005,SEED-V4-CON-005-P1,contraception,How soon can I become pregnant after I stop taking the pill?
@@ -23,7 +23,7 @@ SEED-V4-CON-006,SEED-V4-CON-006-P1,contraception,Can the contraceptive injection
 SEED-V4-CON-006,SEED-V4-CON-006-P2,contraception,will using the injection make it take longer to get pregnant later
 SEED-V4-CON-006,SEED-V4-CON-006-P3,contraception,Does the shot affect how quickly I can have a baby afterwards?
 SEED-V4-CON-006,SEED-V4-CON-006-P4,contraception,"injection and having a baby later, any delay"
-SEED-V4-CON-007,SEED-V4-CON-007-P1,contraception,I have had light bleeding on and off since the implant was inserted
+SEED-V4-CON-007,SEED-V4-CON-007-P1,contraception,"I've had light, on-and-off bleeding since my implant was inserted"
 SEED-V4-CON-007,SEED-V4-CON-007-P2,contraception,"irregular spotting after getting an implant, normal"
 SEED-V4-CON-007,SEED-V4-CON-007-P3,contraception,Is on and off spotting normal after having an implant put in?
 SEED-V4-CON-007,SEED-V4-CON-007-P4,contraception,since my implant i keep spotting here and there
@@ -50,19 +50,19 @@ SEED-V4-CON-012,SEED-V4-CON-012-P4,contraception,"birth control shot, how does i
 SEED-V4-CON-013,SEED-V4-CON-013-P1,contraception,What are the side effects of the combined oral contraceptive pill?
 SEED-V4-CON-013,SEED-V4-CON-013-P2,contraception,combined pill side effects
 SEED-V4-CON-013,SEED-V4-CON-013-P3,contraception,Which unwanted effects can the combined pill cause?
-SEED-V4-CON-013,SEED-V4-CON-013-P4,contraception,what might happen to my body if i use the combined pill
+SEED-V4-CON-013,SEED-V4-CON-013-P4,contraception,what side effects might the combined pill cause in my body
 SEED-V4-CON-014,SEED-V4-CON-014-P1,contraception,"I feel nauseous and have spotting since I began the pill, is that normal?"
 SEED-V4-CON-014,SEED-V4-CON-014-P2,contraception,"feeling sick and light bleeding after starting pills, normal"
 SEED-V4-CON-014,SEED-V4-CON-014-P3,contraception,Are nausea and breakthrough spotting common when starting the pill?
-SEED-V4-CON-014,SEED-V4-CON-014-P4,contraception,just started the pill and have nausea with spotting
+SEED-V4-CON-014,SEED-V4-CON-014-P4,contraception,"just started the pill and have nausea with spotting, is that normal"
 SEED-V4-STI-001,SEED-V4-STI-001-P1,sti,"I have itching and burning in my private area and pain low in my belly, could this be an infection?"
 SEED-V4-STI-001,SEED-V4-STI-001-P2,sti,"itchy burning vagina and lower abdominal pain, is it an infection"
-SEED-V4-STI-001,SEED-V4-STI-001-P3,sti,"Could itching, burning and lower stomach pain mean I have an STI?"
-SEED-V4-STI-001,SEED-V4-STI-001-P4,sti,burning and itching down there plus pain in the lower tummy
-SEED-V4-STI-002,SEED-V4-STI-002-P1,sti,It burns when I pee and there is a yellow discharge
+SEED-V4-STI-001,SEED-V4-STI-001-P3,sti,"Could itching, burning and lower stomach pain mean I have an infection?"
+SEED-V4-STI-001,SEED-V4-STI-001-P4,sti,"burning and itching down there with pain in my lower tummy, could this be an infection"
+SEED-V4-STI-002,SEED-V4-STI-002-P1,sti,"It burns when I pee and I have yellow discharge, what could it be?"
 SEED-V4-STI-002,SEED-V4-STI-002-P2,sti,"painful urination with yellowish discharge, what could it be"
 SEED-V4-STI-002,SEED-V4-STI-002-P3,sti,What could cause pain on urinating together with yellow discharge?
-SEED-V4-STI-002,SEED-V4-STI-002-P4,sti,yellow discharge and burning when urinating
+SEED-V4-STI-002,SEED-V4-STI-002-P4,sti,"yellow discharge and burning when urinating, what could this be"
 SEED-V4-STI-003,SEED-V4-STI-003-P1,sti,Can an infection picked up through sex stay hidden without any sign?
 SEED-V4-STI-003,SEED-V4-STI-003-P2,sti,can you have an infection from sex and not feel anything
 SEED-V4-STI-003,SEED-V4-STI-003-P3,sti,Can someone be infected through sex without feeling ill?
@@ -79,25 +79,25 @@ SEED-V4-STI-006,SEED-V4-STI-006-P1,sti,"I have white discharge without any smell
 SEED-V4-STI-006,SEED-V4-STI-006-P2,sti,"odourless white discharge and no itch, is that a problem"
 SEED-V4-STI-006,SEED-V4-STI-006-P3,sti,Is white discharge with no itch or odour something to treat?
 SEED-V4-STI-006,SEED-V4-STI-006-P4,sti,"white discharge but nothing else wrong, do i need medicine"
-SEED-V4-STI-007,SEED-V4-STI-007-P1,sti,I have painful blisters on my genitals
+SEED-V4-STI-007,SEED-V4-STI-007-P1,sti,"I have painful blisters on my genitals, what could they be?"
 SEED-V4-STI-007,SEED-V4-STI-007-P2,sti,"sore blisters around my private area, what are they"
 SEED-V4-STI-007,SEED-V4-STI-007-P3,sti,What could painful blisters on my private area be?
-SEED-V4-STI-007,SEED-V4-STI-007-P4,sti,blisters down there that hurt
+SEED-V4-STI-007,SEED-V4-STI-007-P4,sti,"blisters down there that hurt, what are they"
 SEED-V4-STI-008,SEED-V4-STI-008-P1,sti,"I have painful sores on my genitals, is it herpes or another infection?"
 SEED-V4-STI-008,SEED-V4-STI-008-P2,sti,"hurting ulcers in my private area, could it be herpes"
 SEED-V4-STI-008,SEED-V4-STI-008-P3,sti,Could painful genital ulcers be herpes or something different?
 SEED-V4-STI-008,SEED-V4-STI-008-P4,sti,"painful sores down there, herpes or not"
-SEED-V4-STI-009,SEED-V4-STI-009-P1,sti,I had a painless sore and now there is a rash on my palms
+SEED-V4-STI-009,SEED-V4-STI-009-P1,sti,"I had a painless sore and now have a rash on my palms, what does this mean?"
 SEED-V4-STI-009,SEED-V4-STI-009-P2,sti,"painless ulcer followed by a rash on my hands, what is it"
 SEED-V4-STI-009,SEED-V4-STI-009-P3,sti,What does a sore that doesn't hurt followed by a skin rash on the hands mean?
-SEED-V4-STI-009,SEED-V4-STI-009-P4,sti,"first a sore with no pain, now a rash on my hands"
+SEED-V4-STI-009,SEED-V4-STI-009-P4,sti,"first a sore with no pain, now a rash on my hands, what is it"
 SEED-V4-STI-010,SEED-V4-STI-010-P1,sti,How does primary syphilis look?
 SEED-V4-STI-010,SEED-V4-STI-010-P2,sti,what are the early signs of syphilis
 SEED-V4-STI-010,SEED-V4-STI-010-P3,sti,Can you describe the first stage of a syphilis infection?
 SEED-V4-STI-010,SEED-V4-STI-010-P4,sti,syphilis first stage appearance
 SEED-V4-STI-011,SEED-V4-STI-011-P1,sti,"I found small bugs in my pubic hair, what are they?"
 SEED-V4-STI-011,SEED-V4-STI-011-P2,sti,what could be crawling in my pubic hair
-SEED-V4-STI-011,SEED-V4-STI-011-P3,sti,Are tiny insects living in pubic hair an infection?
+SEED-V4-STI-011,SEED-V4-STI-011-P3,sti,"there are little bugs in my pubic hair, what could they be"
 SEED-V4-STI-011,SEED-V4-STI-011-P4,sti,"bugs in my private hair, what is that"
 SEED-V4-STI-012,SEED-V4-STI-012-P1,sti,My skin itches badly at night and I have small bumps between my fingers
 SEED-V4-STI-012,SEED-V4-STI-012-P2,sti,"night time itching and little bumps in the finger webs, what is it"
@@ -110,7 +110,7 @@ SEED-V4-STI-013,SEED-V4-STI-013-P4,sti,"pid, what does it stand for and what is 
 SEED-V4-STI-014,SEED-V4-STI-014-P1,sti,I have small cauliflower-like bumps around my genitals
 SEED-V4-STI-014,SEED-V4-STI-014-P2,sti,"little growths that look like cauliflower near my private parts, what are they"
 SEED-V4-STI-014,SEED-V4-STI-014-P3,sti,What are the bumps that look like small cauliflowers around the genital area?
-SEED-V4-STI-014,SEED-V4-STI-014-P4,sti,cauliflower shaped bumps down there
+SEED-V4-STI-014,SEED-V4-STI-014-P4,sti,"cauliflower shaped bumps down there, what are they"
 SEED-V4-STI-015,SEED-V4-STI-015-P1,sti,Is hepatitis B transmitted sexually?
 SEED-V4-STI-015,SEED-V4-STI-015-P2,sti,can you catch hep b from having sex
 SEED-V4-STI-015,SEED-V4-STI-015-P3,sti,"I read that hep B can be sexually transmitted, is that correct?"
