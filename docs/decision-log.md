@@ -1981,3 +1981,24 @@ paraphrases. Files: `research/v4/results/cv_selection.json` and
     (`fold_assignment_v4.summary.txt`), so some held-out seeds have a
     near-copy in training. The sealed test set is the unbiased
     estimate.
+
+## V4 pre-registration: deviation 1 (2026-10-26), before the sealed set is opened
+
+- **Reason.** The step 2 DistilBERT grid (lr 5e-6 and 1e-5, max 8
+  epochs) was set to be gentler than V3. Some folds were still
+  improving at the 8-epoch cap: lr 5e-6 fold 1 and lr 1e-5 fold 5
+  picked epoch 8, the last allowed. Seven of the ten folds ran all 8
+  epochs without early stopping. So DistilBERT may have been
+  undertrained.
+- **Change.** Add lr 2e-5 and 3e-5, with max 12 epochs.
+- **Unchanged.** Everything else stays as before:
+  - the inner validation fold (the next fold, wrapping 5 -> 1);
+  - patience 2, label smoothing 0.1, weight decay 0.01;
+  - balanced class weights from each fold's training rows;
+  - batch 16, max length 64, seed 42;
+  - no V1 restore paraphrases;
+  - linear schedule with 10% warmup.
+- **Step 2 results stay as reported**, with the 8-epoch cap. The
+  selection rule (clarification 2, item 3) is unchanged.
+- **Disclosure for Chapter 5.** The DistilBERT grid grew after the
+  first CV results were seen. The sealed set has not been opened.
