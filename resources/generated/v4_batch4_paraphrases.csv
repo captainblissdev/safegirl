@@ -1,0 +1,181 @@
+seed_id,paraphrase_id,class,text
+SEED-V4-CON-015,SEED-V4-CON-015-P1,contraception,How frequently must I return to the clinic to get the contraceptive injection?
+SEED-V4-CON-015,SEED-V4-CON-015-P2,contraception,"after i get the family planning injection, when do i need to go back for the next one"
+SEED-V4-CON-015,SEED-V4-CON-015-P3,contraception,What is the schedule for repeat contraceptive injections?
+SEED-V4-CON-015,SEED-V4-CON-015-P4,contraception,how many months between each birth control shot
+SEED-V4-CON-016,SEED-V4-CON-016-P1,contraception,"If I get an implant, will I still be able to have a baby when I decide to?"
+SEED-V4-CON-016,SEED-V4-CON-016-P2,contraception,does having the implant affect my ability to get pregnant in future
+SEED-V4-CON-016,SEED-V4-CON-016-P3,contraception,Can an implant make it hard for me to have children later on?
+SEED-V4-CON-016,SEED-V4-CON-016-P4,contraception,"i want kids one day, will the implant spoil that"
+SEED-V4-CON-017,SEED-V4-CON-017-P1,contraception,Is it okay to use a condom that seems dry or tacky?
+SEED-V4-CON-017,SEED-V4-CON-017-P2,contraception,"my condom feels sticky and dried, should i still use it"
+SEED-V4-CON-017,SEED-V4-CON-017-P3,contraception,Should a condom that has dried out be used?
+SEED-V4-CON-017,SEED-V4-CON-017-P4,contraception,condom looks old and sticky can i use it anyway
+SEED-V4-CON-018,SEED-V4-CON-018-P1,contraception,Is it safe to use baby oil or body lotion together with a condom?
+SEED-V4-CON-018,SEED-V4-CON-018-P2,contraception,does lotion or oil ruin a condom
+SEED-V4-CON-018,SEED-V4-CON-018-P3,contraception,Can I put an oil based lubricant on a condom?
+SEED-V4-CON-018,SEED-V4-CON-018-P4,contraception,"using oil with condoms, is that ok"
+SEED-V4-CON-019,SEED-V4-CON-019-P1,contraception,Would layering one condom on top of another be safer?
+SEED-V4-CON-019,SEED-V4-CON-019-P2,contraception,if i put on 2 condoms will it be safer
+SEED-V4-CON-019,SEED-V4-CON-019-P3,contraception,Can I use more than one condom at once to be extra safe?
+SEED-V4-CON-019,SEED-V4-CON-019-P4,contraception,double condom is that better than one
+SEED-V4-CON-020,SEED-V4-CON-020-P1,contraception,Can you explain what a female condom is and how you use it?
+SEED-V4-CON-020,SEED-V4-CON-020-P2,contraception,how does a female condom work
+SEED-V4-CON-020,SEED-V4-CON-020-P3,contraception,I have never seen a female condom. What is it and how do I use it?
+SEED-V4-CON-020,SEED-V4-CON-020-P4,contraception,what's a female condom and how do you use it
+SEED-V4-CON-021,SEED-V4-CON-021-P1,contraception,female condom how do i insert
+SEED-V4-CON-021,SEED-V4-CON-021-P2,contraception,how 2 insert femal condom
+SEED-V4-CON-021,SEED-V4-CON-021-P3,contraception,How do I put a female condom in correctly?
+SEED-V4-CON-021,SEED-V4-CON-021-P4,contraception,"putting in a female condom, how"
+SEED-V4-CON-022,SEED-V4-CON-022-P1,contraception,What does the copper coil do to stop a woman getting pregnant?
+SEED-V4-CON-022,SEED-V4-CON-022-P2,contraception,how does a copper iud work
+SEED-V4-CON-022,SEED-V4-CON-022-P3,contraception,Can you explain how the copper intrauterine device prevents pregnancy?
+SEED-V4-CON-022,SEED-V4-CON-022-P4,contraception,copper iud how does it stop you from getting pregnant
+SEED-V4-CON-023,SEED-V4-CON-023-P1,contraception,Does having a coil put in make periods heavier?
+SEED-V4-CON-023,SEED-V4-CON-023-P2,contraception,"i heard the coil makes your periods heavy, is that true"
+SEED-V4-CON-023,SEED-V4-CON-023-P3,contraception,Can an IUD change how heavy my periods are?
+SEED-V4-CON-023,SEED-V4-CON-023-P4,contraception,will my period flow be heavier with a coil
+SEED-V4-CON-024,SEED-V4-CON-024-P1,contraception,Is it okay to use birth control pills while nursing?
+SEED-V4-CON-024,SEED-V4-CON-024-P2,contraception,"i am breastfeeding, can i start the pill"
+SEED-V4-CON-024,SEED-V4-CON-024-P3,contraception,Are contraceptive pills safe when breastfeeding a baby?
+SEED-V4-CON-024,SEED-V4-CON-024-P4,contraception,"taking family planning pills and breastfeeding at the same time, allowed?"
+SEED-V4-CON-025,SEED-V4-CON-025-P1,contraception,Can breastfeeding alone prevent pregnancy during the first six months after birth?
+SEED-V4-CON-025,SEED-V4-CON-025-P2,contraception,if i breastfeed will i not get pregnant for 6 months
+SEED-V4-CON-025,SEED-V4-CON-025-P3,contraception,Is breastfeeding a reliable way of avoiding pregnancy in the first months after delivery?
+SEED-V4-CON-025,SEED-V4-CON-025-P4,contraception,does nursing my baby act like family planning for the first six months
+SEED-V4-CON-026,SEED-V4-CON-026-P1,contraception,How soon after an implant is inserted am I protected from pregnancy?
+SEED-V4-CON-026,SEED-V4-CON-026-P2,contraception,"after getting the implant, how long before it starts to protect me"
+SEED-V4-CON-026,SEED-V4-CON-026-P3,contraception,Does the implant work straight after it is put in or is there a waiting time?
+SEED-V4-CON-026,SEED-V4-CON-026-P4,contraception,"implant just put in, am i covered right away"
+SEED-V4-CON-027,SEED-V4-CON-027-P1,contraception,How long does it take to be able to get pregnant after stopping birth control?
+SEED-V4-CON-027,SEED-V4-CON-027-P2,contraception,"when i stop using family planning, how quickly can i conceive"
+SEED-V4-CON-027,SEED-V4-CON-027-P3,contraception,once i quit contraception will i get pregnant quickly
+SEED-V4-CON-027,SEED-V4-CON-027-P4,contraception,how fast does fertility come back after you stop a contraceptive method
+SEED-V4-CON-028,SEED-V4-CON-028-P1,contraception,Is it true that birth control pills can cause cancer?
+SEED-V4-CON-028,SEED-V4-CON-028-P2,contraception,"someone told me the pill causes cancer, is that right"
+SEED-V4-CON-028,SEED-V4-CON-028-P3,contraception,Do contraceptive pills give women cancer?
+SEED-V4-CON-028,SEED-V4-CON-028-P4,contraception,"i am scared to use the pill because of cancer, does it cause it"
+SEED-V4-STI-017,SEED-V4-STI-017-P1,sti,I have a thick white discharge that looks like cottage cheese and itches
+SEED-V4-STI-017,SEED-V4-STI-017-P2,sti,itchy vagina with thick white clumpy discharge
+SEED-V4-STI-017,SEED-V4-STI-017-P3,sti,"There is thick, white, curdy discharge and itching in my private area"
+SEED-V4-STI-017,SEED-V4-STI-017-P4,sti,"white lumpy discharge and itchiness down there, what is it"
+SEED-V4-STI-018,SEED-V4-STI-018-P1,sti,What is the treatment for a yeast infection in the vagina?
+SEED-V4-STI-018,SEED-V4-STI-018-P2,sti,how do you treat thrush
+SEED-V4-STI-018,SEED-V4-STI-018-P3,sti,What do health workers give for a vaginal yeast infection?
+SEED-V4-STI-018,SEED-V4-STI-018-P4,sti,"yeast infection down there, how is it treated"
+SEED-V4-STI-019,SEED-V4-STI-019-P1,sti,Is a yeast infection a sexually transmitted infection?
+SEED-V4-STI-019,SEED-V4-STI-019-P2,sti,can i get thrush without having sex
+SEED-V4-STI-019,SEED-V4-STI-019-P3,sti,does a yeast infection mean i caught something from a partner
+SEED-V4-STI-019,SEED-V4-STI-019-P4,sti,Is thrush an STI or does it have other causes?
+SEED-V4-STI-020,SEED-V4-STI-020-P1,sti,"If I am diagnosed with an infection, should my boyfriend also be treated?"
+SEED-V4-STI-020,SEED-V4-STI-020-P2,sti,"my partner has no symptoms, does he still need treatment if i have an infection"
+SEED-V4-STI-020,SEED-V4-STI-020-P3,sti,do both partners take medicine when one has an STI
+SEED-V4-STI-020,SEED-V4-STI-020-P4,sti,Does my boyfriend need to get treated too when I have an infection?
+SEED-V4-STI-021,SEED-V4-STI-021-P1,sti,Why should the partner be informed and treated if one person has an STI?
+SEED-V4-STI-021,SEED-V4-STI-021-P2,sti,why do health workers ask me to bring my partner when i have an infection
+SEED-V4-STI-021,SEED-V4-STI-021-P3,sti,What is the reason partners must be notified about an STI?
+SEED-V4-STI-021,SEED-V4-STI-021-P4,sti,why is it important for my partner to be treated too
+SEED-V4-STI-022,SEED-V4-STI-022-P1,sti,"I tested positive for an infection and I am nervous to bring it up with my partner, how should I do it"
+SEED-V4-STI-022,SEED-V4-STI-022-P2,sti,how can i tell my boyfriend about my infection without a quarrel
+SEED-V4-STI-022,SEED-V4-STI-022-P3,sti,how do I break the news of my diagnosis to the person I am seeing without it turning into a row
+SEED-V4-STI-022,SEED-V4-STI-022-P4,sti,"telling my partner i have an std, how do i start the conversation"
+SEED-V4-STI-023,SEED-V4-STI-023-P1,sti,Can hepatitis B spread through sexual contact?
+SEED-V4-STI-023,SEED-V4-STI-023-P2,sti,what is hep b and how do people get it
+SEED-V4-STI-023,SEED-V4-STI-023-P3,sti,Is hepatitis B an infection you can get from having sex?
+SEED-V4-STI-023,SEED-V4-STI-023-P4,sti,"hepatitis b, what is it and can it be sexually transmitted"
+SEED-V4-STI-024,SEED-V4-STI-024-P1,sti,Can I get vaccinated against hepatitis B?
+SEED-V4-STI-024,SEED-V4-STI-024-P2,sti,Is there an injection to prevent hepatitis B?
+SEED-V4-STI-024,SEED-V4-STI-024-P3,sti,does a hep b vaccine exist
+SEED-V4-STI-024,SEED-V4-STI-024-P4,sti,"how can i be protected from hepatitis b, is there a vaccine"
+SEED-V4-STI-025,SEED-V4-STI-025-P1,sti,What does HPV mean and how do girls avoid getting it?
+SEED-V4-STI-025,SEED-V4-STI-025-P2,sti,how can i protect myself from hpv
+SEED-V4-STI-025,SEED-V4-STI-025-P3,sti,Can you explain HPV and the ways a girl can be protected?
+SEED-V4-STI-025,SEED-V4-STI-025-P4,sti,"what is hpv, and what can i do so i dont get it"
+SEED-V4-STI-026,SEED-V4-STI-026-P1,sti,Is there a vaccine that protects girls from cervical cancer?
+SEED-V4-STI-026,SEED-V4-STI-026-P2,sti,can a girl get a vaccine against cervical cancer
+SEED-V4-STI-026,SEED-V4-STI-026-P3,sti,what is the cervical cancer vaccine for girls
+SEED-V4-STI-026,SEED-V4-STI-026-P4,sti,Is there a shot to help prevent cervical cancer in young women?
+SEED-V4-PREG-014,SEED-V4-PREG-014-P1,pregnancy,what number of check-ups does a pregnancy need at the health facility
+SEED-V4-PREG-014,SEED-V4-PREG-014-P2,pregnancy,during pregnancy how often do i need to attend clinic
+SEED-V4-PREG-014,SEED-V4-PREG-014-P3,pregnancy,How many clinic visits are recommended while expecting a baby?
+SEED-V4-PREG-014,SEED-V4-PREG-014-P4,pregnancy,number of times to go to the hospital for check ups when pregnant
+SEED-V4-PREG-015,SEED-V4-PREG-015-P1,pregnancy,I have just learned that I am pregnant. When should I go to the clinic?
+SEED-V4-PREG-015,SEED-V4-PREG-015-P2,pregnancy,"now that the test is positive, how long should i wait before booking a clinic appointment"
+SEED-V4-PREG-015,SEED-V4-PREG-015-P3,pregnancy,"Just confirmed my pregnancy, when do I start clinic visits?"
+SEED-V4-PREG-015,SEED-V4-PREG-015-P4,pregnancy,"i am expecting, when is the right time to go for my first clinic visit"
+SEED-V4-PREG-016,SEED-V4-PREG-016-P1,pregnancy,"my first pregnancy appointment at the health centre is coming up, what will the nurse look at"
+SEED-V4-PREG-016,SEED-V4-PREG-016-P2,pregnancy,what will the nurse do on my first clinic visit when pregnant
+SEED-V4-PREG-016,SEED-V4-PREG-016-P3,pregnancy,Which checks are done at the first antenatal appointment?
+SEED-V4-PREG-016,SEED-V4-PREG-016-P4,pregnancy,which tests and examinations come first when I start antenatal care
+SEED-V4-PREG-017,SEED-V4-PREG-017-P1,pregnancy,Is HIV testing offered at the antenatal clinic?
+SEED-V4-PREG-017,SEED-V4-PREG-017-P2,pregnancy,will i be tested for hiv when i attend antenatal care
+SEED-V4-PREG-017,SEED-V4-PREG-017-P3,pregnancy,Do pregnant women get an HIV test at the clinic?
+SEED-V4-PREG-017,SEED-V4-PREG-017-P4,pregnancy,"antenatal clinic hiv test, is it done"
+SEED-V4-PREG-018,SEED-V4-PREG-018-P1,pregnancy,anc visits how many
+SEED-V4-PREG-018,SEED-V4-PREG-018-P2,pregnancy,how many anc visit do i need
+SEED-V4-PREG-018,SEED-V4-PREG-018-P3,pregnancy,How many ANC visits are there?
+SEED-V4-PREG-018,SEED-V4-PREG-018-P4,pregnancy,antenatal clinic visits number
+SEED-V4-PREG-019,SEED-V4-PREG-019-P1,pregnancy,Is it okay to ask a community health volunteer questions about my pregnancy?
+SEED-V4-PREG-019,SEED-V4-PREG-019-P2,pregnancy,can i talk to a CHV about my pregnancy
+SEED-V4-PREG-019,SEED-V4-PREG-019-P3,pregnancy,Can a community health worker help me with questions about being pregnant?
+SEED-V4-PREG-019,SEED-V4-PREG-019-P4,pregnancy,"i have questions about my pregnancy, can a community health volunteer help"
+SEED-V4-PREG-020,SEED-V4-PREG-020-P1,pregnancy,What should I do to get ready for giving birth?
+SEED-V4-PREG-020,SEED-V4-PREG-020-P2,pregnancy,how do i prepare for delivery
+SEED-V4-PREG-020,SEED-V4-PREG-020-P3,pregnancy,Can you tell me how to prepare for my baby's birth?
+SEED-V4-PREG-020,SEED-V4-PREG-020-P4,pregnancy,"getting ready to deliver my baby, where do i start"
+SEED-V4-PREG-021,SEED-V4-PREG-021-P1,pregnancy,What do I need to prepare before I go into labour?
+SEED-V4-PREG-021,SEED-V4-PREG-021-P2,pregnancy,things to have ready before the baby comes
+SEED-V4-PREG-021,SEED-V4-PREG-021-P3,pregnancy,Which things should be ready ahead of labour?
+SEED-V4-PREG-021,SEED-V4-PREG-021-P4,pregnancy,what must i put together before i go into labour
+SEED-V4-PREG-022,SEED-V4-PREG-022-P1,pregnancy,What does a birth plan mean?
+SEED-V4-PREG-022,SEED-V4-PREG-022-P2,pregnancy,Can you explain what a birth plan is?
+SEED-V4-PREG-022,SEED-V4-PREG-022-P3,pregnancy,"birth plan, what is it"
+SEED-V4-PREG-022,SEED-V4-PREG-022-P4,pregnancy,"i keep hearing about a birth plan, what is it for"
+SEED-V4-PREG-023,SEED-V4-PREG-023-P1,pregnancy,Why should transport and money be planned before the delivery?
+SEED-V4-PREG-023,SEED-V4-PREG-023-P2,pregnancy,why do they tell pregnant women to organise transport and money early
+SEED-V4-PREG-023,SEED-V4-PREG-023-P3,pregnancy,What is the reason for arranging transport and funds before childbirth?
+SEED-V4-PREG-023,SEED-V4-PREG-023-P4,pregnancy,why is it important to plan how to reach the hospital and pay before birth
+SEED-V4-PREG-025,SEED-V4-PREG-025-P1,pregnancy,Can someone accompany me to the hospital when I deliver?
+SEED-V4-PREG-025,SEED-V4-PREG-025-P2,pregnancy,may I bring a companion when I go to give birth
+SEED-V4-PREG-025,SEED-V4-PREG-025-P3,pregnancy,who is allowed to be with me during delivery
+SEED-V4-PREG-025,SEED-V4-PREG-025-P4,pregnancy,can i have a person with me when giving birth at the facility
+SEED-V4-PREG-026,SEED-V4-PREG-026-P1,pregnancy,How do I plan to reach the hospital and pay when labour begins?
+SEED-V4-PREG-026,SEED-V4-PREG-026-P2,pregnancy,"when labour starts, how will I get to the facility and cover the costs"
+SEED-V4-PREG-026,SEED-V4-PREG-026-P3,pregnancy,what arrangements for transport and payment should i make before labour
+SEED-V4-PREG-026,SEED-V4-PREG-026-P4,pregnancy,"labour starts and I need to reach the hospital, how do I plan transport and payment"
+SEED-V4-GEN-025,SEED-V4-GEN-025-P1,general,Should I use pads or a menstrual cup at school?
+SEED-V4-GEN-025,SEED-V4-GEN-025-P2,general,"pads vs menstrual cup for school, which one is better"
+SEED-V4-GEN-025,SEED-V4-GEN-025-P3,general,"For going to school on my period, is a pad or a cup better?"
+SEED-V4-GEN-025,SEED-V4-GEN-025-P4,general,i am choosing between pads and a cup for school
+SEED-V4-GEN-026,SEED-V4-GEN-026-P1,general,Can I wash a sanitary pad and use it again?
+SEED-V4-GEN-026,SEED-V4-GEN-026-P2,general,is it okay to reuse pads after washing them
+SEED-V4-GEN-026,SEED-V4-GEN-026-P3,general,Are reusable pads safe if I wash them?
+SEED-V4-GEN-026,SEED-V4-GEN-026-P4,general,"washing pads to use them again, is that ok"
+SEED-V4-GEN-027,SEED-V4-GEN-027-P1,general,I get a rash from using sanitary pads
+SEED-V4-GEN-027,SEED-V4-GEN-027-P2,general,sanitary pads make my skin itchy and red
+SEED-V4-GEN-027,SEED-V4-GEN-027-P3,general,"There is a rash where my pad sits, why"
+SEED-V4-GEN-027,SEED-V4-GEN-027-P4,general,why do pads give me a rash
+SEED-V4-GEN-028,SEED-V4-GEN-028-P1,general,How frequently should a pad be changed when on a period?
+SEED-V4-GEN-028,SEED-V4-GEN-028-P2,general,at what point should a used pad be replaced during my period
+SEED-V4-GEN-028,SEED-V4-GEN-028-P3,general,How regularly do I need to change my cloth or pad during menstruation?
+SEED-V4-GEN-028,SEED-V4-GEN-028-P4,general,when should i change my pad while on my period
+SEED-V4-GEN-029,SEED-V4-GEN-029-P1,general,How long is it okay to keep a tampon in?
+SEED-V4-GEN-029,SEED-V4-GEN-029-P2,general,what is the longest time a tampon can stay inside
+SEED-V4-GEN-029,SEED-V4-GEN-029-P3,general,How long can a tampon stay in before changing it?
+SEED-V4-GEN-029,SEED-V4-GEN-029-P4,general,"tampon, how long should it be left in"
+SEED-V4-GEN-030,SEED-V4-GEN-030-P1,general,I have a sudden high fever and a rash and I use tampons
+SEED-V4-GEN-030,SEED-V4-GEN-030-P2,general,got a rash and a high temperature suddenly while wearing a tampon
+SEED-V4-GEN-030,SEED-V4-GEN-030-P3,general,High fever and skin rash that started while I had a tampon in
+SEED-V4-GEN-030,SEED-V4-GEN-030-P4,general,tampon user with sudden fever and rash
+SEED-V4-GEN-031,SEED-V4-GEN-031-P1,general,I get pimples and cannot sleep well just before my period
+SEED-V4-GEN-031,SEED-V4-GEN-031-P2,general,acne and poor sleep in the week before my periods
+SEED-V4-GEN-031,SEED-V4-GEN-031-P3,general,Breaking out and not sleeping well before my period starts
+SEED-V4-GEN-031,SEED-V4-GEN-031-P4,general,before my monthly period i get spots and sleepless nights
+SEED-V4-GEN-032,SEED-V4-GEN-032-P1,general,Is it normal to be moody and irritable before a period?
+SEED-V4-GEN-032,SEED-V4-GEN-032-P2,general,"i turn short tempered and tearful before my periods, what causes that"
+SEED-V4-GEN-032,SEED-V4-GEN-032-P3,general,"mood swings before my periods, is that normal"
+SEED-V4-GEN-032,SEED-V4-GEN-032-P4,general,"I get very irritable one week before my monthly period, is this normal?"
+SEED-V4-GEN-033,SEED-V4-GEN-033-P1,general,Does a hot water bottle help with period pain?
+SEED-V4-GEN-033,SEED-V4-GEN-033-P2,general,can i use a hot water bottle on my tummy for painful periods
+SEED-V4-GEN-033,SEED-V4-GEN-033-P3,general,Is heat from a hot water bottle good for menstrual pain?
+SEED-V4-GEN-033,SEED-V4-GEN-033-P4,general,"hot water bottle for period pains, does it help"

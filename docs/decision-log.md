@@ -1803,3 +1803,20 @@ Measured on the 62-entry KB (was 41). Test set 205 questions (was about 150). Ma
 
 ### 11. Deviations
 Any change after this entry is recorded here with date and reason: [none yet].
+
+## V4 paraphrasing: protocol applied (2026-10-26)
+The V2 paraphrasing protocol (2026-09-18) is applied unchanged to
+the V4 seeds: exactly 4 English paraphrases per seed, the fixed
+prompt, automated checks, manual semantic and safety review, and
+only reviewed files are trained on. Recorded here because the V2
+record lacks them: generator Claude (Anthropic), model
+claude-sonnet-5-5, in a chat session; temperature not settable and
+not recorded; prompt = the fixed V2 prompt applied per seed. Seeds
+are synthetic; no real user text is used. The three seeds carrying
+the note 'held-topic phrasing, label is topic only' (PREG-012,
+PREG-013, PREG-024) get no paraphrases, so held-topic phrasing is
+not multiplied. Every paraphrase file must pass
+research/v4/check_paraphrases.py (sealed set, DR-04, dev set,
+relevance_validation, held-topic rules and Safety Net) before
+manual review. Counts per batch are in docs/ai-use-log.md.
+Marker list: V2's was never committed; research/v4/sheng_swahili_markers.txt (2026-10-26) is a recorded addition.

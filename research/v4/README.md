@@ -12,6 +12,8 @@ nothing here changes the V3 data (`resources/seeds/`, `resources/reviewed/`,
 | `seeds_v4_template.csv` | The seed schema: header only. Copy it to start a seed file. |
 | `check_seeds.py` | Checks a seed file; exits non-zero on any failure. |
 | `make_folds.py` | Assigns whole seeds to 5 folds; writes `fold_assignment_v4.csv`. |
+| `check_paraphrases.py` | Checks a paraphrase file before manual review; exits non-zero on any failure. |
+| `sheng_swahili_markers.txt` | The Swahili and Sheng marker list `check_paraphrases.py` uses. |
 | `v3_pool_exclusions.csv` | V3 pool items V4 must not train on, with the reason. |
 | `seeds_without_paraphrases.csv` | The 55 V3 seeds with no reviewed paraphrase. |
 | `v3_fold_balance.md` | Class balance of the V3 folds. |
@@ -124,6 +126,38 @@ fails and is printed as seed_id, sealed id and similarity only. The
 sealed text and the path are never printed, so neither can reach a log,
 report, fixture or commit. `sealed/` and `*sealed*.csv` are in
 `.gitignore` as a second guard. Tests use synthetic sealed sets only.
+
+## Checking a paraphrase file
+
+```
+.venv/Scripts/python.exe -I research/v4/check_paraphrases.py resources/generated/v4_batch4_paraphrases.csv --seeds research/v4/seeds_v4_batch4.csv [--sealed PATH]
+```
+
+Paraphrases are generated under the V2 paraphrasing protocol (decision
+log, 2026-09-18 and "V4 paraphrasing: protocol applied (2026-10-26)")
+into `resources/generated/`, and only reviewed files move to
+`resources/reviewed/`. The checker fails on:
+
+- the protocol's automated checks: a seed_id not in the `--seeds` files,
+  a class other than the seed's `primary_class`, a count other than 4
+  per seed (0 for a seed with the held-topic override note), exact
+  duplicates, text under 10 characters, text identical to its seed, and
+  Swahili/Sheng markers;
+- near duplicates (the same thresholds as `check_seeds.py`) of the sealed
+  set, DR-04 (row numbers only), `relevance_validation.csv`, the
+  development set, the V3 pool, the 220 V1 paraphrases and the other
+  seeds of the `--seeds` files;
+- any match of the held-topic rule or the Safety Net (no override for
+  paraphrases).
+
+It prints ids, scores and counts only. The marker check reads
+`research/v4/sheng_swahili_markers.txt`; if that file is missing, the
+check is skipped with a warning.
+
+`sheng_swahili_markers.txt` (2026-10-26) replaces the V2 marker list,
+which was never committed to the repository. It is a recorded addition,
+not a copy of the V2 list (decision log, "V4 paraphrasing: protocol
+applied (2026-10-26)").
 
 ## Folds
 
