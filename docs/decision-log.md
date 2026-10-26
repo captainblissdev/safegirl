@@ -1941,3 +1941,43 @@ Written before any CV run.
 
 Note for Chapter 5: V3's CV picked its best epoch on the held-out fold,
 so V3's CV score is slightly optimistic.
+
+## V4 CV selection (2026-10-26)
+
+The rule in clarification 2, item 3, applied as written to the four
+candidates, each at its best setting by mean macro-F1. Scored on the
+380 held-out seeds only, with the frozen folds and no V1 restore
+paraphrases. Files: `research/v4/results/cv_selection.json` and
+`cv_selection.md`, written by `research/v4/cv_selection.py`.
+
+| Candidate | Setting | Macro-F1 +/- sd | STI rec. | Preg. rec. | Conf.-wrong | ECE |
+|---|---|---|---|---|---|---|
+| Baseline M2 | M2 | 0.6194 +/- 0.0525 | 0.756 | 0.627 | 0.384* | n/a |
+| LR on e5 | C 10 | 0.8606 +/- 0.0616 | 0.927 | 0.827 | 0.068 | 0.118 |
+| DistilBERT | lr 1e-5 | 0.7609 +/- 0.0262 | 0.817 | 0.747 | 0.108 | 0.095 |
+| Hybrid | C 10 | 0.8835 +/- 0.0507 | 0.963 | 0.827 | 0.055 | 0.066 |
+
+\* Plain error rate: the baseline has no probability.
+
+- **Decision.** The best mean macro-F1 is 0.8835 (hybrid). The tie
+  threshold is 0.8735, and no other candidate reaches it (LR on e5 has
+  0.8606). So the confident-wrong and simpler-model steps are not
+  reached.
+- **Winner: the hybrid**, logistic regression on [e5 embedding,
+  keyword hit counts, vague-rule flag], C 10, L2, class_weight
+  balanced, max_iter 2000, seed 42.
+- **Not frozen.** No final model is trained yet; that is step 4.
+- **Notes for Chapter 5.**
+  - (a) The best C (10) is at the top edge of the grid, for both the
+    hybrid and LR on e5. A larger C might score higher; the grid is
+    not extended after results are seen.
+  - (b) The winner's lead over LR on e5 is +0.0230 mean macro-F1.
+    That is smaller than the fold-to-fold spread: the sd is 0.0507
+    for the hybrid and 0.0616 for LR on e5. Per fold the difference
+    runs from -0.0361 to +0.0714, and the hybrid is ahead in 3 of 5
+    folds.
+  - (c) CV is optimistic. 19 same-class near-duplicate pairs (e5
+    cosine >= 0.95) fall in different folds
+    (`fold_assignment_v4.summary.txt`), so some held-out seeds have a
+    near-copy in training. The sealed test set is the unbiased
+    estimate.
