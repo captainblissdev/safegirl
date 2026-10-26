@@ -2110,3 +2110,32 @@ Written before any threshold figure is computed.
   reference rows. They are not tuned to anything.
 - **Fixed for the sealed run.** t_act is fixed here for the sealed
   run. It is not changed after the sealed result.
+
+## V4 frozen candidate (2026-10-26)
+
+- **Model.** The e5 hybrid at C 10: logistic regression on [e5
+  embedding (384), keyword hit counts (5), vague-rule flag (1)]. The
+  6 rule columns are scaled; the embedding is not. L2, class_weight
+  balanced, max_iter 2000, seed 42.
+- **Training data.** All 380 seeds and their 1,239 paraphrases (1,619
+  rows), with the dr05 and V3-pool exclusions and no V1 restore
+  paraphrases.
+- **Follows** "V4 CV selection (2026-10-26)" (the re-run over all
+  candidates) and "V4 threshold rule (2026-10-26)".
+- **File.** `research/v4/frozen/v4_hybrid_c10.json`, sha256
+  89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd.
+  - It was written by `research/v4/freeze_hybrid.py` at commit
+    7a1c134.
+  - A refit in a separate process gave byte-identical output.
+  - The sidecar `v4_hybrid_c10.sha256` holds the hash.
+  - `research/v4/v4_infer.py` loads only this file. It refuses the
+    file if its hash, the feature code or the local e5 weights differ
+    from what is recorded.
+- **Threshold.** t_act = 0.45. Predictions with confidence below 0.45
+  take the existing low-confidence path.
+- **Rule.** Nothing about this model, its features, C or threshold
+  changes before the sealed run. Any change needs a dated deviation
+  and a new hash.
+- **Not done.** The model is not integrated into ml_service or the
+  gateway; integration happens only after the sealed gate. The sealed
+  set has not been opened, and no sealed result is recorded here.
