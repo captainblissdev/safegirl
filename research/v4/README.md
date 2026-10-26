@@ -130,8 +130,12 @@ report, fixture or commit. `sealed/` and `*sealed*.csv` are in
 ## Checking a paraphrase file
 
 ```
-.venv/Scripts/python.exe -I research/v4/check_paraphrases.py resources/generated/v4_batch4_paraphrases.csv --seeds research/v4/seeds_v4_batch4.csv [--sealed PATH]
+.venv/Scripts/python.exe -I research/v4/check_paraphrases.py resources/generated/v4_batch4_paraphrases.csv --seeds research/v4/seeds_v4_batch4.csv --compare-seeds research/v4/seeds_v4_batch1.csv --compare-seeds research/v4/seeds_v4_batch2.csv --compare-seeds research/v4/seeds_v4_batch3.csv [--sealed PATH]
 ```
+
+`--seeds` names the seed file(s) the paraphrases belong to: the count rule
+applies to those seeds. `--compare-seeds` names the other batches, used
+only to catch a paraphrase close to a seed it does not belong to.
 
 Paraphrases are generated under the V2 paraphrasing protocol (decision
 log, 2026-09-18 and "V4 paraphrasing: protocol applied (2026-10-26)")
