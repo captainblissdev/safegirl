@@ -1,0 +1,9 @@
+sealed set: 205 items compared
+paraphrases: 120; seeds: 30 (0 with the held-topic override)
+compared with 139 other seeds (--compare-seeds, no count rule)
+per class: contraception 56, sti 64
+
+warnings (0):
+failures (0):
+
+passed
