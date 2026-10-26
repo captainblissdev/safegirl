@@ -1,6 +1,6 @@
 seed_id,paraphrase_id,class,text
 SEED-V4-OOS-001,SEED-V4-OOS-001-P1,out_of_scope,What are the Sunday closing hours of the supermarket?
-SEED-V4-OOS-001,SEED-V4-OOS-001-P2,out_of_scope,does the supermarket shut early on sundays
+SEED-V4-OOS-001,SEED-V4-OOS-001-P2,out_of_scope,what time does the supermarket shut on sundays
 SEED-V4-OOS-001,SEED-V4-OOS-001-P3,out_of_scope,At what time do supermarkets close on a Sunday?
 SEED-V4-OOS-001,SEED-V4-OOS-001-P4,out_of_scope,sunday supermarket closing time
 SEED-V4-OOS-002,SEED-V4-OOS-002-P1,out_of_scope,How can I change US dollars into Kenya shillings?
@@ -9,14 +9,14 @@ SEED-V4-OOS-002,SEED-V4-OOS-002-P3,out_of_scope,Can you show me how to work out 
 SEED-V4-OOS-002,SEED-V4-OOS-002-P4,out_of_scope,"dollar to shilling conversion, how"
 SEED-V4-OOS-003,SEED-V4-OOS-003-P1,out_of_scope,Which Kenyan musician is the most famous at the moment?
 SEED-V4-OOS-003,SEED-V4-OOS-003-P2,out_of_scope,who is the top singer in kenya these days
-SEED-V4-OOS-003,SEED-V4-OOS-003-P3,out_of_scope,Who are people listening to most in Kenya right now?
+SEED-V4-OOS-003,SEED-V4-OOS-003-P3,out_of_scope,which musician is currently the most popular in Kenya
 SEED-V4-OOS-003,SEED-V4-OOS-003-P4,out_of_scope,currently most popular kenyan artist
 SEED-V4-OOS-004,SEED-V4-OOS-004-P1,out_of_scope,Can you help me solve x + 5 = 12?
 SEED-V4-OOS-004,SEED-V4-OOS-004-P2,out_of_scope,what is x if x plus 5 is 12
 SEED-V4-OOS-004,SEED-V4-OOS-004-P3,out_of_scope,Please solve for x: x plus five equals twelve.
 SEED-V4-OOS-004,SEED-V4-OOS-004-P4,out_of_scope,"algebra question, x plus 5 equals 12, find x"
 SEED-V4-OOS-005,SEED-V4-OOS-005-P1,out_of_scope,What is tomorrow's weather forecast for Nairobi?
-SEED-V4-OOS-005,SEED-V4-OOS-005-P2,out_of_scope,will it rain in nairobi tomorrow
+SEED-V4-OOS-005,SEED-V4-OOS-005-P2,out_of_scope,what is the weather going to be in nairobi tomorrow
 SEED-V4-OOS-005,SEED-V4-OOS-005-P3,out_of_scope,How will the weather be in Nairobi tomorrow?
 SEED-V4-OOS-005,SEED-V4-OOS-005-P4,out_of_scope,nairobi weather tomorrow
 SEED-V4-OOS-006,SEED-V4-OOS-006-P1,out_of_scope,How should I write a CV when applying for my first job?
@@ -34,7 +34,7 @@ SEED-V4-OOS-008,SEED-V4-OOS-008-P4,out_of_scope,"starting a snack selling busine
 SEED-V4-OOS-009,SEED-V4-OOS-009-P1,out_of_scope,Could you suggest a good book for me to read?
 SEED-V4-OOS-009,SEED-V4-OOS-009-P2,out_of_scope,any good books you would suggest
 SEED-V4-OOS-009,SEED-V4-OOS-009-P3,out_of_scope,What book would you suggest I read next?
-SEED-V4-OOS-009,SEED-V4-OOS-009-P4,out_of_scope,recommend me something good to read
+SEED-V4-OOS-009,SEED-V4-OOS-009-P4,out_of_scope,can you suggest one good book for me
 SEED-V4-OOS-010,SEED-V4-OOS-010-P1,out_of_scope,Can you explain photosynthesis?
 SEED-V4-OOS-010,SEED-V4-OOS-010-P2,out_of_scope,how do plants make food using sunlight
 SEED-V4-OOS-010,SEED-V4-OOS-010-P3,out_of_scope,What does photosynthesis mean in biology?
@@ -56,19 +56,19 @@ SEED-V4-OOS-014,SEED-V4-OOS-014-P2,out_of_scope,what matatu do i take to get to 
 SEED-V4-OOS-014,SEED-V4-OOS-014-P3,out_of_scope,How do I get to Ngong Road from town by matatu?
 SEED-V4-OOS-014,SEED-V4-OOS-014-P4,out_of_scope,"matatu from town to ngong road, which one"
 SEED-V4-OOS-015,SEED-V4-OOS-015-P1,out_of_scope,How can I join a wifi network on my laptop?
-SEED-V4-OOS-015,SEED-V4-OOS-015-P2,out_of_scope,"my laptop wont connect to wifi, how do i set it up"
+SEED-V4-OOS-015,SEED-V4-OOS-015-P2,out_of_scope,how can i get my laptop connected to wifi
 SEED-V4-OOS-015,SEED-V4-OOS-015-P3,out_of_scope,What are the steps to connect a laptop to wifi?
 SEED-V4-OOS-015,SEED-V4-OOS-015-P4,out_of_scope,"laptop wifi connection, how"
 SEED-V4-OOS-016,SEED-V4-OOS-016-P1,out_of_scope,How did Kenya gain its independence?
 SEED-V4-OOS-016,SEED-V4-OOS-016-P2,out_of_scope,give me the story of kenya becoming independent
 SEED-V4-OOS-016,SEED-V4-OOS-016-P3,out_of_scope,Can you describe the history behind Kenyan independence?
 SEED-V4-OOS-016,SEED-V4-OOS-016-P4,out_of_scope,kenya independence history
-SEED-V4-OOS-017,SEED-V4-OOS-017-P1,out_of_scope,Why does my phone battery run out so quickly and how can I fix it?
+SEED-V4-OOS-017,SEED-V4-OOS-017-P1,out_of_scope,how can i stop my phone battery from running down so quickly
 SEED-V4-OOS-017,SEED-V4-OOS-017-P2,out_of_scope,"phone battery finishes too fast, what can i do"
 SEED-V4-OOS-017,SEED-V4-OOS-017-P3,out_of_scope,How can I make my phone's battery last longer?
-SEED-V4-OOS-017,SEED-V4-OOS-017-P4,out_of_scope,battery draining fast on my phone
+SEED-V4-OOS-017,SEED-V4-OOS-017-P4,out_of_scope,"battery draining fast on my phone, how do i stop it"
 SEED-V4-OOS-018,SEED-V4-OOS-018-P1,out_of_scope,Which is the highest mountain on the African continent?
-SEED-V4-OOS-018,SEED-V4-OOS-018-P2,out_of_scope,"the biggest mountain in africa, what is it called"
+SEED-V4-OOS-018,SEED-V4-OOS-018-P2,out_of_scope,name the tallest mountain in Africa
 SEED-V4-OOS-018,SEED-V4-OOS-018-P3,out_of_scope,What is Africa's tallest peak?
 SEED-V4-OOS-018,SEED-V4-OOS-018-P4,out_of_scope,tallest african mountain
 SEED-V4-OOS-019,SEED-V4-OOS-019-P1,out_of_scope,What can I do to perform well at a job interview?
@@ -77,7 +77,7 @@ SEED-V4-OOS-019,SEED-V4-OOS-019-P3,out_of_scope,How should I prepare so that an 
 SEED-V4-OOS-019,SEED-V4-OOS-019-P4,out_of_scope,"doing well in interviews, how"
 SEED-V4-OOS-020,SEED-V4-OOS-020-P1,out_of_scope,What time should a form two girl go to bed?
 SEED-V4-OOS-020,SEED-V4-OOS-020-P2,out_of_scope,when should a student in form 2 sleep at night
-SEED-V4-OOS-020,SEED-V4-OOS-020-P3,out_of_scope,What is the best bedtime for a girl in secondary school?
+SEED-V4-OOS-020,SEED-V4-OOS-020-P3,out_of_scope,what bedtime is ideal for a girl in form two
 SEED-V4-OOS-020,SEED-V4-OOS-020-P4,out_of_scope,bedtime for a form two girl
 SEED-V4-OOS-021,SEED-V4-OOS-021-P1,out_of_scope,Which foods help build muscle?
 SEED-V4-OOS-021,SEED-V4-OOS-021-P2,out_of_scope,"I want bigger muscles, what foods should I be eating"
@@ -85,7 +85,7 @@ SEED-V4-OOS-021,SEED-V4-OOS-021-P3,out_of_scope,What diet should I follow to bui
 SEED-V4-OOS-021,SEED-V4-OOS-021-P4,out_of_scope,muscle building foods
 SEED-V4-OOS-022,SEED-V4-OOS-022-P1,out_of_scope,What is the right way to take care of a cut on my knee?
 SEED-V4-OOS-022,SEED-V4-OOS-022-P2,out_of_scope,"i scraped my knee and it is cut, how do i treat it"
-SEED-V4-OOS-022,SEED-V4-OOS-022-P3,out_of_scope,How should I clean and cover a knee cut?
+SEED-V4-OOS-022,SEED-V4-OOS-022-P3,out_of_scope,what is the way to treat a cut on the knee
 SEED-V4-OOS-022,SEED-V4-OOS-022-P4,out_of_scope,knee cut first aid
 SEED-V4-OOS-023,SEED-V4-OOS-023-P1,out_of_scope,"I have a toothache, what should I do?"
 SEED-V4-OOS-023,SEED-V4-OOS-023-P2,out_of_scope,what helps when a tooth is aching
@@ -106,10 +106,10 @@ SEED-V4-OOS-026,SEED-V4-OOS-026-P4,out_of_scope,"feeling nervous before my exams
 SEED-V4-OOS-027,SEED-V4-OOS-027-P1,out_of_scope,Which vaccinations should a baby get?
 SEED-V4-OOS-027,SEED-V4-OOS-027-P2,out_of_scope,what immunisations are given to infants
 SEED-V4-OOS-027,SEED-V4-OOS-027-P3,out_of_scope,Can you tell me the vaccines babies need?
-SEED-V4-OOS-027,SEED-V4-OOS-027-P4,out_of_scope,"baby vaccine schedule, which ones"
+SEED-V4-OOS-027,SEED-V4-OOS-027-P4,out_of_scope,which vaccines should a baby be given
 SEED-V4-OOS-028,SEED-V4-OOS-028-P1,out_of_scope,What should I do when my nose is bleeding?
 SEED-V4-OOS-028,SEED-V4-OOS-028-P2,out_of_scope,how to make a nosebleed stop
-SEED-V4-OOS-028,SEED-V4-OOS-028-P3,out_of_scope,How can a nosebleed be stopped quickly?
+SEED-V4-OOS-028,SEED-V4-OOS-028-P3,out_of_scope,how can a nosebleed be stopped
 SEED-V4-OOS-028,SEED-V4-OOS-028-P4,out_of_scope,"nose bleeding, how to stop it"
 SEED-V4-OOS-029,SEED-V4-OOS-029-P1,out_of_scope,Can you explain what diabetes is?
 SEED-V4-OOS-029,SEED-V4-OOS-029-P2,out_of_scope,diabetes meaning
@@ -121,7 +121,7 @@ SEED-V4-VAG-001,SEED-V4-VAG-001-P3,vague,where should I start
 SEED-V4-VAG-001,SEED-V4-VAG-001-P4,vague,how do I even start asking
 SEED-V4-VAG-002,SEED-V4-VAG-002-P1,vague,There is something I would like to ask you
 SEED-V4-VAG-002,SEED-V4-VAG-002-P2,vague,okay i have a question for you
-SEED-V4-VAG-002,SEED-V4-VAG-002-P3,vague,I want to ask something but let me think how
+SEED-V4-VAG-002,SEED-V4-VAG-002-P3,vague,"ok, so there's something I want to ask you"
 SEED-V4-VAG-002,SEED-V4-VAG-002-P4,vague,so there is this thing i wanted to ask
 SEED-V4-VAG-003,SEED-V4-VAG-003-P1,vague,Could you help me with something please?
 SEED-V4-VAG-003,SEED-V4-VAG-003-P2,vague,i need your help with something
@@ -157,7 +157,7 @@ SEED-V4-VAG-010,SEED-V4-VAG-010-P3,vague,What are you here to do?
 SEED-V4-VAG-010,SEED-V4-VAG-010-P4,vague,what is this place and what do you do
 SEED-V4-VAG-011,SEED-V4-VAG-011-P1,vague,"Hello, is anyone there?"
 SEED-V4-VAG-011,SEED-V4-VAG-011-P2,vague,"hi, are you there?"
-SEED-V4-VAG-011,SEED-V4-VAG-011-P3,vague,Hello? Can you hear me?
+SEED-V4-VAG-011,SEED-V4-VAG-011-P3,vague,"hello hello, are you there"
 SEED-V4-VAG-011,SEED-V4-VAG-011-P4,vague,hey is somebody there
 SEED-V4-VAG-012,SEED-V4-VAG-012-P1,vague,I want to ask something about my body but I feel shy
 SEED-V4-VAG-012,SEED-V4-VAG-012-P2,vague,im too shy to ask about my body
@@ -187,10 +187,10 @@ SEED-V4-VAG-018,SEED-V4-VAG-018-P1,vague,I would like some information please
 SEED-V4-VAG-018,SEED-V4-VAG-018-P2,vague,i need to find something out
 SEED-V4-VAG-018,SEED-V4-VAG-018-P3,vague,Can you give me some information?
 SEED-V4-VAG-018,SEED-V4-VAG-018-P4,vague,looking for some information
-SEED-V4-VAG-019,SEED-V4-VAG-019-P1,vague,"umm, hello there"
-SEED-V4-VAG-019,SEED-V4-VAG-019-P2,vague,uhm i'm not sure
-SEED-V4-VAG-019,SEED-V4-VAG-019-P3,vague,"erm, hi, one second"
-SEED-V4-VAG-019,SEED-V4-VAG-019-P4,vague,"um, hmm, ok"
+SEED-V4-VAG-019,SEED-V4-VAG-019-P1,vague,um um um um um
+SEED-V4-VAG-019,SEED-V4-VAG-019-P2,vague,uhm... uhhh...
+SEED-V4-VAG-019,SEED-V4-VAG-019-P3,vague,erm... err...
+SEED-V4-VAG-019,SEED-V4-VAG-019-P4,vague,"hmm, umm... um"
 SEED-V4-VAG-020,SEED-V4-VAG-020-P1,vague,Tell me everything you know
 SEED-V4-VAG-020,SEED-V4-VAG-020-P2,vague,i want to know everything
 SEED-V4-VAG-020,SEED-V4-VAG-020-P3,vague,Explain it all to me
@@ -206,19 +206,19 @@ SEED-V4-VAG-022,SEED-V4-VAG-022-P4,vague,"first time here, new to this"
 SEED-V4-VAG-023,SEED-V4-VAG-023-P1,vague,Who can I go to?
 SEED-V4-VAG-023,SEED-V4-VAG-023-P2,vague,who is there for me to talk to
 SEED-V4-VAG-023,SEED-V4-VAG-023-P3,vague,Is there anyone I can talk to?
-SEED-V4-VAG-023,SEED-V4-VAG-023-P4,vague,there should be somebody I can speak to about things
+SEED-V4-VAG-023,SEED-V4-VAG-023-P4,vague,who could I speak to?
 SEED-V4-VAG-024,SEED-V4-VAG-024-P1,vague,It is a personal matter
 SEED-V4-VAG-024,SEED-V4-VAG-024-P2,vague,this is private
 SEED-V4-VAG-024,SEED-V4-VAG-024-P3,vague,"It's quite personal, really"
 SEED-V4-VAG-024,SEED-V4-VAG-024-P4,vague,its a private thing
-SEED-V4-VAG-025,SEED-V4-VAG-025-P1,vague,I just feel a bit off today
+SEED-V4-VAG-025,SEED-V4-VAG-025-P1,vague,I feel a bit off
 SEED-V4-VAG-025,SEED-V4-VAG-025-P2,vague,something feels off with me
 SEED-V4-VAG-025,SEED-V4-VAG-025-P3,vague,I don't feel like myself
-SEED-V4-VAG-025,SEED-V4-VAG-025-P4,vague,feeling off lately
-SEED-V4-VAG-026,SEED-V4-VAG-026-P1,vague,Something came up that I need to talk about
-SEED-V4-VAG-026,SEED-V4-VAG-026-P2,vague,so something took place and I am not sure what to do
-SEED-V4-VAG-026,SEED-V4-VAG-026-P3,vague,there is something I need to tell you
-SEED-V4-VAG-026,SEED-V4-VAG-026-P4,vague,a thing came up recently
+SEED-V4-VAG-025,SEED-V4-VAG-025-P4,vague,i am feeling off
+SEED-V4-VAG-026,SEED-V4-VAG-026-P1,vague,something has happened
+SEED-V4-VAG-026,SEED-V4-VAG-026-P2,vague,so something happened
+SEED-V4-VAG-026,SEED-V4-VAG-026-P3,vague,a thing happened
+SEED-V4-VAG-026,SEED-V4-VAG-026-P4,vague,something did happen
 SEED-V4-VAG-027,SEED-V4-VAG-027-P1,vague,I have a lot of questions
 SEED-V4-VAG-027,SEED-V4-VAG-027-P2,vague,so many things i want to ask
 SEED-V4-VAG-027,SEED-V4-VAG-027-P3,vague,There are many questions on my mind
