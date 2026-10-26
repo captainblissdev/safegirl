@@ -1,0 +1,9 @@
+sealed set: 205 items compared
+paraphrases: 140; seeds: 37 (2 with the held-topic override)
+compared with 132 other seeds (--compare-seeds, no count rule)
+per class: pregnancy 44, general 96
+
+warnings (0):
+failures (0):
+
+passed
