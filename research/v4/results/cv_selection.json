@@ -1,0 +1,250 @@
+{
+ "rule": "docs/decision-log.md, clarification 2, item 3",
+ "candidates": {
+  "baseline M2": {
+   "setting": "baseline_m2",
+   "macro_f1_mean": 0.6194249424619481,
+   "macro_f1_sd": 0.05249990721507371,
+   "per_fold_macro_f1": {
+    "1": 0.6959557258407832,
+    "2": 0.5727242440952118,
+    "3": 0.638808533172319,
+    "4": 0.5683574879227054,
+    "5": 0.6212787212787213
+   },
+   "sti_recall": 0.7560975609756098,
+   "pregnancy_recall": 0.6266666666666667,
+   "confident_wrong": 0.38421052631578945,
+   "confident_wrong_is_plain_error_rate": true,
+   "ece": null
+  },
+  "LR on e5 (no V1)": {
+   "setting": "lr_e5_base_C10",
+   "macro_f1_mean": 0.8605653358246926,
+   "macro_f1_sd": 0.061562996464193546,
+   "per_fold_macro_f1": {
+    "1": 0.8828678266178267,
+    "2": 0.8936058379884854,
+    "3": 0.8256283020988904,
+    "4": 0.772445296638845,
+    "5": 0.9282794157794158
+   },
+   "sti_recall": 0.926829268292683,
+   "pregnancy_recall": 0.8266666666666667,
+   "confident_wrong": 0.06842105263157895,
+   "confident_wrong_is_plain_error_rate": false,
+   "ece": 0.1176957209643565
+  },
+  "DistilBERT": {
+   "setting": "distilbert_lr1e-5",
+   "macro_f1_mean": 0.7608903757494021,
+   "macro_f1_sd": 0.02622119580623156,
+   "per_fold_macro_f1": {
+    "1": 0.7458558710840658,
+    "2": 0.7921698512215753,
+    "3": 0.7425352425352424,
+    "4": 0.737383034294799,
+    "5": 0.786507879611328
+   },
+   "sti_recall": 0.8170731707317073,
+   "pregnancy_recall": 0.7466666666666667,
+   "confident_wrong": 0.10789473684210527,
+   "confident_wrong_is_plain_error_rate": false,
+   "ece": 0.09540415684643547
+  },
+  "hybrid": {
+   "setting": "hybrid_C10",
+   "macro_f1_mean": 0.8835196370409516,
+   "macro_f1_sd": 0.05068781530298449,
+   "per_fold_macro_f1": {
+    "1": 0.8467411983332451,
+    "2": 0.9390356769667115,
+    "3": 0.8970169583072809,
+    "4": 0.8167039931745813,
+    "5": 0.9181003584229391
+   },
+   "sti_recall": 0.9634146341463414,
+   "pregnancy_recall": 0.8266666666666667,
+   "confident_wrong": 0.05526315789473684,
+   "confident_wrong_is_plain_error_rate": false,
+   "ece": 0.06564933071647636
+  }
+ },
+ "decision": {
+  "best_macro_f1": 0.8835196370409516,
+  "tie_threshold": 0.8735196370409516,
+  "tied": [
+   "hybrid"
+  ],
+  "confident_wrong_of_tied": {
+   "hybrid": 0.05526315789473684
+  },
+  "decided_by": "macro-F1",
+  "winner": "hybrid"
+ },
+ "paired_per_fold": {
+  "baseline M2": {
+   "per_fold_diff": {
+    "1": 0.15078547249246188,
+    "2": 0.3663114328714997,
+    "3": 0.2582084251349619,
+    "4": 0.24834650525187596,
+    "5": 0.29682163714421783
+   },
+   "mean_diff": 0.2640946945790034,
+   "folds_winner_ahead": 5,
+   "folds": 5
+  },
+  "LR on e5 (no V1)": {
+   "per_fold_diff": {
+    "1": -0.036126628284581574,
+    "2": 0.04542983897822617,
+    "3": 0.07138865620839052,
+    "4": 0.04425869653573633,
+    "5": -0.010179057356476617
+   },
+   "mean_diff": 0.022954301216258965,
+   "folds_winner_ahead": 3,
+   "folds": 5
+  },
+  "DistilBERT": {
+   "per_fold_diff": {
+    "1": 0.10088532724917931,
+    "2": 0.14686582574513618,
+    "3": 0.1544817157720385,
+    "4": 0.0793209588797823,
+    "5": 0.13159247881161118
+   },
+   "mean_diff": 0.1226292612915495,
+   "folds_winner_ahead": 5,
+   "folds": 5
+  }
+ },
+ "winner_details": {
+  "per_class": {
+   "contraception": {
+    "precision": 0.9459459459459459,
+    "recall": 0.9210526315789473,
+    "f1": 0.9333333333333332,
+    "support": 76
+   },
+   "sti": {
+    "precision": 0.9518072289156626,
+    "recall": 0.9634146341463414,
+    "f1": 0.9575757575757576,
+    "support": 82
+   },
+   "pregnancy": {
+    "precision": 0.8857142857142857,
+    "recall": 0.8266666666666667,
+    "f1": 0.8551724137931035,
+    "support": 75
+   },
+   "general": {
+    "precision": 0.8297872340425532,
+    "recall": 0.8571428571428571,
+    "f1": 0.8432432432432433,
+    "support": 91
+   },
+   "out_of_scope": {
+    "precision": 0.8333333333333334,
+    "recall": 0.8620689655172413,
+    "f1": 0.847457627118644,
+    "support": 29
+   },
+   "vague": {
+    "precision": 0.8275862068965517,
+    "recall": 0.8888888888888888,
+    "f1": 0.8571428571428572,
+    "support": 27
+   }
+  },
+  "confusion": {
+   "labels": [
+    "contraception",
+    "sti",
+    "pregnancy",
+    "general",
+    "out_of_scope",
+    "vague"
+   ],
+   "matrix": [
+    [
+     70,
+     0,
+     2,
+     3,
+     1,
+     0
+    ],
+    [
+     1,
+     79,
+     1,
+     0,
+     0,
+     1
+    ],
+    [
+     2,
+     0,
+     62,
+     8,
+     1,
+     2
+    ],
+    [
+     1,
+     4,
+     5,
+     78,
+     2,
+     1
+    ],
+    [
+     0,
+     0,
+     0,
+     3,
+     25,
+     1
+    ],
+    [
+     0,
+     0,
+     0,
+     2,
+     1,
+     24
+    ]
+   ]
+  },
+  "top_confusions": [
+   {
+    "true": "pregnancy",
+    "pred": "general",
+    "count": 8
+   },
+   {
+    "true": "general",
+    "pred": "pregnancy",
+    "count": 5
+   },
+   {
+    "true": "general",
+    "pred": "sti",
+    "count": 4
+   },
+   {
+    "true": "contraception",
+    "pred": "general",
+    "count": 3
+   },
+   {
+    "true": "out_of_scope",
+    "pred": "general",
+    "count": 3
+   }
+  ]
+ }
+}
