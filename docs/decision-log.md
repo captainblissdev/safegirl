@@ -1896,3 +1896,48 @@ Clarifications to "V4 triage classifier: pre-registration (26 Oct
   changed), is `research/v4/fold_assignment_v4.summary.txt`.
 - **The folds are frozen from this commit.** No V4 training or
   cross-validation has run.
+
+## V4 pre-registration: clarification 2 (2026-10-26)
+
+Written before any CV run.
+
+1. Evaluation unit in CV: the seeds of the held-out fold, original
+   wording only. Paraphrases of held-out seeds are never scored in the
+   primary result. Training rows: seeds of the other folds plus their
+   paraphrases, minus ids in dr05_exclusions.csv and
+   v3_pool_exclusions.csv. A paraphrase always follows its seed's fold.
+2. Baseline comparator. The frozen keyword baseline cannot output
+   out_of_scope or vague (and can output gbv), which would cap its
+   macro-F1 and make the 0.05 margin trivially easy. Two mappings are
+   fixed now: M1 raw: label as is, gbv -> general. M2 pipeline-style:
+   the existing vague-query rule first -> vague; else zero keyword
+   hits -> out_of_scope; gbv -> general; else the baseline label. The
+   baseline code is not changed. The mapping with the higher CV
+   macro-F1 is "the baseline" for the sealed decision; both are
+   reported. Neither mapping changes after results are seen.
+3. Selection: highest mean-over-folds macro-F1. Candidates within 0.01
+   of the best count as tied; among tied, lowest confident-wrong rate
+   (wrong with top probability > 0.5); if still tied, the simpler
+   model. The baseline has no probability, so its rate is its plain
+   error rate, flagged as such. ECE uses 10 equal-width bins.
+   Selection optimism (small grid tuned on the same folds) is
+   disclosed in Chapter 5.
+4. Grids fixed now. Logistic regression on e5 embeddings: L2,
+   C in {0.1, 1, 10}, class_weight balanced, max_iter 2000, seed 42.
+   DistilBERT (step 2): distilbert-base-multilingual-cased, lr in
+   {5e-6, 1e-5}, max 8 epochs, batch 16, max length 64, weight decay
+   0.01, label smoothing 0.1, balanced class weights computed from
+   training rows, seed 42. Early stopping and best-epoch choice use an
+   INNER validation fold (one of the four training folds, seed-level),
+   never the held-out fold. Hybrid (step 3): logistic regression on
+   [e5 embedding, keyword hit counts for the baseline's classes,
+   vague-rule flag], scalers fitted inside the training folds, same C
+   grid.
+5. V1-paraphrase ablation: with and without
+   research/v4/v1_paraphrases_restore_candidates.csv, decided by CV
+   macro-F1 on logistic regression; ties go to the smaller set; the
+   winner applies to all candidates.
+6. Thresholds are calibrated on CV out-of-fold predictions only.
+
+Note for Chapter 5: V3's CV picked its best epoch on the held-out fold,
+so V3's CV score is slightly optimistic.
