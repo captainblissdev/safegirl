@@ -1869,3 +1869,30 @@ vague pairs above and the three other remaining V4 pairs (SEED-PREG-12
 differs in meaning (similar wording, a different question), so none is a
 label conflict. They are disclosed and nothing is changed. DR-05 is
 closed.
+
+## V4 pre-registration: clarifications (2026-10-26)
+
+Clarifications to "V4 triage classifier: pre-registration (26 Oct
+2026)", made before any V4 training or cross-validation.
+
+- **The V3 pool joins the V4 folds.** The 211 V3 seeds
+  (`resources/seeds/seeds.csv`) and their reviewed paraphrases are
+  folded together with the 169 V4 seeds, at seed level, by
+  `research/v4/make_folds.py --v3-seeds`. Every V3 seed is included,
+  also the 55 with no paraphrases.
+- **V3 seeds have no phrasing style**, so they are stratified by class
+  only, with the placeholder style `v3_unlabelled`; V4 seeds are
+  stratified by class and style. The fold file's `source` column says
+  which is which.
+- **DR-05 exclusions apply at training time**, not at fold time: the ids
+  in `research/v4/dr05_exclusions.csv` and
+  `research/v4/v3_pool_exclusions.csv` keep their seed's fold and are
+  dropped from training.
+- **The fold file** `research/v4/fold_assignment_v4.csv` (380 seeds, 5
+  folds of 76) has sha256
+  9fa96d80c22d020b62ada028d87c0679004c0d68be87e6b2f40d4bff46361cbf.
+  Its summary, with counts per fold and class and the 19 same-class
+  near-duplicate pairs that fall in different folds (disclosed, not
+  changed), is `research/v4/fold_assignment_v4.summary.txt`.
+- **The folds are frozen from this commit.** No V4 training or
+  cross-validation has run.
