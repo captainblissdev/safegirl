@@ -2084,3 +2084,29 @@ written by `research/v4/cv_selection.py`.
     (`fold_assignment_v4.summary.txt`), so some held-out seeds have a
     near-copy in training. The sealed test set is the unbiased
     estimate.
+
+## V4 threshold rule (2026-10-26)
+
+Written before any threshold figure is computed.
+
+- **Data.** The pooled out-of-fold predictions of the CV winner, the
+  e5 hybrid at C 10 without V1 paraphrases
+  (`research/v4/results/cv_hybrid_C10_oof.csv`). The sealed set is not
+  used.
+- **Candidates.** Thresholds t on the top predicted probability: 0.30,
+  0.35, ..., 0.70 (nine values).
+- **Rule.** t_act is the smallest t such that, among the OOF
+  predictions with confidence >= t, all three hold:
+  - accuracy is at least 0.90;
+  - the precision of sti is at least 0.90;
+  - the precision of pregnancy is at least 0.90.
+
+  If no t qualifies, that is reported and the step stops. The rule is
+  not relaxed.
+- **Below t_act.** Predictions with confidence below t_act go to the
+  low-confidence path the pipeline already uses. There is no new
+  behaviour.
+- **Reference rows.** The existing 0.35 and 0.50 are also reported, as
+  reference rows. They are not tuned to anything.
+- **Fixed for the sealed run.** t_act is fixed here for the sealed
+  run. It is not changed after the sealed result.
