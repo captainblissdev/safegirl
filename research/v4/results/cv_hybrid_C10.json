@@ -1,0 +1,146 @@
+{
+ "candidate": "hybrid_C10",
+ "config": {
+  "model": "LogisticRegression",
+  "features": [
+   "multilingual-e5-small, 'query: ', normalized (unscaled)",
+   "keyword hit counts ['gbv', 'sti', 'contraception', 'pregnancy', 'general'] (scaled)",
+   "vague-rule flag (scaled)"
+  ],
+  "feature_width": 390,
+  "scaler": "StandardScaler on rule columns, fitted on each fold's training rows",
+  "penalty": "l2 (sklearn default)",
+  "C": 10,
+  "class_weight": "balanced",
+  "max_iter": 2000,
+  "random_state": 42,
+  "training_set": "without V1 restore paraphrases"
+ },
+ "per_fold_macro_f1": {
+  "1": 0.8467411983332451,
+  "2": 0.9390356769667115,
+  "3": 0.8970169583072809,
+  "4": 0.8167039931745813,
+  "5": 0.9181003584229391
+ },
+ "macro_f1_mean": 0.8835196370409516,
+ "macro_f1_sd": 0.05068781530298449,
+ "pooled_macro_f1": 0.8823208720344898,
+ "pooled_per_class": {
+  "contraception": {
+   "precision": 0.9459459459459459,
+   "recall": 0.9210526315789473,
+   "f1": 0.9333333333333332,
+   "support": 76
+  },
+  "sti": {
+   "precision": 0.9518072289156626,
+   "recall": 0.9634146341463414,
+   "f1": 0.9575757575757576,
+   "support": 82
+  },
+  "pregnancy": {
+   "precision": 0.8857142857142857,
+   "recall": 0.8266666666666667,
+   "f1": 0.8551724137931035,
+   "support": 75
+  },
+  "general": {
+   "precision": 0.8297872340425532,
+   "recall": 0.8571428571428571,
+   "f1": 0.8432432432432433,
+   "support": 91
+  },
+  "out_of_scope": {
+   "precision": 0.8333333333333334,
+   "recall": 0.8620689655172413,
+   "f1": 0.847457627118644,
+   "support": 29
+  },
+  "vague": {
+   "precision": 0.8275862068965517,
+   "recall": 0.8888888888888888,
+   "f1": 0.8571428571428572,
+   "support": 27
+  }
+ },
+ "sti_recall": 0.9634146341463414,
+ "pregnancy_recall": 0.8266666666666667,
+ "confident_wrong": 0.05526315789473684,
+ "confident_wrong_is_plain_error_rate": false,
+ "ece": 0.06564933071647636,
+ "confusion": {
+  "labels": [
+   "contraception",
+   "sti",
+   "pregnancy",
+   "general",
+   "out_of_scope",
+   "vague"
+  ],
+  "matrix": [
+   [
+    70,
+    0,
+    2,
+    3,
+    1,
+    0
+   ],
+   [
+    1,
+    79,
+    1,
+    0,
+    0,
+    1
+   ],
+   [
+    2,
+    0,
+    62,
+    8,
+    1,
+    2
+   ],
+   [
+    1,
+    4,
+    5,
+    78,
+    2,
+    1
+   ],
+   [
+    0,
+    0,
+    0,
+    3,
+    25,
+    1
+   ],
+   [
+    0,
+    0,
+    0,
+    2,
+    1,
+    24
+   ]
+  ]
+ },
+ "n": 380,
+ "environment": {
+  "python": "3.14.6",
+  "packages": {
+   "scikit-learn": "1.9.0",
+   "numpy": "2.5.3",
+   "pandas": "3.0.5",
+   "torch": "2.9.0",
+   "transformers": "5.0.0",
+   "sentence-transformers": "6.1.0"
+  },
+  "git_commit": "ac59eace2763c1ea230ff540471711fdb4fed699",
+  "fold_file_sha256": "9fa96d80c22d020b62ada028d87c0679004c0d68be87e6b2f40d4bff46361cbf"
+ }
+}
