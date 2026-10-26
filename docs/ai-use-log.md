@@ -44,3 +44,7 @@ verified to already be correct).
 No AI-generated citation, statistic, or technical claim has been used in
 project documentation without independent verification against a primary or
 authoritative source.
+
+Review: manual semantic and safety review by the author, assisted by a
+second AI tool (used to flag candidate rewords; the author made the
+accept/reword decisions). Date: 2026-10-26.
