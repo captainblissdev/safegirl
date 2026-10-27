@@ -2851,3 +2851,72 @@ is an experiment for the comparison only.
   it offline with a fake `fetch` only; no real API call is made.
   Turning the flag on, even for the comparison, is a separate logged
   step.
+
+## Gemini smoke test (2026-10-27)
+
+Step 7b, on `gemini/integration` at commit 3df122e. One run of
+`research/experiments/gemini_smoke.js` with `GENERATION_ENABLED=true`:
+four author-written synthetic queries, one real call each, no retries.
+Settings unchanged (temperature 0, `maxOutputTokens` 512, timeout 8 s).
+ml_service was not running, so every query took the keyword fallback
+and local retrieval.
+
+- **Result.** All four calls returned HTTP 200 with finish reason
+  `MAX_TOKENS`, so all four answers fell back to extractive, as
+  designed. The guard was not reached.
+- **Cause.** Thinking tokens (487 to 491 per call) used almost all of
+  the 512-token limit. The Gemini thinking docs (updated 14 Oct 2026)
+  say `max_output_tokens` includes thought tokens. This is the case the
+  "Fixed settings" note asked to check at the first real call.
+- **Retrieval, separately.** The local keyword retrieval picked poorly
+  matching entries for three queries (KB-C4, KB-P5, KB-G6). This is the
+  keyword fallback, not Gemini, and is noted only.
+- **Status.** No setting changed. A proposed change waits for approval.
+
+Output copied exactly:
+
+```text
+=== contraception
+query: How soon after sex should I take the emergency pill?
+classified: contraception (keyword_fallback), retrieval: local, entry: KB-C4
+HTTP status: 200
+finish reason: MAX_TOKENS
+tokens: prompt 357, candidates 17, thinking 491, total 865
+latency: 4486 ms
+answer: extractive ([generationModule] Gemini unavailable, using extractive answer: finish reason MAX_TOKENS)
+guard: not reached
+text: Yes, if you want protection from STIs. Condoms are the only contraceptive method that prevents both pregnancy and sexually transmitted infections, including HIV. Other methods prevent pregnancy only, so Kenyan guidance strongly encourages young people to use condoms as well, for dual protection.
+
+=== sti
+query: Can you get an STI the first time you have sex?
+classified: sti (keyword_fallback), retrieval: local, entry: KB-S4
+HTTP status: 200
+finish reason: MAX_TOKENS
+tokens: prompt 358, candidates 21, thinking 487, total 866
+latency: 4296 ms
+answer: extractive ([generationModule] Gemini unavailable, using extractive answer: finish reason MAX_TOKENS)
+guard: not reached
+text: It could be. Unusual discharge, genital sores or lower belly pain can be signs of an STI, but many STIs cause no symptoms at all, so only a test can tell. A health worker can examine you and give treatment, and Kenya's guidelines say providers must ensure privacy and confidentiality when serving adolescents.
+
+=== pregnancy
+query: What are the first signs that I might be pregnant?
+classified: pregnancy (keyword_fallback), retrieval: local, entry: KB-P5
+HTTP status: 200
+finish reason: MAX_TOKENS
+tokens: prompt 402, candidates 19, thinking 489, total 910
+latency: 3231 ms
+answer: extractive ([generationModule] Gemini unavailable, using extractive answer: finish reason MAX_TOKENS)
+guard: not reached
+text: Under Kenya's 2020 national school re-entry guidelines, a pregnant learner is allowed to stay in school for as long as possible and to sit national exams if her health allows. After delivery she is re-admitted to the same class she was in before. The guidelines give the return time as six months after delivery and also as the start of the next calendar year, so ask your school's guidance and counselling teacher what applies to you.
+
+=== general
+query: Is it normal for my period to come at different times?
+classified: general (keyword_fallback), retrieval: local, entry: KB-G6
+HTTP status: 200
+finish reason: MAX_TOKENS
+tokens: prompt 387, candidates 20, thinking 488, total 895
+latency: 3627 ms
+answer: extractive ([generationModule] Gemini unavailable, using extractive answer: finish reason MAX_TOKENS)
+guard: not reached
+text: The first sign of puberty in most girls is breast 'buds', followed by body hair and a growth spurt. Most girls get their first period within 2 to 3 years after breast development starts. Timing varies from girl to girl, so if you are worried about your development, talk to a health worker.
+```
