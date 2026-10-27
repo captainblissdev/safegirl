@@ -92,8 +92,11 @@ def run_upstream(items) -> dict:
     return {r["id"]: r["upstream"] for r in json.loads(done.stdout)}
 
 
-def simulate(items, model=None) -> list[dict]:
-    """Rows for (id, text) pairs. model is a loaded v4_infer model."""
+def simulate(items, model=None, proba=None) -> list[dict]:
+    """Rows for (id, text) pairs. model is a loaded v4_infer model; proba,
+    if given, is its predict_proba for the same texts in the same order,
+    so a caller that already has the probabilities does not compute them
+    twice."""
     items = list(items)
     ids = [i for i, _ in items]
     if len(set(ids)) != len(ids):
@@ -103,7 +106,10 @@ def simulate(items, model=None) -> list[dict]:
     assert model.t_act == T_ACT, "the frozen model's t_act differs from the pinned T_ACT"
     baseline = _load("cv_baseline", HERE / "cv_baseline.py")
     upstream = run_upstream(items)
-    proba = model.predict_proba([t for _, t in items])
+    if proba is None:
+        proba = model.predict_proba([t for _, t in items])
+    if len(proba) != len(items):
+        raise ValueError("proba must have one row per item")
     rows = []
     for (item_id, text), p in zip(items, proba):
         top = int(p.argmax())
