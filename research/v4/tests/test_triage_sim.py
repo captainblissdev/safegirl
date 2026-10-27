@@ -18,18 +18,18 @@ cv = load("cv_common")
 DEV_SET = cv.REPO / "resources" / "eval" / "retrieval_eval_set.csv"
 PARITY = V4 / "tests" / "triage_parity.js"
 
-# id -> (upstream_fired, v4_kind, baseline_kind), one per branch
+# id -> (upstream_fired, v4_kind, M2 kind, M1 kind), one per branch
 FIXTURES = {
-    "DEV-Q44": ("referral", "referral", "referral"),
-    "DEV-Q31": ("help", "help", "help"),
-    "SEED-CONTRA-09": ("held_A", "held", "held"),
-    "SEED-PREG-14": ("held_B", "held", "held"),
-    "SEED-PREG-11": ("held_C", "held", "held"),
-    "SEED-V4-VAG-007": ("vague_rule", "ask", "ask"),
-    "SEED-CONTRA-43-P1": ("", "abstain", "abstain"),  # V4 top probability below 0.45
-    "SEED-V4-VAG-005": ("", "ask", "abstain"),  # V4 vague class; baseline zero hits
-    "SEED-V4-OOS-001": ("", "abstain", "abstain"),  # out_of_scope for both
-    "SEED-V4-PREG-002": ("", "answer", "answer"),  # topic class for both
+    "DEV-Q44": ("referral", "referral", "referral", "referral"),
+    "DEV-Q31": ("help", "help", "help", "help"),
+    "SEED-CONTRA-09": ("held_A", "held", "held", "held"),
+    "SEED-PREG-14": ("held_B", "held", "held", "held"),
+    "SEED-PREG-11": ("held_C", "held", "held", "held"),
+    "SEED-V4-VAG-007": ("vague_rule", "ask", "ask", "ask"),
+    "SEED-CONTRA-43-P1": ("", "abstain", "abstain", "answer"),  # V4 below 0.45; no keyword hits
+    "SEED-V4-VAG-005": ("", "ask", "abstain", "answer"),  # V4 vague class; no keyword hits
+    "SEED-V4-OOS-001": ("", "abstain", "abstain", "answer"),  # out_of_scope; M1 no hits -> general
+    "SEED-V4-PREG-002": ("", "answer", "answer", "answer"),  # topic class with keyword hits
 }
 
 
@@ -49,7 +49,7 @@ class Decide(unittest.TestCase):
     def test_upstream_kinds_apply_to_both(self):
         for fired, kind in (("referral", "referral"), ("help", "help"), ("held_A", "held"), ("held_B", "held"),
                             ("held_C", "held"), ("vague_rule", "ask")):
-            self.assertEqual(ts.decide(fired, "sti", 0.99, "sti"), (kind, kind))
+            self.assertEqual(ts.decide(fired, "sti", 0.99, "sti", "sti"), (kind, kind, kind))
 
     def test_v4_table(self):
         self.assertEqual(ts.classifier_kind("sti", 0.44), "abstain")
@@ -67,6 +67,9 @@ class Decide(unittest.TestCase):
         with self.assertRaises(ValueError):
             ts.classifier_kind("gbv")
 
+    def test_three_kinds_when_nothing_fires(self):
+        self.assertEqual(ts.decide("", "vague", 0.9, "out_of_scope", "general"), ("ask", "abstain", "answer"))
+
     def test_pinned_threshold(self):
         self.assertEqual(ts.T_ACT, 0.45)
 
@@ -81,7 +84,8 @@ class Simulator(unittest.TestCase):
     def test_one_fixture_per_branch(self):
         for item_id, expected in FIXTURES.items():
             r = self.rows[item_id]
-            self.assertEqual((r["upstream_fired"], r["v4_kind"], r["baseline_kind"]), expected, item_id)
+            self.assertEqual((r["upstream_fired"], r["v4_kind"], r["baseline_kind"], r["baseline_m1_kind"]),
+                             expected, item_id)
 
     def test_abstain_fixture_is_below_t_act(self):
         r = self.rows["SEED-CONTRA-43-P1"]
@@ -106,9 +110,42 @@ class Simulator(unittest.TestCase):
             written = out.read_text(encoding="utf-8")
             with open(out, encoding="utf-8", newline="") as f:
                 header = next(csv.reader(f))
-        self.assertEqual(header[:4], ["id", "v4_kind", "baseline_kind", "upstream_fired"])
+        self.assertEqual(header[:5], ["id", "v4_kind", "baseline_kind", "upstream_fired", "baseline_m1_kind"])
         leaks = [i for i in ids if self.text[i] in console.getvalue() or self.text[i] in written]
         self.assertEqual(leaks, [])
+
+
+class BaselineM1(unittest.TestCase):
+    """M1: the label as is, gbv -> general, no keyword hits -> general."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.text = texts()
+        cls.cb = load("cv_baseline")
+
+    def test_topic_label_with_hits_is_kept(self):
+        t = self.text["SEED-V4-PREG-002"]
+        self.assertEqual(self.cb.baseline.classify_baseline(t), "pregnancy")
+        self.assertEqual(self.cb.m1(t), "pregnancy")
+        self.assertEqual(ts.classifier_kind(self.cb.m1(t)), "answer")
+
+    def test_no_keyword_hits_is_general(self):
+        for item_id in ("SEED-V4-OOS-001", "SEED-V4-VAG-005", "SEED-CONTRA-43-P1"):
+            t = self.text[item_id]
+            self.assertEqual(sum(self.cb.baseline.explain_baseline(t)["scores"].values()), 0, item_id)
+            self.assertEqual((self.cb.m1(t), self.cb.m2(t)), ("general", "out_of_scope"), item_id)
+
+    def test_gbv_is_general(self):
+        # No seed or dev item reaches the classifier with a gbv label: all
+        # three are caught upstream. The mapping itself is checked here.
+        t = self.text["DEV-Q44"]
+        self.assertEqual(self.cb.baseline.classify_baseline(t), "gbv")
+        self.assertEqual(self.cb.m1(t), "general")
+        self.assertEqual(ts.classifier_kind("general"), "answer")
+
+    def test_m1_never_asks_or_abstains_after_upstream(self):
+        for label in ("contraception", "sti", "pregnancy", "general"):
+            self.assertEqual(ts.classifier_kind(label), "answer")
 
 
 class ParityWithBackend(unittest.TestCase):

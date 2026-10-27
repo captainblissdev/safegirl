@@ -5,9 +5,10 @@ Run from the repository root (.venv, CPU; Node on PATH):
     .venv/Scripts/python.exe -I research/v4/triage_sim.py INPUT.csv --out OUTPUT.csv
 
 INPUT.csv has the columns id and text. OUTPUT.csv has one row per item:
-id, v4_kind, baseline_kind, upstream_fired, then v4_class,
-v4_confidence and baseline_class for description. No text is written
-or printed; the console gets counts only.
+id, v4_kind, baseline_kind (M2), upstream_fired, baseline_m1_kind, then
+v4_class, v4_confidence, baseline_class (M2) and baseline_m1_class for
+description. No text is written or printed; the console gets counts
+only.
 
 The measure is docs/decision-log.md, "V4 pre-registration: deviation 4
 (2026-10-27), system-level measure":
@@ -19,7 +20,11 @@ The measure is docs/decision-log.md, "V4 pre-registration: deviation 4
   below t_act 0.45 -> abstain, vague -> ask, out_of_scope -> abstain,
   topic class -> answer;
 - otherwise the baseline under M2 (cv_baseline.m2): out_of_scope ->
-  abstain, vague -> ask, topic class -> answer.
+  abstain, vague -> ask, topic class -> answer;
+- and the baseline under M1 (cv_baseline.m1): the label as is, gbv ->
+  general, no keyword hits -> general, so a topic class -> answer.
+
+Deviation 5 (2026-10-27) makes both M1 and M2 the triage comparators.
 
 There is no retrieval, entry matching or relevance gate. Every setting
 is pinned here; nothing is read from environment variables.
@@ -42,7 +47,8 @@ T_ACT = 0.45
 TOPICS = ("contraception", "sti", "pregnancy", "general")
 UPSTREAM_KIND = {"referral": "referral", "help": "help", "held_A": "held", "held_B": "held", "held_C": "held",
                  "vague_rule": "ask"}
-COLUMNS = ["id", "v4_kind", "baseline_kind", "upstream_fired", "v4_class", "v4_confidence", "baseline_class"]
+COLUMNS = ["id", "v4_kind", "baseline_kind", "upstream_fired", "baseline_m1_kind", "v4_class", "v4_confidence",
+           "baseline_class", "baseline_m1_class"]
 
 
 def _load(name, path):
@@ -66,12 +72,13 @@ def classifier_kind(cls: str, confidence: float | None = None) -> str:
     raise ValueError(f"unknown class {cls!r}")
 
 
-def decide(upstream: str, v4_class: str, v4_confidence: float, baseline_class: str) -> tuple[str, str]:
-    """(v4_kind, baseline_kind) for one item."""
+def decide(upstream: str, v4_class: str, v4_confidence: float, m2_class: str,
+           m1_class: str) -> tuple[str, str, str]:
+    """(v4_kind, M2 kind, M1 kind) for one item."""
     if upstream:
         kind = UPSTREAM_KIND[upstream]
-        return kind, kind
-    return classifier_kind(v4_class, v4_confidence), classifier_kind(baseline_class)
+        return kind, kind, kind
+    return classifier_kind(v4_class, v4_confidence), classifier_kind(m2_class), classifier_kind(m1_class)
 
 
 def run_upstream(items) -> dict:
@@ -94,18 +101,18 @@ def simulate(items, model=None) -> list[dict]:
     if model is None:
         model = _load("v4_infer", HERE / "v4_infer.py").load()
     assert model.t_act == T_ACT, "the frozen model's t_act differs from the pinned T_ACT"
-    m2 = _load("cv_baseline", HERE / "cv_baseline.py").m2
+    baseline = _load("cv_baseline", HERE / "cv_baseline.py")
     upstream = run_upstream(items)
     proba = model.predict_proba([t for _, t in items])
     rows = []
     for (item_id, text), p in zip(items, proba):
         top = int(p.argmax())
         v4_class, v4_conf = model.classes[top], float(p[top])
-        base_class = m2(text)
-        v4_kind, base_kind = decide(upstream[item_id], v4_class, v4_conf, base_class)
-        rows.append({"id": item_id, "v4_kind": v4_kind, "baseline_kind": base_kind,
-                     "upstream_fired": upstream[item_id], "v4_class": v4_class,
-                     "v4_confidence": f"{v4_conf:.6f}", "baseline_class": base_class})
+        m2_class, m1_class = baseline.m2(text), baseline.m1(text)
+        v4_kind, m2_kind, m1_kind = decide(upstream[item_id], v4_class, v4_conf, m2_class, m1_class)
+        rows.append({"id": item_id, "v4_kind": v4_kind, "baseline_kind": m2_kind,
+                     "upstream_fired": upstream[item_id], "baseline_m1_kind": m1_kind, "v4_class": v4_class,
+                     "v4_confidence": f"{v4_conf:.6f}", "baseline_class": m2_class, "baseline_m1_class": m1_class})
     return rows
 
 
@@ -134,7 +141,8 @@ def main(argv=None):
     write_rows(rows, args.out)
     print(f"{len(rows)} items; upstream fired on {sum(1 for r in rows if r['upstream_fired'])}")
     print("v4_kind:", dict(Counter(r["v4_kind"] for r in rows)))
-    print("baseline_kind:", dict(Counter(r["baseline_kind"] for r in rows)))
+    print("baseline_kind (M2):", dict(Counter(r["baseline_kind"] for r in rows)))
+    print("baseline_m1_kind:", dict(Counter(r["baseline_m1_kind"] for r in rows)))
     return 0
 
 
