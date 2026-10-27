@@ -1,0 +1,1049 @@
+{
+ "dry_run": false,
+ "provenance": {
+  "frozen_model_sha256": "89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd",
+  "frozen_commit": "7a1c134208c6dc9a8b55abd9e08bae5b598e36b7",
+  "labels_sha256": "99380b532b02f4f41cd7f4cdc4e61b0e96413230a3ff2966ec46ab384f850f39",
+  "texts_sha256": "7b3cc85a905fe6e55b16d3bd59b9f6d18c07ac1311de60d2f09e70348efe9db1",
+  "script_sha256": "315fa466cebccd655077cea3733461cf8410d9e740b47abf547b22038a84d007",
+  "git_head": "edf3778c5c0a9c4a1b3835eaab3de706317f24d5",
+  "t_act": 0.45
+ },
+ "aggregates": {
+  "counts": {
+   "items": 205,
+   "no_upstream": 163,
+   "ambiguous": 4,
+   "route": {
+    "none": 185,
+    "held": 19,
+    "safety": 1
+   },
+   "topic_label": {
+    "contraception": 37,
+    "sti": 37,
+    "pregnancy": 34,
+    "general": 48,
+    "out_of_scope": 26,
+    "vague": 23
+   },
+   "upstream_fired": {
+    "held_A": 8,
+    "held_B": 1,
+    "held_C": 9,
+    "help": 1,
+    "referral": 1,
+    "vague_rule": 22
+   }
+  },
+  "classifier": {
+   "all": {
+    "v4": {
+     "n": 205,
+     "macro_f1": 0.8571641537361582,
+     "per_class": {
+      "contraception": {
+       "precision": 0.8823529411764706,
+       "recall": 0.8108108108108109,
+       "support": 37
+      },
+      "sti": {
+       "precision": 0.9117647058823529,
+       "recall": 0.8378378378378378,
+       "support": 37
+      },
+      "pregnancy": {
+       "precision": 0.8857142857142857,
+       "recall": 0.9117647058823529,
+       "support": 34
+      },
+      "general": {
+       "precision": 0.8541666666666666,
+       "recall": 0.8541666666666666,
+       "support": 48
+      },
+      "out_of_scope": {
+       "precision": 0.7857142857142857,
+       "recall": 0.8461538461538461,
+       "support": 26
+      },
+      "vague": {
+       "precision": 0.8076923076923077,
+       "recall": 0.9130434782608695,
+       "support": 23
+      }
+     },
+     "sti_recall": 0.8378378378378378,
+     "pregnancy_recall": 0.9117647058823529,
+     "confusion": {
+      "labels": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general",
+       "out_of_scope",
+       "vague"
+      ],
+      "matrix": [
+       [
+        30,
+        0,
+        2,
+        1,
+        3,
+        1
+       ],
+       [
+        3,
+        31,
+        0,
+        2,
+        1,
+        0
+       ],
+       [
+        1,
+        0,
+        31,
+        1,
+        0,
+        1
+       ],
+       [
+        0,
+        1,
+        2,
+        41,
+        2,
+        2
+       ],
+       [
+        0,
+        1,
+        0,
+        2,
+        22,
+        1
+       ],
+       [
+        0,
+        1,
+        0,
+        1,
+        0,
+        21
+       ]
+      ]
+     },
+     "confident_wrong": 0.1024390243902439,
+     "ece": 0.0918915942868653
+    },
+    "m1": {
+     "n": 205,
+     "macro_f1": 0.5099388152548417,
+     "per_class": {
+      "contraception": {
+       "precision": 0.8666666666666667,
+       "recall": 0.7027027027027027,
+       "support": 37
+      },
+      "sti": {
+       "precision": 1.0,
+       "recall": 0.7297297297297297,
+       "support": 37
+      },
+      "pregnancy": {
+       "precision": 0.90625,
+       "recall": 0.8529411764705882,
+       "support": 34
+      },
+      "general": {
+       "precision": 0.39655172413793105,
+       "recall": 0.9583333333333334,
+       "support": 48
+      },
+      "out_of_scope": {
+       "precision": 0.0,
+       "recall": 0.0,
+       "support": 26
+      },
+      "vague": {
+       "precision": 0.0,
+       "recall": 0.0,
+       "support": 23
+      }
+     },
+     "sti_recall": 0.7297297297297297,
+     "pregnancy_recall": 0.8529411764705882,
+     "confusion": {
+      "labels": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general",
+       "out_of_scope",
+       "vague"
+      ],
+      "matrix": [
+       [
+        26,
+        0,
+        1,
+        10,
+        0,
+        0
+       ],
+       [
+        3,
+        27,
+        0,
+        7,
+        0,
+        0
+       ],
+       [
+        1,
+        0,
+        29,
+        4,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        2,
+        46,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        26,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        23,
+        0,
+        0
+       ]
+      ]
+     }
+    },
+    "m2": {
+     "n": 205,
+     "macro_f1": 0.5863517632502878,
+     "per_class": {
+      "contraception": {
+       "precision": 0.8666666666666667,
+       "recall": 0.7027027027027027,
+       "support": 37
+      },
+      "sti": {
+       "precision": 1.0,
+       "recall": 0.7297297297297297,
+       "support": 37
+      },
+      "pregnancy": {
+       "precision": 0.90625,
+       "recall": 0.8529411764705882,
+       "support": 34
+      },
+      "general": {
+       "precision": 0.75,
+       "recall": 0.0625,
+       "support": 48
+      },
+      "out_of_scope": {
+       "precision": 0.22727272727272727,
+       "recall": 0.7692307692307693,
+       "support": 26
+      },
+      "vague": {
+       "precision": 0.5416666666666666,
+       "recall": 0.5652173913043478,
+       "support": 23
+      }
+     },
+     "sti_recall": 0.7297297297297297,
+     "pregnancy_recall": 0.8529411764705882,
+     "confusion": {
+      "labels": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general",
+       "out_of_scope",
+       "vague"
+      ],
+      "matrix": [
+       [
+        26,
+        0,
+        1,
+        0,
+        9,
+        1
+       ],
+       [
+        3,
+        27,
+        0,
+        1,
+        6,
+        0
+       ],
+       [
+        1,
+        0,
+        29,
+        0,
+        3,
+        1
+       ],
+       [
+        0,
+        0,
+        2,
+        3,
+        40,
+        3
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        20,
+        6
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        10,
+        13
+       ]
+      ]
+     }
+    }
+   },
+   "no_upstream": {
+    "v4": {
+     "n": 163,
+     "macro_f1": 0.8976711973580066,
+     "per_class": {
+      "contraception": {
+       "precision": 0.9310344827586207,
+       "recall": 0.9,
+       "support": 30
+      },
+      "sti": {
+       "precision": 0.9117647058823529,
+       "recall": 0.8857142857142857,
+       "support": 35
+      },
+      "pregnancy": {
+       "precision": 0.896551724137931,
+       "recall": 0.9629629629629629,
+       "support": 27
+      },
+      "general": {
+       "precision": 0.8837209302325582,
+       "recall": 0.926829268292683,
+       "support": 41
+      },
+      "out_of_scope": {
+       "precision": 0.85,
+       "recall": 0.85,
+       "support": 20
+      },
+      "vague": {
+       "precision": 1.0,
+       "recall": 0.8,
+       "support": 10
+      }
+     },
+     "sti_recall": 0.8857142857142857,
+     "pregnancy_recall": 0.9629629629629629,
+     "confusion": {
+      "labels": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general",
+       "out_of_scope",
+       "vague"
+      ],
+      "matrix": [
+       [
+        27,
+        0,
+        2,
+        0,
+        1,
+        0
+       ],
+       [
+        2,
+        31,
+        0,
+        1,
+        1,
+        0
+       ],
+       [
+        0,
+        0,
+        26,
+        1,
+        0,
+        0
+       ],
+       [
+        0,
+        1,
+        1,
+        38,
+        1,
+        0
+       ],
+       [
+        0,
+        1,
+        0,
+        2,
+        17,
+        0
+       ],
+       [
+        0,
+        1,
+        0,
+        1,
+        0,
+        8
+       ]
+      ]
+     },
+     "confident_wrong": 0.06134969325153374,
+     "ece": 0.11196753565115822
+    },
+    "m1": {
+     "n": 163,
+     "macro_f1": 0.5503301954914858,
+     "per_class": {
+      "contraception": {
+       "precision": 0.9230769230769231,
+       "recall": 0.8,
+       "support": 30
+      },
+      "sti": {
+       "precision": 1.0,
+       "recall": 0.7714285714285715,
+       "support": 35
+      },
+      "pregnancy": {
+       "precision": 0.96,
+       "recall": 0.8888888888888888,
+       "support": 27
+      },
+      "general": {
+       "precision": 0.4823529411764706,
+       "recall": 1.0,
+       "support": 41
+      },
+      "out_of_scope": {
+       "precision": 0.0,
+       "recall": 0.0,
+       "support": 20
+      },
+      "vague": {
+       "precision": 0.0,
+       "recall": 0.0,
+       "support": 10
+      }
+     },
+     "sti_recall": 0.7714285714285715,
+     "pregnancy_recall": 0.8888888888888888,
+     "confusion": {
+      "labels": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general",
+       "out_of_scope",
+       "vague"
+      ],
+      "matrix": [
+       [
+        24,
+        0,
+        1,
+        5,
+        0,
+        0
+       ],
+       [
+        2,
+        27,
+        0,
+        6,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        24,
+        3,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        41,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        20,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        10,
+        0,
+        0
+       ]
+      ]
+     }
+    },
+    "m2": {
+     "n": 163,
+     "macro_f1": 0.5300934099081656,
+     "per_class": {
+      "contraception": {
+       "precision": 0.9230769230769231,
+       "recall": 0.8,
+       "support": 30
+      },
+      "sti": {
+       "precision": 1.0,
+       "recall": 0.7714285714285715,
+       "support": 35
+      },
+      "pregnancy": {
+       "precision": 0.96,
+       "recall": 0.8888888888888888,
+       "support": 27
+      },
+      "general": {
+       "precision": 0.75,
+       "recall": 0.07317073170731707,
+       "support": 41
+      },
+      "out_of_scope": {
+       "precision": 0.24691358024691357,
+       "recall": 1.0,
+       "support": 20
+      },
+      "vague": {
+       "precision": 0.0,
+       "recall": 0.0,
+       "support": 10
+      }
+     },
+     "sti_recall": 0.7714285714285715,
+     "pregnancy_recall": 0.8888888888888888,
+     "confusion": {
+      "labels": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general",
+       "out_of_scope",
+       "vague"
+      ],
+      "matrix": [
+       [
+        24,
+        0,
+        1,
+        0,
+        5,
+        0
+       ],
+       [
+        2,
+        27,
+        0,
+        1,
+        5,
+        0
+       ],
+       [
+        0,
+        0,
+        24,
+        0,
+        3,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        3,
+        38,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        20,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        10,
+        0
+       ]
+      ]
+     }
+    }
+   }
+  },
+  "reply_kind": {
+   "all": {
+    "n": 205,
+    "correct_rate": {
+     "v4": 0.8195121951219512,
+     "m1": 0.7609756097560976,
+     "m2": 0.6146341463414634
+    },
+    "mcnemar": {
+     "v4_vs_m1": {
+      "v4_right_other_wrong": 25,
+      "v4_wrong_other_right": 13,
+      "p_exact": 0.07295138851623051
+     },
+     "v4_vs_m2": {
+      "v4_right_other_wrong": 45,
+      "v4_wrong_other_right": 3,
+      "p_exact": 1.312585595769633e-10
+     }
+    }
+   },
+   "no_upstream": {
+    "n": 163,
+    "correct_rate": {
+     "v4": 0.8650306748466258,
+     "m1": 0.7914110429447853,
+     "m2": 0.6073619631901841
+    },
+    "mcnemar": {
+     "v4_vs_m1": {
+      "v4_right_other_wrong": 25,
+      "v4_wrong_other_right": 13,
+      "p_exact": 0.07295138851623051
+     },
+     "v4_vs_m2": {
+      "v4_right_other_wrong": 45,
+      "v4_wrong_other_right": 3,
+      "p_exact": 1.312585595769633e-10
+     }
+    }
+   }
+  },
+  "descriptive_without_ambiguous": {
+   "flagged": 4,
+   "n": 201,
+   "classifier": {
+    "v4": {
+     "n": 201,
+     "macro_f1": 0.8593335344368382,
+     "per_class": {
+      "contraception": {
+       "precision": 0.8823529411764706,
+       "recall": 0.8108108108108109,
+       "support": 37
+      },
+      "sti": {
+       "precision": 0.9090909090909091,
+       "recall": 0.8333333333333334,
+       "support": 36
+      },
+      "pregnancy": {
+       "precision": 0.90625,
+       "recall": 0.90625,
+       "support": 32
+      },
+      "general": {
+       "precision": 0.8541666666666666,
+       "recall": 0.8723404255319149,
+       "support": 47
+      },
+      "out_of_scope": {
+       "precision": 0.7857142857142857,
+       "recall": 0.8461538461538461,
+       "support": 26
+      },
+      "vague": {
+       "precision": 0.8076923076923077,
+       "recall": 0.9130434782608695,
+       "support": 23
+      }
+     },
+     "sti_recall": 0.8333333333333334,
+     "pregnancy_recall": 0.90625,
+     "confusion": {
+      "labels": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general",
+       "out_of_scope",
+       "vague"
+      ],
+      "matrix": [
+       [
+        30,
+        0,
+        2,
+        1,
+        3,
+        1
+       ],
+       [
+        3,
+        30,
+        0,
+        2,
+        1,
+        0
+       ],
+       [
+        1,
+        0,
+        29,
+        1,
+        0,
+        1
+       ],
+       [
+        0,
+        1,
+        1,
+        41,
+        2,
+        2
+       ],
+       [
+        0,
+        1,
+        0,
+        2,
+        22,
+        1
+       ],
+       [
+        0,
+        1,
+        0,
+        1,
+        0,
+        21
+       ]
+      ]
+     },
+     "confident_wrong": 0.09950248756218906,
+     "ece": 0.08944022898335614
+    },
+    "m1": {
+     "n": 201,
+     "macro_f1": 0.510748693326314,
+     "per_class": {
+      "contraception": {
+       "precision": 0.8666666666666667,
+       "recall": 0.7027027027027027,
+       "support": 37
+      },
+      "sti": {
+       "precision": 1.0,
+       "recall": 0.7222222222222222,
+       "support": 36
+      },
+      "pregnancy": {
+       "precision": 0.9310344827586207,
+       "recall": 0.84375,
+       "support": 32
+      },
+      "general": {
+       "precision": 0.39655172413793105,
+       "recall": 0.9787234042553191,
+       "support": 47
+      },
+      "out_of_scope": {
+       "precision": 0.0,
+       "recall": 0.0,
+       "support": 26
+      },
+      "vague": {
+       "precision": 0.0,
+       "recall": 0.0,
+       "support": 23
+      }
+     },
+     "sti_recall": 0.7222222222222222,
+     "pregnancy_recall": 0.84375,
+     "confusion": {
+      "labels": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general",
+       "out_of_scope",
+       "vague"
+      ],
+      "matrix": [
+       [
+        26,
+        0,
+        1,
+        10,
+        0,
+        0
+       ],
+       [
+        3,
+        26,
+        0,
+        7,
+        0,
+        0
+       ],
+       [
+        1,
+        0,
+        27,
+        4,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        1,
+        46,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        26,
+        0,
+        0
+       ],
+       [
+        0,
+        0,
+        0,
+        23,
+        0,
+        0
+       ]
+      ]
+     }
+    },
+    "m2": {
+     "n": 201,
+     "macro_f1": 0.5869651205352436,
+     "per_class": {
+      "contraception": {
+       "precision": 0.8666666666666667,
+       "recall": 0.7027027027027027,
+       "support": 37
+      },
+      "sti": {
+       "precision": 1.0,
+       "recall": 0.7222222222222222,
+       "support": 36
+      },
+      "pregnancy": {
+       "precision": 0.9310344827586207,
+       "recall": 0.84375,
+       "support": 32
+      },
+      "general": {
+       "precision": 0.75,
+       "recall": 0.06382978723404255,
+       "support": 47
+      },
+      "out_of_scope": {
+       "precision": 0.22727272727272727,
+       "recall": 0.7692307692307693,
+       "support": 26
+      },
+      "vague": {
+       "precision": 0.5416666666666666,
+       "recall": 0.5652173913043478,
+       "support": 23
+      }
+     },
+     "sti_recall": 0.7222222222222222,
+     "pregnancy_recall": 0.84375,
+     "confusion": {
+      "labels": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general",
+       "out_of_scope",
+       "vague"
+      ],
+      "matrix": [
+       [
+        26,
+        0,
+        1,
+        0,
+        9,
+        1
+       ],
+       [
+        3,
+        26,
+        0,
+        1,
+        6,
+        0
+       ],
+       [
+        1,
+        0,
+        27,
+        0,
+        3,
+        1
+       ],
+       [
+        0,
+        0,
+        1,
+        3,
+        40,
+        3
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        20,
+        6
+       ],
+       [
+        0,
+        0,
+        0,
+        0,
+        10,
+        13
+       ]
+      ]
+     }
+    }
+   },
+   "reply_kind": {
+    "n": 201,
+    "correct_rate": {
+     "v4": 0.8159203980099502,
+     "m1": 0.7562189054726368,
+     "m2": 0.6069651741293532
+    },
+    "mcnemar": {
+     "v4_vs_m1": {
+      "v4_right_other_wrong": 25,
+      "v4_wrong_other_right": 13,
+      "p_exact": 0.07295138851623051
+     },
+     "v4_vs_m2": {
+      "v4_right_other_wrong": 45,
+      "v4_wrong_other_right": 3,
+      "p_exact": 1.312585595769633e-10
+     }
+    }
+   }
+  },
+  "bootstrap": {
+   "statistic": "macro-F1(V4) - macro-F1(M2), all items",
+   "point": 0.27081239048587025,
+   "ci95": [
+    0.21476603411253728,
+    0.32824401276076354
+   ],
+   "resamples": 10000,
+   "seed": 42,
+   "method": "numpy default_rng, item resampling, percentile interval"
+  }
+ },
+ "gate": {
+  "conditions": {
+   "1 macro-F1 gain >= 0.05 and the 95% interval excludes 0": {
+    "pass": true,
+    "gain": 0.27081239048587036,
+    "ci95": [
+     0.21476603411253728,
+     0.32824401276076354
+    ]
+   },
+   "2 sti and pregnancy recall not lower than M2's": {
+    "pass": true,
+    "v4": [
+     0.8378378378378378,
+     0.9117647058823529
+    ],
+    "m2": [
+     0.7297297297297297,
+     0.8529411764705882
+    ]
+   },
+   "3 reply-kind correct rate not lower than M1's and than M2's": {
+    "pass": true,
+    "rates": {
+     "v4": 0.8195121951219512,
+     "m1": 0.7609756097560976,
+     "m2": 0.6146341463414634
+    }
+   },
+   "4 app/ unchanged since the frozen model's commit": {
+    "pass": true,
+    "diff_stat": ""
+   }
+  },
+  "overall": true
+ }
+}
