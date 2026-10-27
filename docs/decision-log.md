@@ -3121,3 +3121,40 @@ is left as it was.
 - **Unchanged.** Model `gemini-3.6-flash`, timeout 8 s with no retry,
   the prompt, the output guard, the extractive fallback, synthetic
   queries only, and the flag off by default.
+
+## KB 62 merge rule (written before measurement) (2026-10-27)
+
+Branch `kb/merge-60` (the KB branch merged into development at
+dde3f92). Decision owner: project owner. This rule decides whether the
+demo serves the 62-entry KB or stays on the 21 entries. It is applied as
+written to the K5 measurements that follow.
+
+- **Retrieval index, pass criterion.** Unscoped self-retrieval of at
+  least 60 of 62 KB questions in question-only mode
+  (`RETRIEVAL_EMBED_MODE=question`, `npm run kb:self-retrieval`). The
+  scoped count (live V3 scoping) is reported, not gated, because V3
+  mis-scopes five entries (KB-C11, KB-S16, KB-P1, KB-G13, KB-P9), so
+  scoped retrieval cannot reach them whatever is embedded.
+- **Dev score, pass criterion.** On the 35 labelled development-set
+  questions, the 62-entry KB must be within one question of the
+  21-entry result (29 of 35), so at least 28 of 35, scored with
+  relabelled labels.
+  - The existing labels file
+    (`resources/eval/retrieval_eval_set_labels_2026-10-15.csv`)
+    predates the new entries. The first run uses it as it is and is
+    reported as provisional.
+  - Relabelling needs a blind review of the 35 questions by Cindy.
+  - The development set is not blind to the 62 entries: the K3 and K4
+    evaluations and the diagnosis already looked at its replies on
+    them.
+- **Embed mode.** The default switches from "full" to "question" only
+  if the criteria pass, and then as its own logged change. Otherwise
+  the demo stays on the 21 entries.
+- **Gate.** The 0.8439 relevance gate is re-measured, not changed, in
+  this step. Any change is a separate, tested decision.
+- **Timing.** This rule was written after the K4 diagnosis
+  (`docs/kb-integration-diagnosis-2026-10-22.md`, which includes an
+  offline what-if of question-only embedding), but before any
+  question-only measurement on the merged tree. The self-retrieval
+  wording was corrected before measuring, to gate on the unscoped
+  count and report the scoped count.
