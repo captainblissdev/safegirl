@@ -2313,3 +2313,49 @@ Gate report, copied exactly from the script's output:
 - **Overall: PASS**
 
 git diff --stat of app/ against the frozen model's commit 7a1c134: (empty)
+
+## V4 post-gate descriptive comparison with V3 (2026-10-27)
+
+- **Descriptive only.** This follows the sealed gate result ("V4
+  sealed result (2026-10-27)") and is descriptive only. No decision,
+  gate condition or integration step depends on it, and it does not
+  change the decision on V4.
+- **V3 is frozen.**
+  - Checkpoint: `ml_service/final/` (gitignored), `model.safetensors`
+    sha256 e8bf2e3aa01c920197b51071e736ef6a3d1f16a57dd8d3bdb1565f75152cfb30,
+    as already recorded in this log.
+  - Settings: DistilBertForSequenceClassification, 6 layers, 4 labels
+    (0 contraception, 1 sti, 2 pregnancy, 3 general). Each text is
+    classified on its own, as `ml_service/app.py` does: truncation at
+    max length 64, softmax, argmax, confidence = top probability.
+  - Gateway thresholds: abstain below 0.35, scoped retrieval at 0.5
+    (`app/gateway/src/classifierClient.js`). V3 is loaded offline from
+    the checkpoint, with no server and no network.
+- **Same items, own run.** It uses the same sealed items and the same
+  final labels (sha256 99380b53...). It has its own script
+  (`research/v4/v3_comparison.py`) and its own one-run lock,
+  `V3_COMPARISON_RUN.lock`, next to the labels file. It is run once
+  and reported as it comes out.
+- **Scope.** V3 knows only contraception, sti, pregnancy and general.
+  So the classifier comparison covers the 156 items whose topic label
+  is one of those four classes.
+- **Reply-kind column (all 205).** V3 is treated as: the upstream rules
+  first (as in `triage_sim`), then confidence < 0.35 -> abstain,
+  otherwise answer. Expected kinds and V4's kinds are as in deviations
+  4 and 5.
+- **Reported on the 156 items, for V3 and V4:** accuracy, macro-F1 over
+  the four classes, per-class precision and recall, the confusion
+  matrix, confident-wrong (> 0.5), ECE (10 bins), and V3's abstain rate
+  at 0.35. V4 is reported twice:
+  - as is: the six-class argmax; out_of_scope and vague predictions
+    count as errors; confidence = top of the six probabilities;
+  - restricted to the four topic classes: the argmax over the four
+    topic probabilities; confidence = the top of those four,
+    renormalised to sum to 1.
+
+  The same is reported on the subset where no upstream rule fires.
+- **Tests.** McNemar's exact test on correct/incorrect over the 156
+  items, for V4 as is against V3 and V4 restricted against V3, with
+  the discordant counts. A paired bootstrap (10,000 resamples, numpy
+  default_rng(42), the same item resamples for both pairs) of each
+  macro-F1 difference, with a 95% percentile interval, reported as is.
