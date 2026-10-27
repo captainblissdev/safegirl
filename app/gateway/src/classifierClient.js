@@ -30,9 +30,11 @@
  * V4 triage (docs/decision-log.md, "V4 integration behind a flag"), only
  * when V4_TRIAGE_ENABLED is exactly "true" (off by default):
  *   classify(text) first POSTs /triage -> { label, confidence, source: "v4" }
- *   over six classes. Any failure (network, timeout, non-2xx, malformed
- *   body, unknown label, confidence not a number in 0..1) falls back to
- *   /classify as above, logging the reason only, never the query.
+ *   over six classes. A timeout or network error goes straight to the
+ *   keyword fallback (ml_service is not answering, so /classify is not
+ *   tried). Any other failure (non-2xx, malformed body, unknown label,
+ *   confidence not a number in 0..1) falls back to /classify as above.
+ *   The log gives the reason only, never the query.
  *   retrieve() abstains without retrieval for out_of_scope or a
  *   confidence below 0.45 (t_act); a topic class goes through the usual
  *   scoping (0.5) and the relevance gate. vague is answered with the
@@ -272,8 +274,21 @@ function createClassifierClient({
       try {
         return await triage(text);
       } catch (error) {
+        const reason = triageFailureReason(error);
+
+        // A timeout or network error means ml_service itself is not
+        // answering, so /classify would wait out its own timeout too: go
+        // straight to the keyword fallback (worst case stays one timeout).
+        if (reason === "timeout" || reason === "network error") {
+          logger.warn(
+            `[classifierClient] /triage unreachable, using keyword fallback: ${reason}`,
+          );
+          const { label } = keywordClassifier.classify(text);
+          return { label, confidence: null, source: "keyword_fallback" };
+        }
+
         logger.warn(
-          `[classifierClient] /triage unavailable, using V3 /classify: ${triageFailureReason(error)}`,
+          `[classifierClient] /triage unavailable, using V3 /classify: ${reason}`,
         );
       }
     }

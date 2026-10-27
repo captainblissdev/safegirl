@@ -214,23 +214,57 @@ describe("V4 triage: mapping when the flag is on", () => {
   });
 });
 
-describe("V4 triage: every failure falls back to the V3 path", () => {
+describe("V4 triage: an unreachable ml_service goes straight to keywords", () => {
   const hang = (_body, options) =>
     new Promise((_resolve, reject) => {
       options?.signal?.addEventListener("abort", () =>
         reject(options.signal.reason),
       );
     });
+  const UNREACHABLE = {
+    "network error": async () => {
+      throw new TypeError("fetch failed");
+    },
+    timeout: hang,
+  };
+
+  for (const [name, handler] of Object.entries(UNREACHABLE)) {
+    it(
+      `${name} -> keyword fallback, no /classify request`,
+      { timeout: 2000 },
+      async () => {
+        const { handleQuery, calls, warnings } = setup({ "/triage": handler });
+        const r = await handleQuery(QUERY);
+        assert.equal(r.classifierSource, "keyword_fallback");
+        assert.ok(
+          !endpoints(calls).includes("/classify"),
+          endpoints(calls).join(", "),
+        );
+        assert.equal(endpoints(calls)[0], "/triage");
+        assert.ok(
+          warnings.some(
+            (w) =>
+              /\/triage unreachable, using keyword fallback/.test(w) &&
+              w.includes(name),
+          ),
+          warnings.join("\n"),
+        );
+        assert.ok(
+          !warnings.some((w) => w.includes(QUERY)),
+          "no query text in the log",
+        );
+      },
+    );
+  }
+});
+
+describe("V4 triage: every other failure falls back to the V3 path", () => {
   const malformed = () => ({
     ok: true,
     status: 200,
     json: async () => JSON.parse("{not json"),
   });
   const FAILURES = {
-    "network error": async () => {
-      throw new TypeError("fetch failed");
-    },
-    timeout: hang,
     "HTTP 503": () => json({ detail: "V4 triage model is not loaded." }, 503),
     "HTTP 500": () => json({}, 500),
     "HTTP 404": () => json({}, 404),
@@ -244,8 +278,6 @@ describe("V4 triage: every failure falls back to the V3 path", () => {
     "confidence missing": () => json({ label: "sti" }),
   };
   const REASON = {
-    "network error": /network error/,
-    timeout: /timeout/,
     "HTTP 503": /HTTP 503/,
     "HTTP 500": /HTTP 500/,
     "HTTP 404": /HTTP 404/,
@@ -281,12 +313,11 @@ describe("V4 triage: every failure falls back to the V3 path", () => {
   }
 
   it("when /classify also fails -> the keyword fallback", async () => {
-    const down = async () => {
-      throw new TypeError("fetch failed");
-    };
     const { handleQuery, warnings } = setup({
-      "/triage": down,
-      "/classify": down,
+      "/triage": () => json({}, 503),
+      "/classify": async () => {
+        throw new TypeError("fetch failed");
+      },
     });
     const r = await handleQuery(QUERY);
     assert.equal(r.classifierSource, "keyword_fallback");

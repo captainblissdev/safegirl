@@ -2578,6 +2578,15 @@ Recorded 27 Oct 2026, before any integration code, on branch
     - Latency per query (median and 95th percentile) and RAM, measured
       with the flag on and off.
     - A closing decision-log entry and a README note.
+- **Update, 2026-10-27 (timeouts).** After a `/triage` timeout or
+  network error, the gateway skips `/classify` and goes straight to the
+  keyword fallback. ml_service is not answering, so waiting out a
+  second 3 s timeout would double the worst case. The worst case with
+  the flag on therefore stays about 3 s, as with the flag off. The V3
+  `/classify` fallback is kept for a 503, other non-2xx responses, a
+  malformed body, an unknown label or a bad confidence. `npm test` now
+  clears a stray `V4_TRIAGE_ENABLED` from the shell
+  (`test/clearV4Flag.js`).
 
 ## V4 integration: keyword fallback list differences (2026-10-27)
 
