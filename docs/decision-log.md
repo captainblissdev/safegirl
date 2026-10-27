@@ -2779,3 +2779,169 @@ seeds mismatches (id: live / triage_sim, reason):
 
 Machine: AMD64 Family 25 Model 124 Stepping 0, AuthenticAMD; Python 3.14.6; Node v24.18.1; git 4da9e85.
 ```
+
+## Gemini generation behind a flag
+
+Recorded 27 Oct 2026, before any generation code, on branch
+`gemini/integration`. Mr. Ouma's decision stands: SafeGirl gives
+extractive answers (the KB entry's answer verbatim). Gemini generation
+is an experiment for the comparison only.
+
+- **Flag.** `GENERATION_ENABLED`, on only when it is exactly `"true"`;
+  off by default. With the flag off, `generationModule` returns the
+  extractive answer exactly as before, Gemini is never contacted, and
+  the flag-off snapshots are unchanged.
+- **Key.** Read only from the `GEMINI_API_KEY` environment variable and
+  sent only in the `x-goog-api-key` request header, never in the URL.
+  It is never logged or put in an error message. With the flag on and
+  no key, every reply is extractive.
+- **Model, pinned: `gemini-3.6-flash`** (REST `generateContent`, plain
+  `fetch`, no SDK).
+  - It is a stable model, and stable codes "usually don't change". The
+    `-latest` aliases are hot-swapped with each release, so they would
+    break the comparison.
+  - No shutdown date has been announced. It has been stable since 21 Jul
+    2026, longer than `gemini-3.8-flash` (2 Sep 2026).
+  - The Gemini API offers no dated (`-001`) code for current Flash
+    models. The 2.5 models are limited to earlier users, and 2.0 was shut
+    down on 1 Jun 2026.
+  - Checked against ai.google.dev (models and deprecations pages, last
+    updated 22 Oct 2026). Re-check before the first real call.
+- **Fixed settings.**
+  - Temperature 0, for the most repeatable output.
+  - `maxOutputTokens` 512, about five times the longest KB answer (76
+    words). If the model's thinking tokens count toward this limit, a
+    `MAX_TOKENS` finish falls back to the extractive reply. Check this at
+    the first real call.
+  - Timeout 8 s, with no retry. Generation runs after classification and
+    retrieval, so the worst case adds 8 s to the reply.
+- **Extractive fallback on any failure.** These all return the extractive
+  reply, byte-identical to the flag-off reply:
+  - a missing key, network error, timeout or non-2xx status;
+  - a malformed body, a blocked prompt or a finish reason other than
+    `STOP`;
+  - an empty text;
+  - the output guard.
+  The log records the reason only, never the query, the answer or the
+  key.
+- **Output guard.** The generated text is rejected (extractive reply) if
+  it contains a phone number (a run of three or more digits) that is not
+  in the KB entry, or omits a helpline number (GBV 1195, Childline 116,
+  999, 112, or any number of seven or more digits) that the entry has.
+- **Prompt.** Answer only from the supplied KB entry, add no new medical
+  facts, keep helpline text and numbers as written, and refer to a
+  clinic when the entry does.
+- **What is sent.** Only the query text and the retrieved KB entry's
+  question, answer, conditions/limitations and safety/referral notes. No
+  session, user or device data, history, or classifier output is sent.
+- **Where it runs.** Only on a clear query that retrieved an entry and
+  passed the relevance gate. Referral, help, held-topic, vague and
+  abstain replies never reach Gemini.
+- **Synthetic queries only** until ethics clearance. No real user query
+  is sent to Gemini. Sending data to Google is a DPO/ethics point. The
+  API tier, and whether Google may keep or train on the data, must be
+  settled before any non-synthetic use.
+- **Unchanged.**
+  - The frozen list as before: the V4 model JSON and hash, thresholds
+    0.35, 0.5 and 0.45, and the gate 0.8439.
+  - The order of checks, KB text, Safety Net patterns, helplines and
+    HELP_CONTACTS_VERIFIED.
+  - The offline interface pipeline, which is extractive and keyword-only.
+- **Status.** Experimental and off by default. Step 7a builds and tests
+  it offline with a fake `fetch` only; no real API call is made.
+  Turning the flag on, even for the comparison, is a separate logged
+  step.
+
+## Gemini smoke test (2026-10-27)
+
+Step 7b, on `gemini/integration` at commit 3df122e. One run of
+`research/experiments/gemini_smoke.js` with `GENERATION_ENABLED=true`:
+four author-written synthetic queries, one real call each, no retries.
+Settings unchanged (temperature 0, `maxOutputTokens` 512, timeout 8 s).
+ml_service was not running, so every query took the keyword fallback
+and local retrieval.
+
+- **Result.** All four calls returned HTTP 200 with finish reason
+  `MAX_TOKENS`, so all four answers fell back to extractive, as
+  designed. The guard was not reached.
+- **Cause.** Thinking tokens (487 to 491 per call) used almost all of
+  the 512-token limit. The Gemini thinking docs (updated 14 Oct 2026)
+  say `max_output_tokens` includes thought tokens. This is the case the
+  "Fixed settings" note asked to check at the first real call.
+- **Retrieval, separately.** The local keyword retrieval picked poorly
+  matching entries for three queries (KB-C4, KB-P5, KB-G6). This is the
+  keyword fallback, not Gemini, and is noted only.
+- **Status.** No setting changed. A proposed change waits for approval.
+
+Output copied exactly:
+
+```text
+=== contraception
+query: How soon after sex should I take the emergency pill?
+classified: contraception (keyword_fallback), retrieval: local, entry: KB-C4
+HTTP status: 200
+finish reason: MAX_TOKENS
+tokens: prompt 357, candidates 17, thinking 491, total 865
+latency: 4486 ms
+answer: extractive ([generationModule] Gemini unavailable, using extractive answer: finish reason MAX_TOKENS)
+guard: not reached
+text: Yes, if you want protection from STIs. Condoms are the only contraceptive method that prevents both pregnancy and sexually transmitted infections, including HIV. Other methods prevent pregnancy only, so Kenyan guidance strongly encourages young people to use condoms as well, for dual protection.
+
+=== sti
+query: Can you get an STI the first time you have sex?
+classified: sti (keyword_fallback), retrieval: local, entry: KB-S4
+HTTP status: 200
+finish reason: MAX_TOKENS
+tokens: prompt 358, candidates 21, thinking 487, total 866
+latency: 4296 ms
+answer: extractive ([generationModule] Gemini unavailable, using extractive answer: finish reason MAX_TOKENS)
+guard: not reached
+text: It could be. Unusual discharge, genital sores or lower belly pain can be signs of an STI, but many STIs cause no symptoms at all, so only a test can tell. A health worker can examine you and give treatment, and Kenya's guidelines say providers must ensure privacy and confidentiality when serving adolescents.
+
+=== pregnancy
+query: What are the first signs that I might be pregnant?
+classified: pregnancy (keyword_fallback), retrieval: local, entry: KB-P5
+HTTP status: 200
+finish reason: MAX_TOKENS
+tokens: prompt 402, candidates 19, thinking 489, total 910
+latency: 3231 ms
+answer: extractive ([generationModule] Gemini unavailable, using extractive answer: finish reason MAX_TOKENS)
+guard: not reached
+text: Under Kenya's 2020 national school re-entry guidelines, a pregnant learner is allowed to stay in school for as long as possible and to sit national exams if her health allows. After delivery she is re-admitted to the same class she was in before. The guidelines give the return time as six months after delivery and also as the start of the next calendar year, so ask your school's guidance and counselling teacher what applies to you.
+
+=== general
+query: Is it normal for my period to come at different times?
+classified: general (keyword_fallback), retrieval: local, entry: KB-G6
+HTTP status: 200
+finish reason: MAX_TOKENS
+tokens: prompt 387, candidates 20, thinking 488, total 895
+latency: 3627 ms
+answer: extractive ([generationModule] Gemini unavailable, using extractive answer: finish reason MAX_TOKENS)
+guard: not reached
+text: The first sign of puberty in most girls is breast 'buds', followed by body hair and a growth spurt. Most girls get their first period within 2 to 3 years after breast development starts. Timing varies from girl to girl, so if you are worried about your development, talk to a health worker.
+```
+
+## Gemini request settings amended (2026-10-27)
+
+Amends the "Fixed settings" in "Gemini generation behind a flag", after
+the smoke test (see "Gemini smoke test (2026-10-27)"). The earlier entry
+is left as it was.
+
+- **Thinking level `minimal`** (`generationConfig.thinkingConfig.
+  thinkingLevel`). At the default level, thinking used 487 to 491 of
+  the 512 output tokens on every smoke call, so each stopped at
+  `MAX_TOKENS`. The task only rewrites one entry, so it needs little
+  reasoning. Google notes that `minimal` does not guarantee thinking is
+  off.
+- **`maxOutputTokens` 1024** (was 512), as headroom, because thinking
+  tokens count toward the limit (Gemini thinking docs, updated 14 Oct
+  2026).
+- **Temperature 1.0** (was 0), the default Google recommends for all
+  Gemini 3 models. The docs warn that a temperature below 1.0 may lead
+  to looping or degraded output.
+- **Repeatability.** This departs from the earlier aim of the most
+  repeatable output. To make up for it, the comparison will run each
+  query 3 times and report the spread.
+- **Unchanged.** Model `gemini-3.6-flash`, timeout 8 s with no retry,
+  the prompt, the output guard, the extractive fallback, synthetic
+  queries only, and the flag off by default.

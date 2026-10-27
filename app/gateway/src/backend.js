@@ -37,6 +37,11 @@
  * Classification and retrieval go through the classifier client: the
  * DistilBERT classifier and semantic retrieval in ml_service, with the
  * keyword classifier and local keyword retrieval as fallbacks.
+ *
+ * Generation returns the extractive answer, or, only with
+ * GENERATION_ENABLED, a Gemini answer from the retrieved entry (see
+ * generationModule.js). It runs only for an entry that passed the
+ * relevance gate.
  */
 
 const { checkSafety: defaultCheckSafety } = require("./safetyNet");
@@ -76,6 +81,8 @@ const RELEVANCE_GATE_NOTE =
  * @param {Function} [deps.isVague] - Vague-query rule.
  * @param {boolean} [deps.relevanceGate] - Whether the relevance gate is
  *        on; defaults to the RELEVANCE_GATE environment variable.
+ * @param {Function} [deps.generate] - generate(entry, queryText), as
+ *        generationModule exports or createGenerator returns.
  * @returns {(queryText: string) => Promise<object>} Query handler.
  */
 function createHandleQuery({
@@ -85,6 +92,7 @@ function createHandleQuery({
   matchHeld = matchHeldTopic,
   isVague = isVagueQuery,
   relevanceGate = isRelevanceGateEnabled(),
+  generate: generateAnswer = generate,
 }) {
   /**
    * Process a SafeGirl user query.
@@ -146,7 +154,7 @@ function createHandleQuery({
       if (!relevanceGate) {
         ({ entry: retrievedEntry, retrievalScope } =
           await classifierClient.retrieve(queryText, classification));
-        generation = generate(retrievedEntry);
+        generation = await generateAnswer(retrievedEntry, queryText);
       } else {
         // 6. Relevance gate, after retrieval: abstain with the standard
         // no-answer message when the top-1 unscoped score is too low.
@@ -166,7 +174,7 @@ function createHandleQuery({
           retrievedEntry = null;
           generation = { text: null, note: RELEVANCE_GATE_NOTE };
         } else {
-          generation = generate(retrievedEntry);
+          generation = await generateAnswer(retrievedEntry, queryText);
         }
       }
     }
