@@ -2173,3 +2173,40 @@ Written before any threshold figure is computed.
     describes discharge with no smell or itch.
 
   Their paraphrases follow their seeds' labels.
+
+## V4 pre-registration: deviation 4 (2026-10-27), system-level measure
+
+- **The measure.** The system-level measure becomes triage
+  correctness: the reply kind only. There is no retrieval, no KB entry
+  matching and no relevance gate.
+- **How a reply kind is decided.** The real upstream rules run first,
+  in the gateway's order: `checkSafety`, `isGenericHelpRequest`,
+  `matchHeldTopic`, `isVagueQuery`. If none fires, the classifier
+  decides.
+
+  | Classifier result | V4 (frozen e5 hybrid) | Baseline under M2 |
+  |---|---|---|
+  | top probability < 0.45 (t_act) | abstain | (no probability) |
+  | vague | ask | ask |
+  | out_of_scope | abstain | abstain |
+  | topic class (contraception, sti, pregnancy, general) | answer | answer |
+
+  For V4 the threshold is applied first.
+- **Expected reply kind, from the final labels:**
+
+  | Final label | Expected reply kind |
+  |---|---|
+  | route held | held |
+  | route safety | referral |
+  | vague | ask |
+  | out_of_scope | abstain |
+  | topic class | answer |
+- **Scoring.** All 205 items are scored, and so is the subset where no
+  upstream rule fires. V4 is compared with M2 by McNemar's exact test.
+- **Descriptive only.** Retrieval and matched-entry results are
+  reported for description only, on the KB the demo uses.
+- **Weaker than pre-registered.** This is a weaker measure than the
+  pre-registered "matched entry", and Chapter 5 will disclose that.
+  There is no dependency on the KB branch.
+- **Integration.** Integration into the gateway happens only after the
+  sealed gate, with its own decision-log entry.
