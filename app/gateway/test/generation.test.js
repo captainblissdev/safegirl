@@ -170,9 +170,10 @@ describe("flag on: success", () => {
       "systemInstruction",
     ]);
     assert.deepEqual(body.generationConfig, {
-      temperature: 0,
-      maxOutputTokens: 512,
+      temperature: 1.0,
+      maxOutputTokens: 1024,
       candidateCount: 1,
+      thinkingConfig: { thinkingLevel: "minimal" },
     });
     assert.equal(body.contents.length, 1);
     const sent = body.contents[0].parts[0].text;
@@ -216,8 +217,9 @@ describe("flag on: success", () => {
       {
         apiBase: "https://generativelanguage.googleapis.com/v1beta",
         model: "gemini-3.6-flash",
-        temperature: 0,
-        maxOutputTokens: 512,
+        temperature: 1.0,
+        maxOutputTokens: 1024,
+        thinkingLevel: "minimal",
         timeoutMs: 8000,
       },
     );

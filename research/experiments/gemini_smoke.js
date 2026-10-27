@@ -10,7 +10,8 @@
  * For each query it prints only: HTTP status, finish reason, prompt /
  * candidates / thinking token counts (if returned), latency, whether the
  * answer was generated or fell back to extractive and why, whether the
- * guard passed, and the answer text. It never prints request headers or
+ * guard passed, the answer text, and the matched KB entry's question and
+ * answer for comparison. It never prints request headers or
  * the key. Synthetic queries only: no real user query is sent.
  */
 
@@ -110,6 +111,8 @@ async function smoke(expected, queryText) {
   );
   console.log(`guard: ${guard}`);
   console.log(`text: ${result.text}`);
+  console.log(`KB question: ${entry?.question ?? "none"}`);
+  console.log(`KB answer: ${entry?.answer ?? "none"}`);
   console.log();
 }
 

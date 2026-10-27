@@ -34,8 +34,9 @@ const {
 const GENERATION_CONFIG = Object.freeze({
   apiBase: "https://generativelanguage.googleapis.com/v1beta",
   model: "gemini-3.6-flash",
-  temperature: 0,
-  maxOutputTokens: 512,
+  temperature: 1.0,
+  maxOutputTokens: 1024,
+  thinkingLevel: "minimal",
   timeoutMs: 8000,
 });
 
@@ -139,6 +140,7 @@ function requestBody(entry, queryText) {
       temperature: GENERATION_CONFIG.temperature,
       maxOutputTokens: GENERATION_CONFIG.maxOutputTokens,
       candidateCount: 1,
+      thinkingConfig: { thinkingLevel: GENERATION_CONFIG.thinkingLevel },
     },
   };
 }
