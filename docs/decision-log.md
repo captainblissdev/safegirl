@@ -2226,3 +2226,23 @@ Written before any threshold figure is computed.
   count as correct.
 - **Timing.** Both statements were fixed before any sealed run and do
   not refer to any sealed result.
+
+## V4 sealed run procedure (2026-10-27)
+
+- **Every item gets a topic label.** All 205 items get a topic label.
+  A clinician forces a primary label on any item that cannot be
+  settled. Such items are flagged ambiguous in a separate column of the
+  labels file (`ambiguous`, 0 or 1).
+- **What the gate uses.** The gate uses all 205 items. A descriptive
+  table without the flagged items is added to the report.
+- **Upstream catches.** Topic-labelled items that an upstream rule
+  catches while their route is none lower every system's reply-kind
+  rate equally, and they do not affect McNemar's test. This will be
+  disclosed in Chapter 5.
+- **The lock is permanent.** It may be removed only if the run crashed
+  before any metric was produced, and only with a dated note in this
+  log. If any result was shown, the lock stays and the result stands.
+- **Subsets.** Conditions 1 to 3 of the gate use all items. The subset
+  where no upstream rule fires is descriptive only.
+- **Run once.** The sealed evaluation is run once and reported as it
+  comes out (`research/v4/sealed_eval.py`).
