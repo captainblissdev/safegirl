@@ -111,7 +111,7 @@ On the retrieval **development set** (not an independent test), the frozen keywo
 
 V4 is a triage classifier in [`research/v4/`](research/v4/). It is a frozen hybrid: logistic regression on multilingual-e5 embeddings, the keyword baseline's hit counts and the vague-query flag, over six classes (contraception, sti, pregnancy, general, out_of_scope, vague). It abstains below a top probability of 0.45. The frozen model is [`research/v4/frozen/v4_hybrid_c10.json`](research/v4/frozen/v4_hybrid_c10.json), with a sha256 sidecar, and [`research/v4/v4_infer.py`](research/v4/v4_infer.py) loads it.
 
-**V4 is not wired into the app.** V3 is still the classifier in the running pipeline (`ml_service`).
+**V4 is off by default.** V3 is still the classifier in the running pipeline (`ml_service`). V4 can be turned on behind a flag: set `V4_TRIAGE_ENABLED=true` for both `ml_service` and the gateway (exactly `true`; any other value leaves it off). Then the gateway asks `ml_service`'s `/triage` for the six-class label and falls back to V3, or to the keyword classifier if `ml_service` is unreachable. The offline interface pipeline stays keyword-only. The gateway's keyword fallback was not evaluated on its own; its keyword lists differ from the evaluated Python baseline. Turning V4 on for the demo is a separate logged decision. See "V4 integration complete (flag off by default)" in the decision log, and [`research/v4/results/integration_e2e.md`](research/v4/results/integration_e2e.md) for the end-to-end checks.
 
 | Evaluation | Result | Status |
 | --- | --- | --- |
