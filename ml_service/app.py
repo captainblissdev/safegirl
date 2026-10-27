@@ -67,6 +67,8 @@ Notes
 
 from __future__ import annotations
 
+import hashlib
+import importlib.util
 import logging
 import os
 from contextlib import asynccontextmanager
@@ -112,6 +114,12 @@ EXPECTED_LABELS = {
 # script rather than editing this file by hand.
 KB_PATH = Path(os.environ.get("KB_PATH", "./knowledge_base.json"))
 
+# V4 triage (docs/decision-log.md, "V4 integration behind a flag"): on only
+# when the variable is exactly "true". When off, V4 is never loaded,
+# /triage is not registered and /health is unchanged.
+V4_TRIAGE_ENABLED = os.environ.get("V4_TRIAGE_ENABLED") == "true"
+V4_INFER_PATH = Path(__file__).resolve().parent.parent / "research" / "v4" / "v4_infer.py"
+
 
 # ============================================================================
 # Logging
@@ -136,6 +144,10 @@ DEVICE = torch.device(
 model = None
 tokenizer = None
 retriever: Optional[KnowledgeBaseRetriever] = None
+
+# The frozen V4 hybrid (research/v4/v4_infer.py), or None when the flag
+# is off or it refused to load.
+v4 = None
 
 
 # ============================================================================
@@ -230,6 +242,17 @@ class RetrieveResponse(BaseModel):
     """Response body returned by the /retrieve endpoint."""
 
     results: list[RetrieveResult]
+
+
+class TriageResponse(BaseModel):
+    """Response body returned by /triage (only when V4 triage is enabled).
+
+    No abstain logic here: the gateway applies t_act (0.45)."""
+
+    label: str
+    confidence: float = Field(ge=0.0, le=1.0)
+    scores: dict[str, float]
+    model: str
 
 
 # ============================================================================
@@ -356,6 +379,71 @@ def load_retriever() -> None:
     )
 
 
+def e5_mismatch(st_model, frozen: dict) -> Optional[str]:
+    """
+    Why the retriever's loaded e5 is not the one V4 was frozen with, or
+    None when it is: the same model, the revision the loaded config
+    resolved to, the frozen weights file (by sha256), and every loaded
+    tensor equal to that file's.
+    """
+
+    from huggingface_hub import try_to_load_from_cache
+    from safetensors.torch import load_file
+
+    auto = st_model[0].auto_model
+    if getattr(auto.config, "_name_or_path", None) != frozen["model"]:
+        return "e5 model name differs from the frozen one"
+    commit = getattr(auto.config, "_commit_hash", None)
+    if commit != frozen["revision"]:
+        return f"e5 revision {commit} is not the frozen {frozen['revision']}"
+    path = try_to_load_from_cache(frozen["model"], frozen["weights_file"], revision=frozen["revision"])
+    if not isinstance(path, str) or hashlib.sha256(Path(path).read_bytes()).hexdigest() != frozen["weights_sha256"]:
+        return "frozen e5 weights file missing or changed"
+    pinned = load_file(path)
+    for key, value in auto.state_dict().items():
+        if key not in pinned or not torch.equal(value.detach().cpu(), pinned[key]):
+            return "loaded e5 weights differ from the frozen revision"
+    return None
+
+
+def load_v4() -> None:
+    """
+    Load the frozen V4 hybrid when V4_TRIAGE_ENABLED is on.
+
+    It reuses the retriever's already-loaded e5 (no second copy) after
+    checking it is the revision V4 was frozen with. Any refusal (the
+    sidecar hash, the feature code, the e5 revision or weights) leaves V4
+    unloaded: /triage then returns 503. Only the reason is logged.
+    """
+
+    global v4
+    v4 = None
+
+    if retriever is None:
+        logger.error("V4 triage not loaded: the retriever and its e5 model are not loaded.")
+        return
+
+    try:
+        spec = importlib.util.spec_from_file_location("v4_infer", V4_INFER_PATH)
+        v4_infer = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(v4_infer)
+
+        def embed(texts):
+            e = loaded.spec["embedding"]
+            return retriever.model.encode([e["prefix"] + t for t in texts], normalize_embeddings=e["normalize"])
+
+        loaded = v4_infer.load(embed=embed)
+        reason = e5_mismatch(retriever.model, loaded.spec["embedding"])
+        if reason:
+            raise v4_infer.FrozenModelError(reason)
+    except Exception as exc:
+        logger.error("V4 triage not loaded: %s: %s", type(exc).__name__, exc)
+        return
+
+    v4 = loaded
+    logger.info("V4 triage model loaded (classes: %s).", ", ".join(v4.classes))
+
+
 # ============================================================================
 # FastAPI application lifecycle
 # ============================================================================
@@ -371,14 +459,17 @@ async def lifespan(app: FastAPI):
 
     load_model()
     load_retriever()
+    if V4_TRIAGE_ENABLED:
+        load_v4()
 
     yield
 
     # Release references during application shutdown.
-    global model, tokenizer, retriever
+    global model, tokenizer, retriever, v4
     model = None
     tokenizer = None
     retriever = None
+    v4 = None
 
     logger.info("SafeGirl classifier service shut down.")
 
@@ -420,13 +511,19 @@ def health() -> dict[str, str | int]:
     else:
         status = "ok"
 
-    return {
+    body = {
         "status": status,
         "device": str(DEVICE),
         "model_version": MODEL_VERSION,
         "retriever": "ok" if retriever is not None else "not_loaded",
         "kb_entries": len(retriever.entries) if retriever is not None else 0,
     }
+
+    # Only when the flag is on, so the flag-off response is unchanged.
+    if V4_TRIAGE_ENABLED:
+        body["v4"] = "ok" if v4 is not None else "not_loaded"
+
+    return body
 
 
 # ============================================================================
@@ -567,6 +664,60 @@ def retrieve(request: RetrieveRequest) -> RetrieveResponse:
     return RetrieveResponse(results=[
         RetrieveResult(**r) for r in results
     ])
+
+
+# ============================================================================
+# V4 triage endpoint (registered only when V4_TRIAGE_ENABLED is on)
+# ============================================================================
+
+def triage(request: ClassifyRequest) -> TriageResponse:
+    """
+    V4 triage for one query: the six-class label, its probability and the
+    scores of all six classes. The same request checks as /classify. No
+    abstain logic: the gateway applies t_act. Logs never contain the query.
+    """
+
+    if v4 is None:
+        raise HTTPException(
+            status_code=503,
+            detail="V4 triage model is not loaded.",
+        )
+
+    text = request.text.strip()
+
+    if not text:
+        raise HTTPException(
+            status_code=400,
+            detail="text must be non-empty.",
+        )
+
+    if len(text) > MAX_INPUT_CHARS:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                f"text exceeds the maximum allowed length of "
+                f"{MAX_INPUT_CHARS} characters."
+            ),
+        )
+
+    try:
+        proba = v4.predict_proba([text])[0]
+    except Exception as exc:
+        logger.error("V4 triage failed: %s", type(exc).__name__)
+        raise HTTPException(status_code=503, detail="V4 triage failed.") from None
+
+    top = max(range(len(proba)), key=lambda i: proba[i])
+
+    return TriageResponse(
+        label=v4.classes[top],
+        confidence=float(proba[top]),
+        scores={label: float(p) for label, p in zip(v4.classes, proba)},
+        model="v4",
+    )
+
+
+if V4_TRIAGE_ENABLED:
+    app.post("/triage", response_model=TriageResponse)(triage)
 
 
 # ============================================================================
