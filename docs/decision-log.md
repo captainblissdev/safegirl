@@ -3280,3 +3280,38 @@ Sets: kb_questions 62, dev_questions 35, seeds 380, paraphrases 1239. Vague now:
 
 All four removed: vague result changes on 0 texts.
 ```
+
+## KB 62 relabelling (2026-10-27)
+
+Branch `kb/merge-60`. Prepares the relabelled run that "KB 62 merge
+rule (written before measurement)" requires. Nothing is measured or
+scored in this step.
+
+- **Why.** The dev labels (`retrieval_eval_set_labels_2026-10-15.csv`)
+  and the gate set's likely entries name only the 21 old entries, so
+  an answer from one of the new entries counts as wrong even when it
+  fits. The K5 dev score (21 of 35) is provisional for that reason.
+- **What is relabelled.** 75 items: the 35 labelled dev questions and
+  all 40 gate-set items (`relevance_validation.csv`), against the 62
+  served entries. The 4 pending entries are not offered.
+- **Blind protocol.**
+  - Cindy labels from the question text and the 62 entries only:
+    best entry, other acceptable entries, or "none fits" (the system
+    should not answer).
+  - The sheet has no system output, score, earlier label or original
+    id. Items are in a fixed shuffled order (seed 20261027) under
+    opaque ids (R01 to R75). The id key is kept apart from the kit.
+  - The dev set is not blind to the 62 entries: the K3, K4 and K5
+    evaluations and the diagnosis looked at its replies on them.
+  - A clinician or Mr. Ouma may spot-check the filled sheet.
+- **Not in git.** The kit, the filled sheet, the key and the converted
+  labels files are kept outside the repository
+  (`C:\Users\cindy\relabel\`, `C:\Users\cindy\relabel_key\`). The
+  repository holds only the tools: `research/eval/relabel_kit.js`,
+  `research/eval/relabel_check.js` and its tests (synthetic sheets
+  only).
+- **Check before use.** No number is computed from the new labels until
+  the filled sheet passes `relabel_check.js`: every item has a best
+  entry or "none fits", every id is a served entry, no id twice in a
+  row, and no blank, changed, missing or extra row. Only then is it
+  converted into labels files in the existing schemas.
