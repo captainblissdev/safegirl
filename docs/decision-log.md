@@ -2506,3 +2506,75 @@ V3: upstream rules first, then confidence < 0.35 -> abstain, otherwise answer. V
 | all | 205 | 0.7561 | 0.8195 |
 | no_upstream | 163 | 0.7853 | 0.8650 |
 ```
+
+## V4 integration behind a flag
+
+Recorded 27 Oct 2026, before any integration code, on branch
+`v4/integration`.
+
+- **Flag.** `V4_TRIAGE_ENABLED`, on only when it is exactly `"true"`;
+  off by default. With the flag off, V3 behaviour is unchanged
+  (byte-for-byte on the tested paths): V4 is not loaded and `/triage`
+  is never called.
+- **Mapping when on** (deviation 4). After the upstream rules (Safety
+  Net, help, held topics A/B/C, vague rule), V4 classifies:
+  - vague class -> `clarify()`;
+  - out_of_scope, or confidence < 0.45 -> abstain, without retrieval;
+  - topic class -> the existing `retrieve` (0.35 and 0.5 unchanged),
+    then the relevance gate 0.8439.
+
+  V4's vague and out_of_scope are never passed to `/retrieve`.
+- **Fail-safe.**
+  - Any `/triage` failure (network, timeout, 503, malformed body) falls
+    back to V3 `/classify`, then to the keyword fallback, as today.
+  - The log records the reason only (status or error code), never
+    query text.
+  - V4 refuses to load on any hash, feature-code or e5-revision
+    mismatch, and `/triage` is then unavailable (503).
+- **e5 is shared with the retriever.** V4 reuses the retriever's
+  `intfloat/multilingual-e5-small` instance, with a check that its
+  revision is the one V4 was frozen with (614241f6...).
+- **Frozen and unchanged:**
+  - the V4 model JSON and its sha256 (89eee2b4...);
+  - thresholds 0.35, 0.5 and t_act 0.45, and the relevance gate 0.8439;
+  - KB text, Safety Net patterns, helplines and HELP_CONTACTS_VERIFIED;
+  - the order of checks;
+  - the offline interface pipeline, which stays keyword-only.
+- **Status.** Experimental and off by default. Turning it on for the
+  demo is a separate logged decision, after the rehearsal and Mr. Ouma's
+  sign-off. The DPO/ethics point on automated triage still applies.
+- **Acceptance criteria.** Dev queries are used for equivalence checks
+  only, never for tuning.
+  - **Step 2, parity (research side).**
+    - Node-vs-Python tests of the vague flag on synthetic edge cases
+      (accents, apostrophes, mixed case, non-ASCII).
+    - One keyword-count comparison, Node `matchedKeywords` against
+      Python `explain_baseline`, that reports mismatches without
+      blocking.
+  - **Step 3, ml_service.**
+    - With the flag off, `/classify`, `/retrieve` and `/health`
+      responses are identical to a snapshot, and `/triage` is
+      unavailable.
+    - A fixture test that `/triage` probabilities equal `v4_infer` on
+      synthetic queries only (within 1e-6).
+    - A tampered sidecar or feature file gives 503, with no query text
+      in the logs.
+  - **Step 4, gateway.**
+    - With the flag off, all existing tests pass, and `handleQuery`
+      responses on the 58 dev queries with a stubbed ml_service are
+      byte-identical before and after.
+    - With the flag on (fake fetch):
+      - vague -> clarify; out_of_scope -> abstain; below 0.45 ->
+        abstain;
+      - 0.45 to 0.5 -> unscoped; 0.5 or above -> scoped;
+      - a 503 or malformed `/triage` -> the V3 path;
+      - the log never contains query text.
+    - Safety Net, help, held and vague still fire before `/triage`,
+      which is never called for them.
+  - **Step 5, end to end.**
+    - With the flag on, reply kinds equal
+      `research/v4/triage_sim.py` on the dev queries and seeds (no
+      sealed data).
+    - Latency per query (median and 95th percentile) and RAM, measured
+      with the flag on and off.
+    - A closing decision-log entry and a README note.
