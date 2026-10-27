@@ -1,0 +1,666 @@
+{
+ "flag_off": {
+  "startup": {
+   "ml_service_s": 24.44,
+   "gateway_s": 1.06,
+   "both_s": 25.53
+  },
+  "memory_after_startup": {
+   "ml_service_mb": 989.3,
+   "gateway_mb": 63.6
+  },
+  "memory_after_queries": {
+   "ml_service_mb": 1168.0,
+   "gateway_mb": 78.9
+  },
+  "first_request_ms": 569.3,
+  "latency_dev": {
+   "n": 58,
+   "median_ms": 87.0,
+   "p95_ms": 140.3,
+   "max_ms": 154.6,
+   "method": "client wall time per POST /api/query, sequential; p95 = nearest rank on the sorted values"
+  }
+ },
+ "flag_on": {
+  "startup": {
+   "ml_service_s": 26.19,
+   "gateway_s": 1.09,
+   "both_s": 27.29
+  },
+  "memory_after_startup": {
+   "ml_service_mb": 1377.9,
+   "gateway_mb": 65.1
+  },
+  "memory_after_queries": {
+   "ml_service_mb": 1388.8,
+   "gateway_mb": 126.6
+  },
+  "first_request_ms": 211.6,
+  "latency_dev": {
+   "n": 58,
+   "median_ms": 95.7,
+   "p95_ms": 137.5,
+   "max_ms": 179.7,
+   "method": "client wall time per POST /api/query, sequential; p95 = nearest rank on the sorted values"
+  }
+ },
+ "e5_tensor_check": {
+  "median_s": 0.81,
+  "runs": [
+   0.95,
+   0.81,
+   0.75
+  ],
+  "result": "match"
+ },
+ "equivalence": {
+  "dev": {
+   "compared": 58,
+   "matching": 55,
+   "mismatches": [
+    {
+     "id": "DEV-Q23",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "DEV-Q53",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "DEV-Q57",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    }
+   ],
+   "mismatch_reasons": {
+    "gate": 3
+   }
+  },
+  "seeds": {
+   "compared": 380,
+   "matching": 286,
+   "mismatches": [
+    {
+     "id": "SEED-V4-GEN-003",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-GEN-005",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-GEN-006",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-GEN-008",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-GEN-011",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-GEN-016",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-GEN-018",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-GEN-019",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-GEN-020",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-GEN-022",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-PREG-011",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-CON-007",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-CON-010",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-CON-013",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-STI-010",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-STI-011",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-STI-012",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-STI-014",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-STI-015",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-CON-025",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-CON-028",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-STI-017",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-STI-018",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-STI-022",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-STI-023",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-PREG-018",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-PREG-019",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-PREG-022",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-PREG-025",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-V4-GEN-027",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-CONTRA-06",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-CONTRA-14",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-CONTRA-20",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-07",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-10",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-04",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-05",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-07",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-20",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-22",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-04",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-05",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-06",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-07",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-08",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-09",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-11",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-12",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-13",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-14",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-15",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-16",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-18",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-23",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-24",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-28",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-30",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-31",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-33",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-35",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-42",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-43",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-44",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-49",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-51",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-52",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-42",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-28",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-29",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-32",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-33",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-34",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-36",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-39",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-44",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-CONTRA-48",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-45",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-46",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-47",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-48",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-50",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-46",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-47",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-48",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-PREG-51",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-54",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-55",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-57",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-GEN-58",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-51",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-52",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-53",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-54",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    },
+    {
+     "id": "SEED-STI-55",
+     "live": "abstain",
+     "sim": "answer",
+     "reason": "gate"
+    }
+   ],
+   "mismatch_reasons": {
+    "gate": 94
+   }
+  }
+ },
+ "statuses_not_200": [],
+ "environment": {
+  "machine": "AMD64 Family 25 Model 124 Stepping 0, AuthenticAMD",
+  "python": "3.14.6",
+  "node": "v24.18.1",
+  "git": "4da9e85"
+ }
+}
