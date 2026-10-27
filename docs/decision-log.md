@@ -2210,3 +2210,19 @@ Written before any threshold figure is computed.
   There is no dependency on the KB branch.
 - **Integration.** Integration into the gateway happens only after the
   sealed gate, with its own decision-log entry.
+
+## V4 pre-registration: deviation 5 (2026-10-27), comparators and the help row
+
+- **Two baseline comparators at triage level.** At the triage
+  (system) level the baseline comparators are BOTH M1 and M2.
+  Criterion 3 requires V4's reply-kind correct rate to be not lower
+  than M1's AND not lower than M2's.
+- **Reason.** M2 abstains on many topic questions with no keyword hits
+  (626 of the 1,677 training and dev items), which makes it a weak
+  triage baseline. M1 is closer to the demo's behaviour.
+- **Classifier level unchanged.** Criterion 1 still uses M2, chosen by
+  CV macro-F1 in clarification 2.
+- **The help row.** For items labelled vague, both "ask" and "help"
+  count as correct.
+- **Timing.** Both statements were fixed before any sealed run and do
+  not refer to any sealed result.
