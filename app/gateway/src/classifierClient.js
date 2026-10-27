@@ -26,6 +26,18 @@
  *
  * The Safety Net is deliberately not involved: it stays independent of
  * classification.
+ *
+ * V4 triage (docs/decision-log.md, "V4 integration behind a flag"), only
+ * when V4_TRIAGE_ENABLED is exactly "true" (off by default):
+ *   classify(text) first POSTs /triage -> { label, confidence, source: "v4" }
+ *   over six classes. Any failure (network, timeout, non-2xx, malformed
+ *   body, unknown label, confidence not a number in 0..1) falls back to
+ *   /classify as above, logging the reason only, never the query.
+ *   retrieve() abstains without retrieval for out_of_scope or a
+ *   confidence below 0.45 (t_act); a topic class goes through the usual
+ *   scoping (0.5) and the relevance gate. vague is answered with the
+ *   clarifying question in backend.js and never reaches retrieve; only
+ *   topic classes are ever sent to /retrieve as an intent.
  */
 
 const { KeywordBaselineClassifier } = require("./fallback/keywordClassifier");
@@ -44,6 +56,19 @@ const DEFAULT_CONFIG = Object.freeze({
 });
 
 const RETRIEVE_TOP_K = 3;
+
+// V4 triage: the frozen top-probability threshold below which V4 abstains
+// (t_act), its six labels, and the four that may be retrieved.
+const V4_T_ACT = 0.45;
+const V4_LABELS = Object.freeze([
+  "contraception",
+  "sti",
+  "pregnancy",
+  "general",
+  "out_of_scope",
+  "vague",
+]);
+const TOPIC_LABELS = new Set(["contraception", "sti", "pregnancy", "general"]);
 
 const isProbability = (value) =>
   typeof value === "number" &&
@@ -139,7 +164,27 @@ function configFromEnv(env = process.env, logger = console) {
     ),
   };
 
+  // V4 triage is on only when the variable is exactly "true". The key is
+  // added only then, so the flag-off configuration is unchanged.
+  if (env.V4_TRIAGE_ENABLED === "true") {
+    config.v4TriageEnabled = true;
+  }
+
   return enforceThresholdOrder(config, logger);
+}
+
+/** The reason a /triage call failed, for the log; never the query. */
+function triageFailureReason(error) {
+  if (error?.name === "TimeoutError" || error?.name === "AbortError") {
+    return "timeout";
+  }
+  if (error instanceof SyntaxError) {
+    return "malformed JSON";
+  }
+  if (error instanceof TypeError) {
+    return "network error";
+  }
+  return error?.message ?? "unknown error";
 }
 
 /**
@@ -165,11 +210,17 @@ function createClassifierClient({
   logger = console,
 } = {}) {
   // Overrides could break the threshold order, so it is enforced again.
-  const { serviceUrl, confidenceThreshold, abstainThreshold, timeoutMs } =
-    enforceThresholdOrder(
-      { ...configFromEnv(process.env, logger), ...config },
-      logger,
-    );
+  const {
+    serviceUrl,
+    confidenceThreshold,
+    abstainThreshold,
+    timeoutMs,
+    v4TriageEnabled,
+  } = enforceThresholdOrder(
+    { ...configFromEnv(process.env, logger), ...config },
+    logger,
+  );
+  const triageOn = v4TriageEnabled === true;
 
   /**
    * POST a JSON body to ml_service and return the parsed response body.
@@ -190,7 +241,43 @@ function createClassifierClient({
     return response.json();
   }
 
+  /** V4 triage; throws on any failure or invalid body. */
+  async function triage(text) {
+    const body = await postJson("/triage", { text });
+
+    if (!body || !V4_LABELS.includes(body.label)) {
+      throw new Error("/triage returned a missing or unknown label");
+    }
+    if (
+      typeof body.confidence !== "number" ||
+      !Number.isFinite(body.confidence) ||
+      body.confidence < 0 ||
+      body.confidence > 1
+    ) {
+      throw new Error(
+        "/triage returned a confidence that is not a number in 0..1",
+      );
+    }
+
+    return {
+      label: body.label,
+      confidence: body.confidence,
+      scores: body.scores,
+      source: "v4",
+    };
+  }
+
   async function classify(text) {
+    if (triageOn) {
+      try {
+        return await triage(text);
+      } catch (error) {
+        logger.warn(
+          `[classifierClient] /triage unavailable, using V3 /classify: ${triageFailureReason(error)}`,
+        );
+      }
+    }
+
     try {
       const body = await postJson("/classify", { text });
 
@@ -247,6 +334,19 @@ function createClassifierClient({
         entry: retrieve(label, text),
         retrievalScope: "local",
       });
+    }
+
+    // V4: out_of_scope, any non-topic label, or a confidence below t_act
+    // abstains without retrieval, so only topic classes reach /retrieve.
+    if (
+      source === "v4" &&
+      (!TOPIC_LABELS.has(label) || confidence < V4_T_ACT)
+    ) {
+      logger.warn(
+        `[classifierClient] V4 abstaining from retrieval: ${label}, ` +
+          `confidence ${confidence.toFixed(3)} (t_act ${V4_T_ACT})`,
+      );
+      return withScore({ entry: null, retrievalScope: "abstained" });
     }
 
     // Abstain zone: the prediction is too uncertain to trust any entry,

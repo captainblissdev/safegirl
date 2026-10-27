@@ -137,6 +137,12 @@ function createHandleQuery({
         classifierClient.classify(queryText),
       );
 
+      // V4 triage (only with V4_TRIAGE_ENABLED): a vague prediction gets
+      // the clarifying question, as the vague rule does, and no retrieval.
+      if (classification?.source === "v4" && classification.label === "vague") {
+        return clarify();
+      }
+
       if (!relevanceGate) {
         ({ entry: retrievedEntry, retrievalScope } =
           await classifierClient.retrieve(queryText, classification));

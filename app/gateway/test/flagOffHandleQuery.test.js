@@ -25,8 +25,24 @@ const { loadKnowledgeBase } = require("../src/retrievalModule");
 
 const SERVICE_URL = "http://ml.test";
 const SNAPSHOT = path.join(__dirname, "snapshots", "flagOffHandleQuery.json");
-const DEV_SET = path.join(__dirname, "..", "..", "..", "resources", "eval", "retrieval_eval_set.csv");
-const CONFIG = { serviceUrl: SERVICE_URL, confidenceThreshold: 0.5, abstainThreshold: 0.35, timeoutMs: 50 };
+const DEV_SET = path.join(
+  __dirname,
+  "..",
+  "..",
+  "..",
+  "resources",
+  "eval",
+  "retrieval_eval_set.csv",
+);
+// V4 triage pinned off, like the thresholds, so the environment cannot
+// turn it on here.
+const CONFIG = {
+  serviceUrl: SERVICE_URL,
+  confidenceThreshold: 0.5,
+  abstainThreshold: 0.35,
+  timeoutMs: 50,
+  v4TriageEnabled: false,
+};
 const V3_CLASSES = ["contraception", "sti", "pregnancy", "general"];
 
 // Author-written synthetic queries: [id, text, fake /classify answer or
@@ -35,17 +51,64 @@ const SYNTHETIC = [
   ["S-safety", "someone forced me to have sex", null, null, "referral"],
   ["S-help", "where can i get help", null, null, "help"],
   ["S-held-A", "can i use postinor after sex", null, null, "held-topic"],
-  ["S-held-B", "i have an unwanted pregnancy what can i do", null, null, "held-topic"],
+  [
+    "S-held-B",
+    "i have an unwanted pregnancy what can i do",
+    null,
+    null,
+    "held-topic",
+  ],
   ["S-held-C", "my period is late and i am scared", null, null, "held-topic"],
   ["S-vague", "am i okay", null, null, "vague"],
-  ["S-contraception", "how do condoms work for teenagers", ["contraception", 0.91], 0.93, "answer-scoped"],
-  ["S-sti", "what are the signs of an sti infection", ["sti", 0.88], 0.92, "answer-scoped"],
-  ["S-pregnancy", "what are the early signs of pregnancy", ["pregnancy", 0.86], 0.9, "answer-scoped"],
-  ["S-general", "is it normal to have cramps before my period starts", ["general", 0.83], 0.91, "answer-scoped"],
-  ["S-unscoped", "what does a youth friendly clinic offer", ["general", 0.42], 0.9, "answer-unscoped"],
-  ["S-low-confidence", "i have a question about something that happened at school yesterday", ["general", 0.2],
-    null, "abstain"],
-  ["S-gate", "what are the side effects of the contraceptive implant", ["contraception", 0.9], 0.7, "abstain"],
+  [
+    "S-contraception",
+    "how do condoms work for teenagers",
+    ["contraception", 0.91],
+    0.93,
+    "answer-scoped",
+  ],
+  [
+    "S-sti",
+    "what are the signs of an sti infection",
+    ["sti", 0.88],
+    0.92,
+    "answer-scoped",
+  ],
+  [
+    "S-pregnancy",
+    "what are the early signs of pregnancy",
+    ["pregnancy", 0.86],
+    0.9,
+    "answer-scoped",
+  ],
+  [
+    "S-general",
+    "is it normal to have cramps before my period starts",
+    ["general", 0.83],
+    0.91,
+    "answer-scoped",
+  ],
+  [
+    "S-unscoped",
+    "what does a youth friendly clinic offer",
+    ["general", 0.42],
+    0.9,
+    "answer-unscoped",
+  ],
+  [
+    "S-low-confidence",
+    "i have a question about something that happened at school yesterday",
+    ["general", 0.2],
+    null,
+    "abstain",
+  ],
+  [
+    "S-gate",
+    "what are the side effects of the contraceptive implant",
+    ["contraception", 0.9],
+    0.7,
+    "abstain",
+  ],
 ];
 
 // Queries answered by an unreachable ml_service: keyword fallback.
@@ -101,11 +164,18 @@ function parseCsv(text) {
     rows.push(row);
   }
   const [header, ...body] = rows.filter((r) => r.some((v) => v !== ""));
-  return body.map((r) => Object.fromEntries(header.map((h, i) => [h.replace(/^﻿/, ""), r[i] ?? ""])));
+  return body.map((r) =>
+    Object.fromEntries(
+      header.map((h, i) => [h.replace(/^\uFEFF/, ""), r[i] ?? ""]),
+    ),
+  );
 }
 
 function devQueries() {
-  return parseCsv(fs.readFileSync(DEV_SET, "utf8")).map((r) => [`DEV-${r.id}`, r.query]);
+  return parseCsv(fs.readFileSync(DEV_SET, "utf8")).map((r) => [
+    `DEV-${r.id}`,
+    r.query,
+  ]);
 }
 
 function jsonResponse(body) {
@@ -115,7 +185,9 @@ function jsonResponse(body) {
 /** A deterministic fake ml_service; records every endpoint requested. */
 function fakeMlService() {
   const entries = Object.values(loadKnowledgeBase()).flat();
-  const fixed = new Map(SYNTHETIC.map(([, text, cls, score]) => [text, { cls, score }]));
+  const fixed = new Map(
+    SYNTHETIC.map(([, text, cls, score]) => [text, { cls, score }]),
+  );
   const calls = [];
 
   async function fetch(url, options) {
@@ -125,17 +197,37 @@ function fakeMlService() {
     if (endpoint === "/classify") {
       const f = fixed.get(body.text);
       const h = hash(body.text);
-      const [intent, confidence] = f?.cls ?? [V3_CLASSES[h % 4], [0.2, 0.4, 0.62, 0.93][(h >>> 4) % 4]];
-      const scores = Object.fromEntries(V3_CLASSES.map((c) => [c, c === intent ? confidence : (1 - confidence) / 3]));
+      const [intent, confidence] = f?.cls ?? [
+        V3_CLASSES[h % 4],
+        [0.2, 0.4, 0.62, 0.93][(h >>> 4) % 4],
+      ];
+      const scores = Object.fromEntries(
+        V3_CLASSES.map((c) => [
+          c,
+          c === intent ? confidence : (1 - confidence) / 3,
+        ]),
+      );
       return jsonResponse({ intent, confidence, scores });
     }
     if (endpoint === "/retrieve") {
-      const pool = body.intent ? entries.filter((e) => e.category === body.intent) : entries;
+      const pool = body.intent
+        ? entries.filter((e) => e.category === body.intent)
+        : entries;
       const h = hash(body.query);
       const entry = pool[h % pool.length];
-      const score = fixed.get(body.query)?.score ?? 0.7 + ((h >>> 8) % 30) / 100;
+      const score =
+        fixed.get(body.query)?.score ?? 0.7 + ((h >>> 8) % 30) / 100;
       return jsonResponse({
-        results: [{ id: entry.kbId, class: entry.category, title: "t", content: "c", source: "s", score }],
+        results: [
+          {
+            id: entry.kbId,
+            class: entry.category,
+            title: "t",
+            content: "c",
+            source: "s",
+            score,
+          },
+        ],
       });
     }
     throw new Error(`unexpected request to ${endpoint}`);
@@ -152,7 +244,11 @@ async function runAll(extraConfig = {}) {
   const ml = fakeMlService();
   const silent = { warn() {} };
   const online = createHandleQuery({
-    classifierClient: createClassifierClient({ fetch: ml.fetch, config: { ...CONFIG, ...extraConfig }, logger: silent }),
+    classifierClient: createClassifierClient({
+      fetch: ml.fetch,
+      config: { ...CONFIG, ...extraConfig },
+      logger: silent,
+    }),
     relevanceGate: true,
   });
   const offline = createHandleQuery({
@@ -164,7 +260,10 @@ async function runAll(extraConfig = {}) {
     relevanceGate: true,
   });
   const out = {};
-  for (const [id, text] of [...devQueries(), ...SYNTHETIC.map(([sid, t]) => [sid, t])]) {
+  for (const [id, text] of [
+    ...devQueries(),
+    ...SYNTHETIC.map(([sid, t]) => [sid, t]),
+  ]) {
     out[id] = await online(text);
   }
   for (const [id, text] of UNREACHABLE) {
@@ -188,12 +287,19 @@ if (process.env.RECORD_SNAPSHOTS === "1") {
       for (const [id, response] of Object.entries(expected)) {
         assert.deepStrictEqual(responses[id], response, id);
       }
-      assert.equal(JSON.stringify(responses), JSON.stringify(expected), "byte-identical in order too");
+      assert.equal(
+        JSON.stringify(responses),
+        JSON.stringify(expected),
+        "byte-identical in order too",
+      );
     });
 
     it("covers the 58 dev queries and each synthetic branch", async () => {
       const { responses, calls } = await runAll();
-      assert.equal(Object.keys(responses).filter((id) => id.startsWith("DEV-")).length, 58);
+      assert.equal(
+        Object.keys(responses).filter((id) => id.startsWith("DEV-")).length,
+        58,
+      );
       for (const [id, , , , kind] of SYNTHETIC) {
         assert.equal(responses[id].kind, kind, id);
       }
