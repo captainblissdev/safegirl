@@ -2292,3 +2292,24 @@ sealed questions. No question text is recorded here.
 - Date: [FILL]
 - Second reviewer labelled blind: [yes]
 - Author read reviewer 2 labels before adjudicating: [yes]
+
+## V4 sealed result (2026-10-27)
+
+The one sealed run of `research/v4/sealed_eval.py` with --confirm-final,
+run at commit edf3778.
+- Labels sha256: 99380b532b02f4f41cd7f4cdc4e61b0e96413230a3ff2966ec46ab384f850f39
+- Frozen model sha256: 89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd
+- Full aggregate report: `research/v4/results/sealed_result.md` and
+  `sealed_result.json`.
+- The lock and the per-item predictions stay next to the labels file,
+  outside the repository.
+
+Gate report, copied exactly from the script's output:
+
+- [PASS] 1 macro-F1 gain >= 0.05 and the 95% interval excludes 0
+- [PASS] 2 sti and pregnancy recall not lower than M2's
+- [PASS] 3 reply-kind correct rate not lower than M1's and than M2's
+- [PASS] 4 app/ unchanged since the frozen model's commit
+- **Overall: PASS**
+
+git diff --stat of app/ against the frozen model's commit 7a1c134: (empty)
