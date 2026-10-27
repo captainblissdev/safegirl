@@ -2139,3 +2139,37 @@ Written before any threshold figure is computed.
 - **Not done.** The model is not integrated into ml_service or the
   gateway; integration happens only after the sealed gate. The sealed
   set has not been opened, and no sealed result is recorded here.
+
+## V4 pre-registration: deviation 3 (2026-10-27), labelling guide and timing
+
+- **Departure.** The pre-registration says of the sealed labels:
+  "Labelling is finished before any V4 result exists." The sealed
+  labels will be assigned after the CV results and the frozen model
+  exist.
+- **Safeguards.**
+  - The model is frozen before labelling: `research/v4/frozen/v4_hybrid_c10.json`,
+    sha256 89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd
+    ("V4 frozen candidate (2026-10-26)").
+  - Labellers see no model output.
+  - The guide was derived from the training seeds only. No sealed
+    question was read.
+- **Disclosed.** The guide was written after the CV confusions were
+  seen; the most frequent were pregnancy and general.
+- **The guide.** `research/v4/LABELLING_GUIDE.md` documents the
+  existing labelling conventions. For V4 it supersedes the class text
+  in the V1 dataset plan (`docs/safegirl_dataset_plan.md`, "Intent
+  classes").
+- **Nothing changed.** No seed, label, fold or frozen file was changed,
+  and no refit was needed.
+- **Training seeds that disagree with the guide.** They are not
+  relabelled and are treated as label noise. Disclosed for Chapter 5:
+  - SEED-CONTRA-11 is labelled contraception. Rule 3 makes a question
+    about precum pregnancy, since withdrawal and precum are a sex act,
+    not a method.
+  - SEED-V4-CON-004 is labelled contraception. The sti class covers
+    condoms as infection protection.
+  - SEED-V4-STI-006 is borderline. Under rule 5 it is sti (discharge
+    not tied to the cycle, puberty or age), though the question
+    describes discharge with no smell or itch.
+
+  Their paraphrases follow their seeds' labels.
