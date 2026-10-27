@@ -107,6 +107,27 @@ Source: [`research/experiments/logs/v3_1_training_log.txt`](research/experiments
 
 On the retrieval **development set** (not an independent test), the frozen keyword baseline classifies better than V3: 28/29 against 20/29 (exact McNemar p = 0.021). V3's weakest class is general, especially period and puberty questions (2 of 8 recognised). See [`research/eval/results/classifier_analysis.md`](research/eval/results/classifier_analysis.md).
 
+### V4 triage classifier (research)
+
+V4 is a triage classifier in [`research/v4/`](research/v4/). It is a frozen hybrid: logistic regression on multilingual-e5 embeddings, the keyword baseline's hit counts and the vague-query flag, over six classes (contraception, sti, pregnancy, general, out_of_scope, vague). It abstains below a top probability of 0.45. The frozen model is [`research/v4/frozen/v4_hybrid_c10.json`](research/v4/frozen/v4_hybrid_c10.json), with a sha256 sidecar, and [`research/v4/v4_infer.py`](research/v4/v4_infer.py) loads it.
+
+**V4 is not wired into the app.** V3 is still the classifier in the running pipeline (`ml_service`).
+
+| Evaluation | Result | Status |
+| --- | --- | --- |
+| Sealed test set (n=205), macro-F1 | V4 0.8572 against the keyword baseline (M2) 0.5864 | Pre-registered gate: **PASS** |
+| V3 comparison on the same sealed items | – | Descriptive only; partly reflects a class-definition change |
+
+The gate and every pre-registration step and deviation are in [`docs/decision-log.md`](docs/decision-log.md). The full aggregate reports are [`research/v4/results/sealed_result.md`](research/v4/results/sealed_result.md) and [`research/v4/results/sealed_v3_comparison.md`](research/v4/results/sealed_v3_comparison.md). Labels follow [`research/v4/LABELLING_GUIDE.md`](research/v4/LABELLING_GUIDE.md).
+
+All V4 data is synthetic. The seed questions were written by the project owner. Their paraphrases were generated with an AI tool and reviewed by the project owner ([`docs/ai-use-log.md`](docs/ai-use-log.md)). No real adolescent data is used.
+
+The V4 tests run from the repository root, in the `.venv` set up for `ml_service` below. They also need scikit-learn (not in `ml_service/requirements.txt`), Node, and the `ml_service/final/` checkpoint for the V3 comparison tests:
+
+```powershell
+.\.venv\Scripts\python.exe -I -m unittest discover -s research/v4/tests -t research/v4
+```
+
 ---
 
 ## Architecture
