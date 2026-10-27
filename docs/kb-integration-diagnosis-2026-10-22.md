@@ -271,7 +271,11 @@ see (the answer text, or the no-answer message), in random order, and
 blank `which_answers_better` and `notes` columns. Q18 is left out: its
 reply is the same as before. The key (which reply is old and which
 new) is kept outside the repository with the project owner since Step
-K5; an earlier copy remains in the git history of commit 20b9184.
+K5. An earlier copy, committed with this note, was purged from the
+branch history on 27 October 2026, before the branch was pushed, so no
+commit contains it. The commit that had removed it ("chore(kb): move
+the blind review key out of git") was kept, with its message reworded.
+Anyone who opened that copy before the rewrite has seen the key.
 
 ## Options (proposed, none applied)
 
