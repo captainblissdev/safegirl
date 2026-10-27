@@ -2246,3 +2246,49 @@ Written before any threshold figure is computed.
   where no upstream rule fires is descriptive only.
 - **Run once.** The sealed evaluation is run once and reported as it
   comes out (`research/v4/sealed_eval.py`).
+
+## V4 sealed final labels (2026-10-27)
+
+The sealed set's final labels, kept outside the repository with the
+sealed questions. No question text is recorded here.
+
+**Files (sha256)**
+- Pre-review record, `sealed_final_combined_raw.xlsx`:
+  1155667b0798deecba64f86c183f6076e22a93c653ba737734a42e1a03527d4c
+- Reviewed sheet, `sealed_final_combined_v3.csv`:
+  43aaaa478ad764116886230add1ba8d7351919d2d78d3cd9b565d551806628bb
+- Labels used by `research/v4/sealed_eval.py`, `sealed_final_labels.csv`
+  (id, topic_label, route, ambiguous; no text):
+  99380b532b02f4f41cd7f4cdc4e61b0e96413230a3ff2966ec46ab384f850f39
+
+**Counts (205 items)**
+- Topic label: contraception 37, sti 37, pregnancy 34, general 48,
+  out_of_scope 26, vague 23.
+- Route: none 185, held 19, safety 1. The 20 held and safety items have
+  these topic labels: contraception 7, general 5, pregnancy 4, sti 3,
+  vague 1.
+- Flagged ambiguous: 4 (FS-004, FS-021, FS-031, FS-110).
+- The check-only run of `sealed_eval.py` passed all 14 pre-run checks.
+  No lock was written and nothing was computed.
+
+**Notes**
+- **Topic labels for held and safety items.** The 20 held and safety
+  items received topic labels and a route column on 27 Oct, after the
+  freeze, under the labelling guide (`research/v4/LABELLING_GUIDE.md`).
+- **Re-keyed ids.** In v3 the id column had been renumbered, so the
+  rows were re-keyed to the original ids by text hash. All 205 texts
+  were found, all distinct, and 146 rows took a different id. Each
+  row's label, route and ambiguous value stayed with its text. After
+  re-keying, the held and safety sets matched the pre-edit lists
+  exactly:
+  - held: FS-012, FS-014, FS-021, FS-031, FS-062, FS-063, FS-064,
+    FS-065, FS-078, FS-105, FS-136, FS-201, FS-208, FS-209, FS-224,
+    FS-226, FS-243, FS-252, FS-255;
+  - safety: FS-079.
+- **v2 not retained.** The v2 file was not retained.
+
+**To complete**
+- Adjudicated by: [role]
+- Date: [FILL]
+- Second reviewer labelled blind: [yes]
+- Author read reviewer 2 labels before adjudicating: [yes]
