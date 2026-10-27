@@ -9,7 +9,13 @@ paths are given as arguments and never stored in the repository:
         --texts TEXTS.csv --labels LABELS.csv --dry-run
 
 TEXTS.csv has the columns id, text; LABELS.csv has id, topic_label,
-route (route is none, held or safety).
+route (route is none, held or safety) and, optionally, ambiguous (0 or
+1: a primary label a clinician had to force; see "V4 sealed run
+procedure (2026-10-27)"). Without the column no item is flagged.
+
+Without --confirm-final (and without --dry-run) the script is in
+check-only mode: it prints the checklist and stops, writing no lock and
+computing nothing.
 
 1. Pre-run checks, printed as a checklist; any failure stops the run:
    the frozen model's sha256 equals its sidecar and the decision log;
@@ -17,7 +23,8 @@ route (route is none, held or safety).
    the decision-log entries the run follows; both input files outside
    the repository; the same ids in both files (205 of them, except in a
    dry run); no empty text; a topic label from the six classes; a valid
-   route; and, for a real run, no previous run. A real run also needs
+   route; an ambiguous value of 0 or 1 where the column is present;
+   and, for a real run, no previous run. A real run also needs
    --confirm-final.
 2. One-run lock (real run only): a sentinel file next to the labels
    file is created, exclusively, before anything is computed. It holds
@@ -36,12 +43,15 @@ route (route is none, held or safety).
      and McNemar's exact test of V4 against M1 and against M2 with the
      discordant counts;
    - a paired bootstrap of macro-F1(V4) - macro-F1(M2) on all items:
-     10,000 resamples, numpy default_rng(42), 95% percentile interval.
+     10,000 resamples, numpy default_rng(42), 95% percentile interval;
+   - descriptive only: the classifier and reply-kind results without
+     the items flagged ambiguous, with counts.
 4. The gate, mechanically: (1) the macro-F1 gain is at least 0.05 and
    the interval excludes 0; (2) sti and pregnancy recall are not lower
    than M2's; (3) the reply-kind correct rate is not lower than M1's
    and not lower than M2's; (4) app/ is unchanged since the commit the
    frozen model was fitted at. PASS or FAIL for each and overall.
+   Conditions 1 to 3 use all items, flagged or not.
 5. Outputs: aggregates only (no text, no per-item rows) to
    research/v4/results/sealed_result.json and .md; per-item predictions
    (ids and labels, no text) next to the labels file, outside the
@@ -121,11 +131,15 @@ def read_texts(path):
 
 
 def read_labels(path):
+    """[(id, topic_label, route, ambiguous)], ambiguous as written ("0"
+    when the optional column is absent); prerun_checks validates it."""
     with open(path, encoding="utf-8-sig", newline="") as f:
         reader = csv.DictReader(f)
         if not {"id", "topic_label", "route"} <= set(reader.fieldnames or []):
             raise ValueError("labels file needs the columns id, topic_label, route")
-        return [(r["id"].strip(), r["topic_label"].strip(), r["route"].strip()) for r in reader]
+        has_flag = "ambiguous" in reader.fieldnames
+        return [(r["id"].strip(), r["topic_label"].strip(), r["route"].strip(),
+                 (r["ambiguous"] or "").strip() if has_flag else "0") for r in reader]
 
 
 def inside(path, root=REPO) -> bool:
@@ -175,7 +189,7 @@ def prerun_checks(texts_path, labels_path, dry_run=False, root=REPO, frozen=FROZ
         add("input files readable with the expected columns", False, type(error).__name__)
         return checks, None, None
     add("input files readable with the expected columns", True)
-    t_ids, l_ids = [i for i, _ in texts], [i for i, _, _ in labels]
+    t_ids, l_ids = [i for i, _ in texts], [i for i, _, _, _ in labels]
     add("same ids in both files, no duplicates",
         len(set(t_ids)) == len(t_ids) and len(set(l_ids)) == len(l_ids) and set(t_ids) == set(l_ids),
         f"{len(set(t_ids))} text ids, {len(set(l_ids))} label ids")
@@ -184,8 +198,11 @@ def prerun_checks(texts_path, labels_path, dry_run=False, root=REPO, frozen=FROZ
     else:
         add(f"{EXPECTED_N} items", len(texts) == EXPECTED_N, f"{len(texts)} items")
     add("no empty text", all(t.strip() for _, t in texts))
-    add("topic_label filled and one of the six classes", all(c in CLASSES for _, c, _ in labels))
-    add("route is none, held or safety", all(r in ROUTES for _, _, r in labels))
+    add("topic_label filled and one of the six classes", all(c in CLASSES for _, c, _, _ in labels))
+    add("route is none, held or safety", all(r in ROUTES for _, _, r, _ in labels))
+    flags = [a for _, _, _, a in labels]
+    add("ambiguous is 0 or 1 (0 when the column is absent)", all(a in ("0", "1") for a in flags),
+        f"{sum(1 for a in flags if a == '1')} flagged")
     return checks, texts, labels
 
 
@@ -294,16 +311,16 @@ def reply_block(items) -> dict:
 def evaluate(texts, labels, model) -> tuple[dict, list[dict]]:
     """(aggregates, per-item rows). texts: [(id, text)]; labels: [(id,
     topic_label, route)]. Per-item rows hold ids and labels, never text."""
-    label_of = {i: (c, r) for i, c, r in labels}
+    label_of = {i: (c, r, a == "1") for i, c, r, a in labels}
     proba = model.predict_proba([t for _, t in texts])
     rows = ts.simulate(texts, model, proba=proba)
     items = []
     for (item_id, _), row, p in zip(texts, rows, proba):
-        topic, route = label_of[item_id]
+        topic, route, ambiguous = label_of[item_id]
         top = int(np.argmax(p))
         assert model.classes[top] == row["v4_class"]
         expected = expected_kinds(topic, route)
-        items.append({"id": item_id, "topic_label": topic, "route": route,
+        items.append({"id": item_id, "topic_label": topic, "route": route, "ambiguous": ambiguous,
                       "expected_kind": "|".join(sorted(expected)), "upstream_fired": row["upstream_fired"],
                       "v4_class": row["v4_class"], "v4_confidence": float(p[top]),
                       "m1_class": row["baseline_m1_class"], "m2_class": row["baseline_class"],
@@ -318,16 +335,20 @@ def evaluate(texts, labels, model) -> tuple[dict, list[dict]]:
                 "m2": classifier_block(gold, [x["m2_class"] for x in subset])}
 
     no_upstream = [x for x in items if not x["upstream_fired"]]
+    unflagged = [x for x in items if not x["ambiguous"]]
     point, low, high = paired_bootstrap([x["topic_label"] for x in items], [x["v4_class"] for x in items],
                                         [x["m2_class"] for x in items])
     aggregates = {
         "counts": {"items": len(items), "no_upstream": len(no_upstream),
+                   "ambiguous": len(items) - len(unflagged),
                    "route": {r: sum(1 for x in items if x["route"] == r) for r in ROUTES},
                    "topic_label": {c: sum(1 for x in items if x["topic_label"] == c) for c in CLASSES},
                    "upstream_fired": {u: sum(1 for x in items if x["upstream_fired"] == u)
                                       for u in sorted({x["upstream_fired"] for x in items}) if u}},
         "classifier": {"all": level(items), "no_upstream": level(no_upstream)},
         "reply_kind": {"all": reply_block(items), "no_upstream": reply_block(no_upstream)},
+        "descriptive_without_ambiguous": {"flagged": len(items) - len(unflagged), "n": len(unflagged),
+                                          "classifier": level(unflagged), "reply_kind": reply_block(unflagged)},
         "bootstrap": {"statistic": "macro-F1(V4) - macro-F1(M2), all items", "point": point,
                       "ci95": [low, high], "resamples": BOOTSTRAP, "seed": BOOTSTRAP_SEED,
                       "method": "numpy default_rng, item resampling, percentile interval"},
@@ -377,7 +398,8 @@ def markdown(result, dry_run) -> str:
               f"labels sha256 {result['provenance']['labels_sha256']}; script sha256 "
               f"{result['provenance']['script_sha256']}; git {result['provenance']['git_head']}.", "",
               "## Counts", "",
-              f"{a['counts']['items']} items; {a['counts']['no_upstream']} where no upstream rule fires. "
+              f"{a['counts']['items']} items; {a['counts']['no_upstream']} where no upstream rule fires; "
+              f"{a['counts']['ambiguous']} flagged ambiguous. "
               f"Routes: {a['counts']['route']}. Topic labels: {a['counts']['topic_label']}. "
               f"Upstream fired: {a['counts']['upstream_fired']}.", ""]
     for subset, title in (("all", "all items"), ("no_upstream", "no upstream rule fires")):
@@ -410,6 +432,19 @@ def markdown(result, dry_run) -> str:
         for k, v in a["reply_kind"][subset]["mcnemar"].items():
             lines.append(f"- {subset}, {k.replace('_', ' ')}: {v['v4_right_other_wrong']} / "
                          f"{v['v4_wrong_other_right']}, p = {fmt(v['p_exact'])}")
+    d = a["descriptive_without_ambiguous"]
+    lines += ["", f"## Descriptive: without the items flagged ambiguous (n = {d['n']}; {d['flagged']} flagged)", "",
+              "Not part of the gate.", "",
+              "| | Macro-F1 | STI recall | Pregnancy recall | Confident-wrong | ECE | Reply-kind correct |",
+              "|---|---|---|---|---|---|---|"]
+    for m in ("v4", "m1", "m2"):
+        b = d["classifier"][m]
+        lines.append(f"| {m.upper()} | {fmt(b['macro_f1'])} | {fmt(b['sti_recall'])} | {fmt(b['pregnancy_recall'])} | "
+                     f"{fmt(b.get('confident_wrong'))} | {fmt(b.get('ece'))} | "
+                     f"{fmt(d['reply_kind']['correct_rate'][m])} |")
+    lines += ["", "Discordant counts (V4 right / other wrong, V4 wrong / other right): " + "; ".join(
+        f"{k.replace('_', ' ')} {v['v4_right_other_wrong']} / {v['v4_wrong_other_right']}"
+        for k, v in d["reply_kind"]["mcnemar"].items()) + "."]
     bs = a["bootstrap"]
     lines += ["", "## Paired bootstrap", "",
               f"{bs['statistic']}: {fmt(bs['point'])}, 95% interval [{fmt(bs['ci95'][0])}, {fmt(bs['ci95'][1])}] "
@@ -426,13 +461,14 @@ def markdown(result, dry_run) -> str:
 
 
 def write_items(items, path):
-    cols = ["id", "topic_label", "route", "expected_kind", "upstream_fired", "v4_class", "v4_confidence", "m1_class",
-            "m2_class", "v4_kind", "m1_kind", "m2_kind", "v4_correct", "m1_correct", "m2_correct"]
+    cols = ["id", "topic_label", "route", "ambiguous", "expected_kind", "upstream_fired", "v4_class", "v4_confidence",
+            "m1_class", "m2_class", "v4_kind", "m1_kind", "m2_kind", "v4_correct", "m1_correct", "m2_correct"]
     with open(path, "x", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=cols, lineterminator="\n")
         w.writeheader()
         for x in items:
-            w.writerow({**{k: x[k] for k in cols}, "v4_confidence": f"{x['v4_confidence']:.6f}"})
+            w.writerow({**{k: x[k] for k in cols}, "ambiguous": int(x["ambiguous"]),
+                        "v4_confidence": f"{x['v4_confidence']:.6f}"})
 
 
 def run(texts, labels, labels_path, texts_path, dry_run, model=None, results_dir=RESULTS) -> dict:
@@ -472,7 +508,8 @@ def main(argv=None):
     if args.dry_run:
         print("DRY RUN: no lock; outputs go next to the labels file and are marked DRY RUN.")
     elif not args.confirm_final:
-        print("STOP: add --confirm-final for the one sealed run. Nothing was computed.")
+        print("CHECK ONLY: all checks passed. No lock was written and nothing was computed. "
+              "Add --confirm-final for the one sealed run.")
         return 3
     else:
         acquire_lock(args.labels, args.texts)
