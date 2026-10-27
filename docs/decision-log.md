@@ -2779,3 +2779,75 @@ seeds mismatches (id: live / triage_sim, reason):
 
 Machine: AMD64 Family 25 Model 124 Stepping 0, AuthenticAMD; Python 3.14.6; Node v24.18.1; git 4da9e85.
 ```
+
+## Gemini generation behind a flag
+
+Recorded 27 Oct 2026, before any generation code, on branch
+`gemini/integration`. Mr. Ouma's decision stands: SafeGirl gives
+extractive answers (the KB entry's answer verbatim). Gemini generation
+is an experiment for the comparison only.
+
+- **Flag.** `GENERATION_ENABLED`, on only when it is exactly `"true"`;
+  off by default. With the flag off, `generationModule` returns the
+  extractive answer exactly as before, Gemini is never contacted, and
+  the flag-off snapshots are unchanged.
+- **Key.** Read only from the `GEMINI_API_KEY` environment variable and
+  sent only in the `x-goog-api-key` request header, never in the URL.
+  It is never logged or put in an error message. With the flag on and
+  no key, every reply is extractive.
+- **Model, pinned: `gemini-3.6-flash`** (REST `generateContent`, plain
+  `fetch`, no SDK).
+  - It is a stable model, and stable codes "usually don't change". The
+    `-latest` aliases are hot-swapped with each release, so they would
+    break the comparison.
+  - No shutdown date has been announced. It has been stable since 21 Jul
+    2026, longer than `gemini-3.8-flash` (2 Sep 2026).
+  - The Gemini API offers no dated (`-001`) code for current Flash
+    models. The 2.5 models are limited to earlier users, and 2.0 was shut
+    down on 1 Jun 2026.
+  - Checked against ai.google.dev (models and deprecations pages, last
+    updated 22 Oct 2026). Re-check before the first real call.
+- **Fixed settings.**
+  - Temperature 0, for the most repeatable output.
+  - `maxOutputTokens` 512, about five times the longest KB answer (76
+    words). If the model's thinking tokens count toward this limit, a
+    `MAX_TOKENS` finish falls back to the extractive reply. Check this at
+    the first real call.
+  - Timeout 8 s, with no retry. Generation runs after classification and
+    retrieval, so the worst case adds 8 s to the reply.
+- **Extractive fallback on any failure.** These all return the extractive
+  reply, byte-identical to the flag-off reply:
+  - a missing key, network error, timeout or non-2xx status;
+  - a malformed body, a blocked prompt or a finish reason other than
+    `STOP`;
+  - an empty text;
+  - the output guard.
+  The log records the reason only, never the query, the answer or the
+  key.
+- **Output guard.** The generated text is rejected (extractive reply) if
+  it contains a phone number (a run of three or more digits) that is not
+  in the KB entry, or omits a helpline number (GBV 1195, Childline 116,
+  999, 112, or any number of seven or more digits) that the entry has.
+- **Prompt.** Answer only from the supplied KB entry, add no new medical
+  facts, keep helpline text and numbers as written, and refer to a
+  clinic when the entry does.
+- **What is sent.** Only the query text and the retrieved KB entry's
+  question, answer, conditions/limitations and safety/referral notes. No
+  session, user or device data, history, or classifier output is sent.
+- **Where it runs.** Only on a clear query that retrieved an entry and
+  passed the relevance gate. Referral, help, held-topic, vague and
+  abstain replies never reach Gemini.
+- **Synthetic queries only** until ethics clearance. No real user query
+  is sent to Gemini. Sending data to Google is a DPO/ethics point. The
+  API tier, and whether Google may keep or train on the data, must be
+  settled before any non-synthetic use.
+- **Unchanged.**
+  - The frozen list as before: the V4 model JSON and hash, thresholds
+    0.35, 0.5 and 0.45, and the gate 0.8439.
+  - The order of checks, KB text, Safety Net patterns, helplines and
+    HELP_CONTACTS_VERIFIED.
+  - The offline interface pipeline, which is extractive and keyword-only.
+- **Status.** Experimental and off by default. Step 7a builds and tests
+  it offline with a fake `fetch` only; no real API call is made.
+  Turning the flag on, even for the comparison, is a separate logged
+  step.
