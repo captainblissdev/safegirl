@@ -1,0 +1,120 @@
+62 questions; scoped at >= 0.5, abstain below 0.35; near-miss margin < 0.03
+
+KB-C1  [contraception] classed contraception 0.76 (scoped contraception) | unscoped: KB-C1 +0.007 | live: KB-C1 +0.007
+KB-C2  [contraception] classed contraception 0.89 (scoped contraception) | unscoped: KB-C2 +0.009 | live: KB-C2 +0.009
+KB-C3  [contraception] classed contraception 0.87 (scoped contraception) | unscoped: KB-C3 +0.023 | live: KB-C3 +0.023
+KB-C4  [contraception] classed contraception 0.91 (scoped contraception) | unscoped: KB-C18 | live: KB-C18
+KB-C5  [contraception] classed contraception 0.80 (scoped contraception) | unscoped: KB-C5 +0.017 | live: KB-C5 +0.017
+KB-C7  [contraception] classed contraception 0.79 (scoped contraception) | unscoped: KB-C7 +0.073 | live: KB-C7 +0.073
+KB-C8  [contraception] classed contraception 0.90 (scoped contraception) | unscoped: KB-C8 +0.030 | live: KB-C8 +0.030
+KB-C9  [contraception] classed contraception 0.90 (scoped contraception) | unscoped: KB-C9 +0.014 | live: KB-C9 +0.014
+KB-C10 [contraception] classed contraception 0.91 (scoped contraception) | unscoped: KB-C10 +0.038 | live: KB-C10 +0.038
+KB-C11 [contraception] classed pregnancy 0.88 (scoped pregnancy) | unscoped: KB-C11 +0.051 | live: KB-P8
+KB-C12 [contraception] classed contraception 0.85 (scoped contraception) | unscoped: KB-C12 +0.015 | live: KB-C12 +0.015
+KB-C13 [contraception] classed contraception 0.50 (scoped contraception) | unscoped: KB-C13 +0.045 | live: KB-C13 +0.045
+KB-C15 [contraception] classed contraception 0.78 (scoped contraception) | unscoped: KB-C15 +0.041 | live: KB-C15 +0.041
+KB-C16 [contraception] classed contraception 0.88 (scoped contraception) | unscoped: KB-C16 +0.052 | live: KB-C16 +0.052
+KB-C17 [contraception] classed contraception 0.88 (scoped contraception) | unscoped: KB-C17 +0.056 | live: KB-C17 +0.056
+KB-C18 [contraception] classed contraception 0.90 (scoped contraception) | unscoped: KB-C18 +0.052 | live: KB-C18 +0.052
+KB-C19 [contraception] classed contraception 0.90 (scoped contraception) | unscoped: KB-C19 +0.017 | live: KB-C19 +0.017
+KB-C20 [contraception] classed sti 0.47 (unscoped) | unscoped: KB-C20 +0.041 | live: KB-C20 +0.041
+KB-C21 [contraception] classed contraception 0.78 (scoped contraception) | unscoped: KB-C21 +0.014 | live: KB-C21 +0.014
+KB-S3  [sti] classed sti 0.91 (scoped sti) | unscoped: KB-S3 +0.006 | live: KB-S3 +0.006
+KB-S4  [sti] classed sti 0.93 (scoped sti) | unscoped: KB-S4 +0.009 | live: KB-S4 +0.009
+KB-S5  [sti] classed sti 0.93 (scoped sti) | unscoped: KB-S5 +0.017 | live: KB-S5 +0.017
+KB-S6  [sti] classed sti 0.91 (scoped sti) | unscoped: KB-S6 +0.045 | live: KB-S6 +0.045
+KB-S7  [sti] classed sti 0.86 (scoped sti) | unscoped: KB-S7 +0.037 | live: KB-S7 +0.037
+KB-S8  [sti] classed sti 0.93 (scoped sti) | unscoped: KB-S8 +0.009 | live: KB-S8 +0.009
+KB-S9  [sti] classed sti 0.80 (scoped sti) | unscoped: KB-S9 +0.038 | live: KB-S9 +0.038
+KB-S10 [sti] classed sti 0.92 (scoped sti) | unscoped: KB-S10 +0.036 | live: KB-S10 +0.036
+KB-S11 [sti] classed sti 0.90 (scoped sti) | unscoped: KB-S11 +0.042 | live: KB-S11 +0.042
+KB-S12 [sti] classed sti 0.89 (scoped sti) | unscoped: KB-S12 +0.018 | live: KB-S12 +0.018
+KB-S13 [sti] classed sti 0.91 (scoped sti) | unscoped: KB-S13 +0.066 | live: KB-S13 +0.066
+KB-S14 [sti] classed sti 0.78 (scoped sti) | unscoped: KB-S14 +0.049 | live: KB-S14 +0.049
+KB-S15 [sti] classed sti 0.90 (scoped sti) | unscoped: KB-S15 +0.051 | live: KB-S15 +0.051
+KB-S16 [sti] classed general 0.87 (scoped general) | unscoped: KB-S16 +0.073 | live: KB-G16
+KB-S17 [sti] classed sti 0.91 (scoped sti) | unscoped: KB-S17 +0.052 | live: KB-S17 +0.052
+KB-S18 [sti] classed general 0.43 (unscoped) | unscoped: KB-S18 +0.036 | live: KB-S18 +0.036
+KB-S20 [sti] classed sti 0.93 (scoped sti) | unscoped: KB-S20 +0.044 | live: KB-S20 +0.044
+KB-S21 [sti] classed sti 0.88 (scoped sti) | unscoped: KB-S21 +0.036 | live: KB-S21 +0.036
+KB-P1  [pregnancy] classed general 0.85 (scoped general) | unscoped: KB-P1 +0.036 | live: KB-G14
+KB-P5  [pregnancy] classed pregnancy 0.88 (scoped pregnancy) | unscoped: KB-P5 +0.030 | live: KB-P5 +0.045
+KB-P6  [pregnancy] classed pregnancy 0.89 (scoped pregnancy) | unscoped: KB-P6 +0.061 | live: KB-P6 +0.061
+KB-P7  [pregnancy] classed pregnancy 0.86 (scoped pregnancy) | unscoped: KB-P7 +0.081 | live: KB-P7 +0.082
+KB-P8  [pregnancy] classed pregnancy 0.87 (scoped pregnancy) | unscoped: KB-P8 +0.022 | live: KB-P8 +0.044
+KB-P9  [pregnancy] classed general 0.77 (scoped general) | unscoped: KB-P9 +0.040 | live: KB-G14
+KB-P10 [pregnancy] classed pregnancy 0.67 (scoped pregnancy) | unscoped: KB-P10 +0.033 | live: KB-P10 +0.033
+KB-G1  [general] classed general 0.90 (scoped general) | unscoped: KB-G1 +0.032 | live: KB-G1 +0.047
+KB-G2  [general] classed general 0.91 (scoped general) | unscoped: KB-G2 +0.031 | live: KB-G2 +0.060
+KB-G3  [general] classed general 0.58 (scoped general) | unscoped: KB-G3 +0.003 | live: KB-G3 +0.003
+KB-G4  [general] classed general 0.86 (scoped general) | unscoped: KB-G4 +0.045 | live: KB-G4 +0.045
+KB-G5  [general] classed general 0.89 (scoped general) | unscoped: KB-G5 +0.011 | live: KB-G5 +0.011
+KB-G6  [general] classed general 0.92 (scoped general) | unscoped: KB-G6 +0.018 | live: KB-G6 +0.018
+KB-G7  [general] classed general 0.85 (scoped general) | unscoped: KB-G7 +0.012 | live: KB-G7 +0.012
+KB-G8  [general] classed general 0.92 (scoped general) | unscoped: KB-G8 +0.062 | live: KB-G8 +0.062
+KB-G9  [general] classed general 0.88 (scoped general) | unscoped: KB-G9 +0.007 | live: KB-G9 +0.007
+KB-G10 [general] classed general 0.44 (unscoped) | unscoped: KB-G10 +0.032 | live: KB-G10 +0.032
+KB-G11 [general] classed general 0.90 (scoped general) | unscoped: KB-G11 +0.040 | live: KB-G11 +0.040
+KB-G12 [general] classed general 0.47 (unscoped) | unscoped: KB-G12 +0.059 | live: KB-G12 +0.059
+KB-G13 [general] classed pregnancy 0.88 (scoped pregnancy) | unscoped: KB-G13 +0.043 | live: KB-P8
+KB-G14 [general] classed general 0.74 (scoped general) | unscoped: KB-G14 +0.023 | live: KB-G14 +0.023
+KB-G15 [general] classed general 0.81 (scoped general) | unscoped: KB-G15 +0.041 | live: KB-G15 +0.041
+KB-G16 [general] classed general 0.93 (scoped general) | unscoped: KB-G16 +0.012 | live: KB-G16 +0.012
+KB-G17 [general] classed general 0.87 (scoped general) | unscoped: KB-G17 +0.021 | live: KB-G17 +0.021
+KB-G18 [general] classed general 0.77 (scoped general) | unscoped: KB-G18 +0.038 | live: KB-G18 +0.038
+
+Failures (7):
+  KB-C4 unscoped: got KB-C18; own entry rank 2 (own 0.893)
+  KB-C4 live (scoped contraception): got KB-C18; own entry rank 2 (own 0.893)
+  KB-C11 live (scoped pregnancy): got KB-P8
+  KB-S16 live (scoped general): got KB-G16
+  KB-P1 live (scoped general): got KB-G14
+  KB-P9 live (scoped general): got KB-G14
+  KB-G13 live (scoped pregnancy): got KB-P8
+Near-misses (46):
+  KB-C1 unscoped: margin 0.007 over KB-C3 0.892
+  KB-C1 live (scoped contraception): margin 0.007 over KB-C3 0.892
+  KB-C2 unscoped: margin 0.009 over KB-C1 0.868
+  KB-C2 live (scoped contraception): margin 0.009 over KB-C1 0.868
+  KB-C3 unscoped: margin 0.023 over KB-C1 0.870
+  KB-C3 live (scoped contraception): margin 0.023 over KB-C1 0.870
+  KB-C5 unscoped: margin 0.017 over KB-C21 0.891
+  KB-C5 live (scoped contraception): margin 0.017 over KB-C21 0.891
+  KB-C8 unscoped: margin 0.030 over KB-C9 0.879
+  KB-C8 live (scoped contraception): margin 0.030 over KB-C9 0.879
+  KB-C9 unscoped: margin 0.014 over KB-C10 0.889
+  KB-C9 live (scoped contraception): margin 0.014 over KB-C10 0.889
+  KB-C12 unscoped: margin 0.015 over KB-C13 0.896
+  KB-C12 live (scoped contraception): margin 0.015 over KB-C13 0.896
+  KB-C19 unscoped: margin 0.017 over KB-C3 0.879
+  KB-C19 live (scoped contraception): margin 0.017 over KB-C3 0.879
+  KB-C21 unscoped: margin 0.014 over KB-C5 0.911
+  KB-C21 live (scoped contraception): margin 0.014 over KB-C5 0.911
+  KB-S3 unscoped: margin 0.006 over KB-S11 0.865
+  KB-S3 live (scoped sti): margin 0.006 over KB-S11 0.865
+  KB-S4 unscoped: margin 0.009 over KB-S21 0.918
+  KB-S4 live (scoped sti): margin 0.009 over KB-S21 0.918
+  KB-S5 unscoped: margin 0.017 over KB-S15 0.881
+  KB-S5 live (scoped sti): margin 0.017 over KB-S15 0.881
+  KB-S8 unscoped: margin 0.009 over KB-S20 0.884
+  KB-S8 live (scoped sti): margin 0.009 over KB-S20 0.884
+  KB-S12 unscoped: margin 0.018 over KB-S9 0.903
+  KB-S12 live (scoped sti): margin 0.018 over KB-S9 0.903
+  KB-P5 unscoped: margin 0.030 over KB-C11 0.862
+  KB-P8 unscoped: margin 0.022 over KB-G11 0.880
+  KB-G3 unscoped: margin 0.003 over KB-G14 0.903
+  KB-G3 live (scoped general): margin 0.003 over KB-G14 0.903
+  KB-G5 unscoped: margin 0.011 over KB-G9 0.883
+  KB-G5 live (scoped general): margin 0.011 over KB-G9 0.883
+  KB-G6 unscoped: margin 0.018 over KB-G11 0.889
+  KB-G6 live (scoped general): margin 0.018 over KB-G11 0.889
+  KB-G7 unscoped: margin 0.012 over KB-G1 0.868
+  KB-G7 live (scoped general): margin 0.012 over KB-G1 0.868
+  KB-G9 unscoped: margin 0.007 over KB-G15 0.889
+  KB-G9 live (scoped general): margin 0.007 over KB-G15 0.889
+  KB-G14 unscoped: margin 0.023 over KB-G3 0.878
+  KB-G14 live (scoped general): margin 0.023 over KB-G3 0.878
+  KB-G16 unscoped: margin 0.012 over KB-G5 0.881
+  KB-G16 live (scoped general): margin 0.012 over KB-G5 0.881
+  KB-G17 unscoped: margin 0.021 over KB-G4 0.886
+  KB-G17 live (scoped general): margin 0.021 over KB-G4 0.886

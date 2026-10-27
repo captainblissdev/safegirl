@@ -1,0 +1,878 @@
+{
+  "measured": "2026-10-27T18:30:03.979Z",
+  "mode": "question",
+  "health": {
+    "status": "ok",
+    "device": "cpu",
+    "model_version": "v3",
+    "retriever": "ok",
+    "kb_entries": 62,
+    "embed_mode": "question"
+  },
+  "gate_threshold": 0.8439,
+  "self_retrieval": {
+    "exit": 1,
+    "entries": 62,
+    "unscoped_own": 62,
+    "scoped_own": 57,
+    "unscoped_failures": [],
+    "scoped_failures": [
+      "KB-C11->KB-P5 (scoped pregnancy)",
+      "KB-S16->KB-G16 (scoped general)",
+      "KB-P1->KB-G3 (scoped general)",
+      "KB-P9->KB-G6 (scoped general)",
+      "KB-G13->KB-P5 (scoped pregnancy)"
+    ],
+    "failures": [
+      "KB-C11 live (scoped pregnancy): got KB-P5",
+      "KB-S16 live (scoped general): got KB-G16",
+      "KB-P1 live (scoped general): got KB-G3",
+      "KB-P9 live (scoped general): got KB-G6",
+      "KB-G13 live (scoped pregnancy): got KB-P5"
+    ],
+    "near_misses": []
+  },
+  "dev": {
+    "labels": "resources/eval/retrieval_eval_set_labels_2026-10-15.csv",
+    "provisional": true,
+    "questions": 35,
+    "correct": 21,
+    "baseline_21_correct": 29,
+    "changed_vs_21": [
+      "Q03",
+      "Q07",
+      "Q11",
+      "Q13",
+      "Q16",
+      "Q20",
+      "Q23",
+      "Q28",
+      "Q30",
+      "Q54",
+      "Q55",
+      "Q58"
+    ],
+    "gate": {
+      "correct_answers": {
+        "min": 0.8456,
+        "max": 0.9675,
+        "n": 21
+      },
+      "wrong_or_partial_answers": {
+        "min": 0.8536,
+        "max": 0.8908,
+        "n": 7
+      },
+      "abstentions": {
+        "min": 0.8037,
+        "max": 0.8416,
+        "n": 5
+      },
+      "wrong_or_partial_answers_passing_gate": [
+        "Q03",
+        "Q11",
+        "Q13",
+        "Q28",
+        "Q30",
+        "Q55",
+        "Q58"
+      ]
+    },
+    "per_question": [
+      {
+        "id": "Q01",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-C3",
+        "verdict": "correct",
+        "gate_score": 0.9675,
+        "unscoped_top1": "KB-C3",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-C3",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q02",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-C4",
+        "verdict": "correct",
+        "gate_score": 0.928,
+        "unscoped_top1": "KB-C4",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-C4",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q03",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-C18",
+        "verdict": "wrong",
+        "gate_score": 0.8675,
+        "unscoped_top1": "KB-C18",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-C5",
+        "before_verdict": "correct",
+        "changed": true
+      },
+      {
+        "id": "Q04",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-S4",
+        "verdict": "correct",
+        "gate_score": 0.9066,
+        "unscoped_top1": "KB-S4",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-S4",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q05",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-S5",
+        "verdict": "correct",
+        "gate_score": 0.8456,
+        "unscoped_top1": "KB-S5",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-S5",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q06",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-S6",
+        "verdict": "correct",
+        "gate_score": 0.8957,
+        "unscoped_top1": "KB-S6",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-S6",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q07",
+        "reply_kind": "abstain",
+        "entry": null,
+        "verdict": "wrong",
+        "gate_score": 0.8408,
+        "unscoped_top1": "KB-S7",
+        "before_kind": "answer-unscoped",
+        "before_entry": "KB-S7",
+        "before_verdict": "correct",
+        "changed": true
+      },
+      {
+        "id": "Q08",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-P5",
+        "verdict": "correct",
+        "gate_score": 0.9187,
+        "unscoped_top1": "KB-P5",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-P5",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q09",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-P6",
+        "verdict": "correct",
+        "gate_score": 0.893,
+        "unscoped_top1": "KB-P6",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-P6",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q10",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-P7",
+        "verdict": "correct",
+        "gate_score": 0.8985,
+        "unscoped_top1": "KB-P7",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-P7",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q11",
+        "reply_kind": "answer-unscoped",
+        "entry": "KB-G14",
+        "verdict": "wrong",
+        "gate_score": 0.8908,
+        "unscoped_top1": "KB-G14",
+        "before_kind": "answer-unscoped",
+        "before_entry": "KB-G3",
+        "before_verdict": "correct",
+        "changed": true
+      },
+      {
+        "id": "Q12",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-G4",
+        "verdict": "correct",
+        "gate_score": 0.8821,
+        "unscoped_top1": "KB-G4",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-G4",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q13",
+        "reply_kind": "answer-unscoped",
+        "entry": "KB-G9",
+        "verdict": "wrong",
+        "gate_score": 0.8538,
+        "unscoped_top1": "KB-G9",
+        "before_kind": "answer-unscoped",
+        "before_entry": "KB-G5",
+        "before_verdict": "correct",
+        "changed": true
+      },
+      {
+        "id": "Q14",
+        "reply_kind": "answer-unscoped",
+        "entry": "KB-G6",
+        "verdict": "correct",
+        "gate_score": 0.8792,
+        "unscoped_top1": "KB-G6",
+        "before_kind": "answer-unscoped",
+        "before_entry": "KB-G6",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q15",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-G7",
+        "verdict": "correct",
+        "gate_score": 0.8958,
+        "unscoped_top1": "KB-G7",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-G7",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q16",
+        "reply_kind": "abstain",
+        "entry": null,
+        "verdict": "wrong",
+        "gate_score": 0.8279,
+        "unscoped_top1": "KB-G1",
+        "before_kind": "answer-unscoped",
+        "before_entry": "KB-G1",
+        "before_verdict": "correct",
+        "changed": true
+      },
+      {
+        "id": "Q17",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-C2",
+        "verdict": "correct",
+        "gate_score": 0.9349,
+        "unscoped_top1": "KB-C2",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-C2",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q18",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-C1",
+        "verdict": "correct",
+        "gate_score": 0.8758,
+        "unscoped_top1": "KB-C1",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-C1",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q20",
+        "reply_kind": "abstain",
+        "entry": null,
+        "verdict": "wrong",
+        "gate_score": 0.8416,
+        "unscoped_top1": "KB-C3",
+        "before_kind": "answer-unscoped",
+        "before_entry": "KB-C3",
+        "before_verdict": "correct",
+        "changed": true
+      },
+      {
+        "id": "Q21",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-C4",
+        "verdict": "correct",
+        "gate_score": 0.9125,
+        "unscoped_top1": "KB-C4",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-C4",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q22",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-C5",
+        "verdict": "correct",
+        "gate_score": 0.8771,
+        "unscoped_top1": "KB-C5",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-C5",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q23",
+        "reply_kind": "answer-unscoped",
+        "entry": "KB-S4",
+        "verdict": "correct",
+        "gate_score": 0.8644,
+        "unscoped_top1": "KB-S4",
+        "before_kind": "abstain",
+        "before_entry": null,
+        "before_verdict": "wrong",
+        "changed": true
+      },
+      {
+        "id": "Q24",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-S7",
+        "verdict": "correct",
+        "gate_score": 0.8738,
+        "unscoped_top1": "KB-S7",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-S7",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q25",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-P5",
+        "verdict": "correct",
+        "gate_score": 0.8758,
+        "unscoped_top1": "KB-P5",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-P5",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q26",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-P6",
+        "verdict": "correct",
+        "gate_score": 0.8944,
+        "unscoped_top1": "KB-P6",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-P6",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q27",
+        "reply_kind": "held-topic",
+        "entry": null,
+        "verdict": "wrong",
+        "gate_score": 0.8884,
+        "unscoped_top1": "KB-G8",
+        "before_kind": "held-topic",
+        "before_entry": null,
+        "before_verdict": "wrong",
+        "changed": false
+      },
+      {
+        "id": "Q28",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-P8",
+        "verdict": "wrong",
+        "gate_score": 0.8544,
+        "unscoped_top1": "KB-P8",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-P6",
+        "before_verdict": "partial",
+        "changed": true
+      },
+      {
+        "id": "Q29",
+        "reply_kind": "held-topic",
+        "entry": null,
+        "verdict": "wrong",
+        "gate_score": 0.8647,
+        "unscoped_top1": "KB-G14",
+        "before_kind": "held-topic",
+        "before_entry": null,
+        "before_verdict": "wrong",
+        "changed": false
+      },
+      {
+        "id": "Q30",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-P8",
+        "verdict": "wrong",
+        "gate_score": 0.8899,
+        "unscoped_top1": "KB-P8",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-P5",
+        "before_verdict": "wrong",
+        "changed": true
+      },
+      {
+        "id": "Q50",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-P6",
+        "verdict": "correct",
+        "gate_score": 0.8615,
+        "unscoped_top1": "KB-G14",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-P6",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q54",
+        "reply_kind": "abstain",
+        "entry": null,
+        "verdict": "wrong",
+        "gate_score": 0.8348,
+        "unscoped_top1": "KB-S7",
+        "before_kind": "answer-unscoped",
+        "before_entry": "KB-S7",
+        "before_verdict": "correct",
+        "changed": true
+      },
+      {
+        "id": "Q55",
+        "reply_kind": "answer-unscoped",
+        "entry": "KB-G14",
+        "verdict": "wrong",
+        "gate_score": 0.8785,
+        "unscoped_top1": "KB-G14",
+        "before_kind": "answer-unscoped",
+        "before_entry": "KB-G3",
+        "before_verdict": "correct",
+        "changed": true
+      },
+      {
+        "id": "Q56",
+        "reply_kind": "answer-unscoped",
+        "entry": "KB-G3",
+        "verdict": "correct",
+        "gate_score": 0.9168,
+        "unscoped_top1": "KB-G3",
+        "before_kind": "answer-unscoped",
+        "before_entry": "KB-G3",
+        "before_verdict": "correct",
+        "changed": false
+      },
+      {
+        "id": "Q57",
+        "reply_kind": "abstain",
+        "entry": null,
+        "verdict": "wrong",
+        "gate_score": 0.8037,
+        "unscoped_top1": "KB-S7",
+        "before_kind": "abstain",
+        "before_entry": null,
+        "before_verdict": "wrong",
+        "changed": false
+      },
+      {
+        "id": "Q58",
+        "reply_kind": "answer-scoped",
+        "entry": "KB-C12",
+        "verdict": "wrong",
+        "gate_score": 0.8536,
+        "unscoped_top1": "KB-C12",
+        "before_kind": "answer-scoped",
+        "before_entry": "KB-C4",
+        "before_verdict": "correct",
+        "changed": true
+      }
+    ]
+  },
+  "gate_set": {
+    "correct": {
+      "min": 0.8154,
+      "max": 0.9107,
+      "n": 15
+    },
+    "wrong": {
+      "min": 0.8538,
+      "max": 0.9107,
+      "n": 5
+    },
+    "off_topic": {
+      "min": 0.7445,
+      "max": 0.8489,
+      "n": 14
+    },
+    "correct_below_gate": [
+      "V02",
+      "V03",
+      "V06",
+      "V17",
+      "V19"
+    ],
+    "wrong_passing_gate": [
+      "V05",
+      "V12",
+      "V14",
+      "V16",
+      "V18"
+    ],
+    "off_topic_passing_gate": [
+      "V31",
+      "V34"
+    ],
+    "referral_or_signpost_not_scored": 6,
+    "per_query": [
+      {
+        "id": "V01",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-C3",
+        "top1": "KB-C3",
+        "score": 0.8743,
+        "passes_gate": true
+      },
+      {
+        "id": "V02",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-C3",
+        "top1": "KB-C3",
+        "score": 0.8375,
+        "passes_gate": false
+      },
+      {
+        "id": "V03",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-C5",
+        "top1": "KB-C5",
+        "score": 0.8197,
+        "passes_gate": false
+      },
+      {
+        "id": "V04",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-C4",
+        "top1": "KB-C4",
+        "score": 0.9105,
+        "passes_gate": true
+      },
+      {
+        "id": "V05",
+        "group": "in_scope",
+        "kind": "wrong",
+        "likely_entry": "KB-S4",
+        "top1": "KB-S8",
+        "score": 0.9107,
+        "passes_gate": true
+      },
+      {
+        "id": "V06",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-S5",
+        "top1": "KB-S5",
+        "score": 0.8277,
+        "passes_gate": false
+      },
+      {
+        "id": "V07",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-S6",
+        "top1": "KB-S6",
+        "score": 0.8966,
+        "passes_gate": true
+      },
+      {
+        "id": "V08",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-S7",
+        "top1": "KB-S7",
+        "score": 0.8833,
+        "passes_gate": true
+      },
+      {
+        "id": "V09",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-P5",
+        "top1": "KB-P5",
+        "score": 0.9107,
+        "passes_gate": true
+      },
+      {
+        "id": "V10",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-P6",
+        "top1": "KB-P6",
+        "score": 0.9008,
+        "passes_gate": true
+      },
+      {
+        "id": "V11",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-P7",
+        "top1": "KB-P7",
+        "score": 0.8776,
+        "passes_gate": true
+      },
+      {
+        "id": "V12",
+        "group": "in_scope",
+        "kind": "wrong",
+        "likely_entry": "KB-G3",
+        "top1": "KB-G14",
+        "score": 0.872,
+        "passes_gate": true
+      },
+      {
+        "id": "V13",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-G4",
+        "top1": "KB-G4",
+        "score": 0.8944,
+        "passes_gate": true
+      },
+      {
+        "id": "V14",
+        "group": "in_scope",
+        "kind": "wrong",
+        "likely_entry": "KB-G6",
+        "top1": "KB-G11",
+        "score": 0.8832,
+        "passes_gate": true
+      },
+      {
+        "id": "V15",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-G1",
+        "top1": "KB-G1",
+        "score": 0.8777,
+        "passes_gate": true
+      },
+      {
+        "id": "V16",
+        "group": "in_scope",
+        "kind": "wrong",
+        "likely_entry": "KB-G5",
+        "top1": "KB-G9",
+        "score": 0.8538,
+        "passes_gate": true
+      },
+      {
+        "id": "V17",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-S5",
+        "top1": "KB-S5",
+        "score": 0.8221,
+        "passes_gate": false
+      },
+      {
+        "id": "V18",
+        "group": "in_scope",
+        "kind": "wrong",
+        "likely_entry": "KB-G3",
+        "top1": "KB-G14",
+        "score": 0.8732,
+        "passes_gate": true
+      },
+      {
+        "id": "V19",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-G1",
+        "top1": "KB-G1",
+        "score": 0.8154,
+        "passes_gate": false
+      },
+      {
+        "id": "V20",
+        "group": "in_scope",
+        "kind": "correct",
+        "likely_entry": "KB-P6",
+        "top1": "KB-P6",
+        "score": 0.8804,
+        "passes_gate": true
+      },
+      {
+        "id": "V21",
+        "group": "off_topic",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-G11",
+        "score": 0.7936,
+        "passes_gate": false
+      },
+      {
+        "id": "V22",
+        "group": "off_topic",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-S11",
+        "score": 0.7982,
+        "passes_gate": false
+      },
+      {
+        "id": "V23",
+        "group": "off_topic",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-S5",
+        "score": 0.7823,
+        "passes_gate": false
+      },
+      {
+        "id": "V24",
+        "group": "off_topic",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-S4",
+        "score": 0.7831,
+        "passes_gate": false
+      },
+      {
+        "id": "V25",
+        "group": "off_topic",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-C15",
+        "score": 0.7445,
+        "passes_gate": false
+      },
+      {
+        "id": "V26",
+        "group": "off_topic",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-P10",
+        "score": 0.7861,
+        "passes_gate": false
+      },
+      {
+        "id": "V27",
+        "group": "off_topic",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-G7",
+        "score": 0.8014,
+        "passes_gate": false
+      },
+      {
+        "id": "V28",
+        "group": "off_topic",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-S11",
+        "score": 0.8251,
+        "passes_gate": false
+      },
+      {
+        "id": "V29",
+        "group": "out_of_scope_health",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-S7",
+        "score": 0.8283,
+        "passes_gate": false
+      },
+      {
+        "id": "V30",
+        "group": "out_of_scope_health",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-S21",
+        "score": 0.8331,
+        "passes_gate": false
+      },
+      {
+        "id": "V31",
+        "group": "out_of_scope_health",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-G8",
+        "score": 0.8484,
+        "passes_gate": true
+      },
+      {
+        "id": "V32",
+        "group": "out_of_scope_health",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-S4",
+        "score": 0.8356,
+        "passes_gate": false
+      },
+      {
+        "id": "V33",
+        "group": "out_of_scope_health",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-C3",
+        "score": 0.8388,
+        "passes_gate": false
+      },
+      {
+        "id": "V34",
+        "group": "out_of_scope_health",
+        "kind": "off_topic",
+        "likely_entry": null,
+        "top1": "KB-C17",
+        "score": 0.8489,
+        "passes_gate": true
+      },
+      {
+        "id": "V35",
+        "group": "distress",
+        "kind": "referral_or_signpost"
+      },
+      {
+        "id": "V36",
+        "group": "distress",
+        "kind": "referral_or_signpost"
+      },
+      {
+        "id": "V37",
+        "group": "distress",
+        "kind": "referral_or_signpost"
+      },
+      {
+        "id": "V38",
+        "group": "distress",
+        "kind": "referral_or_signpost"
+      },
+      {
+        "id": "V39",
+        "group": "distress",
+        "kind": "referral_or_signpost"
+      },
+      {
+        "id": "V40",
+        "group": "distress",
+        "kind": "referral_or_signpost"
+      }
+    ]
+  }
+}

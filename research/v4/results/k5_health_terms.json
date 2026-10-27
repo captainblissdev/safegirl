@@ -1,0 +1,91 @@
+{
+  "measured": "2026-10-27T18:32:59.007Z",
+  "set_sizes": {
+    "kb_questions": 62,
+    "dev_questions": 35,
+    "seeds": 380,
+    "paraphrases": 1239
+  },
+  "vague_now": {
+    "kb_questions": 0,
+    "dev_questions": 0,
+    "seeds": 33,
+    "paraphrases": 137
+  },
+  "terms": [
+    {
+      "term": "abortion",
+      "in_healthTerms_json": true,
+      "in_extraHealthTerms_json": true,
+      "texts_containing": {
+        "kb_questions": 0,
+        "dev_questions": 0,
+        "seeds": 0,
+        "paraphrases": 0
+      },
+      "vague_result_changes_if_removed": {
+        "kb_questions": [],
+        "dev_questions": [],
+        "seeds": [],
+        "paraphrases": []
+      }
+    },
+    {
+      "term": "nurse",
+      "in_healthTerms_json": true,
+      "in_extraHealthTerms_json": false,
+      "texts_containing": {
+        "kb_questions": 0,
+        "dev_questions": 0,
+        "seeds": 3,
+        "paraphrases": 5
+      },
+      "vague_result_changes_if_removed": {
+        "kb_questions": [],
+        "dev_questions": [],
+        "seeds": [],
+        "paraphrases": []
+      }
+    },
+    {
+      "term": "pharmacies",
+      "in_healthTerms_json": true,
+      "in_extraHealthTerms_json": false,
+      "texts_containing": {
+        "kb_questions": 0,
+        "dev_questions": 0,
+        "seeds": 0,
+        "paraphrases": 0
+      },
+      "vague_result_changes_if_removed": {
+        "kb_questions": [],
+        "dev_questions": [],
+        "seeds": [],
+        "paraphrases": []
+      }
+    },
+    {
+      "term": "sexuality",
+      "in_healthTerms_json": true,
+      "in_extraHealthTerms_json": false,
+      "texts_containing": {
+        "kb_questions": 0,
+        "dev_questions": 0,
+        "seeds": 0,
+        "paraphrases": 0
+      },
+      "vague_result_changes_if_removed": {
+        "kb_questions": [],
+        "dev_questions": [],
+        "seeds": [],
+        "paraphrases": []
+      }
+    }
+  ],
+  "vague_result_changes_if_all_four_removed": {
+    "kb_questions": [],
+    "dev_questions": [],
+    "seeds": [],
+    "paraphrases": []
+  }
+}
