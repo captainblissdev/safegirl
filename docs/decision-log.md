@@ -2920,3 +2920,28 @@ answer: extractive ([generationModule] Gemini unavailable, using extractive answ
 guard: not reached
 text: The first sign of puberty in most girls is breast 'buds', followed by body hair and a growth spurt. Most girls get their first period within 2 to 3 years after breast development starts. Timing varies from girl to girl, so if you are worried about your development, talk to a health worker.
 ```
+
+## Gemini request settings amended (2026-10-27)
+
+Amends the "Fixed settings" in "Gemini generation behind a flag", after
+the smoke test (see "Gemini smoke test (2026-10-27)"). The earlier entry
+is left as it was.
+
+- **Thinking level `minimal`** (`generationConfig.thinkingConfig.
+  thinkingLevel`). At the default level, thinking used 487 to 491 of
+  the 512 output tokens on every smoke call, so each stopped at
+  `MAX_TOKENS`. The task only rewrites one entry, so it needs little
+  reasoning. Google notes that `minimal` does not guarantee thinking is
+  off.
+- **`maxOutputTokens` 1024** (was 512), as headroom, because thinking
+  tokens count toward the limit (Gemini thinking docs, updated 14 Oct
+  2026).
+- **Temperature 1.0** (was 0), the default Google recommends for all
+  Gemini 3 models. The docs warn that a temperature below 1.0 may lead
+  to looping or degraded output.
+- **Repeatability.** This departs from the earlier aim of the most
+  repeatable output. To make up for it, the comparison will run each
+  query 3 times and report the spread.
+- **Unchanged.** Model `gemini-3.6-flash`, timeout 8 s with no retry,
+  the prompt, the output guard, the extractive fallback, synthetic
+  queries only, and the flag off by default.
