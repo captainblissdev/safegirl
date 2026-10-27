@@ -2578,3 +2578,30 @@ Recorded 27 Oct 2026, before any integration code, on branch
     - Latency per query (median and 95th percentile) and RAM, measured
       with the flag on and off.
     - A closing decision-log entry and a README note.
+
+## V4 integration: keyword fallback list differences (2026-10-27)
+
+A note to "V4 integration behind a flag", from plan step 2
+(`research/v4/tests/test_keyword_parity.py`, non-blocking).
+
+- **The finding.** The gateway's keyword fallback
+  (`app/gateway/src/fallback/keywordClassifier.js`) does not use the
+  same keyword lists as the evaluated Python baseline
+  (`research/experiments/baseline_classifier.py`), although its comment
+  says the set is preserved.
+  - gbv: `consent` is only in Node. `female genital mutilation`,
+    `molestation` and the `without my agreement/approval/permission`
+    phrases are only in Python.
+  - pregnancy: `pregnancy risk(s)` is only in Node.
+  - The two also differ on word boundaries: JavaScript's `\b` is
+    ASCII-only and Python's is Unicode-aware. This shows only in
+    synthetic strings where a keyword is directly followed by an
+    accented letter.
+  - On real data, 7 items differ, all in gbv: SEED-GEN-11, its
+    paraphrases P1 to P4, DEV-Q19 and DEV-Q42.
+- **V4 is unaffected.** It computes its keyword features in Python only,
+  in training, in the frozen evaluation and in `/triage`.
+- **Nothing changed.** Neither classifier was changed.
+- **Not separately evaluated.** The gateway's keyword fallback path
+  (used when ml_service is unreachable) was not evaluated on its own.
+  The M1/M2 baseline results come from the Python baseline.
