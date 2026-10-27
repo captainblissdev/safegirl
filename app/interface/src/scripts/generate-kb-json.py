@@ -35,6 +35,11 @@ OUT_PATH = os.path.join(
     "Kbdata.json",
 )
 
+# Review status every entry must carry. Validated so a missing or unknown
+# status fails the export. Only approved entries are written to
+# Kbdata.json, and the status itself never is.
+KB_STATUSES = ("approved", "pending")
+
 ACTIVE_CATEGORIES = [
     "contraception",
     "sti",
@@ -66,6 +71,17 @@ def parse_kb_file(path):
             pattern = rf"\*\*{re.escape(field)}:\*\*\s*(.+)"
             match = re.search(pattern, block)
             return match.group(1).strip() if match else None
+
+        status = get_field("Status")
+        if status not in KB_STATUSES:
+            found = f"unknown status {status!r}" if status else "no status"
+            raise SystemExit(
+                f"{os.path.basename(path)}: {id_match.group(1)} has {found} "
+                f"(expected one of {list(KB_STATUSES)})."
+            )
+
+        if status != "approved":
+            continue
 
         entries.append(
             {

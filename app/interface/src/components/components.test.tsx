@@ -1081,9 +1081,9 @@ console.log("\nTest 29: the Topic list for each topic");
     );
   }
   assert(
-    KB_QUESTIONS.length === 21 &&
+    KB_QUESTIONS.length === 62 &&
       KB_QUESTIONS.every((item) => Object.keys(item).length === 3),
-    "21 questions with id, class and question only (no answers)",
+    "62 questions with id, class and question only (no answers)",
   );
 }
 
@@ -1109,14 +1109,16 @@ console.log(
   );
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
-    /const askFromTopic = \(text: string, questionId: string \| null\) => \{\s*if \(topic\) setAnswerOrigin\(\{ topic, questionId \}\);\s*setScreen\("chat"\);[\s\S]{0,120}void handleSend\(\s*text,\s*questionId === null \? "typed" : "tapped",?\s*\);/.test(
+    /const askFromTopic = \(text: string, questionId: string \| null\) => \{\s*if \(topic\) setAnswerOrigin\(\{ topic, questionId \}\);\s*setScreen\("chat"\);[\s\S]{0,120}if \(questionId === null\) \{\s*void handleSend\(text, "typed"\);\s*\} else \{\s*void handleSend\(text, "tapped", questionId\);\s*\}/.test(
       app,
     ),
-    "App sends it through handleSend, the full pipeline used for every question",
+    "App sends a tapped row with its entry id, and ask-bar text without one",
   );
   assert(
-    app.includes("submitQuery(text, { signal: request.signal })"),
-    "handleSend submits only the text",
+    /entryId\s*\?\s*await submitEntry\(entryId, text, \{ signal: request\.signal \}\)\s*:\s*await submitQuery\(text, \{ signal: request\.signal \}\)/.test(
+      app,
+    ),
+    "handleSend posts the entry id for a tapped row (/api/entry), else only the text",
   );
   assert(
     app.includes('onTopic={(next) => openTopic(next, "tile")}') &&
@@ -2290,7 +2292,7 @@ console.log("\nTest 50: Topic list and answer screen polish (step 6b)");
     `header card: the icon tile, the h1 and "${TOPIC_LIST_HINT}"`,
   );
   assert(
-    list.includes('<p class="sr-only topic-count">5 questions</p>') &&
+    list.includes('<p class="sr-only topic-count">18 questions</p>') &&
       list.indexOf("sr-only topic-count") <
         list.indexOf('<ul class="topic-questions"'),
     "the question count stays, for screen readers only, before the list",
@@ -2820,12 +2822,11 @@ console.log(
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
     chat.includes('onSend={(question) => onSend(question, "tapped")}') &&
-      app.includes(
-        'void handleSend(text, questionId === null ? "typed" : "tapped");',
-      ) &&
+      app.includes('void handleSend(text, "tapped", questionId);') &&
+      app.includes('void handleSend(text, "typed");') &&
       app.includes("via,") &&
       app.includes("submitQuery(text, { signal: request.signal })"),
-    "related rows and Topic list rows are tapped, ask bars typed; the request is still the text alone",
+    "related rows and Topic list rows are tapped, ask bars typed; a Topic list row also sends its entry id, related rows the text alone",
   );
 }
 

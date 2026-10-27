@@ -57,6 +57,7 @@ const {
 const REPLY_KINDS = Object.freeze([
   "answer-scoped",
   "answer-unscoped",
+  "answer-direct",
   "abstain",
   "help",
   "held-topic",
@@ -189,6 +190,34 @@ function orchestrate({
 }
 
 /**
+ * Response to a tapped Topic-list entry (src/topicEntry.js): the entry
+ * itself, with no classification, retrieval or gate.
+ *
+ * @param {object} entry - The served knowledge-base entry.
+ * @param {object} generation - generate(entry).
+ * @returns {object} Final response payload.
+ */
+function direct(entry, generation) {
+  return {
+    outcome: "grounded_answer",
+    kind: "answer-direct",
+    matchedQuestion: entry.question,
+    message: generation.text,
+    category: entry.category,
+    answerFound: true,
+    generated: generation.generated,
+    note: generation.note,
+    source: generation.source,
+    safetyNotes: generation.safetyNotes,
+    generationInvoked: true,
+    predictedCategory: null,
+    classifierSource: null,
+    confidence: null,
+    retrievalScope: "direct",
+  };
+}
+
+/**
  * Response to a generic help request that names no topic. Classification
  * and retrieval did not run, so there is no category or classifier output.
  *
@@ -273,6 +302,7 @@ module.exports = {
   ABUSE_REFERRAL_MESSAGE,
   REPLY_KINDS,
   clarify,
+  direct,
   hold,
   orchestrate,
   signpost,

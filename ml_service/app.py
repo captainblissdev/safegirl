@@ -37,6 +37,10 @@ the KB_PATH environment variable.
 Example:
     MODEL_DIR=./final KB_PATH=./knowledge_base.json uvicorn app:app --host 0.0.0.0 --port 8001
 
+RETRIEVAL_EMBED_MODE chooses what retrieval embeds for each entry:
+"question" (the question only) or "full" (question, answer, evidence,
+Conditions and safety notes). See retrieval.py.
+
 The checkpoint directory must contain the model and tokenizer files
 produced by the V3 final training run, including files such as:
 
@@ -83,7 +87,7 @@ from transformers import (
     AutoTokenizer,
 )
 
-from retrieval import KnowledgeBaseRetriever
+from retrieval import DEFAULT_EMBED_MODE, KnowledgeBaseRetriever
 
 
 # ============================================================================
@@ -119,6 +123,11 @@ KB_PATH = Path(os.environ.get("KB_PATH", "./knowledge_base.json"))
 # /triage is not registered and /health is unchanged.
 V4_TRIAGE_ENABLED = os.environ.get("V4_TRIAGE_ENABLED") == "true"
 V4_INFER_PATH = Path(__file__).resolve().parent.parent / "research" / "v4" / "v4_infer.py"
+
+# What retrieval embeds for each entry: "question" or "full" (see
+# retrieval.EMBED_MODES). An unknown value stops the retriever loading,
+# so /retrieve returns 503 rather than silently using another mode.
+RETRIEVAL_EMBED_MODE = os.environ.get("RETRIEVAL_EMBED_MODE", DEFAULT_EMBED_MODE)
 
 
 # ============================================================================
@@ -362,7 +371,7 @@ def load_retriever() -> None:
     )
 
     try:
-        retriever = KnowledgeBaseRetriever(KB_PATH)
+        retriever = KnowledgeBaseRetriever(KB_PATH, RETRIEVAL_EMBED_MODE)
     except Exception:
         retriever = None
 
@@ -490,7 +499,7 @@ app = FastAPI(
 # ============================================================================
 
 @app.get("/health")
-def health() -> dict[str, str | int]:
+def health() -> dict[str, str | int | None]:
     """
     Return service health and model information.
 
@@ -517,6 +526,7 @@ def health() -> dict[str, str | int]:
         "model_version": MODEL_VERSION,
         "retriever": "ok" if retriever is not None else "not_loaded",
         "kb_entries": len(retriever.entries) if retriever is not None else 0,
+        "embed_mode": retriever.embed_mode if retriever is not None else None,
     }
 
     # Only when the flag is on, so the flag-off response is unchanged.

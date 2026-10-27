@@ -24,3 +24,6 @@ ml_service/venv/
 # Sealed evaluation sets stay outside the repository (research/v4/README.md)
 sealed/
 *sealed*.csv
+
+# Blind review keys stay outside the repository (docs/kb-integration-diagnosis-2026-10-22.md)
+blind_review_key*.csv

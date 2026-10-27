@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { AnswerVia, ChatTurn, Screen } from "./types";
 import { announcementFor, replyViewOf } from "./replyView";
 import { nextLoopCount, reachesLoopLimit } from "./loopLimit";
-import { QueryCancelledError, submitQuery } from "./api/client";
+import { QueryCancelledError, submitEntry, submitQuery } from "./api/client";
 import { answerDetails, isDetailsEnabled } from "./details";
 import AppShell from "./components/AppShell";
 import Splash from "./components/Splash";
@@ -90,7 +90,16 @@ export default function App() {
     };
   }, []);
 
-  const handleSend = async (text: string, via: AnswerVia = "typed") => {
+  /**
+   * Send a question. With entryId (a Topic-list row) the gateway returns
+   * that entry directly; otherwise the text goes through the full
+   * pipeline.
+   */
+  const handleSend = async (
+    text: string,
+    via: AnswerVia = "typed",
+    entryId: string | null = null,
+  ) => {
     // One request at a time: a question sent while a reply loads is not
     // sent (the ask bar is disabled meanwhile).
     if (pendingRef.current) return;
@@ -110,7 +119,9 @@ export default function App() {
     pendingRef.current = request;
 
     try {
-      const response = await submitQuery(text, { signal: request.signal });
+      const response = entryId
+        ? await submitEntry(entryId, text, { signal: request.signal })
+        : await submitQuery(text, { signal: request.signal });
       loopCountRef.current = nextLoopCount(loopCountRef.current, response.kind);
 
       if (response.outcome === "referral") {
@@ -215,15 +226,20 @@ export default function App() {
   };
 
   /**
-   * A question tapped in the Topic list, or typed in its ask bar: the
-   * exact text goes through the same full pipeline as any question. It is
-   * never scoped to the topic.
+   * A question tapped in the Topic list, or typed in its ask bar. A tapped
+   * row sends its entry id and gets that entry back directly (no
+   * classifier, retrieval or gate); text typed in the ask bar goes through
+   * the full pipeline like any question, never scoped to the topic.
    */
   const askFromTopic = (text: string, questionId: string | null) => {
     if (topic) setAnswerOrigin({ topic, questionId });
     setScreen("chat");
     // A row carries its id; the Topic list's ask bar does not.
-    void handleSend(text, questionId === null ? "typed" : "tapped");
+    if (questionId === null) {
+      void handleSend(text, "typed");
+    } else {
+      void handleSend(text, "tapped", questionId);
+    }
   };
 
   /** A question asked on the chat screen itself: its back link is Home. */

@@ -9,12 +9,17 @@
  * dependencies so it can be tested in-process. The server only listens
  * when this file is executed directly.
  *
- * POST /api/query requires a Firebase Anonymous Authentication ID token
- * (see src/middleware/sessionAuth.js). /health is unauthenticated.
+ * POST /api/query and POST /api/entry require a Firebase Anonymous
+ * Authentication ID token (see src/middleware/sessionAuth.js). /health is
+ * unauthenticated.
  * Persistent data storage is not implemented.
  */
 
 const express = require("express");
+const {
+  answerEntry: defaultAnswerEntry,
+  isEntryId,
+} = require("./src/topicEntry");
 
 /**
  * Maximum accepted JSON body size. A query is a single chat message;
@@ -31,6 +36,8 @@ const ERRORS = Object.freeze({
   malformedBody: "Malformed request body.",
   tooLarge: "Request too large.",
   notFound: "Not found.",
+  entryIdRequired: "Entry id is required.",
+  noSuchEntry: "No such entry.",
   internal: "Unable to process query.",
 });
 
@@ -55,12 +62,19 @@ function isBodyParserError(err) {
  * @param {(text: string) => Promise<object>} deps.handleQuery - Query
  *        processing pipeline.
  * @param {Function} deps.authMiddleware - Express middleware run before
- *        POST /api/query. Required, so a missing middleware can never
- *        leave the route silently unprotected.
+ *        POST /api/query and POST /api/entry. Required, so a missing
+ *        middleware can never leave a route silently unprotected.
+ * @param {(id: string) => object|null} [deps.answerEntry] - A tapped
+ *        Topic-list entry's response (src/topicEntry.js).
  * @param {object} [deps.logger] - Logger with an error() method.
  * @returns {import("express").Express} The configured application.
  */
-function createApp({ handleQuery, authMiddleware, logger = console }) {
+function createApp({
+  handleQuery,
+  authMiddleware,
+  answerEntry = defaultAnswerEntry,
+  logger = console,
+}) {
   if (typeof authMiddleware !== "function") {
     throw new TypeError("createApp requires an authMiddleware function");
   }
@@ -113,6 +127,30 @@ function createApp({ handleQuery, authMiddleware, logger = console }) {
       return res.json(result);
     } catch (err) {
       // Handled by the error middleware below: 500 with a fixed message.
+      return next(err);
+    }
+  });
+
+  /**
+   * POST /api/entry
+   *
+   * A question tapped in the Topic list: the body names the entry,
+   * {"id": "KB-P9"}, and the response is that served entry, with no
+   * Safety Net, classifier, retrieval or gate (src/topicEntry.js). A
+   * pending, held or unknown id gets 404 and no entry.
+   */
+  app.post("/api/entry", authMiddleware, parseJson, (req, res, next) => {
+    try {
+      const { id } = req.body || {};
+      if (!isEntryId(id)) {
+        return res.status(400).json({ error: ERRORS.entryIdRequired });
+      }
+      const result = answerEntry(id);
+      if (!result) {
+        return res.status(404).json({ error: ERRORS.noSuchEntry });
+      }
+      return res.json(result);
+    } catch (err) {
       return next(err);
     }
   });

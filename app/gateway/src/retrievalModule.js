@@ -52,6 +52,16 @@ const KB_DIR = path.join(
 const ACTIVE_CATEGORIES = ["contraception", "sti", "pregnancy", "general"];
 
 /**
+ * Review status every active entry must carry ("- **Status:** ...").
+ * Only "approved" entries are served. "pending" entries are parsed and
+ * validated (so a missing or unknown status still fails), but
+ * loadKnowledgeBase() leaves them out, so nothing can retrieve or return
+ * them (docs/decision-log.md, "KB expansion, 22 Oct 2026"). The status is
+ * internal: it is never copied into a response.
+ */
+const KB_STATUSES = ["approved", "pending"];
+
+/**
  * Parse active knowledge-base entries from a Markdown file.
  *
  * Content after the first "\n---\n" boundary is treated as held content
@@ -91,6 +101,16 @@ function parseKbFile(filePath) {
       return match ? match[1].trim() : null;
     };
 
+    const status = get("Status");
+
+    if (!KB_STATUSES.includes(status)) {
+      throw new Error(
+        `${path.basename(filePath)}: ${idMatch[1]} has ${
+          status ? `unknown status "${status}"` : "no status"
+        } (expected ${KB_STATUSES.join(" or ")}).`,
+      );
+    }
+
     entries.push({
       kbId: idMatch[1],
       intent: get("Intent"),
@@ -100,6 +120,7 @@ function parseKbFile(filePath) {
       source: get("Source"),
       conditions: get("Conditions/limitations"),
       safetyNotes: get("Safety/referral notes"),
+      status,
     });
   }
 
@@ -107,7 +128,26 @@ function parseKbFile(filePath) {
 }
 
 /**
- * Load the active knowledge base.
+ * Every entry above the HELD boundary, approved or pending, by category.
+ * For checks and tests only: nothing that serves the user calls this.
+ *
+ * @returns {object} All active-section entries grouped by category.
+ */
+function loadAllEntries() {
+  const kb = {};
+
+  for (const category of ACTIVE_CATEGORIES) {
+    const filePath = path.join(KB_DIR, `${category}.md`);
+    const entries = fs.existsSync(filePath) ? parseKbFile(filePath) : [];
+
+    kb[category] = entries.map((entry) => ({ ...entry, category }));
+  }
+
+  return kb;
+}
+
+/**
+ * Load the served knowledge base: approved entries only.
  *
  * Each active category is loaded from its corresponding Markdown file.
  * Missing files are handled by returning an empty category rather than
@@ -120,13 +160,10 @@ function parseKbFile(filePath) {
  * @returns {object} Knowledge base grouped by category.
  */
 function loadKnowledgeBase() {
-  const kb = {};
+  const kb = loadAllEntries();
 
-  for (const category of ACTIVE_CATEGORIES) {
-    const filePath = path.join(KB_DIR, `${category}.md`);
-    const entries = fs.existsSync(filePath) ? parseKbFile(filePath) : [];
-
-    kb[category] = entries.map((entry) => ({ ...entry, category }));
+  for (const category of Object.keys(kb)) {
+    kb[category] = kb[category].filter((entry) => entry.status === "approved");
   }
 
   return kb;
@@ -220,6 +257,9 @@ function getEntryById(kbId) {
 }
 
 module.exports = {
+  KB_STATUSES,
+  parseKbFile,
+  loadAllEntries,
   loadKnowledgeBase,
   retrieve,
   getEntryById,

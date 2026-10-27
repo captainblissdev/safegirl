@@ -78,6 +78,11 @@ ENTRY_ID = re.compile(r"^(KB-\S+)")
 ANY_KB_ID = re.compile(r"\bKB-[A-Za-z0-9]+")
 
 REQUIRED_FIELDS = ("User question", "Answer", "Source")
+
+# Review status every entry must carry. Checked here so a missing or
+# unknown status fails the build. Only approved entries are exported:
+# pending ones are never served. The status itself is never exported.
+KB_STATUSES = ("approved", "pending")
 OPTIONAL_CONTENT_FIELDS = {
     # markdown label -> prefix used in the embedded/retrieved content
     "Evidence/claim": "Evidence",
@@ -126,6 +131,14 @@ def parse_entry(block: str, filename: str, entry_class: str) -> dict:
             f"{filename}: {entry_id} is missing required field(s) {missing}."
         )
 
+    status = get_field(block, "Status")
+    if status not in KB_STATUSES:
+        found = f"unknown status {status!r}" if status else "no status"
+        raise KBParseError(
+            f"{filename}: {entry_id} has {found} "
+            f"(expected one of {list(KB_STATUSES)})."
+        )
+
     content_parts = [fields["Answer"]]
     for label, prefix in OPTIONAL_CONTENT_FIELDS.items():
         value = get_field(block, label)
@@ -133,6 +146,7 @@ def parse_entry(block: str, filename: str, entry_class: str) -> dict:
             content_parts.append(f"{prefix}: {value}")
 
     return {
+        "_status": status,
         "id": entry_id,
         "class": entry_class,
         "title": fields["User question"],
@@ -149,10 +163,16 @@ def parse_file(path: Path, entry_class: str) -> list[dict]:
     # section. Sections whose heading is not a KB id are skipped, as in
     # retrievalModule.js.
     blocks = ENTRY_HEADING.split(active)[1:]
-    entries = [
+    parsed = [
         parse_entry(block, path.name, entry_class)
         for block in blocks
         if ENTRY_ID.match(block)
+    ]
+    # Pending entries are validated above but never exported.
+    entries = [
+        {k: v for k, v in entry.items() if k != "_status"}
+        for entry in parsed
+        if entry["_status"] == "approved"
     ]
 
     if not entries:

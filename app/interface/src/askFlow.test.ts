@@ -132,18 +132,26 @@ async function main() {
     const app = readFileSync(new URL("./App.tsx", import.meta.url), "utf8");
     assert(
       app.includes("submitQuery(text, { signal: request.signal })") &&
-        /const askFromTopic = \(text: string, questionId: string \| null\) => \{\s*if \(topic\) setAnswerOrigin\(\{ topic, questionId \}\);\s*setScreen\("chat"\);[\s\S]{0,120}void handleSend\(\s*text,\s*questionId === null \? "typed" : "tapped",?\s*\);/.test(
-          app,
+        app.includes(
+          "submitEntry(entryId, text, { signal: request.signal })",
+        ) &&
+        !/topic|class/i.test(
+          app.slice(
+            app.indexOf("const handleSend"),
+            app.indexOf("const cancelPending"),
+          ),
         ),
-      "App sends the text alone; a Topic list's class and row id are never sent",
+      "App sends text alone to /api/query; a tapped Topic list row sends only its entry id to /api/entry; the topic's class is never sent",
     );
     const client = readFileSync(
       new URL("./api/client.ts", import.meta.url),
       "utf8",
     );
     assert(
-      client.includes("body: JSON.stringify({ text }),"),
-      "the client builds the body from the text alone",
+      client.includes("body: JSON.stringify(request.payload),") &&
+        client.includes('path: "/api/query", payload: { text }') &&
+        client.includes('{ path: "/api/entry", payload: { id }, text }'),
+      "the client sends { text } to /api/query and { id } to /api/entry, nothing else",
     );
   }
 
@@ -188,7 +196,7 @@ async function main() {
     );
     const app = readFileSync(new URL("./App.tsx", import.meta.url), "utf8");
     assert(
-      /const handleSend = async \(text: string, via: AnswerVia = "typed"\) => \{[\s\S]{0,200}if \(pendingRef\.current\) return;/.test(
+      /const handleSend = async \(\s*text: string,\s*via: AnswerVia = "typed",\s*entryId: string \| null = null,\s*\) => \{[\s\S]{0,200}if \(pendingRef\.current\) return;/.test(
         app,
       ),
       "one request at a time, from every screen (the Topic list's too)",

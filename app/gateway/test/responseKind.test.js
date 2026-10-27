@@ -49,12 +49,13 @@ function handler({ confidence, relevanceGate = false } = {}) {
 const QUESTION = "I have unusual discharge and itching, could it be an STI?";
 
 describe("reply kind and matched question", () => {
-  it("lists exactly the seven reply kinds", () => {
+  it("lists exactly the eight reply kinds", () => {
     assert.deepEqual(
       [...REPLY_KINDS],
       [
         "answer-scoped",
         "answer-unscoped",
+        "answer-direct",
         "abstain",
         "help",
         "held-topic",
