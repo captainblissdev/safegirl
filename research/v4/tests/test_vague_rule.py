@@ -4,6 +4,7 @@ import json
 import subprocess
 import unittest
 
+from tests import edge_cases
 from tests.support import load
 
 vague = load("vague_rule")
@@ -43,6 +44,20 @@ class Parity(unittest.TestCase):
                  "what's up", "IS MY PERIOD NORMAL", "i have stis", "clinic", "hey there hmm"]
         self.assertEqual([vague.is_vague(c) for c in cases], js_vague(cases))
         self.assertFalse(vague.is_vague(None))
+
+    def test_synthetic_edge_cases(self):
+        """Blocking (V4 integration plan, step 2): accents, non-ASCII
+        letters, apostrophes, mixed case, whitespace, emoji, very short
+        and very long strings, Swahili/Sheng and punctuation only. The
+        strings are synthetic, so a failure lists them."""
+        cases = edge_cases.all_cases()
+        texts = [t for _, t in cases]
+        expected = js_vague(texts)
+        mismatches = [(cid, text[:60], vague.is_vague(text), node)
+                      for (cid, text), node in zip(cases, expected) if vague.is_vague(text) != node]
+        self.assertEqual(mismatches, [], "(case, text, python, node)")
+        self.assertGreater(len(cases), 60)
+        self.assertTrue(0 < sum(expected) < len(cases), "both vague and non-vague cases")
 
     def test_lists_come_from_the_gateway(self):
         self.assertIn("would", vague.function_words())

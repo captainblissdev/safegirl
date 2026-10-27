@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node test/backend.test.js && node --test test/classifierClient.test.js test/backend.wiring.test.js test/server.test.js test/sessionAuth.test.js test/auth.http.test.js test/helpSignposting.test.js test/heldEntries.test.js test/safetyNet.test.js test/offlineSafetyParity.test.js test/relevanceGate.test.js test/responseKind.test.js test/vagueQuery.test.js test/heldTopics.test.js test/homeExamples.test.js test/kbQuestions.test.js test/helpline116Wording.test.js",
+    "test": "node --require ./test/clearV4Flag.js test/backend.test.js && node --require ./test/clearV4Flag.js --test test/classifierClient.test.js test/backend.wiring.test.js test/server.test.js test/sessionAuth.test.js test/auth.http.test.js test/helpSignposting.test.js test/heldEntries.test.js test/safetyNet.test.js test/offlineSafetyParity.test.js test/relevanceGate.test.js test/responseKind.test.js test/vagueQuery.test.js test/heldTopics.test.js test/homeExamples.test.js test/kbQuestions.test.js test/helpline116Wording.test.js test/flagOffHandleQuery.test.js test/v4Triage.test.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier . --write",

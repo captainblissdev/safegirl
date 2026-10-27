@@ -2506,3 +2506,276 @@ V3: upstream rules first, then confidence < 0.35 -> abstain, otherwise answer. V
 | all | 205 | 0.7561 | 0.8195 |
 | no_upstream | 163 | 0.7853 | 0.8650 |
 ```
+
+## V4 integration behind a flag
+
+Recorded 27 Oct 2026, before any integration code, on branch
+`v4/integration`.
+
+- **Flag.** `V4_TRIAGE_ENABLED`, on only when it is exactly `"true"`;
+  off by default. With the flag off, V3 behaviour is unchanged
+  (byte-for-byte on the tested paths): V4 is not loaded and `/triage`
+  is never called.
+- **Mapping when on** (deviation 4). After the upstream rules (Safety
+  Net, help, held topics A/B/C, vague rule), V4 classifies:
+  - vague class -> `clarify()`;
+  - out_of_scope, or confidence < 0.45 -> abstain, without retrieval;
+  - topic class -> the existing `retrieve` (0.35 and 0.5 unchanged),
+    then the relevance gate 0.8439.
+
+  V4's vague and out_of_scope are never passed to `/retrieve`.
+- **Fail-safe.**
+  - Any `/triage` failure (network, timeout, 503, malformed body) falls
+    back to V3 `/classify`, then to the keyword fallback, as today.
+  - The log records the reason only (status or error code), never
+    query text.
+  - V4 refuses to load on any hash, feature-code or e5-revision
+    mismatch, and `/triage` is then unavailable (503).
+- **e5 is shared with the retriever.** V4 reuses the retriever's
+  `intfloat/multilingual-e5-small` instance, with a check that its
+  revision is the one V4 was frozen with (614241f6...).
+- **Frozen and unchanged:**
+  - the V4 model JSON and its sha256 (89eee2b4...);
+  - thresholds 0.35, 0.5 and t_act 0.45, and the relevance gate 0.8439;
+  - KB text, Safety Net patterns, helplines and HELP_CONTACTS_VERIFIED;
+  - the order of checks;
+  - the offline interface pipeline, which stays keyword-only.
+- **Status.** Experimental and off by default. Turning it on for the
+  demo is a separate logged decision, after the rehearsal and Mr. Ouma's
+  sign-off. The DPO/ethics point on automated triage still applies.
+- **Acceptance criteria.** Dev queries are used for equivalence checks
+  only, never for tuning.
+  - **Step 2, parity (research side).**
+    - Node-vs-Python tests of the vague flag on synthetic edge cases
+      (accents, apostrophes, mixed case, non-ASCII).
+    - One keyword-count comparison, Node `matchedKeywords` against
+      Python `explain_baseline`, that reports mismatches without
+      blocking.
+  - **Step 3, ml_service.**
+    - With the flag off, `/classify`, `/retrieve` and `/health`
+      responses are identical to a snapshot, and `/triage` is
+      unavailable.
+    - A fixture test that `/triage` probabilities equal `v4_infer` on
+      synthetic queries only (within 1e-6).
+    - A tampered sidecar or feature file gives 503, with no query text
+      in the logs.
+  - **Step 4, gateway.**
+    - With the flag off, all existing tests pass, and `handleQuery`
+      responses on the 58 dev queries with a stubbed ml_service are
+      byte-identical before and after.
+    - With the flag on (fake fetch):
+      - vague -> clarify; out_of_scope -> abstain; below 0.45 ->
+        abstain;
+      - 0.45 to 0.5 -> unscoped; 0.5 or above -> scoped;
+      - a 503 or malformed `/triage` -> the V3 path;
+      - the log never contains query text.
+    - Safety Net, help, held and vague still fire before `/triage`,
+      which is never called for them.
+  - **Step 5, end to end.**
+    - With the flag on, reply kinds equal
+      `research/v4/triage_sim.py` on the dev queries and seeds (no
+      sealed data).
+    - Latency per query (median and 95th percentile) and RAM, measured
+      with the flag on and off.
+    - A closing decision-log entry and a README note.
+- **Update, 2026-10-27 (timeouts).** After a `/triage` timeout or
+  network error, the gateway skips `/classify` and goes straight to the
+  keyword fallback. ml_service is not answering, so waiting out a
+  second 3 s timeout would double the worst case. The worst case with
+  the flag on therefore stays about 3 s, as with the flag off. The V3
+  `/classify` fallback is kept for a 503, other non-2xx responses, a
+  malformed body, an unknown label or a bad confidence. `npm test` now
+  clears a stray `V4_TRIAGE_ENABLED` from the shell
+  (`test/clearV4Flag.js`).
+
+## V4 integration: keyword fallback list differences (2026-10-27)
+
+A note to "V4 integration behind a flag", from plan step 2
+(`research/v4/tests/test_keyword_parity.py`, non-blocking).
+
+- **The finding.** The gateway's keyword fallback
+  (`app/gateway/src/fallback/keywordClassifier.js`) does not use the
+  same keyword lists as the evaluated Python baseline
+  (`research/experiments/baseline_classifier.py`), although its comment
+  says the set is preserved.
+  - gbv: `consent` is only in Node. `female genital mutilation`,
+    `molestation` and the `without my agreement/approval/permission`
+    phrases are only in Python.
+  - pregnancy: `pregnancy risk(s)` is only in Node.
+  - The two also differ on word boundaries: JavaScript's `\b` is
+    ASCII-only and Python's is Unicode-aware. This shows only in
+    synthetic strings where a keyword is directly followed by an
+    accented letter.
+  - On real data, 7 items differ, all in gbv: SEED-GEN-11, its
+    paraphrases P1 to P4, DEV-Q19 and DEV-Q42.
+- **V4 is unaffected.** It computes its keyword features in Python only,
+  in training, in the frozen evaluation and in `/triage`.
+- **Nothing changed.** Neither classifier was changed.
+- **Not separately evaluated.** The gateway's keyword fallback path
+  (used when ml_service is unreachable) was not evaluated on its own.
+  The M1/M2 baseline results come from the Python baseline.
+
+## V4 integration complete (flag off by default)
+
+Closes "V4 integration behind a flag" (27 Oct 2026, branch
+`v4/integration`).
+
+- **What exists.** `V4_TRIAGE_ENABLED` is off by default and is on only
+  when it is exactly `"true"`.
+  - **ml_service:** `/triage`, with the frozen model and its checks:
+    the sidecar hash, the feature code, and the e5 revision and
+    weights.
+  - **Gateway:** the deviation 4 mapping. After a `/triage` timeout or
+    network error it goes straight to the keyword fallback; after any
+    other failure, to V3 `/classify`.
+  - **With the flag off:** the snapshots of ml_service (23 responses)
+    and the gateway (74 replies) are byte-identical to before.
+- **Unchanged.** Thresholds 0.35, 0.5 and 0.45, the gate 0.8439, KB
+  text, Safety Net, helplines, HELP_CONTACTS_VERIFIED, the order of
+  checks, `generationModule` and the offline interface pipeline (still
+  keyword-only).
+- **Not evaluated on its own.** The gateway's keyword fallback, whose
+  lists differ from the evaluated Python baseline (see "V4
+  integration: keyword fallback list differences (2026-10-27)").
+- **Status.** The flag stays off. Turning it on for the demo is a
+  separate logged decision, after the rehearsal and Mr. Ouma's
+  sign-off. The DPO/ethics point on automated triage still applies.
+- **End-to-end results.** From `research/v4/integration_e2e.py`, at
+  commit 4da9e85: synthetic, seed and dev queries only, nothing tuned.
+  Copied exactly from `research/v4/results/integration_e2e.md`:
+
+```markdown
+# V4 integration, end to end
+
+Synthetic warm-up query, the 58 dev queries and the 380 V4 training seeds; ids only. Seeds are training data: the route comparison is an equivalence check, not an accuracy claim. Nothing was tuned.
+
+## Startup, memory and latency
+
+| | Flag off | Flag on |
+|---|---|---|
+| ml_service startup (s) | 24.44 | 26.19 |
+| gateway startup (s) | 1.06 | 1.09 |
+| ml_service memory after startup (MB) | 989.3 | 1377.9 |
+| ml_service memory after queries (MB) | 1168.0 | 1388.8 |
+| gateway memory after queries (MB) | 78.9 | 126.6 |
+| first request (ms) | 569.3 | 211.6 |
+| dev queries, median (ms) | 87.0 | 95.7 |
+| dev queries, 95th percentile (ms) | 140.3 | 137.5 |
+| dev queries, max (ms) | 154.6 | 179.7 |
+
+e5 tensor check at startup (flag on only): median 0.81 s over 3 runs; result: match.
+
+The flag-off run goes first, so it starts from a colder disk cache: its startup and first request include that, and the startup difference between the two runs is not the cost of V4. The e5 tensor check above is the measured startup cost V4 adds.
+
+## Route equivalence with triage_sim (flag on)
+
+| Set | Compared | Matching | Mismatch reasons |
+|---|---|---|---|
+| dev | 58 | 55 | {'gate': 3} |
+| seeds | 380 | 286 | {'gate': 94} |
+
+dev mismatches (id: live / triage_sim, reason):
+
+- DEV-Q23: abstain / answer, gate
+- DEV-Q53: abstain / answer, gate
+- DEV-Q57: abstain / answer, gate
+
+seeds mismatches (id: live / triage_sim, reason):
+
+- SEED-V4-GEN-003: abstain / answer, gate
+- SEED-V4-GEN-005: abstain / answer, gate
+- SEED-V4-GEN-006: abstain / answer, gate
+- SEED-V4-GEN-008: abstain / answer, gate
+- SEED-V4-GEN-011: abstain / answer, gate
+- SEED-V4-GEN-016: abstain / answer, gate
+- SEED-V4-GEN-018: abstain / answer, gate
+- SEED-V4-GEN-019: abstain / answer, gate
+- SEED-V4-GEN-020: abstain / answer, gate
+- SEED-V4-GEN-022: abstain / answer, gate
+- SEED-V4-PREG-011: abstain / answer, gate
+- SEED-V4-CON-007: abstain / answer, gate
+- SEED-V4-CON-010: abstain / answer, gate
+- SEED-V4-CON-013: abstain / answer, gate
+- SEED-V4-STI-010: abstain / answer, gate
+- SEED-V4-STI-011: abstain / answer, gate
+- SEED-V4-STI-012: abstain / answer, gate
+- SEED-V4-STI-014: abstain / answer, gate
+- SEED-V4-STI-015: abstain / answer, gate
+- SEED-V4-CON-025: abstain / answer, gate
+- SEED-V4-CON-028: abstain / answer, gate
+- SEED-V4-STI-017: abstain / answer, gate
+- SEED-V4-STI-018: abstain / answer, gate
+- SEED-V4-STI-022: abstain / answer, gate
+- SEED-V4-STI-023: abstain / answer, gate
+- SEED-V4-PREG-018: abstain / answer, gate
+- SEED-V4-PREG-019: abstain / answer, gate
+- SEED-V4-PREG-022: abstain / answer, gate
+- SEED-V4-PREG-025: abstain / answer, gate
+- SEED-V4-GEN-027: abstain / answer, gate
+- SEED-CONTRA-06: abstain / answer, gate
+- SEED-CONTRA-14: abstain / answer, gate
+- SEED-CONTRA-20: abstain / answer, gate
+- SEED-STI-07: abstain / answer, gate
+- SEED-STI-10: abstain / answer, gate
+- SEED-PREG-04: abstain / answer, gate
+- SEED-PREG-05: abstain / answer, gate
+- SEED-PREG-07: abstain / answer, gate
+- SEED-PREG-20: abstain / answer, gate
+- SEED-PREG-22: abstain / answer, gate
+- SEED-GEN-04: abstain / answer, gate
+- SEED-GEN-05: abstain / answer, gate
+- SEED-GEN-06: abstain / answer, gate
+- SEED-GEN-07: abstain / answer, gate
+- SEED-GEN-08: abstain / answer, gate
+- SEED-GEN-09: abstain / answer, gate
+- SEED-GEN-11: abstain / answer, gate
+- SEED-GEN-12: abstain / answer, gate
+- SEED-GEN-13: abstain / answer, gate
+- SEED-GEN-14: abstain / answer, gate
+- SEED-GEN-15: abstain / answer, gate
+- SEED-GEN-16: abstain / answer, gate
+- SEED-GEN-18: abstain / answer, gate
+- SEED-GEN-23: abstain / answer, gate
+- SEED-GEN-24: abstain / answer, gate
+- SEED-GEN-28: abstain / answer, gate
+- SEED-GEN-30: abstain / answer, gate
+- SEED-GEN-31: abstain / answer, gate
+- SEED-GEN-33: abstain / answer, gate
+- SEED-GEN-35: abstain / answer, gate
+- SEED-GEN-42: abstain / answer, gate
+- SEED-GEN-43: abstain / answer, gate
+- SEED-GEN-44: abstain / answer, gate
+- SEED-GEN-49: abstain / answer, gate
+- SEED-GEN-51: abstain / answer, gate
+- SEED-GEN-52: abstain / answer, gate
+- SEED-STI-42: abstain / answer, gate
+- SEED-PREG-28: abstain / answer, gate
+- SEED-PREG-29: abstain / answer, gate
+- SEED-PREG-32: abstain / answer, gate
+- SEED-PREG-33: abstain / answer, gate
+- SEED-PREG-34: abstain / answer, gate
+- SEED-PREG-36: abstain / answer, gate
+- SEED-PREG-39: abstain / answer, gate
+- SEED-PREG-44: abstain / answer, gate
+- SEED-CONTRA-48: abstain / answer, gate
+- SEED-STI-45: abstain / answer, gate
+- SEED-STI-46: abstain / answer, gate
+- SEED-STI-47: abstain / answer, gate
+- SEED-STI-48: abstain / answer, gate
+- SEED-STI-50: abstain / answer, gate
+- SEED-PREG-46: abstain / answer, gate
+- SEED-PREG-47: abstain / answer, gate
+- SEED-PREG-48: abstain / answer, gate
+- SEED-PREG-51: abstain / answer, gate
+- SEED-GEN-54: abstain / answer, gate
+- SEED-GEN-55: abstain / answer, gate
+- SEED-GEN-57: abstain / answer, gate
+- SEED-GEN-58: abstain / answer, gate
+- SEED-STI-51: abstain / answer, gate
+- SEED-STI-52: abstain / answer, gate
+- SEED-STI-53: abstain / answer, gate
+- SEED-STI-54: abstain / answer, gate
+- SEED-STI-55: abstain / answer, gate
+
+Machine: AMD64 Family 25 Model 124 Stepping 0, AuthenticAMD; Python 3.14.6; Node v24.18.1; git 4da9e85.
+```

@@ -1,3 +1,5 @@
 node_modules
 package-lock.json
 firebase-service-account*.json
+# Recorded by the tests; compared byte for byte
+test/snapshots/
