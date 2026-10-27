@@ -1,0 +1,536 @@
+{
+ "dry_run": false,
+ "descriptive_only": true,
+ "provenance": {
+  "v3_checkpoint_sha256": "e8bf2e3aa01c920197b51071e736ef6a3d1f16a57dd8d3bdb1565f75152cfb30",
+  "v4_frozen_sha256": "89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd",
+  "labels_sha256": "99380b532b02f4f41cd7f4cdc4e61b0e96413230a3ff2966ec46ab384f850f39",
+  "texts_sha256": "7b3cc85a905fe6e55b16d3bd59b9f6d18c07ac1311de60d2f09e70348efe9db1",
+  "script_sha256": "c90459e42fed488a4c15c7518e8cbe495665f635563853a6adcf784e7acfd1a7",
+  "git_head": "26925494d483924237f5179ab3bdd12aa727d9c0",
+  "versions": {
+   "torch": "2.9.0",
+   "transformers": "5.0.0",
+   "numpy": "2.5.3"
+  },
+  "v3_settings": {
+   "max_length": 64,
+   "abstain": 0.35,
+   "scoped": 0.5,
+   "one_text_at_a_time": true
+  }
+ },
+ "aggregates": {
+  "counts": {
+   "items": 205,
+   "four_class_items": 156,
+   "four_class_no_upstream": 133,
+   "topic_label": {
+    "contraception": 37,
+    "sti": 37,
+    "pregnancy": 34,
+    "general": 48,
+    "out_of_scope": 26,
+    "vague": 23
+   }
+  },
+  "four_classes": {
+   "all": {
+    "v3": {
+     "n": 156,
+     "accuracy": 0.6089743589743589,
+     "macro_f1": 0.5983944592639561,
+     "per_class": {
+      "contraception": {
+       "precision": 0.78125,
+       "recall": 0.6756756756756757,
+       "support": 37
+      },
+      "sti": {
+       "precision": 0.5777777777777777,
+       "recall": 0.7027027027027027,
+       "support": 37
+      },
+      "pregnancy": {
+       "precision": 0.5079365079365079,
+       "recall": 0.9411764705882353,
+       "support": 34
+      },
+      "general": {
+       "precision": 0.75,
+       "recall": 0.25,
+       "support": 48
+      }
+     },
+     "confusion": {
+      "rows": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general"
+      ],
+      "cols": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general"
+      ],
+      "matrix": [
+       [
+        25,
+        4,
+        7,
+        1
+       ],
+       [
+        4,
+        26,
+        4,
+        3
+       ],
+       [
+        0,
+        2,
+        32,
+        0
+       ],
+       [
+        3,
+        13,
+        20,
+        12
+       ]
+      ]
+     },
+     "confident_wrong": 0.15384615384615385,
+     "ece": 0.11132448873458764,
+     "abstain_rate_at_0.35": 0.01282051282051282
+    },
+    "v4_as_is": {
+     "n": 156,
+     "accuracy": 0.8525641025641025,
+     "macro_f1": 0.8809730754795251,
+     "per_class": {
+      "contraception": {
+       "precision": 0.8823529411764706,
+       "recall": 0.8108108108108109,
+       "support": 37
+      },
+      "sti": {
+       "precision": 0.96875,
+       "recall": 0.8378378378378378,
+       "support": 37
+      },
+      "pregnancy": {
+       "precision": 0.8857142857142857,
+       "recall": 0.9117647058823529,
+       "support": 34
+      },
+      "general": {
+       "precision": 0.9111111111111111,
+       "recall": 0.8541666666666666,
+       "support": 48
+      }
+     },
+     "confusion": {
+      "rows": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general"
+      ],
+      "cols": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general",
+       "out_of_scope",
+       "vague"
+      ],
+      "matrix": [
+       [
+        30,
+        0,
+        2,
+        1,
+        3,
+        1
+       ],
+       [
+        3,
+        31,
+        0,
+        2,
+        1,
+        0
+       ],
+       [
+        1,
+        0,
+        31,
+        1,
+        0,
+        1
+       ],
+       [
+        0,
+        1,
+        2,
+        41,
+        2,
+        2
+       ]
+      ]
+     },
+     "confident_wrong": 0.11538461538461539,
+     "ece": 0.08546367999319598
+    },
+    "v4_restricted": {
+     "n": 156,
+     "accuracy": 0.8717948717948718,
+     "macro_f1": 0.8726728188333188,
+     "per_class": {
+      "contraception": {
+       "precision": 0.8857142857142857,
+       "recall": 0.8378378378378378,
+       "support": 37
+      },
+      "sti": {
+       "precision": 0.8611111111111112,
+       "recall": 0.8378378378378378,
+       "support": 37
+      },
+      "pregnancy": {
+       "precision": 0.8888888888888888,
+       "recall": 0.9411764705882353,
+       "support": 34
+      },
+      "general": {
+       "precision": 0.8571428571428571,
+       "recall": 0.875,
+       "support": 48
+      }
+     },
+     "confusion": {
+      "rows": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general"
+      ],
+      "cols": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general"
+      ],
+      "matrix": [
+       [
+        31,
+        1,
+        2,
+        3
+       ],
+       [
+        3,
+        31,
+        0,
+        3
+       ],
+       [
+        1,
+        0,
+        32,
+        1
+       ],
+       [
+        0,
+        4,
+        2,
+        42
+       ]
+      ]
+     },
+     "confident_wrong": 0.09615384615384616,
+     "ece": 0.06935137809272453
+    },
+    "mcnemar": {
+     "v4_as_is_vs_v3": {
+      "a_right_b_wrong": 47,
+      "a_wrong_b_right": 9,
+      "p_exact": 2.571572048082338e-07
+     },
+     "v4_restricted_vs_v3": {
+      "a_right_b_wrong": 48,
+      "a_wrong_b_right": 7,
+      "p_exact": 1.3087586125948292e-08
+     }
+    }
+   },
+   "no_upstream": {
+    "v3": {
+     "n": 133,
+     "accuracy": 0.6240601503759399,
+     "macro_f1": 0.6156698564593301,
+     "per_class": {
+      "contraception": {
+       "precision": 0.7407407407407407,
+       "recall": 0.6666666666666666,
+       "support": 30
+      },
+      "sti": {
+       "precision": 0.6097560975609756,
+       "recall": 0.7142857142857143,
+       "support": 35
+      },
+      "pregnancy": {
+       "precision": 0.5098039215686274,
+       "recall": 0.9629629629629629,
+       "support": 27
+      },
+      "general": {
+       "precision": 0.8571428571428571,
+       "recall": 0.2926829268292683,
+       "support": 41
+      }
+     },
+     "confusion": {
+      "rows": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general"
+      ],
+      "cols": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general"
+      ],
+      "matrix": [
+       [
+        20,
+        3,
+        7,
+        0
+       ],
+       [
+        4,
+        25,
+        4,
+        2
+       ],
+       [
+        0,
+        1,
+        26,
+        0
+       ],
+       [
+        3,
+        12,
+        14,
+        12
+       ]
+      ]
+     },
+     "confident_wrong": 0.14285714285714285,
+     "ece": 0.09895196041666476,
+     "abstain_rate_at_0.35": 0.015037593984962405
+    },
+    "v4_as_is": {
+     "n": 133,
+     "accuracy": 0.9172932330827067,
+     "macro_f1": 0.9268676012815484,
+     "per_class": {
+      "contraception": {
+       "precision": 0.9310344827586207,
+       "recall": 0.9,
+       "support": 30
+      },
+      "sti": {
+       "precision": 0.96875,
+       "recall": 0.8857142857142857,
+       "support": 35
+      },
+      "pregnancy": {
+       "precision": 0.896551724137931,
+       "recall": 0.9629629629629629,
+       "support": 27
+      },
+      "general": {
+       "precision": 0.95,
+       "recall": 0.926829268292683,
+       "support": 41
+      }
+     },
+     "confusion": {
+      "rows": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general"
+      ],
+      "cols": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general",
+       "out_of_scope",
+       "vague"
+      ],
+      "matrix": [
+       [
+        27,
+        0,
+        2,
+        0,
+        1,
+        0
+       ],
+       [
+        2,
+        31,
+        0,
+        1,
+        1,
+        0
+       ],
+       [
+        0,
+        0,
+        26,
+        1,
+        0,
+        0
+       ],
+       [
+        0,
+        1,
+        1,
+        38,
+        1,
+        0
+       ]
+      ]
+     },
+     "confident_wrong": 0.06015037593984962,
+     "ece": 0.10396552283482838
+    },
+    "v4_restricted": {
+     "n": 133,
+     "accuracy": 0.924812030075188,
+     "macro_f1": 0.9251246840199494,
+     "per_class": {
+      "contraception": {
+       "precision": 0.9333333333333333,
+       "recall": 0.9333333333333333,
+       "support": 30
+      },
+      "sti": {
+       "precision": 0.9393939393939394,
+       "recall": 0.8857142857142857,
+       "support": 35
+      },
+      "pregnancy": {
+       "precision": 0.896551724137931,
+       "recall": 0.9629629629629629,
+       "support": 27
+      },
+      "general": {
+       "precision": 0.926829268292683,
+       "recall": 0.926829268292683,
+       "support": 41
+      }
+     },
+     "confusion": {
+      "rows": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general"
+      ],
+      "cols": [
+       "contraception",
+       "sti",
+       "pregnancy",
+       "general"
+      ],
+      "matrix": [
+       [
+        28,
+        0,
+        2,
+        0
+       ],
+       [
+        2,
+        31,
+        0,
+        2
+       ],
+       [
+        0,
+        0,
+        26,
+        1
+       ],
+       [
+        0,
+        2,
+        1,
+        38
+       ]
+      ]
+     },
+     "confident_wrong": 0.05263157894736842,
+     "ece": 0.06756730606495227
+    },
+    "mcnemar": {
+     "v4_as_is_vs_v3": {
+      "a_right_b_wrong": 43,
+      "a_wrong_b_right": 4,
+      "p_exact": 2.781192165457469e-09
+     },
+     "v4_restricted_vs_v3": {
+      "a_right_b_wrong": 43,
+      "a_wrong_b_right": 3,
+      "p_exact": 4.6219383875722997e-10
+     }
+    }
+   }
+  },
+  "bootstrap": {
+   "statistic": "macro-F1 over the four topic classes, difference with V3",
+   "v4_as_is_minus_v3": {
+    "point": 0.282578616215569,
+    "ci95": [
+     0.20291221653416536,
+     0.364315540142363
+    ]
+   },
+   "v4_restricted_minus_v3": {
+    "point": 0.27427835956936275,
+    "ci95": [
+     0.19428177670950625,
+     0.3568537979968853
+    ]
+   },
+   "resamples": 10000,
+   "seed": 42,
+   "method": "numpy default_rng, item resampling, percentile interval"
+  },
+  "reply_kind": {
+   "all": {
+    "n": 205,
+    "v3": 0.7560975609756098,
+    "v4": 0.8195121951219512
+   },
+   "no_upstream": {
+    "n": 163,
+    "v3": 0.7852760736196319,
+    "v4": 0.8650306748466258
+   }
+  }
+ }
+}

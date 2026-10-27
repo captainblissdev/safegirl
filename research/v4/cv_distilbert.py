@@ -29,6 +29,12 @@ Writes research/v4/results/cv_distilbert_lr5e-6.json,
 cv_distilbert_lr1e-5.json and their _oof.csv files. --folds and
 --out-dir rerun some folds elsewhere (for the determinism check).
 
+Deviation 1 (docs/decision-log.md) adds lr 2e-5 and 3e-5 with max 12
+epochs, everything else unchanged:
+
+    .venv-train/Scripts/python.exe -I research/v4/cv_distilbert.py \
+        --lr 2e-5 --lr 3e-5 --max-epochs 12
+
 torch and transformers are imported only inside the training code, so
 the split and weight logic can be tested without them.
 """
@@ -48,7 +54,9 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 MODEL = "distilbert-base-multilingual-cased"
-LRS = {"5e-6": 5e-6, "1e-5": 1e-5}
+# step 2 grid; 2e-5 and 3e-5 (max 12 epochs) are deviation 1 in docs/decision-log.md
+LRS = {"5e-6": 5e-6, "1e-5": 1e-5, "2e-5": 2e-5, "3e-5": 3e-5}
+STEP2_LRS = ("5e-6", "1e-5")
 MAX_EPOCHS = 8
 PATIENCE = 2
 BATCH = 16
@@ -125,7 +133,7 @@ def labels_of(proba):
     return [cv.CLASSES[i] for i in proba.argmax(axis=1)]
 
 
-def train_fold(data, held_out, lr, device):
+def train_fold(data, held_out, lr, device, max_epochs=MAX_EPOCHS):
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer, get_linear_schedule_with_warmup
 
@@ -148,12 +156,12 @@ def train_fold(data, held_out, lr, device):
               {"params": [p for n, p in model.named_parameters() if n.endswith(no_decay)], "weight_decay": 0.0}]
     optimizer = torch.optim.AdamW(groups, lr=lr)
     steps_per_epoch = -(-len(train) // BATCH)
-    total = steps_per_epoch * MAX_EPOCHS
+    total = steps_per_epoch * max_epochs
     scheduler = get_linear_schedule_with_warmup(optimizer, int(WARMUP_RATIO * total), total)
     order = torch.Generator().manual_seed(SEED)
 
     curve, best, best_epoch, best_state, stale = [], -1.0, 0, None, 0
-    for epoch in range(1, MAX_EPOCHS + 1):
+    for epoch in range(1, max_epochs + 1):
         model.train()
         for batch in torch.randperm(len(train), generator=order).split(BATCH):
             enc = tok([texts[i] for i in batch], padding="max_length", truncation=True,
@@ -183,6 +191,7 @@ def train_fold(data, held_out, lr, device):
             "steps_per_epoch": steps_per_epoch, "warmup_steps": int(WARMUP_RATIO * total),
             "planned_steps": total, "epochs_run": len(curve), "best_epoch": best_epoch,
             "best_inner_macro_f1": best, "inner_macro_f1_per_epoch": curve,
+            "ran_to_cap": len(curve) == max_epochs, "best_at_cap": best_epoch == max_epochs,
             "seconds": round(time.perf_counter() - started, 1)}
     del model, best_state
     torch.cuda.empty_cache()
@@ -200,7 +209,8 @@ def hardware():
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--lr", choices=sorted(LRS), action="append", help="default: both")
+    ap.add_argument("--lr", choices=sorted(LRS), action="append", help="default: the step 2 pair")
+    ap.add_argument("--max-epochs", type=int, default=MAX_EPOCHS)
     ap.add_argument("--folds", type=int, nargs="+", default=list(cv.FOLDS))
     ap.add_argument("--out-dir", type=Path, default=cv.RESULTS_DIR)
     args = ap.parse_args(argv)
@@ -212,23 +222,26 @@ def main(argv=None):
     torch.backends.cudnn.benchmark = False
     device = "cuda" if torch.cuda.is_available() else "cpu"
     data = cv.load_data()
-    for tag in args.lr or sorted(LRS, key=LRS.get):
+    for tag in args.lr or STEP2_LRS:
         print(f"lr {tag}", flush=True)
         oof, folds = [], {}
         for k in args.folds:
-            rows, info = train_fold(data, k, LRS[tag], device)
+            rows, info = train_fold(data, k, LRS[tag], device, args.max_epochs)
             oof += rows
             folds[str(k)] = info
             print(f"  fold {k}: best epoch {info['best_epoch']}, {info['seconds']} s", flush=True)
-        config = {"model": MODEL, "lr": LRS[tag], "max_epochs": MAX_EPOCHS, "patience": PATIENCE, "batch": BATCH,
+        config = {"model": MODEL, "lr": LRS[tag], "max_epochs": args.max_epochs, "patience": PATIENCE, "batch": BATCH,
                   "max_length": MAX_LENGTH, "weight_decay": WEIGHT_DECAY, "label_smoothing": LABEL_SMOOTHING,
                   "class_weights": "balanced, from each fold's training rows, in the loss",
-                  "warmup": f"linear schedule, {WARMUP_RATIO:.0%} warmup over the planned {MAX_EPOCHS} epochs",
+                  "warmup": f"linear schedule, {WARMUP_RATIO:.0%} warmup over the planned {args.max_epochs} epochs",
                   "warmup_note": "V3 defined WARMUP_RATIO but never passed it to its trainer; V4 applies it",
                   "seed": SEED, "training_set": "without V1 restore paraphrases",
                   "inner_fold": "next fold, wrapping 5 -> 1",
                   "checkpoints": "best epoch kept in memory only, never saved", "folds": folds,
                   "best_epochs": [folds[str(k)]["best_epoch"] for k in args.folds],
+                  "folds_ran_to_cap": [k for k in args.folds if folds[str(k)]["ran_to_cap"]],
+                  "folds_best_at_cap": [k for k in args.folds if folds[str(k)]["best_at_cap"]],
+                  "grid": "step 2" if tag in STEP2_LRS else "deviation 1 (docs/decision-log.md)",
                   "total_seconds": round(sum(f["seconds"] for f in folds.values()), 1), "hardware": hardware()}
         if args.folds == list(cv.FOLDS):
             s = cv.write_results(f"distilbert_lr{tag}", oof, config, out_dir=args.out_dir)

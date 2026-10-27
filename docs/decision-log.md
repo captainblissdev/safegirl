@@ -1941,3 +1941,568 @@ Written before any CV run.
 
 Note for Chapter 5: V3's CV picked its best epoch on the held-out fold,
 so V3's CV score is slightly optimistic.
+
+## V4 CV selection (2026-10-26)
+
+The rule in clarification 2, item 3, applied as written to the four
+candidates, each at its best setting by mean macro-F1. Scored on the
+380 held-out seeds only, with the frozen folds and no V1 restore
+paraphrases. Files: `research/v4/results/cv_selection.json` and
+`cv_selection.md`, written by `research/v4/cv_selection.py`.
+
+| Candidate | Setting | Macro-F1 +/- sd | STI rec. | Preg. rec. | Conf.-wrong | ECE |
+|---|---|---|---|---|---|---|
+| Baseline M2 | M2 | 0.6194 +/- 0.0525 | 0.756 | 0.627 | 0.384* | n/a |
+| LR on e5 | C 10 | 0.8606 +/- 0.0616 | 0.927 | 0.827 | 0.068 | 0.118 |
+| DistilBERT | lr 1e-5 | 0.7609 +/- 0.0262 | 0.817 | 0.747 | 0.108 | 0.095 |
+| Hybrid | C 10 | 0.8835 +/- 0.0507 | 0.963 | 0.827 | 0.055 | 0.066 |
+
+\* Plain error rate: the baseline has no probability.
+
+- **Decision.** The best mean macro-F1 is 0.8835 (hybrid). The tie
+  threshold is 0.8735, and no other candidate reaches it (LR on e5 has
+  0.8606). So the confident-wrong and simpler-model steps are not
+  reached.
+- **Winner: the hybrid**, logistic regression on [e5 embedding,
+  keyword hit counts, vague-rule flag], C 10, L2, class_weight
+  balanced, max_iter 2000, seed 42.
+- **Not frozen.** No final model is trained yet; that is step 4.
+- **Notes for Chapter 5.**
+  - (a) The best C (10) is at the top edge of the grid, for both the
+    hybrid and LR on e5. A larger C might score higher; the grid is
+    not extended after results are seen.
+  - (b) The winner's lead over LR on e5 is +0.0230 mean macro-F1.
+    That is smaller than the fold-to-fold spread: the sd is 0.0507
+    for the hybrid and 0.0616 for LR on e5. Per fold the difference
+    runs from -0.0361 to +0.0714, and the hybrid is ahead in 3 of 5
+    folds.
+  - (c) CV is optimistic. 19 same-class near-duplicate pairs (e5
+    cosine >= 0.95) fall in different folds
+    (`fold_assignment_v4.summary.txt`), so some held-out seeds have a
+    near-copy in training. The sealed test set is the unbiased
+    estimate.
+
+## V4 pre-registration: deviation 1 (2026-10-26), before the sealed set is opened
+
+- **Reason.** The step 2 DistilBERT grid (lr 5e-6 and 1e-5, max 8
+  epochs) was set to be gentler than V3. Some folds were still
+  improving at the 8-epoch cap: lr 5e-6 fold 1 and lr 1e-5 fold 5
+  picked epoch 8, the last allowed. Seven of the ten folds ran all 8
+  epochs without early stopping. So DistilBERT may have been
+  undertrained.
+- **Change.** Add lr 2e-5 and 3e-5, with max 12 epochs.
+- **Unchanged.** Everything else stays as before:
+  - the inner validation fold (the next fold, wrapping 5 -> 1);
+  - patience 2, label smoothing 0.1, weight decay 0.01;
+  - balanced class weights from each fold's training rows;
+  - batch 16, max length 64, seed 42;
+  - no V1 restore paraphrases;
+  - linear schedule with 10% warmup.
+- **Step 2 results stay as reported**, with the 8-epoch cap. The
+  selection rule (clarification 2, item 3) is unchanged.
+- **Disclosure for Chapter 5.** The DistilBERT grid grew after the
+  first CV results were seen. The sealed set has not been opened.
+
+## V4 pre-registration: deviation 2 (2026-10-26), before the sealed set is opened
+
+- **Reason.** The pre-registration names a "hybrid of keyword evidence
+  and the model". This project's classifier is a fine-tuned
+  DistilBERT, so a DistilBERT hybrid is a fair candidate alongside the
+  e5 hybrid.
+- **Definition.** DistilBERT keeps its own pre_classifier, ReLU and
+  dropout. The final classifier layer becomes Linear(768 + 6, 6). Its
+  input is the 768-wide first-token representation concatenated with
+  6 features: the 5 keyword hit counts from explain_baseline and the
+  vague-rule flag from vague_rule.py, in the same order as the e5
+  hybrid. The 6 features are scaled with a StandardScaler fitted on
+  that fold's training rows only.
+- **Learning rate.** The one with the highest mean macro-F1 among the
+  four plain DistilBERT runs (5e-6, 1e-5, 2e-5, 3e-5); a tie goes to
+  the lower rate. There is no other grid. Max 12 epochs.
+- **Unchanged from steps 2 and 3c:**
+  - the inner validation fold and patience 2;
+  - label smoothing 0.1, weight decay 0.01;
+  - balanced class weights;
+  - batch 16, max length 64, warmup 10%, seed 42;
+  - no V1 restore paraphrases.
+- **Selection rule unchanged.**
+- **Disclosure for Chapter 5.** The candidate list grew after the
+  first CV results were seen, and more candidates mean a larger
+  selection optimism. The sealed set has not been opened.
+
+## V4 CV selection (2026-10-26)
+
+Re-run over every candidate after deviations 1 and 2. This supersedes
+the earlier entry of the same name, which covered four candidates;
+that entry is kept as it was.
+
+The rule in clarification 2, item 3, applied as written. Each family
+enters at its best setting by mean macro-F1; a tie between settings
+goes to the lower C or lr. Scored on the 380 held-out seeds only, with
+the frozen folds and no V1 restore paraphrases. The simpler-model
+order is LR on e5 < hybrid e5 < DistilBERT < DistilBERT + keyword.
+Files: `research/v4/results/cv_selection.json` and `cv_selection.md`,
+written by `research/v4/cv_selection.py`.
+
+| Candidate | Setting | Macro-F1 +/- sd | STI rec. | Preg. rec. | Conf.-wrong | ECE |
+|---|---|---|---|---|---|---|
+| Baseline M2 | M2 | 0.6194 +/- 0.0525 | 0.756 | 0.627 | 0.384* | n/a |
+| LR on e5 | C 10 | 0.8606 +/- 0.0616 | 0.927 | 0.827 | 0.068 | 0.118 |
+| Hybrid e5 | C 10 | 0.8835 +/- 0.0507 | 0.963 | 0.827 | 0.055 | 0.066 |
+| DistilBERT | lr 3e-5 | 0.7883 +/- 0.0832 | 0.841 | 0.787 | 0.142 | 0.053 |
+| DistilBERT + keyword | lr 3e-5 | 0.7866 +/- 0.0644 | 0.854 | 0.787 | 0.147 | 0.075 |
+| Baseline M1 (reference only) | M1 | 0.5166 +/- 0.0179 | 0.756 | 0.627 | 0.311* | n/a |
+
+\* Plain error rate: the baseline has no probability.
+
+- **Decision.** The best mean macro-F1 is 0.8835 (hybrid e5). The tie
+  threshold is 0.8735, and no other candidate reaches it (LR on e5 has
+  0.8606). So the confident-wrong and simpler-model steps are not
+  reached.
+- **Winner: the hybrid e5**, logistic regression on [e5 embedding,
+  keyword hit counts, vague-rule flag], C 10, L2, class_weight
+  balanced, max_iter 2000, seed 42.
+- **Not frozen.** No final model is trained yet.
+- **Notes for Chapter 5.**
+  - (a) The best C (10) is at the top edge of the grid, for both the
+    hybrid e5 and LR on e5. The grid is not extended after results are
+    seen.
+  - (b) Plain DistilBERT converged at about 0.79: 0.7854 at lr 2e-5
+    and 0.7883 at 3e-5, with no fold at the 12-epoch cap. The keyword
+    features did not help it: 0.7866 with them against 0.7883 without,
+    at the same lr.
+  - (c) The winner's lead over the other e5 model (LR on e5) is
+    +0.0230 mean macro-F1. That is smaller than the fold-to-fold
+    spread: the sd is 0.0507 and 0.0616. Per fold the difference runs
+    from -0.0361 to +0.0714, and the winner is ahead in 3 of 5 folds.
+  - (d) The candidate list grew after the first results (deviations
+    1 and 2). Three more settings were tried (DistilBERT at lr 2e-5
+    and 3e-5, and DistilBERT + keyword at 3e-5), which increases
+    selection optimism.
+  - (e) CV is optimistic. 19 same-class near-duplicate pairs (e5
+    cosine >= 0.95) fall in different folds
+    (`fold_assignment_v4.summary.txt`), so some held-out seeds have a
+    near-copy in training. The sealed test set is the unbiased
+    estimate.
+
+## V4 threshold rule (2026-10-26)
+
+Written before any threshold figure is computed.
+
+- **Data.** The pooled out-of-fold predictions of the CV winner, the
+  e5 hybrid at C 10 without V1 paraphrases
+  (`research/v4/results/cv_hybrid_C10_oof.csv`). The sealed set is not
+  used.
+- **Candidates.** Thresholds t on the top predicted probability: 0.30,
+  0.35, ..., 0.70 (nine values).
+- **Rule.** t_act is the smallest t such that, among the OOF
+  predictions with confidence >= t, all three hold:
+  - accuracy is at least 0.90;
+  - the precision of sti is at least 0.90;
+  - the precision of pregnancy is at least 0.90.
+
+  If no t qualifies, that is reported and the step stops. The rule is
+  not relaxed.
+- **Below t_act.** Predictions with confidence below t_act go to the
+  low-confidence path the pipeline already uses. There is no new
+  behaviour.
+- **Reference rows.** The existing 0.35 and 0.50 are also reported, as
+  reference rows. They are not tuned to anything.
+- **Fixed for the sealed run.** t_act is fixed here for the sealed
+  run. It is not changed after the sealed result.
+
+## V4 frozen candidate (2026-10-26)
+
+- **Model.** The e5 hybrid at C 10: logistic regression on [e5
+  embedding (384), keyword hit counts (5), vague-rule flag (1)]. The
+  6 rule columns are scaled; the embedding is not. L2, class_weight
+  balanced, max_iter 2000, seed 42.
+- **Training data.** All 380 seeds and their 1,239 paraphrases (1,619
+  rows), with the dr05 and V3-pool exclusions and no V1 restore
+  paraphrases.
+- **Follows** "V4 CV selection (2026-10-26)" (the re-run over all
+  candidates) and "V4 threshold rule (2026-10-26)".
+- **File.** `research/v4/frozen/v4_hybrid_c10.json`, sha256
+  89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd.
+  - It was written by `research/v4/freeze_hybrid.py` at commit
+    7a1c134.
+  - A refit in a separate process gave byte-identical output.
+  - The sidecar `v4_hybrid_c10.sha256` holds the hash.
+  - `research/v4/v4_infer.py` loads only this file. It refuses the
+    file if its hash, the feature code or the local e5 weights differ
+    from what is recorded.
+- **Threshold.** t_act = 0.45. Predictions with confidence below 0.45
+  take the existing low-confidence path.
+- **Rule.** Nothing about this model, its features, C or threshold
+  changes before the sealed run. Any change needs a dated deviation
+  and a new hash.
+- **Not done.** The model is not integrated into ml_service or the
+  gateway; integration happens only after the sealed gate. The sealed
+  set has not been opened, and no sealed result is recorded here.
+
+## V4 pre-registration: deviation 3 (2026-10-27), labelling guide and timing
+
+- **Departure.** The pre-registration says of the sealed labels:
+  "Labelling is finished before any V4 result exists." The sealed
+  labels will be assigned after the CV results and the frozen model
+  exist.
+- **Safeguards.**
+  - The model is frozen before labelling: `research/v4/frozen/v4_hybrid_c10.json`,
+    sha256 89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd
+    ("V4 frozen candidate (2026-10-26)").
+  - Labellers see no model output.
+  - The guide was derived from the training seeds only. No sealed
+    question was read.
+- **Disclosed.** The guide was written after the CV confusions were
+  seen; the most frequent were pregnancy and general.
+- **The guide.** `research/v4/LABELLING_GUIDE.md` documents the
+  existing labelling conventions. For V4 it supersedes the class text
+  in the V1 dataset plan (`docs/safegirl_dataset_plan.md`, "Intent
+  classes").
+- **Nothing changed.** No seed, label, fold or frozen file was changed,
+  and no refit was needed.
+- **Training seeds that disagree with the guide.** They are not
+  relabelled and are treated as label noise. Disclosed for Chapter 5:
+  - SEED-CONTRA-11 is labelled contraception. Rule 3 makes a question
+    about precum pregnancy, since withdrawal and precum are a sex act,
+    not a method.
+  - SEED-V4-CON-004 is labelled contraception. The sti class covers
+    condoms as infection protection.
+  - SEED-V4-STI-006 is borderline. Under rule 5 it is sti (discharge
+    not tied to the cycle, puberty or age), though the question
+    describes discharge with no smell or itch.
+
+  Their paraphrases follow their seeds' labels.
+
+## V4 pre-registration: deviation 4 (2026-10-27), system-level measure
+
+- **The measure.** The system-level measure becomes triage
+  correctness: the reply kind only. There is no retrieval, no KB entry
+  matching and no relevance gate.
+- **How a reply kind is decided.** The real upstream rules run first,
+  in the gateway's order: `checkSafety`, `isGenericHelpRequest`,
+  `matchHeldTopic`, `isVagueQuery`. If none fires, the classifier
+  decides.
+
+  | Classifier result | V4 (frozen e5 hybrid) | Baseline under M2 |
+  |---|---|---|
+  | top probability < 0.45 (t_act) | abstain | (no probability) |
+  | vague | ask | ask |
+  | out_of_scope | abstain | abstain |
+  | topic class (contraception, sti, pregnancy, general) | answer | answer |
+
+  For V4 the threshold is applied first.
+- **Expected reply kind, from the final labels:**
+
+  | Final label | Expected reply kind |
+  |---|---|
+  | route held | held |
+  | route safety | referral |
+  | vague | ask |
+  | out_of_scope | abstain |
+  | topic class | answer |
+- **Scoring.** All 205 items are scored, and so is the subset where no
+  upstream rule fires. V4 is compared with M2 by McNemar's exact test.
+- **Descriptive only.** Retrieval and matched-entry results are
+  reported for description only, on the KB the demo uses.
+- **Weaker than pre-registered.** This is a weaker measure than the
+  pre-registered "matched entry", and Chapter 5 will disclose that.
+  There is no dependency on the KB branch.
+- **Integration.** Integration into the gateway happens only after the
+  sealed gate, with its own decision-log entry.
+
+## V4 pre-registration: deviation 5 (2026-10-27), comparators and the help row
+
+- **Two baseline comparators at triage level.** At the triage
+  (system) level the baseline comparators are BOTH M1 and M2.
+  Criterion 3 requires V4's reply-kind correct rate to be not lower
+  than M1's AND not lower than M2's.
+- **Reason.** M2 abstains on many topic questions with no keyword hits
+  (626 of the 1,677 training and dev items), which makes it a weak
+  triage baseline. M1 is closer to the demo's behaviour.
+- **Classifier level unchanged.** Criterion 1 still uses M2, chosen by
+  CV macro-F1 in clarification 2.
+- **The help row.** For items labelled vague, both "ask" and "help"
+  count as correct.
+- **Timing.** Both statements were fixed before any sealed run and do
+  not refer to any sealed result.
+
+## V4 sealed run procedure (2026-10-27)
+
+- **Every item gets a topic label.** All 205 items get a topic label.
+  A clinician forces a primary label on any item that cannot be
+  settled. Such items are flagged ambiguous in a separate column of the
+  labels file (`ambiguous`, 0 or 1).
+- **What the gate uses.** The gate uses all 205 items. A descriptive
+  table without the flagged items is added to the report.
+- **Upstream catches.** Topic-labelled items that an upstream rule
+  catches while their route is none lower every system's reply-kind
+  rate equally, and they do not affect McNemar's test. This will be
+  disclosed in Chapter 5.
+- **The lock is permanent.** It may be removed only if the run crashed
+  before any metric was produced, and only with a dated note in this
+  log. If any result was shown, the lock stays and the result stands.
+- **Subsets.** Conditions 1 to 3 of the gate use all items. The subset
+  where no upstream rule fires is descriptive only.
+- **Run once.** The sealed evaluation is run once and reported as it
+  comes out (`research/v4/sealed_eval.py`).
+
+## V4 sealed final labels (2026-10-27)
+
+The sealed set's final labels, kept outside the repository with the
+sealed questions. No question text is recorded here.
+
+**Files (sha256)**
+- Pre-review record, `sealed_final_combined_raw.xlsx`:
+  1155667b0798deecba64f86c183f6076e22a93c653ba737734a42e1a03527d4c
+- Reviewed sheet, `sealed_final_combined_v3.csv`:
+  43aaaa478ad764116886230add1ba8d7351919d2d78d3cd9b565d551806628bb
+- Labels used by `research/v4/sealed_eval.py`, `sealed_final_labels.csv`
+  (id, topic_label, route, ambiguous; no text):
+  99380b532b02f4f41cd7f4cdc4e61b0e96413230a3ff2966ec46ab384f850f39
+
+**Counts (205 items)**
+- Topic label: contraception 37, sti 37, pregnancy 34, general 48,
+  out_of_scope 26, vague 23.
+- Route: none 185, held 19, safety 1. The 20 held and safety items have
+  these topic labels: contraception 7, general 5, pregnancy 4, sti 3,
+  vague 1.
+- Flagged ambiguous: 4 (FS-004, FS-021, FS-031, FS-110).
+- The check-only run of `sealed_eval.py` passed all 14 pre-run checks.
+  No lock was written and nothing was computed.
+
+**Notes**
+- **Topic labels for held and safety items.** The 20 held and safety
+  items received topic labels and a route column on 27 Oct, after the
+  freeze, under the labelling guide (`research/v4/LABELLING_GUIDE.md`).
+- **Re-keyed ids.** In v3 the id column had been renumbered, so the
+  rows were re-keyed to the original ids by text hash. All 205 texts
+  were found, all distinct, and 146 rows took a different id. Each
+  row's label, route and ambiguous value stayed with its text. After
+  re-keying, the held and safety sets matched the pre-edit lists
+  exactly:
+  - held: FS-012, FS-014, FS-021, FS-031, FS-062, FS-063, FS-064,
+    FS-065, FS-078, FS-105, FS-136, FS-201, FS-208, FS-209, FS-224,
+    FS-226, FS-243, FS-252, FS-255;
+  - safety: FS-079.
+- **v2 not retained.** The v2 file was not retained.
+
+**To complete**
+- Adjudicated by: [role]
+- Date: [FILL]
+- Second reviewer labelled blind: [yes]
+- Author read reviewer 2 labels before adjudicating: [yes]
+
+## V4 sealed result (2026-10-27)
+
+The one sealed run of `research/v4/sealed_eval.py` with --confirm-final,
+run at commit edf3778.
+- Labels sha256: 99380b532b02f4f41cd7f4cdc4e61b0e96413230a3ff2966ec46ab384f850f39
+- Frozen model sha256: 89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd
+- Full aggregate report: `research/v4/results/sealed_result.md` and
+  `sealed_result.json`.
+- The lock and the per-item predictions stay next to the labels file,
+  outside the repository.
+
+Gate report, copied exactly from the script's output:
+
+- [PASS] 1 macro-F1 gain >= 0.05 and the 95% interval excludes 0
+- [PASS] 2 sti and pregnancy recall not lower than M2's
+- [PASS] 3 reply-kind correct rate not lower than M1's and than M2's
+- [PASS] 4 app/ unchanged since the frozen model's commit
+- **Overall: PASS**
+
+git diff --stat of app/ against the frozen model's commit 7a1c134: (empty)
+
+## V4 post-gate descriptive comparison with V3 (2026-10-27)
+
+- **Descriptive only.** This follows the sealed gate result ("V4
+  sealed result (2026-10-27)") and is descriptive only. No decision,
+  gate condition or integration step depends on it, and it does not
+  change the decision on V4.
+- **V3 is frozen.**
+  - Checkpoint: `ml_service/final/` (gitignored), `model.safetensors`
+    sha256 e8bf2e3aa01c920197b51071e736ef6a3d1f16a57dd8d3bdb1565f75152cfb30,
+    as already recorded in this log.
+  - Settings: DistilBertForSequenceClassification, 6 layers, 4 labels
+    (0 contraception, 1 sti, 2 pregnancy, 3 general). Each text is
+    classified on its own, as `ml_service/app.py` does: truncation at
+    max length 64, softmax, argmax, confidence = top probability.
+  - Gateway thresholds: abstain below 0.35, scoped retrieval at 0.5
+    (`app/gateway/src/classifierClient.js`). V3 is loaded offline from
+    the checkpoint, with no server and no network.
+- **Same items, own run.** It uses the same sealed items and the same
+  final labels (sha256 99380b53...). It has its own script
+  (`research/v4/v3_comparison.py`) and its own one-run lock,
+  `V3_COMPARISON_RUN.lock`, next to the labels file. It is run once
+  and reported as it comes out.
+- **Scope.** V3 knows only contraception, sti, pregnancy and general.
+  So the classifier comparison covers the 156 items whose topic label
+  is one of those four classes.
+- **Reply-kind column (all 205).** V3 is treated as: the upstream rules
+  first (as in `triage_sim`), then confidence < 0.35 -> abstain,
+  otherwise answer. Expected kinds and V4's kinds are as in deviations
+  4 and 5.
+- **Reported on the 156 items, for V3 and V4:** accuracy, macro-F1 over
+  the four classes, per-class precision and recall, the confusion
+  matrix, confident-wrong (> 0.5), ECE (10 bins), and V3's abstain rate
+  at 0.35. V4 is reported twice:
+  - as is: the six-class argmax; out_of_scope and vague predictions
+    count as errors; confidence = top of the six probabilities;
+  - restricted to the four topic classes: the argmax over the four
+    topic probabilities; confidence = the top of those four,
+    renormalised to sum to 1.
+
+  The same is reported on the subset where no upstream rule fires.
+- **Tests.** McNemar's exact test on correct/incorrect over the 156
+  items, for V4 as is against V3 and V4 restricted against V3, with
+  the discordant counts. A paired bootstrap (10,000 resamples, numpy
+  default_rng(42), the same item resamples for both pairs) of each
+  macro-F1 difference, with a 95% percentile interval, reported as is.
+
+## V3 vs V4 sealed descriptive comparison result
+
+- **Descriptive only.** This is the one run under "V4 post-gate
+  descriptive comparison with V3 (2026-10-27)", on 27 Oct. No decision,
+  gate condition or integration step depends on it, and the sealed
+  gate result ("V4 sealed result (2026-10-27)") stands as recorded.
+- **Deviations unchanged.** The five pre-registration deviations (1 to
+  5) are unchanged.
+- **Which comparisons are four-class and which six-class.**
+  - V3 predicts four classes.
+  - "V4 as is" predicts six classes; its out_of_scope and vague
+    predictions count as errors on the four-class items.
+  - "V4 restricted" is V4 limited to the four topic classes.
+  - The reply-kind rate covers all 205 items.
+- **Where the report is.** `research/v4/results/sealed_v3_comparison.md`
+  and `.json`. It is copied exactly below.
+
+```markdown
+# V4 post-gate descriptive comparison with V3
+
+Descriptive only; no decision depends on it.
+
+V3 checkpoint sha256 e8bf2e3aa01c920197b51071e736ef6a3d1f16a57dd8d3bdb1565f75152cfb30; V4 frozen model sha256 89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd; labels sha256 99380b532b02f4f41cd7f4cdc4e61b0e96413230a3ff2966ec46ab384f850f39; script sha256 c90459e42fed488a4c15c7518e8cbe495665f635563853a6adcf784e7acfd1a7; git 26925494d483924237f5179ab3bdd12aa727d9c0.
+
+## Counts
+
+205 items; 156 with a topic label in V3's four classes; 133 of those where no upstream rule fires. Topic labels: {'contraception': 37, 'sti': 37, 'pregnancy': 34, 'general': 48, 'out_of_scope': 26, 'vague': 23}.
+
+## four-class items (n = 156)
+
+| | Accuracy | Macro-F1 (4) | Confident-wrong | ECE |
+|---|---|---|---|---|
+| V3 | 0.6090 | 0.5984 | 0.1538 | 0.1113 |
+| V4 as is | 0.8526 | 0.8810 | 0.1154 | 0.0855 |
+| V4 restricted | 0.8718 | 0.8727 | 0.0962 | 0.0694 |
+
+V3 abstain rate at 0.35: 0.0128.
+
+Per-class precision / recall:
+
+| Class | V3 | V4 as is | V4 restricted | Support |
+|---|---|---|---|---|
+| contraception | 0.781 / 0.676 | 0.882 / 0.811 | 0.886 / 0.838 | 37 |
+| sti | 0.578 / 0.703 | 0.969 / 0.838 | 0.861 / 0.838 | 37 |
+| pregnancy | 0.508 / 0.941 | 0.886 / 0.912 | 0.889 / 0.941 | 34 |
+| general | 0.750 / 0.250 | 0.911 / 0.854 | 0.857 / 0.875 | 48 |
+
+V3 confusion (rows true, columns predicted):
+
+| | contraception | sti | pregnancy | general |
+|---|---|---|---|---|
+| contraception | 25 | 4 | 7 | 1 |
+| sti | 4 | 26 | 4 | 3 |
+| pregnancy | 0 | 2 | 32 | 0 |
+| general | 3 | 13 | 20 | 12 |
+
+V4 as is confusion (rows true, columns predicted):
+
+| | contraception | sti | pregnancy | general | out_of_scope | vague |
+|---|---|---|---|---|---|---|
+| contraception | 30 | 0 | 2 | 1 | 3 | 1 |
+| sti | 3 | 31 | 0 | 2 | 1 | 0 |
+| pregnancy | 1 | 0 | 31 | 1 | 0 | 1 |
+| general | 0 | 1 | 2 | 41 | 2 | 2 |
+
+V4 restricted confusion (rows true, columns predicted):
+
+| | contraception | sti | pregnancy | general |
+|---|---|---|---|---|
+| contraception | 31 | 1 | 2 | 3 |
+| sti | 3 | 31 | 0 | 3 |
+| pregnancy | 1 | 0 | 32 | 1 |
+| general | 0 | 4 | 2 | 42 |
+
+McNemar exact on correct/incorrect (V4 right and V3 wrong / V4 wrong and V3 right):
+
+- v4 as is vs v3: 47 / 9, p = 0.0000
+- v4 restricted vs v3: 48 / 7, p = 0.0000
+
+## four-class items, no upstream rule fires (n = 133)
+
+| | Accuracy | Macro-F1 (4) | Confident-wrong | ECE |
+|---|---|---|---|---|
+| V3 | 0.6241 | 0.6157 | 0.1429 | 0.0990 |
+| V4 as is | 0.9173 | 0.9269 | 0.0602 | 0.1040 |
+| V4 restricted | 0.9248 | 0.9251 | 0.0526 | 0.0676 |
+
+V3 abstain rate at 0.35: 0.0150.
+
+Per-class precision / recall:
+
+| Class | V3 | V4 as is | V4 restricted | Support |
+|---|---|---|---|---|
+| contraception | 0.741 / 0.667 | 0.931 / 0.900 | 0.933 / 0.933 | 30 |
+| sti | 0.610 / 0.714 | 0.969 / 0.886 | 0.939 / 0.886 | 35 |
+| pregnancy | 0.510 / 0.963 | 0.897 / 0.963 | 0.897 / 0.963 | 27 |
+| general | 0.857 / 0.293 | 0.950 / 0.927 | 0.927 / 0.927 | 41 |
+
+V3 confusion (rows true, columns predicted):
+
+| | contraception | sti | pregnancy | general |
+|---|---|---|---|---|
+| contraception | 20 | 3 | 7 | 0 |
+| sti | 4 | 25 | 4 | 2 |
+| pregnancy | 0 | 1 | 26 | 0 |
+| general | 3 | 12 | 14 | 12 |
+
+V4 as is confusion (rows true, columns predicted):
+
+| | contraception | sti | pregnancy | general | out_of_scope | vague |
+|---|---|---|---|---|---|---|
+| contraception | 27 | 0 | 2 | 0 | 1 | 0 |
+| sti | 2 | 31 | 0 | 1 | 1 | 0 |
+| pregnancy | 0 | 0 | 26 | 1 | 0 | 0 |
+| general | 0 | 1 | 1 | 38 | 1 | 0 |
+
+V4 restricted confusion (rows true, columns predicted):
+
+| | contraception | sti | pregnancy | general |
+|---|---|---|---|---|
+| contraception | 28 | 0 | 2 | 0 |
+| sti | 2 | 31 | 0 | 2 |
+| pregnancy | 0 | 0 | 26 | 1 |
+| general | 0 | 2 | 1 | 38 |
+
+McNemar exact on correct/incorrect (V4 right and V3 wrong / V4 wrong and V3 right):
+
+- v4 as is vs v3: 43 / 4, p = 0.0000
+- v4 restricted vs v3: 43 / 3, p = 0.0000
+
+## Paired bootstrap, four-class items
+
+- v4 as is minus v3: 0.2826, 95% interval [0.2029, 0.3643]
+- v4 restricted minus v3: 0.2743, 95% interval [0.1943, 0.3569]
+
+(10000 resamples, seed 42.)
+
+## Reply-kind correct rate
+
+V3: upstream rules first, then confidence < 0.35 -> abstain, otherwise answer. V4 as in triage_sim.
+
+| Subset | n | V3 | V4 |
+|---|---|---|---|
+| all | 205 | 0.7561 | 0.8195 |
+| no_upstream | 163 | 0.7853 | 0.8650 |
+```

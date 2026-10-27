@@ -1,0 +1,436 @@
+{
+ "candidate": "distilbert_kw_lr3e-5",
+ "config": {
+  "model": "distilbert-base-multilingual-cased + keyword evidence",
+  "head": "Linear(768 + 6, 6)",
+  "rule_features": [
+   "gbv",
+   "sti",
+   "contraception",
+   "pregnancy",
+   "general",
+   "vague"
+  ],
+  "scaler": "StandardScaler on the rule features, fitted on each fold's training rows",
+  "lr": 3e-05,
+  "lr_choice": {
+   "plain_distilbert_macro_f1": {
+    "5e-6": 0.6922304163318689,
+    "1e-5": 0.7608903757494021,
+    "2e-5": 0.7853926879144871,
+    "3e-5": 0.7883486060742653
+   },
+   "chosen": "3e-5",
+   "rule": "highest mean macro-F1, a tie goes to the lower rate"
+  },
+  "max_epochs": 12,
+  "patience": 2,
+  "batch": 16,
+  "max_length": 64,
+  "weight_decay": 0.01,
+  "label_smoothing": 0.1,
+  "class_weights": "balanced, from each fold's training rows, in the loss",
+  "warmup": "linear schedule, 10% warmup over the planned 12 epochs",
+  "seed": 42,
+  "training_set": "without V1 restore paraphrases",
+  "inner_fold": "next fold, wrapping 5 -> 1",
+  "grid": "deviation 2 (docs/decision-log.md)",
+  "checkpoints": "best epoch kept in memory only, never saved",
+  "folds": {
+   "1": {
+    "inner_fold": 2,
+    "train_rows": 981,
+    "val_seeds": 76,
+    "test_seeds": 76,
+    "class_weights": {
+     "contraception": 0.9134078212290503,
+     "sti": 0.8341836734693877,
+     "pregnancy": 0.8790322580645161,
+     "general": 0.6673469387755102,
+     "out_of_scope": 1.8166666666666667,
+     "vague": 1.923529411764706
+    },
+    "scaler_mean": {
+     "gbv": 0.0,
+     "sti": 0.23649337410805302,
+     "contraception": 0.27217125382262997,
+     "pregnancy": 0.17023445463812437,
+     "general": 0.08970438328236494,
+     "vague": 0.09378185524974515
+    },
+    "scaler_scale": {
+     "gbv": 1.0,
+     "sti": 0.5631692188128513,
+     "contraception": 0.6094149826094645,
+     "pregnancy": 0.4544163691706867,
+     "general": 0.35280442536876666,
+     "vague": 0.2915249884240821
+    },
+    "scaler_rows": 981,
+    "steps_per_epoch": 62,
+    "warmup_steps": 74,
+    "planned_steps": 744,
+    "epochs_run": 9,
+    "best_epoch": 7,
+    "best_inner_macro_f1": 0.8387930875047623,
+    "inner_macro_f1_per_epoch": [
+     0.5015072335901003,
+     0.799630042632889,
+     0.803279497662145,
+     0.8101203943115708,
+     0.8280492609714621,
+     0.8280492609714621,
+     0.8387930875047623,
+     0.8387930875047623,
+     0.8387930875047623
+    ],
+    "ran_to_cap": false,
+    "best_at_cap": false,
+    "seconds": 292.6
+   },
+   "2": {
+    "inner_fold": 3,
+    "train_rows": 952,
+    "val_seeds": 76,
+    "test_seeds": 76,
+    "class_weights": {
+     "contraception": 0.8484848484848485,
+     "sti": 0.8576576576576577,
+     "pregnancy": 0.9616161616161616,
+     "general": 0.6611111111111111,
+     "out_of_scope": 1.762962962962963,
+     "vague": 1.8666666666666667
+    },
+    "scaler_mean": {
+     "gbv": 0.0,
+     "sti": 0.22899159663865545,
+     "contraception": 0.29831932773109243,
+     "pregnancy": 0.19012605042016806,
+     "general": 0.11134453781512606,
+     "vague": 0.10294117647058823
+    },
+    "scaler_scale": {
+     "gbv": 1.0,
+     "sti": 0.5633034243003864,
+     "contraception": 0.6930608269080657,
+     "pregnancy": 0.49215183580825744,
+     "general": 0.3837528624583188,
+     "vague": 0.30388203411429215
+    },
+    "scaler_rows": 952,
+    "steps_per_epoch": 60,
+    "warmup_steps": 72,
+    "planned_steps": 720,
+    "epochs_run": 7,
+    "best_epoch": 5,
+    "best_inner_macro_f1": 0.8017750233741858,
+    "inner_macro_f1_per_epoch": [
+     0.29531362353370466,
+     0.7073942431837169,
+     0.7112478072036895,
+     0.8003392217101895,
+     0.8017750233741858,
+     0.783893505492668,
+     0.7757878062104981
+    ],
+    "ran_to_cap": false,
+    "best_at_cap": false,
+    "seconds": 214.5
+   },
+   "3": {
+    "inner_fold": 4,
+    "train_rows": 950,
+    "val_seeds": 76,
+    "test_seeds": 76,
+    "class_weights": {
+     "contraception": 0.8333333333333334,
+     "sti": 0.8333333333333334,
+     "pregnancy": 0.9654471544715447,
+     "general": 0.656984785615491,
+     "out_of_scope": 1.8627450980392157,
+     "vague": 1.9791666666666667
+    },
+    "scaler_mean": {
+     "gbv": 0.0,
+     "sti": 0.20421052631578948,
+     "contraception": 0.2810526315789474,
+     "pregnancy": 0.18947368421052632,
+     "general": 0.1031578947368421,
+     "vague": 0.11789473684210526
+    },
+    "scaler_scale": {
+     "gbv": 1.0,
+     "sti": 0.5235336996087674,
+     "contraception": 0.6727468808184606,
+     "pregnancy": 0.48978484733187416,
+     "general": 0.3431901825300962,
+     "vague": 0.3224834381282807
+    },
+    "scaler_rows": 950,
+    "steps_per_epoch": 60,
+    "warmup_steps": 72,
+    "planned_steps": 720,
+    "epochs_run": 5,
+    "best_epoch": 3,
+    "best_inner_macro_f1": 0.8586407586407586,
+    "inner_macro_f1_per_epoch": [
+     0.28733877418087944,
+     0.7650252525252524,
+     0.8586407586407586,
+     0.8448292989959657,
+     0.8482241164088097
+    ],
+    "ran_to_cap": false,
+    "best_at_cap": false,
+    "seconds": 198.6
+   },
+   "4": {
+    "inner_fold": 5,
+    "train_rows": 962,
+    "val_seeds": 76,
+    "test_seeds": 76,
+    "class_weights": {
+     "contraception": 0.8222222222222222,
+     "sti": 0.8180272108843537,
+     "pregnancy": 0.9376218323586745,
+     "general": 0.6680555555555555,
+     "out_of_scope": 1.8862745098039215,
+     "vague": 2.137777777777778
+    },
+    "scaler_mean": {
+     "gbv": 0.0,
+     "sti": 0.2182952182952183,
+     "contraception": 0.2817047817047817,
+     "pregnancy": 0.19334719334719336,
+     "general": 0.09043659043659044,
+     "vague": 0.11330561330561331
+    },
+    "scaler_scale": {
+     "gbv": 1.0,
+     "sti": 0.5434910677322932,
+     "contraception": 0.6659665448306566,
+     "pregnancy": 0.4782563422862511,
+     "general": 0.3337122153185611,
+     "vague": 0.31696600969039374
+    },
+    "scaler_rows": 962,
+    "steps_per_epoch": 61,
+    "warmup_steps": 73,
+    "planned_steps": 732,
+    "epochs_run": 7,
+    "best_epoch": 5,
+    "best_inner_macro_f1": 0.8250680827886709,
+    "inner_macro_f1_per_epoch": [
+     0.4095428679443598,
+     0.7383055429032441,
+     0.808664196595231,
+     0.7702022705563225,
+     0.8250680827886709,
+     0.8165267943002011,
+     0.8245920745920746
+    ],
+    "ran_to_cap": false,
+    "best_at_cap": false,
+    "seconds": 74.5
+   },
+   "5": {
+    "inner_fold": 1,
+    "train_rows": 1012,
+    "val_seeds": 76,
+    "test_seeds": 76,
+    "class_weights": {
+     "contraception": 0.8694158075601375,
+     "sti": 0.7993680884676145,
+     "pregnancy": 0.887719298245614,
+     "general": 0.6693121693121693,
+     "out_of_scope": 1.9843137254901961,
+     "vague": 2.1083333333333334
+    },
+    "scaler_mean": {
+     "gbv": 0.0,
+     "sti": 0.26778656126482214,
+     "contraception": 0.2608695652173913,
+     "pregnancy": 0.17193675889328064,
+     "general": 0.08794466403162056,
+     "vague": 0.09782608695652174
+    },
+    "scaler_scale": {
+     "gbv": 1.0,
+     "sti": 0.6147317306670905,
+     "contraception": 0.595711315260216,
+     "pregnancy": 0.44906908976677834,
+     "general": 0.34602903317437167,
+     "vague": 0.2970793558416613
+    },
+    "scaler_rows": 1012,
+    "steps_per_epoch": 64,
+    "warmup_steps": 76,
+    "planned_steps": 768,
+    "epochs_run": 9,
+    "best_epoch": 7,
+    "best_inner_macro_f1": 0.8287037037037037,
+    "inner_macro_f1_per_epoch": [
+     0.280348663681997,
+     0.7630958910370675,
+     0.7865409679925808,
+     0.8187363834422658,
+     0.8157449304508129,
+     0.8257122507122507,
+     0.8287037037037037,
+     0.8287037037037037,
+     0.8287037037037037
+    ],
+    "ran_to_cap": false,
+    "best_at_cap": false,
+    "seconds": 99.1
+   }
+  },
+  "best_epochs": [
+   7,
+   5,
+   3,
+   5,
+   7
+  ],
+  "folds_ran_to_cap": [],
+  "folds_best_at_cap": [],
+  "total_seconds": 879.3,
+  "hardware": {
+   "versions": {
+    "torch": "2.5.1+cu121",
+    "transformers": "5.17.0",
+    "scikit-learn": "1.9.1"
+   },
+   "cuda": "12.1",
+   "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+   "deterministic_algorithms": true
+  }
+ },
+ "per_fold_macro_f1": {
+  "1": 0.8158900836320191,
+  "2": 0.8484873364183709,
+  "3": 0.7503156565656565,
+  "4": 0.6918650793650793,
+  "5": 0.8265375295408665
+ },
+ "macro_f1_mean": 0.7866191371043985,
+ "macro_f1_sd": 0.0643704408268678,
+ "pooled_macro_f1": 0.7898778860839079,
+ "pooled_per_class": {
+  "contraception": {
+   "precision": 0.8734177215189873,
+   "recall": 0.9078947368421053,
+   "f1": 0.8903225806451613,
+   "support": 76
+  },
+  "sti": {
+   "precision": 0.8045977011494253,
+   "recall": 0.8536585365853658,
+   "f1": 0.8284023668639052,
+   "support": 82
+  },
+  "pregnancy": {
+   "precision": 0.7662337662337663,
+   "recall": 0.7866666666666666,
+   "f1": 0.7763157894736841,
+   "support": 75
+  },
+  "general": {
+   "precision": 0.7848101265822784,
+   "recall": 0.6813186813186813,
+   "f1": 0.7294117647058823,
+   "support": 91
+  },
+  "out_of_scope": {
+   "precision": 0.6774193548387096,
+   "recall": 0.7241379310344828,
+   "f1": 0.7,
+   "support": 29
+  },
+  "vague": {
+   "precision": 0.8148148148148148,
+   "recall": 0.8148148148148148,
+   "f1": 0.8148148148148148,
+   "support": 27
+  }
+ },
+ "sti_recall": 0.8536585365853658,
+ "pregnancy_recall": 0.7866666666666666,
+ "confident_wrong": 0.14736842105263157,
+ "confident_wrong_is_plain_error_rate": false,
+ "ece": 0.07515288418845126,
+ "confusion": {
+  "labels": [
+   "contraception",
+   "sti",
+   "pregnancy",
+   "general",
+   "out_of_scope",
+   "vague"
+  ],
+  "matrix": [
+   [
+    69,
+    0,
+    4,
+    1,
+    1,
+    1
+   ],
+   [
+    2,
+    70,
+    2,
+    6,
+    2,
+    0
+   ],
+   [
+    2,
+    4,
+    59,
+    8,
+    2,
+    0
+   ],
+   [
+    4,
+    8,
+    12,
+    62,
+    2,
+    3
+   ],
+   [
+    2,
+    4,
+    0,
+    1,
+    21,
+    1
+   ],
+   [
+    0,
+    1,
+    0,
+    1,
+    3,
+    22
+   ]
+  ]
+ },
+ "n": 380,
+ "environment": {
+  "python": "3.12.10",
+  "packages": {
+   "scikit-learn": "1.9.1",
+   "numpy": "2.5.3",
+   "pandas": "3.0.6",
+   "torch": "2.5.1+cu121",
+   "transformers": "5.17.0",
+   "sentence-transformers": null
+  },
+  "git_commit": "08a515084cc81f33272177d6a71395621026d22c",
+  "fold_file_sha256": "9fa96d80c22d020b62ada028d87c0679004c0d68be87e6b2f40d4bff46361cbf"
+ }
+}

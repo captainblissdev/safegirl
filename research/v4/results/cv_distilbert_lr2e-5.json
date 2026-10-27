@@ -1,0 +1,331 @@
+{
+ "candidate": "distilbert_lr2e-5",
+ "config": {
+  "model": "distilbert-base-multilingual-cased",
+  "lr": 2e-05,
+  "max_epochs": 12,
+  "patience": 2,
+  "batch": 16,
+  "max_length": 64,
+  "weight_decay": 0.01,
+  "label_smoothing": 0.1,
+  "class_weights": "balanced, from each fold's training rows, in the loss",
+  "warmup": "linear schedule, 10% warmup over the planned 12 epochs",
+  "warmup_note": "V3 defined WARMUP_RATIO but never passed it to its trainer; V4 applies it",
+  "seed": 42,
+  "training_set": "without V1 restore paraphrases",
+  "inner_fold": "next fold, wrapping 5 -> 1",
+  "checkpoints": "best epoch kept in memory only, never saved",
+  "folds": {
+   "1": {
+    "inner_fold": 2,
+    "train_rows": 981,
+    "val_seeds": 76,
+    "test_seeds": 76,
+    "class_weights": {
+     "contraception": 0.9134078212290503,
+     "sti": 0.8341836734693877,
+     "pregnancy": 0.8790322580645161,
+     "general": 0.6673469387755102,
+     "out_of_scope": 1.8166666666666667,
+     "vague": 1.923529411764706
+    },
+    "steps_per_epoch": 62,
+    "warmup_steps": 74,
+    "planned_steps": 744,
+    "epochs_run": 8,
+    "best_epoch": 6,
+    "best_inner_macro_f1": 0.828757376318352,
+    "inner_macro_f1_per_epoch": [
+     0.41477790727790725,
+     0.7760294733729269,
+     0.799080549080549,
+     0.8284628756651712,
+     0.8195045695045695,
+     0.828757376318352,
+     0.8191798941798942,
+     0.828757376318352
+    ],
+    "ran_to_cap": false,
+    "best_at_cap": false,
+    "seconds": 77.2
+   },
+   "2": {
+    "inner_fold": 3,
+    "train_rows": 952,
+    "val_seeds": 76,
+    "test_seeds": 76,
+    "class_weights": {
+     "contraception": 0.8484848484848485,
+     "sti": 0.8576576576576577,
+     "pregnancy": 0.9616161616161616,
+     "general": 0.6611111111111111,
+     "out_of_scope": 1.762962962962963,
+     "vague": 1.8666666666666667
+    },
+    "steps_per_epoch": 60,
+    "warmup_steps": 72,
+    "planned_steps": 720,
+    "epochs_run": 7,
+    "best_epoch": 5,
+    "best_inner_macro_f1": 0.8017952116296683,
+    "inner_macro_f1_per_epoch": [
+     0.4190190633739021,
+     0.6873709669052807,
+     0.6863726551226552,
+     0.7843239198077908,
+     0.8017952116296683,
+     0.7931527647519272,
+     0.7682144133429877
+    ],
+    "ran_to_cap": false,
+    "best_at_cap": false,
+    "seconds": 60.2
+   },
+   "3": {
+    "inner_fold": 4,
+    "train_rows": 950,
+    "val_seeds": 76,
+    "test_seeds": 76,
+    "class_weights": {
+     "contraception": 0.8333333333333334,
+     "sti": 0.8333333333333334,
+     "pregnancy": 0.9654471544715447,
+     "general": 0.656984785615491,
+     "out_of_scope": 1.8627450980392157,
+     "vague": 1.9791666666666667
+    },
+    "steps_per_epoch": 60,
+    "warmup_steps": 72,
+    "planned_steps": 720,
+    "epochs_run": 8,
+    "best_epoch": 6,
+    "best_inner_macro_f1": 0.8193538190142604,
+    "inner_macro_f1_per_epoch": [
+     0.36410818713450294,
+     0.7472240642499264,
+     0.7533154121863799,
+     0.7973943595548011,
+     0.7925505975980359,
+     0.8193538190142604,
+     0.715224639991498,
+     0.8040035987404409
+    ],
+    "ran_to_cap": false,
+    "best_at_cap": false,
+    "seconds": 67.4
+   },
+   "4": {
+    "inner_fold": 5,
+    "train_rows": 962,
+    "val_seeds": 76,
+    "test_seeds": 76,
+    "class_weights": {
+     "contraception": 0.8222222222222222,
+     "sti": 0.8180272108843537,
+     "pregnancy": 0.9376218323586745,
+     "general": 0.6680555555555555,
+     "out_of_scope": 1.8862745098039215,
+     "vague": 2.137777777777778
+    },
+    "steps_per_epoch": 61,
+    "warmup_steps": 73,
+    "planned_steps": 732,
+    "epochs_run": 6,
+    "best_epoch": 4,
+    "best_inner_macro_f1": 0.8496857315192051,
+    "inner_macro_f1_per_epoch": [
+     0.30894031809363615,
+     0.7398451697302272,
+     0.7725344741473773,
+     0.8496857315192051,
+     0.8070110445110444,
+     0.8083039826291135
+    ],
+    "ran_to_cap": false,
+    "best_at_cap": false,
+    "seconds": 52.4
+   },
+   "5": {
+    "inner_fold": 1,
+    "train_rows": 1012,
+    "val_seeds": 76,
+    "test_seeds": 76,
+    "class_weights": {
+     "contraception": 0.8694158075601375,
+     "sti": 0.7993680884676145,
+     "pregnancy": 0.887719298245614,
+     "general": 0.6693121693121693,
+     "out_of_scope": 1.9843137254901961,
+     "vague": 2.1083333333333334
+    },
+    "steps_per_epoch": 64,
+    "warmup_steps": 76,
+    "planned_steps": 768,
+    "epochs_run": 7,
+    "best_epoch": 5,
+    "best_inner_macro_f1": 0.7714646464646465,
+    "inner_macro_f1_per_epoch": [
+     0.27425810904071773,
+     0.6765901987780213,
+     0.7514265371770442,
+     0.7617573585315521,
+     0.7714646464646465,
+     0.7466031280547409,
+     0.746105504763
+    ],
+    "ran_to_cap": false,
+    "best_at_cap": false,
+    "seconds": 63.3
+   }
+  },
+  "best_epochs": [
+   6,
+   5,
+   6,
+   4,
+   5
+  ],
+  "folds_ran_to_cap": [],
+  "folds_best_at_cap": [],
+  "grid": "deviation 1 (docs/decision-log.md)",
+  "total_seconds": 320.5,
+  "hardware": {
+   "versions": {
+    "torch": "2.5.1+cu121",
+    "transformers": "5.17.0",
+    "scikit-learn": "1.9.1"
+   },
+   "cuda": "12.1",
+   "gpu": "NVIDIA GeForce RTX 4050 Laptop GPU",
+   "deterministic_algorithms": true
+  }
+ },
+ "per_fold_macro_f1": {
+  "1": 0.8298334387518448,
+  "2": 0.8157218973648993,
+  "3": 0.7744857481699587,
+  "4": 0.7068815987933634,
+  "5": 0.8000407564923694
+ },
+ "macro_f1_mean": 0.7853926879144871,
+ "macro_f1_sd": 0.048457093504236354,
+ "pooled_macro_f1": 0.786688590366296,
+ "pooled_per_class": {
+  "contraception": {
+   "precision": 0.881578947368421,
+   "recall": 0.881578947368421,
+   "f1": 0.881578947368421,
+   "support": 76
+  },
+  "sti": {
+   "precision": 0.797752808988764,
+   "recall": 0.8658536585365854,
+   "f1": 0.8304093567251462,
+   "support": 82
+  },
+  "pregnancy": {
+   "precision": 0.8169014084507042,
+   "recall": 0.7733333333333333,
+   "f1": 0.7945205479452055,
+   "support": 75
+  },
+  "general": {
+   "precision": 0.7727272727272727,
+   "recall": 0.7472527472527473,
+   "f1": 0.7597765363128491,
+   "support": 91
+  },
+  "out_of_scope": {
+   "precision": 0.7391304347826086,
+   "recall": 0.5862068965517241,
+   "f1": 0.6538461538461539,
+   "support": 29
+  },
+  "vague": {
+   "precision": 0.7272727272727273,
+   "recall": 0.8888888888888888,
+   "f1": 0.7999999999999999,
+   "support": 27
+  }
+ },
+ "sti_recall": 0.8658536585365854,
+ "pregnancy_recall": 0.7733333333333333,
+ "confident_wrong": 0.14210526315789473,
+ "confident_wrong_is_plain_error_rate": false,
+ "ece": 0.06141565002893145,
+ "confusion": {
+  "labels": [
+   "contraception",
+   "sti",
+   "pregnancy",
+   "general",
+   "out_of_scope",
+   "vague"
+  ],
+  "matrix": [
+   [
+    67,
+    1,
+    4,
+    3,
+    0,
+    1
+   ],
+   [
+    2,
+    71,
+    2,
+    6,
+    1,
+    0
+   ],
+   [
+    2,
+    6,
+    58,
+    7,
+    1,
+    1
+   ],
+   [
+    2,
+    7,
+    6,
+    68,
+    4,
+    4
+   ],
+   [
+    2,
+    3,
+    1,
+    3,
+    17,
+    3
+   ],
+   [
+    1,
+    1,
+    0,
+    1,
+    0,
+    24
+   ]
+  ]
+ },
+ "n": 380,
+ "environment": {
+  "python": "3.12.10",
+  "packages": {
+   "scikit-learn": "1.9.1",
+   "numpy": "2.5.3",
+   "pandas": "3.0.6",
+   "torch": "2.5.1+cu121",
+   "transformers": "5.17.0",
+   "sentence-transformers": null
+  },
+  "git_commit": "fa68cee96a93bb769dbd73137084ee92fca5a995",
+  "fold_file_sha256": "9fa96d80c22d020b62ada028d87c0679004c0d68be87e6b2f40d4bff46361cbf"
+ }
+}

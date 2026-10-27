@@ -1,0 +1,146 @@
+{
+ "candidate": "hybrid_C1",
+ "config": {
+  "model": "LogisticRegression",
+  "features": [
+   "multilingual-e5-small, 'query: ', normalized (unscaled)",
+   "keyword hit counts ['gbv', 'sti', 'contraception', 'pregnancy', 'general'] (scaled)",
+   "vague-rule flag (scaled)"
+  ],
+  "feature_width": 390,
+  "scaler": "StandardScaler on rule columns, fitted on each fold's training rows",
+  "penalty": "l2 (sklearn default)",
+  "C": 1,
+  "class_weight": "balanced",
+  "max_iter": 2000,
+  "random_state": 42,
+  "training_set": "without V1 restore paraphrases"
+ },
+ "per_fold_macro_f1": {
+  "1": 0.8553050397877984,
+  "2": 0.8785634118967452,
+  "3": 0.8719419080053704,
+  "4": 0.7886363636363636,
+  "5": 0.9090372803016482
+ },
+ "macro_f1_mean": 0.8606968007255852,
+ "macro_f1_sd": 0.044733231153190174,
+ "pooled_macro_f1": 0.8611370288731109,
+ "pooled_per_class": {
+  "contraception": {
+   "precision": 0.9444444444444444,
+   "recall": 0.8947368421052632,
+   "f1": 0.918918918918919,
+   "support": 76
+  },
+  "sti": {
+   "precision": 0.96,
+   "recall": 0.8780487804878049,
+   "f1": 0.9171974522292994,
+   "support": 82
+  },
+  "pregnancy": {
+   "precision": 0.9193548387096774,
+   "recall": 0.76,
+   "f1": 0.832116788321168,
+   "support": 75
+  },
+  "general": {
+   "precision": 0.7345132743362832,
+   "recall": 0.9120879120879121,
+   "f1": 0.8137254901960785,
+   "support": 91
+  },
+  "out_of_scope": {
+   "precision": 0.7878787878787878,
+   "recall": 0.896551724137931,
+   "f1": 0.8387096774193549,
+   "support": 29
+  },
+  "vague": {
+   "precision": 0.88,
+   "recall": 0.8148148148148148,
+   "f1": 0.8461538461538461,
+   "support": 27
+  }
+ },
+ "sti_recall": 0.8780487804878049,
+ "pregnancy_recall": 0.76,
+ "confident_wrong": 0.05,
+ "confident_wrong_is_plain_error_rate": false,
+ "ece": 0.1283153899279391,
+ "confusion": {
+  "labels": [
+   "contraception",
+   "sti",
+   "pregnancy",
+   "general",
+   "out_of_scope",
+   "vague"
+  ],
+  "matrix": [
+   [
+    68,
+    0,
+    2,
+    5,
+    1,
+    0
+   ],
+   [
+    1,
+    72,
+    0,
+    8,
+    0,
+    1
+   ],
+   [
+    2,
+    1,
+    57,
+    11,
+    3,
+    1
+   ],
+   [
+    1,
+    2,
+    3,
+    83,
+    2,
+    0
+   ],
+   [
+    0,
+    0,
+    0,
+    2,
+    26,
+    1
+   ],
+   [
+    0,
+    0,
+    0,
+    4,
+    1,
+    22
+   ]
+  ]
+ },
+ "n": 380,
+ "environment": {
+  "python": "3.14.6",
+  "packages": {
+   "scikit-learn": "1.9.0",
+   "numpy": "2.5.3",
+   "pandas": "3.0.5",
+   "torch": "2.9.0",
+   "transformers": "5.0.0",
+   "sentence-transformers": "6.1.0"
+  },
+  "git_commit": "ac59eace2763c1ea230ff540471711fdb4fed699",
+  "fold_file_sha256": "9fa96d80c22d020b62ada028d87c0679004c0d68be87e6b2f40d4bff46361cbf"
+ }
+}

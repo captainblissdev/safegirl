@@ -1,0 +1,322 @@
+{
+ "rule": "docs/decision-log.md, clarification 2, item 3",
+ "candidates": {
+  "baseline M2": {
+   "setting": "baseline_m2",
+   "macro_f1_mean": 0.6194249424619481,
+   "macro_f1_sd": 0.05249990721507371,
+   "per_fold_macro_f1": {
+    "1": 0.6959557258407832,
+    "2": 0.5727242440952118,
+    "3": 0.638808533172319,
+    "4": 0.5683574879227054,
+    "5": 0.6212787212787213
+   },
+   "sti_recall": 0.7560975609756098,
+   "pregnancy_recall": 0.6266666666666667,
+   "confident_wrong": 0.38421052631578945,
+   "confident_wrong_is_plain_error_rate": true,
+   "ece": null
+  },
+  "LR on e5 (no V1)": {
+   "setting": "lr_e5_base_C10",
+   "macro_f1_mean": 0.8605653358246926,
+   "macro_f1_sd": 0.061562996464193546,
+   "per_fold_macro_f1": {
+    "1": 0.8828678266178267,
+    "2": 0.8936058379884854,
+    "3": 0.8256283020988904,
+    "4": 0.772445296638845,
+    "5": 0.9282794157794158
+   },
+   "sti_recall": 0.926829268292683,
+   "pregnancy_recall": 0.8266666666666667,
+   "confident_wrong": 0.06842105263157895,
+   "confident_wrong_is_plain_error_rate": false,
+   "ece": 0.1176957209643565
+  },
+  "hybrid e5": {
+   "setting": "hybrid_C10",
+   "macro_f1_mean": 0.8835196370409516,
+   "macro_f1_sd": 0.05068781530298449,
+   "per_fold_macro_f1": {
+    "1": 0.8467411983332451,
+    "2": 0.9390356769667115,
+    "3": 0.8970169583072809,
+    "4": 0.8167039931745813,
+    "5": 0.9181003584229391
+   },
+   "sti_recall": 0.9634146341463414,
+   "pregnancy_recall": 0.8266666666666667,
+   "confident_wrong": 0.05526315789473684,
+   "confident_wrong_is_plain_error_rate": false,
+   "ece": 0.06564933071647636
+  },
+  "DistilBERT": {
+   "setting": "distilbert_lr3e-5",
+   "macro_f1_mean": 0.7883486060742653,
+   "macro_f1_sd": 0.08317058729760908,
+   "per_fold_macro_f1": {
+    "1": 0.8691271963330786,
+    "2": 0.8353937728937728,
+    "3": 0.6952325452325452,
+    "4": 0.7015035890035889,
+    "5": 0.8404859269083408
+   },
+   "sti_recall": 0.8414634146341463,
+   "pregnancy_recall": 0.7866666666666666,
+   "confident_wrong": 0.14210526315789473,
+   "confident_wrong_is_plain_error_rate": false,
+   "ece": 0.0531732708999985
+  },
+  "DistilBERT + keyword": {
+   "setting": "distilbert_kw_lr3e-5",
+   "macro_f1_mean": 0.7866191371043985,
+   "macro_f1_sd": 0.0643704408268678,
+   "per_fold_macro_f1": {
+    "1": 0.8158900836320191,
+    "2": 0.8484873364183709,
+    "3": 0.7503156565656565,
+    "4": 0.6918650793650793,
+    "5": 0.8265375295408665
+   },
+   "sti_recall": 0.8536585365853658,
+   "pregnancy_recall": 0.7866666666666666,
+   "confident_wrong": 0.14736842105263157,
+   "confident_wrong_is_plain_error_rate": false,
+   "ece": 0.07515288418845126
+  }
+ },
+ "settings_considered": {
+  "baseline M2": [
+   "baseline_m2"
+  ],
+  "LR on e5 (no V1)": [
+   "lr_e5_base_C0.1",
+   "lr_e5_base_C1",
+   "lr_e5_base_C10"
+  ],
+  "hybrid e5": [
+   "hybrid_C0.1",
+   "hybrid_C1",
+   "hybrid_C10"
+  ],
+  "DistilBERT": [
+   "distilbert_lr5e-6",
+   "distilbert_lr1e-5",
+   "distilbert_lr2e-5",
+   "distilbert_lr3e-5"
+  ],
+  "DistilBERT + keyword": [
+   "distilbert_kw_lr3e-5"
+  ]
+ },
+ "reference": {
+  "baseline M1": {
+   "setting": "baseline_m1",
+   "macro_f1_mean": 0.516572584716412,
+   "macro_f1_sd": 0.01793751668605243,
+   "per_fold_macro_f1": {
+    "1": 0.5323193622044197,
+    "2": 0.5360863130607291,
+    "3": 0.514459452301499,
+    "4": 0.49277283706631536,
+    "5": 0.5072249589490969
+   },
+   "sti_recall": 0.7560975609756098,
+   "pregnancy_recall": 0.6266666666666667,
+   "confident_wrong": 0.3105263157894737,
+   "confident_wrong_is_plain_error_rate": true,
+   "ece": null
+  }
+ },
+ "decision": {
+  "best_macro_f1": 0.8835196370409516,
+  "tie_threshold": 0.8735196370409516,
+  "tied": [
+   "hybrid e5"
+  ],
+  "confident_wrong_of_tied": {
+   "hybrid e5": 0.05526315789473684
+  },
+  "decided_by": "macro-F1",
+  "winner": "hybrid e5"
+ },
+ "paired_per_fold": {
+  "baseline M2": {
+   "per_fold_diff": {
+    "1": 0.15078547249246188,
+    "2": 0.3663114328714997,
+    "3": 0.2582084251349619,
+    "4": 0.24834650525187596,
+    "5": 0.29682163714421783
+   },
+   "mean_diff": 0.2640946945790034,
+   "folds_winner_ahead": 5,
+   "folds": 5
+  },
+  "LR on e5 (no V1)": {
+   "per_fold_diff": {
+    "1": -0.036126628284581574,
+    "2": 0.04542983897822617,
+    "3": 0.07138865620839052,
+    "4": 0.04425869653573633,
+    "5": -0.010179057356476617
+   },
+   "mean_diff": 0.022954301216258965,
+   "folds_winner_ahead": 3,
+   "folds": 5
+  },
+  "DistilBERT": {
+   "per_fold_diff": {
+    "1": -0.02238599799983343,
+    "2": 0.10364190407293872,
+    "3": 0.2017844130747357,
+    "4": 0.11520040417099242,
+    "5": 0.07761443151459835
+   },
+   "mean_diff": 0.09517103096668636,
+   "folds_winner_ahead": 4,
+   "folds": 5
+  },
+  "DistilBERT + keyword": {
+   "per_fold_diff": {
+    "1": 0.030851114701226034,
+    "2": 0.0905483405483406,
+    "3": 0.14670130174162443,
+    "4": 0.12483891380950196,
+    "5": 0.09156282888207268
+   },
+   "mean_diff": 0.09690049993655314,
+   "folds_winner_ahead": 5,
+   "folds": 5
+  }
+ },
+ "winner_details": {
+  "per_class": {
+   "contraception": {
+    "precision": 0.9459459459459459,
+    "recall": 0.9210526315789473,
+    "f1": 0.9333333333333332,
+    "support": 76
+   },
+   "sti": {
+    "precision": 0.9518072289156626,
+    "recall": 0.9634146341463414,
+    "f1": 0.9575757575757576,
+    "support": 82
+   },
+   "pregnancy": {
+    "precision": 0.8857142857142857,
+    "recall": 0.8266666666666667,
+    "f1": 0.8551724137931035,
+    "support": 75
+   },
+   "general": {
+    "precision": 0.8297872340425532,
+    "recall": 0.8571428571428571,
+    "f1": 0.8432432432432433,
+    "support": 91
+   },
+   "out_of_scope": {
+    "precision": 0.8333333333333334,
+    "recall": 0.8620689655172413,
+    "f1": 0.847457627118644,
+    "support": 29
+   },
+   "vague": {
+    "precision": 0.8275862068965517,
+    "recall": 0.8888888888888888,
+    "f1": 0.8571428571428572,
+    "support": 27
+   }
+  },
+  "confusion": {
+   "labels": [
+    "contraception",
+    "sti",
+    "pregnancy",
+    "general",
+    "out_of_scope",
+    "vague"
+   ],
+   "matrix": [
+    [
+     70,
+     0,
+     2,
+     3,
+     1,
+     0
+    ],
+    [
+     1,
+     79,
+     1,
+     0,
+     0,
+     1
+    ],
+    [
+     2,
+     0,
+     62,
+     8,
+     1,
+     2
+    ],
+    [
+     1,
+     4,
+     5,
+     78,
+     2,
+     1
+    ],
+    [
+     0,
+     0,
+     0,
+     3,
+     25,
+     1
+    ],
+    [
+     0,
+     0,
+     0,
+     2,
+     1,
+     24
+    ]
+   ]
+  },
+  "top_confusions": [
+   {
+    "true": "pregnancy",
+    "pred": "general",
+    "count": 8
+   },
+   {
+    "true": "general",
+    "pred": "pregnancy",
+    "count": 5
+   },
+   {
+    "true": "general",
+    "pred": "sti",
+    "count": 4
+   },
+   {
+    "true": "contraception",
+    "pred": "general",
+    "count": 3
+   },
+   {
+    "true": "out_of_scope",
+    "pred": "general",
+    "count": 3
+   }
+  ]
+ }
+}
