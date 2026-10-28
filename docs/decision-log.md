@@ -3670,3 +3670,62 @@ errors on the 69 development items:
 - No case had the right entry on top with the gate deciding wrongly.
 - Q13 and V16 are the same question text, so one error is counted
   twice in the development data.
+
+## KB scale validation: reranker candidate (2026-10-28)
+
+Amends "KB scale validation: gate and ranking (PRE-REGISTRATION), 28 Oct
+2026" items 4 and 5, and "KB scale validation: test arms" (arm B).
+Recorded after the reranker was downloaded and timed on synthetic pairs,
+and before it is run on any development or fresh item. The earlier
+entries are left as they were.
+
+- **Reranker:** `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1`, revision
+  `1427fd652930e4ba29e8149678df786c240d8825` (Apache-2.0; 12 layers,
+  hidden 384; up to 512 tokens; no custom code). Loaded with
+  sentence-transformers `CrossEncoder` on CPU, offline
+  (`HF_HUB_OFFLINE=1`) after one download. `model.safetensors` SHA-256
+  `5daeca2481a76b5976a2bdc32f0a78532b6716da4f8cd3ff59460ef8d2f359b4`
+  (matches the published hash).
+- **Input:** the query paired with each candidate entry's question
+  text, for the top 10 entries of the question-mode dense ranking (top
+  10 within the class when the query is scoped).
+- **Two pipelines are added, eight in total:**
+  - P6: question mode; rerank the top 10; serve the reranked top entry;
+    gate on its rerank score, threshold recalibrated within each
+    leave-one-out fold as for P1 and P2.
+  - P7: question mode; rerank the top 10; logistic gate on the rerank
+    top-1 score, the rerank margin (top-1 minus top-2) and agreement
+    between V4's class and the served entry's class, fitted within each
+    fold as for P3. With V4 off it falls back to rerank score and margin
+    only, fitted and reported as for P3 and P5.
+  - Complexity order for the tie rule: P0; P1 and P2; P4 and P6; P3;
+    P5 and P7.
+- **Forking path, disclosed:** P6 and P7 are added after the residual
+  analysis of P3 ("P3 residual errors") on the same development data,
+  which showed crowded same-class neighbours as the main error. Eight
+  pipelines have therefore been tried in total, and the choice to add
+  these two was made after seeing development results.
+- **Items:** Q13 and V16 are the same question text and count as one:
+  V16 is removed from scoring and training, leaving 68 scored items.
+  All eight pipelines are scored on the 68; the six 69-item scores stay
+  reported as they are.
+- **Selection:** the registered leave-one-out rule, unchanged. If the
+  winner is not P3, it supersedes `frozen_gate_v2.json` by a new freeze
+  (`frozen_gate_v3.json`) with a new SHA-256, logged before the fresh
+  test, and arm B of the test arms uses it. If P3 still wins, gate_v2
+  stands.
+- **Fresh-test harness:** `research/eval/fresh_test_run.*` will take
+  the frozen gate file and its SHA-256 as inputs, so arm B can use
+  `frozen_gate_v3.json` if a reranker pipeline wins.
+- **Residual errors:** the same residual analysis as for P3 is reported
+  for the winner.
+- **Latency budget:** the reranker may add at most 250 ms per query
+  (p90 on this machine's CPU). Measured on synthetic pairs before any
+  development item was scored: 10 entry-question pairs, 30 runs,
+  median 94 ms, p90 109 ms. Within budget, so P6 and P7 stay.
+- **Fallback:** if the reranker cannot be loaded or its weights' hash
+  does not match, the pipeline falls back to P3 (the frozen gate_v2)
+  and logs the reason.
+- **Unchanged:** the frozen list of the pre-registration (V4, the
+  thresholds, KB text, Safety Net, helplines, check order) and the
+  decision rule.
