@@ -3504,6 +3504,11 @@ system.
     `8C7F0757A29B3F3ABE3DC2FEA9E5159985EFC42B8BA7CE549437FEA2A29E01FC`
   - `C:\Users\cindy\fresh\fresh_test_v1.csv`, 82 rows, SHA-256
     `667A547C06CDF6B097061D6F096A1585339B3193F439240D98BC202036157C54`
+- **Correction (2026-10-28): provenance filled.** The questions were
+  written by a remote reviewer, a person other than the author. The
+  gynaecologist list was not used (as stated by the author). The date
+  of writing is not recorded. Whether AI tools were used is not
+  recorded. The set was never run through the system.
 
 ## Gate and ranking selection (62 entries) (2026-10-28)
 
