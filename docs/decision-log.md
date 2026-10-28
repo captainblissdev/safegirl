@@ -2945,3 +2945,41 @@ is left as it was.
 - **Unchanged.** Model `gemini-3.6-flash`, timeout 8 s with no retry,
   the prompt, the output guard, the extractive fallback, synthetic
   queries only, and the flag off by default.
+
+## V4 triage on for the demo (PROPOSED) (2026-10-28)
+
+**Status: PROPOSED, not accepted.** Nothing changes until this entry is
+accepted; the default stays off (`V4_TRIAGE_ENABLED` unset). Branch
+`demo/v4-ready`, from development at 93b8e46.
+
+- **Pre-registered condition met.** The V4 sealed gate passed ("V4
+  sealed result (2026-10-27)": all four criteria PASS, frozen model
+  SHA-256 `89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd`).
+- **Configuration.** `V4_TRIAGE_ENABLED=true` for both ml_service and
+  the gateway, started with `scripts/demo.ps1 -Mode on` (README "6.
+  Demo: V4 triage off or on"); the 21-entry knowledge base, full embed
+  mode, the relevance gate at 0.8439, V3 thresholds 0.35 and 0.5, V4
+  t_act 0.45, generation off. This is the configuration measured as arm
+  A in the KB scale validation test.
+- **Rollback.** Restart both processes with `-Mode off` (the flag off):
+  V3 classification, today's behaviour.
+- **Rehearsal results:** [FILL after the run of
+  `research/eval/demo_rehearsal.js` on the demo queries: per query the
+  reply kind with V4 off and on, kept outside the repository; counts
+  only here].
+- **Sign-off:** Mr. Ouma [FILL, date].
+- **DPO and ethics.** With V4 on, a classifier decides whether a query
+  is answered, asked to clarify or declined (out of scope, vague, or low
+  confidence). This automated triage is a DPO and ethics point to settle
+  before the demo, as noted in "V4 integration complete (flag off by
+  default)".
+- **Known limit.** In the fresh test ("KB scale validation result
+  (fresh test)", decision log on `kb/merge-60`, 9ae43bb), arm A, this
+  configuration, served 38 answers to the 82 independent questions, of
+  which 17 were correct: about 45% of served answers were correct (21
+  wrong answers served; 38 correct abstains or questions back; 6 missed
+  answers).
+- **Unchanged.** The V4 files and hash, the thresholds and the gate, KB
+  text, Safety Net patterns, helplines and HELP_CONTACTS_VERIFIED, the
+  check order, the snapshots, and every default (V4 and generation
+  off).
