@@ -1,0 +1,259 @@
+{
+  "measured": "2026-10-28T09:10:28.845Z",
+  "replies": "docs/kb-integration-eval-2026-10-22.md, Before (21 entries)",
+  "labels": "retrieval_eval_set_labels_kb62.csv",
+  "questions": 35,
+  "correct": 28,
+  "k3_correct": 29,
+  "verdict_changed_vs_k3": [
+    "Q28",
+    "Q58"
+  ],
+  "per_question": [
+    {
+      "id": "Q01",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-C3",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q02",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-C4",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q03",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-C5",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q04",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-S4",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q05",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-S5",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q06",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-S6",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q07",
+      "reply_kind": "answer-unscoped",
+      "entry": "KB-S7",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q08",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-P5",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q09",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-P6",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q10",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-P7",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q11",
+      "reply_kind": "answer-unscoped",
+      "entry": "KB-G3",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q12",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-G4",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q13",
+      "reply_kind": "answer-unscoped",
+      "entry": "KB-G5",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q14",
+      "reply_kind": "answer-unscoped",
+      "entry": "KB-G6",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q15",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-G7",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q16",
+      "reply_kind": "answer-unscoped",
+      "entry": "KB-G1",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q17",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-C2",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q18",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-C1",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q20",
+      "reply_kind": "answer-unscoped",
+      "entry": "KB-C3",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q21",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-C4",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q22",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-C5",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q23",
+      "reply_kind": "abstain",
+      "entry": null,
+      "verdict": "wrong",
+      "k3_verdict": "wrong"
+    },
+    {
+      "id": "Q24",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-S7",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q25",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-P5",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q26",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-P6",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q27",
+      "reply_kind": "held-topic",
+      "entry": null,
+      "verdict": "wrong",
+      "k3_verdict": "wrong"
+    },
+    {
+      "id": "Q28",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-P6",
+      "verdict": "wrong",
+      "k3_verdict": "partial"
+    },
+    {
+      "id": "Q29",
+      "reply_kind": "held-topic",
+      "entry": null,
+      "verdict": "wrong",
+      "k3_verdict": "wrong"
+    },
+    {
+      "id": "Q30",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-P5",
+      "verdict": "wrong",
+      "k3_verdict": "wrong"
+    },
+    {
+      "id": "Q50",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-P6",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q54",
+      "reply_kind": "answer-unscoped",
+      "entry": "KB-S7",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q55",
+      "reply_kind": "answer-unscoped",
+      "entry": "KB-G3",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q56",
+      "reply_kind": "answer-unscoped",
+      "entry": "KB-G3",
+      "verdict": "correct",
+      "k3_verdict": "correct"
+    },
+    {
+      "id": "Q57",
+      "reply_kind": "abstain",
+      "entry": null,
+      "verdict": "wrong",
+      "k3_verdict": "wrong"
+    },
+    {
+      "id": "Q58",
+      "reply_kind": "answer-scoped",
+      "entry": "KB-C4",
+      "verdict": "wrong",
+      "k3_verdict": "correct"
+    }
+  ]
+}
