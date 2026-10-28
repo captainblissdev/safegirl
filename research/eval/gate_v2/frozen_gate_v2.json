@@ -1,0 +1,139 @@
+{
+  "name": "gate_v2",
+  "pipeline": "P3",
+  "mode": "question",
+  "params": {
+    "logistic": {
+      "mean": [
+        0.8754876134572206,
+        0.027898674761807477,
+        0.9074074074074074
+      ],
+      "scale": [
+        0.0333512449770571,
+        0.0249718673610184,
+        0.28986066374997277
+      ],
+      "coef": [
+        0.35442478833107016,
+        1.409713280618459,
+        0.4955344466987277
+      ],
+      "intercept": 2.130892849711751
+    },
+    "w": 0.0,
+    "with_v4": true
+  },
+  "v4_off_fallback": {
+    "logistic": {
+      "mean": [
+        0.8754876134572206,
+        0.027898674761807477
+      ],
+      "scale": [
+        0.0333512449770571,
+        0.0249718673610184
+      ],
+      "coef": [
+        0.636974465090625,
+        1.5269092915917037
+      ],
+      "intercept": 2.2238887625942856
+    },
+    "w": 0.0,
+    "with_v4": false
+  },
+  "routing": {
+    "v3_abstain_below": 0.35,
+    "v3_scoped_at": 0.5
+  },
+  "bm25": {
+    "k1": 1.5,
+    "b": 0.75,
+    "text": "question + content",
+    "stopwords": [
+      "a",
+      "am",
+      "an",
+      "and",
+      "are",
+      "as",
+      "at",
+      "be",
+      "been",
+      "but",
+      "by",
+      "can",
+      "could",
+      "did",
+      "do",
+      "does",
+      "dont",
+      "for",
+      "from",
+      "had",
+      "has",
+      "have",
+      "how",
+      "i",
+      "if",
+      "im",
+      "in",
+      "is",
+      "it",
+      "its",
+      "me",
+      "my",
+      "of",
+      "on",
+      "or",
+      "our",
+      "so",
+      "than",
+      "that",
+      "the",
+      "their",
+      "them",
+      "then",
+      "there",
+      "these",
+      "they",
+      "this",
+      "to",
+      "too",
+      "was",
+      "we",
+      "were",
+      "what",
+      "when",
+      "where",
+      "which",
+      "who",
+      "why",
+      "will",
+      "with",
+      "would",
+      "you",
+      "your"
+    ]
+  },
+  "selected_on": "75 relabelled development items (69 scored), leave-one-out",
+  "provenance": {
+    "e5": {
+      "model": "intfloat/multilingual-e5-small",
+      "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+      "weights_sha256": "1a55775f53449dac10a2bcbc312469fac40b96d53198c407081a831f81c98477"
+    },
+    "v3_checkpoint_sha256": {
+      "model.safetensors": "e8bf2e3aa01c920197b51071e736ef6a3d1f16a57dd8d3bdb1565f75152cfb30",
+      "config.json": "df6d0c0b2f4461aa967044fc18e29cd8ecf316cfb976710806771b1b9b9a084e"
+    },
+    "v4_frozen_sha256": "89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd",
+    "kb_sha256": "1b53efad82587063462d24efa9a436c2e20df007ad86b8623429b73a12885ff0",
+    "code_sha256": {
+      "research/eval/gate_candidates.py": "b44a45bd3c37ef85972e57144ce28ee539fb8bba2bac8c1069227182509fd77e",
+      "research/eval/gate_candidates_routes.js": "2ada590c28b0a4e41b4fec75a8ca2b42705075a35ad8952f5c556faf4738dd9f",
+      "ml_service/retrieval.py": "5ff4effc94c32ca2c4fcb985ee287c0b49d4498de05d9677b91ada539c8bb0b8"
+    }
+  }
+}
