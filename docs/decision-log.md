@@ -3729,3 +3729,89 @@ entries are left as they were.
 - **Unchanged:** the frozen list of the pre-registration (V4, the
   thresholds, KB text, Safety Net, helplines, check order) and the
   decision rule.
+
+## Reranker selection (62 entries) (2026-10-28)
+
+Applies "KB scale validation: reranker candidate" (dd523e9, committed
+before scoring). Harness in a006c4e, data in bc789d8. Development data
+only; the fresh test set was not read or used. Production defaults,
+thresholds, V4 files and KB text are unchanged.
+
+- **Eight pipelines tried in total** (P0 to P7), all scored on the 68
+  development items (V16 counted with Q13) with the registered rule
+  and the amended complexity order. K5 was reproduced first.
+- **Winner: P3** (57 of 68; P0 51). The reranker pipelines scored
+  below the baseline (P6 45, P7 44): the cross-encoder puts an
+  acceptable entry on top for 31 of 49 retrieved answer items, against
+  42 for the question-mode dense ranking.
+- **gate_v2 stands:** `frozen_gate_v2.json`, SHA-256
+  `ad6895a120b538e4cc751ebe4de8944aace640c268e0013f981d29ceabe4bafc`.
+  No `frozen_gate_v3.json` is written, and the fresh-test harness keeps
+  using gate_v2 (its hash is already checked), so the frozen-file input
+  foreseen in the amendment is not needed.
+- **Latency:** the winner adds no reranker cost. The reranker measured
+  median 94 ms, p90 109 ms on 10 synthetic pairs (budget 250 ms).
+- **Residual errors of P3 on the 68:** 6 wrong answers, all a crowded
+  same-class neighbour; 5 missed answers, 1 scoped to another class and
+  4 routing (2 held topic, 2 V3 abstains).
+- **Read with the numbers:** the interval of P3's difference to P0 on
+  the 68 items is 0 to +12. P6 and P7 were added after seeing P3's
+  residual errors on the same data (a disclosed forking path); they did
+  not win, so the selection is unchanged by them.
+
+Results copied exactly from `research/eval/gate_v2/selection_v3.md`:
+
+```markdown
+# Reranker selection: eight pipelines on 68 items (28 October 2026)
+
+Development data only: the 75 relabelled items, 68 scored (the 6 distress items are not scored; V16 is the same question as Q13 and counts with it). Leave-one-out with the registered utility and selection rule; complexity order P0; P1, P2; P4, P6; P3; P5, P7. Reranker `cross-encoder/mmarco-mMiniLMv2-L12-H384-v1` at revision `1427fd652930e4ba29e8149678df786c240d8825` (weights SHA-256 `5daeca2481a76b5976a2bdc32f0a78532b6716da4f8cd3ff59460ef8d2f359b4`), query paired with each entry's question for the top 10. Produced by `research/eval/gate_candidates_v3.py`; per-item ids in `selection_v3.json`.
+
+K5 reproduced before scoring: full: dev 25/35, correct below gate 1, wrong passing 4, off-topic passing 4; question: dev 25/35, correct below gate 5, wrong passing 4, off-topic passing 2.
+
+| Pipeline | LOO score (68) | Correct answers | Wrong answers served | Correct abstains | Missed answers | Difference to P0 (95% bootstrap interval) | Earlier score (69) |
+|---|---|---|---|---|---|---|---|
+| P0: full mode, current gate 0.8439 (baseline) | 51 / 68 | 39 | 11 | 12 | 6 | +0 (+0 to +0) | 52 / 69 |
+| P1: full mode, threshold recalibrated | 50 / 68 | 39 | 12 | 11 | 6 | -1 (-3 to +0) | 51 / 69 |
+| P2: question mode, threshold recalibrated | 53 / 68 | 42 | 10 | 11 | 5 | +2 (-3 to +8) | 53 / 69 |
+| P3: question mode, logistic gate (top-1 score, margin, V4 agreement) | 57 / 68 | 42 | 6 | 15 | 5 | +6 (+0 to +12) | 57 / 69 |
+| P4: question mode, hybrid ranking, threshold recalibrated | 54 / 68 | 42 | 7 | 12 | 7 | +3 (-3 to +9) | 54 / 69 |
+| P5: question mode, hybrid ranking, logistic gate | 55 / 68 | 41 | 7 | 14 | 6 | +4 (-2 to +10) | 55 / 69 |
+| P6: question mode, reranker over the top 10, threshold recalibrated | 45 / 68 | 30 | 12 | 15 | 11 | -6 (-14 to +2) | – |
+| P7: question mode, reranker over the top 10, logistic gate | 44 / 68 | 29 | 7 | 15 | 17 | -7 (-15 to +1) | – |
+
+With V4 off (fallback logistic gate on score and margin): P3 55 / 68, P5 56 / 68, P7 41 / 68.
+
+Top entry acceptable on the 49 answer-expected items that retrieve: question-mode dense 42, reranked 31.
+
+Winner: **P3**. P3 still wins, so `frozen_gate_v2.json` (SHA-256 `ad6895a120b538e4cc751ebe4de8944aace640c268e0013f981d29ceabe4bafc`) stands and no `frozen_gate_v3.json` is written. The winner adds no reranker latency; the reranker itself measured median 94 ms, p90 109 ms on 10 synthetic pairs.
+```
+
+Residual errors copied exactly from `research/eval/gate_v2/p3_residual_v3.md`:
+
+```markdown
+# P3 residual errors on 68 items (28 October 2026)
+
+Descriptive only. The winner P3's leave-one-out errors on the 68 scored development items (V16 counted with Q13): 6 wrong answers served and 5 missed answers. Same format as `p3_residual.md`; ids and numbers only.
+
+| Id | Outcome | Acceptable | Route | Served / top entry (class) | Best acceptable (rank, unscoped / served list) | Top-1 score | Margin | Gate probability | V4 class, agrees | Cause |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Q03 | wrong answer | KB-C5;KB-C9 | scoped (V3 contraception 0.555) | KB-C18 (contraception) | KB-C5 (2 / 2) | 0.8675 | 0.0135 | 0.844 | contraception, yes | a |
+| Q13 | wrong answer | KB-G5 | unscoped (V3 pregnancy 0.381) | KB-G9 (general) | KB-G5 (9 / 9) | 0.8538 | 0.0001 | 0.7164 | general, yes | a |
+| Q27 | missed answer | KB-G3;KB-P8 | held (V3 pregnancy 0.523) | – | – | – | – | – | general 0.784 | e |
+| Q29 | missed answer | KB-P8;KB-G3 | held (V3 pregnancy 0.488) | – | – | – | – | – | pregnancy 0.435 | e |
+| Q55 | wrong answer | KB-G3 | unscoped (V3 sti 0.384) | KB-G14 (general) | KB-G3 (2 / 2) | 0.8785 | 0.0019 | 0.7775 | general, yes | a |
+| Q57 | missed answer | KB-S7 | v3_abstain (V3 sti 0.306) | – | – | – | – | – | sti 0.889 | e |
+| V02 | missed answer | KB-C3;KB-C18 | v3_abstain (V3 sti 0.312) | – | – | – | – | – | contraception 0.666 | e |
+| V03 | missed answer | KB-C5 | scoped (V3 pregnancy 0.609) | KB-P6 (pregnancy) | KB-C5 (1 / not in class) | 0.8197 | 0.0123 | 0.3689 | contraception, no | b |
+| V12 | wrong answer | KB-G3;KB-G6 | unscoped (V3 pregnancy 0.376) | KB-G14 (general) | KB-G3 (2 / 2) | 0.872 | 0.0016 | 0.7606 | general, yes | a |
+| V14 | wrong answer | KB-G6;KB-G14 | unscoped (V3 general 0.359) | KB-G11 (general) | KB-G6 (2 / 2) | 0.8832 | 0.0029 | 0.7971 | general, yes | a |
+| V18 | wrong answer | KB-G3 | unscoped (V3 contraception 0.413) | KB-G14 (general) | KB-G3 (2 / 2) | 0.8732 | 0.014 | 0.8555 | general, yes | a |
+
+| Cause | Count | Items | What kind of change could help |
+|---|---|---|---|
+| a: crowded neighbour, same class | 6 | Q03, Q13, Q55, V12, V14, V18 | the reranker did not help (P6 and P7 scored below P0); resolving near-duplicate entries (KB text change, clinician decision) or a stronger, domain-matched reranker; gate features help little (V4 agrees, gate probability 0.72 to 0.86) |
+| b: neighbour of another class / scoping | 1 | V03 | not the gate or ranking: V4 routing, as in the registered test arms |
+| c: gate wrong with the right entry on top | 0 | none | none observed |
+| d: no good entry (labelling doubt) | 0 | none | none on this reading |
+| e: other (routing) | 4 | Q27, Q29, Q57, V02 | held topics: nothing (by design); V3 abstains: V4 routing as in the test arms |
+```
