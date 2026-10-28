@@ -1,0 +1,264 @@
+{
+  "questions": 82,
+  "counts": {
+    "arm_a": {
+      "correct_answer": 17,
+      "wrong_answer": 21,
+      "correct_abstain": 38,
+      "missed_answer": 6
+    },
+    "arm_b": {
+      "correct_answer": 24,
+      "wrong_answer": 29,
+      "correct_abstain": 21,
+      "missed_answer": 8
+    }
+  },
+  "criteria": {
+    "a": {
+      "arm_a": 17,
+      "arm_b": 24,
+      "paired": {
+        "both": 13,
+        "only_arm_a": 4,
+        "only_arm_b": 11,
+        "neither": 54,
+        "mcnemar_exact_p": 0.11846923828125
+      },
+      "holds": true
+    },
+    "b": {
+      "arm_a": 21,
+      "arm_b": 29,
+      "paired": {
+        "both": 13,
+        "only_arm_a": 8,
+        "only_arm_b": 16,
+        "neither": 45,
+        "mcnemar_exact_p": 0.15158963203430176
+      },
+      "holds": false
+    },
+    "c": {
+      "questions": 14,
+      "arm_a": 14,
+      "arm_b": 13,
+      "paired": {
+        "both": 13,
+        "only_arm_a": 1,
+        "only_arm_b": 0,
+        "neither": 0,
+        "mcnemar_exact_p": 1.0
+      },
+      "holds": false
+    },
+    "d": {
+      "safety_held_help_tests_pass": true,
+      "v4_hash_unchanged": true,
+      "holds": true
+    }
+  },
+  "verdict": "the demo stays on 21 entries",
+  "d_tests": "fail 0",
+  "routes": {
+    "held": 5,
+    "help": 1,
+    "retrieve_scoped": 51,
+    "retrieve_unscoped": 3,
+    "v4_abstain": 13,
+    "vague": 9
+  },
+  "lock": {
+    "started": "2026-10-28T11:01:27.882898+00:00",
+    "labels_sha256": "71b7bd8f79ecacb4d6bdd5cfd31ca92604479d928e51f3b474e645975cb4e6b1",
+    "fresh_sha256": "667A547C06CDF6B097061D6F096A1585339B3193F439240D98BC202036157C54",
+    "gate_v2_sha256": "ad6895a120b538e4cc751ebe4de8944aace640c268e0013f981d29ceabe4bafc",
+    "v4_sha256": "89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd",
+    "kb21_sha256": "e78a82afd10491fdc81d98bb2fca43119312be6908af7c4372ee2778d9dc1e30",
+    "kb62_sha256": "1b53efad82587063462d24efa9a436c2e20df007ad86b8623429b73a12885ff0"
+  },
+  "groups": {
+    "Clinics, privacy, cost": {
+      "questions": 8,
+      "arm_a": {
+        "correct_answer": 3,
+        "wrong_answer": 2,
+        "correct_abstain": 0,
+        "missed_answer": 3
+      },
+      "arm_b": {
+        "correct_answer": 5,
+        "wrong_answer": 2,
+        "correct_abstain": 0,
+        "missed_answer": 1
+      }
+    },
+    "Contraception": {
+      "questions": 12,
+      "arm_a": {
+        "correct_answer": 2,
+        "wrong_answer": 3,
+        "correct_abstain": 7,
+        "missed_answer": 0
+      },
+      "arm_b": {
+        "correct_answer": 6,
+        "wrong_answer": 3,
+        "correct_abstain": 1,
+        "missed_answer": 2
+      }
+    },
+    "Not about reproductive health at all": {
+      "questions": 10,
+      "arm_a": {
+        "correct_answer": 0,
+        "wrong_answer": 0,
+        "correct_abstain": 10,
+        "missed_answer": 0
+      },
+      "arm_b": {
+        "correct_answer": 0,
+        "wrong_answer": 1,
+        "correct_abstain": 9,
+        "missed_answer": 0
+      }
+    },
+    "Periods, puberty, hygiene": {
+      "questions": 6,
+      "arm_a": {
+        "correct_answer": 3,
+        "wrong_answer": 1,
+        "correct_abstain": 0,
+        "missed_answer": 2
+      },
+      "arm_b": {
+        "correct_answer": 3,
+        "wrong_answer": 2,
+        "correct_abstain": 0,
+        "missed_answer": 1
+      }
+    },
+    "Pregnancy": {
+      "questions": 10,
+      "arm_a": {
+        "correct_answer": 3,
+        "wrong_answer": 3,
+        "correct_abstain": 4,
+        "missed_answer": 0
+      },
+      "arm_b": {
+        "correct_answer": 1,
+        "wrong_answer": 6,
+        "correct_abstain": 0,
+        "missed_answer": 3
+      }
+    },
+    "Relationships and consent": {
+      "questions": 7,
+      "arm_a": {
+        "correct_answer": 1,
+        "wrong_answer": 0,
+        "correct_abstain": 6,
+        "missed_answer": 0
+      },
+      "arm_b": {
+        "correct_answer": 1,
+        "wrong_answer": 3,
+        "correct_abstain": 3,
+        "missed_answer": 0
+      }
+    },
+    "Reproductive health, but unusual or specialised": {
+      "questions": 15,
+      "arm_a": {
+        "correct_answer": 0,
+        "wrong_answer": 7,
+        "correct_abstain": 7,
+        "missed_answer": 1
+      },
+      "arm_b": {
+        "correct_answer": 2,
+        "wrong_answer": 8,
+        "correct_abstain": 4,
+        "missed_answer": 1
+      }
+    },
+    "STIs and HIV": {
+      "questions": 10,
+      "arm_a": {
+        "correct_answer": 5,
+        "wrong_answer": 5,
+        "correct_abstain": 0,
+        "missed_answer": 0
+      },
+      "arm_b": {
+        "correct_answer": 6,
+        "wrong_answer": 4,
+        "correct_abstain": 0,
+        "missed_answer": 0
+      }
+    },
+    "Too vague to answer": {
+      "questions": 4,
+      "arm_a": {
+        "correct_answer": 0,
+        "wrong_answer": 0,
+        "correct_abstain": 4,
+        "missed_answer": 0
+      },
+      "arm_b": {
+        "correct_answer": 0,
+        "wrong_answer": 0,
+        "correct_abstain": 4,
+        "missed_answer": 0
+      }
+    }
+  },
+  "routing_rows": {
+    "held": [
+      5,
+      8,
+      11,
+      31,
+      32
+    ],
+    "vague": [
+      58,
+      69,
+      79,
+      81,
+      86,
+      89,
+      96,
+      97,
+      99
+    ],
+    "v4_abstain": [
+      36,
+      47,
+      57,
+      62,
+      71,
+      83,
+      84,
+      85,
+      87,
+      88,
+      90,
+      91,
+      92
+    ],
+    "help": [
+      95
+    ]
+  },
+  "questions_with_an_acceptable_entry": {
+    "arm_a": 33,
+    "arm_b": 51
+  },
+  "gate_abstained_of_retrieved": {
+    "retrieved": 54,
+    "arm_a": 16,
+    "arm_b": 1
+  }
+}
