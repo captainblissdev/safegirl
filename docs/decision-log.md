@@ -3391,3 +3391,81 @@ Context, not part of the rule: the 21-entry KB's replies (K3 "Before") scored on
 | gate set: off-topic passing the gate | 2 (V31, V34) | 4 (V29, V31, V33, V34) |
 | gate set: referral or signpost rows, not scored | 6 | 6 |
 ```
+
+## KB scale validation: gate and ranking (PRE-REGISTRATION), 28 Oct 2026
+Status: registered before any candidate is built and before the fresh
+set is labelled or run.
+
+1. Question. Can retrieval (relevance gate and ranking) be rebuilt so
+   the 62-entry knowledge base serves at least as well as the validated
+   21-entry base, so the demo can use it?
+
+2. Background. The 62-entry base scored 25 of 35 on the relabelled dev
+   set against a pre-set requirement of 28; the 21-entry base scores 28
+   (K5, 01fc5ad and later entries). The failure analysis (04d4e06)
+   found gate abstentions (4 of 7 lost questions in question mode) and
+   crowding by similar new entries (3 of 7). The dev set favours the 21
+   entries. That verdict is not changed by this entry.
+
+3. Data roles.
+   - Development data: the 75 relabelled items (35 dev, 40 gate; 6
+     distress items are not scored). They were seen and measured, so
+     all tuning happens only here, with leave-one-out cross-validation.
+   - Test data: C:\Users\cindy\fresh\fresh100.csv, 100 questions,
+     SHA-256 8C7F0757A29B3F3ABE3DC2FEA9E5159985EFC42B8BA7CE549437FEA2A29E01FC.
+     Provenance: written by [WRITER] on [DATE]; AI tools used: [YES/NO];
+     never run through the system. It is not used in any build or
+     selection step. A duplicate check against the sealed, dev, gate,
+     seed, DR-04 and KB-question sets is done before labelling, and
+     near-duplicates are removed from the test and counted.
+   - Labelling: by the author against the 62 entries without seeing
+     system output (best entry, acceptable entries, or none fits), with
+     the same checker as the 75. Unsure items are flagged for clinician
+     spot-check. The author knows the system, which is disclosed.
+   - Not used: the sealed 205 set, including its 60 items derived from
+     the gynaecologist list. The AI assistant read the sealed questions
+     on 27 Oct 2026, so the set is not used to design or test this work.
+
+4. Candidates (at most six pipelines, all built on development data):
+   - G0: the current gate (0.8439, full mode), the baseline.
+   - G1: the same gate with a threshold recalibrated per embed mode.
+   - G2: a logistic regression on at most three signals: top-1 score,
+     margin to the second entry, agreement between the entry's class
+     and the classifier's class.
+   - R1: question-only embedding. R2: R1 plus a named reranker (model
+     and revision logged before use). R3: a hybrid of keyword and dense
+     scores.
+   Any combination counts as one pipeline; the total number of
+   pipelines tried is reported.
+
+5. Selection (development data only). Choose the pipeline with the
+   highest leave-one-out score on the 69 scored items of: answered with
+   an acceptable entry, or correctly abstained. Ties within one item go
+   to the simpler pipeline, then to fewer wrong answers served. Freeze
+   the winner (code hash, parameters, model revisions) and log the
+   hashes before the test is run.
+
+6. Test, one run. The frozen pipeline serves the 62-entry base; the
+   current pipeline (G0) serves the 21-entry base; both on the fresh set.
+   For the 21-entry base, the acceptable entries are those labelled
+   entries that exist in it (ids unchanged); a question with none is
+   expected to abstain. Outcomes per question: correct answer, wrong
+   answer served, correct abstain or ask, missed answer.
+
+7. Decision. The 62-entry base replaces the 21 in the demo only if ALL
+   hold: (a) correct answers with the 62 are at least those of the 21;
+   (b) wrong answers served with the 62 are no more than with the 21;
+   (c) off-topic and vague questions are abstained or asked at least as
+   often as with the 21; (d) all safety, held-topic and help tests pass
+   and the V4 hash is unchanged. Otherwise the demo stays on 21 entries.
+   With 100 questions the intervals are wide and are reported as they
+   are. Switching the default is its own decision-log entry.
+
+8. Frozen: V4 model and hash, thresholds 0.35, 0.5 and 0.45, KB text,
+   Safety Net patterns, helplines and HELP_CONTACTS_VERIFIED, and the
+   check order. The gate stays at 0.8439 until a candidate passes.
+
+9. Time-box. Build and select by 4 Nov; log hashes; run the test on 5
+   Nov; decide on 6 Nov. If not ready, the demo stays on 21 entries.
+
+10. Deviations after this entry: [none yet].
