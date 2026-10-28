@@ -84,12 +84,15 @@ function servedEntries() {
     .map((e) => ({ entry_id: e.kbId, class: e.category, question: e.question, answer: e.answer }));
 }
 
-/** Build the kit in memory: the sheet rows, the key rows and the reference rows. */
-function buildKit(items = sourceItems(), seed = SEED) {
+/**
+ * Build the kit in memory: the sheet rows, the key rows and the reference
+ * rows. Items are { source, original_id, text }; ids are prefix + number.
+ */
+function buildKit(items = sourceItems(), seed = SEED, { prefix = "R" } = {}) {
   const width = String(items.length).length;
   const shuffled = shuffle(items, seed).map((item, i) => ({
     ...item,
-    item_id: `R${String(i + 1).padStart(Math.max(2, width), "0")}`,
+    item_id: `${prefix}${String(i + 1).padStart(Math.max(2, width), "0")}`,
   }));
   return {
     sheet: shuffled.map((item) => ({ item_id: item.item_id, question_text: item.text })),
@@ -98,7 +101,7 @@ function buildKit(items = sourceItems(), seed = SEED) {
   };
 }
 
-const README = `SafeGirl: blind relabelling of 75 questions against the 62-entry KB
+const readme = (count) => `SafeGirl: blind relabelling of ${count} questions against the 62-entry KB
 
 Files
   relabel_items.csv   the questions to label (one row each)
@@ -153,7 +156,7 @@ function main() {
     path.join(args.kit, "kb62_reference.csv"),
     bom + toCsv(["entry_id", "class", "question", "answer"], kit.reference),
   );
-  fs.writeFileSync(path.join(args.kit, "README.txt"), README);
+  fs.writeFileSync(path.join(args.kit, "README.txt"), readme(kit.sheet.length));
   fs.writeFileSync(path.join(args.key, "item_map.csv"), toCsv(["item_id", "source", "original_id"], kit.key));
   const bySource = kit.key.reduce((n, k) => ({ ...n, [k.source]: (n[k.source] || 0) + 1 }), {});
   console.log(
@@ -171,4 +174,6 @@ if (require.main === module) {
   }
 }
 
-module.exports = { SEED, SHEET_COLUMNS, buildKit, servedEntries, shuffle, sourceItems, toCsv };
+module.exports = {
+  SEED, SHEET_COLUMNS, buildKit, insideRepo, readme, servedEntries, shuffle, sourceItems, toCsv,
+};
