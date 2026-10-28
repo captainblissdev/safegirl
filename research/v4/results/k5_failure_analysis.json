@@ -1,0 +1,2782 @@
+{
+  "modes": {
+    "question": {
+      "regressions": [
+        {
+          "id": "Q03",
+          "acceptable": [
+            "KB-C5",
+            "KB-C9"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.555,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C18",
+          "unscoped_top1_score": 0.8675,
+          "unscoped_best_acceptable": "KB-C5",
+          "unscoped_best_acceptable_rank": 2,
+          "scoped_top1": "KB-C18",
+          "scoped_best_acceptable_rank": 2,
+          "scoping_moved": false,
+          "live_top1": "KB-C18",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C18",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-C5",
+          "reply_kind_21": "answer-scoped",
+          "cause": "a",
+          "cause_detail": "new entry KB-C18 outranks the acceptable one"
+        },
+        {
+          "id": "Q07",
+          "acceptable": [
+            "KB-S7"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.425,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-S7",
+          "unscoped_top1_score": 0.8408,
+          "unscoped_best_acceptable": "KB-S7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-S7",
+          "gate_abstained": true,
+          "reply_kind": "abstain",
+          "entry": null,
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-S7",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "c",
+          "cause_detail": "gate abstained with an acceptable entry on top"
+        },
+        {
+          "id": "Q13",
+          "acceptable": [
+            "KB-G5"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.381,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G9",
+          "unscoped_top1_score": 0.8538,
+          "unscoped_best_acceptable": "KB-G5",
+          "unscoped_best_acceptable_rank": 9,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G9",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G9",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-G5",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "a",
+          "cause_detail": "new entry KB-G9 outranks the acceptable one"
+        },
+        {
+          "id": "Q16",
+          "acceptable": [
+            "KB-G1",
+            "KB-G7"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.414,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G1",
+          "unscoped_top1_score": 0.8279,
+          "unscoped_best_acceptable": "KB-G1",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G1",
+          "gate_abstained": true,
+          "reply_kind": "abstain",
+          "entry": null,
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-G1",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "c",
+          "cause_detail": "gate abstained with an acceptable entry on top"
+        },
+        {
+          "id": "Q20",
+          "acceptable": [
+            "KB-C3",
+            "KB-C18"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "general",
+          "v3_confidence": 0.357,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-C3",
+          "unscoped_top1_score": 0.8416,
+          "unscoped_best_acceptable": "KB-C3",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-C3",
+          "gate_abstained": true,
+          "reply_kind": "abstain",
+          "entry": null,
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-C3",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "c",
+          "cause_detail": "gate abstained with an acceptable entry on top"
+        },
+        {
+          "id": "Q54",
+          "acceptable": [
+            "KB-S7"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.424,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-S7",
+          "unscoped_top1_score": 0.8348,
+          "unscoped_best_acceptable": "KB-S7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-S7",
+          "gate_abstained": true,
+          "reply_kind": "abstain",
+          "entry": null,
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-S7",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "c",
+          "cause_detail": "gate abstained with an acceptable entry on top"
+        },
+        {
+          "id": "Q55",
+          "acceptable": [
+            "KB-G3"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.384,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G14",
+          "unscoped_top1_score": 0.8785,
+          "unscoped_best_acceptable": "KB-G3",
+          "unscoped_best_acceptable_rank": 2,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G14",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G14",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-G3",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "a",
+          "cause_detail": "new entry KB-G14 outranks the acceptable one"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "Q23",
+          "acceptable": [
+            "KB-S4",
+            "KB-S21",
+            "KB-S15"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.441,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-S4",
+          "unscoped_top1_score": 0.8644,
+          "unscoped_best_acceptable": "KB-S4",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-S4",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-S4",
+          "pass_21": false,
+          "pass_62": true,
+          "entry_21": null,
+          "reply_kind_21": "abstain",
+          "cause": null,
+          "cause_detail": null
+        },
+        {
+          "id": "Q28",
+          "acceptable": [
+            "KB-P8"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.815,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P8",
+          "unscoped_top1_score": 0.8544,
+          "unscoped_best_acceptable": "KB-P8",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P8",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P8",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P8",
+          "pass_21": false,
+          "pass_62": true,
+          "entry_21": "KB-P6",
+          "reply_kind_21": "answer-scoped",
+          "cause": null,
+          "cause_detail": null
+        },
+        {
+          "id": "Q30",
+          "acceptable": [
+            "KB-P8"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.804,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P8",
+          "unscoped_top1_score": 0.8899,
+          "unscoped_best_acceptable": "KB-P8",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P8",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P8",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P8",
+          "pass_21": false,
+          "pass_62": true,
+          "entry_21": "KB-P5",
+          "reply_kind_21": "answer-scoped",
+          "cause": null,
+          "cause_detail": null
+        },
+        {
+          "id": "Q58",
+          "acceptable": [
+            "KB-C12"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.682,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C12",
+          "unscoped_top1_score": 0.8536,
+          "unscoped_best_acceptable": "KB-C12",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C12",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C12",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C12",
+          "pass_21": false,
+          "pass_62": true,
+          "entry_21": "KB-C4",
+          "reply_kind_21": "answer-scoped",
+          "cause": null,
+          "cause_detail": null
+        }
+      ],
+      "cause_counts": {
+        "a": 3,
+        "c": 4
+      },
+      "competitors": [
+        {
+          "dev_id": "Q03",
+          "competitor": "KB-C18",
+          "competitor_class": "contraception",
+          "acceptable": "KB-C5",
+          "question_cosine": 0.8904,
+          "within_0_03": false
+        },
+        {
+          "dev_id": "Q13",
+          "competitor": "KB-G9",
+          "competitor_class": "general",
+          "acceptable": "KB-G5",
+          "question_cosine": 0.915,
+          "within_0_03": false
+        },
+        {
+          "dev_id": "Q55",
+          "competitor": "KB-G14",
+          "competitor_class": "general",
+          "acceptable": "KB-G3",
+          "question_cosine": 0.9177,
+          "within_0_03": false
+        }
+      ],
+      "all_questions": [
+        {
+          "id": "Q01",
+          "acceptable": [
+            "KB-C3",
+            "KB-C18"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.87,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C3",
+          "unscoped_top1_score": 0.9675,
+          "unscoped_best_acceptable": "KB-C3",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C3",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C3",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C3",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-C3",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q02",
+          "acceptable": [
+            "KB-C4"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.907,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C4",
+          "unscoped_top1_score": 0.928,
+          "unscoped_best_acceptable": "KB-C4",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C4",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C4",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C4",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-C4",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q03",
+          "acceptable": [
+            "KB-C5",
+            "KB-C9"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.555,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C18",
+          "unscoped_top1_score": 0.8675,
+          "unscoped_best_acceptable": "KB-C5",
+          "unscoped_best_acceptable_rank": 2,
+          "scoped_top1": "KB-C18",
+          "scoped_best_acceptable_rank": 2,
+          "scoping_moved": false,
+          "live_top1": "KB-C18",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C18",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-C5",
+          "reply_kind_21": "answer-scoped",
+          "cause": "a",
+          "cause_detail": "new entry KB-C18 outranks the acceptable one"
+        },
+        {
+          "id": "Q04",
+          "acceptable": [
+            "KB-S4",
+            "KB-S10",
+            "KB-S21"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.929,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-S4",
+          "unscoped_top1_score": 0.9066,
+          "unscoped_best_acceptable": "KB-S4",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-S4",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-S4",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-S4",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-S4",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q05",
+          "acceptable": [
+            "KB-S5"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.741,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-S5",
+          "unscoped_top1_score": 0.8456,
+          "unscoped_best_acceptable": "KB-S5",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-S5",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-S5",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-S5",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-S5",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q06",
+          "acceptable": [
+            "KB-S6"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.876,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-S6",
+          "unscoped_top1_score": 0.8957,
+          "unscoped_best_acceptable": "KB-S6",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-S6",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-S6",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-S6",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-S6",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q07",
+          "acceptable": [
+            "KB-S7"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.425,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-S7",
+          "unscoped_top1_score": 0.8408,
+          "unscoped_best_acceptable": "KB-S7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-S7",
+          "gate_abstained": true,
+          "reply_kind": "abstain",
+          "entry": null,
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-S7",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "c",
+          "cause_detail": "gate abstained with an acceptable entry on top"
+        },
+        {
+          "id": "Q08",
+          "acceptable": [
+            "KB-P5"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.737,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P5",
+          "unscoped_top1_score": 0.9187,
+          "unscoped_best_acceptable": "KB-P5",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P5",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P5",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P5",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-P5",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q09",
+          "acceptable": [
+            "KB-P6"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.82,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P6",
+          "unscoped_top1_score": 0.893,
+          "unscoped_best_acceptable": "KB-P6",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P6",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P6",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P6",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-P6",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q10",
+          "acceptable": [
+            "KB-P7"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.84,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P7",
+          "unscoped_top1_score": 0.8985,
+          "unscoped_best_acceptable": "KB-P7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P7",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P7",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P7",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-P7",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q11",
+          "acceptable": [
+            "KB-G3",
+            "KB-G6",
+            "KB-G14"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.441,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G14",
+          "unscoped_top1_score": 0.8908,
+          "unscoped_best_acceptable": "KB-G14",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G14",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G14",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-G3",
+          "reply_kind_21": "answer-unscoped"
+        },
+        {
+          "id": "Q12",
+          "acceptable": [
+            "KB-G4"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "general",
+          "v3_confidence": 0.567,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-G4",
+          "unscoped_top1_score": 0.8821,
+          "unscoped_best_acceptable": "KB-G4",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-G4",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-G4",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-G4",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-G4",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q13",
+          "acceptable": [
+            "KB-G5"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.381,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G9",
+          "unscoped_top1_score": 0.8538,
+          "unscoped_best_acceptable": "KB-G5",
+          "unscoped_best_acceptable_rank": 9,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G9",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G9",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-G5",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "a",
+          "cause_detail": "new entry KB-G9 outranks the acceptable one"
+        },
+        {
+          "id": "Q14",
+          "acceptable": [
+            "KB-G6",
+            "KB-G14"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.368,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G6",
+          "unscoped_top1_score": 0.8792,
+          "unscoped_best_acceptable": "KB-G6",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G6",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G6",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-G6",
+          "reply_kind_21": "answer-unscoped"
+        },
+        {
+          "id": "Q15",
+          "acceptable": [
+            "KB-G7"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "general",
+          "v3_confidence": 0.531,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-G7",
+          "unscoped_top1_score": 0.8958,
+          "unscoped_best_acceptable": "KB-G7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-G7",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-G7",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-G7",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-G7",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q16",
+          "acceptable": [
+            "KB-G1",
+            "KB-G7"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.414,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G1",
+          "unscoped_top1_score": 0.8279,
+          "unscoped_best_acceptable": "KB-G1",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G1",
+          "gate_abstained": true,
+          "reply_kind": "abstain",
+          "entry": null,
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-G1",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "c",
+          "cause_detail": "gate abstained with an acceptable entry on top"
+        },
+        {
+          "id": "Q17",
+          "acceptable": [
+            "KB-C2",
+            "KB-C1",
+            "KB-G1"
+          ],
+          "acceptable_classes": [
+            "contraception",
+            "general"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.81,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C2",
+          "unscoped_top1_score": 0.9349,
+          "unscoped_best_acceptable": "KB-C2",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C2",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C2",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C2",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-C2",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q18",
+          "acceptable": [
+            "KB-C1",
+            "KB-C2",
+            "KB-G1"
+          ],
+          "acceptable_classes": [
+            "contraception",
+            "general"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.596,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C1",
+          "unscoped_top1_score": 0.8758,
+          "unscoped_best_acceptable": "KB-C1",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C1",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C1",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C1",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-C1",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q20",
+          "acceptable": [
+            "KB-C3",
+            "KB-C18"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "general",
+          "v3_confidence": 0.357,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-C3",
+          "unscoped_top1_score": 0.8416,
+          "unscoped_best_acceptable": "KB-C3",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-C3",
+          "gate_abstained": true,
+          "reply_kind": "abstain",
+          "entry": null,
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-C3",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "c",
+          "cause_detail": "gate abstained with an acceptable entry on top"
+        },
+        {
+          "id": "Q21",
+          "acceptable": [
+            "KB-C4",
+            "KB-C8"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.812,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C4",
+          "unscoped_top1_score": 0.9125,
+          "unscoped_best_acceptable": "KB-C4",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C4",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C4",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C4",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-C4",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q22",
+          "acceptable": [
+            "KB-C5",
+            "KB-C10"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.815,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C5",
+          "unscoped_top1_score": 0.8771,
+          "unscoped_best_acceptable": "KB-C5",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C5",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C5",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C5",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-C5",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q23",
+          "acceptable": [
+            "KB-S4",
+            "KB-S21",
+            "KB-S15"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.441,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-S4",
+          "unscoped_top1_score": 0.8644,
+          "unscoped_best_acceptable": "KB-S4",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-S4",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-S4",
+          "pass_21": false,
+          "pass_62": true,
+          "entry_21": null,
+          "reply_kind_21": "abstain",
+          "cause": null,
+          "cause_detail": null
+        },
+        {
+          "id": "Q24",
+          "acceptable": [
+            "KB-S7",
+            "KB-S3"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.718,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-S7",
+          "unscoped_top1_score": 0.8738,
+          "unscoped_best_acceptable": "KB-S7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-S7",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-S7",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-S7",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-S7",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q25",
+          "acceptable": [
+            "KB-P5"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.759,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P5",
+          "unscoped_top1_score": 0.8758,
+          "unscoped_best_acceptable": "KB-P5",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P5",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P5",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P5",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-P5",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q26",
+          "acceptable": [
+            "KB-P6"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.808,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P6",
+          "unscoped_top1_score": 0.8944,
+          "unscoped_best_acceptable": "KB-P6",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P6",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P6",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P6",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-P6",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q27",
+          "acceptable": [
+            "KB-G3",
+            "KB-P8"
+          ],
+          "acceptable_classes": [
+            "general",
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.523,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-G8",
+          "unscoped_top1_score": 0.8884,
+          "unscoped_best_acceptable": "KB-G3",
+          "unscoped_best_acceptable_rank": 4,
+          "scoped_top1": "KB-P6",
+          "scoped_best_acceptable_rank": 2,
+          "scoping_moved": true,
+          "live_top1": "KB-P6",
+          "gate_abstained": false,
+          "reply_kind": "held-topic",
+          "entry": null,
+          "pass_21": false,
+          "pass_62": false,
+          "entry_21": null,
+          "reply_kind_21": "held-topic"
+        },
+        {
+          "id": "Q28",
+          "acceptable": [
+            "KB-P8"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.815,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P8",
+          "unscoped_top1_score": 0.8544,
+          "unscoped_best_acceptable": "KB-P8",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P8",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P8",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P8",
+          "pass_21": false,
+          "pass_62": true,
+          "entry_21": "KB-P6",
+          "reply_kind_21": "answer-scoped",
+          "cause": null,
+          "cause_detail": null
+        },
+        {
+          "id": "Q29",
+          "acceptable": [
+            "KB-P8",
+            "KB-G3"
+          ],
+          "acceptable_classes": [
+            "general",
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.488,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G14",
+          "unscoped_top1_score": 0.8647,
+          "unscoped_best_acceptable": "KB-G3",
+          "unscoped_best_acceptable_rank": 2,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G14",
+          "gate_abstained": false,
+          "reply_kind": "held-topic",
+          "entry": null,
+          "pass_21": false,
+          "pass_62": false,
+          "entry_21": null,
+          "reply_kind_21": "held-topic"
+        },
+        {
+          "id": "Q30",
+          "acceptable": [
+            "KB-P8"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.804,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P8",
+          "unscoped_top1_score": 0.8899,
+          "unscoped_best_acceptable": "KB-P8",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P8",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P8",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P8",
+          "pass_21": false,
+          "pass_62": true,
+          "entry_21": "KB-P5",
+          "reply_kind_21": "answer-scoped",
+          "cause": null,
+          "cause_detail": null
+        },
+        {
+          "id": "Q50",
+          "acceptable": [
+            "KB-G1"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.637,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-G14",
+          "unscoped_top1_score": 0.8615,
+          "unscoped_best_acceptable": "KB-G1",
+          "unscoped_best_acceptable_rank": 17,
+          "scoped_top1": "KB-P6",
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": true,
+          "live_top1": "KB-P6",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P6",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-P6",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q54",
+          "acceptable": [
+            "KB-S7"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.424,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-S7",
+          "unscoped_top1_score": 0.8348,
+          "unscoped_best_acceptable": "KB-S7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-S7",
+          "gate_abstained": true,
+          "reply_kind": "abstain",
+          "entry": null,
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-S7",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "c",
+          "cause_detail": "gate abstained with an acceptable entry on top"
+        },
+        {
+          "id": "Q55",
+          "acceptable": [
+            "KB-G3"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.384,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G14",
+          "unscoped_top1_score": 0.8785,
+          "unscoped_best_acceptable": "KB-G3",
+          "unscoped_best_acceptable_rank": 2,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G14",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G14",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-G3",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "a",
+          "cause_detail": "new entry KB-G14 outranks the acceptable one"
+        },
+        {
+          "id": "Q56",
+          "acceptable": [
+            "KB-G3"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.451,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G3",
+          "unscoped_top1_score": 0.9168,
+          "unscoped_best_acceptable": "KB-G3",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G3",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G3",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-G3",
+          "reply_kind_21": "answer-unscoped"
+        },
+        {
+          "id": "Q57",
+          "acceptable": [
+            "KB-S7"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.306,
+          "retrieval": "abstained",
+          "unscoped_top1": "KB-S7",
+          "unscoped_top1_score": 0.8037,
+          "unscoped_best_acceptable": "KB-S7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": null,
+          "gate_abstained": false,
+          "reply_kind": "abstain",
+          "entry": null,
+          "pass_21": false,
+          "pass_62": false,
+          "entry_21": null,
+          "reply_kind_21": "abstain"
+        },
+        {
+          "id": "Q58",
+          "acceptable": [
+            "KB-C12"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.682,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C12",
+          "unscoped_top1_score": 0.8536,
+          "unscoped_best_acceptable": "KB-C12",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C12",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C12",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C12",
+          "pass_21": false,
+          "pass_62": true,
+          "entry_21": "KB-C4",
+          "reply_kind_21": "answer-scoped",
+          "cause": null,
+          "cause_detail": null
+        }
+      ]
+    },
+    "full": {
+      "regressions": [
+        {
+          "id": "Q02",
+          "acceptable": [
+            "KB-C4"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.907,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C18",
+          "unscoped_top1_score": 0.8883,
+          "unscoped_best_acceptable": "KB-C4",
+          "unscoped_best_acceptable_rank": 2,
+          "scoped_top1": "KB-C18",
+          "scoped_best_acceptable_rank": 2,
+          "scoping_moved": false,
+          "live_top1": "KB-C18",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C18",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-C4",
+          "reply_kind_21": "answer-scoped",
+          "cause": "a",
+          "cause_detail": "new entry KB-C18 outranks the acceptable one"
+        },
+        {
+          "id": "Q03",
+          "acceptable": [
+            "KB-C5",
+            "KB-C9"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.555,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C18",
+          "unscoped_top1_score": 0.875,
+          "unscoped_best_acceptable": "KB-C5",
+          "unscoped_best_acceptable_rank": 3,
+          "scoped_top1": "KB-C18",
+          "scoped_best_acceptable_rank": 3,
+          "scoping_moved": false,
+          "live_top1": "KB-C18",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C18",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-C5",
+          "reply_kind_21": "answer-scoped",
+          "cause": "a",
+          "cause_detail": "new entry KB-C18 outranks the acceptable one"
+        },
+        {
+          "id": "Q11",
+          "acceptable": [
+            "KB-G3",
+            "KB-G6",
+            "KB-G14"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.441,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-C7",
+          "unscoped_top1_score": 0.8862,
+          "unscoped_best_acceptable": "KB-G3",
+          "unscoped_best_acceptable_rank": 2,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-C7",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-C7",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-G3",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "e",
+          "cause_detail": "new entry KB-C7 in another class"
+        },
+        {
+          "id": "Q54",
+          "acceptable": [
+            "KB-S7"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.424,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-S7",
+          "unscoped_top1_score": 0.8401,
+          "unscoped_best_acceptable": "KB-S7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-S7",
+          "gate_abstained": true,
+          "reply_kind": "abstain",
+          "entry": null,
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-S7",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "c",
+          "cause_detail": "gate abstained with an acceptable entry on top"
+        },
+        {
+          "id": "Q55",
+          "acceptable": [
+            "KB-G3"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.384,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G14",
+          "unscoped_top1_score": 0.8761,
+          "unscoped_best_acceptable": "KB-G3",
+          "unscoped_best_acceptable_rank": 2,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G14",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G14",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-G3",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "a",
+          "cause_detail": "new entry KB-G14 outranks the acceptable one"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "Q23",
+          "acceptable": [
+            "KB-S4",
+            "KB-S21",
+            "KB-S15"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.441,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-S21",
+          "unscoped_top1_score": 0.8504,
+          "unscoped_best_acceptable": "KB-S21",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-S21",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-S21",
+          "pass_21": false,
+          "pass_62": true,
+          "entry_21": null,
+          "reply_kind_21": "abstain",
+          "cause": null,
+          "cause_detail": null
+        },
+        {
+          "id": "Q30",
+          "acceptable": [
+            "KB-P8"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.804,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P8",
+          "unscoped_top1_score": 0.879,
+          "unscoped_best_acceptable": "KB-P8",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P8",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P8",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P8",
+          "pass_21": false,
+          "pass_62": true,
+          "entry_21": "KB-P5",
+          "reply_kind_21": "answer-scoped",
+          "cause": null,
+          "cause_detail": null
+        }
+      ],
+      "cause_counts": {
+        "a": 3,
+        "e": 1,
+        "c": 1
+      },
+      "competitors": [
+        {
+          "dev_id": "Q02",
+          "competitor": "KB-C18",
+          "competitor_class": "contraception",
+          "acceptable": "KB-C4",
+          "question_cosine": 0.9308,
+          "within_0_03": false
+        },
+        {
+          "dev_id": "Q03",
+          "competitor": "KB-C18",
+          "competitor_class": "contraception",
+          "acceptable": "KB-C5",
+          "question_cosine": 0.8904,
+          "within_0_03": false
+        },
+        {
+          "dev_id": "Q55",
+          "competitor": "KB-G14",
+          "competitor_class": "general",
+          "acceptable": "KB-G3",
+          "question_cosine": 0.9177,
+          "within_0_03": false
+        }
+      ],
+      "all_questions": [
+        {
+          "id": "Q01",
+          "acceptable": [
+            "KB-C3",
+            "KB-C18"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.87,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C3",
+          "unscoped_top1_score": 0.8931,
+          "unscoped_best_acceptable": "KB-C3",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C3",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C3",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C3",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-C3",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q02",
+          "acceptable": [
+            "KB-C4"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.907,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C18",
+          "unscoped_top1_score": 0.8883,
+          "unscoped_best_acceptable": "KB-C4",
+          "unscoped_best_acceptable_rank": 2,
+          "scoped_top1": "KB-C18",
+          "scoped_best_acceptable_rank": 2,
+          "scoping_moved": false,
+          "live_top1": "KB-C18",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C18",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-C4",
+          "reply_kind_21": "answer-scoped",
+          "cause": "a",
+          "cause_detail": "new entry KB-C18 outranks the acceptable one"
+        },
+        {
+          "id": "Q03",
+          "acceptable": [
+            "KB-C5",
+            "KB-C9"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.555,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C18",
+          "unscoped_top1_score": 0.875,
+          "unscoped_best_acceptable": "KB-C5",
+          "unscoped_best_acceptable_rank": 3,
+          "scoped_top1": "KB-C18",
+          "scoped_best_acceptable_rank": 3,
+          "scoping_moved": false,
+          "live_top1": "KB-C18",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C18",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-C5",
+          "reply_kind_21": "answer-scoped",
+          "cause": "a",
+          "cause_detail": "new entry KB-C18 outranks the acceptable one"
+        },
+        {
+          "id": "Q04",
+          "acceptable": [
+            "KB-S4",
+            "KB-S10",
+            "KB-S21"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.929,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-S10",
+          "unscoped_top1_score": 0.8947,
+          "unscoped_best_acceptable": "KB-S10",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-S10",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-S10",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-S10",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-S4",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q05",
+          "acceptable": [
+            "KB-S5"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.741,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-S5",
+          "unscoped_top1_score": 0.8949,
+          "unscoped_best_acceptable": "KB-S5",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-S5",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-S5",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-S5",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-S5",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q06",
+          "acceptable": [
+            "KB-S6"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.876,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-S6",
+          "unscoped_top1_score": 0.9246,
+          "unscoped_best_acceptable": "KB-S6",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-S6",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-S6",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-S6",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-S6",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q07",
+          "acceptable": [
+            "KB-S7"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.425,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-S7",
+          "unscoped_top1_score": 0.858,
+          "unscoped_best_acceptable": "KB-S7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-S7",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-S7",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-S7",
+          "reply_kind_21": "answer-unscoped"
+        },
+        {
+          "id": "Q08",
+          "acceptable": [
+            "KB-P5"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.737,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P5",
+          "unscoped_top1_score": 0.8914,
+          "unscoped_best_acceptable": "KB-P5",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P5",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P5",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P5",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-P5",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q09",
+          "acceptable": [
+            "KB-P6"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.82,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P6",
+          "unscoped_top1_score": 0.9142,
+          "unscoped_best_acceptable": "KB-P6",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P6",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P6",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P6",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-P6",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q10",
+          "acceptable": [
+            "KB-P7"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.84,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P7",
+          "unscoped_top1_score": 0.9138,
+          "unscoped_best_acceptable": "KB-P7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P7",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P7",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P7",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-P7",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q11",
+          "acceptable": [
+            "KB-G3",
+            "KB-G6",
+            "KB-G14"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.441,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-C7",
+          "unscoped_top1_score": 0.8862,
+          "unscoped_best_acceptable": "KB-G3",
+          "unscoped_best_acceptable_rank": 2,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-C7",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-C7",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-G3",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "e",
+          "cause_detail": "new entry KB-C7 in another class"
+        },
+        {
+          "id": "Q12",
+          "acceptable": [
+            "KB-G4"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "general",
+          "v3_confidence": 0.567,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-G4",
+          "unscoped_top1_score": 0.8903,
+          "unscoped_best_acceptable": "KB-G4",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-G4",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-G4",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-G4",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-G4",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q13",
+          "acceptable": [
+            "KB-G5"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.381,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G5",
+          "unscoped_top1_score": 0.8693,
+          "unscoped_best_acceptable": "KB-G5",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G5",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G5",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-G5",
+          "reply_kind_21": "answer-unscoped"
+        },
+        {
+          "id": "Q14",
+          "acceptable": [
+            "KB-G6",
+            "KB-G14"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.368,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G6",
+          "unscoped_top1_score": 0.9094,
+          "unscoped_best_acceptable": "KB-G6",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G6",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G6",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-G6",
+          "reply_kind_21": "answer-unscoped"
+        },
+        {
+          "id": "Q15",
+          "acceptable": [
+            "KB-G7"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "general",
+          "v3_confidence": 0.531,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-G7",
+          "unscoped_top1_score": 0.8772,
+          "unscoped_best_acceptable": "KB-G7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-G7",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-G7",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-G7",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-G7",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q16",
+          "acceptable": [
+            "KB-G1",
+            "KB-G7"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.414,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G1",
+          "unscoped_top1_score": 0.8703,
+          "unscoped_best_acceptable": "KB-G1",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G1",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G1",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-G1",
+          "reply_kind_21": "answer-unscoped"
+        },
+        {
+          "id": "Q17",
+          "acceptable": [
+            "KB-C2",
+            "KB-C1",
+            "KB-G1"
+          ],
+          "acceptable_classes": [
+            "contraception",
+            "general"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.81,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C2",
+          "unscoped_top1_score": 0.8896,
+          "unscoped_best_acceptable": "KB-C2",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C2",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C2",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C2",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-C2",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q18",
+          "acceptable": [
+            "KB-C1",
+            "KB-C2",
+            "KB-G1"
+          ],
+          "acceptable_classes": [
+            "contraception",
+            "general"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.596,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C1",
+          "unscoped_top1_score": 0.8768,
+          "unscoped_best_acceptable": "KB-C1",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C1",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C1",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C1",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-C1",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q20",
+          "acceptable": [
+            "KB-C3",
+            "KB-C18"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "general",
+          "v3_confidence": 0.357,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-C3",
+          "unscoped_top1_score": 0.8842,
+          "unscoped_best_acceptable": "KB-C3",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-C3",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-C3",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-C3",
+          "reply_kind_21": "answer-unscoped"
+        },
+        {
+          "id": "Q21",
+          "acceptable": [
+            "KB-C4",
+            "KB-C8"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.812,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C4",
+          "unscoped_top1_score": 0.8903,
+          "unscoped_best_acceptable": "KB-C4",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C4",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C4",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C4",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-C4",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q22",
+          "acceptable": [
+            "KB-C5",
+            "KB-C10"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.815,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C5",
+          "unscoped_top1_score": 0.891,
+          "unscoped_best_acceptable": "KB-C5",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-C5",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-C5",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C5",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-C5",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q23",
+          "acceptable": [
+            "KB-S4",
+            "KB-S21",
+            "KB-S15"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.441,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-S21",
+          "unscoped_top1_score": 0.8504,
+          "unscoped_best_acceptable": "KB-S21",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-S21",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-S21",
+          "pass_21": false,
+          "pass_62": true,
+          "entry_21": null,
+          "reply_kind_21": "abstain",
+          "cause": null,
+          "cause_detail": null
+        },
+        {
+          "id": "Q24",
+          "acceptable": [
+            "KB-S7",
+            "KB-S3"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.718,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-S7",
+          "unscoped_top1_score": 0.8789,
+          "unscoped_best_acceptable": "KB-S7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-S7",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-S7",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-S7",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-S7",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q25",
+          "acceptable": [
+            "KB-P5"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.759,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P5",
+          "unscoped_top1_score": 0.8883,
+          "unscoped_best_acceptable": "KB-P5",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P5",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P5",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P5",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-P5",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q26",
+          "acceptable": [
+            "KB-P6"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.808,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P6",
+          "unscoped_top1_score": 0.8846,
+          "unscoped_best_acceptable": "KB-P6",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P6",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P6",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P6",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-P6",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q27",
+          "acceptable": [
+            "KB-G3",
+            "KB-P8"
+          ],
+          "acceptable_classes": [
+            "general",
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.523,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-G3",
+          "unscoped_top1_score": 0.8906,
+          "unscoped_best_acceptable": "KB-G3",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P8",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": true,
+          "live_top1": "KB-P8",
+          "gate_abstained": false,
+          "reply_kind": "held-topic",
+          "entry": null,
+          "pass_21": false,
+          "pass_62": false,
+          "entry_21": null,
+          "reply_kind_21": "held-topic"
+        },
+        {
+          "id": "Q28",
+          "acceptable": [
+            "KB-P8"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.815,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P6",
+          "unscoped_top1_score": 0.8439,
+          "unscoped_best_acceptable": "KB-P8",
+          "unscoped_best_acceptable_rank": 3,
+          "scoped_top1": "KB-P6",
+          "scoped_best_acceptable_rank": 2,
+          "scoping_moved": false,
+          "live_top1": "KB-P6",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P6",
+          "pass_21": false,
+          "pass_62": false,
+          "entry_21": "KB-P6",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q29",
+          "acceptable": [
+            "KB-P8",
+            "KB-G3"
+          ],
+          "acceptable_classes": [
+            "general",
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.488,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G4",
+          "unscoped_top1_score": 0.8468,
+          "unscoped_best_acceptable": "KB-G3",
+          "unscoped_best_acceptable_rank": 6,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G4",
+          "gate_abstained": false,
+          "reply_kind": "held-topic",
+          "entry": null,
+          "pass_21": false,
+          "pass_62": false,
+          "entry_21": null,
+          "reply_kind_21": "held-topic"
+        },
+        {
+          "id": "Q30",
+          "acceptable": [
+            "KB-P8"
+          ],
+          "acceptable_classes": [
+            "pregnancy"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.804,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-P8",
+          "unscoped_top1_score": 0.879,
+          "unscoped_best_acceptable": "KB-P8",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": "KB-P8",
+          "scoped_best_acceptable_rank": 1,
+          "scoping_moved": false,
+          "live_top1": "KB-P8",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P8",
+          "pass_21": false,
+          "pass_62": true,
+          "entry_21": "KB-P5",
+          "reply_kind_21": "answer-scoped",
+          "cause": null,
+          "cause_detail": null
+        },
+        {
+          "id": "Q50",
+          "acceptable": [
+            "KB-G1"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.637,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-G8",
+          "unscoped_top1_score": 0.8591,
+          "unscoped_best_acceptable": "KB-G1",
+          "unscoped_best_acceptable_rank": 18,
+          "scoped_top1": "KB-P8",
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": true,
+          "live_top1": "KB-P8",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-P8",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-P6",
+          "reply_kind_21": "answer-scoped"
+        },
+        {
+          "id": "Q54",
+          "acceptable": [
+            "KB-S7"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.424,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-S7",
+          "unscoped_top1_score": 0.8401,
+          "unscoped_best_acceptable": "KB-S7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-S7",
+          "gate_abstained": true,
+          "reply_kind": "abstain",
+          "entry": null,
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-S7",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "c",
+          "cause_detail": "gate abstained with an acceptable entry on top"
+        },
+        {
+          "id": "Q55",
+          "acceptable": [
+            "KB-G3"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.384,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G14",
+          "unscoped_top1_score": 0.8761,
+          "unscoped_best_acceptable": "KB-G3",
+          "unscoped_best_acceptable_rank": 2,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G14",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G14",
+          "pass_21": true,
+          "pass_62": false,
+          "entry_21": "KB-G3",
+          "reply_kind_21": "answer-unscoped",
+          "cause": "a",
+          "cause_detail": "new entry KB-G14 outranks the acceptable one"
+        },
+        {
+          "id": "Q56",
+          "acceptable": [
+            "KB-G3"
+          ],
+          "acceptable_classes": [
+            "general"
+          ],
+          "v3_class": "pregnancy",
+          "v3_confidence": 0.451,
+          "retrieval": "unscoped",
+          "unscoped_top1": "KB-G3",
+          "unscoped_top1_score": 0.9036,
+          "unscoped_best_acceptable": "KB-G3",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": "KB-G3",
+          "gate_abstained": false,
+          "reply_kind": "answer-unscoped",
+          "entry": "KB-G3",
+          "pass_21": true,
+          "pass_62": true,
+          "entry_21": "KB-G3",
+          "reply_kind_21": "answer-unscoped"
+        },
+        {
+          "id": "Q57",
+          "acceptable": [
+            "KB-S7"
+          ],
+          "acceptable_classes": [
+            "sti"
+          ],
+          "v3_class": "sti",
+          "v3_confidence": 0.306,
+          "retrieval": "abstained",
+          "unscoped_top1": "KB-S7",
+          "unscoped_top1_score": 0.8227,
+          "unscoped_best_acceptable": "KB-S7",
+          "unscoped_best_acceptable_rank": 1,
+          "scoped_top1": null,
+          "scoped_best_acceptable_rank": null,
+          "scoping_moved": false,
+          "live_top1": null,
+          "gate_abstained": false,
+          "reply_kind": "abstain",
+          "entry": null,
+          "pass_21": false,
+          "pass_62": false,
+          "entry_21": null,
+          "reply_kind_21": "abstain"
+        },
+        {
+          "id": "Q58",
+          "acceptable": [
+            "KB-C12"
+          ],
+          "acceptable_classes": [
+            "contraception"
+          ],
+          "v3_class": "contraception",
+          "v3_confidence": 0.682,
+          "retrieval": "scoped",
+          "unscoped_top1": "KB-C4",
+          "unscoped_top1_score": 0.8904,
+          "unscoped_best_acceptable": "KB-C12",
+          "unscoped_best_acceptable_rank": 6,
+          "scoped_top1": "KB-C4",
+          "scoped_best_acceptable_rank": 5,
+          "scoping_moved": false,
+          "live_top1": "KB-C4",
+          "gate_abstained": false,
+          "reply_kind": "answer-scoped",
+          "entry": "KB-C4",
+          "pass_21": false,
+          "pass_62": false,
+          "entry_21": "KB-C4",
+          "reply_kind_21": "answer-scoped"
+        }
+      ]
+    }
+  },
+  "near_duplicates": {
+    "kb62": {
+      "entries": 62,
+      "pairs_cos_ge_0.97": 0,
+      "pairs_cos_ge_0.95": 0,
+      "pairs_cos_ge_0.90": 82,
+      "entries_in_pairs_cos_ge_0.97": 0,
+      "entries_in_pairs_cos_ge_0.95": 0,
+      "entries_in_pairs_cos_ge_0.90": 49,
+      "pairs_within_0_03": [],
+      "max_pair_cosine": 0.9452
+    },
+    "kb21": {
+      "entries": 21,
+      "pairs_cos_ge_0.97": 0,
+      "pairs_cos_ge_0.95": 0,
+      "pairs_cos_ge_0.90": 9,
+      "entries_in_pairs_cos_ge_0.97": 0,
+      "entries_in_pairs_cos_ge_0.95": 0,
+      "entries_in_pairs_cos_ge_0.90": 12,
+      "pairs_within_0_03": [],
+      "max_pair_cosine": 0.9322
+    }
+  },
+  "near_miss_margins_unscoped": {
+    "kb62_question": {
+      "entries": 62,
+      "own_not_top": [],
+      "near_miss_count": 0,
+      "near_misses": []
+    },
+    "kb62_full": {
+      "entries": 62,
+      "own_not_top": [
+        "KB-C4"
+      ],
+      "near_miss_count": 24,
+      "near_misses": [
+        [
+          "KB-C1",
+          "KB-C3",
+          0.007
+        ],
+        [
+          "KB-C2",
+          "KB-C1",
+          0.0093
+        ],
+        [
+          "KB-C3",
+          "KB-C1",
+          0.0226
+        ],
+        [
+          "KB-C5",
+          "KB-C21",
+          0.0169
+        ],
+        [
+          "KB-C8",
+          "KB-C9",
+          0.0298
+        ],
+        [
+          "KB-C9",
+          "KB-C10",
+          0.0144
+        ],
+        [
+          "KB-C12",
+          "KB-C13",
+          0.0146
+        ],
+        [
+          "KB-C19",
+          "KB-C3",
+          0.0169
+        ],
+        [
+          "KB-C21",
+          "KB-C5",
+          0.0144
+        ],
+        [
+          "KB-S3",
+          "KB-S11",
+          0.0061
+        ],
+        [
+          "KB-S4",
+          "KB-S21",
+          0.0094
+        ],
+        [
+          "KB-S5",
+          "KB-S15",
+          0.0174
+        ],
+        [
+          "KB-S8",
+          "KB-S20",
+          0.0087
+        ],
+        [
+          "KB-S12",
+          "KB-S9",
+          0.018
+        ],
+        [
+          "KB-P5",
+          "KB-C11",
+          0.0298
+        ],
+        [
+          "KB-P8",
+          "KB-G11",
+          0.0218
+        ],
+        [
+          "KB-G3",
+          "KB-G14",
+          0.0033
+        ],
+        [
+          "KB-G5",
+          "KB-G9",
+          0.0112
+        ],
+        [
+          "KB-G6",
+          "KB-G11",
+          0.0182
+        ],
+        [
+          "KB-G7",
+          "KB-G1",
+          0.0123
+        ],
+        [
+          "KB-G9",
+          "KB-G15",
+          0.0069
+        ],
+        [
+          "KB-G14",
+          "KB-G3",
+          0.0229
+        ],
+        [
+          "KB-G16",
+          "KB-G5",
+          0.012
+        ],
+        [
+          "KB-G17",
+          "KB-G4",
+          0.0205
+        ]
+      ]
+    },
+    "kb21_question": {
+      "entries": 21,
+      "own_not_top": [],
+      "near_miss_count": 0,
+      "near_misses": []
+    },
+    "kb21_full": {
+      "entries": 21,
+      "own_not_top": [],
+      "near_miss_count": 4,
+      "near_misses": [
+        [
+          "KB-C1",
+          "KB-C3",
+          0.0099
+        ],
+        [
+          "KB-C2",
+          "KB-C1",
+          0.0093
+        ],
+        [
+          "KB-C3",
+          "KB-C1",
+          0.0288
+        ],
+        [
+          "KB-S3",
+          "KB-S5",
+          0.0185
+        ]
+      ]
+    }
+  },
+  "about": "Step 8g, descriptive only (28 October 2026): nothing here may be used to change a rule, threshold, label or entry on the dev set. Inputs: k5_{question,full}_relabelled.json and k5_baseline21_relabelled.json (cff6009), the relabelled dev labels (outside the repository), V3 /classify, and offline rankings with ml_service's KnowledgeBaseRetriever (they reproduce the saved unscoped top-1 and served entry for every question). Pass on 21 = the 21-entry replies (K3 Before) scored on the relabelled labels. Causes: a = a new entry in the same class outranks the acceptable one; b = scoping sent it to the wrong class; c = the gate abstained though an acceptable entry was on top; d = the acceptable entry changed id or text between the KBs; e = other. Near duplicates: cosine of question embeddings ('query: ' prefix both sides); 'within 0.03' read as cosine >= 0.97, and also as the self-retrieval near-miss margin (own entry top-1 by less than 0.03, unscoped)."
+}
