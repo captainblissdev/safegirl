@@ -3583,3 +3583,69 @@ P0, P1, P2 and P4 do not use V4 and behave the same. P3 and P5 fall back to a lo
 
 Rule (pre-registered): the highest LOO score; within one item of it, the simpler pipeline (P0; then P1 and P2; then P4; then P3; then P5), then fewer wrong answers served. Winner: **P3**. Frozen as `research/eval/gate_v2/frozen_gate_v2.json`, SHA-256 `ad6895a120b538e4cc751ebe4de8944aace640c268e0013f981d29ceabe4bafc`.
 ```
+
+## KB scale validation: test arms (2026-10-28)
+
+Amends "KB scale validation: gate and ranking (PRE-REGISTRATION), 28 Oct
+2026", items 6 and 7. The pre-registration entry is left as it was.
+Recorded before the fresh set is labelled or run.
+
+- **Both arms run with V4 triage on** (ml_service with V4 loaded; the
+  gateway's V4 path). For each fresh question, in the gateway's order:
+  Safety Net (referral), generic help (signpost), held topic
+  (signpost), vague rule (clarifying question); then V4: a vague label
+  gets the clarifying question, a non-topic label or a top probability
+  below 0.45 abstains, a topic label retrieves (scoped to its class at
+  0.5 or above, unscoped below); then the arm's gate.
+- **Arm A:** the 21-entry base, `ml_service/knowledge_base.json` from
+  development (93b8e46), SHA-256
+  `e78a82afd10491fdc81d98bb2fca43119312be6908af7c4372ee2778d9dc1e30`;
+  full embed mode; the current gate (unscoped top-1 score at least
+  0.8439).
+- **Arm B:** the 62-entry base, `ml_service/knowledge_base.json` on
+  `kb/merge-60`, SHA-256
+  `1b53efad82587063462d24efa9a436c2e20df007ad86b8623429b73a12885ff0`;
+  question embed mode; the frozen gate_v2
+  (`research/eval/gate_v2/frozen_gate_v2.json`, SHA-256
+  `ad6895a120b538e4cc751ebe4de8944aace640c268e0013f981d29ceabe4bafc`),
+  with V4's class as its agreement signal.
+- **Why both arms use V4 triage:** to isolate the effect of the
+  knowledge base and gate from the effect of V4 triage. gate_v2 was
+  selected with V3 routing on the development items; in this test V4
+  routes in both arms.
+- **V4:** `research/v4/frozen/v4_hybrid_c10.json`, SHA-256
+  `89eee2b41634c896d7e03b49d184680c843df183f1e628bd71fb0fb9ee96ecdd`.
+- **Outcome per question and arm** (labels from the checked fresh
+  labels file; for arm A the acceptable entries are the labelled ones
+  that exist in the 21-entry base, ids unchanged; a question with none
+  is expected to abstain):
+  - correct answer: an acceptable entry is served;
+  - wrong answer served: an entry is served that is not acceptable, or
+    any entry for a question expected to abstain;
+  - correct abstain or ask: no entry is served (abstain, clarifying
+    question, signpost or referral) and the question is expected to
+    abstain;
+  - missed answer: no entry is served and an acceptable entry exists.
+- **Decision rule** (pre-registration item 7, unchanged). The 62-entry
+  base replaces the 21 in the demo only if ALL hold:
+  - (a) correct answers with the 62 are at least those of the 21;
+  - (b) wrong answers served with the 62 are no more than with the 21;
+  - (c) off-topic and vague questions are abstained or asked at least
+    as often as with the 21;
+  - (d) all safety, held-topic and help tests pass and the V4 hash is
+    unchanged.
+  Otherwise the demo stays on 21 entries.
+- **How each criterion is computed:**
+  - (a) and (b): counts over all fresh questions, arm B against arm A.
+  - (c): counts over the fresh questions in the groups "Not about
+    reproductive health at all" and "Too vague to answer" (from the
+    labels file), of those with no entry served.
+  - (d): the gateway's Safety Net, held-topic and help test files pass
+    on the arm B tree, and the V4 frozen file still matches its
+    sidecar hash.
+  - The verdict uses the counts as registered. For (a), (b) and (c) a
+    paired 2x2 table on the same questions is reported, with an exact
+    McNemar test (two-sided binomial on the discordant pairs) where
+    there is at least one discordant pair; it does not change the
+    verdict. Intervals are wide with 82 questions and are reported as
+    they are.
