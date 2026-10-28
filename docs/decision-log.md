@@ -3649,3 +3649,24 @@ Recorded before the fresh set is labelled or run.
     there is at least one discordant pair; it does not change the
     verdict. Intervals are wide with 82 questions and are reported as
     they are.
+
+## P3 residual errors (2026-10-28)
+
+Descriptive note on the P3 selection ("Gate and ranking selection (62
+entries)"); nothing is changed. Data in
+`research/eval/gate_v2/p3_residual.md`. Of P3's 12 leave-one-out
+errors on the 69 development items:
+
+- All 7 wrong answers come from a crowded neighbour of the same class
+  outranking the acceptable entry (KB-C18 over KB-C5; KB-G9 over KB-G5;
+  KB-G14 over KB-G3; KB-G11 over KB-G6), mostly with margins below
+  0.003. V4 agreed and the gate passed them (probability 0.66 to 0.84),
+  so the gate's signals do not separate these; a reranker or resolving
+  near-duplicate entries is the kind of change that could.
+- Of the 5 missed answers, 1 was scoped by V3 to another class (the
+  gate abstained correctly), 2 are held-topic signposts and 2 are V3
+  abstentions below 0.35. Under the registered test arms V4 routes, so
+  the scoping and V3-abstain cases would be routed differently there.
+- No case had the right entry on top with the gate deciding wrongly.
+- Q13 and V16 are the same question text, so one error is counted
+  twice in the development data.
