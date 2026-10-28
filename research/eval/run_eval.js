@@ -20,8 +20,13 @@
  *
  * Usage (ml_service and a gateway with AUTH_DISABLED=true must be running):
  *   node research/eval/run_eval.js [--gateway URL] [--ml URL] [--set FILE] [--out DIR]
- *                                  [--analysis FILE] [--extra FILE]
+ *                                  [--analysis FILE] [--extra FILE] [--labels FILE]
  * Defaults: --gateway http://127.0.0.1:3016  --ml http://127.0.0.1:8002
+ *
+ * --labels FILE takes the acceptable entries of every labelled row from a
+ * labels file (the schema of retrieval_eval_set_labels_*.csv, for example
+ * the relabelled file from relabel_check.js) instead of from --set, and
+ * drops partial entries (see labels.js).
  *
  * --analysis FILE also writes one row per query with the inputs for the
  * classifier and relevance analysis: the softmax probability of every
@@ -50,6 +55,7 @@ const { retrieve: localRetrieve, loadKnowledgeBase } = require(
 const { checkSafety } = require(path.join(GW, "safetyNet"));
 const { isGenericHelpRequest } = require(path.join(GW, "helpSignposting"));
 const { NO_ANSWER_MESSAGE } = require(path.join(GW, "content", "helpContent"));
+const { applyDevLabels } = require("./labels");
 
 // Live gateway defaults, used to self-check the offline sweep.
 const LIVE_ABSTAIN = 0.35;
@@ -67,6 +73,7 @@ function parseArgs(argv) {
     out: path.join(__dirname, "results"),
     analysis: "",
     extra: "",
+    labels: "",
   };
   for (let i = 2; i < argv.length; i += 2) {
     const key = argv[i].replace(/^--/, "");
@@ -122,6 +129,13 @@ function parseCsv(text) {
   return body.map((values) =>
     Object.fromEntries(header.map((name, i) => [name, values[i] ?? ""])),
   );
+}
+
+/** The eval-set rows, with the acceptable entries from --labels if given. */
+function loadRows(args) {
+  const rows = parseCsv(fs.readFileSync(args.set, "utf8"));
+  const labels = args.labels ? parseCsv(fs.readFileSync(args.labels, "utf8")) : null;
+  return applyDevLabels(rows, labels);
 }
 
 function toCsv(records, columns) {
@@ -273,7 +287,7 @@ const expectsAnswer = (row) => row.expected_behavior.split("|").includes("ANSWER
 
 async function main() {
   const args = parseArgs(process.argv);
-  const rows = parseCsv(fs.readFileSync(args.set, "utf8"));
+  const rows = loadRows(args);
   const mlHealth = await checkServices(args);
 
   // Map answer text -> entry id, so the gateway's answer can be identified.
@@ -527,7 +541,11 @@ async function main() {
   console.log(`Summary:     ${path.relative(ROOT, `${base}.summary.md`)}`);
 }
 
-main().catch((error) => {
-  console.error(`run_eval failed: ${error.message}`);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((error) => {
+    console.error(`run_eval failed: ${error.message}`);
+    process.exit(1);
+  });
+}
+
+module.exports = { loadRows, parseArgs };

@@ -19,13 +19,21 @@
  *      fixed 0.8439 gate.
  *
  * It writes ids and numbers only (no query text) to
- * research/v4/results/k5_<mode>.json and k5_<mode>_self_retrieval.txt.
- * It changes no threshold, model, KB entry or rule. DR-04, the sealed
- * set and the demo-risk set are not used.
+ * research/v4/results/k5_<mode>[_<tag>].json and
+ * k5_<mode>[_<tag>]_self_retrieval.txt. It changes no threshold, model,
+ * KB entry or rule. DR-04, the sealed set and the demo-risk set are not
+ * used.
+ *
+ * --labels FILE and --gate FILE replace the dev labels and the gate set
+ * (for example the relabelled files from relabel_check.js): the
+ * labelled dev questions and their acceptable entries then come from
+ * --labels (see labels.js), and a gate-set item is correct when its
+ * top-1 is its likely entry or an "also acceptable" one.
  *
  * Usage (ml_service and a gateway with AUTH_DISABLED=true must be running):
  *   node research/eval/k5_measure.js --mode question|full
  *        [--ml http://127.0.0.1:8001] [--gateway http://127.0.0.1:3001]
+ *        [--labels FILE] [--gate FILE] [--tag NAME]
  */
 
 "use strict";
@@ -41,6 +49,7 @@ const OUT = path.join(ROOT, "research", "v4", "results");
 const { loadKnowledgeBase } = require(path.join(GW, "src", "retrievalModule"));
 const { NO_ANSWER_MESSAGE } = require(path.join(GW, "src", "content", "helpContent"));
 const { RELEVANCE_GATE_THRESHOLD } = require(path.join(GW, "src", "relevanceGate"));
+const { applyDevLabels, gateAcceptable, labelledIds } = require("./labels");
 
 const FILES = {
   evalSet: path.join(ROOT, "resources", "eval", "retrieval_eval_set.csv"),
@@ -50,7 +59,10 @@ const FILES = {
 };
 
 function parseArgs(argv) {
-  const args = { mode: null, ml: "http://127.0.0.1:8001", gateway: "http://127.0.0.1:3001" };
+  const args = {
+    mode: null, ml: "http://127.0.0.1:8001", gateway: "http://127.0.0.1:3001",
+    labels: FILES.labels, gate: FILES.gateSet, tag: "",
+  };
   for (let i = 2; i < argv.length; i += 2) {
     const key = argv[i].replace(/^--/, "");
     if (!(key in args) || argv[i + 1] === undefined) {
@@ -61,7 +73,26 @@ function parseArgs(argv) {
   if (!["question", "full"].includes(args.mode)) {
     throw new Error("--mode must be question or full");
   }
+  if (args.tag && !/^[a-z0-9_]+$/.test(args.tag)) {
+    throw new Error("--tag must be lower-case letters, digits or _");
+  }
   return args;
+}
+
+/**
+ * The labelled dev questions (ids) and the eval-set rows with their
+ * acceptable entries taken from the labels file.
+ */
+function loadDev(labelsFile, evalSetFile = FILES.evalSet) {
+  const labels = readCsv(labelsFile);
+  const rows = applyDevLabels(readCsv(evalSetFile), labels);
+  return { ids: labelledIds(labels), rows: Object.fromEntries(rows.map((r) => [r.id, r])) };
+}
+
+/** A file's name for the results: repo-relative, or the base name if outside. */
+function fileLabel(file) {
+  const relative = path.relative(ROOT, path.resolve(file));
+  return relative.startsWith("..") ? path.basename(file) : relative.replace(/\\/g, "/");
 }
 
 /** Minimal CSV reader (quoted fields, commas and newlines inside quotes). */
@@ -236,8 +267,7 @@ async function main() {
   const self = selfRetrieval(args);
 
   // 2. The 35 labelled dev questions through the gateway.
-  const evalRows = Object.fromEntries(readCsv(FILES.evalSet).map((r) => [r.id, r]));
-  const labelled = readCsv(FILES.labels).filter((r) => r.expected_class !== "none").map((r) => r.id);
+  const { ids: labelled, rows: evalRows } = loadDev(args.labels);
   const baseline = readBaseline();
   const dev = [];
   for (const id of labelled) {
@@ -273,18 +303,19 @@ async function main() {
 
   // 3. Gate set: unscoped top-1 against the likely entry or off-topic.
   const gateRows = [];
-  for (const row of readCsv(FILES.gateSet)) {
+  for (const row of readCsv(args.gate)) {
     if (row.expected === "REFERRAL_OR_SIGNPOST") {
       gateRows.push({ id: row.id, group: row.group, kind: "referral_or_signpost" });
       continue;
     }
     const top = await unscopedTop1(args.ml, row.query);
+    const acceptable = gateAcceptable(row);
     let kind;
     if (row.expected === "NOT_KB_ANSWER") kind = "off_topic";
-    else kind = top.id === row.likely_entry ? "correct" : "wrong";
+    else kind = acceptable.includes(top.id) ? "correct" : "wrong";
     gateRows.push({
       id: row.id, group: row.group, kind, likely_entry: row.likely_entry || null,
-      top1: top.id, score: top.score, passes_gate: top.score >= RELEVANCE_GATE_THRESHOLD,
+      acceptable, top1: top.id, score: top.score, passes_gate: top.score >= RELEVANCE_GATE_THRESHOLD,
     });
   }
   const scored = gateRows.filter((r) => r.score !== undefined);
@@ -305,8 +336,9 @@ async function main() {
     gate_threshold: RELEVANCE_GATE_THRESHOLD,
     self_retrieval: { ...self, raw: undefined },
     dev: {
-      labels: path.relative(ROOT, FILES.labels).replace(/\\/g, "/"),
-      provisional: true,
+      labels: fileLabel(args.labels),
+      gate_set: fileLabel(args.gate),
+      provisional: path.resolve(args.labels) === path.resolve(FILES.labels),
       questions: dev.length,
       correct,
       baseline_21_correct: Object.values(baseline).filter((b) => b.verdict === "correct").length,
@@ -318,8 +350,9 @@ async function main() {
   };
 
   fs.mkdirSync(OUT, { recursive: true });
-  fs.writeFileSync(path.join(OUT, `k5_${args.mode}.json`), JSON.stringify(result, null, 2) + "\n");
-  fs.writeFileSync(path.join(OUT, `k5_${args.mode}_self_retrieval.txt`), self.raw);
+  const name = `k5_${args.mode}${args.tag ? `_${args.tag}` : ""}`;
+  fs.writeFileSync(path.join(OUT, `${name}.json`), JSON.stringify(result, null, 2) + "\n");
+  fs.writeFileSync(path.join(OUT, `${name}_self_retrieval.txt`), self.raw);
   console.log(JSON.stringify({
     mode: args.mode,
     self_retrieval: {
@@ -339,4 +372,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { readCsv };
+module.exports = { loadDev, parseArgs, readBaseline, readCsv, verdict };
