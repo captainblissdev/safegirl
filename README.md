@@ -449,6 +449,33 @@ curl.exe -s -X POST http://127.0.0.1:3001/api/query -H "Content-Type: applicatio
 
 It should return `"outcome":"grounded_answer"`, `"category":"contraception"` and `"classifierSource":"distilbert"`.
 
+### 6. Demo: V4 triage off or on
+
+`scripts/demo.ps1` starts terminal 1 or 2 above with V4 triage off (the default, today's behaviour with V3) or on. It runs the same commands as section 5, changes nothing else (authentication included), and prints the mode and the number of knowledge-base entries served (21). Use the same mode in both terminals:
+
+```powershell
+.\scripts\demo.ps1 -Part ml      -Mode off      # terminal 1
+.\scripts\demo.ps1 -Part gateway -Mode off      # terminal 2
+
+.\scripts\demo.ps1 -Part ml      -Mode on       # terminal 1, V4 triage
+.\scripts\demo.ps1 -Part gateway -Mode on       # terminal 2, V4 triage
+```
+
+`-Mode on` sets `V4_TRIAGE_ENABLED=true` for that terminal's process; `-Mode off` sets it to `false`. The variable in the process environment takes precedence over the gateway's `.env`, so the printed mode is the mode that runs. With V4 on, `ml_service`'s `/health` also reports `"v4":"ok"`; `.\scripts\demo.ps1 -Part ml -Mode on -Check` prints it without starting anything.
+
+The flag-on mode is the configuration measured as arm A in the KB scale validation test: the 21-entry base, full embed mode, the 0.8439 relevance gate and V4 triage on (see "KB scale validation result (fresh test)" in the decision log on the `kb/merge-60` branch, commit 9ae43bb). Turning V4 on for the demo is a proposed decision, not yet accepted ("V4 triage on for the demo (PROPOSED)").
+
+**Offline.** After the models are in the local Hugging Face cache (the first normal start downloads e5), add `-Offline` to terminal 1: it sets `HF_HUB_OFFLINE=1`, so `ml_service` starts from the cache without contacting the hub. On the test machine it answered `/health` with `"v4":"ok"` about 25 seconds after start. On the demo laptop:
+
+1. Start `ml_service` once while online (`.\scripts\demo.ps1 -Part ml -Mode on`), wait for `Application startup complete`, then stop it. This fills the cache (`%USERPROFILE%\.cache\huggingface\hub`).
+2. From then on, start it with `-Offline`; disconnect and check `curl.exe -s http://127.0.0.1:8001/health`.
+
+**Rehearsal.** `research/eval/demo_rehearsal.js` runs a list of demo queries through the real gateway pipeline with V4 off and then on, and prints each reply's kind, the matched entry and the reason for an abstain or a question back. The query list (a CSV with a `query` column) and the output stay outside the repository; it starts `ml_service` with V4 loaded if none is running (`--offline` for the cached models). The queries are observed, never tuned against.
+
+```powershell
+node research/eval/demo_rehearsal.js --queries C:\path\to\demo_queries.csv --out C:\path\to\rehearsal
+```
+
 ### Production build
 
 ```powershell
