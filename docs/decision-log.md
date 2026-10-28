@@ -3815,3 +3815,19 @@ Descriptive only. The winner P3's leave-one-out errors on the 68 scored developm
 | d: no good entry (labelling doubt) | 0 | none | none on this reading |
 | e: other (routing) | 4 | Q27, Q29, Q57, V02 | held topics: nothing (by design); V3 abstains: V4 routing as in the test arms |
 ```
+
+## KB scale validation: fresh labels locked (2026-10-28)
+
+Amends "KB scale validation: gate and ranking (PRE-REGISTRATION), 28 Oct
+2026", item 3 (labelling). Recorded before the fresh test is run.
+
+- **Files** (outside the repository):
+  - the filled sheet `C:\Users\cindy\fresh_kit\relabel_items.csv`,
+    SHA-256
+    `E96DA7E032F5D7179100DB988C73DA66FD1CE1B29D149134A579CF0722056B39`;
+  - the checked labels file
+    `C:\Users\cindy\fresh_kit\out\fresh_test_v1_labels.csv`, SHA-256
+    `71B7BD8F79ECACB4D6BDD5CFD31CA92604479D928E51F3B474E645975CB4E6B1`.
+- The labels were made by the author blind to system output.
+- No system run has touched the fresh set.
+- Neither file may change before the test.
