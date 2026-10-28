@@ -3504,3 +3504,77 @@ system.
     `8C7F0757A29B3F3ABE3DC2FEA9E5159985EFC42B8BA7CE549437FEA2A29E01FC`
   - `C:\Users\cindy\fresh\fresh_test_v1.csv`, 82 rows, SHA-256
     `667A547C06CDF6B097061D6F096A1585339B3193F439240D98BC202036157C54`
+
+## Gate and ranking selection (62 entries) (2026-10-28)
+
+Step 8k-a of "KB scale validation: gate and ranking (PRE-REGISTRATION),
+28 Oct 2026", items 4 and 5. Built and selected on the 75 relabelled
+development items only (69 scored); the fresh test set was not read or
+used. Harness in def55a9, data in 0568918. Production defaults,
+thresholds, V4 files and KB text are unchanged, and nothing is wired
+into production.
+
+- **Pipelines tried: six** (P0 to P5, as listed below); no other was
+  added or dropped. The V4-off fallbacks of P3 and P5 are reported, not
+  candidates.
+- **K5 reproduced first.** The harness gave the saved K5 dev replies
+  (25 of 35 in both modes) and gate-set counts exactly before any
+  pipeline was scored.
+- **Selection rule applied as registered:** P3 has the highest
+  leave-one-out score (57 of 69, P0 52); no other pipeline is within
+  one item of it. **Winner: P3.**
+- **Frozen:** `research/eval/gate_v2/frozen_gate_v2.json`, SHA-256
+  `ad6895a120b538e4cc751ebe4de8944aace640c268e0013f981d29ceabe4bafc`
+  (sidecar `frozen_gate_v2.sha256`). It records the logistic gate's
+  parameters, the V4-off fallback, the routing thresholds, and the
+  hashes of the harness code, the e5 weights (revision
+  `614241f622f53c4eeff9890bdc4f31cfecc418b3`), the V3 checkpoint, the
+  V4 frozen model and the 62-entry KB.
+- **Read with the numbers:**
+  - The bootstrap interval of P3's difference to P0 is -1 to +11
+    items: it includes no difference.
+  - P3 uses V4's class as a signal. V4 is loaded in ml_service only
+    when `V4_TRIAGE_ENABLED` is on, so serving P3 needs V4 loaded for
+    the gate even with V4 triage off; with V4 off, P3 falls back to its
+    score-and-margin gate (54 of 69 here). How it is wired is a later
+    decision.
+  - These are development numbers. The pre-registered test is the one
+    run on the fresh set (item 6), not yet done.
+
+Results copied exactly from `research/eval/gate_v2/selection.md`:
+
+```markdown
+# Gate and ranking selection, 62-entry KB (28 October 2026)
+
+Development data only: the 75 relabelled items (35 dev questions, 40 gate-set items); the 6 distress items are not scored, leaving 69. Leave-one-out cross-validation; every threshold, hybrid weight and logistic gate is fitted on the other 68 items. Utility: answered with an acceptable entry, or correctly abstained (Q50, NOT_REFERRAL, counts unless referred). V3 routes in every pipeline (abstain below 0.35, scoped at 0.5 or above); V4 is only the agreement signal of P3 and P5. Produced by `research/eval/gate_candidates.py`; per-item ids in `selection.json`.
+
+Routes of the 69 scored items before retrieval: held 2, referral 0, retrieve 56, vague 11.
+
+K5 reproduced before scoring (dev correct; gate-set counts at 0.8439): full: dev 25/35, correct below gate 1, wrong passing 4, off-topic passing 4; question: dev 25/35, correct below gate 5, wrong passing 4, off-topic passing 2.
+
+## Pipelines (leave-one-out, 69 items)
+
+| Pipeline | LOO score | Correct answers | Wrong answers served | Correct abstains | Missed answers | Difference to P0 (95% bootstrap interval) |
+|---|---|---|---|---|---|---|
+| P0: full mode, current gate 0.8439 (baseline) | 52 / 69 | 40 | 11 | 12 | 6 | +0 (+0 to +0) |
+| P1: full mode, threshold recalibrated | 51 / 69 | 40 | 12 | 11 | 6 | -1 (-3 to +0) |
+| P2: question mode, threshold recalibrated | 53 / 69 | 42 | 11 | 11 | 5 | +1 (-5 to +7) |
+| P3: question mode, logistic gate (top-1 score, margin, V4 agreement) | 57 / 69 | 42 | 7 | 15 | 5 | +5 (-1 to +11) |
+| P4: question mode, hybrid ranking, threshold recalibrated | 54 / 69 | 42 | 8 | 12 | 7 | +2 (-4 to +8) |
+| P5: question mode, hybrid ranking, logistic gate | 55 / 69 | 41 | 8 | 14 | 6 | +3 (-3 to +10) |
+
+Bootstrap: 10,000 resamples of the 69 items, seed 20261028, percentile interval of the difference in successes.
+
+## With V4 off
+
+P0, P1, P2 and P4 do not use V4 and behave the same. P3 and P5 fall back to a logistic gate on top-1 score and margin only:
+
+| Pipeline | LOO score | Correct answers | Wrong answers served | Correct abstains | Missed answers |
+|---|---|---|---|---|---|
+| P3 (V4 off) | 54 / 69 | 41 | 9 | 13 | 6 |
+| P5 (V4 off) | 56 / 69 | 43 | 6 | 13 | 7 |
+
+## Selection
+
+Rule (pre-registered): the highest LOO score; within one item of it, the simpler pipeline (P0; then P1 and P2; then P4; then P3; then P5), then fewer wrong answers served. Winner: **P3**. Frozen as `research/eval/gate_v2/frozen_gate_v2.json`, SHA-256 `ad6895a120b538e4cc751ebe4de8944aace640c268e0013f981d29ceabe4bafc`.
+```
