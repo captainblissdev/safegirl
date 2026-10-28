@@ -1,0 +1,3473 @@
+{
+  "items": {
+    "total": 75,
+    "scored": 68,
+    "removed_as_duplicate": {
+      "V16": "Q13"
+    }
+  },
+  "k5_reproduced": {
+    "full": {
+      "dev_correct": 25,
+      "correct_below_gate": 1,
+      "wrong_passing_gate": 4,
+      "off_topic_passing_gate": 4
+    },
+    "question": {
+      "dev_correct": 25,
+      "correct_below_gate": 5,
+      "wrong_passing_gate": 4,
+      "off_topic_passing_gate": 2
+    }
+  },
+  "reranker": {
+    "model": "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1",
+    "revision": "1427fd652930e4ba29e8149678df786c240d8825",
+    "weights_sha256": "5daeca2481a76b5976a2bdc32f0a78532b6716da4f8cd3ff59460ef8d2f359b4",
+    "top_k": 10,
+    "input": "query paired with the entry's question"
+  },
+  "pipelines": {
+    "P0": {
+      "score": 51,
+      "of": 68,
+      "correct_answers": 39,
+      "wrong_answers_served": 11,
+      "correct_abstains": 12,
+      "missed_answers": 6,
+      "diff_to_P0": 0,
+      "diff_to_P0_95ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "P1": {
+      "score": 50,
+      "of": 68,
+      "correct_answers": 39,
+      "wrong_answers_served": 12,
+      "correct_abstains": 11,
+      "missed_answers": 6,
+      "diff_to_P0": -1,
+      "diff_to_P0_95ci": [
+        -3.0,
+        0.0
+      ]
+    },
+    "P2": {
+      "score": 53,
+      "of": 68,
+      "correct_answers": 42,
+      "wrong_answers_served": 10,
+      "correct_abstains": 11,
+      "missed_answers": 5,
+      "diff_to_P0": 2,
+      "diff_to_P0_95ci": [
+        -3.0,
+        8.0
+      ]
+    },
+    "P3": {
+      "score": 57,
+      "of": 68,
+      "correct_answers": 42,
+      "wrong_answers_served": 6,
+      "correct_abstains": 15,
+      "missed_answers": 5,
+      "diff_to_P0": 6,
+      "diff_to_P0_95ci": [
+        0.0,
+        12.0
+      ]
+    },
+    "P4": {
+      "score": 54,
+      "of": 68,
+      "correct_answers": 42,
+      "wrong_answers_served": 7,
+      "correct_abstains": 12,
+      "missed_answers": 7,
+      "diff_to_P0": 3,
+      "diff_to_P0_95ci": [
+        -3.0,
+        9.0
+      ]
+    },
+    "P5": {
+      "score": 55,
+      "of": 68,
+      "correct_answers": 41,
+      "wrong_answers_served": 7,
+      "correct_abstains": 14,
+      "missed_answers": 6,
+      "diff_to_P0": 4,
+      "diff_to_P0_95ci": [
+        -2.0,
+        10.0
+      ]
+    },
+    "P6": {
+      "score": 45,
+      "of": 68,
+      "correct_answers": 30,
+      "wrong_answers_served": 12,
+      "correct_abstains": 15,
+      "missed_answers": 11,
+      "diff_to_P0": -6,
+      "diff_to_P0_95ci": [
+        -14.0,
+        2.0
+      ]
+    },
+    "P7": {
+      "score": 44,
+      "of": 68,
+      "correct_answers": 29,
+      "wrong_answers_served": 7,
+      "correct_abstains": 15,
+      "missed_answers": 17,
+      "diff_to_P0": -7,
+      "diff_to_P0_95ci": [
+        -15.0,
+        1.0
+      ]
+    }
+  },
+  "v4_off_fallback": {
+    "P3": {
+      "score": 55,
+      "of": 68,
+      "correct_answers": 43,
+      "wrong_answers_served": 9,
+      "correct_abstains": 12,
+      "missed_answers": 4
+    },
+    "P5": {
+      "score": 56,
+      "of": 68,
+      "correct_answers": 43,
+      "wrong_answers_served": 6,
+      "correct_abstains": 13,
+      "missed_answers": 6
+    },
+    "P7": {
+      "score": 41,
+      "of": 68,
+      "correct_answers": 26,
+      "wrong_answers_served": 7,
+      "correct_abstains": 15,
+      "missed_answers": 20
+    }
+  },
+  "earlier_69_item_scores": {
+    "P0": {
+      "score": 52,
+      "of": 69
+    },
+    "P1": {
+      "score": 51,
+      "of": 69
+    },
+    "P2": {
+      "score": 53,
+      "of": 69
+    },
+    "P3": {
+      "score": 57,
+      "of": 69
+    },
+    "P4": {
+      "score": 54,
+      "of": 69
+    },
+    "P5": {
+      "score": 55,
+      "of": 69
+    }
+  },
+  "winner": "P3",
+  "winner_latency_synthetic": null,
+  "frozen_gate_v3_sha256": null,
+  "per_item": {
+    "P0": [
+      {
+        "id": "Q01",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q02",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q03",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q04",
+        "served": "KB-S10",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q05",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q06",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q07",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q08",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q09",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q10",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q11",
+        "served": "KB-C7",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q12",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q13",
+        "served": "KB-G5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q14",
+        "served": "KB-G6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q15",
+        "served": "KB-G7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q16",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q17",
+        "served": "KB-C2",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q18",
+        "served": "KB-C1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q20",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q21",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q22",
+        "served": "KB-C5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q23",
+        "served": "KB-S21",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q24",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q25",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q26",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q27",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q28",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q29",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q30",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q50",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q54",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q55",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q56",
+        "served": "KB-G3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q57",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q58",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V01",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V02",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V03",
+        "served": "KB-P10",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V04",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V05",
+        "served": "KB-S8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V06",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V07",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V08",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V09",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V10",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V11",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V12",
+        "served": "KB-G8",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V13",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V14",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V15",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V17",
+        "served": "KB-S8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V18",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V19",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V20",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V21",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V22",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V23",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V24",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V25",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V26",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V27",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V28",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V29",
+        "served": "KB-S4",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V30",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V31",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V32",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V33",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V34",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      }
+    ],
+    "P1": [
+      {
+        "id": "Q01",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q02",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q03",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q04",
+        "served": "KB-S10",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q05",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q06",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q07",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q08",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q09",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q10",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q11",
+        "served": "KB-C7",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q12",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q13",
+        "served": "KB-G5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q14",
+        "served": "KB-G6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q15",
+        "served": "KB-G7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q16",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q17",
+        "served": "KB-C2",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q18",
+        "served": "KB-C1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q20",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q21",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q22",
+        "served": "KB-C5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q23",
+        "served": "KB-S21",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q24",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q25",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q26",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q27",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q28",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q29",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q30",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q50",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q54",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q55",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q56",
+        "served": "KB-G3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q57",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q58",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V01",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V02",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V03",
+        "served": "KB-P10",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V04",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V05",
+        "served": "KB-S8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V06",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V07",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V08",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V09",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V10",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V11",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V12",
+        "served": "KB-G8",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V13",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V14",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V15",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V17",
+        "served": "KB-S8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V18",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V19",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V20",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V21",
+        "served": "KB-P9",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V22",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V23",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V24",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V25",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V26",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V27",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V28",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V29",
+        "served": "KB-S4",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V30",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V31",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V32",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V33",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V34",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      }
+    ],
+    "P2": [
+      {
+        "id": "Q01",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q02",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q03",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q04",
+        "served": "KB-S4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q05",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q06",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q07",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q08",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q09",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q10",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q11",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q12",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q13",
+        "served": "KB-G9",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q14",
+        "served": "KB-G6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q15",
+        "served": "KB-G7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q16",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q17",
+        "served": "KB-C2",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q18",
+        "served": "KB-C1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q20",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q21",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q22",
+        "served": "KB-C5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q23",
+        "served": "KB-S4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q24",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q25",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q26",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q27",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q28",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q29",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q30",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q50",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q54",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q55",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q56",
+        "served": "KB-G3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q57",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q58",
+        "served": "KB-C12",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V01",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V02",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V03",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V04",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V05",
+        "served": "KB-S8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V06",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V07",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V08",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V09",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V10",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V11",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V12",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V13",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V14",
+        "served": "KB-G11",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V15",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V17",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V18",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V19",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V20",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V21",
+        "served": "KB-G11",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V22",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V23",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V24",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V25",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V26",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V27",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V28",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V29",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V30",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V31",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V32",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V33",
+        "served": "KB-P9",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V34",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      }
+    ],
+    "P3": [
+      {
+        "id": "Q01",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q02",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q03",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q04",
+        "served": "KB-S4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q05",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q06",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q07",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q08",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q09",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q10",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q11",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q12",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q13",
+        "served": "KB-G9",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q14",
+        "served": "KB-G6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q15",
+        "served": "KB-G7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q16",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q17",
+        "served": "KB-C2",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q18",
+        "served": "KB-C1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q20",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q21",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q22",
+        "served": "KB-C5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q23",
+        "served": "KB-S4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q24",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q25",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q26",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q27",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q28",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q29",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q30",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q50",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "Q54",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q55",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q56",
+        "served": "KB-G3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q57",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q58",
+        "served": "KB-C12",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V01",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V02",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V03",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V04",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V05",
+        "served": "KB-S8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V06",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V07",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V08",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V09",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V10",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V11",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V12",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V13",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V14",
+        "served": "KB-G11",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V15",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V17",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V18",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V19",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V20",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V21",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V22",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V23",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V24",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V25",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V26",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V27",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V28",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V29",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V30",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V31",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V32",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V33",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V34",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      }
+    ],
+    "P4": [
+      {
+        "id": "Q01",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q02",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q03",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q04",
+        "served": "KB-S10",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q05",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q06",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q07",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q08",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q09",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q10",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q11",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q12",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q13",
+        "served": "KB-G9",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q14",
+        "served": "KB-G6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q15",
+        "served": "KB-G7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q16",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q17",
+        "served": "KB-C2",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q18",
+        "served": "KB-C1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q20",
+        "served": "KB-C19",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q21",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q22",
+        "served": "KB-C5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q23",
+        "served": "KB-S21",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q24",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q25",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q26",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q27",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q28",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q29",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q30",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q50",
+        "served": "KB-P9",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q54",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q55",
+        "served": "KB-G3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q56",
+        "served": "KB-G3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q57",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q58",
+        "served": "KB-C12",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V01",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V02",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V03",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V04",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V05",
+        "served": "KB-S8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V06",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V07",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V08",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V09",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V10",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V11",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V12",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V13",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V14",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V15",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V17",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V18",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V19",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V20",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V21",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V22",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V23",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V24",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V25",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V26",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V27",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V28",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V29",
+        "served": "KB-S21",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V30",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V31",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V32",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V33",
+        "served": "KB-P9",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V34",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      }
+    ],
+    "P5": [
+      {
+        "id": "Q01",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q02",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q03",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q04",
+        "served": "KB-S10",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q05",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q06",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q07",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q08",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q09",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q10",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q11",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q12",
+        "served": "KB-G4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q13",
+        "served": "KB-G9",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q14",
+        "served": "KB-G6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q15",
+        "served": "KB-G7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q16",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q17",
+        "served": "KB-C2",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q18",
+        "served": "KB-C1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q20",
+        "served": "KB-C19",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q21",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q22",
+        "served": "KB-C5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q23",
+        "served": "KB-S21",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q24",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q25",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q26",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q27",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q28",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q29",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q30",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q50",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "Q54",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q55",
+        "served": "KB-G3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q56",
+        "served": "KB-G3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q57",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q58",
+        "served": "KB-C12",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V01",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V02",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V03",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V04",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V05",
+        "served": "KB-S8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V06",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V07",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V08",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V09",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V10",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V11",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V12",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V13",
+        "served": "KB-G18",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V14",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V15",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V17",
+        "served": "KB-S5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V18",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V19",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V20",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V21",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V22",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V23",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V24",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V25",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V26",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V27",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V28",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V29",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V30",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V31",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V32",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V33",
+        "served": "KB-P9",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V34",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      }
+    ],
+    "P6": [
+      {
+        "id": "Q01",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q02",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q03",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q04",
+        "served": "KB-S4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q05",
+        "served": "KB-S20",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q06",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q07",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q08",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q09",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q10",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q11",
+        "served": "KB-C7",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q12",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q13",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q14",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q15",
+        "served": "KB-G7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q16",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q17",
+        "served": "KB-C2",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q18",
+        "served": "KB-C1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q20",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q21",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q22",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q23",
+        "served": "KB-S21",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q24",
+        "served": "KB-S9",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q25",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q26",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q27",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q28",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q29",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q30",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q50",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "Q54",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q55",
+        "served": "KB-G3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q56",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q57",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q58",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V01",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V02",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V03",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V04",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V05",
+        "served": "KB-S8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V06",
+        "served": "KB-S4",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V07",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V08",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V09",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V10",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V11",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V12",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V13",
+        "served": "KB-G9",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V14",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V15",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V17",
+        "served": "KB-S4",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V18",
+        "served": "KB-G12",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V19",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V20",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V21",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V22",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V23",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V24",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V25",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V26",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V27",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V28",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V29",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V30",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V31",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V32",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V33",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V34",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      }
+    ],
+    "P7": [
+      {
+        "id": "Q01",
+        "served": "KB-C3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q02",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q03",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q04",
+        "served": "KB-S4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q05",
+        "served": "KB-S20",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q06",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q07",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q08",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q09",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q10",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q11",
+        "served": "KB-C7",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q12",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q13",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q14",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q15",
+        "served": "KB-G7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q16",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q17",
+        "served": "KB-C2",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q18",
+        "served": "KB-C1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q20",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q21",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q22",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q23",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q24",
+        "served": "KB-S9",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q25",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q26",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q27",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q28",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q29",
+        "served": null,
+        "kind": "held",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q30",
+        "served": "KB-P8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q50",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "Q54",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q55",
+        "served": "KB-G3",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "Q56",
+        "served": "KB-G14",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "Q57",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "Q58",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V01",
+        "served": "KB-C18",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V02",
+        "served": null,
+        "kind": "v3_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V03",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V04",
+        "served": "KB-C4",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V05",
+        "served": "KB-S8",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V06",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V07",
+        "served": "KB-S6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V08",
+        "served": "KB-S7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V09",
+        "served": "KB-P5",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V10",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V11",
+        "served": "KB-P7",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V12",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V13",
+        "served": "KB-G9",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V14",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V15",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V17",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "missed_answer"
+      },
+      {
+        "id": "V18",
+        "served": "KB-G12",
+        "kind": "answer",
+        "category": "wrong_answer"
+      },
+      {
+        "id": "V19",
+        "served": "KB-G1",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V20",
+        "served": "KB-P6",
+        "kind": "answer",
+        "category": "correct_answer"
+      },
+      {
+        "id": "V21",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V22",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V23",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V24",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V25",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V26",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V27",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V28",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V29",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V30",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V31",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V32",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V33",
+        "served": null,
+        "kind": "gate_abstain",
+        "category": "correct_abstain"
+      },
+      {
+        "id": "V34",
+        "served": null,
+        "kind": "vague",
+        "category": "correct_abstain"
+      }
+    ]
+  }
+}
