@@ -1,0 +1,1724 @@
+{
+  "fresh": {
+    "file": "fresh100.csv (outside the repository)",
+    "sha256": "8C7F0757A29B3F3ABE3DC2FEA9E5159985EFC42B8BA7CE549437FEA2A29E01FC",
+    "rows": 100,
+    "blank_rows": [],
+    "groups": {
+      "Clinics, privacy, cost": 8,
+      "Contraception": 14,
+      "Not about reproductive health at all": 10,
+      "Periods, puberty, hygiene": 10,
+      "Pregnancy": 14,
+      "Relationships and consent": 8,
+      "Reproductive health, but unusual or specialised": 15,
+      "STIs and HIV": 14,
+      "Too vague to answer": 7
+    },
+    "exact_duplicates_within": [],
+    "near_duplicates_within_ge_0_90": [
+      [
+        1,
+        61,
+        0.9061
+      ],
+      [
+        3,
+        11,
+        0.9053
+      ],
+      [
+        3,
+        29,
+        0.934
+      ],
+      [
+        3,
+        31,
+        0.9088
+      ],
+      [
+        3,
+        37,
+        0.9008
+      ],
+      [
+        8,
+        97,
+        0.9001
+      ],
+      [
+        9,
+        21,
+        0.9193
+      ],
+      [
+        11,
+        33,
+        0.9038
+      ],
+      [
+        11,
+        44,
+        0.9047
+      ],
+      [
+        15,
+        17,
+        0.9056
+      ],
+      [
+        15,
+        29,
+        0.908
+      ],
+      [
+        18,
+        19,
+        0.9026
+      ],
+      [
+        18,
+        25,
+        0.9193
+      ],
+      [
+        18,
+        63,
+        0.9217
+      ],
+      [
+        19,
+        25,
+        0.9091
+      ],
+      [
+        29,
+        30,
+        0.9123
+      ],
+      [
+        29,
+        31,
+        0.9175
+      ],
+      [
+        29,
+        32,
+        0.9155
+      ],
+      [
+        29,
+        37,
+        0.9121
+      ],
+      [
+        29,
+        39,
+        0.9069
+      ],
+      [
+        29,
+        42,
+        0.9054
+      ],
+      [
+        29,
+        44,
+        0.9127
+      ],
+      [
+        30,
+        32,
+        0.9064
+      ],
+      [
+        30,
+        38,
+        0.9154
+      ],
+      [
+        30,
+        41,
+        0.9239
+      ],
+      [
+        30,
+        44,
+        0.9105
+      ],
+      [
+        30,
+        51,
+        0.9009
+      ],
+      [
+        31,
+        32,
+        0.9008
+      ],
+      [
+        31,
+        37,
+        0.9003
+      ],
+      [
+        36,
+        86,
+        0.9088
+      ],
+      [
+        37,
+        68,
+        0.9054
+      ],
+      [
+        38,
+        39,
+        0.901
+      ],
+      [
+        38,
+        41,
+        0.9003
+      ],
+      [
+        40,
+        61,
+        0.9423
+      ],
+      [
+        41,
+        51,
+        0.901
+      ],
+      [
+        41,
+        82,
+        0.9
+      ],
+      [
+        43,
+        82,
+        0.9045
+      ],
+      [
+        45,
+        48,
+        0.9052
+      ],
+      [
+        48,
+        82,
+        0.9056
+      ],
+      [
+        51,
+        82,
+        0.9008
+      ],
+      [
+        53,
+        60,
+        0.9218
+      ]
+    ],
+    "near_duplicates_within_ge_0_95": []
+  },
+  "embedding": "intfloat/multilingual-e5-small, 'query: ' prefix on both sides, cosine of normalised vectors",
+  "sources": {
+    "sealed_205": {
+      "size": 205,
+      "rows_ge_0_90": [
+        1,
+        2,
+        3,
+        4,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15,
+        16,
+        17,
+        18,
+        19,
+        21,
+        22,
+        23,
+        25,
+        27,
+        29,
+        30,
+        31,
+        32,
+        33,
+        37,
+        38,
+        39,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        50,
+        51,
+        52,
+        60,
+        62,
+        67,
+        68,
+        82,
+        83,
+        86,
+        94,
+        95,
+        96,
+        97,
+        98,
+        100
+      ],
+      "rows_ge_0_95": [
+        10,
+        13,
+        21,
+        29,
+        30,
+        33,
+        44,
+        50,
+        52,
+        94,
+        98,
+        100
+      ],
+      "pairs_ge_0_90": [
+        {
+          "row": 1,
+          "neighbour": "FS-247",
+          "cosine": 0.9013
+        },
+        {
+          "row": 2,
+          "neighbour": "FS-080",
+          "cosine": 0.9021
+        },
+        {
+          "row": 3,
+          "neighbour": "FS-108",
+          "cosine": 0.9151
+        },
+        {
+          "row": 4,
+          "neighbour": "FS-083",
+          "cosine": 0.9306
+        },
+        {
+          "row": 7,
+          "neighbour": "FS-240",
+          "cosine": 0.9259
+        },
+        {
+          "row": 8,
+          "neighbour": "FS-024",
+          "cosine": 0.9266
+        },
+        {
+          "row": 9,
+          "neighbour": "FS-259",
+          "cosine": 0.9185
+        },
+        {
+          "row": 10,
+          "neighbour": "FS-023",
+          "cosine": 0.974
+        },
+        {
+          "row": 11,
+          "neighbour": "FS-231",
+          "cosine": 0.9465
+        },
+        {
+          "row": 12,
+          "neighbour": "FS-237",
+          "cosine": 0.9065
+        },
+        {
+          "row": 13,
+          "neighbour": "FS-082",
+          "cosine": 0.9694
+        },
+        {
+          "row": 15,
+          "neighbour": "FS-108",
+          "cosine": 0.9288
+        },
+        {
+          "row": 16,
+          "neighbour": "FS-025",
+          "cosine": 0.9329
+        },
+        {
+          "row": 17,
+          "neighbour": "FS-053",
+          "cosine": 0.9293
+        },
+        {
+          "row": 18,
+          "neighbour": "FS-095",
+          "cosine": 0.9396
+        },
+        {
+          "row": 19,
+          "neighbour": "FS-231",
+          "cosine": 0.9158
+        },
+        {
+          "row": 21,
+          "neighbour": "FS-092",
+          "cosine": 0.953
+        },
+        {
+          "row": 22,
+          "neighbour": "FS-098",
+          "cosine": 0.9057
+        },
+        {
+          "row": 23,
+          "neighbour": "FS-254",
+          "cosine": 0.9228
+        },
+        {
+          "row": 25,
+          "neighbour": "FS-095",
+          "cosine": 0.9236
+        },
+        {
+          "row": 27,
+          "neighbour": "FS-100",
+          "cosine": 0.9178
+        },
+        {
+          "row": 29,
+          "neighbour": "FS-108",
+          "cosine": 0.967
+        },
+        {
+          "row": 30,
+          "neighbour": "FS-201",
+          "cosine": 0.9501
+        },
+        {
+          "row": 31,
+          "neighbour": "FS-231",
+          "cosine": 0.9305
+        },
+        {
+          "row": 32,
+          "neighbour": "FS-108",
+          "cosine": 0.9109
+        },
+        {
+          "row": 33,
+          "neighbour": "FS-115",
+          "cosine": 0.9683
+        },
+        {
+          "row": 37,
+          "neighbour": "FS-113",
+          "cosine": 0.9375
+        },
+        {
+          "row": 38,
+          "neighbour": "FS-002",
+          "cosine": 0.9061
+        },
+        {
+          "row": 39,
+          "neighbour": "FS-121",
+          "cosine": 0.9305
+        },
+        {
+          "row": 41,
+          "neighbour": "FS-012",
+          "cosine": 0.9138
+        },
+        {
+          "row": 42,
+          "neighbour": "FS-110",
+          "cosine": 0.9352
+        },
+        {
+          "row": 43,
+          "neighbour": "FS-093",
+          "cosine": 0.9334
+        },
+        {
+          "row": 44,
+          "neighbour": "FS-123",
+          "cosine": 0.9877
+        },
+        {
+          "row": 45,
+          "neighbour": "FS-201",
+          "cosine": 0.911
+        },
+        {
+          "row": 46,
+          "neighbour": "FS-004",
+          "cosine": 0.9165
+        },
+        {
+          "row": 47,
+          "neighbour": "FS-008",
+          "cosine": 0.9004
+        },
+        {
+          "row": 48,
+          "neighbour": "FS-054",
+          "cosine": 0.915
+        },
+        {
+          "row": 50,
+          "neighbour": "FS-135",
+          "cosine": 0.9786
+        },
+        {
+          "row": 51,
+          "neighbour": "FS-127",
+          "cosine": 0.9199
+        },
+        {
+          "row": 52,
+          "neighbour": "FS-126",
+          "cosine": 0.9585
+        },
+        {
+          "row": 60,
+          "neighbour": "FS-231",
+          "cosine": 0.905
+        },
+        {
+          "row": 62,
+          "neighbour": "FS-132",
+          "cosine": 0.939
+        },
+        {
+          "row": 67,
+          "neighbour": "FS-131",
+          "cosine": 0.9288
+        },
+        {
+          "row": 68,
+          "neighbour": "FS-113",
+          "cosine": 0.9152
+        },
+        {
+          "row": 82,
+          "neighbour": "FS-204",
+          "cosine": 0.9201
+        },
+        {
+          "row": 83,
+          "neighbour": "FS-081",
+          "cosine": 0.9121
+        },
+        {
+          "row": 86,
+          "neighbour": "FS-144",
+          "cosine": 0.9381
+        },
+        {
+          "row": 94,
+          "neighbour": "FS-156",
+          "cosine": 1.0
+        },
+        {
+          "row": 95,
+          "neighbour": "FS-019",
+          "cosine": 0.9398
+        },
+        {
+          "row": 96,
+          "neighbour": "FS-155",
+          "cosine": 0.9113
+        },
+        {
+          "row": 97,
+          "neighbour": "FS-029",
+          "cosine": 0.9375
+        },
+        {
+          "row": 98,
+          "neighbour": "FS-016",
+          "cosine": 0.9502
+        },
+        {
+          "row": 100,
+          "neighbour": "FS-040",
+          "cosine": 0.9535
+        }
+      ],
+      "max_cosine": 1.0,
+      "exact_duplicates": [
+        {
+          "row": 94,
+          "neighbour": "FS-156"
+        }
+      ]
+    },
+    "dev_35": {
+      "size": 35,
+      "rows_ge_0_90": [
+        1,
+        3,
+        15,
+        22,
+        28,
+        29,
+        30,
+        31,
+        37,
+        40,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        51,
+        52,
+        61,
+        62,
+        67,
+        70,
+        82
+      ],
+      "rows_ge_0_95": [
+        22,
+        28,
+        30,
+        52
+      ],
+      "pairs_ge_0_90": [
+        {
+          "row": 1,
+          "neighbour": "Q20",
+          "cosine": 0.934
+        },
+        {
+          "row": 3,
+          "neighbour": "Q03",
+          "cosine": 0.9102
+        },
+        {
+          "row": 15,
+          "neighbour": "Q09",
+          "cosine": 0.9006
+        },
+        {
+          "row": 22,
+          "neighbour": "Q05",
+          "cosine": 0.9552
+        },
+        {
+          "row": 28,
+          "neighbour": "Q07",
+          "cosine": 0.9728
+        },
+        {
+          "row": 29,
+          "neighbour": "Q09",
+          "cosine": 0.9299
+        },
+        {
+          "row": 30,
+          "neighbour": "Q27",
+          "cosine": 0.9558
+        },
+        {
+          "row": 31,
+          "neighbour": "Q26",
+          "cosine": 0.9196
+        },
+        {
+          "row": 37,
+          "neighbour": "Q26",
+          "cosine": 0.9048
+        },
+        {
+          "row": 40,
+          "neighbour": "Q30",
+          "cosine": 0.9057
+        },
+        {
+          "row": 42,
+          "neighbour": "Q09",
+          "cosine": 0.9276
+        },
+        {
+          "row": 43,
+          "neighbour": "Q12",
+          "cosine": 0.9209
+        },
+        {
+          "row": 44,
+          "neighbour": "Q56",
+          "cosine": 0.9421
+        },
+        {
+          "row": 45,
+          "neighbour": "Q27",
+          "cosine": 0.9203
+        },
+        {
+          "row": 46,
+          "neighbour": "Q56",
+          "cosine": 0.9189
+        },
+        {
+          "row": 47,
+          "neighbour": "Q12",
+          "cosine": 0.903
+        },
+        {
+          "row": 48,
+          "neighbour": "Q11",
+          "cosine": 0.9494
+        },
+        {
+          "row": 51,
+          "neighbour": "Q56",
+          "cosine": 0.919
+        },
+        {
+          "row": 52,
+          "neighbour": "Q13",
+          "cosine": 0.957
+        },
+        {
+          "row": 61,
+          "neighbour": "Q01",
+          "cosine": 0.9025
+        },
+        {
+          "row": 62,
+          "neighbour": "Q17",
+          "cosine": 0.9236
+        },
+        {
+          "row": 67,
+          "neighbour": "Q15",
+          "cosine": 0.9286
+        },
+        {
+          "row": 70,
+          "neighbour": "Q22",
+          "cosine": 0.9047
+        },
+        {
+          "row": 82,
+          "neighbour": "Q27",
+          "cosine": 0.9013
+        }
+      ],
+      "max_cosine": 0.9728,
+      "exact_duplicates": []
+    },
+    "gate_40": {
+      "size": 40,
+      "rows_ge_0_90": [
+        1,
+        2,
+        15,
+        17,
+        22,
+        28,
+        29,
+        30,
+        42,
+        43,
+        44,
+        48,
+        50,
+        51,
+        52,
+        62,
+        86
+      ],
+      "rows_ge_0_95": [
+        52
+      ],
+      "pairs_ge_0_90": [
+        {
+          "row": 1,
+          "neighbour": "V02",
+          "cosine": 0.9172
+        },
+        {
+          "row": 2,
+          "neighbour": "V04",
+          "cosine": 0.902
+        },
+        {
+          "row": 15,
+          "neighbour": "V05",
+          "cosine": 0.9414
+        },
+        {
+          "row": 17,
+          "neighbour": "V05",
+          "cosine": 0.9299
+        },
+        {
+          "row": 22,
+          "neighbour": "V06",
+          "cosine": 0.9397
+        },
+        {
+          "row": 28,
+          "neighbour": "V08",
+          "cosine": 0.9004
+        },
+        {
+          "row": 29,
+          "neighbour": "V14",
+          "cosine": 0.9227
+        },
+        {
+          "row": 30,
+          "neighbour": "V14",
+          "cosine": 0.9116
+        },
+        {
+          "row": 42,
+          "neighbour": "V10",
+          "cosine": 0.9257
+        },
+        {
+          "row": 43,
+          "neighbour": "V18",
+          "cosine": 0.9404
+        },
+        {
+          "row": 44,
+          "neighbour": "V14",
+          "cosine": 0.924
+        },
+        {
+          "row": 48,
+          "neighbour": "V12",
+          "cosine": 0.9076
+        },
+        {
+          "row": 50,
+          "neighbour": "V14",
+          "cosine": 0.9142
+        },
+        {
+          "row": 51,
+          "neighbour": "V12",
+          "cosine": 0.9098
+        },
+        {
+          "row": 52,
+          "neighbour": "V16",
+          "cosine": 0.957
+        },
+        {
+          "row": 62,
+          "neighbour": "V15",
+          "cosine": 0.911
+        },
+        {
+          "row": 86,
+          "neighbour": "V29",
+          "cosine": 0.941
+        }
+      ],
+      "max_cosine": 0.957,
+      "exact_duplicates": []
+    },
+    "v4_seeds_380": {
+      "size": 380,
+      "rows_ge_0_90": [
+        1,
+        2,
+        3,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        15,
+        16,
+        17,
+        18,
+        19,
+        21,
+        23,
+        24,
+        25,
+        27,
+        28,
+        29,
+        30,
+        31,
+        33,
+        36,
+        37,
+        38,
+        39,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        51,
+        52,
+        53,
+        55,
+        60,
+        61,
+        62,
+        63,
+        65,
+        68,
+        83,
+        90,
+        93,
+        94,
+        95,
+        96,
+        97,
+        100
+      ],
+      "rows_ge_0_95": [],
+      "pairs_ge_0_90": [
+        {
+          "row": 1,
+          "neighbour": "SEED-V4-CON-002",
+          "cosine": 0.9145
+        },
+        {
+          "row": 2,
+          "neighbour": "SEED-V4-CON-005",
+          "cosine": 0.907
+        },
+        {
+          "row": 3,
+          "neighbour": "SEED-V4-CON-005",
+          "cosine": 0.9365
+        },
+        {
+          "row": 8,
+          "neighbour": "SEED-CONTRA-16",
+          "cosine": 0.9162
+        },
+        {
+          "row": 9,
+          "neighbour": "SEED-CONTRA-33",
+          "cosine": 0.9461
+        },
+        {
+          "row": 10,
+          "neighbour": "SEED-PREG-18",
+          "cosine": 0.9407
+        },
+        {
+          "row": 11,
+          "neighbour": "SEED-CONTRA-35",
+          "cosine": 0.9281
+        },
+        {
+          "row": 12,
+          "neighbour": "SEED-V4-CON-009",
+          "cosine": 0.9109
+        },
+        {
+          "row": 13,
+          "neighbour": "SEED-CONTRA-40",
+          "cosine": 0.9236
+        },
+        {
+          "row": 15,
+          "neighbour": "SEED-STI-01",
+          "cosine": 0.9239
+        },
+        {
+          "row": 16,
+          "neighbour": "SEED-V4-STI-002",
+          "cosine": 0.918
+        },
+        {
+          "row": 17,
+          "neighbour": "SEED-STI-11",
+          "cosine": 0.9491
+        },
+        {
+          "row": 18,
+          "neighbour": "SEED-V4-STI-016",
+          "cosine": 0.9226
+        },
+        {
+          "row": 19,
+          "neighbour": "SEED-STI-04",
+          "cosine": 0.9296
+        },
+        {
+          "row": 21,
+          "neighbour": "SEED-V4-CON-004",
+          "cosine": 0.9418
+        },
+        {
+          "row": 23,
+          "neighbour": "SEED-STI-44",
+          "cosine": 0.9061
+        },
+        {
+          "row": 24,
+          "neighbour": "SEED-STI-19",
+          "cosine": 0.9113
+        },
+        {
+          "row": 25,
+          "neighbour": "SEED-V4-STI-016",
+          "cosine": 0.9025
+        },
+        {
+          "row": 27,
+          "neighbour": "SEED-STI-16",
+          "cosine": 0.9046
+        },
+        {
+          "row": 28,
+          "neighbour": "SEED-STI-03",
+          "cosine": 0.9499
+        },
+        {
+          "row": 29,
+          "neighbour": "SEED-PREG-12",
+          "cosine": 0.9181
+        },
+        {
+          "row": 30,
+          "neighbour": "SEED-PREG-15",
+          "cosine": 0.918
+        },
+        {
+          "row": 31,
+          "neighbour": "SEED-PREG-12",
+          "cosine": 0.9179
+        },
+        {
+          "row": 33,
+          "neighbour": "SEED-V4-CON-005",
+          "cosine": 0.9071
+        },
+        {
+          "row": 36,
+          "neighbour": "SEED-V4-PREG-011",
+          "cosine": 0.9001
+        },
+        {
+          "row": 37,
+          "neighbour": "SEED-V4-PREG-016",
+          "cosine": 0.938
+        },
+        {
+          "row": 38,
+          "neighbour": "SEED-V4-PREG-002",
+          "cosine": 0.907
+        },
+        {
+          "row": 39,
+          "neighbour": "SEED-V4-PREG-024",
+          "cosine": 0.9065
+        },
+        {
+          "row": 41,
+          "neighbour": "SEED-PREG-24",
+          "cosine": 0.9174
+        },
+        {
+          "row": 42,
+          "neighbour": "SEED-V4-PREG-005",
+          "cosine": 0.9283
+        },
+        {
+          "row": 43,
+          "neighbour": "SEED-V4-GEN-004",
+          "cosine": 0.9156
+        },
+        {
+          "row": 44,
+          "neighbour": "SEED-V4-GEN-001",
+          "cosine": 0.9455
+        },
+        {
+          "row": 45,
+          "neighbour": "SEED-V4-GEN-001",
+          "cosine": 0.9152
+        },
+        {
+          "row": 46,
+          "neighbour": "SEED-V4-GEN-012",
+          "cosine": 0.9229
+        },
+        {
+          "row": 47,
+          "neighbour": "SEED-V4-GEN-004",
+          "cosine": 0.9164
+        },
+        {
+          "row": 48,
+          "neighbour": "SEED-V4-CON-008",
+          "cosine": 0.9115
+        },
+        {
+          "row": 51,
+          "neighbour": "SEED-PREG-11",
+          "cosine": 0.9301
+        },
+        {
+          "row": 52,
+          "neighbour": "SEED-V4-GEN-028",
+          "cosine": 0.9197
+        },
+        {
+          "row": 53,
+          "neighbour": "SEED-GEN-14",
+          "cosine": 0.9331
+        },
+        {
+          "row": 55,
+          "neighbour": "SEED-V4-STI-022",
+          "cosine": 0.9101
+        },
+        {
+          "row": 60,
+          "neighbour": "SEED-GEN-17",
+          "cosine": 0.9455
+        },
+        {
+          "row": 61,
+          "neighbour": "SEED-V4-CON-002",
+          "cosine": 0.9089
+        },
+        {
+          "row": 62,
+          "neighbour": "SEED-CONTRA-10",
+          "cosine": 0.9182
+        },
+        {
+          "row": 63,
+          "neighbour": "SEED-STI-40",
+          "cosine": 0.9202
+        },
+        {
+          "row": 65,
+          "neighbour": "SEED-GEN-22",
+          "cosine": 0.91
+        },
+        {
+          "row": 68,
+          "neighbour": "SEED-V4-PREG-014",
+          "cosine": 0.909
+        },
+        {
+          "row": 83,
+          "neighbour": "SEED-CONTRA-04",
+          "cosine": 0.9106
+        },
+        {
+          "row": 90,
+          "neighbour": "SEED-V4-OOS-013",
+          "cosine": 0.9077
+        },
+        {
+          "row": 93,
+          "neighbour": "SEED-V4-GEN-005",
+          "cosine": 0.9024
+        },
+        {
+          "row": 94,
+          "neighbour": "SEED-V4-VAG-004",
+          "cosine": 0.9101
+        },
+        {
+          "row": 95,
+          "neighbour": "SEED-V4-VAG-003",
+          "cosine": 0.9039
+        },
+        {
+          "row": 96,
+          "neighbour": "SEED-V4-VAG-007",
+          "cosine": 0.9478
+        },
+        {
+          "row": 97,
+          "neighbour": "SEED-V4-VAG-021",
+          "cosine": 0.9086
+        },
+        {
+          "row": 100,
+          "neighbour": "SEED-V4-VAG-021",
+          "cosine": 0.9153
+        }
+      ],
+      "max_cosine": 0.9499,
+      "exact_duplicates": []
+    },
+    "v4_paraphrases_1239": {
+      "size": 1239,
+      "rows_ge_0_90": [
+        1,
+        2,
+        3,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        21,
+        23,
+        24,
+        25,
+        29,
+        30,
+        31,
+        33,
+        36,
+        37,
+        38,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        51,
+        52,
+        53,
+        55,
+        60,
+        61,
+        63,
+        65,
+        67,
+        68,
+        82,
+        90,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100
+      ],
+      "rows_ge_0_95": [
+        10,
+        15,
+        37,
+        60
+      ],
+      "pairs_ge_0_90": [
+        {
+          "row": 1,
+          "neighbour": "SEED-V4-CON-002-P2",
+          "cosine": 0.9259
+        },
+        {
+          "row": 2,
+          "neighbour": "SEED-V4-CON-024-P1",
+          "cosine": 0.9187
+        },
+        {
+          "row": 3,
+          "neighbour": "SEED-V4-CON-012-P2",
+          "cosine": 0.9376
+        },
+        {
+          "row": 8,
+          "neighbour": "SEED-CONTRA-16-P1",
+          "cosine": 0.9308
+        },
+        {
+          "row": 9,
+          "neighbour": "SEED-V4-CON-019-P2",
+          "cosine": 0.9468
+        },
+        {
+          "row": 10,
+          "neighbour": "SEED-PREG-18-P1",
+          "cosine": 0.9618
+        },
+        {
+          "row": 11,
+          "neighbour": "SEED-CONTRA-35-P4",
+          "cosine": 0.9409
+        },
+        {
+          "row": 13,
+          "neighbour": "SEED-CONTRA-40-P2",
+          "cosine": 0.9427
+        },
+        {
+          "row": 14,
+          "neighbour": "SEED-V4-CON-027-P2",
+          "cosine": 0.9105
+        },
+        {
+          "row": 15,
+          "neighbour": "SEED-V4-STI-010-P2",
+          "cosine": 0.9529
+        },
+        {
+          "row": 16,
+          "neighbour": "SEED-STI-45-P2",
+          "cosine": 0.9254
+        },
+        {
+          "row": 17,
+          "neighbour": "SEED-V4-STI-004-P1",
+          "cosine": 0.9307
+        },
+        {
+          "row": 18,
+          "neighbour": "SEED-V4-STI-016-P2",
+          "cosine": 0.9344
+        },
+        {
+          "row": 19,
+          "neighbour": "SEED-V4-PREG-017-P2",
+          "cosine": 0.9048
+        },
+        {
+          "row": 21,
+          "neighbour": "SEED-STI-30-P2",
+          "cosine": 0.9315
+        },
+        {
+          "row": 23,
+          "neighbour": "SEED-STI-44-P3",
+          "cosine": 0.9275
+        },
+        {
+          "row": 24,
+          "neighbour": "SEED-STI-19-P1",
+          "cosine": 0.9087
+        },
+        {
+          "row": 25,
+          "neighbour": "SEED-V4-STI-016-P2",
+          "cosine": 0.9083
+        },
+        {
+          "row": 29,
+          "neighbour": "SEED-V4-PREG-004-P4",
+          "cosine": 0.9289
+        },
+        {
+          "row": 30,
+          "neighbour": "SEED-PREG-16-P2",
+          "cosine": 0.9124
+        },
+        {
+          "row": 31,
+          "neighbour": "SEED-V4-PREG-014-P2",
+          "cosine": 0.9091
+        },
+        {
+          "row": 33,
+          "neighbour": "SEED-V4-CON-027-P3",
+          "cosine": 0.9154
+        },
+        {
+          "row": 36,
+          "neighbour": "SEED-V4-PREG-015-P2",
+          "cosine": 0.9076
+        },
+        {
+          "row": 37,
+          "neighbour": "SEED-V4-PREG-018-P4",
+          "cosine": 0.9503
+        },
+        {
+          "row": 38,
+          "neighbour": "SEED-V4-PREG-002-P2",
+          "cosine": 0.9085
+        },
+        {
+          "row": 40,
+          "neighbour": "SEED-V4-PREG-014-P1",
+          "cosine": 0.9149
+        },
+        {
+          "row": 41,
+          "neighbour": "SEED-PREG-24-P2",
+          "cosine": 0.9279
+        },
+        {
+          "row": 42,
+          "neighbour": "SEED-V4-PREG-005-P2",
+          "cosine": 0.9339
+        },
+        {
+          "row": 43,
+          "neighbour": "SEED-V4-GEN-004-P2",
+          "cosine": 0.9252
+        },
+        {
+          "row": 44,
+          "neighbour": "SEED-V4-GEN-001-P2",
+          "cosine": 0.9339
+        },
+        {
+          "row": 45,
+          "neighbour": "SEED-V4-GEN-022-P2",
+          "cosine": 0.9146
+        },
+        {
+          "row": 46,
+          "neighbour": "SEED-GEN-26-P4",
+          "cosine": 0.9299
+        },
+        {
+          "row": 47,
+          "neighbour": "SEED-V4-GEN-004-P4",
+          "cosine": 0.9385
+        },
+        {
+          "row": 48,
+          "neighbour": "SEED-V4-CON-008-P2",
+          "cosine": 0.9035
+        },
+        {
+          "row": 49,
+          "neighbour": "SEED-V4-GEN-009-P3",
+          "cosine": 0.9014
+        },
+        {
+          "row": 51,
+          "neighbour": "SEED-CONTRA-41-P2",
+          "cosine": 0.9177
+        },
+        {
+          "row": 52,
+          "neighbour": "SEED-V4-GEN-028-P4",
+          "cosine": 0.9352
+        },
+        {
+          "row": 53,
+          "neighbour": "SEED-GEN-14-P4",
+          "cosine": 0.9355
+        },
+        {
+          "row": 55,
+          "neighbour": "SEED-V4-STI-022-P4",
+          "cosine": 0.9058
+        },
+        {
+          "row": 60,
+          "neighbour": "SEED-GEN-17-P4",
+          "cosine": 0.9608
+        },
+        {
+          "row": 61,
+          "neighbour": "SEED-V4-CON-002-P2",
+          "cosine": 0.9109
+        },
+        {
+          "row": 63,
+          "neighbour": "SEED-STI-40-P3",
+          "cosine": 0.9321
+        },
+        {
+          "row": 65,
+          "neighbour": "SEED-GEN-22-P2",
+          "cosine": 0.9066
+        },
+        {
+          "row": 67,
+          "neighbour": "SEED-V4-GEN-023-P2",
+          "cosine": 0.9153
+        },
+        {
+          "row": 68,
+          "neighbour": "SEED-V4-PREG-016-P2",
+          "cosine": 0.9398
+        },
+        {
+          "row": 82,
+          "neighbour": "SEED-GEN-49-P3",
+          "cosine": 0.9015
+        },
+        {
+          "row": 90,
+          "neighbour": "SEED-V4-OOS-013-P1",
+          "cosine": 0.9038
+        },
+        {
+          "row": 93,
+          "neighbour": "SEED-V4-GEN-033-P4",
+          "cosine": 0.9069
+        },
+        {
+          "row": 94,
+          "neighbour": "SEED-V4-VAG-005-P3",
+          "cosine": 0.9082
+        },
+        {
+          "row": 95,
+          "neighbour": "SEED-V4-VAG-003-P1",
+          "cosine": 0.9405
+        },
+        {
+          "row": 96,
+          "neighbour": "SEED-V4-VAG-007-P1",
+          "cosine": 0.9244
+        },
+        {
+          "row": 97,
+          "neighbour": "SEED-CONTRA-47-P2",
+          "cosine": 0.9017
+        },
+        {
+          "row": 98,
+          "neighbour": "SEED-V4-VAG-025-P2",
+          "cosine": 0.9264
+        },
+        {
+          "row": 99,
+          "neighbour": "SEED-V4-VAG-020-P3",
+          "cosine": 0.9162
+        },
+        {
+          "row": 100,
+          "neighbour": "SEED-V4-VAG-005-P2",
+          "cosine": 0.9193
+        }
+      ],
+      "max_cosine": 0.9618,
+      "exact_duplicates": []
+    },
+    "dr04": {
+      "size": 31,
+      "rows_ge_0_90": [
+        1,
+        2,
+        11,
+        17,
+        21,
+        29,
+        33
+      ],
+      "rows_ge_0_95": [],
+      "pairs_ge_0_90": [
+        {
+          "row": 1,
+          "neighbour": "row 17",
+          "cosine": 0.9372
+        },
+        {
+          "row": 2,
+          "neighbour": "row 17",
+          "cosine": 0.9066
+        },
+        {
+          "row": 11,
+          "neighbour": "row 30",
+          "cosine": 0.9041
+        },
+        {
+          "row": 17,
+          "neighbour": "row 16",
+          "cosine": 0.9061
+        },
+        {
+          "row": 21,
+          "neighbour": "row 12",
+          "cosine": 0.9068
+        },
+        {
+          "row": 29,
+          "neighbour": "row 14",
+          "cosine": 0.9206
+        },
+        {
+          "row": 33,
+          "neighbour": "row 30",
+          "cosine": 0.904
+        }
+      ],
+      "max_cosine": 0.9372,
+      "exact_duplicates": []
+    },
+    "kb_62_questions": {
+      "size": 62,
+      "rows_ge_0_90": [
+        1,
+        7,
+        8,
+        10,
+        17,
+        18,
+        19,
+        25,
+        30,
+        33,
+        37,
+        43,
+        44,
+        51,
+        61,
+        62,
+        68
+      ],
+      "rows_ge_0_95": [
+        10,
+        51
+      ],
+      "pairs_ge_0_90": [
+        {
+          "row": 1,
+          "neighbour": "KB-C19",
+          "cosine": 0.9122
+        },
+        {
+          "row": 7,
+          "neighbour": "KB-C17",
+          "cosine": 0.9117
+        },
+        {
+          "row": 8,
+          "neighbour": "KB-C16",
+          "cosine": 0.939
+        },
+        {
+          "row": 10,
+          "neighbour": "KB-C11",
+          "cosine": 0.9662
+        },
+        {
+          "row": 17,
+          "neighbour": "KB-S8",
+          "cosine": 0.9491
+        },
+        {
+          "row": 18,
+          "neighbour": "KB-S11",
+          "cosine": 0.9196
+        },
+        {
+          "row": 19,
+          "neighbour": "KB-S12",
+          "cosine": 0.9283
+        },
+        {
+          "row": 25,
+          "neighbour": "KB-S11",
+          "cosine": 0.9064
+        },
+        {
+          "row": 30,
+          "neighbour": "KB-G13",
+          "cosine": 0.9145
+        },
+        {
+          "row": 33,
+          "neighbour": "KB-G13",
+          "cosine": 0.9066
+        },
+        {
+          "row": 37,
+          "neighbour": "KB-P9",
+          "cosine": 0.9227
+        },
+        {
+          "row": 43,
+          "neighbour": "KB-G4",
+          "cosine": 0.93
+        },
+        {
+          "row": 44,
+          "neighbour": "KB-G3",
+          "cosine": 0.9007
+        },
+        {
+          "row": 51,
+          "neighbour": "KB-G14",
+          "cosine": 0.9517
+        },
+        {
+          "row": 61,
+          "neighbour": "KB-C3",
+          "cosine": 0.9025
+        },
+        {
+          "row": 62,
+          "neighbour": "KB-C2",
+          "cosine": 0.9142
+        },
+        {
+          "row": 68,
+          "neighbour": "KB-P9",
+          "cosine": 0.9066
+        }
+      ],
+      "max_cosine": 0.9662,
+      "exact_duplicates": []
+    }
+  },
+  "exact_duplicate_rows_any_source": [
+    94
+  ],
+  "review_rows": {
+    "exact_duplicate": [
+      94
+    ],
+    "cosine_ge_0_95_any_source": [
+      10,
+      13,
+      15,
+      21,
+      22,
+      28,
+      29,
+      30,
+      33,
+      37,
+      44,
+      50,
+      51,
+      52,
+      60,
+      94,
+      98,
+      100
+    ]
+  }
+}
