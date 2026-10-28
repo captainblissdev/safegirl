@@ -3469,3 +3469,38 @@ set is labelled or run.
    Nov; decide on 6 Nov. If not ready, the demo stays on 21 entries.
 
 10. Deviations after this entry: [none yet].
+
+## KB scale validation: fresh set exclusions (2026-10-28)
+
+Amends "KB scale validation: gate and ranking (PRE-REGISTRATION), 28 Oct
+2026" (3e0bed8), item 3, test data. The pre-registration entry is left
+as it was. Recorded before the fresh set is labelled or run through the
+system.
+
+- **Duplicate check** (`research/v4/results/fresh100_dedupe.md`,
+  d7c6a07; e5-small, cosine of question embeddings; counts only).
+  Fresh rows whose nearest neighbour is at cosine 0.95 or above, per
+  source: sealed 205 set 12 (one of them an exact duplicate after
+  lowercasing and removing punctuation), 35 dev questions 4, 40 gate
+  items 1, 380 V4 seeds 0, 1,239 V4 paraphrases 4, DR-04 0, 62 KB
+  questions 2; 18 distinct rows in all. None within the fresh set.
+- **Rule.** Any fresh row with cosine 0.95 or above to the sealed,
+  dev, gate, seed, paraphrase, DR-04 or KB-question sets is excluded.
+  18 rows were excluded (10, 13, 15, 21, 22, 28, 29, 30, 33, 37, 44,
+  50, 51, 52, 60, 94, 98, 100) and 82 remain.
+  - Independent writers converge on common questions, so this is a
+    conservative control and not an accusation.
+  - It slightly under-represents the most common questions, which is a
+    limitation.
+- **Provenance (FILL).** Written by [WRITER NAME OR ROLE], a person
+  other than the author, on [DATE]. Derived from the gynaecologist list
+  or the reserved situations: [YES/NO/NOT RECORDED]. AI tools used:
+  [YES/NO/NOT RECORDED]. Never run through the system.
+- **Sealed set.** After the exclusion the overlap with the sealed set
+  is topic-level only, and no sealed item is used in the gate work.
+- **Files** (outside the repository; the rows keep their original
+  number in `source_row`):
+  - `C:\Users\cindy\fresh\fresh100.csv`, 100 rows, SHA-256
+    `8C7F0757A29B3F3ABE3DC2FEA9E5159985EFC42B8BA7CE549437FEA2A29E01FC`
+  - `C:\Users\cindy\fresh\fresh_test_v1.csv`, 82 rows, SHA-256
+    `667A547C06CDF6B097061D6F096A1585339B3193F439240D98BC202036157C54`
