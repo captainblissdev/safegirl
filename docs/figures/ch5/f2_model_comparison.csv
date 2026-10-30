@@ -1,0 +1,10 @@
+panel,model,metric,value,n
+a_six_class,M1,macro_f1,0.5099388152548417,205
+a_six_class,M2,macro_f1,0.5863517632502878,205
+a_six_class,V4,macro_f1,0.8571641537361582,205
+a_six_class,M1,reply_kind_correct_rate,0.7609756097560976,205
+a_six_class,M2,reply_kind_correct_rate,0.6146341463414634,205
+a_six_class,V4,reply_kind_correct_rate,0.8195121951219512,205
+b_four_class,V3,macro_f1,0.5983944592639561,156
+b_four_class,V4 as is,macro_f1,0.8809730754795251,156
+b_four_class,V4 restricted,macro_f1,0.8726728188333188,156
