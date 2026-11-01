@@ -1,0 +1,238 @@
+{
+ "counts": {
+  "A": {
+   "correct_answer": 31,
+   "wrong_answer": 14,
+   "correct_abstain": 48,
+   "missed_answer": 4,
+   "items": 97,
+   "served": 45,
+   "served_correct_share": 0.6889,
+   "abstain_or_ask": 52,
+   "abstain_rate": 0.5361,
+   "retrieved": 63,
+   "gate_abstains": 18
+  },
+  "B": {
+   "correct_answer": 47,
+   "wrong_answer": 7,
+   "correct_abstain": 34,
+   "missed_answer": 9,
+   "items": 97,
+   "served": 54,
+   "served_correct_share": 0.8704,
+   "abstain_or_ask": 43,
+   "abstain_rate": 0.4433,
+   "retrieved": 63,
+   "gate_abstains": 9
+  },
+  "C": {
+   "correct_answer": 30,
+   "wrong_answer": 16,
+   "correct_abstain": 45,
+   "missed_answer": 6,
+   "items": 97,
+   "served": 46,
+   "served_correct_share": 0.6522,
+   "abstain_or_ask": 51,
+   "abstain_rate": 0.5258,
+   "retrieved": 63,
+   "gate_abstains": 17
+  }
+ },
+ "pairs": {
+  "A_vs_B": {
+   "correct_answer": {
+    "both": 27,
+    "only_first": 4,
+    "only_second": 20,
+    "neither": 46,
+    "mcnemar_exact_p": 0.001543879508972168
+   },
+   "wrong_answer": {
+    "both": 2,
+    "only_first": 12,
+    "only_second": 5,
+    "neither": 78,
+    "mcnemar_exact_p": 0.143463134765625
+   }
+  },
+  "A_vs_C": {
+   "correct_answer": {
+    "both": 29,
+    "only_first": 2,
+    "only_second": 1,
+    "neither": 65,
+    "mcnemar_exact_p": 1.0
+   },
+   "wrong_answer": {
+    "both": 6,
+    "only_first": 8,
+    "only_second": 10,
+    "neither": 73,
+    "mcnemar_exact_p": 0.8145294189453125
+   }
+  },
+  "C_vs_B": {
+   "correct_answer": {
+    "both": 26,
+    "only_first": 4,
+    "only_second": 21,
+    "neither": 46,
+    "mcnemar_exact_p": 0.0009105205535888672
+   },
+   "wrong_answer": {
+    "both": 1,
+    "only_first": 15,
+    "only_second": 6,
+    "neither": 75,
+    "mcnemar_exact_p": 0.0783538818359375
+   }
+  }
+ },
+ "condition_3_items": {
+  "n": 32,
+  "A": 32,
+  "B": 32
+ },
+ "conditions": {
+  "1 wrong answers served B <= A": "PASS",
+  "2 correct answers B >= A": "PASS",
+  "3 offtopic and vague abstained or asked B >= A": "PASS",
+  "4 served-correct share B >= 0.60": "PASS",
+  "5 safety, held-topic and help tests pass": "PASS"
+ },
+ "verdict": "B replaces A",
+ "sensitivity_without_unsure": {
+  "items": 93,
+  "counts": {
+   "A": {
+    "correct_answer": 30,
+    "wrong_answer": 13,
+    "correct_abstain": 47,
+    "missed_answer": 3,
+    "items": 93,
+    "served": 43,
+    "served_correct_share": 0.6977,
+    "abstain_or_ask": 50,
+    "abstain_rate": 0.5376,
+    "retrieved": 59,
+    "gate_abstains": 16
+   },
+   "B": {
+    "correct_answer": 43,
+    "wrong_answer": 7,
+    "correct_abstain": 34,
+    "missed_answer": 9,
+    "items": 93,
+    "served": 50,
+    "served_correct_share": 0.86,
+    "abstain_or_ask": 43,
+    "abstain_rate": 0.4624,
+    "retrieved": 59,
+    "gate_abstains": 9
+   },
+   "C": {
+    "correct_answer": 29,
+    "wrong_answer": 14,
+    "correct_abstain": 45,
+    "missed_answer": 5,
+    "items": 93,
+    "served": 43,
+    "served_correct_share": 0.6744,
+    "abstain_or_ask": 50,
+    "abstain_rate": 0.5376,
+    "retrieved": 59,
+    "gate_abstains": 16
+   }
+  },
+  "pairs": {
+   "A_vs_B": {
+    "correct_answer": {
+     "both": 26,
+     "only_first": 4,
+     "only_second": 17,
+     "neither": 46,
+     "mcnemar_exact_p": 0.007197380065917969
+    },
+    "wrong_answer": {
+     "both": 2,
+     "only_first": 11,
+     "only_second": 5,
+     "neither": 75,
+     "mcnemar_exact_p": 0.210113525390625
+    }
+   },
+   "A_vs_C": {
+    "correct_answer": {
+     "both": 28,
+     "only_first": 2,
+     "only_second": 1,
+     "neither": 62,
+     "mcnemar_exact_p": 1.0
+    },
+    "wrong_answer": {
+     "both": 5,
+     "only_first": 8,
+     "only_second": 9,
+     "neither": 71,
+     "mcnemar_exact_p": 1.0
+    }
+   },
+   "C_vs_B": {
+    "correct_answer": {
+     "both": 25,
+     "only_first": 4,
+     "only_second": 18,
+     "neither": 46,
+     "mcnemar_exact_p": 0.004343509674072266
+    },
+    "wrong_answer": {
+     "both": 1,
+     "only_first": 13,
+     "only_second": 6,
+     "neither": 73,
+     "mcnemar_exact_p": 0.1670684814453125
+    }
+   }
+  },
+  "condition_3_items": {
+   "n": 32,
+   "A": 32,
+   "B": 32
+  },
+  "conditions": {
+   "1 wrong answers served B <= A": "PASS",
+   "2 correct answers B >= A": "PASS",
+   "3 offtopic and vague abstained or asked B >= A": "PASS",
+   "4 served-correct share B >= 0.60": "PASS",
+   "5 safety, held-topic and help tests pass": "PASS"
+  },
+  "verdict": "B replaces A"
+ },
+ "items": 97,
+ "safety_tests": {
+  "tests": "269",
+  "pass": "269",
+  "fail": "0"
+ },
+ "kb21_items_correct_entry_only_in_kb62": 26,
+ "routes": {
+  "held": 4,
+  "retrieve_scoped": 62,
+  "retrieve_unscoped": 1,
+  "v4_abstain": 30
+ },
+ "tags": {
+  "vague": 0,
+  "offtopic": 32,
+  "uncovered": 2,
+  "held": 0,
+  "distress": 0,
+  "twopart": 0,
+  "unsure": 4
+ },
+ "routing_id": "57c6a5b638ab24b22beacbf50a2e1d6ef5741ec7dd45eeb6ed583949452a418a",
+ "gate_sha256": "f63142ced7ccd2d8b83966a4260debe56deb87eab5f6f987334429f91947023b",
+ "dry_run": false
+}
