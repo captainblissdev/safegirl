@@ -3206,3 +3206,55 @@ Follows "Round 2: pre-registration of the one-shot gate test (1 Nov
     vague rows exist in this set.
 - **Unchanged.** No run on the round 2 questions; no model, threshold,
   rule, gate or KB file changed.
+
+## Round 2 one-shot gate test: result (2026-11-01)
+
+The one execution pre-registered in "Round 2: pre-registration of the
+one-shot gate test (1 Nov 2026)". Counts only; no question or label
+text.
+
+- **Run.** `research/v4/gate_refit/round2_run.py` at fe3e446, once, on
+  2026-11-01 08:40:55 to 08:41:21 UTC; exit 0; lock
+  `C:\Users\cindy\round2\results\ROUND2_RUN.lock` taken before scoring.
+  Checked before the run: label file SHA-256 c111d882...bfb7, read-only;
+  gate_g.json f63142ce...023b; routing id 57c6a5b638ab for every arm;
+  questions file 012eb198...0858; no lock. Tracked files under
+  `research/` and `docs/` were clean; untracked files present and not
+  read by the script: the Chapter 5 diagram files in
+  `docs/figures/ch5/` and `research/experiments/results/gemini_probe_2026-10-15.csv`.
+- **Items.** 97. Routes: retrieval scoped 62, unscoped 1; V4 abstain
+  30; held topic 4. 26 items have a correct entry only in the 62-entry
+  base (scored for arms A and C as correct abstain if nothing is served,
+  wrong answer if something is).
+
+| Arm | Correct | Wrong served | Correct abstain or ask | Missed | Served correct | Abstain rate |
+|---|---|---|---|---|---|---|
+| A: KB-21, gate 0.8439 | 31 | 14 | 48 | 4 | 0.689 | 0.536 |
+| B: KB-62, gate (g) | 47 | 7 | 34 | 9 | 0.870 | 0.443 |
+| C: KB-21, gate (g) | 30 | 16 | 45 | 6 | 0.652 | 0.526 |
+
+- **McNemar exact p** (correct answers; wrong answers served): A vs B
+  0.0015 (4 only A, 20 only B); 0.143 (12 only A, 5 only B). A vs C 1.0
+  (2, 1); 0.815 (8, 10). C vs B 0.0009 (4 only C, 21 only B); 0.078
+  (15 only C, 6 only B).
+- **Decision rule.**
+  1. Wrong answers served B 7 <= A 14: PASS.
+  2. Correct answers B 47 >= A 31: PASS.
+  3. Offtopic and vague items (32 offtopic, 0 vague) abstained or asked:
+     B 32 >= A 32: PASS.
+  4. Share of served answers correct in B 0.870 >= 0.60: PASS.
+  5. Safety, held-topic and help tests: 269 of 269 pass: PASS.
+  **Verdict under the pre-registered rule: all five hold; B replaces
+  A.**
+- **Sensitivity, without the 4 unsure rows (93 items).** A 30 correct,
+  13 wrong, 47 correct abstain or ask, 3 missed (0.698); B 43, 7, 34, 9
+  (0.860); C 29, 14, 45, 5 (0.674). All five conditions PASS; the same
+  verdict.
+- **Files.** `C:\Users\cindy\round2\results\aggregate.json` (SHA-256
+  9d86cdf3...24ef as written) and `per_item.csv` (ids and outcome codes
+  only, 36a8af0e...a1d2), outside the repository; a copy of the
+  aggregate is committed as `research/v4/gate_refit/round2_aggregate.json`.
+- **Nothing deployed.** The demo still runs KB-21 with the gate at
+  0.8439. Per the pre-registration, any gate or KB change needs its own
+  decision-log entry, and KB text needs clinician sign-off; the
+  decision is due by 6 Nov 2026.
