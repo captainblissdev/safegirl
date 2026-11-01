@@ -1,0 +1,31 @@
+candidate,source,fold,macro_f1,mean
+Hybrid (e5 + rules),research/v4/results/cv_hybrid_C10.json,1,0.8467411983332451,0.8835196370409516
+Hybrid (e5 + rules),research/v4/results/cv_hybrid_C10.json,2,0.9390356769667115,0.8835196370409516
+Hybrid (e5 + rules),research/v4/results/cv_hybrid_C10.json,3,0.8970169583072809,0.8835196370409516
+Hybrid (e5 + rules),research/v4/results/cv_hybrid_C10.json,4,0.8167039931745813,0.8835196370409516
+Hybrid (e5 + rules),research/v4/results/cv_hybrid_C10.json,5,0.9181003584229391,0.8835196370409516
+LR on e5,research/v4/results/cv_lr_e5_base_C10.json,1,0.8828678266178267,0.8605653358246926
+LR on e5,research/v4/results/cv_lr_e5_base_C10.json,2,0.8936058379884854,0.8605653358246926
+LR on e5,research/v4/results/cv_lr_e5_base_C10.json,3,0.8256283020988904,0.8605653358246926
+LR on e5,research/v4/results/cv_lr_e5_base_C10.json,4,0.772445296638845,0.8605653358246926
+LR on e5,research/v4/results/cv_lr_e5_base_C10.json,5,0.9282794157794158,0.8605653358246926
+DistilBERT,research/v4/results/cv_distilbert_lr3e-5.json,1,0.8691271963330786,0.7883486060742653
+DistilBERT,research/v4/results/cv_distilbert_lr3e-5.json,2,0.8353937728937728,0.7883486060742653
+DistilBERT,research/v4/results/cv_distilbert_lr3e-5.json,3,0.6952325452325452,0.7883486060742653
+DistilBERT,research/v4/results/cv_distilbert_lr3e-5.json,4,0.7015035890035889,0.7883486060742653
+DistilBERT,research/v4/results/cv_distilbert_lr3e-5.json,5,0.8404859269083408,0.7883486060742653
+DistilBERT + keyword,research/v4/results/cv_distilbert_kw_lr3e-5.json,1,0.8158900836320191,0.7866191371043985
+DistilBERT + keyword,research/v4/results/cv_distilbert_kw_lr3e-5.json,2,0.8484873364183709,0.7866191371043985
+DistilBERT + keyword,research/v4/results/cv_distilbert_kw_lr3e-5.json,3,0.7503156565656565,0.7866191371043985
+DistilBERT + keyword,research/v4/results/cv_distilbert_kw_lr3e-5.json,4,0.6918650793650793,0.7866191371043985
+DistilBERT + keyword,research/v4/results/cv_distilbert_kw_lr3e-5.json,5,0.8265375295408665,0.7866191371043985
+M2,research/v4/results/cv_baseline_m2.json,1,0.6959557258407832,0.6194249424619481
+M2,research/v4/results/cv_baseline_m2.json,2,0.5727242440952118,0.6194249424619481
+M2,research/v4/results/cv_baseline_m2.json,3,0.638808533172319,0.6194249424619481
+M2,research/v4/results/cv_baseline_m2.json,4,0.5683574879227054,0.6194249424619481
+M2,research/v4/results/cv_baseline_m2.json,5,0.6212787212787213,0.6194249424619481
+M1,research/v4/results/cv_baseline_m1.json,1,0.5323193622044197,0.516572584716412
+M1,research/v4/results/cv_baseline_m1.json,2,0.5360863130607291,0.516572584716412
+M1,research/v4/results/cv_baseline_m1.json,3,0.514459452301499,0.516572584716412
+M1,research/v4/results/cv_baseline_m1.json,4,0.49277283706631536,0.516572584716412
+M1,research/v4/results/cv_baseline_m1.json,5,0.5072249589490969,0.516572584716412

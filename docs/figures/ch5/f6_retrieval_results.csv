@@ -1,0 +1,12 @@
+panel,arm,outcome,count,of,source
+a_dev,21 entries,correct_answer,28,35,9ae43bb:research/v4/results/k5_baseline21_relabelled.json
+a_dev,62 entries (question mode),correct_answer,25,35,9ae43bb:research/v4/results/k5_question_relabelled.json
+b_fresh,21 entries (arm A),correct_answer,17,82,9ae43bb:research/eval/fresh_test/fresh_test_aggregate.json
+b_fresh,21 entries (arm A),wrong_answer,21,82,9ae43bb:research/eval/fresh_test/fresh_test_aggregate.json
+b_fresh,21 entries (arm A),correct_abstain,38,82,9ae43bb:research/eval/fresh_test/fresh_test_aggregate.json
+b_fresh,21 entries (arm A),missed_answer,6,82,9ae43bb:research/eval/fresh_test/fresh_test_aggregate.json
+b_fresh,62 entries (arm B),correct_answer,24,82,9ae43bb:research/eval/fresh_test/fresh_test_aggregate.json
+b_fresh,62 entries (arm B),wrong_answer,29,82,9ae43bb:research/eval/fresh_test/fresh_test_aggregate.json
+b_fresh,62 entries (arm B),correct_abstain,21,82,9ae43bb:research/eval/fresh_test/fresh_test_aggregate.json
+b_fresh,62 entries (arm B),missed_answer,8,82,9ae43bb:research/eval/fresh_test/fresh_test_aggregate.json
+note,62 entries (full mode),correct_answer,25,35,9ae43bb:research/v4/results/k5_full_relabelled.json
