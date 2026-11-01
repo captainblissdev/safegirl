@@ -3071,3 +3071,38 @@ and a test on unseen data.
 - **Outputs.** `research/v4/gate_refit/`: the code, a CSV of counts and a
   summary; ids, counts and numbers only, no question text. Feature tables
   are written outside the repository.
+
+## Gate (g) frozen (2026-11-01)
+
+Development stage. Follows "Gate refit under V4 routing
+(PRE-REGISTRATION)" and its results (`research/v4/gate_refit/`).
+
+- **Candidate chosen: (g),** a logistic gate on the unscoped top-1
+  score, the margin (top-1 minus top-2), agreement between V4's class
+  and the class of the unscoped top-1 entry, and V4's top probability.
+- **Why: the pre-registered rule.** Fewest wrong answers served on
+  KB-62 by leave-one-out, then most correct answers. (g) served 14
+  wrong answers (62 correct, 44 correct abstains or asks, 30 missed;
+  0.816 of served answers correct), against 20 for the current gate
+  (a); (e) and (f) served 17. Noted, not part of the rule: (g) misses
+  more answers than (f) (30 against 24).
+- **Fit.** Once, on all 150 scored development items, with exactly the
+  G1 method: KB-62 in question embed mode, V4 triage routing id
+  `57c6a5b638ab24b22beacbf50a2e1d6ef5741ec7dd45eeb6ed583949452a418a`,
+  standardised logistic regression (C = 1), target "serving the live
+  entry would be correct", serve at p >= 0.5. 107 items reached
+  retrieval; 69 of them had a correct live entry; the gate serves 76
+  in sample. The fit was checked against an independent scikit-learn
+  refit, and fresh-test arms A and B were reproduced first.
+- **File.** `research/v4/gate_refit/frozen/gate_g.json`, SHA-256
+  `f63142ced7ccd2d8b83966a4260debe56deb87eab5f6f987334429f91947023b`
+  (sidecar `gate_g.sha256`), frozen on 2026-11-01 from commit 8d8bd60.
+  Loader `research/v4/gate_refit/gate_g.py` (refuses a changed file or
+  a different routing id); `research/v4/tests/test_gate_g.py`
+  reproduces the 107 in-sample decisions (5 tests pass; the V4 suite,
+  190 tests, passes).
+- **Nothing deployed.** The runtime gate stays at 0.8439 on KB-21; no
+  model, threshold, rule or KB file changed. (g) is development
+  evidence fitted on all development items, so its leave-one-out
+  counts are its only performance estimate. Using it in the app needs
+  its own entry and a test on data it has not seen.
