@@ -153,6 +153,7 @@ def dry_run_guard(args):
 
 
 def take_lock(lock: Path, record: dict):
+    Path(lock).parent.mkdir(parents=True, exist_ok=True)
     try:
         with open(lock, "x", encoding="utf-8") as f:
             json.dump(record, f, indent=1)
