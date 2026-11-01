@@ -1,0 +1,8 @@
+figure,source,values
+f1_v4_confusion,research/v4/results/sealed_result.json,"V4 sealed confusion, n=205, 6x6 counts and row shares"
+f2_model_comparison,research/v4/results/sealed_result.json; research/v4/results/sealed_v3_comparison.json,"macro-F1 and reply-kind rate for M1, M2, V4 (n=205); four-class macro-F1 for V3, V4 (n=156)"
+f3_per_class_f1,research/v4/results/sealed_result.json,"per-class F1 = 2PR/(P+R) from saved precision and recall, M1, M2, V4"
+f4_cv_macro_f1_per_fold,research/v4/results/cv_hybrid_C10.json; research/v4/results/cv_lr_e5_base_C10.json; research/v4/results/cv_distilbert_lr3e-5.json; research/v4/results/cv_distilbert_kw_lr3e-5.json; research/v4/results/cv_baseline_m2.json; research/v4/results/cv_baseline_m1.json,per-fold macro-F1 (5 folds) and fold mean for six candidates
+f5_gate_scores_kb62,9ae43bb:research/v4/results/k5_full_relabelled.json; 9ae43bb:research/v4/results/k5_question_relabelled.json,"top-1 score per gate item by group, 62-entry base, full and question modes; threshold line"
+f6_retrieval_results,9ae43bb:research/v4/results/k5_baseline21_relabelled.json; 9ae43bb:research/v4/results/k5_question_relabelled.json; 9ae43bb:research/eval/fresh_test/fresh_test_aggregate.json,dev correct answers 21 vs 62 entries; fresh-test outcome counts arm A (21) vs arm B (62)
+f7_class_distribution,research/v4/frozen/v4_hybrid_c10.json; research/v4/results/cv_hybrid_C10_oof.csv,seeds per class (OOF true labels) and paraphrases (frozen per-class total minus seeds)
