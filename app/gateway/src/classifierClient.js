@@ -331,8 +331,13 @@ function createClassifierClient({
    *        unscopedScore, the top-1 unscoped retrieval score, for the
    *        relevance gate. When retrieval was scoped this costs one extra
    *        unscoped /retrieve call. Without this option nothing changes.
+   * @param {boolean} [options.withGateFeatures] - With withUnscopedScore,
+   *        also return unscopedTop {s1, s2, top1Class}: the unscoped
+   *        top-1 and top-2 scores and the top-1 entry's class, for gate
+   *        (g) (gateG.js). The extra unscoped call then asks for two
+   *        results instead of one. Only used when GATE_G_ENABLED is on.
    * @returns {Promise<{entry: object|null, retrievalScope: string,
-   *            unscopedScore?: number|null}>}
+   *            unscopedScore?: number|null, unscopedTop?: object|null}>}
    *   retrievalScope is "scoped" or "unscoped" (ml_service /retrieve),
    *   "abstained" (no retrieval attempted) or "local" (keyword retrieval,
    *   after a keyword fallback or an unusable /retrieve). unscopedScore is
@@ -340,9 +345,15 @@ function createClassifierClient({
    */
   async function retrieveEntry(text, classification, options = {}) {
     const { label, confidence, source } = classification;
-    const { withUnscopedScore = false } = options;
-    const withScore = (result, unscopedScore = null) =>
-      withUnscopedScore ? { ...result, unscopedScore } : result;
+    const { withUnscopedScore = false, withGateFeatures = false } = options;
+    const withScore = (result, unscopedScore = null, unscopedTop = null) => {
+      if (!withUnscopedScore) {
+        return result;
+      }
+      return withGateFeatures
+        ? { ...result, unscopedScore, unscopedTop }
+        : { ...result, unscopedScore };
+    };
 
     if (source === "keyword_fallback") {
       return withScore({
@@ -405,6 +416,11 @@ function createClassifierClient({
         return result;
       }
 
+      if (withGateFeatures) {
+        const top = scoped ? await unscopedTop2(text) : topOf(body.results);
+        return withScore(result, top ? top.s1 : null, top);
+      }
+
       return withScore(
         result,
         scoped ? await unscopedTopScore(text) : scoreOf(topResult),
@@ -432,6 +448,29 @@ function createClassifierClient({
     } catch (error) {
       logger.warn(
         `[classifierClient] unscoped score unavailable for the relevance gate: ${error.message}`,
+      );
+      return null;
+    }
+  }
+
+  /** {s1, s2, top1Class} from an unscoped result list, or null. */
+  function topOf(results) {
+    const [first, second] = Array.isArray(results) ? results : [];
+    const s1 = scoreOf(first);
+    if (s1 === null || typeof first.class !== "string") {
+      return null;
+    }
+    return { s1, s2: scoreOf(second), top1Class: first.class };
+  }
+
+  /** Unscoped top-1 and top-2 scores and top-1 class, or null. */
+  async function unscopedTop2(text) {
+    try {
+      const body = await postJson("/retrieve", { query: text, top_k: 2 });
+      return topOf(body && body.results);
+    } catch (error) {
+      logger.warn(
+        `[classifierClient] unscoped top-2 unavailable for gate (g): ${error.message}`,
       );
       return null;
     }

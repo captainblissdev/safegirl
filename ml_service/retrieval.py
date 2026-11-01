@@ -36,6 +36,23 @@ PASSAGE_PREFIX = "passage: "
 
 REQUIRED_FIELDS = {"id", "class", "title", "content", "source"}
 
+# What is embedded for each entry, set by RETRIEVAL_EMBED_MODE in app.py
+# (ported from kb/merge-60, 26cfd2e; docs/decision-log.md, "Gate (g) wired
+# behind a flag"):
+#   "question": the entry's question only ("passage: <question>").
+#   "full":     the question and its content, the behaviour before this
+#               setting existed and still the default.
+# The answer text served to the user is the same in both modes.
+EMBED_MODES = ("question", "full")
+DEFAULT_EMBED_MODE = "full"
+
+
+def passage_text(entry: dict, embed_mode: str) -> str:
+    """The text embedded for one entry, by mode."""
+    if embed_mode == "question":
+        return PASSAGE_PREFIX + entry["title"]
+    return PASSAGE_PREFIX + entry["title"] + ". " + entry["content"]
+
 
 class KnowledgeBaseRetriever:
     """Loads the knowledge base once at startup, embeds every passage
@@ -44,7 +61,12 @@ class KnowledgeBaseRetriever:
     be wasteful and slow -- passage embeddings are fixed until the KB
     file changes, so this is a one-time cost paid at construction."""
 
-    def __init__(self, kb_path: str | Path):
+    def __init__(self, kb_path: str | Path, embed_mode: str = DEFAULT_EMBED_MODE):
+        if embed_mode not in EMBED_MODES:
+            raise ValueError(
+                f"Unknown embed mode {embed_mode!r}; expected one of {EMBED_MODES}"
+            )
+        self.embed_mode = embed_mode
         self.kb_path = Path(kb_path)
         if not self.kb_path.exists():
             raise FileNotFoundError(f"Knowledge base file not found: {self.kb_path}")
@@ -71,10 +93,7 @@ class KnowledgeBaseRetriever:
         logger.info(f"Loading embedding model: {EMBEDDING_MODEL_NAME}")
         self.model = SentenceTransformer(EMBEDDING_MODEL_NAME)
 
-        passages = [
-            PASSAGE_PREFIX + e["title"] + ". " + e["content"]
-            for e in self.entries
-        ]
+        passages = [passage_text(e, self.embed_mode) for e in self.entries]
         self.embeddings = self.model.encode(
             passages, convert_to_numpy=True, normalize_embeddings=True
         )
