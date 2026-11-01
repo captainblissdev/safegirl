@@ -3106,3 +3106,62 @@ Development stage. Follows "Gate refit under V4 routing
   evidence fitted on all development items, so its leave-one-out
   counts are its only performance estimate. Using it in the app needs
   its own entry and a test on data it has not seen.
+
+## Round 2: pre-registration of the one-shot gate test (1 Nov 2026)
+
+Question: under V4 triage routing, does the frozen gate (g) let the 62-entry
+knowledge base serve fewer wrong answers than the 21-entry base with the
+current gate, without losing correct answers or safety behaviour?
+
+Reason: the first fresh test (82 questions) gave 24 correct and 29 wrong
+served for 62 entries, against 17 and 21 for 21 entries. The V3-fitted gate
+lost its class-agreement signal under V4 routing (constant on every scoped
+item, confirmed in step G1). The refit used signals that vary under V4
+routing.
+
+Data. Development (used for fitting, not a test): 75 relabelled items plus 82
+fresh items = 157 (150 scored). Test: the 97 questions R2-001..R2-100
+(R2-033, R2-034 and R2-061 removed as near-duplicates), written by the remote
+reviewer on 29 Oct 2026. Raw file sha256 f378c260e9adebce5257a1542cc7d3a3337f7ed10aca8169219dfda27a0c01ea,
+post-dedupe sha256 012eb198a35794450f50121a279d4fe810af68c10c56ef473edcef8aadcd0858.
+Files stay outside the repository. No system output on these questions
+exists. Not used: the sealed set, DR-04, the demo-risk set.
+
+Gate. Candidate (g) (top-1 score, margin, agreement of V4's class with the
+class of the unscoped top-1 entry, V4 max probability), chosen under the
+pre-registered rule of fewest wrong answers served on KB-62 in leave-one-out.
+Frozen in research/v4/gate_refit/frozen/gate_g.json, sha256 f63142ced7ccd2d8b83966a4260debe56deb87eab5f6f987334429f91947023b,
+code commit 8d8bd60. Not changed after this entry.
+
+Labels. Assigned by the author alone, blind to system output, scores and old
+labels, using the existing labelling guide, in the worksheet fields
+best_entry_id, acceptable_entry_ids, none_fits and notes (tags: vague,
+offtopic, uncovered, held, distress, twopart, unsure). Single labeller:
+there is no second reviewer, which is a limitation. The finished label file
+is locked by sha256 before the run; only the hash is committed.
+
+Arms (all with V4 triage routing, same routing id as the fit):
+A: 21 entries, current gate 0.8439 (the demo as it stands).
+B: 62 entries, gate (g).
+C: 21 entries, gate (g).
+
+Measures. Per arm: correct answer, wrong answer served, correct abstain or
+ask, missed answer; share of served answers that were correct; abstain
+rate. Paired comparison by McNemar's exact test. With 97 questions the
+intervals are wide and are reported as they are.
+
+Decision rule. B replaces A only if ALL hold:
+1. Wrong answers served in B are not more than in A.
+2. Correct answers in B are at least those in A.
+3. Off-topic and vague questions abstained or asked at least as often in B
+   as in A.
+4. The share of served answers that are correct in B is at least 0.60.
+5. Safety, held-topic and help tests unchanged (all existing tests pass).
+Otherwise the demo stays on the 21-entry base with the current gate. Any
+gate or KB change needs its own decision-log entry; KB text needs clinician
+sign-off. Decision recorded by 6 Nov 2026; fallback is 21 entries.
+
+Run. One execution, then locked. The run script is dry-run tested on a
+dummy file first. Metrics only in the report, no question text.
+
+Deviations: none yet.
