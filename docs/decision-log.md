@@ -2983,3 +2983,49 @@ accepted; the default stays off (`V4_TRIAGE_ENABLED` unset). Branch
   text, Safety Net patterns, helplines and HELP_CONTACTS_VERIFIED, the
   check order, the snapshots, and every default (V4 and generation
   off).
+
+## Round 2 question set ingested (2026-11-01)
+
+A new question set for a second labelling round, ingested before any
+system output on it. Kept outside the repository; hashes, counts, ids
+and row numbers only here.
+
+- **Input.** `C:\Users\cindy\round2\questions_raw.csv`, read only, never
+  modified. SHA-256 as ingested:
+  `f378c260e9adebce5257a1542cc7d3a3337f7ed10aca8169219dfda27a0c01ea`.
+  Work was done on a byte copy (same hash) under `round2\work\`.
+- **Validation.** 100 data rows, 6 columns (`item_id`, `question_text`,
+  `best_entry_id`, `acceptable_entry_ids`, `none_fits`, `notes`), every
+  row with 6 fields. 0 empty rows, 0 blank questions, 0 duplicate source
+  ids, 0 exact duplicates and 0 duplicates after case and whitespace
+  normalisation. The four label columns arrived empty (0 cells filled).
+- **Ids.** Stable ids R2-001 to R2-100 in data-row order, each stored
+  with the SHA-256 of its question text
+  (`round2\work\questions_with_ids.csv`).
+- **Dedupe rule.** `intfloat/multilingual-e5-small` at revision
+  `614241f622f53c4eeff9890bdc4f31cfecc418b3` (the revision frozen with
+  V4), "query: " prefix on both sides, normalised vectors, cosine; the
+  same setup as the 28 October fresh-set check. A row is removed at
+  cosine >= 0.95 to any of:
+  - the 157 development items: the 75 relabelled development items
+    (35 development-set questions and 40 gate items) and the 82
+    fresh-test questions, which are spent after their one run;
+  - the 62 entry questions of the 62-entry knowledge base.
+- **Removed: 3 rows** (data rows 33, 34 and 61; R2-033, R2-034,
+  R2-061), all nearest to a knowledge-base entry question (cosine
+  0.9699, 0.9738 and 0.9613); none was at 0.95 or above to a
+  development item. No pair inside the set reached 0.95. 55 rows were
+  at 0.90 or above to some reference item; the highest kept row is at
+  0.9497. Removal log with ids, neighbour ids and cosines only:
+  `round2\dedupe_removed_log.csv`.
+- **Kept: 97 rows.** Post-dedupe file `round2\work\questions_dedup.csv`
+  (columns `r2_id`, `source_row`, `source_item_id`, `text_sha256`,
+  `question_text`; UTF-8, LF), SHA-256
+  `012eb198a35794450f50121a279d4fe810af68c10c56ef473edcef8aadcd0858`.
+- **Worksheet.** `round2\labelling_worksheet.xlsx`: sheet "label" with
+  the 97 kept questions (id, question and the four label columns,
+  empty); sheet "kb62" with the 62 entries and their ids. No system
+  output is included.
+- **Unchanged.** Models, thresholds, rules and knowledge-base files.
+  None of the round 2 files, nor the scripts that made them
+  (`round2\tools\`), are committed.
