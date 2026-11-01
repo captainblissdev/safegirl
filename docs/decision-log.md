@@ -3258,3 +3258,46 @@ text.
   0.8439. Per the pre-registration, any gate or KB change needs its own
   decision-log entry, and KB text needs clinician sign-off; the
   decision is due by 6 Nov 2026.
+
+## Gate (g) wired behind a flag (2026-11-01)
+
+Follows "Round 2 one-shot gate test: result". Wiring only; nothing is on
+by default and nothing was deployed.
+
+- **Flag.** `GATE_G_ENABLED`, off unless exactly "true". Gate (g) is used
+  only when it AND `V4_TRIAGE_ENABLED` are both "true"; with
+  `GATE_G_ENABLED` on and V4 off the gateway warns and keeps the current
+  gate. Even when on, (g) gates only queries V4 classified; a query that
+  fell back to V3 or the keyword classifier keeps the current gate.
+- **Wiring.** `app/gateway/src/gateG.js` loads
+  `research/v4/gate_refit/frozen/gate_g.json`, checks its SHA-256
+  (f63142ced7ccd2d8b83966a4260debe56deb87eab5f6f987334429f91947023b)
+  and its features at start-up and refuses to start on a mismatch, and
+  applies the frozen logistic decision (serve at p >= 0.5) to the
+  unscoped top-1 score, the margin to the top-2, the agreement of V4's
+  class with the top-1 entry's class and V4's confidence. These come
+  from `/retrieve`, whose results already carry each entry's class and
+  score; with the flag on the extra unscoped call asks for 2 results
+  instead of 1. No response field changed.
+- **ml_service.** `RETRIEVAL_EMBED_MODE` ("full" by default, which embeds
+  the same text as before; "question"), ported from kb/merge-60
+  26cfd2e, so the 62-entry base can be served in the embed mode the gate
+  was fitted in. `/health` is unchanged.
+- **Unchanged.** The default knowledge base (21 entries), the 0.8439
+  runtime gate, V3, V4, thresholds 0.35/0.5, t_act 0.45, rules, Safety
+  Net, helplines and the frozen gate file.
+- **Parity.** `research/v4/gate_refit/gate_g_parity.py`: a real
+  ml_service with the 62-entry base written from git (kb/merge-60
+  9ae43bb, the file the harness reads), question mode and V4 on, and the
+  gateway pipeline with both flags on, against the harness on the 150
+  scored development items: serve-or-abstain agreed on 150 of 150 and
+  the served entry id on 150 of 150 (76 served by both; no
+  disagreement).
+- **Regression, flags off.** Gateway 543 of 543 node tests (526 before,
+  17 new) and backend.test.js all passed; ml_service 16 (11 before, 5
+  new); research/v4 208; interface tests pass unchanged. The flag-off
+  snapshot tests pass unchanged.
+- **Not in the demo.** Turning the flag on in the demo also needs the
+  62-entry base served by the gateway and ml_service, which needs the
+  clinician's sign-off on the KB text, and Mr. Ouma's decision. Until
+  then the demo runs KB-21 with the 0.8439 gate.
