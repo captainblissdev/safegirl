@@ -3165,3 +3165,44 @@ Run. One execution, then locked. The run script is dry-run tested on a
 dummy file first. Metrics only in the report, no question text.
 
 Deviations: none yet.
+
+## Round 2 labels locked (2026-11-01)
+
+Follows "Round 2: pre-registration of the one-shot gate test (1 Nov
+2026)". Hashes and counts only; no labels and no question text.
+
+- **File locked.** `C:\Users\cindy\round2\labelling_worksheet_labelled.csv`,
+  10,167 bytes, SHA-256
+  `c111d8824603f9713fe3e8862becf69d6785e275732e885ec70f63153467bfb7`.
+  Set read-only on 2026-11-01 and copied (read-only) to
+  `round2\locked\labelling_worksheet_labelled_sha256-c111d882...bfb7.csv`.
+  Outside the repository; only the hash is recorded here.
+- **Saves.** The file was saved at 11:14 (SHA-256 53413953...efa1,
+  10,069 bytes; validated, not locked) and again at 11:21, after that
+  validation; the 11:21 version is the one locked. Reason for the 11:21
+  save: not stated by the author. Both versions gave the same label
+  counts. The file was closed in all editors before locking.
+- **Labelling.** Single labeller (the author), blind to system output;
+  no system output on these questions has ever existed. Start and
+  finish times: not recorded.
+- **Validation (all passed on the locked version).** Exactly the 97 ids
+  of the post-dedupe file, each once; `none_fits` yes or no on every
+  row; with no, one `best_entry_id` that exists in the 62-entry base;
+  with yes, no entry ids; acceptable ids `;`-separated, all in the
+  62-entry base, none repeating the best entry, no duplicates; every
+  note starts with one of the seven tags.
+- **Counts.** `none_fits` no 63 (in scope), yes 34. Tags: offtopic 32,
+  uncovered 2 (together the 34 yes rows), unsure 4; vague, held,
+  distress and twopart 0. The set has 0 held and 0 distress questions.
+  Of the 63 rows with an entry, 37 have an entry in the 21-entry base
+  (27 by best entry) and 26 only in the 41 entries added for KB-62; 35
+  rows list acceptable ids.
+- **Clarifications made after labelling and before any run (not
+  deviations).**
+  - The 4 rows tagged unsure are among the 63 in-scope rows and are
+    included in the primary analysis; a sensitivity analysis excluding
+    them is reported alongside.
+  - Condition 3 of the decision rule uses the 32 offtopic rows; no
+    vague rows exist in this set.
+- **Unchanged.** No run on the round 2 questions; no model, threshold,
+  rule, gate or KB file changed.
