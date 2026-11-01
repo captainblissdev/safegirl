@@ -81,6 +81,11 @@ class Preflight(Files):
         self.assertAborts("routing id", routing="1" * 64)
         self.assertAborts("frozen gate routing", gate_routing="1" * 64)
 
+    def test_lock_in_new_folder(self):
+        lock = self.tmp / "not_yet" / "run.lock"
+        r2.take_lock(lock, {"x": 1})
+        self.assertTrue(lock.exists())
+
     def test_lock_refuses_second(self):
         r2.take_lock(self.args.lock, {"x": 1})
         with self.assertRaises(r2.CheckFailed):
