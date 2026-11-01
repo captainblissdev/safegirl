@@ -2983,3 +2983,91 @@ accepted; the default stays off (`V4_TRIAGE_ENABLED` unset). Branch
   text, Safety Net patterns, helplines and HELP_CONTACTS_VERIFIED, the
   check order, the snapshots, and every default (V4 and generation
   off).
+
+## Gate refit under V4 routing (PRE-REGISTRATION) (2026-11-01)
+
+Development stage. Written and committed before any code for it is run.
+The result is development evidence, not a test: no gate is chosen or
+deployed by this step, and changing the runtime gate needs its own entry
+and a test on unseen data.
+
+- **Purpose.** Refit the relevance gate with V4 triage routing. Gate v2
+  (`research/eval/gate_v2/frozen_gate_v2.json` on `kb/merge-60`) was
+  fitted with V3 routing. Its class-agreement signal compares V4's class
+  with the class of the served entry; with V4 routing a scoped query is
+  served the best entry of V4's own class, so the signal is constant
+  there and carries no information.
+- **Data: the 157 development items.**
+  - The 75 relabelled items: the 35 development-set questions with a
+    class label (`retrieval_eval_set_labels_kb62.csv`; queries from
+    `resources/eval/retrieval_eval_set.csv`) and the 40 gate items
+    (`relevance_validation_kb62.csv`), both in `C:\Users\cindy\relabel\out`.
+  - The 82 fresh-test questions (`C:\Users\cindy\fresh\fresh_test_v1.csv`,
+    SHA-256 667A547C...) with their locked labels
+    (`fresh_test_v1_labels.csv`, SHA-256 71B7BD8F...). The fresh test has
+    had its one run; these are development data from now on.
+  - Not scored: the 6 distress gate items (expected referral, as in the
+    earlier gate work), and any item whose question text exactly repeats
+    an earlier item (V16 = Q13). Expected: 150 scored items; the code
+    reports the actual number.
+  - DR-04, the demo-risk set and the sealed set are not used.
+- **Routing (fit and evaluation alike).** V4 triage on, in the gateway's
+  order: Safety Net, generic help, held topic, vague rule (the gateway's
+  own modules on this branch); then V4: a vague label asks, a non-topic
+  label or a top probability below 0.45 abstains, a topic label
+  retrieves, scoped to its class at 0.5 or above, unscoped below. The
+  code asserts that the routing used to fit equals the routing used to
+  evaluate and stops if not.
+- **Bases.** KB-21 (`ml_service/knowledge_base.json` on this branch, the
+  demo's base) in full embed mode; KB-62 (`kb/merge-60` at 9ae43bb,
+  SHA-256 1b53efad...) in question embed mode, as in fresh-test arms A
+  and B. e5 at the revision frozen with V4. An item's acceptable entries
+  are its labelled ids that exist in the base.
+- **Features per item and base.** Unscoped top-1 score, top-2 score,
+  margin (top-1 minus top-2), V4 class and top probability, class of the
+  unscoped top-1 entry, agreement (V4 class equals that class), the live
+  entry (scoped: best of V4's class; unscoped: top-1) and its score.
+  Label: correct (an acceptable entry exists and the live entry is one),
+  wrong (an acceptable entry exists, the live entry is not one),
+  off-topic (no acceptable entry in this base), should-ask (fresh group
+  "Too vague to answer").
+- **Outcomes,** as in the fresh test: correct answer, wrong answer
+  served, correct abstain or ask, missed answer; plus the share of served
+  answers that were correct, and how often each candidate abstains.
+- **Candidates (eight, fixed now).** The gate decides only for items V4
+  sends to retrieval; it serves the live entry or abstains.
+  - (a) current gate: unscoped top-1 score >= 0.8439 (not refitted);
+  - (b) top-1 score alone, threshold refitted;
+  - (c) score + margin;
+  - (d) score + V4 top probability;
+  - (e) score + margin + V4 top probability;
+  - (f) score + margin + agreement between V4's class and the class of
+    the unscoped top-1 entry;
+  - (g) (f) + V4 top probability;
+  - (h) the live entry's own score + its gap to the unscoped top-1 score.
+    Justification: the current gate and (b) to (g) look at the unscoped
+    top-1, but under V4 scoped routing the served entry can be a lower
+    ranked entry of V4's class. (h) gates on the entry actually served
+    and on how far it sits below the best match.
+  - Fitting: (b) takes the threshold that maximises successes (correct
+    answers plus correct abstains) on the training items, ties to fewer
+    wrong answers, then the middle threshold (as `gate_candidates.py`);
+    (c) to (h) are logistic regressions on standardised features, C = 1,
+    target "serving the live entry would be correct", serve at p >= 0.5.
+- **Leave-one-out.** For each scored item, every candidate is fitted on
+  the other scored items and applied to the held-out one; both bases
+  separately.
+- **Selection rule (for reporting only).** Per base: fewest wrong
+  answers served, then most correct answers served, then the earlier
+  letter.
+- **Checks before scoring.** On the fresh items, (a) on KB-21 must
+  reproduce arm A (17 correct, 21 wrong served, 38 correct abstain or
+  ask, 6 missed) and frozen gate v2 on KB-62 must reproduce arm B (24,
+  29, 21, 8); otherwise the run stops. The code also reports every
+  feature that is constant over the retrieved items of a base.
+- **Frozen.** V3, the V4 model and hash, thresholds 0.35 and 0.5, V4
+  t_act 0.45, the runtime gate 0.8439, KB text, Safety Net patterns and
+  helpline numbers. Only research code changes.
+- **Outputs.** `research/v4/gate_refit/`: the code, a CSV of counts and a
+  summary; ids, counts and numbers only, no question text. Feature tables
+  are written outside the repository.
