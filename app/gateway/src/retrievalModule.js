@@ -43,6 +43,27 @@ const KB_DIR = path.join(
 );
 
 /**
+ * Knowledge-base sets. "kb21" is the default and is read exactly as
+ * before. "kb62" (resources/knowledge_base/kb62/, the 62 approved entries
+ * from kb/merge-60) is used only when KB_SET is exactly "kb62"; its
+ * entries carry a review status and only "approved" ones are served
+ * (docs/decision-log.md, "Gate (g) wired behind a flag"; the switch
+ * itself needs its own entry).
+ */
+const KB_SETS = Object.freeze({
+  kb21: KB_DIR,
+  kb62: path.join(KB_DIR, "kb62"),
+});
+
+/** Review statuses a kb62 entry must carry; only "approved" is served. */
+const KB_STATUSES = ["approved", "pending"];
+
+/** The set for this process: "kb62" only when KB_SET is exactly "kb62". */
+function kbSetFromEnv(env = process.env) {
+  return env.KB_SET === "kb62" ? "kb62" : "kb21";
+}
+
+/**
  * The four active SRH categories supported by SafeGirl.
  *
  * GBV is deliberately excluded because safety-related queries should be
@@ -58,9 +79,12 @@ const ACTIVE_CATEGORIES = ["contraception", "sti", "pregnancy", "general"];
  * and is therefore never loaded into the retrievable knowledge base.
  *
  * @param {string} filePath - Path to the knowledge-base Markdown file.
+ * @param {object} [options]
+ * @param {boolean} [options.withStatus] - Require and return each entry's
+ *        review status (the kb62 set). Without it the parse is unchanged.
  * @returns {Array<object>} Parsed active knowledge-base entries.
  */
-function parseKbFile(filePath) {
+function parseKbFile(filePath, { withStatus = false } = {}) {
   const raw = fs.readFileSync(filePath, "utf-8");
 
   // Exclude all content after the first HELD/--- boundary.
@@ -91,7 +115,7 @@ function parseKbFile(filePath) {
       return match ? match[1].trim() : null;
     };
 
-    entries.push({
+    const entry = {
       kbId: idMatch[1],
       intent: get("Intent"),
       question: get("User question"),
@@ -100,7 +124,22 @@ function parseKbFile(filePath) {
       source: get("Source"),
       conditions: get("Conditions/limitations"),
       safetyNotes: get("Safety/referral notes"),
-    });
+    };
+
+    if (withStatus) {
+      const status = get("Status");
+
+      if (!KB_STATUSES.includes(status)) {
+        throw new Error(
+          `${path.basename(filePath)}: ${idMatch[1]} has ${
+            status ? `unknown status "${status}"` : "no status"
+          } (expected ${KB_STATUSES.join(" or ")}).`,
+        );
+      }
+      entry.status = status;
+    }
+
+    entries.push(entry);
   }
 
   return entries;
@@ -117,16 +156,26 @@ function parseKbFile(filePath) {
  * (e.g. "sti"), so callers know an entry's category however it was
  * found. The "intent" field holds the display name ("STIs") instead.
  *
+ * With the kb62 set, only approved entries are returned; pending ones
+ * are parsed and validated but never served.
+ *
+ * @param {"kb21"|"kb62"} [kbSet] - Defaults to kbSetFromEnv().
  * @returns {object} Knowledge base grouped by category.
  */
-function loadKnowledgeBase() {
+function loadKnowledgeBase(kbSet = kbSetFromEnv()) {
   const kb = {};
+  const kb62 = kbSet === "kb62";
+  const dir = kb62 ? KB_SETS.kb62 : KB_DIR;
 
   for (const category of ACTIVE_CATEGORIES) {
-    const filePath = path.join(KB_DIR, `${category}.md`);
-    const entries = fs.existsSync(filePath) ? parseKbFile(filePath) : [];
+    const filePath = path.join(dir, `${category}.md`);
+    const entries = fs.existsSync(filePath)
+      ? parseKbFile(filePath, { withStatus: kb62 })
+      : [];
 
-    kb[category] = entries.map((entry) => ({ ...entry, category }));
+    kb[category] = entries
+      .filter((entry) => !kb62 || entry.status === "approved")
+      .map((entry) => ({ ...entry, category }));
   }
 
   return kb;
@@ -223,4 +272,8 @@ module.exports = {
   loadKnowledgeBase,
   retrieve,
   getEntryById,
+  kbSetFromEnv,
+  parseKbFile,
+  KB_SETS,
+  KB_STATUSES,
 };
