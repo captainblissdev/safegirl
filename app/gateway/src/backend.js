@@ -60,6 +60,7 @@ const {
   isRelevanceGateEnabled,
   relevanceGateDecision,
 } = require("./relevanceGate");
+const { gateGDecision, gateGFromEnv } = require("./gateG");
 
 // Note returned when the relevance gate abstains. The user sees the
 // standard no-answer help message, not this note.
@@ -83,6 +84,8 @@ const RELEVANCE_GATE_NOTE =
  *        on; defaults to the RELEVANCE_GATE environment variable.
  * @param {Function} [deps.generate] - generate(entry, queryText), as
  *        generationModule exports or createGenerator returns.
+ * @param {object|null} [deps.gateG] - The loaded gate (g) (gateG.js), or
+ *        null for the current gate. Used only for queries V4 classified.
  * @returns {(queryText: string) => Promise<object>} Query handler.
  */
 function createHandleQuery({
@@ -93,6 +96,7 @@ function createHandleQuery({
   isVague = isVagueQuery,
   relevanceGate = isRelevanceGateEnabled(),
   generate: generateAnswer = generate,
+  gateG = null,
 }) {
   /**
    * Process a SafeGirl user query.
@@ -158,17 +162,33 @@ function createHandleQuery({
       } else {
         // 6. Relevance gate, after retrieval: abstain with the standard
         // no-answer message when the top-1 unscoped score is too low.
+        // With gate (g) on (GATE_G_ENABLED and V4), a query V4 classified
+        // is gated by (g); every other query keeps the current gate.
+        const useGateG = gateG !== null && classification?.source === "v4";
         let unscopedScore;
+        let unscopedTop;
         ({
           entry: retrievedEntry,
           retrievalScope,
           unscopedScore,
+          unscopedTop,
         } = await classifierClient.retrieve(queryText, classification, {
           withUnscopedScore: true,
+          ...(useGateG ? { withGateFeatures: true } : {}),
         }));
-        gateResult = retrievedEntry
-          ? relevanceGateDecision(unscopedScore)
-          : "not_applied";
+        if (!retrievedEntry) {
+          gateResult = "not_applied";
+        } else if (useGateG) {
+          gateResult = gateGDecision(gateG, {
+            s1: unscopedTop?.s1,
+            s2: unscopedTop?.s2,
+            top1Class: unscopedTop?.top1Class,
+            v4Label: classification.label,
+            v4Confidence: classification.confidence,
+          });
+        } else {
+          gateResult = relevanceGateDecision(unscopedScore);
+        }
 
         if (gateResult === "abstained") {
           retrievedEntry = null;
@@ -199,8 +219,11 @@ function createHandleQuery({
 }
 
 // Created once at module load, as the keyword classifier was before.
+// gateGFromEnv() is null unless GATE_G_ENABLED and V4_TRIAGE_ENABLED are
+// both "true"; then it loads and hash-checks gate (g) or throws.
 const handleQuery = createHandleQuery({
   classifierClient: createClassifierClient(),
+  gateG: gateGFromEnv(),
 });
 
 module.exports = { handleQuery, createHandleQuery };

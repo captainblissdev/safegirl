@@ -3029,3 +3029,321 @@ and row numbers only here.
 - **Unchanged.** Models, thresholds, rules and knowledge-base files.
   None of the round 2 files, nor the scripts that made them
   (`round2\tools\`), are committed.
+
+## Gate refit under V4 routing (PRE-REGISTRATION) (2026-11-01)
+
+Development stage. Written and committed before any code for it is run.
+The result is development evidence, not a test: no gate is chosen or
+deployed by this step, and changing the runtime gate needs its own entry
+and a test on unseen data.
+
+- **Purpose.** Refit the relevance gate with V4 triage routing. Gate v2
+  (`research/eval/gate_v2/frozen_gate_v2.json` on `kb/merge-60`) was
+  fitted with V3 routing. Its class-agreement signal compares V4's class
+  with the class of the served entry; with V4 routing a scoped query is
+  served the best entry of V4's own class, so the signal is constant
+  there and carries no information.
+- **Data: the 157 development items.**
+  - The 75 relabelled items: the 35 development-set questions with a
+    class label (`retrieval_eval_set_labels_kb62.csv`; queries from
+    `resources/eval/retrieval_eval_set.csv`) and the 40 gate items
+    (`relevance_validation_kb62.csv`), both in `C:\Users\cindy\relabel\out`.
+  - The 82 fresh-test questions (`C:\Users\cindy\fresh\fresh_test_v1.csv`,
+    SHA-256 667A547C...) with their locked labels
+    (`fresh_test_v1_labels.csv`, SHA-256 71B7BD8F...). The fresh test has
+    had its one run; these are development data from now on.
+  - Not scored: the 6 distress gate items (expected referral, as in the
+    earlier gate work), and any item whose question text exactly repeats
+    an earlier item (V16 = Q13). Expected: 150 scored items; the code
+    reports the actual number.
+  - DR-04, the demo-risk set and the sealed set are not used.
+- **Routing (fit and evaluation alike).** V4 triage on, in the gateway's
+  order: Safety Net, generic help, held topic, vague rule (the gateway's
+  own modules on this branch); then V4: a vague label asks, a non-topic
+  label or a top probability below 0.45 abstains, a topic label
+  retrieves, scoped to its class at 0.5 or above, unscoped below. The
+  code asserts that the routing used to fit equals the routing used to
+  evaluate and stops if not.
+- **Bases.** KB-21 (`ml_service/knowledge_base.json` on this branch, the
+  demo's base) in full embed mode; KB-62 (`kb/merge-60` at 9ae43bb,
+  SHA-256 1b53efad...) in question embed mode, as in fresh-test arms A
+  and B. e5 at the revision frozen with V4. An item's acceptable entries
+  are its labelled ids that exist in the base.
+- **Features per item and base.** Unscoped top-1 score, top-2 score,
+  margin (top-1 minus top-2), V4 class and top probability, class of the
+  unscoped top-1 entry, agreement (V4 class equals that class), the live
+  entry (scoped: best of V4's class; unscoped: top-1) and its score.
+  Label: correct (an acceptable entry exists and the live entry is one),
+  wrong (an acceptable entry exists, the live entry is not one),
+  off-topic (no acceptable entry in this base), should-ask (fresh group
+  "Too vague to answer").
+- **Outcomes,** as in the fresh test: correct answer, wrong answer
+  served, correct abstain or ask, missed answer; plus the share of served
+  answers that were correct, and how often each candidate abstains.
+- **Candidates (eight, fixed now).** The gate decides only for items V4
+  sends to retrieval; it serves the live entry or abstains.
+  - (a) current gate: unscoped top-1 score >= 0.8439 (not refitted);
+  - (b) top-1 score alone, threshold refitted;
+  - (c) score + margin;
+  - (d) score + V4 top probability;
+  - (e) score + margin + V4 top probability;
+  - (f) score + margin + agreement between V4's class and the class of
+    the unscoped top-1 entry;
+  - (g) (f) + V4 top probability;
+  - (h) the live entry's own score + its gap to the unscoped top-1 score.
+    Justification: the current gate and (b) to (g) look at the unscoped
+    top-1, but under V4 scoped routing the served entry can be a lower
+    ranked entry of V4's class. (h) gates on the entry actually served
+    and on how far it sits below the best match.
+  - Fitting: (b) takes the threshold that maximises successes (correct
+    answers plus correct abstains) on the training items, ties to fewer
+    wrong answers, then the middle threshold (as `gate_candidates.py`);
+    (c) to (h) are logistic regressions on standardised features, C = 1,
+    target "serving the live entry would be correct", serve at p >= 0.5.
+- **Leave-one-out.** For each scored item, every candidate is fitted on
+  the other scored items and applied to the held-out one; both bases
+  separately.
+- **Selection rule (for reporting only).** Per base: fewest wrong
+  answers served, then most correct answers served, then the earlier
+  letter.
+- **Checks before scoring.** On the fresh items, (a) on KB-21 must
+  reproduce arm A (17 correct, 21 wrong served, 38 correct abstain or
+  ask, 6 missed) and frozen gate v2 on KB-62 must reproduce arm B (24,
+  29, 21, 8); otherwise the run stops. The code also reports every
+  feature that is constant over the retrieved items of a base.
+- **Frozen.** V3, the V4 model and hash, thresholds 0.35 and 0.5, V4
+  t_act 0.45, the runtime gate 0.8439, KB text, Safety Net patterns and
+  helpline numbers. Only research code changes.
+- **Outputs.** `research/v4/gate_refit/`: the code, a CSV of counts and a
+  summary; ids, counts and numbers only, no question text. Feature tables
+  are written outside the repository.
+
+## Gate (g) frozen (2026-11-01)
+
+Development stage. Follows "Gate refit under V4 routing
+(PRE-REGISTRATION)" and its results (`research/v4/gate_refit/`).
+
+- **Candidate chosen: (g),** a logistic gate on the unscoped top-1
+  score, the margin (top-1 minus top-2), agreement between V4's class
+  and the class of the unscoped top-1 entry, and V4's top probability.
+- **Why: the pre-registered rule.** Fewest wrong answers served on
+  KB-62 by leave-one-out, then most correct answers. (g) served 14
+  wrong answers (62 correct, 44 correct abstains or asks, 30 missed;
+  0.816 of served answers correct), against 20 for the current gate
+  (a); (e) and (f) served 17. Noted, not part of the rule: (g) misses
+  more answers than (f) (30 against 24).
+- **Fit.** Once, on all 150 scored development items, with exactly the
+  G1 method: KB-62 in question embed mode, V4 triage routing id
+  `57c6a5b638ab24b22beacbf50a2e1d6ef5741ec7dd45eeb6ed583949452a418a`,
+  standardised logistic regression (C = 1), target "serving the live
+  entry would be correct", serve at p >= 0.5. 107 items reached
+  retrieval; 69 of them had a correct live entry; the gate serves 76
+  in sample. The fit was checked against an independent scikit-learn
+  refit, and fresh-test arms A and B were reproduced first.
+- **File.** `research/v4/gate_refit/frozen/gate_g.json`, SHA-256
+  `f63142ced7ccd2d8b83966a4260debe56deb87eab5f6f987334429f91947023b`
+  (sidecar `gate_g.sha256`), frozen on 2026-11-01 from commit 8d8bd60.
+  Loader `research/v4/gate_refit/gate_g.py` (refuses a changed file or
+  a different routing id); `research/v4/tests/test_gate_g.py`
+  reproduces the 107 in-sample decisions (5 tests pass; the V4 suite,
+  190 tests, passes).
+- **Nothing deployed.** The runtime gate stays at 0.8439 on KB-21; no
+  model, threshold, rule or KB file changed. (g) is development
+  evidence fitted on all development items, so its leave-one-out
+  counts are its only performance estimate. Using it in the app needs
+  its own entry and a test on data it has not seen.
+
+## Round 2: pre-registration of the one-shot gate test (1 Nov 2026)
+
+Question: under V4 triage routing, does the frozen gate (g) let the 62-entry
+knowledge base serve fewer wrong answers than the 21-entry base with the
+current gate, without losing correct answers or safety behaviour?
+
+Reason: the first fresh test (82 questions) gave 24 correct and 29 wrong
+served for 62 entries, against 17 and 21 for 21 entries. The V3-fitted gate
+lost its class-agreement signal under V4 routing (constant on every scoped
+item, confirmed in step G1). The refit used signals that vary under V4
+routing.
+
+Data. Development (used for fitting, not a test): 75 relabelled items plus 82
+fresh items = 157 (150 scored). Test: the 97 questions R2-001..R2-100
+(R2-033, R2-034 and R2-061 removed as near-duplicates), written by the remote
+reviewer on 29 Oct 2026. Raw file sha256 f378c260e9adebce5257a1542cc7d3a3337f7ed10aca8169219dfda27a0c01ea,
+post-dedupe sha256 012eb198a35794450f50121a279d4fe810af68c10c56ef473edcef8aadcd0858.
+Files stay outside the repository. No system output on these questions
+exists. Not used: the sealed set, DR-04, the demo-risk set.
+
+Gate. Candidate (g) (top-1 score, margin, agreement of V4's class with the
+class of the unscoped top-1 entry, V4 max probability), chosen under the
+pre-registered rule of fewest wrong answers served on KB-62 in leave-one-out.
+Frozen in research/v4/gate_refit/frozen/gate_g.json, sha256 f63142ced7ccd2d8b83966a4260debe56deb87eab5f6f987334429f91947023b,
+code commit 8d8bd60. Not changed after this entry.
+
+Labels. Assigned by the author alone, blind to system output, scores and old
+labels, using the existing labelling guide, in the worksheet fields
+best_entry_id, acceptable_entry_ids, none_fits and notes (tags: vague,
+offtopic, uncovered, held, distress, twopart, unsure). Single labeller:
+there is no second reviewer, which is a limitation. The finished label file
+is locked by sha256 before the run; only the hash is committed.
+
+Arms (all with V4 triage routing, same routing id as the fit):
+A: 21 entries, current gate 0.8439 (the demo as it stands).
+B: 62 entries, gate (g).
+C: 21 entries, gate (g).
+
+Measures. Per arm: correct answer, wrong answer served, correct abstain or
+ask, missed answer; share of served answers that were correct; abstain
+rate. Paired comparison by McNemar's exact test. With 97 questions the
+intervals are wide and are reported as they are.
+
+Decision rule. B replaces A only if ALL hold:
+1. Wrong answers served in B are not more than in A.
+2. Correct answers in B are at least those in A.
+3. Off-topic and vague questions abstained or asked at least as often in B
+   as in A.
+4. The share of served answers that are correct in B is at least 0.60.
+5. Safety, held-topic and help tests unchanged (all existing tests pass).
+Otherwise the demo stays on the 21-entry base with the current gate. Any
+gate or KB change needs its own decision-log entry; KB text needs clinician
+sign-off. Decision recorded by 6 Nov 2026; fallback is 21 entries.
+
+Run. One execution, then locked. The run script is dry-run tested on a
+dummy file first. Metrics only in the report, no question text.
+
+Deviations: none yet.
+
+## Round 2 labels locked (2026-11-01)
+
+Follows "Round 2: pre-registration of the one-shot gate test (1 Nov
+2026)". Hashes and counts only; no labels and no question text.
+
+- **File locked.** `C:\Users\cindy\round2\labelling_worksheet_labelled.csv`,
+  10,167 bytes, SHA-256
+  `c111d8824603f9713fe3e8862becf69d6785e275732e885ec70f63153467bfb7`.
+  Set read-only on 2026-11-01 and copied (read-only) to
+  `round2\locked\labelling_worksheet_labelled_sha256-c111d882...bfb7.csv`.
+  Outside the repository; only the hash is recorded here.
+- **Saves.** The file was saved at 11:14 (SHA-256 53413953...efa1,
+  10,069 bytes; validated, not locked) and again at 11:21, after that
+  validation; the 11:21 version is the one locked. Reason for the 11:21
+  save: not stated by the author. Both versions gave the same label
+  counts. The file was closed in all editors before locking.
+- **Labelling.** Single labeller (the author), blind to system output;
+  no system output on these questions has ever existed. Start and
+  finish times: not recorded.
+- **Validation (all passed on the locked version).** Exactly the 97 ids
+  of the post-dedupe file, each once; `none_fits` yes or no on every
+  row; with no, one `best_entry_id` that exists in the 62-entry base;
+  with yes, no entry ids; acceptable ids `;`-separated, all in the
+  62-entry base, none repeating the best entry, no duplicates; every
+  note starts with one of the seven tags.
+- **Counts.** `none_fits` no 63 (in scope), yes 34. Tags: offtopic 32,
+  uncovered 2 (together the 34 yes rows), unsure 4; vague, held,
+  distress and twopart 0. The set has 0 held and 0 distress questions.
+  Of the 63 rows with an entry, 37 have an entry in the 21-entry base
+  (27 by best entry) and 26 only in the 41 entries added for KB-62; 35
+  rows list acceptable ids.
+- **Clarifications made after labelling and before any run (not
+  deviations).**
+  - The 4 rows tagged unsure are among the 63 in-scope rows and are
+    included in the primary analysis; a sensitivity analysis excluding
+    them is reported alongside.
+  - Condition 3 of the decision rule uses the 32 offtopic rows; no
+    vague rows exist in this set.
+- **Unchanged.** No run on the round 2 questions; no model, threshold,
+  rule, gate or KB file changed.
+
+## Round 2 one-shot gate test: result (2026-11-01)
+
+The one execution pre-registered in "Round 2: pre-registration of the
+one-shot gate test (1 Nov 2026)". Counts only; no question or label
+text.
+
+- **Run.** `research/v4/gate_refit/round2_run.py` at fe3e446, once, on
+  2026-11-01 08:40:55 to 08:41:21 UTC; exit 0; lock
+  `C:\Users\cindy\round2\results\ROUND2_RUN.lock` taken before scoring.
+  Checked before the run: label file SHA-256 c111d882...bfb7, read-only;
+  gate_g.json f63142ce...023b; routing id 57c6a5b638ab for every arm;
+  questions file 012eb198...0858; no lock. Tracked files under
+  `research/` and `docs/` were clean; untracked files present and not
+  read by the script: the Chapter 5 diagram files in
+  `docs/figures/ch5/` and `research/experiments/results/gemini_probe_2026-10-15.csv`.
+- **Items.** 97. Routes: retrieval scoped 62, unscoped 1; V4 abstain
+  30; held topic 4. 26 items have a correct entry only in the 62-entry
+  base (scored for arms A and C as correct abstain if nothing is served,
+  wrong answer if something is).
+
+| Arm | Correct | Wrong served | Correct abstain or ask | Missed | Served correct | Abstain rate |
+|---|---|---|---|---|---|---|
+| A: KB-21, gate 0.8439 | 31 | 14 | 48 | 4 | 0.689 | 0.536 |
+| B: KB-62, gate (g) | 47 | 7 | 34 | 9 | 0.870 | 0.443 |
+| C: KB-21, gate (g) | 30 | 16 | 45 | 6 | 0.652 | 0.526 |
+
+- **McNemar exact p** (correct answers; wrong answers served): A vs B
+  0.0015 (4 only A, 20 only B); 0.143 (12 only A, 5 only B). A vs C 1.0
+  (2, 1); 0.815 (8, 10). C vs B 0.0009 (4 only C, 21 only B); 0.078
+  (15 only C, 6 only B).
+- **Decision rule.**
+  1. Wrong answers served B 7 <= A 14: PASS.
+  2. Correct answers B 47 >= A 31: PASS.
+  3. Offtopic and vague items (32 offtopic, 0 vague) abstained or asked:
+     B 32 >= A 32: PASS.
+  4. Share of served answers correct in B 0.870 >= 0.60: PASS.
+  5. Safety, held-topic and help tests: 269 of 269 pass: PASS.
+  **Verdict under the pre-registered rule: all five hold; B replaces
+  A.**
+- **Sensitivity, without the 4 unsure rows (93 items).** A 30 correct,
+  13 wrong, 47 correct abstain or ask, 3 missed (0.698); B 43, 7, 34, 9
+  (0.860); C 29, 14, 45, 5 (0.674). All five conditions PASS; the same
+  verdict.
+- **Files.** `C:\Users\cindy\round2\results\aggregate.json` (SHA-256
+  9d86cdf3...24ef as written) and `per_item.csv` (ids and outcome codes
+  only, 36a8af0e...a1d2), outside the repository; a copy of the
+  aggregate is committed as `research/v4/gate_refit/round2_aggregate.json`.
+- **Nothing deployed.** The demo still runs KB-21 with the gate at
+  0.8439. Per the pre-registration, any gate or KB change needs its own
+  decision-log entry, and KB text needs clinician sign-off; the
+  decision is due by 6 Nov 2026.
+
+## Gate (g) wired behind a flag (2026-11-01)
+
+Follows "Round 2 one-shot gate test: result". Wiring only; nothing is on
+by default and nothing was deployed.
+
+- **Flag.** `GATE_G_ENABLED`, off unless exactly "true". Gate (g) is used
+  only when it AND `V4_TRIAGE_ENABLED` are both "true"; with
+  `GATE_G_ENABLED` on and V4 off the gateway warns and keeps the current
+  gate. Even when on, (g) gates only queries V4 classified; a query that
+  fell back to V3 or the keyword classifier keeps the current gate.
+- **Wiring.** `app/gateway/src/gateG.js` loads
+  `research/v4/gate_refit/frozen/gate_g.json`, checks its SHA-256
+  (f63142ced7ccd2d8b83966a4260debe56deb87eab5f6f987334429f91947023b)
+  and its features at start-up and refuses to start on a mismatch, and
+  applies the frozen logistic decision (serve at p >= 0.5) to the
+  unscoped top-1 score, the margin to the top-2, the agreement of V4's
+  class with the top-1 entry's class and V4's confidence. These come
+  from `/retrieve`, whose results already carry each entry's class and
+  score; with the flag on the extra unscoped call asks for 2 results
+  instead of 1. No response field changed.
+- **ml_service.** `RETRIEVAL_EMBED_MODE` ("full" by default, which embeds
+  the same text as before; "question"), ported from kb/merge-60
+  26cfd2e, so the 62-entry base can be served in the embed mode the gate
+  was fitted in. `/health` is unchanged.
+- **Unchanged.** The default knowledge base (21 entries), the 0.8439
+  runtime gate, V3, V4, thresholds 0.35/0.5, t_act 0.45, rules, Safety
+  Net, helplines and the frozen gate file.
+- **Parity.** `research/v4/gate_refit/gate_g_parity.py`: a real
+  ml_service with the 62-entry base written from git (kb/merge-60
+  9ae43bb, the file the harness reads), question mode and V4 on, and the
+  gateway pipeline with both flags on, against the harness on the 150
+  scored development items: serve-or-abstain agreed on 150 of 150 and
+  the served entry id on 150 of 150 (76 served by both; no
+  disagreement).
+- **Regression, flags off.** Gateway 543 of 543 node tests (526 before,
+  17 new) and backend.test.js all passed; ml_service 16 (11 before, 5
+  new); research/v4 208; interface tests pass unchanged. The flag-off
+  snapshot tests pass unchanged.
+- **Not in the demo.** Turning the flag on in the demo also needs the
+  62-entry base served by the gateway and ml_service, which needs the
+  clinician's sign-off on the KB text, and Mr. Ouma's decision. Until
+  then the demo runs KB-21 with the 0.8439 gate.

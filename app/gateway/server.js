@@ -169,7 +169,14 @@ function createApp({ handleQuery, authMiddleware, logger = console }) {
  * for testing without automatically starting a server.
  */
 if (require.main === module) {
-  const { handleQuery } = require("./src/backend");
+  let handleQuery;
+  try {
+    // Loading the backend checks gate (g) when GATE_G_ENABLED is on.
+    ({ handleQuery } = require("./src/backend"));
+  } catch (err) {
+    console.error(`[gateway] ${err.message}`);
+    process.exit(1);
+  }
   const { createAuthFromEnv } = require("./src/middleware/sessionAuth");
   const { warnIfContactsUnverified } = require("./src/content/helpContent");
 
