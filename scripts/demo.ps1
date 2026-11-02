@@ -113,6 +113,17 @@ if ($Part -eq "ml") {
   Set-Location (Join-Path $repo "ml_service")
   & "..\.venv\Scripts\python.exe" -m uvicorn app:app --host 127.0.0.1 --port 8001
 } else {
+  # The gateway reads its settings from app\gateway\.env (README section
+  # 3). Without the file, node --env-file stops with only ".env: not
+  # found", so say which file is missing and what to do. With
+  # AUTH_DISABLED=true already set (local tests only), start without it.
+  $envFile = Join-Path $repo "app\gateway\.env"
+  $hasEnvFile = Test-Path $envFile
+  if (-not $hasEnvFile -and $env:AUTH_DISABLED -ne "true") {
+    Write-Host "app\gateway\.env not found: create it as in README section 3 (FIREBASE_PROJECT_ID),"
+    Write-Host "or, for a local test only, set AUTH_DISABLED=true before starting the gateway."
+    exit 1
+  }
   Set-Location (Join-Path $repo "app\gateway")
   $env:KB_SET = $kbSet
   $env:GATE_G_ENABLED = $gateG
@@ -121,6 +132,11 @@ if ($Part -eq "ml") {
   }
   $served = node -e "const {loadKnowledgeBase}=require('./src/retrievalModule');console.log(Object.values(loadKnowledgeBase()).flat().length)"
   Write-Host "Gateway: $served knowledge-base entries served"
-  Write-Host "Starting the gateway (node --env-file=.env server.js)."
-  node --env-file=.env server.js
+  if ($hasEnvFile) {
+    Write-Host "Starting the gateway (node --env-file=.env server.js)."
+    node --env-file=.env server.js
+  } else {
+    Write-Host "app\gateway\.env not found; AUTH_DISABLED=true is set (local tests only): starting without it (node server.js)."
+    node server.js
+  }
 }

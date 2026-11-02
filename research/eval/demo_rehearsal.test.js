@@ -187,3 +187,25 @@ describe("demo rehearsal, 62-entry configuration (synthetic)", () => {
     assert.match(refused.out, /needs V4 triage on/);
   });
 });
+
+describe("demo.ps1 gateway start without app/gateway/.env", () => {
+  const envFile = path.join(__dirname, "..", "..", "app", "gateway", ".env");
+  // Only when the file is absent, so the test can never start a gateway.
+  const skip = process.platform !== "win32" || fs.existsSync(envFile);
+
+  it("names the missing file, README section 3 and AUTH_DISABLED, and stops", { skip }, () => {
+    const { spawnSync } = require("node:child_process");
+    const script = path.join(__dirname, "..", "..", "scripts", "demo.ps1");
+    const env = { ...process.env };
+    delete env.AUTH_DISABLED;
+    const r = spawnSync("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script, "-Part", "gateway"], {
+      encoding: "utf8",
+      env,
+    });
+    assert.equal(r.status, 1);
+    assert.ok(r.stdout.includes(["app", "gateway", ".env not found"].join(path.win32.sep)), r.stdout);
+    assert.match(r.stdout, /README section 3/);
+    assert.match(r.stdout, /AUTH_DISABLED=true/);
+    assert.match(r.stdout, /local test only/);
+  });
+});
