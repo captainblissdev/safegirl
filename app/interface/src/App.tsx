@@ -217,12 +217,6 @@ export default function App() {
     setScreen("topic");
   };
 
-  /** A topic button in the Help sheet: close the sheet, open the list. */
-  const handleHelpTopic = (next: Topic) => {
-    setIsHelpOpen(false);
-    openTopic(next, "help");
-  };
-
   /**
    * "All topics": back to Home, then focus returns to the tile that opened
    * the list, or to the Help button if the Help sheet did.
@@ -370,13 +364,11 @@ export default function App() {
         isOpen: isHelpOpen,
         onOpen: openHelp,
         onClose: closeHelp,
-        onTopic: handleHelpTopic,
         buttonRef: helpButtonRef,
       }}
       calm={screen === "referral"}
       headerless={
-        ((onChatScreen && turns.length === 0) || screen === "topic") &&
-        !isHelpOpen
+        isHelpOpen || (onChatScreen && turns.length === 0) || screen === "topic"
       }
       support={
         screen === "referral" ||

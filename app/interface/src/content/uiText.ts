@@ -124,12 +124,21 @@ export const CLARIFY_MORE_WORDS =
 export const CLARIFY_PLACEHOLDER = "Add a few more words";
 
 /**
- * The Help sheet's GBV helpline note, as verified by Cindy's call on 20
- * October 2026 (docs/decision-log.md, "Quick exit"). Moved out of the
- * component in step 3c; wording unchanged.
+ * The Help sheet's GBV helpline note. Its facts (free, 24 hours, English
+ * and Kiswahili) are as verified by Cindy's call on 20 October 2026
+ * (docs/decision-log.md, "Quick exit"); the wording changed in HS1 to
+ * say what the line is for.
  */
 export const GBV_HELP_SHEET_NOTE =
-  "GBV helpline. Free, 24 hours, English and Kiswahili.";
+  "Violence and abuse helpline (GBV). Free, 24 hours, English and Kiswahili.";
+
+/** Help sheet (HS1): the line under the helpline cards. */
+export const HELP_CALLS_NOTE = "Calls may show in your recent calls list.";
+
+/** Help sheet (HS1): the Quick exit card. */
+export const HELP_LEAVE_TITLE = "Need to leave quickly?";
+export const HELP_LEAVE_TEXT =
+  "Tap Quick exit. SafeGirl opens Google in this tab. This does not clear your browser history.";
 
 /** On Home's footer card and at the foot of the Help sheet (step 3c). */
 export const ANONYMOUS_LINE = "Anonymous. We never ask for your name.";

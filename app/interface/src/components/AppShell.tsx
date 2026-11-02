@@ -1,5 +1,4 @@
 import type { ReactNode, RefObject } from "react";
-import type { Topic } from "../content/topics";
 import AppHeader from "./AppHeader";
 import DangerLine from "./DangerLine";
 import HelpSheet from "./HelpSheet";
@@ -12,7 +11,6 @@ interface Props {
     isOpen: boolean;
     onOpen: () => void;
     onClose: () => void;
-    onTopic: (topic: Topic) => void;
     buttonRef: RefObject<HTMLButtonElement>;
   };
   /**
@@ -26,9 +24,9 @@ interface Props {
   /** The help and referral screens: header without Help, "Quick exit". */
   support?: boolean;
   /**
-   * Home, while the Help sheet is closed: no app header, since Home's
-   * own band has the logo, "Get help" and Quick exit. The header returns
-   * with the Help sheet, so its Exit stays in view.
+   * No app header: on Home and the Topic list (their band has the logo,
+   * "Get help" and Quick exit), and while the Help sheet is open (its
+   * band has Quick exit and the close button).
    */
   headerless?: boolean;
   children: ReactNode;
@@ -66,8 +64,7 @@ export default function AppShell({
         />
       )}
       {/* While the Help sheet is open, the screen stays mounted but hidden
-          (its state is kept), and the sheet is the page under the header,
-          whose Exit stays in view. */}
+          (its state is kept), and the sheet is the whole page. */}
       <div className="shell-content" hidden={help.isOpen}>
         {children}
         {!footerInContent && (
@@ -76,9 +73,7 @@ export default function AppShell({
           </footer>
         )}
       </div>
-      {help.isOpen && (
-        <HelpSheet onClose={help.onClose} onTopic={help.onTopic} />
-      )}
+      {help.isOpen && <HelpSheet onClose={help.onClose} onExit={onExit} />}
     </div>
   );
 }

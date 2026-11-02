@@ -1,10 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 import { contactNote, telHref, telName } from "../content/telHref";
-import type { Topic } from "../content/topics";
 import {
   ANONYMOUS_LINE,
   GBV_HELP_SHEET_NOTE,
+  HELP_CALLS_NOTE,
+  HELP_LEAVE_TEXT,
+  HELP_LEAVE_TITLE,
+  HOME_GET_HELP,
+  QUICK_EXIT_LABEL,
   SOURCES_LINE,
 } from "../content/uiText";
 import { trapTab } from "../focusTrap";
@@ -13,37 +17,38 @@ import {
   EMERGENCY_NUMBERS,
   GBV_HELPLINE,
 } from "../offline/helpContent";
-import { CloseIcon, PhoneIcon } from "./Icons";
-import TopicChoices from "./TopicChoices";
+import Flowers from "./Flowers";
+import { ChevronRightIcon, CloseIcon } from "./Icons";
 
 /**
- * The Help sheet, opened from the header's Help button on every screen.
+ * The Help sheet ("Get help"), opened from the header's Help button, the
+ * band's "Get help" on Home and the Topic list, and a few reply screens.
  *
- * A modal dialog (role="dialog", aria-modal, labelled by its h1). It is
- * shown as a page under the app header (AppShell hides the screen behind
- * it), so the header's Exit stays visible and is the only Exit. When it
- * opens, focus moves to its close button; Tab stays inside it; Escape or
- * the close button closes it, and App returns focus to the Help button.
+ * A modal dialog (role="dialog", aria-modal, labelled by its h1), shown
+ * as the whole page (App hides its header and the screen behind it while
+ * it is open). Its band has the title, a Quick exit pill (quickExit.ts,
+ * Google in this tab) and a round close button. When it opens, focus
+ * moves to the close button; Tab stays inside it; one Escape or the close
+ * button closes it, and App returns focus to the control that opened it.
+ *
  * Every number and tap-to-call link comes from the helpline constants;
- * none is typed here.
- *
- * The GBV helpline note rests on Cindy's phone check, recorded in
- * docs/decision-log.md ("Quick exit"). The Childline note is the
- * SUPPORT_SECTIONS constant, word for word.
+ * none is typed here. The GBV note's facts rest on Cindy's phone check,
+ * recorded in docs/decision-log.md ("Quick exit"). The Childline note is
+ * the SUPPORT_SECTIONS constant, word for word (the Childline wording
+ * decision in docs/decision-log.md).
  */
 
 interface Props {
   onClose: () => void;
-  /**
-   * A topic button: App closes the sheet and opens the Topic list for
-   * that class.
-   */
-  onTopic: (topic: Topic) => void;
+  /** Quick exit (quickExit.ts). */
+  onExit: () => void;
 }
 
-export default function HelpSheet({ onClose, onTopic }: Props) {
+export default function HelpSheet({ onClose, onExit }: Props) {
   const sheetRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  // "How SafeGirl works": closed when the sheet opens. React state only.
+  const [isHowOpen, setIsHowOpen] = useState(false);
 
   useEffect(() => {
     closeRef.current?.focus();
@@ -59,7 +64,10 @@ export default function HelpSheet({ onClose, onTopic }: Props) {
     }
   };
 
-  const [emergencyA, emergencyB] = EMERGENCY_NUMBERS;
+  const lines = [
+    { number: GBV_HELPLINE, note: GBV_HELP_SHEET_NOTE },
+    { number: CHILDLINE_KENYA, note: contactNote(CHILDLINE_KENYA) },
+  ];
 
   return (
     <div
@@ -70,100 +78,110 @@ export default function HelpSheet({ onClose, onTopic }: Props) {
       aria-labelledby="help-sheet-title"
       onKeyDown={onKeyDown}
     >
-      <div className="help-sheet-head">
-        <h1 id="help-sheet-title">Help</h1>
-        <button
-          ref={closeRef}
-          className="btn-close"
-          type="button"
-          onClick={onClose}
-          aria-label="Close help"
-        >
-          <CloseIcon size={20} />
-        </button>
+      <div className="help-band surface-dark">
+        <h1 id="help-sheet-title" className="help-title">
+          {HOME_GET_HELP}
+        </h1>
+        <Flowers className="help-flowers" single />
+        <div className="help-band-actions">
+          <button className="btn-help-exit" type="button" onClick={onExit}>
+            {QUICK_EXIT_LABEL}
+          </button>
+          <button
+            ref={closeRef}
+            className="btn-help-close"
+            type="button"
+            onClick={onClose}
+            aria-label="Close help"
+          >
+            <CloseIcon size={20} />
+          </button>
+        </div>
       </div>
 
-      <section className="help-card help-card--how" aria-labelledby="help-how">
-        <h2 id="help-how">How SafeGirl works</h2>
-        <p>
-          SafeGirl finds the closest answer it has and shows you its source.{" "}
-          {SOURCES_LINE} If it has no good answer, it says so. It can&apos;t
-          diagnose you; a nurse or clinic can.
-        </p>
-        <p>
-          To leave quickly, tap Exit or press Escape twice. SafeGirl then opens
-          Google in this tab. This does not clear your browser history.
-        </p>
-      </section>
+      <div className="help-body">
+        <section className="help-danger" aria-labelledby="help-danger-title">
+          <h2 id="help-danger-title" className="help-section-title">
+            In immediate danger?
+          </h2>
+          <div className="help-danger-calls">
+            {EMERGENCY_NUMBERS.map((number) => (
+              <a
+                key={number}
+                className="help-danger-call"
+                href={telHref(number)}
+                aria-label={telName(number, `Call ${number}`)}
+              >
+                Call {number}
+              </a>
+            ))}
+          </div>
+        </section>
 
-      <section
-        className="help-card help-card--tips"
-        aria-labelledby="help-tips"
-      >
-        <h2 id="help-tips">Tips for asking</h2>
-        <ul className="help-tips">
-          <li>Use full words, not short forms.</li>
-          <li>Ask about one thing at a time.</li>
-          <li>
-            If the answer doesn&apos;t fit, try different words or pick a topic
-            below.
-          </li>
-        </ul>
-      </section>
-
-      <section className="help-talk" aria-labelledby="help-talk">
-        <h2 id="help-talk">Need to talk to someone?</h2>
-        <ul className="help-calls">
-          <li>
-            <a
-              className="help-call help-call--main"
-              href={telHref(GBV_HELPLINE)}
-            >
-              <span className="help-call-icon">
-                <PhoneIcon size={20} />
-              </span>
-              <span className="help-call-text">
-                <span className="help-call-title">Call {GBV_HELPLINE}</span>
-                <span className="help-call-note">{GBV_HELP_SHEET_NOTE}</span>
-              </span>
-            </a>
-          </li>
-          <li>
-            <a
-              className="help-call help-call--second"
-              href={telHref(CHILDLINE_KENYA)}
-            >
-              <span className="help-call-icon">
-                <PhoneIcon size={20} />
-              </span>
-              <span className="help-call-text">
-                <span className="help-call-title">Call {CHILDLINE_KENYA}</span>
-                <span className="help-call-note">
-                  {contactNote(CHILDLINE_KENYA)}
+        <section className="help-talk" aria-labelledby="help-talk-title">
+          <h2 id="help-talk-title" className="help-section-title">
+            Need to talk to someone?
+          </h2>
+          <ul className="help-lines">
+            {lines.map(({ number, note }) => (
+              <li key={number} className="help-line">
+                <span className="help-line-text">
+                  <span className="help-line-number">{number}</span>
+                  <span className="help-line-note">{note}</span>
                 </span>
-              </span>
-            </a>
-          </li>
-        </ul>
-        <p className="help-emergency">
-          In immediate danger? Call{" "}
-          <a href={telHref(emergencyA)} aria-label={telName(emergencyA)}>
-            {emergencyA}
-          </a>{" "}
-          or{" "}
-          <a href={telHref(emergencyB)} aria-label={telName(emergencyB)}>
-            {emergencyB}
-          </a>
-          .
-        </p>
-      </section>
+                <a
+                  className="help-line-call"
+                  href={telHref(number)}
+                  aria-label={telName(number, `Call ${number}`)}
+                >
+                  Call
+                </a>
+              </li>
+            ))}
+          </ul>
+          <p className="help-calls-note">{HELP_CALLS_NOTE}</p>
+        </section>
 
-      <section className="help-topics" aria-labelledby="help-topics">
-        <h2 id="help-topics">Topics</h2>
-        <TopicChoices variant="pills" onTopic={onTopic} />
-      </section>
+        <section className="help-leave" aria-labelledby="help-leave-title">
+          <h2 id="help-leave-title" className="help-leave-title">
+            {HELP_LEAVE_TITLE}
+          </h2>
+          <p>{HELP_LEAVE_TEXT}</p>
+        </section>
 
-      <p className="help-footer">{ANONYMOUS_LINE}</p>
+        <section className="help-how">
+          <h2 className="help-how-heading">
+            <button
+              className="help-how-toggle"
+              type="button"
+              aria-expanded={isHowOpen}
+              aria-controls="help-how-body"
+              onClick={() => setIsHowOpen((open) => !open)}
+            >
+              <span>How SafeGirl works</span>
+              <ChevronRightIcon size={18} />
+            </button>
+          </h2>
+          <div id="help-how-body" className="help-how-body" hidden={!isHowOpen}>
+            <p>
+              SafeGirl finds the closest answer it has and shows you its source.
+            </p>
+            <p>{SOURCES_LINE} If it has no good answer, it says so.</p>
+            <p>It can&apos;t diagnose you; a nurse or clinic can.</p>
+            <h3 className="help-tips-title">Tips for asking</h3>
+            <ul className="help-tips">
+              <li>Use full words, not short forms.</li>
+              <li>Ask about one thing at a time.</li>
+              <li>
+                If the answer doesn&apos;t fit, try different words or pick a
+                topic on the home screen.
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <p className="help-footer">{ANONYMOUS_LINE}</p>
+      </div>
     </div>
   );
 }

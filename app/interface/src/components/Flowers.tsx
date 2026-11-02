@@ -39,12 +39,26 @@ function Flower({
   );
 }
 
-/** The cluster: three flowers. */
+/** The cluster: three flowers; or, with single, its large flower alone. */
 export default function Flowers({
   className = "splash-flowers",
+  single = false,
 }: {
   className?: string;
+  single?: boolean;
 }) {
+  if (single) {
+    return (
+      <svg
+        className={className}
+        viewBox="20 0 60 60"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <Flower x={50} y={30} r={15} tone="pink" />
+      </svg>
+    );
+  }
   return (
     <svg
       className={className}

@@ -22,6 +22,9 @@ import {
   MATCH_LABEL,
   ANONYMOUS_LINE,
   GBV_HELP_SHEET_NOTE,
+  HELP_CALLS_NOTE,
+  HELP_LEAVE_TEXT,
+  HELP_LEAVE_TITLE,
   CLARIFY_MORE_WORDS,
   CLARIFY_PICK_LABEL,
   CLARIFY_PLACEHOLDER,
@@ -898,47 +901,64 @@ console.log("\nTest 22: the splash is a full-bleed screen of its own");
   }
 }
 
-console.log("\nTest 23: the Help sheet");
+console.log("\nTest 23: the Help sheet (HS1)");
 {
   const html = renderToStaticMarkup(
-    <HelpSheet onClose={() => undefined} onTopic={() => undefined} />,
+    <HelpSheet onClose={() => undefined} onExit={() => undefined} />,
   );
   assert(
     html.includes('role="dialog"') &&
       html.includes('aria-modal="true"') &&
       html.includes('aria-labelledby="help-sheet-title"') &&
-      html.includes('id="help-sheet-title"'),
-    "a labelled modal dialog",
+      html.includes(
+        '<h1 id="help-sheet-title" class="help-title">Get help</h1>',
+      ),
+    'a modal dialog labelled by its h1, "Get help"',
+  );
+  const band = html.slice(0, html.indexOf('<div class="help-body">'));
+  assert(
+    band.includes(
+      `<button class="btn-help-exit" type="button">${QUICK_EXIT_LABEL}</button>`,
+    ) &&
+      band.includes(
+        '<button class="btn-help-close" type="button" aria-label="Close help"><svg',
+      ) &&
+      band.indexOf("btn-help-exit") < band.indexOf("btn-help-close") &&
+      band.includes(
+        '<svg class="help-flowers" viewBox="20 0 60 60" aria-hidden="true"',
+      ),
+    'the band: a "Quick exit" pill (no icon), the labelled close button, one flower',
   );
   assert(
-    html.includes(
-      '<button class="btn-close" type="button" aria-label="Close help">',
-    ),
-    "a labelled close button",
+    !html.includes('btn-exit"') && !html.includes("topic-choice"),
+    "no other Exit button, and no topic chips",
+  );
+  const headings = [...html.matchAll(/<h2[^>]*>(.*?)<\/h2>/g)].map((m) =>
+    m[1].replace(/<[^>]+>/g, ""),
   );
   assert(
-    !html.includes("btn-exit") &&
-      html.includes('<h1 id="help-sheet-title">Help</h1>'),
-    "the sheet's own h1 \"Help\"; no duplicate Exit (the header's Exit stays in view)",
+    JSON.stringify(headings) ===
+      JSON.stringify([
+        "In immediate danger?",
+        "Need to talk to someone?",
+        HELP_LEAVE_TITLE,
+        "How SafeGirl works",
+      ]),
+    "sections in order: danger, talk, leave quickly, how it works",
   );
-  for (const heading of [
-    "How SafeGirl works",
-    "Tips for asking",
-    "Need to talk to someone?",
-    "Topics",
-  ]) {
-    assert(html.includes(`>${heading}</h2>`), `section: ${heading}`);
+  const [a, b] = EMERGENCY_NUMBERS;
+  for (const n of [a, b]) {
+    assert(
+      html.includes(
+        `<a class="help-danger-call" href="${telHref(n)}" aria-label="${telName(n, `Call ${n}`)}">Call ${n}</a>`,
+      ),
+      `"Call ${n}": a tel: link from the constant, named "Call ${n}, Emergency"`,
+    );
   }
   assert(
-    html.includes(
-      `<a class="help-call help-call--main" href="${telHref(GBV_HELPLINE)}"><span class="help-call-icon"><svg`,
-    ) &&
-      html.includes(
-        `<span class="help-call-title">Call ${GBV_HELPLINE}</span><span class="help-call-note">${GBV_HELP_SHEET_NOTE}</span>`,
-      ) &&
-      GBV_HELP_SHEET_NOTE ===
-        "GBV helpline. Free, 24 hours, English and Kiswahili.",
-    "1195: tap-to-call from the constant, with the checked wording (now a constant)",
+    html.indexOf(`>Call ${a}</a>`) < html.indexOf(`>Call ${b}</a>`) &&
+      html.indexOf(`>Call ${b}</a>`) < html.indexOf("help-talk"),
+    `${a} then ${b}, first on the sheet`,
   );
   const childlineNote = (() => {
     const contact = SUPPORT_SECTIONS.flatMap((x) => x.contacts).find((c) =>
@@ -946,55 +966,76 @@ console.log("\nTest 23: the Help sheet");
     );
     return `${contact?.label}. ${contact?.note}`;
   })();
+  for (const [n, note] of [
+    [GBV_HELPLINE, GBV_HELP_SHEET_NOTE],
+    [CHILDLINE_KENYA, childlineNote],
+  ]) {
+    assert(
+      html.includes(
+        `<li class="help-line"><span class="help-line-text"><span class="help-line-number">${n}</span><span class="help-line-note">${escapeHtml(note)}</span></span><a class="help-line-call" href="${telHref(n)}" aria-label="${telName(n, `Call ${n}`)}">Call</a></li>`,
+      ),
+      `${n}: its card, note "${note}", and a "Call" pill (tel: from the constant)`,
+    );
+  }
+  assert(
+    GBV_HELP_SHEET_NOTE ===
+      "Violence and abuse helpline (GBV). Free, 24 hours, English and Kiswahili.",
+    "1195: the HS1 wording (the checked facts unchanged: free, 24 hours, English and Kiswahili)",
+  );
+  assert(
+    childlineNote === "Childline Kenya. Free, 24 hours, for children." &&
+      !/under 18/i.test(html),
+    '116: SUPPORT_SECTIONS word for word (22 Oct 2026 wording); no "under 18"',
+  );
+  assert(
+    html.includes(`<p class="help-calls-note">${HELP_CALLS_NOTE}</p>`) &&
+      HELP_CALLS_NOTE === "Calls may show in your recent calls list.",
+    `"${HELP_CALLS_NOTE}"`,
+  );
+  assert(
+    html.includes(`<p>${HELP_LEAVE_TEXT}</p>`) &&
+      HELP_LEAVE_TEXT ===
+        "Tap Quick exit. SafeGirl opens Google in this tab. This does not clear your browser history.",
+    "explains Quick exit (Google, this tab) without claiming to clear history",
+  );
   assert(
     html.includes(
-      `<a class="help-call help-call--second" href="${telHref(CHILDLINE_KENYA)}"><span class="help-call-icon"><svg`,
+      '<button class="help-how-toggle" type="button" aria-expanded="false" aria-controls="help-how-body">',
     ) &&
-      html.includes(
-        `<span class="help-call-title">Call ${CHILDLINE_KENYA}</span><span class="help-call-note">${childlineNote}</span>`,
-      ),
-    `116: tap-to-call from the constant; its note is SUPPORT_SECTIONS word for word ("${childlineNote}")`,
+      html.includes('<div id="help-how-body" class="help-how-body" hidden="">'),
+    '"How SafeGirl works" is a toggle, closed when the sheet opens',
   );
-  const childline = html.slice(
-    html.indexOf(telHref(CHILDLINE_KENYA)),
-    html.indexOf("</li>", html.indexOf(telHref(CHILDLINE_KENYA))),
-  );
+  const how = html.slice(html.indexOf('id="help-how-body"'));
   assert(
-    !/free/i.test(childline) || /free/i.test(childlineNote),
-    'the 116 note says "free" only because the constant does (22 Oct 2026 wording)',
+    how.split("<p>").length === 4 &&
+      how.includes(SOURCES_LINE) &&
+      how.includes(
+        escapeHtml("It can't diagnose you; a nurse or clinic can."),
+      ) &&
+      how.includes(">Tips for asking</h3>") &&
+      how.split("<li>").length === 4,
+    "inside: three short paragraphs, then the tips (three)",
   );
   assert(
     html
       .trimEnd()
-      .endsWith(`<p class="help-footer">${ANONYMOUS_LINE}</p></div>`),
+      .endsWith(`<p class="help-footer">${ANONYMOUS_LINE}</p></div></div>`),
     "the anonymous line closes the sheet",
-  );
-  const [a, b] = EMERGENCY_NUMBERS;
-  assert(
-    html.includes(
-      `In immediate danger? Call <a href="${telHref(a)}" aria-label="${telName(a)}">${a}</a> or <a href="${telHref(b)}" aria-label="${telName(b)}">${b}</a>.`,
-    ),
-    "999 and 112 from the constants",
   );
   const numbers = [...html.matchAll(/href="tel:([^"]+)"/g)].map((m) => m[1]);
   assert(
-    numbers.every((n) =>
-      [GBV_HELPLINE, CHILDLINE_KENYA, ...EMERGENCY_NUMBERS].includes(n),
-    ),
-    "no helpline that is not in the constants",
+    JSON.stringify(numbers) ===
+      JSON.stringify([a, b, GBV_HELPLINE, CHILDLINE_KENYA]),
+    "exactly four tel: links, all from the constants: 999, 112, 1195, 116",
   );
-  assert(
-    html.includes("press Escape twice") &&
-      html.includes("This does not clear your browser history."),
-    "explains quick exit without claiming to clear history",
-  );
-  for (const topic of TOPICS) {
-    assert(
-      html.includes(
-        `data-topic="${topic.topicClass}"><span class="topic-choice-label">${topic.label}</span></button>`,
-      ),
-      `topic button (the shared TopicChoices): ${topic.label}`,
-    );
+  for (const banned of [
+    /mental health/i,
+    /trusted person/i,
+    /find a clinic|near you|location/i,
+    /country/i,
+    /confidential/i,
+  ]) {
+    assert(!banned.test(html), `no ${banned.source}`);
   }
 }
 
@@ -1005,7 +1046,7 @@ console.log("\nTest 24: no copy claims clinician review");
       <Splash onContinue={() => undefined} onExit={() => undefined} />,
     ),
     renderToStaticMarkup(
-      <HelpSheet onClose={() => undefined} onTopic={() => undefined} />,
+      <HelpSheet onClose={() => undefined} onExit={() => undefined} />,
     ),
     renderToStaticMarkup(<SupportContent />),
     renderToStaticMarkup(<SessionEnd onStartNew={() => undefined} />),
@@ -1065,7 +1106,7 @@ console.log("\nTest 26: one sources line, used everywhere it appears");
     <Splash onContinue={() => undefined} onExit={() => undefined} />,
   );
   const sheet = renderToStaticMarkup(
-    <HelpSheet onClose={() => undefined} onTopic={() => undefined} />,
+    <HelpSheet onClose={() => undefined} onExit={() => undefined} />,
   );
   // The splash (v3) has its own sources promise, "Guided by Kenya
   // Ministry of Health and WHO."; Help and Home keep the full line.
@@ -1242,10 +1283,10 @@ console.log("\nTest 28: Home");
   );
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
-    /headerless=\{\s*\(\(onChatScreen && turns\.length === 0\) \|\| screen === "topic"\) &&\s*!isHelpOpen\s*\}/.test(
+    /headerless=\{\s*isHelpOpen \|\|\s*\(onChatScreen && turns\.length === 0\) \|\|\s*screen === "topic"\s*\}/.test(
       app,
     ),
-    "App drops its header only on Home and the Topic list, and brings it back with the Help sheet",
+    "App drops its header on Home, the Topic list and while the Help sheet (with its own Quick exit) is open",
   );
 }
 
@@ -1356,10 +1397,8 @@ console.log(
   );
   assert(
     app.includes('onTopic={(next) => openTopic(next, "tile")}') &&
-      /const handleHelpTopic = \(next: Topic\) => \{\s*setIsHelpOpen\(false\);\s*openTopic\(next, "help"\);/.test(
-        app,
-      ),
-    "Home tiles and Help sheet buttons both open the Topic list",
+      !app.includes("handleHelpTopic"),
+    "Home cards open the Topic list (the Help sheet no longer has topic buttons, HS1)",
   );
   assert(
     app.includes('`[data-topic="${topic.topicClass}"]`') &&
@@ -2238,9 +2277,8 @@ console.log("\nTest 44: the topic grid and the footer line fit narrow phones");
     "utf8",
   );
   assert(
-    sheet.includes('<TopicChoices variant="pills" onTopic={onTopic} />') &&
-      !css.includes(".topic-button"),
-    "the Help sheet uses the same TopicChoices; the old topic-button copy is gone",
+    !sheet.includes("TopicChoices") && !css.includes(".topic-button"),
+    "the Help sheet has no topic chips (HS1); the old topic-button copy is gone",
   );
 }
 
@@ -2347,7 +2385,7 @@ console.log("\nTest 46: every phone link's name says which service it calls");
   );
   const noop = () => undefined;
   const pages = [
-    renderToStaticMarkup(<HelpSheet onClose={noop} onTopic={noop} />),
+    renderToStaticMarkup(<HelpSheet onClose={noop} onExit={noop} />),
     renderToStaticMarkup(<SupportContent />),
     renderToStaticMarkup(
       <ReferralScreen message={ABUSE_REFERRAL_MESSAGE} onContinueChat={noop} />,
@@ -3033,9 +3071,7 @@ console.log("\nTest 53: the Help sheet as a page under the header (step 3c)");
     ) && !closed.includes('role="dialog"'),
     "closed: the screen shows, no sheet",
   );
-  const html = renderToStaticMarkup(
-    <HelpSheet onClose={noop} onTopic={noop} />,
-  );
+  const html = renderToStaticMarkup(<HelpSheet onClose={noop} onExit={noop} />);
   const [a, b] = EMERGENCY_NUMBERS;
   for (const n of [GBV_HELPLINE, CHILDLINE_KENYA, a, b]) {
     assert(
@@ -3047,11 +3083,8 @@ console.log("\nTest 53: the Help sheet as a page under the header (step 3c)");
   assert(
     /const closeHelp = \(\) => \{\s*setIsHelpOpen\(false\);\s*helpButtonRef\.current\?\.focus\(\);/.test(
       app,
-    ) &&
-      /const handleHelpTopic = \(next: Topic\) => \{\s*setIsHelpOpen\(false\);\s*openTopic\(next, "help"\);/.test(
-        app,
-      ),
-    "closing returns focus to Help; a topic pill closes the sheet and opens its list (unchanged)",
+    ) && !app.includes("handleHelpTopic"),
+    "closing returns focus to Help; the sheet has no topic pills any more (HS1)",
   );
   const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
   const rule = (selector: string) => {
@@ -3119,7 +3152,7 @@ console.log("\nTest 54: the 116 wording (22 October 2026)");
     ["referral, self-harm", referral(SELF_HARM_REFERRAL_MESSAGE)],
     [
       "Help sheet",
-      renderToStaticMarkup(<HelpSheet onClose={noop} onTopic={noop} />),
+      renderToStaticMarkup(<HelpSheet onClose={noop} onExit={noop} />),
     ],
     ["support panel", renderToStaticMarkup(<SupportContent />)],
   ];
