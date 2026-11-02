@@ -46,7 +46,7 @@ import {
 } from "../details";
 import type { ChatTurn } from "../types";
 import { telHref, telName } from "../content/telHref";
-import { TOPICS } from "../content/topics";
+import { groupQuestions, TOPICS } from "../content/topics";
 import {
   KB_QUESTIONS,
   questionsFor,
@@ -1242,10 +1242,10 @@ console.log("\nTest 28: Home");
   );
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
-    app.includes(
-      "headerless={onChatScreen && turns.length === 0 && !isHelpOpen}",
+    /headerless=\{\s*\(\(onChatScreen && turns\.length === 0\) \|\| screen === "topic"\) &&\s*!isHelpOpen\s*\}/.test(
+      app,
     ),
-    "App drops its header only on Home, and brings it back with the Help sheet",
+    "App drops its header only on Home and the Topic list, and brings it back with the Help sheet",
   );
 }
 
@@ -1277,27 +1277,37 @@ console.log("\nTest 29: the Topic list for each topic");
     );
     const rows = [
       ...html.matchAll(
-        /<button class="topic-question" type="button" data-question="[^"]*"><span>([^<]*)<\/span><span class="topic-question-go" aria-hidden="true">/g,
+        /<button class="topic-row" type="button" data-question="([^"]*)"><span class="topic-row-text">([^<]*)<\/span><span class="topic-row-go" aria-hidden="true">/g,
       ),
-    ].map((m) => m[1]);
+    ].map((m) => [m[1], m[2]]);
     assert(
       JSON.stringify(rows) ===
         JSON.stringify(
-          data.map((item) => escapeHtml(item.question).replace(/"/g, "&quot;")),
+          data.map((item) => [
+            item.id,
+            escapeHtml(item.question).replace(/"/g, "&quot;"),
+          ]),
         ),
-      `${topic.label}: one row button per question, its name the question text`,
+      `${topic.label}: one row button per question, in list order, its name the exact question text`,
     );
     assert(
-      /<button class="back-link" type="button"><svg[^>]*>.*?<\/svg> All topics<\/button>/.test(
+      /<button class="topic-back" type="button"><svg[^>]*>.*?<\/svg> All topics<\/button>/.test(
         html,
-      ),
-      `${topic.label}: an "All topics" back link`,
+      ) &&
+        html.indexOf('class="topic-back"') >
+          html.indexOf('class="home-topbar"') &&
+        html.indexOf('class="topic-back"') < html.indexOf("<h1"),
+      `${topic.label}: an "All topics" back pill under the band's top row`,
     );
-    const lineAt = html.indexOf('class="danger-line"');
     const barAt = html.indexOf('<div class="ask-pill-bar">');
+    const helplineAt = html.indexOf('<a class="home-helpline"');
     assert(
-      lineAt > html.lastIndexOf("topic-question") && lineAt < barAt,
-      `${topic.label}: the footer line under the list, then the ask bar`,
+      !html.includes('class="danger-line"') &&
+        html.indexOf('<footer class="topic-footer">') >
+          html.lastIndexOf("topic-row") &&
+        barAt > html.indexOf('<footer class="topic-footer">') &&
+        helplineAt > barAt,
+      `${topic.label}: the footer holds the ask bar, then the helpline button`,
     );
     assert(
       html.includes(
@@ -2606,30 +2616,83 @@ console.log("\nTest 50: Topic list and answer screen polish (step 6b)");
       onBack={() => undefined}
     />,
   );
+  const band = list.slice(0, list.indexOf("</section>"));
   assert(
-    list.includes(
-      '<div class="topic-head topic-head--sti"><span class="topic-head-icon"><svg',
-    ) && list.includes(`<p class="topic-hint">${TOPIC_LIST_HINT}</p>`),
-    `header card: the icon tile, the h1 and "${TOPIC_LIST_HINT}"`,
+    band.startsWith(
+      '<main class="topic-page"><section class="home-band topic-band surface-dark">',
+    ) &&
+      band.includes('<div class="home-topbar">') &&
+      band.includes('<span class="topic-band-icon"><svg') &&
+      band.includes(`<p class="topic-hint">${TOPIC_LIST_HINT}</p>`) &&
+      TOPIC_LIST_HINT === "Tap a question to read the answer." &&
+      band.includes(
+        '<svg class="topic-flowers" viewBox="0 0 80 96" aria-hidden="true"',
+      ) &&
+      !band.includes("greeting"),
+    `the band: Home's top row, the icon tile, the h1 and "${TOPIC_LIST_HINT}", the flowers; no greeting`,
   );
   assert(
     list.includes('<p class="sr-only topic-count">5 questions</p>') &&
       list.indexOf("sr-only topic-count") <
-        list.indexOf('<ul class="topic-questions"'),
+        list.indexOf('<ul class="topic-list"'),
     "the question count stays, for screen readers only, before the list",
+  );
+  const sti = [
+    ...list.matchAll(
+      /<h2 id="(topic-group-\d)" class="topic-group-label">([^<]+)<\/h2><ul class="topic-list">(.*?)<\/ul>/g,
+    ),
+  ].map((m) => ({
+    label: m[2],
+    ids: [...m[3].matchAll(/data-question="([^"]+)"/g)].map((x) => x[1]),
+  }));
+  assert(
+    JSON.stringify(sti) ===
+      JSON.stringify([
+        { label: "Something worrying me", ids: ["KB-S3", "KB-S4"] },
+        { label: "I want to learn", ids: ["KB-S5", "KB-S6", "KB-S7"] },
+      ]) &&
+      JSON.stringify(sti.flatMap((g) => g.ids)) ===
+        JSON.stringify(questionsFor("sti").map((q) => q.id)),
+    "STIs and HIV: two labelled groups; the display order is unchanged",
+  );
+  for (const topic of TOPICS.slice(0, 3)) {
+    const html = renderToStaticMarkup(
+      <TopicList
+        topic={topic}
+        onAsk={() => undefined}
+        onBack={() => undefined}
+      />,
+    );
+    assert(
+      !html.includes("topic-group") &&
+        html.split('<ul class="topic-list"').length === 2,
+      `${topic.label}: one list, no group labels`,
+    );
+  }
+  assert(
+    JSON.stringify(
+      groupQuestions("sti", [
+        ...questionsFor("sti"),
+        { id: "KB-S99", topicClass: "sti", question: "q" },
+      ]).map((g) => g.label),
+    ) === "[null]",
+    "a changed STI list falls back to one list, so no question is hidden",
   );
   assert(
     list.includes(`<p class="topic-footnote">${TOPIC_LIST_FOOTNOTE}</p>`) &&
-      list.indexOf("topic-footnote") > list.indexOf("</ul>"),
-    "the footnote under the list",
+      list.indexOf("topic-footnote") > list.lastIndexOf("</ul>"),
+    "the footnote (the existing constant) under the lists",
   );
-  const bottom = list.slice(list.indexOf('<div class="screen-bottom">'));
+  const bottom = list.slice(list.indexOf('<footer class="topic-footer">'));
   assert(
-    bottom.includes('class="danger-line"') &&
-      bottom.indexOf('class="danger-line"') <
-        bottom.indexOf('<div class="ask-pill-bar">') &&
-      bottom.includes(`href="${telHref(GBV_HELPLINE)}"`),
-    "the footer line (its tel: link from the constant), then the ask pill",
+    bottom.indexOf('<div class="ask-pill-bar">') <
+      bottom.indexOf('<a class="home-helpline"') &&
+      bottom.includes(
+        `<a class="home-helpline" href="${telHref(GBV_HELPLINE)}"`,
+      ) &&
+      !list.includes('class="danger-line"') &&
+      !list.toLowerCase().includes("time matters"),
+    "the footer: the ask pill, then the helpline button (tel: from the constant); no Time matters card",
   );
   assert(
     bottom.includes(`placeholder="${TOPIC_LIST_PLACEHOLDER}"`) &&

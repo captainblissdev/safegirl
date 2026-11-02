@@ -7,22 +7,15 @@ import {
   HOME_CLEAR_LEAVE,
   HOME_CLEAR_LEAVE_SUB,
   HOME_EXAMPLE_QUESTIONS,
-  HOME_GET_HELP,
   HOME_HEADLINE,
   HOME_QUESTION_PLACEHOLDER,
   HOME_SUPPORT_SUB,
   HOME_SUPPORT_TITLE,
-  QUICK_EXIT_LABEL,
 } from "../content/uiText";
 import Flowers from "./Flowers";
 import HelplineButton from "./HelplineButton";
-import {
-  ArrowUpIcon,
-  ChevronRightIcon,
-  CloseIcon,
-  PeopleIcon,
-  ShieldHeartMark,
-} from "./Icons";
+import BandTopbar from "./BandTopbar";
+import { ArrowUpIcon, ChevronRightIcon, PeopleIcon } from "./Icons";
 import { TOPIC_ICONS } from "./topicIcons";
 
 /**
@@ -114,27 +107,12 @@ export default function Home({
   return (
     <div className="home">
       <section className="home-band surface-dark" aria-labelledby="home-title">
-        <div className="home-topbar">
-          <span className="home-brand">
-            <ShieldHeartMark variant="splash" size={36} />
-            <span className="home-wordmark">SafeGirl</span>
-          </span>
-          <div className="home-actions">
-            <button
-              ref={helpButtonRef}
-              className="btn-home-help"
-              type="button"
-              aria-haspopup="dialog"
-              aria-expanded={isHelpOpen}
-              onClick={onOpenHelp}
-            >
-              {HOME_GET_HELP}
-            </button>
-            <button className="btn-home-exit" type="button" onClick={onExit}>
-              <CloseIcon size={16} /> {QUICK_EXIT_LABEL}
-            </button>
-          </div>
-        </div>
+        <BandTopbar
+          onOpenHelp={onOpenHelp}
+          isHelpOpen={isHelpOpen}
+          helpButtonRef={helpButtonRef}
+          onExit={onExit}
+        />
 
         <div className="home-head">
           <p className="home-greeting">{greeting}</p>

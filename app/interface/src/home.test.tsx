@@ -3,6 +3,7 @@ import * as React from "react";
 import type { ReactElement, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { clearAndLeave } from "./clearAndLeave";
+import BandTopbar from "./components/BandTopbar";
 import Home from "./components/Home";
 import ChatInterface from "./components/ChatInterface";
 import { HOME_EXAMPLE_QUESTIONS } from "./content/uiText";
@@ -400,6 +401,11 @@ console.log("\nTest 5: Home writes nothing to browser storage");
     for (const el of elements(tree)) {
       const click = el.props.onClick as (() => void) | undefined;
       if (click && el.props.className !== "home-clear") click();
+      // The band's top row (BandTopbar): "Get help" and Quick exit.
+      if (el.type === BandTopbar) {
+        (el.props.onOpenHelp as () => void)();
+        (el.props.onExit as () => void)();
+      }
     }
     (
       elements(tree).find((el) => el.type === "textarea")!.props.onChange as (

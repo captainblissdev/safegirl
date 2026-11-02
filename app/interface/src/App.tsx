@@ -48,8 +48,9 @@ export default function App() {
   // only, never sent, never stored; cleared once the chat has used it.
   const [starterDraft, setStarterDraft] = useState("");
   const helpButtonRef = useRef<HTMLButtonElement>(null);
-  // Home's own "Get help" (Home has no app header while the sheet is
-  // closed), and whether focus goes back to it once the sheet closes.
+  // The band's own "Get help" on Home and the Topic list (neither has the
+  // app header while the sheet is closed), and whether focus goes back to
+  // it once the sheet closes.
   const homeHelpButtonRef = useRef<HTMLButtonElement>(null);
   const focusHomeHelpRef = useRef(false);
   // The Topic list's class, what opened it, and where focus returns.
@@ -198,9 +199,9 @@ export default function App() {
     helpButtonRef.current?.focus();
   };
 
-  // Help opened from Home: once the sheet has closed and Home is shown
-  // again, focus returns to Home's "Get help" (the header's Help button
-  // focused above leaves with the sheet).
+  // Help opened from Home or a Topic list: once the sheet has closed and
+  // the page is shown again, focus returns to its "Get help" (the
+  // header's Help button focused above leaves with the sheet).
   useEffect(() => {
     if (isHelpOpen || !focusHomeHelpRef.current) return;
     focusHomeHelpRef.current = false;
@@ -373,7 +374,10 @@ export default function App() {
         buttonRef: helpButtonRef,
       }}
       calm={screen === "referral"}
-      headerless={onChatScreen && turns.length === 0 && !isHelpOpen}
+      headerless={
+        ((onChatScreen && turns.length === 0) || screen === "topic") &&
+        !isHelpOpen
+      }
       support={
         screen === "referral" ||
         (onChatScreen && !isLoading && replyViewOf(lastTurn) === "help")
@@ -446,6 +450,10 @@ export default function App() {
           onAsk={askFromTopic}
           onBack={closeTopic}
           focusQuestionId={answerOrigin?.questionId ?? null}
+          onOpenHelp={openHelp}
+          isHelpOpen={isHelpOpen}
+          helpButtonRef={homeHelpButtonRef}
+          onExit={handleExit}
         />
       )}
 

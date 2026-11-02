@@ -45,3 +45,58 @@ export const TOPICS: readonly Topic[] = [
     subtitle: "Symptoms, treatment, prevention",
   },
 ];
+
+/**
+ * Presentation only: labelled groups on a Topic list, by entry id. It
+ * changes no knowledge-base file, id or question text, and nothing the
+ * pipeline sees. Only STIs and HIV is grouped for now; every other topic
+ * stays one list until the clinician decides.
+ */
+export interface TopicGroup {
+  label: string;
+  /** Entry ids in the group; the list keeps its own order inside it. */
+  ids: readonly string[];
+}
+
+export const TOPIC_GROUPS: Partial<Record<TopicClass, readonly TopicGroup[]>> =
+  {
+    sti: [
+      // KB-S3 (after possible HIV exposure) and KB-S4 (symptoms).
+      { label: "Something worrying me", ids: ["KB-S3", "KB-S4"] },
+      // KB-S5 (cure), KB-S6 (HPV vaccine), KB-S7 (PrEP).
+      { label: "I want to learn", ids: ["KB-S5", "KB-S6", "KB-S7"] },
+    ],
+  };
+
+/** One list on a Topic list page: a group's label, or none. */
+export interface QuestionGroup<T> {
+  label: string | null;
+  items: T[];
+}
+
+/**
+ * A topic's questions, split into its labelled groups (groups in the
+ * order above, questions in list order inside each). The groups apply
+ * only when they hold exactly the list's questions; otherwise (no groups,
+ * or a list that has changed) the list stays one unlabelled group, so a
+ * question is never hidden or moved by stale metadata.
+ */
+export function groupQuestions<T extends { id: string }>(
+  topicClass: TopicClass,
+  questions: readonly T[],
+): QuestionGroup<T>[] {
+  const groups = TOPIC_GROUPS[topicClass];
+  const whole = [{ label: null, items: [...questions] }];
+  if (!groups) return whole;
+  const grouped = groups.flatMap((group) => group.ids);
+  const ids = questions.map((item) => item.id);
+  const exact =
+    grouped.length === ids.length &&
+    new Set(grouped).size === grouped.length &&
+    ids.every((id) => grouped.includes(id));
+  if (!exact) return whole;
+  return groups.map((group) => ({
+    label: group.label,
+    items: questions.filter((item) => group.ids.includes(item.id)),
+  }));
+}
