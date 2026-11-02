@@ -1349,16 +1349,14 @@ html:has(.app-shell--home) {
   cursor: pointer;
 }
 
-/* Two chips in one row; a chip's text never wraps. When the row is
-   wider than the screen, it scrolls sideways on its own (the page
-   does not). */
+/* The example questions, one per row: each a full tap target, no
+   sideways scrolling. Each sits at its own width, from the left. */
 .home-chips {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 8px;
   margin-top: 4px;
-  overflow-x: auto;
-  padding: 2px 2px 4px;
-  scroll-snap-type: x proximity;
 }
 
 .home-chips[hidden] {
@@ -1366,17 +1364,17 @@ html:has(.app-shell--home) {
 }
 
 .home-chip {
-  flex: none;
+  max-width: 100%;
   min-height: var(--tap-target);
   border: 1.5px solid var(--home-card-edge);
   border-radius: 999px;
-  padding: 0 14px;
+  padding: 8px 14px;
   background: var(--color-card);
   color: var(--color-plum);
   font-size: 14px;
   font-weight: var(--weight-bold);
-  white-space: nowrap;
-  scroll-snap-align: start;
+  line-height: 1.3;
+  text-align: left;
   cursor: pointer;
 }
 

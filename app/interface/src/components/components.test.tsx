@@ -2504,10 +2504,16 @@ console.log("\nTest 48: Home refresh (H1)");
   assert(
     rule(".home-topic-grid").includes("grid-auto-rows: 1fr;") &&
       rule(".home-topic-label").includes("white-space: nowrap;") &&
-      rule(".home-topic-sub").includes("-webkit-line-clamp: 2;") &&
-      rule(".home-chip").includes("white-space: nowrap;") &&
-      rule(".home-chips").includes("overflow-x: auto;"),
-    "equal-height cards, one-line titles, two-line subtitles, unwrapped chips",
+      rule(".home-topic-sub").includes("-webkit-line-clamp: 2;"),
+    "equal-height cards, one-line titles, two-line subtitles",
+  );
+  assert(
+    rule(".home-chips").includes("flex-direction: column;") &&
+      !/overflow|scroll-snap|nowrap/.test(rule(".home-chips")) &&
+      !/nowrap|scroll-snap/.test(rule(".home-chip")) &&
+      rule(".home-chip").includes("min-height: var(--tap-target);") &&
+      rule(".home-chip").includes("max-width: 100%;"),
+    "the example chips: one per row, at least 44px high, no sideways scrolling",
   );
   assert(
     rule(".home-helpline").includes(
