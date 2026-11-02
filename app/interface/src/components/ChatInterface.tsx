@@ -53,6 +53,13 @@ interface Props {
   onHome?: () => void;
   /** "See who can help" on the Talk to a person screen: the Help sheet. */
   onOpenHelp?: () => void;
+  /**
+   * Text the ask input starts with (a splash chip's starter phrase):
+   * editable, never sent on its own. Empty by default.
+   */
+  initialDraft?: string;
+  /** Called once the input has taken initialDraft, so App can clear it. */
+  onInitialDraftUsed?: () => void;
 }
 
 export default function ChatInterface({
@@ -64,8 +71,17 @@ export default function ChatInterface({
   back = { label: "Back to home", onBack: () => undefined },
   onHome = () => undefined,
   onOpenHelp = () => undefined,
+  initialDraft = "",
+  onInitialDraftUsed = () => undefined,
 }: Props) {
-  const [draft, setDraft] = useState("");
+  const [draft, setDraft] = useState(initialDraft);
+  // The starter phrase is used once: App clears it after this first render,
+  // so a later chat starts empty. Nothing is sent.
+  useEffect(() => {
+    if (initialDraft !== "") {
+      onInitialDraftUsed();
+    }
+  }, [initialDraft, onInitialDraftUsed]);
   const inputRef = useRef<HTMLInputElement>(null);
   // Home is the empty state: before the first question of this chat.
   const isHome = turns.length === 0;

@@ -43,6 +43,9 @@ export default function App() {
     startScreen(browserSessionStorage),
   );
   const [isHelpOpen, setIsHelpOpen] = useState(false);
+  // A splash chip's starter phrase, for the chat input once: React state
+  // only, never sent, never stored; cleared once the chat has used it.
+  const [starterDraft, setStarterDraft] = useState("");
   const helpButtonRef = useRef<HTMLButtonElement>(null);
   // The Topic list's class, what opened it, and where focus returns.
   const [topic, setTopic] = useState<Topic | null>(null);
@@ -305,16 +308,17 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKeyDown, true);
   }, []);
 
+  /** Leave the splash; a chosen chip's starter phrase goes into the input. */
+  const handleSplashContinue = (starter: string) => {
+    setStarterDraft(starter);
+    setScreen(continueFromSplash(browserSessionStorage));
+  };
+
   // The splash is a full-bleed screen of its own: no app header and no
   // Help button, but its own Exit pill and the footer line. Double Escape
   // works here too (the keydown listener above is on every screen).
   if (screen === "splash") {
-    return (
-      <Splash
-        onContinue={() => setScreen(continueFromSplash(browserSessionStorage))}
-        onExit={handleExit}
-      />
-    );
+    return <Splash onContinue={handleSplashContinue} onExit={handleExit} />;
   }
 
   return (
@@ -362,6 +366,8 @@ export default function App() {
               back={answerBack}
               onHome={handleNewChat}
               onOpenHelp={openHelp}
+              initialDraft={starterDraft}
+              onInitialDraftUsed={() => setStarterDraft("")}
             />
 
             {error && (

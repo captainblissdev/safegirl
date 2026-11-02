@@ -4,6 +4,8 @@ import {
   SPLASH_HELPLINE,
   SPLASH_HELPLINE_TEXT,
   SPLASH_TOPIC_STARTERS,
+  splashStarter,
+  toggleSplashChip,
 } from "../content/uiText";
 import { telHref, telName } from "../content/telHref";
 import { GBV_HELPLINE } from "../offline/helpContent";
@@ -106,7 +108,12 @@ function Flowers({ where }: { where: "top" | "chips" }) {
 }
 
 interface Props {
-  onContinue: () => void;
+  /**
+   * Leave the splash. Gets the chosen chip's starter phrase, or "" when
+   * no chip was chosen; App only puts it in the chat input (never sends
+   * it, never stores it).
+   */
+  onContinue: (starter: string) => void;
   /** Quick exit (quickExit.ts). */
   onExit: () => void;
   /** The time the greeting is worded for; defaults to now (tests pass one). */
@@ -115,6 +122,10 @@ interface Props {
 
 export default function Splash({ onContinue, onExit, now }: Props) {
   const [isHowOpen, setIsHowOpen] = useState(false);
+  // The chosen chip: React state only (memory, this session), never
+  // stored, never sent. Tapping it again clears the choice.
+  const [chosen, setChosen] = useState<string | null>(null);
+  const starter = splashStarter(chosen);
   const greeting = greetingFor(now ?? new Date());
 
   return (
@@ -181,7 +192,10 @@ export default function Splash({ onContinue, onExit, now }: Props) {
                 key={label}
                 className="splash-chip"
                 type="button"
-                aria-pressed={false}
+                aria-pressed={chosen === label}
+                onClick={() =>
+                  setChosen((current) => toggleSplashChip(current, label))
+                }
               >
                 {label}
               </button>
@@ -210,7 +224,11 @@ export default function Splash({ onContinue, onExit, now }: Props) {
           are not saved on your phone or on our server, and they are gone when
           you close or refresh the page. You never give your name.
         </p>
-        <button className="btn-splash" type="button" onClick={onContinue}>
+        <button
+          className="btn-splash"
+          type="button"
+          onClick={() => onContinue(starter)}
+        >
           I understand, continue <ArrowRightIcon size={20} />
         </button>
         <a

@@ -182,3 +182,18 @@ export const SPLASH_HELPLINE = {
 
 /** The same button as one line, for its accessible name and the tests. */
 export const SPLASH_HELPLINE_TEXT = `${SPLASH_HELPLINE.lead} ${SPLASH_HELPLINE.call} ${SPLASH_HELPLINE.tail}`;
+
+/** The chip choice after a tap: tapping the chosen chip again clears it. */
+export function toggleSplashChip(
+  current: string | null,
+  label: string,
+): string | null {
+  return current === label ? null : label;
+}
+
+/** The chosen chip's starter phrase, or "" when no chip was chosen. */
+export function splashStarter(chosen: string | null): string {
+  return (
+    SPLASH_TOPIC_STARTERS.find(({ label }) => label === chosen)?.starter ?? ""
+  );
+}
