@@ -190,6 +190,8 @@
   --home-send-disabled-bg: #dad6e0;
   --home-send-disabled-icon: #625b70;
   --home-flower: rgba(251, 207, 232, 0.34);
+  /* The pinned footer: a soft lift off the scrolling page. */
+  --home-footer-shadow: 0 -8px 20px rgba(76, 29, 149, 0.12);
 
   /* Topic list: the round tile behind each question's chevron. */
   --chevron-tile-bg: #ffe4f1;

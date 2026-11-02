@@ -2400,8 +2400,16 @@ console.log(
     "the splash wordmark and headline are never wider than the screen",
   );
   assert(
-    !css.includes("answer-dock") && !css.includes("position: sticky"),
-    "nothing is docked or sticky at the bottom, so focus is never hidden under it (WCAG 2.4.11; step 7c)",
+    !css.includes("answer-dock") &&
+      !css.includes("position: sticky") &&
+      [...css.matchAll(/\n([^\n{}]+) \{[^}]*position: fixed;/g)]
+        .map((m) => m[1].trim())
+        .every((selector) =>
+          [".app-shell--playful::before", ".home > .home-footer"].includes(
+            selector,
+          ),
+        ),
+    "nothing is docked or sticky at the bottom except Home's footer, whose height the page keeps free and whose focus padding stops it hiding focus (WCAG 2.4.11; step 7c, H1b)",
   );
 }
 
@@ -2512,14 +2520,36 @@ console.log("\nTest 48: Home refresh (H1)");
       rule(".home-helpline strong").includes("font-size: 18px;"),
     "the helpline: solid rose, the pink border, no glow, 18px bold call",
   );
+  const homeCss = css.slice(
+    css.indexOf("/* Home (H1)"),
+    css.indexOf("/* Shared with the support"),
+  );
+  const pinned = rule(".home > .home-footer");
   assert(
-    !/position: (fixed|sticky)/.test(
-      css.slice(
-        css.indexOf("/* Home (H1)"),
-        css.indexOf("/* Shared with the support"),
+    pinned.includes("position: fixed;") &&
+      pinned.includes("bottom: 0;") &&
+      pinned.includes("max(8px, env(safe-area-inset-bottom))") &&
+      pinned.includes("background: var(--home-sheet-end);"),
+    "the helpline and Clear and leave are pinned to the bottom, clear of the safe area, on a solid sheet",
+  );
+  assert(
+    homeCss.match(/position: fixed;/g)?.length === 1 &&
+      !homeCss.includes("position: sticky") &&
+      !rule(".home-band").includes("position") &&
+      !rule(".home-topbar").includes("position"),
+    "only the footer is pinned: Quick exit (in the band) scrolls with the page",
+  );
+  assert(
+    rule(".app-shell--home").includes(
+      "--home-footer-space: calc(156px + env(safe-area-inset-bottom));",
+    ) &&
+      rule(".app-shell--home").includes(
+        "padding: 0 0 var(--home-footer-space);",
+      ) &&
+      rule("html:has(.app-shell--home)").includes(
+        "scroll-padding-bottom: calc(172px + env(safe-area-inset-bottom));",
       ),
-    ) && rule(".home-footer").includes("margin-top: auto;"),
-    "nothing on Home is fixed: the footer ends the page, like the splash",
+    "the page keeps the footer's height free at its end, and focus never scrolls under it",
   );
   const sizes = [
     ...css
