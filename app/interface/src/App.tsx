@@ -13,7 +13,8 @@ import TopicList from "./components/TopicList";
 import type { Topic } from "./content/topics";
 import SessionEnd from "./components/SessionEnd";
 import SupportContent from "./components/SupportContent";
-import { createDoubleEscapeHandler, quickExit } from "./quickExit";
+import { quickExit } from "./quickExit";
+import { createEscapeRouter, returnFocusTarget } from "./helpSheet";
 import { clearAndLeave } from "./clearAndLeave";
 import {
   browserSessionStorage,
@@ -52,7 +53,10 @@ export default function App() {
   // app header while the sheet is closed), and whether focus goes back to
   // it once the sheet closes.
   const homeHelpButtonRef = useRef<HTMLButtonElement>(null);
-  const focusHomeHelpRef = useRef(false);
+  // The control that opened the Help sheet, and whether focus goes back
+  // to it once the sheet has closed (helpSheet.ts).
+  const helpOpenerRef = useRef<HTMLElement | null>(null);
+  const restoreFocusRef = useRef(false);
   // The Topic list's class, what opened it, and where focus returns.
   const [topic, setTopic] = useState<Topic | null>(null);
   const topicOpenerRef = useRef<"tile" | "help">("tile");
@@ -188,24 +192,33 @@ export default function App() {
     setScreen("splash");
   };
 
+  /** Open the Help sheet, remembering the control that opened it. */
   const openHelp = () => {
-    focusHomeHelpRef.current = homeHelpButtonRef.current !== null;
+    const active = document.activeElement;
+    helpOpenerRef.current =
+      active instanceof HTMLElement && active !== document.body ? active : null;
     setIsHelpOpen(true);
   };
 
-  /** Close the Help sheet and return focus to the Help button. */
+  /** Close the Help sheet; focus then returns to what opened it. */
   const closeHelp = () => {
+    restoreFocusRef.current = true;
     setIsHelpOpen(false);
-    helpButtonRef.current?.focus();
   };
 
-  // Help opened from Home or a Topic list: once the sheet has closed and
-  // the page is shown again, focus returns to its "Get help" (the
-  // header's Help button focused above leaves with the sheet).
+  // Once the sheet has closed and the page is shown again, focus returns
+  // to the control that opened it, or, if that has gone (the header's
+  // Help button is replaced while the sheet is open), to the band's
+  // "Get help" or the header's Help button.
   useEffect(() => {
-    if (isHelpOpen || !focusHomeHelpRef.current) return;
-    focusHomeHelpRef.current = false;
-    homeHelpButtonRef.current?.focus();
+    if (isHelpOpen || !restoreFocusRef.current) return;
+    restoreFocusRef.current = false;
+    returnFocusTarget<HTMLElement>(
+      helpOpenerRef.current,
+      homeHelpButtonRef.current,
+      helpButtonRef.current,
+    )?.focus();
+    helpOpenerRef.current = null;
   }, [isHelpOpen]);
 
   /** Open the Topic list, remembering what opened it for focus return. */
@@ -294,23 +307,29 @@ export default function App() {
       replace: (url) => window.location.replace(url),
     });
 
-  // Escape pressed twice within a second also exits, on every screen. An
-  // Escape that closes the Help sheet does not count (it is seen while the
-  // sheet is still open).
+  // Escape pressed twice within a second also exits, on every screen,
+  // while the Help sheet is closed. While it is open, one Escape closes
+  // it (wherever focus is) and does not count (helpSheet.ts).
   const exitRef = useRef(handleExit);
+  const closeHelpRef = useRef(closeHelp);
   const helpOpenRef = useRef(isHelpOpen);
   useEffect(() => {
     exitRef.current = handleExit;
+    closeHelpRef.current = closeHelp;
     helpOpenRef.current = isHelpOpen;
   });
   useEffect(() => {
-    const onEscape = createDoubleEscapeHandler(
-      () => exitRef.current(),
-      () => Date.now(),
-      () => helpOpenRef.current,
-    );
+    const onEscape = createEscapeRouter({
+      isHelpOpen: () => helpOpenRef.current,
+      onCloseHelp: () => closeHelpRef.current(),
+      onExit: () => exitRef.current(),
+    });
     const onKeyDown = (event: KeyboardEvent) => {
-      onEscape(event.key);
+      // An Escape inside the sheet is closed by the sheet itself.
+      const inSheet =
+        event.target instanceof Element &&
+        event.target.closest(".help-sheet") !== null;
+      onEscape(event.key, inSheet);
     };
     // Capture phase: this runs before React's own handlers, so an Escape
     // that closes the Help sheet is seen while the sheet is still open.

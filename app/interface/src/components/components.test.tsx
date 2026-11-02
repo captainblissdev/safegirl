@@ -727,12 +727,12 @@ console.log(
     );
   }
   assert(
-    app.includes("createDoubleEscapeHandler(") &&
+    app.includes("createEscapeRouter({") &&
       app.includes('addEventListener("keydown"'),
-    "double Escape is wired to a keydown listener",
+    "double Escape (through the Help sheet's Escape router) is wired to a keydown listener",
   );
   const effect = app.slice(
-    app.indexOf("createDoubleEscapeHandler("),
+    app.indexOf("createEscapeRouter({"),
     app.indexOf('if (screen === "splash") {'),
   );
   assert(
@@ -1065,18 +1065,27 @@ console.log(
 {
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
-    app.includes("() => helpOpenRef.current,"),
-    "the Escape handler ignores presses while the sheet is open",
+    app.includes("isHelpOpen: () => helpOpenRef.current,") &&
+      app.includes("onCloseHelp: () => closeHelpRef.current(),") &&
+      app.includes('event.target.closest(".help-sheet") !== null;') &&
+      app.includes("onEscape(event.key, inSheet);"),
+    "while the sheet is open, one Escape closes it (wherever focus is) and does not count",
   );
   assert(
     app.includes('window.addEventListener("keydown", onKeyDown, true);'),
     "it listens in the capture phase, before the sheet closes itself",
   );
   assert(
-    /const closeHelp = \(\) => \{\s*setIsHelpOpen\(false\);\s*helpButtonRef\.current\?\.focus\(\);/.test(
+    /const openHelp = \(\) => \{\s*const active = document\.activeElement;\s*helpOpenerRef\.current =/.test(
       app,
-    ),
-    "closing the sheet returns focus to the Help button",
+    ) &&
+      /const closeHelp = \(\) => \{\s*restoreFocusRef\.current = true;\s*setIsHelpOpen\(false\);/.test(
+        app,
+      ) &&
+      /returnFocusTarget<HTMLElement>\(\s*helpOpenerRef\.current,\s*homeHelpButtonRef\.current,\s*helpButtonRef\.current,\s*\)\?\.focus\(\);/.test(
+        app,
+      ),
+    "closing the sheet returns focus to the control that opened it (or the band's Get help, then the header's Help)",
   );
   assert(
     app.includes("startScreen(browserSessionStorage)") &&
@@ -1402,7 +1411,9 @@ console.log(
   );
   assert(
     app.includes('`[data-topic="${topic.topicClass}"]`') &&
-      app.includes("helpButtonRef.current?.focus();"),
+      app.includes(
+        "(homeHelpButtonRef.current ?? helpButtonRef.current)?.focus();",
+      ),
     "back returns focus to the tile, or to Help",
   );
   const home = renderChat([]);
@@ -3084,10 +3095,9 @@ console.log("\nTest 53: the Help sheet as a page under the header (step 3c)");
   }
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
-    /const closeHelp = \(\) => \{\s*setIsHelpOpen\(false\);\s*helpButtonRef\.current\?\.focus\(\);/.test(
-      app,
-    ) && !app.includes("handleHelpTopic"),
-    "closing returns focus to Help; the sheet has no topic pills any more (HS1)",
+    app.includes("restoreFocusRef.current = true;") &&
+      !app.includes("handleHelpTopic"),
+    "closing returns focus to its opener; the sheet has no topic pills any more (HS1)",
   );
   const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
   const rule = (selector: string) => {
