@@ -64,7 +64,7 @@ import {
   SOURCES_LINE,
   SPLASH_HELPLINE,
   SPLASH_HELPLINE_TEXT,
-  SPLASH_TOPIC_STARTERS,
+  SPLASH_EXAMPLE_QUESTIONS,
 } from "../content/uiText";
 import AppHeader from "./AppHeader";
 import AppShell from "./AppShell";
@@ -735,7 +735,7 @@ console.log("\nTest 22: the splash is a full-bleed screen of its own");
   assert(!html.includes("btn-help"), "no Help button on the splash");
   const topbar = html.slice(
     html.indexOf('<div class="splash-topbar">'),
-    html.indexOf('<div class="splash-head">'),
+    html.indexOf('<div class="splash-scroll">'),
   );
   assert(
     topbar.startsWith(
@@ -762,35 +762,59 @@ console.log("\nTest 22: the splash is a full-bleed screen of its own");
   );
   for (const promise of [
     "<strong>Anonymous.</strong> No name asked.",
-    "<strong>Guided by</strong> MoH and WHO.",
+    "<strong>Guided by</strong> Kenya Ministry of Health and WHO.",
     "<strong>Not a doctor.</strong> A nurse can help.",
   ]) {
     assert(html.includes(`<span>${promise}</span>`), `promise: ${promise}`);
   }
   assert(
-    html.split('class="splash-flowers').length === 3 &&
-      html
-        .split('class="splash-flowers')
-        .every((part, i) => i === 0 || part.includes('aria-hidden="true"')),
-    "two flower clusters, hidden from screen readers",
+    html.split('class="splash-flowers"').length === 2 &&
+      html.includes(
+        '<svg class="splash-flowers" viewBox="0 0 80 96" aria-hidden="true"',
+      ) &&
+      html.indexOf('class="splash-flowers"') <
+        html.indexOf('class="splash-promises"'),
+    "one flower cluster, top right, hidden from screen readers",
+  );
+  assert(
+    html.indexOf('<div class="splash-topbar">') <
+      html.indexOf('<div class="splash-scroll">') &&
+      html.indexOf('<div class="splash-scroll">') <
+        html.indexOf('<div class="splash-actions">') &&
+      html.includes('<div class="splash-actions"><button class="btn-splash"'),
+    "top row, scrolling content, then the pinned actions (continue first)",
   );
   assert(
     html.split('class="promise-icon"').length === 4,
     "three promise icons (lock, document, info)",
   );
+  const promisesEnd = html.indexOf("</ul>", html.indexOf("splash-promises"));
+  const scopeAt = html.indexOf(
+    '<h2 id="splash-scope" class="splash-scope">Ask about periods, puberty, your body and health.</h2>',
+  );
+  const subAt = html.indexOf(
+    '<p class="splash-sub">Not sure where to start? Tap one to try it:</p>',
+  );
   assert(
-    html.includes(escapeHtml("What's on your mind today?")) &&
-      html.includes("Tap one to start, or skip."),
-    "the question and its sub-line",
+    promisesEnd > -1 &&
+      promisesEnd < scopeAt &&
+      scopeAt < subAt &&
+      subAt < html.indexOf('class="splash-chip"'),
+    "the scope line under the promises, then the sub-line, then the chips",
+  );
+  assert(
+    !html.includes(escapeHtml("What's on your mind today?")) &&
+      !html.includes("Tap one to start, or skip."),
+    "the v1 question and sub-line are gone",
   );
   const chips = [...html.matchAll(/class="splash-chip"[^>]*>([^<]+)</g)].map(
     (m) => m[1],
   );
   assert(
-    chips.join("|") === SPLASH_TOPIC_STARTERS.map((c) => c.label).join("|") &&
+    chips.join("|") === SPLASH_EXAMPLE_QUESTIONS.join("|") &&
       chips.join("|") ===
-        "Periods|My body|Feelings|Friends and boys|Staying safe",
-    "the five chips, in order",
+        "What is a normal period?|What changes happen during puberty?|How can I look after my body?",
+    "the three example questions, in order",
   );
   const lockAt = html.indexOf(escapeHtml("We don't store your questions."));
   const learnAt = html.indexOf('class="splash-learn"');
@@ -1000,12 +1024,13 @@ console.log("\nTest 26: one sources line, used everywhere it appears");
   const sheet = renderToStaticMarkup(
     <HelpSheet onClose={() => undefined} onTopic={() => undefined} />,
   );
-  // The splash refresh replaced the splash's sources promise with the
-  // short "Guided by MoH and WHO."; Help and Home keep the full line.
+  // The splash (v3) has its own sources promise, "Guided by Kenya
+  // Ministry of Health and WHO."; Help and Home keep the full line.
   assert(
-    splash.includes("<span><strong>Guided by</strong> MoH and WHO.</span>") &&
-      !splash.includes(SOURCES_LINE),
-    "the splash's short promise",
+    splash.includes(
+      "<span><strong>Guided by</strong> Kenya Ministry of Health and WHO.</span>",
+    ) && !splash.includes(SOURCES_LINE),
+    "the splash's own sources promise, ending without a one-word line",
   );
   assert(sheet.includes(SOURCES_LINE), "in the Help sheet");
   const sheetSource = readFileSync(
@@ -1016,12 +1041,6 @@ console.log("\nTest 26: one sources line, used everywhere it appears");
     sheetSource.includes("SOURCES_LINE") &&
       !sheetSource.includes("Ministry of"),
     "./HelpSheet.tsx uses the constant and does not retype the line",
-  );
-  assert(
-    !readFileSync(new URL("./Splash.tsx", import.meta.url), "utf8").includes(
-      "Ministry of",
-    ),
-    "./Splash.tsx does not retype the long line",
   );
   assert(
     !(splash + sheet).includes("Answers come from Kenyan"),

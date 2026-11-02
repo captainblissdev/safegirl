@@ -3,16 +3,19 @@ import { renderToStaticMarkup } from "react-dom/server";
 import ChatInterface from "./components/ChatInterface";
 import Splash from "./components/Splash";
 import {
-  SPLASH_TOPIC_STARTERS,
+  SPLASH_EXAMPLE_QUESTIONS,
   splashStarter,
   toggleSplashChip,
 } from "./content/uiText";
+import { continueFromSplash, SPLASH_SEEN_KEY } from "./splashSession";
 
 /**
- * The splash chips (splash refresh): a chosen chip's starter phrase is
- * put in the chat input when the user continues, editable and never sent;
- * no chip leaves the input empty; the choice lives in React state only
- * and nothing about it is stored in the browser.
+ * The splash example questions (splash v3): a chosen question is put in
+ * the chat input when the user continues, editable and never sent; none
+ * chosen leaves the input empty; the choice lives in React state only.
+ * The splash writes nothing to localStorage, sessionStorage, cookies or
+ * IndexedDB; leaving it writes only the existing once-per-session flag
+ * (splashSession.ts), never the chosen question.
  *
  * Run: tsx src/splashChips.test.tsx
  */
@@ -29,40 +32,35 @@ const escapeHtml = (text: string) =>
 const read = (path: string) =>
   readFileSync(new URL(path, import.meta.url), "utf8");
 
-console.log("Test 1: the five chips and their starter phrases");
+console.log("Test 1: the three example questions");
 {
-  const expected: [string, string][] = [
-    ["Periods", "I have a question about my period"],
-    ["My body", "I have a question about my body"],
-    ["Feelings", "I want to talk about my feelings"],
-    ["Friends and boys", "I have a question about friends and boys"],
-    ["Staying safe", "I want to know how to stay safe"],
+  const expected = [
+    "What is a normal period?",
+    "What changes happen during puberty?",
+    "How can I look after my body?",
   ];
   assert(
-    JSON.stringify(SPLASH_TOPIC_STARTERS.map((c) => [c.label, c.starter])) ===
-      JSON.stringify(expected),
-    "the five chips with the agreed starter phrases",
+    JSON.stringify(SPLASH_EXAMPLE_QUESTIONS) === JSON.stringify(expected),
+    "the three agreed questions, in order",
   );
-  for (const [label, starter] of expected) {
-    assert(splashStarter(label) === starter, `${label}: its starter`);
+  for (const question of expected) {
+    assert(splashStarter(question) === question, `${question}: itself`);
   }
-  assert(splashStarter(null) === "", "no chip: an empty starter");
-  assert(splashStarter("Unknown") === "", "an unknown label: empty");
+  assert(splashStarter(null) === "", "none chosen: an empty starter");
+  assert(splashStarter("Something else?") === "", "an unknown text: empty");
 }
 
-console.log("\nTest 2: tapping a chip chooses it; tapping it again clears it");
+console.log("\nTest 2: tapping a question chooses it; tapping again clears it");
 {
-  assert(toggleSplashChip(null, "Feelings") === "Feelings", "choose");
-  assert(toggleSplashChip("Feelings", "Feelings") === null, "clear");
-  assert(
-    toggleSplashChip("Feelings", "Periods") === "Periods",
-    "another chip replaces the choice",
-  );
+  const [a, b] = SPLASH_EXAMPLE_QUESTIONS;
+  assert(toggleSplashChip(null, a) === a, "choose");
+  assert(toggleSplashChip(a, a) === null, "clear");
+  assert(toggleSplashChip(a, b) === b, "another question replaces it");
 }
 
 console.log("\nTest 3: on continue, the input is prefilled; nothing is sent");
 {
-  for (const { label, starter } of SPLASH_TOPIC_STARTERS) {
+  for (const question of SPLASH_EXAMPLE_QUESTIONS) {
     let sent = 0;
     let used = 0;
     const html = renderToStaticMarkup(
@@ -72,18 +70,18 @@ console.log("\nTest 3: on continue, the input is prefilled; nothing is sent");
           sent += 1;
         }}
         isLoading={false}
-        initialDraft={splashStarter(label)}
+        initialDraft={splashStarter(question)}
         onInitialDraftUsed={() => {
           used += 1;
         }}
       />,
     );
     assert(
-      html.includes(`value="${escapeHtml(starter)}"`),
-      `${label}: the input holds "${starter}"`,
+      html.includes(`value="${escapeHtml(question)}"`),
+      `the input holds "${question}"`,
     );
-    assert(sent === 0, `${label}: nothing is sent`);
-    assert(used === 0, `${label}: cleared only after the input has rendered`);
+    assert(sent === 0, `${question}: nothing is sent`);
+    assert(used === 0, `${question}: cleared only after the input rendered`);
   }
   const empty = renderToStaticMarkup(
     <ChatInterface
@@ -97,7 +95,7 @@ console.log("\nTest 3: on continue, the input is prefilled; nothing is sent");
   );
   assert(
     !/<input[^>]*value="[^"]+"/.test(empty),
-    "no chip (skip): the input is empty",
+    "none chosen (skip): the input is empty",
   );
 }
 
@@ -128,15 +126,59 @@ console.log("\nTest 4: the wiring sends nothing and routes nothing");
       !/onSend|fetch\(|topic=|intent/.test(splash),
     "the splash passes only the starter text: no request, topic or intent",
   );
-  const client = read("./api/client.ts");
   assert(
-    !/starter|chip|SPLASH_/.test(client),
-    "the gateway client knows nothing of the chips",
+    !/starter|chip|SPLASH_/.test(read("./api/client.ts")),
+    "the gateway client knows nothing of the splash questions",
   );
 }
 
-console.log("\nTest 5: the choice is never stored in the browser");
+console.log("\nTest 5: the splash writes nothing to browser storage");
 {
+  // Recording fakes for every browser store, installed before rendering.
+  const writes: string[] = [];
+  const store = (name: string) => ({
+    getItem: () => null,
+    setItem: (key: string) => writes.push(`${name}.setItem(${key})`),
+    removeItem: (key: string) => writes.push(`${name}.removeItem(${key})`),
+    clear: () => writes.push(`${name}.clear()`),
+    key: () => null,
+    length: 0,
+  });
+  const g = globalThis as Record<string, unknown>;
+  const saved = ["localStorage", "sessionStorage", "indexedDB", "document"].map(
+    (k) => [k, g[k]] as const,
+  );
+  g.localStorage = store("localStorage");
+  g.sessionStorage = store("sessionStorage");
+  g.indexedDB = {
+    open: (name: string) => writes.push(`indexedDB.open(${name})`),
+    deleteDatabase: (name: string) => writes.push(`indexedDB.delete(${name})`),
+  };
+  g.document = {
+    get cookie() {
+      return "";
+    },
+    set cookie(value: string) {
+      writes.push(`document.cookie=${value}`);
+    },
+  };
+  try {
+    for (const hour of [8, 14, 21]) {
+      renderToStaticMarkup(
+        <Splash
+          onContinue={() => undefined}
+          onExit={() => undefined}
+          now={new Date(2026, 10, 2, hour)}
+        />,
+      );
+    }
+    assert(writes.length === 0, "rendering the splash writes nothing");
+  } finally {
+    for (const [k, v] of saved) {
+      g[k] = v;
+    }
+  }
+
   const storage =
     /localStorage|sessionStorage|document\.cookie|indexedDB|IDBFactory/;
   for (const file of [
@@ -146,22 +188,32 @@ console.log("\nTest 5: the choice is never stored in the browser");
   ]) {
     assert(!storage.test(read(file)), `${file} uses no browser storage`);
   }
-  const app = read("./App.tsx");
-  const starterLines = app
+  const starterLines = read("./App.tsx")
     .split("\n")
     .filter((line) => /starter/i.test(line))
     .join("\n");
   assert(
     !storage.test(starterLines),
-    "App.tsx keeps the starter in React state only",
+    "App.tsx keeps the chosen question in React state only",
+  );
+
+  // Leaving the splash: the existing once-per-session flag, nothing else.
+  const leaveWrites: [string, string][] = [];
+  continueFromSplash(() => ({
+    getItem: () => null,
+    setItem: (key: string, value: string) => leaveWrites.push([key, value]),
+  }));
+  assert(
+    JSON.stringify(leaveWrites) === JSON.stringify([[SPLASH_SEEN_KEY, "1"]]),
+    `continue writes only the existing flag (${SPLASH_SEEN_KEY} = "1"), never the question`,
   );
   const html = renderToStaticMarkup(
     <Splash onContinue={() => undefined} onExit={() => undefined} />,
   );
   assert(
-    html.split('aria-pressed="false"').length === 6 &&
+    html.split('aria-pressed="false"').length === 4 &&
       !html.includes('aria-pressed="true"'),
-    "no chip is chosen when the splash opens",
+    "no question is chosen when the splash opens",
   );
 }
 

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import {
   greetingFor,
+  SPLASH_EXAMPLE_QUESTIONS,
   SPLASH_HELPLINE,
   SPLASH_HELPLINE_TEXT,
-  SPLASH_TOPIC_STARTERS,
   splashStarter,
   toggleSplashChip,
 } from "../content/uiText";
@@ -26,15 +26,19 @@ import {
  * behaves as before; double Escape works here too (App listens on the
  * window on every screen).
  *
+ * Three parts: the top row (Quick exit, always visible), the content
+ * (scrolls on short phones) and the actions (continue and the helpline,
+ * always visible at the bottom).
+ *
  * English only. The greeting follows the device clock (wording only).
- * The topic chips are a convenience: see SPLASH_TOPIC_STARTERS.
+ * The example questions are a convenience: see SPLASH_EXAMPLE_QUESTIONS.
  *
  * A dark surface (.surface-dark): white focus ring. Every text pair is
  * checked against the gradient in styles/tokens.test.ts. It makes no
  * claim that content is clinician reviewed.
  */
 
-/** A small page icon for the "Guided by MoH and WHO" promise. */
+/** A small page icon for the "Guided by" promise. */
 function DocumentIcon({ size = 20 }: { size?: number }) {
   return (
     <svg
@@ -91,11 +95,11 @@ function Flower({
   );
 }
 
-/** A cluster of three flowers: decoration only, never behind content. */
-function Flowers({ where }: { where: "top" | "chips" }) {
+/** The flower cluster, top right: decoration only, never behind content. */
+function Flowers() {
   return (
     <svg
-      className={`splash-flowers splash-flowers--${where}`}
+      className="splash-flowers"
       viewBox="0 0 80 96"
       aria-hidden="true"
       focusable="false"
@@ -109,9 +113,9 @@ function Flowers({ where }: { where: "top" | "chips" }) {
 
 interface Props {
   /**
-   * Leave the splash. Gets the chosen chip's starter phrase, or "" when
-   * no chip was chosen; App only puts it in the chat input (never sends
-   * it, never stores it).
+   * Leave the splash. Gets the chosen example question, or "" when none
+   * was chosen; App only puts it in the chat input (never sends it, never
+   * stores it).
    */
   onContinue: (starter: string) => void;
   /** Quick exit (quickExit.ts). */
@@ -122,7 +126,7 @@ interface Props {
 
 export default function Splash({ onContinue, onExit, now }: Props) {
   const [isHowOpen, setIsHowOpen] = useState(false);
-  // The chosen chip: React state only (memory, this session), never
+  // The chosen question: React state only (memory, this session), never
   // stored, never sent. Tapping it again clears the choice.
   const [chosen, setChosen] = useState<string | null>(null);
   const starter = splashStarter(chosen);
@@ -131,7 +135,6 @@ export default function Splash({ onContinue, onExit, now }: Props) {
   return (
     <main className="splash-screen surface-dark" aria-labelledby="splash-title">
       <div className="splash-decor" aria-hidden="true">
-        <span className="splash-glow splash-glow--pink" />
         <span className="splash-glow splash-glow--light" />
       </div>
 
@@ -141,89 +144,98 @@ export default function Splash({ onContinue, onExit, now }: Props) {
         </button>
       </div>
 
-      <div className="splash-head">
-        <div className="splash-brand">
-          <ShieldHeartMark variant="splash" size={56} />
-          <p className="splash-wordmark">SafeGirl</p>
+      <div className="splash-scroll">
+        <div className="splash-head">
+          <div className="splash-brand">
+            <ShieldHeartMark variant="splash" size={56} />
+            <p className="splash-wordmark">SafeGirl</p>
+          </div>
+          <p className="splash-greeting">{greeting}</p>
+          <h1 id="splash-title" className="splash-headline">
+            Honest answers. No judgment.
+          </h1>
+          <Flowers />
         </div>
-        <p className="splash-greeting">{greeting}</p>
-        <h1 id="splash-title" className="splash-headline">
-          Honest answers. No judgment.
-        </h1>
-        <Flowers where="top" />
-      </div>
 
-      <ul className="splash-promises">
-        <li>
-          <span className="promise-icon">
-            <LockIcon size={20} strokeWidth={2.2} />
-          </span>
-          <span>
-            <strong>Anonymous.</strong> No name asked.
-          </span>
-        </li>
-        <li>
-          <span className="promise-icon">
-            <DocumentIcon />
-          </span>
-          <span>
-            <strong>Guided by</strong> MoH and WHO.
-          </span>
-        </li>
-        <li>
-          <span className="promise-icon">
-            <InfoIcon size={20} strokeWidth={2.2} />
-          </span>
-          <span>
-            <strong>Not a doctor.</strong> A nurse can help.
-          </span>
-        </li>
-      </ul>
+        <ul className="splash-promises">
+          <li>
+            <span className="promise-icon">
+              <LockIcon size={20} strokeWidth={2.2} />
+            </span>
+            <span>
+              <strong>Anonymous.</strong> No name asked.
+            </span>
+          </li>
+          <li>
+            <span className="promise-icon">
+              <DocumentIcon />
+            </span>
+            <span>
+              <strong>Guided by</strong> Kenya Ministry of Health and{" "}
+              WHO.
+            </span>
+          </li>
+          <li>
+            <span className="promise-icon">
+              <InfoIcon size={20} strokeWidth={2.2} />
+            </span>
+            <span>
+              <strong>Not a doctor.</strong> A nurse can help.
+            </span>
+          </li>
+        </ul>
 
-      <section className="splash-question" aria-labelledby="splash-question">
-        <h2 id="splash-question" className="splash-question-title">
-          What&apos;s on your mind today?
-        </h2>
-        <p className="splash-sub">Tap one to start, or skip.</p>
-        <div className="splash-chips-row">
-          <div className="splash-chips" role="group" aria-label="Topics">
-            {SPLASH_TOPIC_STARTERS.map(({ label }) => (
+        <section className="splash-question" aria-labelledby="splash-scope">
+          <h2 id="splash-scope" className="splash-scope">
+            Ask about periods, puberty, your body and health.
+          </h2>
+          <p className="splash-sub">
+            Not sure where to start? Tap one to try it:
+          </p>
+          <div
+            className="splash-chips"
+            role="group"
+            aria-label="Example questions"
+          >
+            {SPLASH_EXAMPLE_QUESTIONS.map((question) => (
               <button
-                key={label}
+                key={question}
                 className="splash-chip"
                 type="button"
-                aria-pressed={chosen === label}
+                aria-pressed={chosen === question}
                 onClick={() =>
-                  setChosen((current) => toggleSplashChip(current, label))
+                  setChosen((current) => toggleSplashChip(current, question))
                 }
               >
-                {label}
+                {question}
               </button>
             ))}
           </div>
-          <Flowers where="chips" />
-        </div>
-      </section>
+        </section>
 
-      <div className="splash-bottom">
-        <p className="splash-lockline">
-          <SmallLockIcon size={16} />
-          <span>We don&apos;t store your questions.</span>
-          <button
-            className="splash-learn"
-            type="button"
-            aria-expanded={isHowOpen}
-            aria-controls="splash-how"
-            onClick={() => setIsHowOpen((open) => !open)}
-          >
-            Learn how
-          </button>
-        </p>
-        <p id="splash-how" className="splash-how" hidden={!isHowOpen}>
-          Your questions and answers stay in this tab&apos;s memory only. They
-          are not saved on your phone or on our server, and they are gone when
-          you close or refresh the page. You never give your name.
-        </p>
+        <div className="splash-privacy">
+          <p className="splash-lockline">
+            <SmallLockIcon size={16} />
+            <span>We don&apos;t store your questions.</span>
+            <button
+              className="splash-learn"
+              type="button"
+              aria-expanded={isHowOpen}
+              aria-controls="splash-how"
+              onClick={() => setIsHowOpen((open) => !open)}
+            >
+              Learn how
+            </button>
+          </p>
+          <p id="splash-how" className="splash-how" hidden={!isHowOpen}>
+            Your questions and answers stay in this tab&apos;s memory only. They
+            are not saved on your phone or on our server, and they are gone when
+            you close or refresh the page. You never give your name.
+          </p>
+        </div>
+      </div>
+
+      <div className="splash-actions">
         <button
           className="btn-splash"
           type="button"

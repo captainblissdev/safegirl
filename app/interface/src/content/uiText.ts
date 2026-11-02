@@ -135,23 +135,15 @@ export const GBV_HELP_SHEET_NOTE =
 export const ANONYMOUS_LINE = "Anonymous. We never ask for your name.";
 
 /**
- * The splash's "What's on your mind today?" chips and the starter phrase
- * each puts in the chat input when the user continues. The phrase is
- * only a prefill: editable, never sent on its own, and kept in memory
- * for this session only. No chip routes, scopes or tags a query.
+ * The splash's example questions (splash v3): tapping one and continuing
+ * puts that exact question in the chat input. It is only a prefill:
+ * editable, never sent on its own, and kept in memory for this session
+ * only. No chip routes, scopes or tags a query.
  */
-export const SPLASH_TOPIC_STARTERS: readonly {
-  readonly label: string;
-  readonly starter: string;
-}[] = [
-  { label: "Periods", starter: "I have a question about my period" },
-  { label: "My body", starter: "I have a question about my body" },
-  { label: "Feelings", starter: "I want to talk about my feelings" },
-  {
-    label: "Friends and boys",
-    starter: "I have a question about friends and boys",
-  },
-  { label: "Staying safe", starter: "I want to know how to stay safe" },
+export const SPLASH_EXAMPLE_QUESTIONS: readonly string[] = [
+  "What is a normal period?",
+  "What changes happen during puberty?",
+  "How can I look after my body?",
 ];
 
 /**
@@ -186,14 +178,14 @@ export const SPLASH_HELPLINE_TEXT = `${SPLASH_HELPLINE.lead} ${SPLASH_HELPLINE.c
 /** The chip choice after a tap: tapping the chosen chip again clears it. */
 export function toggleSplashChip(
   current: string | null,
-  label: string,
+  question: string,
 ): string | null {
-  return current === label ? null : label;
+  return current === question ? null : question;
 }
 
-/** The chosen chip's starter phrase, or "" when no chip was chosen. */
+/** The text for the chat input: the chosen question, or "" when none. */
 export function splashStarter(chosen: string | null): string {
-  return (
-    SPLASH_TOPIC_STARTERS.find(({ label }) => label === chosen)?.starter ?? ""
-  );
+  return chosen !== null && SPLASH_EXAMPLE_QUESTIONS.includes(chosen)
+    ? chosen
+    : "";
 }
