@@ -148,6 +148,8 @@
   --help-call-tile: rgba(255, 255, 255, 0.18);
   --help-call-second-tile: #ffe4f1;
   --help-call-second-icon: #be185d;
+  /* Help sheet (HS1): the "Need to leave quickly?" card, light lavender. */
+  --help-leave-bg: #efe8fd;
   /* Topic pills: text, and a lighter tint of it for the border that
      still reaches 3:1 on the page and its glows. */
   --pill-periods-text: #9d174d;

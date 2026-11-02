@@ -659,8 +659,7 @@
  * text, so "1195," reads without a gap at any font size.
  */
 .danger-line a::after,
-.emergency-line a::after,
-.help-emergency a::after {
+.emergency-line a::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -2403,8 +2402,7 @@ html:has(.topic-page) {
     margin-left: 4px;
   }
 
-  .answer-screen,
-  .help-sheet {
+  .answer-screen {
     padding-right: 4px;
     padding-left: 4px;
   }
@@ -2793,7 +2791,7 @@ html:has(.topic-page) {
   text-decoration: none;
 }
 
-/* Help sheet (redesign Step 3c): a page under the header */
+/* The shell's screen wrapper (redesign Step 3c) */
 
 .shell-content {
   display: contents;
@@ -2803,246 +2801,331 @@ html:has(.topic-page) {
   display: none;
 }
 
+/*
+ * Help sheet (HS1): the whole page while it is open (App hides its
+ * header and the screen behind). Home's band, then the sections in the
+ * centred column on Home's sheet. Nothing is pinned, so the shell keeps
+ * no footer space here.
+ */
+.app-shell--home:has(.help-sheet) {
+  --home-footer-space: 0px;
+}
+
+html:has(.help-sheet) {
+  scroll-padding-bottom: 0;
+}
+
 .help-sheet {
+  --home-gutter: 20px;
+  --home-column: min(100% - 2 * var(--home-gutter), 520px);
+
   display: flex;
-  flex: 1 0 auto;
   flex-direction: column;
-  gap: 14px;
-  width: min(100%, 720px);
-  margin: 0 auto;
-  padding: 0 8px 16px;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
   color: var(--color-ink);
 }
 
-.help-sheet-head {
+/* The band: Home's, as one row (title, flower, Quick exit, close),
+   with rounded lower corners. */
+.home-band.help-band {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  min-height: 0;
+  border-radius: 0 0 28px 28px;
+  padding-top: 26px;
+  padding-bottom: 30px;
+}
+
+.help-title {
+  font-size: 26px;
+  font-weight: var(--weight-black);
+  line-height: 1.15;
+}
+
+.help-flowers {
+  display: block;
+  flex: none;
+  width: 34px;
+  height: 34px;
+}
+
+.help-flowers .splash-flower ellipse {
+  fill: var(--home-flower);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .help-flowers {
+    animation: splash-flowers-in 600ms ease-out both;
+  }
+}
+
+.help-band-actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  min-height: 48px;
-  padding-top: 16px;
-  box-sizing: content-box;
+  gap: 8px;
+  margin-left: auto;
 }
 
-.help-sheet-head h1 {
-  color: var(--color-plum);
-  font-size: 24px;
-  font-weight: var(--weight-black);
-  letter-spacing: -0.01em;
-}
-
-.btn-close {
-  display: grid;
-  flex: none;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 1.5px solid var(--sheet-control-edge);
-  border-radius: 50%;
+/* Quick exit: the strongest control, solid white, no icon. */
+.btn-help-exit {
+  min-height: var(--tap-target);
+  border: 2px solid var(--color-card);
+  border-radius: 999px;
+  padding: 0 16px;
   background: var(--color-card);
-  color: var(--close-icon);
+  color: var(--splash-button-text);
+  font-size: 15px;
+  font-weight: var(--weight-extrabold);
+  white-space: nowrap;
   cursor: pointer;
 }
 
-.help-card {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.help-card--how {
-  border-radius: 26px;
-  padding: 16px 18px;
-  background: var(--help-how-bg);
-  box-shadow: var(--help-how-shadow);
-  color: var(--color-on-dark);
-}
-
-.help-card--how h2 {
-  font-size: 17px;
-  font-weight: var(--weight-black);
-}
-
-.help-card--how p {
-  color: var(--hero-sub-text);
-  font-size: 14.5px;
-  font-weight: var(--weight-semibold);
-  line-height: 1.5;
-}
-
-.help-card--tips {
-  border: 1.5px solid var(--color-card-border);
-  border-radius: 22px;
-  padding: 14px 16px;
-  background: var(--color-card);
-}
-
-.help-sheet h2 {
-  font-size: 15px;
-  font-weight: var(--weight-black);
-}
-
-.help-card--how h2 {
-  font-size: 17px;
-}
-
-.help-tips {
+.btn-help-close {
   display: grid;
-  gap: 6px;
-  padding-left: 20px;
-  color: var(--tips-text);
-  font-size: 14.5px;
-  font-weight: var(--weight-semibold);
-  line-height: 1.45;
+  flex: none;
+  place-items: center;
+  width: var(--tap-target);
+  height: var(--tap-target);
+  border: 2px solid var(--splash-glass-border);
+  border-radius: 50%;
+  padding: 0;
+  background: var(--splash-glass-bg);
+  color: var(--color-on-dark);
+  cursor: pointer;
 }
 
-.help-talk,
-.help-topics {
+.help-body {
   display: flex;
+  flex: 1 0 auto;
   flex-direction: column;
+  gap: 20px;
+  width: var(--home-column);
+  margin: 0 auto;
+  padding: 20px 0 24px;
+}
+
+.help-section-title {
+  margin-bottom: 10px;
+  color: var(--color-plum);
+  font-size: 16px;
+  font-weight: var(--weight-black);
+}
+
+/* 999 and 112: two solid rose buttons, side by side. */
+.help-danger-calls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
-.help-calls {
+.help-danger-call {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  border: 2px solid var(--splash-helpline-border);
+  border-radius: 999px;
+  background: var(--splash-helpline-bg);
+  color: var(--color-on-dark);
+  font-size: 18px;
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+}
+
+.help-danger-call svg {
+  flex: none;
+}
+
+/* 1195 and 116: white cards with Home's card edge and a Call pill. */
+.help-lines {
   display: flex;
   flex-direction: column;
   gap: 10px;
   list-style: none;
 }
 
-.help-call {
+.help-line {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 64px;
-  border: 1.5px solid transparent;
-  border-radius: 22px;
-  padding: 10px 16px;
-  text-decoration: none;
+  border: 1.5px solid var(--home-card-edge);
+  border-radius: 18px;
+  padding: 12px 12px 12px 16px;
+  background: var(--color-card);
+  box-shadow: var(--home-card-shadow);
 }
 
-.help-call-icon {
+/* A pink tile with a rose phone, like the Home cards' icon tiles. */
+.help-line-icon {
   display: grid;
-  flex: none;
+  flex: 0 0 40px;
   place-items: center;
   width: 40px;
   height: 40px;
-  border-radius: 14px;
+  border-radius: 12px;
+  background: var(--home-icon-tile);
+  color: var(--color-rose-text);
 }
 
-.help-call-text {
+.help-line-text {
   display: flex;
+  flex: 1;
   flex-direction: column;
+  gap: 2px;
   min-width: 0;
 }
 
-.help-call-title {
-  font-size: 17px;
+.help-line-number {
+  color: var(--color-plum);
+  font-size: 22px;
+  font-weight: var(--weight-black);
+  line-height: 1.2;
+}
+
+.help-line-note {
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.4;
+}
+
+/* A solid rose Call pill, no border. */
+.help-line-call {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: var(--tap-target);
+  border-radius: 999px;
+  padding: 0 18px;
+  background: var(--splash-helpline-bg);
+  color: var(--color-on-dark);
+  font-size: 16px;
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+}
+
+.help-calls-note {
+  margin-top: 10px;
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+}
+
+/* Need to leave quickly? A light lavender card. */
+.help-leave {
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: var(--help-leave-bg);
+}
+
+.help-leave-title {
+  margin-bottom: 4px;
+  color: var(--color-plum);
+  font-size: 16px;
   font-weight: var(--weight-black);
 }
 
-.help-call-note {
-  font-size: 13px;
-  font-weight: var(--weight-bold);
-}
-
-.help-call--main {
-  background: var(--color-plum);
-  box-shadow: var(--help-call-shadow);
-  color: var(--color-on-dark);
-}
-
-.help-call--main .help-call-icon {
-  background: var(--help-call-tile);
-}
-
-.help-call--main .help-call-note {
-  color: var(--hero-sub-text);
-}
-
-/* On the dark button the ring is white and drawn inside it, so it shows
-   against the plum and not against the light page. */
-.help-call--main:focus-visible {
-  outline-color: var(--focus-ring-on-dark);
-  outline-offset: -5px;
-}
-
-.help-call--second {
-  border-color: var(--sheet-control-edge);
-  background: var(--color-card);
+.help-leave p {
   color: var(--color-ink);
-}
-
-.help-call--second .help-call-icon {
-  background: var(--help-call-second-tile);
-  color: var(--help-call-second-icon);
-}
-
-.help-call--second .help-call-note {
-  color: var(--color-muted);
-}
-
-.help-emergency {
-  border-radius: 14px;
-  padding: 10px 12px;
-  background: var(--footer-card-bg);
-  color: var(--footer-card-text);
-  font-size: 13.5px;
-  font-weight: var(--weight-bold);
+  font-size: 14px;
   line-height: 1.5;
 }
 
-.help-emergency a {
-  position: relative;
-  color: var(--color-violet);
-  font-weight: var(--weight-black);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+/* How SafeGirl works: a white card whose heading is the toggle. */
+.help-how {
+  overflow: hidden;
+  border: 1.5px solid var(--home-card-edge);
+  border-radius: 18px;
+  background: var(--color-card);
 }
 
-/* The topic pills wrap, each in its topic's colour. */
-.help-sheet .topic-choices {
+.help-how-toggle {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  padding: 0 14px 0 16px;
+  background: none;
+  color: var(--color-plum);
+  font: inherit;
+  font-size: 16px;
+  font-weight: var(--weight-black);
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The ring sits inside the card, so it is not clipped. */
+.help-how-toggle:focus-visible {
+  outline-offset: -4px;
+}
+
+/* The chevron points down when closed and up when open (a state, not
+   an animation). */
+.help-how-toggle svg {
+  flex: none;
+  color: var(--home-icon);
+  transform: rotate(90deg);
+}
+
+.help-how-toggle[aria-expanded="true"] svg {
+  transform: rotate(-90deg);
+}
+
+.help-how-body {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
+  padding: 0 16px 16px;
+  color: var(--color-ink);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-.help-sheet .topic-choices--pills .topic-choice {
-  width: auto;
-  min-height: var(--tap-target);
-  border-radius: 22px;
-  padding: 0 16px;
+.help-how-body[hidden] {
+  display: none;
+}
+
+.help-tips-title {
+  margin-top: 6px;
+  color: var(--color-plum);
   font-size: 15px;
-  font-weight: var(--weight-extrabold);
+  font-weight: var(--weight-black);
 }
 
-.help-sheet .topic-choice--general {
-  border-color: var(--pill-periods-edge);
-  color: var(--pill-periods-text);
-}
-
-.help-sheet .topic-choice--pregnancy {
-  border-color: var(--pill-pregnancy-edge);
-  color: var(--pill-pregnancy-text);
-}
-
-.help-sheet .topic-choice--contraception {
-  border-color: var(--pill-contraception-edge);
-  color: var(--pill-contraception-text);
-}
-
-.help-sheet .topic-choice--sti {
-  border-color: var(--pill-sti-edge);
-  color: var(--pill-sti-text);
+.help-tips {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 20px;
 }
 
 .help-footer {
-  margin-top: auto;
+  margin-top: 16px;
   color: var(--color-muted);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: var(--weight-bold);
   line-height: 1.5;
   text-align: center;
+}
+
+/* Below 360px: a 16px gutter, and the flower gives way to the controls. */
+@media (max-width: 359px) {
+  .help-sheet {
+    --home-gutter: 16px;
+  }
+
+  .help-flowers {
+    display: none;
+  }
 }
 
 /* Matched-question banner (redesign Step 6c) */

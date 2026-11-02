@@ -289,12 +289,7 @@ console.log("\nTest 6: control edges and the header's new pairs");
 
   // Controls never rely on the light card border as their only edge.
   const app = read("../App.css");
-  for (const control of [
-    ".topic-questions",
-    ".btn-close",
-    ".btn-help",
-    ".btn-exit",
-  ]) {
+  for (const control of [".topic-questions", ".btn-help", ".btn-exit"]) {
     const rule = new RegExp(
       `\\${control}\\s*\\{[^}]*border: [^;]*var\\(--(control-border|primary|color-plum|color-control-border|list-edge|sheet-control-edge)\\)`,
     );

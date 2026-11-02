@@ -949,15 +949,15 @@ console.log("\nTest 23: the Help sheet (HS1)");
   const [a, b] = EMERGENCY_NUMBERS;
   for (const n of [a, b]) {
     assert(
-      html.includes(
-        `<a class="help-danger-call" href="${telHref(n)}" aria-label="${telName(n, `Call ${n}`)}">Call ${n}</a>`,
-      ),
-      `"Call ${n}": a tel: link from the constant, named "Call ${n}, Emergency"`,
+      new RegExp(
+        `<a class="help-danger-call" href="${telHref(n)}" aria-label="${telName(n, `Call ${n}`)}"><svg[^>]*>.*?</svg><span>Call ${n}</span></a>`,
+      ).test(html),
+      `"Call ${n}": a phone icon and a tel: link from the constant, named "Call ${n}, Emergency"`,
     );
   }
   assert(
-    html.indexOf(`>Call ${a}</a>`) < html.indexOf(`>Call ${b}</a>`) &&
-      html.indexOf(`>Call ${b}</a>`) < html.indexOf("help-talk"),
+    html.indexOf(`>Call ${a}</span>`) < html.indexOf(`>Call ${b}</span>`) &&
+      html.indexOf(`>Call ${b}</span>`) < html.indexOf("help-talk"),
     `${a} then ${b}, first on the sheet`,
   );
   const childlineNote = (() => {
@@ -971,10 +971,10 @@ console.log("\nTest 23: the Help sheet (HS1)");
     [CHILDLINE_KENYA, childlineNote],
   ]) {
     assert(
-      html.includes(
-        `<li class="help-line"><span class="help-line-text"><span class="help-line-number">${n}</span><span class="help-line-note">${escapeHtml(note)}</span></span><a class="help-line-call" href="${telHref(n)}" aria-label="${telName(n, `Call ${n}`)}">Call</a></li>`,
-      ),
-      `${n}: its card, note "${note}", and a "Call" pill (tel: from the constant)`,
+      new RegExp(
+        `<li class="help-line"><span class="help-line-icon" aria-hidden="true"><svg[^>]*>.*?</svg></span><span class="help-line-text"><span class="help-line-number">${n}</span><span class="help-line-note">${escapeHtml(note).replace(/[().]/g, "\\$&")}</span></span><a class="help-line-call" href="${telHref(n)}" aria-label="${telName(n, `Call ${n}`)}">Call</a></li>`,
+      ).test(html),
+      `${n}: its card (phone tile, number, note "${note}") and a "Call" pill (tel: from the constant)`,
     );
   }
   assert(
@@ -2264,10 +2264,8 @@ console.log("\nTest 44: the topic grid and the footer line fit narrow phones");
   assert(
     rule(".danger-line").includes("line-height: 1.35;") &&
       !rule(".danger-line a").includes("min-height") &&
-      css.includes(
-        ".danger-line a::after,\n.emergency-line a::after,\n.help-emergency a::after {",
-      ) &&
-      rule(".help-emergency a::after").includes("height: var(--tap-target);") &&
+      css.includes(".danger-line a::after,\n.emergency-line a::after {") &&
+      rule(".emergency-line a::after").includes("height: var(--tap-target);") &&
       rule(".emergency-line").includes("line-height: 1.35;") &&
       !rule(".emergency-line a").includes("min-height"),
     "footer and emergency lines: line-height 1.35; their links keep a 44px-tall tap area",
@@ -2631,9 +2629,14 @@ console.log("\nTest 48: Home refresh (H1)");
     ),
     "on phones the header lines up with the 20px content gutter",
   );
-  const narrow = css.slice(css.lastIndexOf("@media (max-width: 359px) {"));
+  const narrowBlocks = [
+    ...css.matchAll(/@media \(max-width: 359px\) \{[\s\S]*?\n\}/g),
+  ].map((m) => m[0]);
   assert(
-    narrow.includes("column-gap: 8px;"),
+    narrowBlocks.some(
+      (block) =>
+        block.includes(".app-header {") && block.includes("column-gap: 8px;"),
+    ),
     "under 360px: the header on one row",
   );
   const homeNarrow = css.slice(
@@ -3092,23 +3095,69 @@ console.log("\nTest 53: the Help sheet as a page under the header (step 3c)");
     return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
   };
   assert(
-    rule(".btn-close").includes("width: 44px;") &&
-      rule(".btn-close").includes("height: 44px;") &&
-      rule(".btn-close").includes(
-        "border: 1.5px solid var(--sheet-control-edge);",
+    rule(".btn-help-close").includes("width: var(--tap-target);") &&
+      rule(".btn-help-close").includes("height: var(--tap-target);") &&
+      rule(".btn-help-close").includes("border-radius: 50%;") &&
+      rule(".btn-help-close").includes(
+        "border: 2px solid var(--splash-glass-border);",
       ),
-    "the close button: 44 by 44, with the 3:1 edge",
+    "the close button: round, 44 by 44, outlined white on the band",
   );
   assert(
-    rule(".help-call--main:focus-visible").includes(
-      "outline-color: var(--focus-ring-on-dark);",
+    rule(".btn-help-exit").includes("background: var(--color-card);") &&
+      rule(".btn-help-exit").includes("min-height: var(--tap-target);"),
+    "Quick exit: a solid white pill, at least 44px",
+  );
+  const danger = rule(".help-danger-call");
+  assert(
+    danger.includes("border: 2px solid var(--splash-helpline-border);") &&
+      danger.includes("background: var(--splash-helpline-bg);") &&
+      danger.includes("border-radius: 999px;") &&
+      danger.includes("min-height: 52px;") &&
+      !danger.includes("shadow") &&
+      rule(".help-danger-calls").includes(
+        "grid-template-columns: repeat(2, minmax(0, 1fr));",
+      ),
+    "999 and 112 side by side: solid rose pills with the pink border, no glow, at least 52px",
+  );
+  assert(
+    rule(".help-line-call").includes(
+      "background: var(--splash-helpline-bg);",
     ) &&
-      rule(".help-call--main:focus-visible").includes("outline-offset: -5px;"),
-    "the dark 1195 button: a white ring drawn inside it",
+      rule(".help-line-call").includes("min-height: var(--tap-target);") &&
+      rule(".help-line-icon").includes("background: var(--home-icon-tile);") &&
+      rule(".home-band.help-band").includes("border-radius: 0 0 28px 28px;"),
+    "solid rose Call pills (at least 44px), pink phone tiles, a band with rounded lower corners",
   );
   assert(
-    rule(".help-sheet .topic-choices").includes("flex-wrap: wrap;"),
-    "the topic pills wrap",
+    rule(".help-line").includes("border: 1.5px solid var(--home-card-edge);") &&
+      rule(".help-how").includes(
+        "border: 1.5px solid var(--home-card-edge);",
+      ) &&
+      rule(".help-leave").includes("background: var(--help-leave-bg);"),
+    "white cards with the #8F82B3 edge; the lavender Quick exit card",
+  );
+  assert(
+    rule(".help-footer").includes("font-size: 14px;") &&
+      rule(".help-how-toggle").includes("min-height: 52px;") &&
+      rule(".help-how-body[hidden]").includes("display: none;"),
+    "the anonymous line at 14px; the toggle at least 44px; closed means hidden",
+  );
+  const helpCss = css.slice(
+    css.indexOf("/*\n * Help sheet (HS1)"),
+    css.indexOf("/* Matched-question banner"),
+  );
+  assert(
+    /@media \(prefers-reduced-motion: no-preference\) \{\s*\.help-flowers \{\s*animation: splash-flowers-in 600ms ease-out both;\s*\}\s*\}/.test(
+      helpCss,
+    ) &&
+      !/transition|infinite/.test(helpCss) &&
+      Math.min(
+        ...[...helpCss.matchAll(/font-size: (\d+)px/g)].map((m) =>
+          Number(m[1]),
+        ),
+      ) >= 14,
+    "the flower fades in once (static with reduced motion); no text under 14px",
   );
 }
 

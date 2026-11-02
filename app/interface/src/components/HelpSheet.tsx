@@ -18,7 +18,7 @@ import {
   GBV_HELPLINE,
 } from "../offline/helpContent";
 import Flowers from "./Flowers";
-import { ChevronRightIcon, CloseIcon } from "./Icons";
+import { ChevronRightIcon, CloseIcon, PhoneIcon } from "./Icons";
 
 /**
  * The Help sheet ("Get help"), opened from the header's Help button, the
@@ -78,7 +78,7 @@ export default function HelpSheet({ onClose, onExit }: Props) {
       aria-labelledby="help-sheet-title"
       onKeyDown={onKeyDown}
     >
-      <div className="help-band surface-dark">
+      <div className="home-band help-band surface-dark">
         <h1 id="help-sheet-title" className="help-title">
           {HOME_GET_HELP}
         </h1>
@@ -112,7 +112,8 @@ export default function HelpSheet({ onClose, onExit }: Props) {
                 href={telHref(number)}
                 aria-label={telName(number, `Call ${number}`)}
               >
-                Call {number}
+                <PhoneIcon size={20} />
+                <span>Call {number}</span>
               </a>
             ))}
           </div>
@@ -125,6 +126,9 @@ export default function HelpSheet({ onClose, onExit }: Props) {
           <ul className="help-lines">
             {lines.map(({ number, note }) => (
               <li key={number} className="help-line">
+                <span className="help-line-icon" aria-hidden="true">
+                  <PhoneIcon size={20} />
+                </span>
                 <span className="help-line-text">
                   <span className="help-line-number">{number}</span>
                   <span className="help-line-note">{note}</span>
