@@ -41,32 +41,28 @@
     #8a24c9 55%,
     #a21caf 100%
   );
-  /* Splash (refresh): purple to magenta, top to bottom. */
+  /* Splash (v3): purple to deep plum, top to bottom; no light pink. */
   --gradient-splash: linear-gradient(
     170deg,
     #5b21b6 0%,
     #7e22ce 35%,
-    #a21caf 70%,
-    #be2a93 100%
+    #8e1f9e 72%,
+    #7a1a8c 100%
   );
-  /*
-   * The two soft glows: pink bottom-left, faint light on the right. The
-   * pink is the strength at its centre; it fades out from there. 10%
-   * keeps white text on the helpline's fill at 4.5:1 even if its centre
-   * sat on the bottom stop (16% gave 4.38:1 with a 6% fill).
-   */
-  --splash-glow-pink: rgba(244, 114, 182, 0.1);
+  /* One faint light glow on the right; it fades out from its centre. */
   --splash-glow-light: rgba(255, 255, 255, 0.08);
-  /* The greeting: 4.58:1 or more on every stop. */
+  /* The greeting: 4.5:1 or more where it sits. */
   --splash-greeting: #fae8ff;
-  /*
-   * Chips, icon tiles and the helpline: 6% white, so white text keeps
-   * 4.5:1 on it over every stop and glow (4.59:1 at worst; 10% gave
-   * 4.31:1). Control borders at 70% white keep 3:1 everywhere.
-   */
-  --splash-glass-bg: rgba(255, 255, 255, 0.06);
+  /* Icon tiles and chips: 10% white; white text keeps 4.5:1 on it. */
+  --splash-glass-bg: rgba(255, 255, 255, 0.1);
+  /* The Quick exit pill's border: 3:1 against every stop. */
   --splash-glass-border: rgba(255, 255, 255, 0.7);
+  /* Chip borders, 1.5px: 3:1 against every stop. */
+  --splash-chip-border: rgba(255, 235, 247, 0.85);
   --splash-button-text: #4c1d95;
+  /* The helpline button: solid, never translucent. */
+  --splash-helpline-bg: #9f1239;
+  --splash-helpline-border: #ffc2dc;
   /* Flowers: decorative, 20 to 35 percent opacity, pale pink and white. */
   --splash-flower-pink: rgba(249, 168, 212, 0.34);
   --splash-flower-white: rgba(255, 255, 255, 0.24);

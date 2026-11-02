@@ -709,22 +709,27 @@
   fill: var(--color-rose);
 }
 
-/* Splash (refresh): a full-bleed screen of its own */
+/* Splash (v3): a full-bleed screen of its own */
 
+/*
+ * Three parts in one screen-high column: the top row (Quick exit) and
+ * the actions (continue and the helpline) always visible; the content
+ * between them scrolls when the phone is short. Nothing is sticky: the
+ * scrolling part is its own box, so focus inside it is never hidden
+ * under the actions.
+ */
 .splash-screen {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
-  padding: 16px 20px 24px;
   background: var(--gradient-splash);
   color: var(--color-on-dark);
 }
 
-/* Two soft glows, pure CSS, behind everything (aria-hidden in the markup). */
+/* One faint glow, pure CSS, behind everything (aria-hidden in the markup). */
 .splash-decor {
   position: absolute;
   inset: 0;
@@ -735,18 +740,6 @@
 .splash-glow {
   position: absolute;
   border-radius: 50%;
-}
-
-.splash-glow--pink {
-  bottom: -140px;
-  left: -140px;
-  width: 360px;
-  height: 360px;
-  background: radial-gradient(
-    circle,
-    var(--splash-glow-pink) 0%,
-    transparent 70%
-  );
 }
 
 .splash-glow--light {
@@ -762,10 +755,8 @@
 }
 
 .splash-topbar,
-.splash-head,
-.splash-promises,
-.splash-question,
-.splash-bottom {
+.splash-scroll,
+.splash-actions {
   position: relative;
   z-index: 1;
 }
@@ -773,7 +764,9 @@
 /* Top row: Quick exit only, right-aligned. */
 .splash-topbar {
   display: flex;
+  flex: none;
   justify-content: flex-end;
+  padding: 16px 20px 4px;
 }
 
 .btn-exit-pill {
@@ -792,12 +785,24 @@
   cursor: pointer;
 }
 
+.splash-scroll {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 8px 20px 20px;
+}
+
 /*
- * Brand, greeting and headline. The top flower cluster sits to the right
- * of the brand and greeting rows only (they leave room for it); the
- * headline starts below it.
+ * Brand, greeting and headline. The flower cluster sits to the right of
+ * the brand and greeting rows only (they leave room for it); the headline
+ * starts below it.
  */
 .splash-head {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -844,6 +849,7 @@
   gap: 14px;
   font-size: 16px;
   line-height: 1.35;
+  text-wrap: pretty;
 }
 
 .splash-promises strong {
@@ -861,44 +867,36 @@
   color: var(--color-on-dark);
 }
 
-.splash-question-title {
+.splash-scope {
   font-size: 19px;
   font-weight: var(--weight-black);
+  line-height: 1.3;
+  text-wrap: pretty;
 }
 
 .splash-sub {
-  margin-top: 4px;
+  margin-top: 6px;
   font-size: 15px;
-}
-
-/*
- * The chips and, beside them, the second flower cluster: a column of its
- * own, so it never sits behind a chip.
- */
-.splash-chips-row {
-  display: flex;
-  align-items: flex-end;
-  gap: 6px;
-  margin-top: 14px;
 }
 
 .splash-chips {
   display: flex;
-  flex: 1 1 auto;
   flex-wrap: wrap;
   gap: 10px;
-  min-width: 0;
+  margin-top: 14px;
 }
 
 .splash-chip {
   min-height: var(--tap-target);
-  border: 1.5px solid var(--splash-glass-border);
-  border-radius: 999px;
-  padding: 0 18px;
+  border: 1.5px solid var(--splash-chip-border);
+  border-radius: 22px;
+  padding: 10px 16px;
   background: var(--splash-glass-bg);
   color: var(--color-on-dark);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: var(--weight-semibold);
+  line-height: 1.3;
+  text-align: left;
   cursor: pointer;
 }
 
@@ -906,13 +904,6 @@
   border-color: var(--color-card);
   background: var(--color-card);
   color: var(--splash-button-text);
-}
-
-.splash-bottom {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-top: auto;
 }
 
 .splash-lockline {
@@ -941,6 +932,15 @@
   line-height: 1.45;
 }
 
+/* The actions: always at the bottom, above the device's safe area. */
+.splash-actions {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 20px max(20px, env(safe-area-inset-bottom));
+}
+
 .btn-splash {
   display: inline-flex;
   align-items: center;
@@ -958,6 +958,7 @@
   cursor: pointer;
 }
 
+/* The helpline: a solid button, never translucent. */
 .splash-helpline {
   display: flex;
   flex-wrap: wrap;
@@ -965,10 +966,10 @@
   justify-content: center;
   gap: 4px 6px;
   min-height: 52px;
-  border: 1.5px solid var(--splash-glass-border);
+  border: 2px solid var(--splash-helpline-border);
   border-radius: 28px;
   padding: 6px 16px;
-  background: var(--splash-glass-bg);
+  background: var(--splash-helpline-bg);
   color: var(--color-on-dark);
   font-size: 15px;
   text-align: center;
@@ -976,30 +977,23 @@
 }
 
 .splash-helpline strong {
-  font-weight: var(--weight-black);
+  font-size: 18px;
+  font-weight: var(--weight-bold);
 }
 
 /*
- * Flowers: two small inline-SVG clusters, aria-hidden, at 20 to 35
- * percent opacity (their fills), never behind text or controls.
+ * The flower cluster: inline SVG, aria-hidden, at 20 to 35 percent
+ * opacity (its fills), beside the brand and greeting rows, never behind
+ * text or controls.
  */
 .splash-flowers {
-  display: block;
-  transform-origin: 50% 100%;
-}
-
-.splash-flowers--top {
   position: absolute;
   top: 0;
   right: -4px;
+  display: block;
   width: 76px;
   height: 92px;
-}
-
-.splash-flowers--chips {
-  flex: 0 0 60px;
-  width: 60px;
-  height: 72px;
+  transform-origin: 50% 100%;
 }
 
 .splash-flower--pink ellipse {

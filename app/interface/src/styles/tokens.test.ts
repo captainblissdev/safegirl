@@ -308,16 +308,14 @@ console.log("\nTest 6: control edges and the header's new pairs");
   );
 }
 
-console.log(
-  "\nTest 7: the splash, every stop of the gradient and the glows on top",
-);
+console.log("\nTest 7: the splash (v3), every stop and the glow where it sits");
 {
   const stops = [...token("--gradient-splash").matchAll(/#[0-9a-f]{6}/g)].map(
     (m) => m[0],
   );
   assert(
-    stops.join(",") === "#5b21b6,#7e22ce,#a21caf,#be2a93",
-    "the splash gradient runs #5B21B6, #7E22CE, #A21CAF, #BE2A93",
+    stops.join(",") === "#5b21b6,#7e22ce,#8e1f9e,#7a1a8c",
+    "the splash gradient runs #5B21B6, #7E22CE, #8E1F9E, #7A1A8C",
   );
 
   /** rgba(r, g, b, a) composited over a hex colour, as hex. */
@@ -338,14 +336,12 @@ console.log(
   const worst = (fg: string, backgrounds: string[]) =>
     Math.min(...backgrounds.map((bg) => contrast(fg, bg)));
 
-  // Each glow at full strength (a worst case: both fade out from their
-  // centres) over the stops it covers: the light glow sits on the right
-  // between 26% and about 64% of the height (#7E22CE to #A21CAF); the
-  // pink glow covers the bottom-left quarter (#A21CAF to #BE2A93).
-  const glows = [
-    ...stops.slice(1, 3).map((s) => over(token("--splash-glow-light"), s)),
-    ...stops.slice(2, 4).map((s) => over(token("--splash-glow-pink"), s)),
-  ];
+  // The light glow at full strength (a worst case: it fades out from its
+  // centre) over the stops it covers, between 26% and about 64% of the
+  // height (#7E22CE to #8E1F9E).
+  const glows = stops
+    .slice(1, 3)
+    .map((s) => over(token("--splash-glow-light"), s));
   const anywhere = [...stops, ...glows];
   const white = token("--color-on-dark");
 
@@ -354,9 +350,8 @@ console.log(
     text >= 4.5,
     `white text anywhere on the splash: ${text.toFixed(2)}:1`,
   );
-  // The greeting sits in the top third (under the brand row): the first
-  // two stops, with the right-hand light glow; the pink glow is
-  // bottom-left, far below it.
+
+  // The greeting sits in the top third, under the brand row.
   const top = stops.slice(0, 2);
   const greeting = worst(token("--splash-greeting"), [
     ...top,
@@ -371,16 +366,16 @@ console.log(
   const onGlass = worst(white, glass);
   assert(
     onGlass >= 4.5,
-    `white text on the chips, icon tiles and helpline: ${onGlass.toFixed(2)}:1`,
+    `white text on the chips and icon tiles: ${onGlass.toFixed(2)}:1`,
   );
-  const edge = Math.min(
-    ...anywhere.map((bg) =>
-      contrast(over(token("--splash-glass-border"), bg), bg),
-    ),
-  );
+  const edge = (name: string) =>
+    Math.min(...anywhere.map((bg) => contrast(over(token(name), bg), bg)));
+  const chipEdge = edge("--splash-chip-border");
+  assert(chipEdge >= 3, `the chips' 1.5px border: ${chipEdge.toFixed(2)}:1`);
+  const pillEdge = edge("--splash-glass-border");
   assert(
-    edge >= 3,
-    `control borders (Quick exit, chips, helpline): ${edge.toFixed(2)}:1`,
+    pillEdge >= 3,
+    `the Quick exit pill's border: ${pillEdge.toFixed(2)}:1`,
   );
 
   const ring = worst(token("--focus-ring-on-dark"), anywhere);
@@ -392,6 +387,21 @@ console.log(
   assert(
     buttonEdge >= 3,
     `the white button's edge: ${buttonEdge.toFixed(2)}:1`,
+  );
+
+  // The helpline: solid #9F1239, white text, a #FFC2DC border; it sits
+  // at the bottom (#8E1F9E to #7A1A8C).
+  assert(
+    token("--splash-helpline-bg") === "#9f1239" &&
+      token("--splash-helpline-border") === "#ffc2dc",
+    "the helpline is solid #9F1239 with a #FFC2DC border",
+  );
+  const helpline = contrast(white, token("--splash-helpline-bg"));
+  assert(helpline >= 4.5, `white on the helpline: ${helpline.toFixed(2)}:1`);
+  const helplineEdge = worst(token("--splash-helpline-border"), stops.slice(2));
+  assert(
+    helplineEdge >= 3,
+    `the helpline's border against the gradient: ${helplineEdge.toFixed(2)}:1`,
   );
 
   for (const name of [
