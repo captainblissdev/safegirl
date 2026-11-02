@@ -51,7 +51,11 @@ export default function AppShell({
   children,
 }: Props) {
   return (
-    <div className={calm ? "app-shell" : "app-shell app-shell--playful"}>
+    <div
+      className={`${calm ? "app-shell" : "app-shell app-shell--playful"}${
+        headerless ? " app-shell--home" : ""
+      }`}
+    >
       {!headerless && (
         <AppHeader
           onExit={onExit}

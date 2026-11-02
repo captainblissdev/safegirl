@@ -1079,39 +1079,475 @@
   color: var(--color-on-dark);
 }
 
-/* Home (redesign Steps 4 and 4b): the empty state of the chat */
+/* Home (H1): the empty state of the chat */
 
-.home-screen {
-  justify-content: flex-start;
-  padding: 8px 0 12px;
+/*
+ * One page on a soft pink-lavender sheet, full width (the shell's own
+ * header and padding are off on Home). The header band, then the
+ * content in a centred column. Like the splash, nothing is fixed or
+ * sticky: on a tall phone the helpline and "Clear and leave" sit at the
+ * bottom of the screen; on a short one the page scrolls to them.
+ */
+.app-shell--home {
+  width: 100%;
+  padding: 0;
+  background: var(--home-sheet);
+}
+
+.app-shell--home::before {
+  display: none;
+}
+
+.app-shell--home .chat-layout {
+  gap: 0;
+}
+
+.chat-screen.home-screen {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  gap: 0;
+  padding: 0;
 }
 
 .home {
+  --home-gutter: 20px;
+  --home-column: min(100% - 2 * var(--home-gutter), 520px);
+
   display: flex;
-  flex: 1;
+  flex: 1 0 auto;
   flex-direction: column;
-  gap: 18px;
-  padding: 0 8px;
+  overflow-x: hidden;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
 }
 
-/* The hero card. The decoration sits behind the text (z-index). */
-.hero {
+.home > :not(.home-band) {
+  width: var(--home-column);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* The header band: the splash gradient, about 240px. */
+.home-band {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 240px;
+  padding: 14px max(var(--home-gutter), calc((100% - 520px) / 2)) 64px;
+  background: var(--gradient-splash);
+  color: var(--color-on-dark);
+}
+
+.home-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.home-brand {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.home-wordmark {
+  font-size: 18px;
+  font-weight: var(--weight-black);
+  line-height: 1;
+}
+
+.home-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.btn-home-help,
+.btn-home-exit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: var(--tap-target);
+  border-radius: 999px;
+  padding: 0 10px;
+  font-size: 14px;
+  font-weight: var(--weight-extrabold);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Outlined: the quieter of the two. */
+.btn-home-help {
+  border: 2px solid var(--splash-glass-border);
+  background: transparent;
+  color: var(--color-on-dark);
+}
+
+/* Solid white: the strongest control on the page. */
+.btn-home-exit {
+  border: 2px solid var(--color-card);
+  background: var(--color-card);
+  color: var(--splash-button-text);
+}
+
+/* The flowers sit beside the greeting, in a row of their own height,
+   so the headline below them has the full width. */
+.home-head {
   position: relative;
+}
+
+.home-greeting {
+  display: flex;
+  align-items: flex-end;
+  min-height: 56px;
+  padding-right: 64px;
+  color: var(--splash-greeting);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+}
+
+.home-headline {
+  margin-top: 4px;
+  font-size: min(30px, 8vw);
+  font-weight: var(--weight-black);
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.home-flowers {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  width: 44px;
+  height: 54px;
+}
+
+/* One pale pink: the cluster's white flower takes the pink too. */
+.home-flowers .splash-flower ellipse {
+  fill: var(--home-flower);
+}
+
+/* The only motion on Home: the flowers fade and scale in once. Static
+   when the device asks for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .home-flowers {
+    animation: splash-flowers-in 600ms ease-out both;
+  }
+}
+
+/* The question card overlaps the band. */
+.home-ask {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: -40px;
+  border: 1.5px solid var(--home-card-edge);
+  border-radius: 22px;
+  padding: 14px 14px 12px;
+  background: var(--color-card);
+  box-shadow: var(--home-ask-shadow);
+}
+
+.home-ask-label {
+  color: var(--color-plum);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+.home-ask-field {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.home-ask-field textarea {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  max-height: 144px;
+  border: 0;
+  padding: 12px 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  line-height: 24px;
+  resize: none;
+  overflow-y: auto;
+}
+
+.home-ask-field textarea::placeholder {
+  color: var(--color-muted);
+}
+
+.btn-home-send {
+  display: grid;
+  flex: 0 0 48px;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--home-send-bg);
+  color: var(--color-on-dark);
+  cursor: pointer;
+}
+
+/* Empty field: visibly grey, and not a target. */
+.btn-home-send:disabled {
+  background: var(--home-send-disabled-bg);
+  color: var(--home-send-disabled-icon);
+  cursor: default;
+}
+
+.home-section-title {
+  color: var(--color-plum);
+  font-size: 16px;
+  font-weight: var(--weight-black);
+}
+
+.home-suggest {
+  margin-top: 20px;
+}
+
+.home-section-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.home-link {
+  min-height: var(--tap-target);
+  border: 0;
+  padding: 0 2px;
+  background: none;
+  color: var(--color-violet);
+  font: inherit;
+  font-size: 14px;
+  font-weight: var(--weight-extrabold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* Two chips in one row; a chip's text never wraps. When the row is
+   wider than the screen, it scrolls sideways on its own (the page
+   does not). */
+.home-chips {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+  overflow-x: auto;
+  padding: 2px 2px 4px;
+  scroll-snap-type: x proximity;
+}
+
+.home-chips[hidden] {
+  display: none;
+}
+
+.home-chip {
+  flex: none;
+  min-height: var(--tap-target);
+  border: 1.5px solid var(--home-card-edge);
+  border-radius: 999px;
+  padding: 0 14px;
+  background: var(--color-card);
+  color: var(--color-plum);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+  white-space: nowrap;
+  scroll-snap-align: start;
+  cursor: pointer;
+}
+
+.home-topics {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  overflow: hidden;
-  border-radius: 28px;
-  padding: 22px 20px;
-  background: var(--gradient-hero);
-  color: var(--color-on-dark);
-  box-shadow: var(--hero-shadow);
+  margin-top: 20px;
 }
 
-.hero > :not(.hero-decor) {
-  position: relative;
-  z-index: 1;
+/* 2x2, equal heights. */
+.home-topic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 10px;
 }
+
+.home-topic,
+.home-support {
+  border: 1.5px solid var(--home-card-edge);
+  border-radius: 18px;
+  background: var(--color-card);
+  color: var(--color-ink);
+  text-align: left;
+  box-shadow: var(--home-card-shadow);
+  cursor: pointer;
+}
+
+.home-topic {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  padding: 11px;
+}
+
+.home-topic-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 4px;
+  border-radius: 12px;
+  background: var(--home-icon-tile);
+  color: var(--home-icon);
+}
+
+/* Titles on one line; subtitles at most two. */
+.home-topic-label {
+  max-width: 100%;
+  font-size: clamp(13px, 3.9vw, 15px);
+  font-weight: var(--weight-black);
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.home-topic-sub {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+/* The support row: full width, the same card. */
+.home-support {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px;
+}
+
+.home-support .home-topic-icon {
+  margin-bottom: 0;
+}
+
+.home-support-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.home-support-text .home-topic-label {
+  white-space: normal;
+}
+
+.home-support > svg {
+  flex: none;
+  color: var(--home-icon);
+}
+
+/* At the end of the page: the bottom of the screen on a tall phone. */
+.home-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+
+.home-helpline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 2px 6px;
+  min-height: 50px;
+  border: 2px solid var(--splash-helpline-border);
+  border-radius: 28px;
+  padding: 6px 16px;
+  background: var(--splash-helpline-bg);
+  color: var(--color-on-dark);
+  font-size: 15px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.home-helpline strong {
+  font-size: 18px;
+  font-weight: var(--weight-bold);
+}
+
+.home-clear {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: var(--tap-target);
+  border: 0;
+  padding: 6px 8px;
+  background: none;
+  color: var(--color-plum);
+  font: inherit;
+  cursor: pointer;
+}
+
+.home-clear-title {
+  font-size: 15px;
+  font-weight: var(--weight-black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.home-clear-sub {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+}
+
+/* Below 360px: a 16px gutter, the logo without the wordmark, and a
+   little more room in the cards so each title stays on one line. */
+@media (max-width: 359px) {
+  .home {
+    --home-gutter: 16px;
+  }
+
+  .home-wordmark {
+    display: none;
+  }
+
+  .home-topic-grid {
+    gap: 8px;
+  }
+
+  .home-topic {
+    padding: 9px;
+  }
+}
+
+/* Shared with the support reply's hero (ReplyViews): its decoration. */
 
 .hero-decor {
   position: absolute;
@@ -1148,34 +1584,7 @@
   opacity: 0.9;
 }
 
-.hero-tag {
-  display: inline-flex;
-  align-self: flex-start;
-  align-items: center;
-  gap: 6px;
-  border-radius: 999px;
-  padding: 5px 12px 5px 10px;
-  background: var(--hero-pill-bg);
-  color: var(--hero-pill-text);
-  font-size: 13px;
-  font-weight: var(--weight-extrabold);
-}
-
-.hero-title {
-  max-width: 290px;
-  font-size: 27px;
-  font-weight: var(--weight-black);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-}
-
-.hero-sub {
-  max-width: 290px;
-  color: var(--hero-sub-text);
-  font-size: 14px;
-  font-weight: var(--weight-semibold);
-  line-height: 1.45;
-}
+/* AskBar's "hero" variant (its ask card). Home no longer uses it. */
 
 /* The ask card: the chat's one ask bar on Home, with a visible label. */
 .ask-card {
@@ -1236,125 +1645,6 @@
   background: var(--send-disabled-bg);
   box-shadow: none;
   opacity: 1;
-}
-
-.home-topics-title {
-  color: var(--color-plum);
-  font-size: 15px;
-  font-weight: var(--weight-black);
-}
-
-.topic-tiles {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.topic-tiles > * {
-  min-width: 0;
-}
-
-/* The coloured edges are control edges (3:1, tokens.css). */
-.topic-tile {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  min-height: 104px;
-  border: 1.5px solid;
-  border-radius: 22px;
-  padding: 14px;
-  background: var(--color-card);
-  color: var(--color-ink);
-  text-align: left;
-  box-shadow: var(--topic-card-shadow);
-  cursor: pointer;
-}
-
-.topic-tile-icon {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 14px;
-}
-
-.topic-tile-label {
-  font-size: 16px;
-  font-weight: var(--weight-black);
-  line-height: 1.2;
-  overflow-wrap: anywhere;
-}
-
-.topic-tile-sub {
-  color: var(--color-muted);
-  font-size: 13px;
-  font-weight: var(--weight-semibold);
-  line-height: 1.3;
-}
-
-.topic-tile--general {
-  border-color: var(--topic-periods-edge);
-}
-
-.topic-tile--general .topic-tile-icon {
-  background: var(--topic-periods-bg);
-  color: var(--topic-periods-text);
-}
-
-.topic-tile--pregnancy {
-  border-color: var(--topic-pregnancy-edge);
-}
-
-.topic-tile--pregnancy .topic-tile-icon {
-  background: var(--topic-pregnancy-bg);
-  color: var(--topic-pregnancy-text);
-}
-
-.topic-tile--contraception {
-  border-color: var(--topic-contraception-edge);
-}
-
-.topic-tile--contraception .topic-tile-icon {
-  background: var(--topic-contraception-bg);
-  color: var(--topic-contraception-text);
-}
-
-.topic-tile--sti {
-  border-color: var(--topic-sti-edge);
-}
-
-.topic-tile--sti .topic-tile-icon {
-  background: var(--topic-sti-bg);
-  color: var(--topic-sti-text);
-}
-
-/* The footer card: the anonymous line and the footer line. */
-.home-footer {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: auto;
-  border-radius: 18px;
-  padding: 12px 14px;
-  background: var(--footer-card-bg);
-  color: var(--footer-card-text);
-  font-size: 13px;
-  font-weight: var(--weight-bold);
-}
-
-.home-anonymous {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.home-footer .danger-line {
-  color: var(--footer-card-text);
-  font-size: 13px;
-  font-weight: var(--weight-bold);
-  line-height: 1.4;
-  text-align: left;
 }
 
 /* Topic list (redesign Step 5) */
@@ -1923,21 +2213,11 @@
     margin-left: 4px;
   }
 
-  .home {
-    padding-right: 4px;
-    padding-left: 4px;
-  }
-
   .topic-screen,
   .answer-screen,
   .help-sheet {
     padding-right: 4px;
     padding-left: 4px;
-  }
-
-  /* "Contraception" at 16px is wider than a tile at 320px. */
-  .topic-tile-label {
-    font-size: 15px;
   }
 }
 

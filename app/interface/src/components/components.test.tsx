@@ -2386,12 +2386,13 @@ console.log(
     "the header wraps: Help and Exit move to a second row instead of scrolling",
   );
   assert(
-    rule(".topic-tiles").includes(
+    rule(".home-topic-grid").includes(
       "grid-template-columns: repeat(2, minmax(0, 1fr));",
     ) &&
-      rule(".topic-tiles > *").includes("min-width: 0;") &&
-      rule(".topic-tile-label").includes("overflow-wrap: anywhere;"),
-    "Home's tiles: two shrinkable columns, labels that wrap",
+      rule(".home-topic").includes("min-width: 0;") &&
+      rule(".home-topbar").includes("flex-wrap: wrap;") &&
+      rule(".home").includes("overflow-x: hidden;"),
+    "Home: two shrinkable card columns; the band's top row wraps",
   );
   assert(
     rule(".splash-wordmark").includes("font-size: min(30px, 9vw);") &&
@@ -2472,18 +2473,71 @@ console.log("\nTest 48: Home refresh (H1)");
     const start = css.indexOf(`\n${selector} {`);
     return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
   };
+  const edge = "border: 1.5px solid var(--home-card-edge);";
   assert(
-    rule(".ask-field").includes("border: 1.5px solid var(--ask-field-edge);") &&
-      rule(".ask-field .btn-send:disabled").includes(
-        "background: var(--send-disabled-bg);",
-      ) &&
-      rule(".ask-field .btn-send:disabled").includes("opacity: 1;"),
-    "the field has a 3:1 edge; the disabled send button keeps a mid-violet fill at full opacity",
+    [".home-ask", ".home-chip"].every((s) => rule(s).includes(edge)) &&
+      css.includes(`.home-topic,\n.home-support {\n  ${edge}`),
+    "the question card, chips, topic cards and support row: a 1.5px 3:1 edge",
   );
   assert(
-    rule(".topic-tile").includes("border: 1.5px solid;") &&
-      rule(".topic-tile").includes("min-height: 104px;"),
-    "the topic cards keep their coloured edges",
+    rule(".btn-home-send:disabled").includes(
+      "background: var(--home-send-disabled-bg);",
+    ) &&
+      rule(".btn-home-send").includes("border-radius: 50%;") &&
+      rule(".btn-home-send").includes("width: 48px;"),
+    "a round 48px send button, grey while disabled",
+  );
+  assert(
+    rule(".home-ask").includes("margin-top: -40px;") &&
+      rule(".home-band").includes("min-height: 240px;") &&
+      rule(".home-band").includes("background: var(--gradient-splash);"),
+    "the band is the splash gradient, about 240px; the card overlaps it",
+  );
+  assert(
+    rule(".home-topic-grid").includes("grid-auto-rows: 1fr;") &&
+      rule(".home-topic-label").includes("white-space: nowrap;") &&
+      rule(".home-topic-sub").includes("-webkit-line-clamp: 2;") &&
+      rule(".home-chip").includes("white-space: nowrap;") &&
+      rule(".home-chips").includes("overflow-x: auto;"),
+    "equal-height cards, one-line titles, two-line subtitles, unwrapped chips",
+  );
+  assert(
+    rule(".home-helpline").includes(
+      "border: 2px solid var(--splash-helpline-border);",
+    ) &&
+      rule(".home-helpline").includes(
+        "background: var(--splash-helpline-bg);",
+      ) &&
+      !rule(".home-helpline").includes("shadow") &&
+      rule(".home-helpline strong").includes("font-size: 18px;"),
+    "the helpline: solid rose, the pink border, no glow, 18px bold call",
+  );
+  assert(
+    !/position: (fixed|sticky)/.test(
+      css.slice(
+        css.indexOf("/* Home (H1)"),
+        css.indexOf("/* Shared with the support"),
+      ),
+    ) && rule(".home-footer").includes("margin-top: auto;"),
+    "nothing on Home is fixed: the footer ends the page, like the splash",
+  );
+  const sizes = [
+    ...css
+      .slice(
+        css.indexOf("/* Home (H1)"),
+        css.indexOf("/* Shared with the support"),
+      )
+      .matchAll(/font-size: (\d+)px/g),
+  ].map((m) => Number(m[1]));
+  assert(
+    sizes.length > 0 && Math.min(...sizes) >= 13,
+    "no Home text under 13px",
+  );
+  assert(
+    /@media \(prefers-reduced-motion: no-preference\) \{\s*\.home-flowers \{\s*animation: splash-flowers-in 600ms ease-out both;\s*\}\s*\}/.test(
+      css,
+    ) && !/\.home[^{]*\{[^}]*(transition|animation-iteration)/.test(css),
+    "the flowers fade in once, only without reduced motion; no other motion",
   );
   assert(
     /@media \(max-width: 600px\) \{[\s\S]*?\.app-header \{\s*margin-right: 8px;\s*margin-left: 8px;/.test(
@@ -2493,9 +2547,17 @@ console.log("\nTest 48: Home refresh (H1)");
   );
   const narrow = css.slice(css.lastIndexOf("@media (max-width: 359px) {"));
   assert(
-    narrow.includes("column-gap: 8px;") &&
-      narrow.includes(".topic-tile-label {\n    font-size: 15px;"),
-    "under 360px: a 16px gutter, the header on one row, tile titles at 15px",
+    narrow.includes("column-gap: 8px;"),
+    "under 360px: the header on one row",
+  );
+  const homeNarrow = css.slice(
+    css.indexOf("@media (max-width: 359px) {", css.indexOf("/* Home (H1)")),
+  );
+  assert(
+    /^@media \(max-width: 359px\) \{\s*\.home \{\s*--home-gutter: 16px;\s*\}\s*\.home-wordmark \{\s*display: none;\s*\}/.test(
+      homeNarrow,
+    ),
+    "Home under 360px: a 16px gutter; the wordmark hidden, the logo kept",
   );
 }
 

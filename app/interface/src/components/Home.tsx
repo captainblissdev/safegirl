@@ -116,7 +116,7 @@ export default function Home({
       <section className="home-band surface-dark" aria-labelledby="home-title">
         <div className="home-topbar">
           <span className="home-brand">
-            <ShieldHeartMark variant="splash" size={40} />
+            <ShieldHeartMark variant="splash" size={36} />
             <span className="home-wordmark">SafeGirl</span>
           </span>
           <div className="home-actions">
@@ -131,7 +131,7 @@ export default function Home({
               {HOME_GET_HELP}
             </button>
             <button className="btn-home-exit" type="button" onClick={onExit}>
-              <CloseIcon size={18} /> {QUICK_EXIT_LABEL}
+              <CloseIcon size={16} /> {QUICK_EXIT_LABEL}
             </button>
           </div>
         </div>

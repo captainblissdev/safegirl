@@ -170,6 +170,27 @@
   --topic-contraception-edge: #ce30de;
   --topic-sti-edge: #eb315f;
 
+  /*
+   * Home (H1): a soft pink-lavender sheet under white cards. Card and
+   * chip edges (1.5px) reach 3:1 against the sheet; the topic icon tiles
+   * share one pink tint, with purple icons. The band uses the splash
+   * gradient and the splash's helpline colours. The edge is the
+   * reference #9A8CC0 darkened 7 percent: #9A8CC0 gave 2.67:1 on the
+   * sheet's lavender end.
+   */
+  --home-sheet: linear-gradient(180deg, #fdf2f8 0%, #f3edff 100%);
+  --home-sheet-start: #fdf2f8;
+  --home-sheet-end: #f3edff;
+  --home-card-edge: #8f82b3;
+  --home-card-shadow: 0 6px 16px rgba(76, 29, 149, 0.08);
+  --home-ask-shadow: 0 12px 28px rgba(76, 29, 149, 0.18);
+  --home-icon-tile: #fce7f3;
+  --home-icon: #6b21a8;
+  --home-send-bg: #6d28d9;
+  --home-send-disabled-bg: #dad6e0;
+  --home-send-disabled-icon: #625b70;
+  --home-flower: rgba(251, 207, 232, 0.34);
+
   /* Topic list: the round tile behind each question's chevron. */
   --chevron-tile-bg: #ffe4f1;
 

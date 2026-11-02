@@ -1455,4 +1455,86 @@ console.log("\nTest 20: the matched-question banner (step 6c)");
   );
 }
 
+console.log("\nTest 21: Home (H1)");
+{
+  const sheet = [token("--home-sheet-start"), token("--home-sheet-end")];
+  assert(
+    token("--home-sheet") ===
+      `linear-gradient(180deg, ${sheet[0]} 0%, ${sheet[1]} 100%)`,
+    "the sheet gradient runs between its two named stops",
+  );
+  const worst = (fg: string, backgrounds: string[]) =>
+    Math.min(...backgrounds.map((bg) => contrast(fg, bg)));
+  const card = token("--color-card");
+  const edge = token("--home-card-edge");
+  assert(
+    edge === "#8f82b3",
+    "the card edge: the reference #9A8CC0, darkened 7 percent to reach 3:1",
+  );
+  const pairs: [string, number, number][] = [
+    ["card and chip edges on the sheet", worst(edge, sheet), 3],
+    ["card edges on the white card", contrast(edge, card), 3],
+    ["titles, ink on white", contrast(token("--color-ink"), card), 4.5],
+    ["subtitles, muted on white", contrast(token("--color-muted"), card), 4.5],
+    [
+      "chips and labels, plum on white",
+      contrast(token("--color-plum"), card),
+      4.5,
+    ],
+    [
+      "section titles, plum on the sheet",
+      worst(token("--color-plum"), sheet),
+      4.5,
+    ],
+    ["links, violet on the sheet", worst(token("--color-violet"), sheet), 4.5],
+    [
+      "Clear and leave's line, muted on the sheet",
+      worst(token("--color-muted"), sheet),
+      4.5,
+    ],
+    [
+      "icons on their pink tile",
+      contrast(token("--home-icon"), token("--home-icon-tile")),
+      3,
+    ],
+    [
+      "send arrow, white on violet",
+      contrast(token("--color-on-dark"), token("--home-send-bg")),
+      3,
+    ],
+    [
+      "send button on the white card",
+      contrast(token("--home-send-bg"), card),
+      3,
+    ],
+    [
+      "Quick exit text on white",
+      contrast(token("--splash-button-text"), card),
+      4.5,
+    ],
+    [
+      "helpline text on rose",
+      contrast(token("--color-on-dark"), token("--splash-helpline-bg")),
+      4.5,
+    ],
+    [
+      "the helpline's fill on the sheet",
+      worst(token("--splash-helpline-bg"), sheet),
+      3,
+    ],
+  ];
+  for (const [name, ratio, needs] of pairs) {
+    assert(ratio >= needs, `${name}: ${ratio.toFixed(2)}:1 (needs ${needs})`);
+  }
+  const alpha = Number(
+    token("--home-flower")
+      .replace(/[^0-9.,]/g, "")
+      .split(",")[3],
+  );
+  assert(
+    alpha >= 0.2 && alpha <= 0.35,
+    "the flowers: 20 to 35 percent opacity",
+  );
+}
+
 console.log("\nAll design token tests passed.");
