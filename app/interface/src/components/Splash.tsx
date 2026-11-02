@@ -2,19 +2,16 @@ import { useState } from "react";
 import {
   greetingFor,
   SPLASH_EXAMPLE_QUESTIONS,
-  SPLASH_HELPLINE,
-  SPLASH_HELPLINE_TEXT,
   splashStarter,
   toggleSplashChip,
 } from "../content/uiText";
-import { telHref, telName } from "../content/telHref";
-import { GBV_HELPLINE } from "../offline/helpContent";
+import Flowers from "./Flowers";
+import HelplineButton from "./HelplineButton";
 import {
   ArrowRightIcon,
   CloseIcon,
   InfoIcon,
   LockIcon,
-  PhoneIcon,
   ShieldHeartMark,
   SmallLockIcon,
 } from "./Icons";
@@ -61,40 +58,6 @@ function DocumentIcon({ size = 20 }: { size?: number }) {
   );
 }
 
-/** One five-petal flower, centred at (x, y), petals of radius r. */
-function Flower({
-  x,
-  y,
-  r,
-  tone,
-}: {
-  x: number;
-  y: number;
-  r: number;
-  tone: "pink" | "white";
-}) {
-  // Five petals, 72 degrees apart (computed: the source types no 3-digit run).
-  const petals = [0, 1, 2, 3, 4].map((i) => i * 72);
-  return (
-    <g
-      className={`splash-flower splash-flower--${tone}`}
-      transform={`translate(${x} ${y})`}
-    >
-      {petals.map((angle) => (
-        <ellipse
-          key={angle}
-          cx={0}
-          cy={-r}
-          rx={r * 0.62}
-          ry={r}
-          transform={`rotate(${angle})`}
-        />
-      ))}
-      <circle className="splash-flower-centre" r={r * 0.42} />
-    </g>
-  );
-}
-
 /** A small up-right arrow at the end of each example question. */
 function ArrowUpRightIcon() {
   return (
@@ -112,22 +75,6 @@ function ArrowUpRightIcon() {
     >
       <path d="M7 17L17 7" />
       <path d="M8 7h9v9" />
-    </svg>
-  );
-}
-
-/** The flower cluster, top right: decoration only, never behind content. */
-function Flowers() {
-  return (
-    <svg
-      className="splash-flowers"
-      viewBox="0 0 80 96"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <Flower x={50} y={30} r={15} tone="pink" />
-      <Flower x={20} y={62} r={8} tone="white" />
-      <Flower x={62} y={78} r={7} tone="pink" />
     </svg>
   );
 }
@@ -265,19 +212,7 @@ export default function Splash({ onContinue, onExit, now }: Props) {
         >
           I understand, continue <ArrowRightIcon size={20} />
         </button>
-        <a
-          className="splash-helpline"
-          href={telHref(GBV_HELPLINE)}
-          aria-label={telName(GBV_HELPLINE, SPLASH_HELPLINE_TEXT)}
-        >
-          <PhoneIcon size={18} />
-          <span>{SPLASH_HELPLINE.lead}</span>{" "}
-          <strong>{SPLASH_HELPLINE.call}</strong>{" "}
-          <span className="splash-helpline-dot" aria-hidden="true">
-            ·
-          </span>
-          <span className="splash-helpline-tail">{SPLASH_HELPLINE.tail}</span>
-        </a>
+        <HelplineButton className="splash-helpline" />
       </div>
     </main>
   );

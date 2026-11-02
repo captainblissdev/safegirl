@@ -14,6 +14,7 @@ import type { Topic } from "./content/topics";
 import SessionEnd from "./components/SessionEnd";
 import SupportContent from "./components/SupportContent";
 import { createDoubleEscapeHandler, quickExit } from "./quickExit";
+import { clearAndLeave } from "./clearAndLeave";
 import {
   browserSessionStorage,
   continueFromSplash,
@@ -47,6 +48,10 @@ export default function App() {
   // only, never sent, never stored; cleared once the chat has used it.
   const [starterDraft, setStarterDraft] = useState("");
   const helpButtonRef = useRef<HTMLButtonElement>(null);
+  // Home's own "Get help" (Home has no app header while the sheet is
+  // closed), and whether focus goes back to it once the sheet closes.
+  const homeHelpButtonRef = useRef<HTMLButtonElement>(null);
+  const focusHomeHelpRef = useRef(false);
   // The Topic list's class, what opened it, and where focus returns.
   const [topic, setTopic] = useState<Topic | null>(null);
   const topicOpenerRef = useRef<"tile" | "help">("tile");
@@ -65,7 +70,7 @@ export default function App() {
     if (screen !== "chat" || target === null) return;
     returnFocusRef.current = null;
     if (target === "help") {
-      helpButtonRef.current?.focus();
+      (homeHelpButtonRef.current ?? helpButtonRef.current)?.focus();
     } else {
       document.querySelector<HTMLElement>(target)?.focus();
     }
@@ -182,13 +187,25 @@ export default function App() {
     setScreen("splash");
   };
 
-  const openHelp = () => setIsHelpOpen(true);
+  const openHelp = () => {
+    focusHomeHelpRef.current = homeHelpButtonRef.current !== null;
+    setIsHelpOpen(true);
+  };
 
   /** Close the Help sheet and return focus to the Help button. */
   const closeHelp = () => {
     setIsHelpOpen(false);
     helpButtonRef.current?.focus();
   };
+
+  // Help opened from Home: once the sheet has closed and Home is shown
+  // again, focus returns to Home's "Get help" (the header's Help button
+  // focused above leaves with the sheet).
+  useEffect(() => {
+    if (isHelpOpen || !focusHomeHelpRef.current) return;
+    focusHomeHelpRef.current = false;
+    homeHelpButtonRef.current?.focus();
+  }, [isHelpOpen]);
 
   /** Open the Topic list, remembering what opened it for focus return. */
   const openTopic = (next: Topic, opener: "tile" | "help") => {
@@ -308,6 +325,28 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKeyDown, true);
   }, []);
 
+  /**
+   * Home's "Clear and leave": clear the chat and every piece of session
+   * state, forget that the splash was seen, and show the splash again.
+   * It stays on SafeGirl (see clearAndLeave.ts); it is not Quick exit.
+   */
+  const handleClearAndLeave = () =>
+    clearAndLeave({
+      clearState: () => {
+        cancelPending();
+        loopCountRef.current = 0;
+        setTurns([]);
+        setReferralMessage("");
+        setError(null);
+        setIsHelpOpen(false);
+        setTopic(null);
+        setAnswerOrigin(null);
+        setStarterDraft("");
+        setScreen("splash");
+      },
+      getSessionStorage: () => window.sessionStorage,
+    });
+
   /** Leave the splash; a chosen chip's starter phrase goes into the input. */
   const handleSplashContinue = (starter: string) => {
     setStarterDraft(starter);
@@ -334,6 +373,7 @@ export default function App() {
         buttonRef: helpButtonRef,
       }}
       calm={screen === "referral"}
+      headerless={onChatScreen && turns.length === 0 && !isHelpOpen}
       support={
         screen === "referral" ||
         (onChatScreen && !isLoading && replyViewOf(lastTurn) === "help")
@@ -368,6 +408,10 @@ export default function App() {
               onOpenHelp={openHelp}
               initialDraft={starterDraft}
               onInitialDraftUsed={() => setStarterDraft("")}
+              onExit={handleExit}
+              onClearAndLeave={handleClearAndLeave}
+              isHelpOpen={isHelpOpen}
+              homeHelpButtonRef={homeHelpButtonRef}
             />
 
             {error && (

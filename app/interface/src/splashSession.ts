@@ -51,3 +51,17 @@ export function continueFromSplash(
   markSplashSeen(getStore);
   return "chat";
 }
+
+/**
+ * Forget that the splash was dismissed (Home's "Clear and leave"), so it
+ * shows again. Removes only this flag; never throws.
+ */
+export function clearSplashSeen(
+  getStore: () => Pick<Storage, "removeItem"> | null,
+): void {
+  try {
+    getStore()?.removeItem(SPLASH_SEEN_KEY);
+  } catch {
+    // Blocked storage: there is no flag to clear.
+  }
+}

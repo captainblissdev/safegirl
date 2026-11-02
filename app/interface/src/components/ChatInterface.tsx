@@ -1,15 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  CLARIFY_PLACEHOLDER,
-  LIMITED_MODE_NOTICE,
-  PLACEHOLDER_EXAMPLES,
-  PLACEHOLDER_ROTATE_MS,
-} from "../content/uiText";
+import { useEffect, useRef, useState, type RefObject } from "react";
+import { CLARIFY_PLACEHOLDER, LIMITED_MODE_NOTICE } from "../content/uiText";
 import { formatDetails } from "../details";
-import {
-  prefersReducedMotion,
-  startPlaceholderRotation,
-} from "../placeholderRotation";
 import AnswerView from "./AnswerView";
 import AskBar from "./AskBar";
 import DangerLine from "./DangerLine";
@@ -60,6 +51,14 @@ interface Props {
   initialDraft?: string;
   /** Called once the input has taken initialDraft, so App can clear it. */
   onInitialDraftUsed?: () => void;
+  /** Home's Quick exit (quickExit.ts). */
+  onExit?: () => void;
+  /** Home's "Clear and leave" (clearAndLeave.ts). */
+  onClearAndLeave?: () => void;
+  /** Whether the Help sheet is open (Home's "Get help"). */
+  isHelpOpen?: boolean;
+  /** Home's "Get help", so App can return focus to it. */
+  homeHelpButtonRef?: RefObject<HTMLButtonElement>;
 }
 
 export default function ChatInterface({
@@ -73,6 +72,10 @@ export default function ChatInterface({
   onOpenHelp = () => undefined,
   initialDraft = "",
   onInitialDraftUsed = () => undefined,
+  onExit = () => undefined,
+  onClearAndLeave = () => undefined,
+  isHelpOpen = false,
+  homeHelpButtonRef,
 }: Props) {
   const [draft, setDraft] = useState(initialDraft);
   // The starter phrase is used once: App clears it after this first render,
@@ -85,25 +88,6 @@ export default function ChatInterface({
   const inputRef = useRef<HTMLInputElement>(null);
   // Home is the empty state: before the first question of this chat.
   const isHome = turns.length === 0;
-  const [placeholderIndex, setPlaceholderIndex] = useState(0);
-
-  // Rotate Home's placeholder, unless the device asks for reduced motion.
-  // When Home goes away, the next Home starts from the first example again.
-  useEffect(() => {
-    if (!isHome) return undefined;
-    const stop = startPlaceholderRotation({
-      count: PLACEHOLDER_EXAMPLES.length,
-      intervalMs: PLACEHOLDER_ROTATE_MS,
-      reducedMotion: prefersReducedMotion(),
-      onChange: setPlaceholderIndex,
-      setInterval: (callback, ms) => window.setInterval(callback, ms),
-      clearInterval: (handle) => window.clearInterval(handle as number),
-    });
-    return () => {
-      stop();
-      setPlaceholderIndex(0);
-    };
-  }, [isHome]);
 
   const lastTurn = turns.length > 0 ? turns[turns.length - 1] : undefined;
   // The reply's screen; while the next reply loads, the plain view.
@@ -122,19 +106,17 @@ export default function ChatInterface({
 
   const askBar = (
     <AskBar
-      variant={isHome ? "hero" : ownScreen ? "pill" : "bar"}
+      variant={ownScreen ? "pill" : "bar"}
       value={draft}
       onChange={setDraft}
       onSubmit={handleSend}
       disabled={isLoading}
       placeholder={
-        isHome
-          ? PLACEHOLDER_EXAMPLES[placeholderIndex]
-          : view === "clarify"
-            ? CLARIFY_PLACEHOLDER
-            : ownScreen
-              ? "Ask something else…"
-              : "Ask about your body or health…"
+        view === "clarify"
+          ? CLARIFY_PLACEHOLDER
+          : ownScreen
+            ? "Ask something else…"
+            : "Ask about your body or health…"
       }
       inputRef={inputRef}
       label={ownScreen ? "Ask something else" : undefined}
@@ -144,7 +126,18 @@ export default function ChatInterface({
   if (isHome) {
     return (
       <main className="screen chat-screen home-screen">
-        <Home askBar={askBar} onTopic={onTopic} />
+        <Home
+          draft={draft}
+          onDraftChange={setDraft}
+          onSubmit={handleSend}
+          isLoading={isLoading}
+          onTopic={onTopic}
+          onOpenHelp={onOpenHelp}
+          isHelpOpen={isHelpOpen}
+          helpButtonRef={homeHelpButtonRef}
+          onExit={onExit}
+          onClearAndLeave={onClearAndLeave}
+        />
       </main>
     );
   }

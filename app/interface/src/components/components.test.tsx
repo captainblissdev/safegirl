@@ -11,7 +11,6 @@ import {
   LIMITED_MODE_NOTICE,
   NO_ANSWER_RETRY,
   PERSON_MESSAGE,
-  HERO_PILL,
   ASK_LABEL,
   ASK_SEND_NAME,
   TOPIC_LIST_FOOTNOTE,
@@ -56,11 +55,18 @@ import {
 import TopicList from "./TopicList";
 import AnswerView from "./AnswerView";
 import { splitReply } from "../replySplit";
-import AskBar from "./AskBar";
+import Home from "./Home";
 import { announcementFor, replyViewOf } from "../replyView";
 import {
   greetingFor,
-  PLACEHOLDER_EXAMPLES,
+  HOME_CLEAR_LEAVE,
+  HOME_CLEAR_LEAVE_SUB,
+  HOME_EXAMPLE_QUESTIONS,
+  HOME_GET_HELP,
+  HOME_HEADLINE,
+  HOME_QUESTION_PLACEHOLDER,
+  HOME_SUPPORT_SUB,
+  HOME_SUPPORT_TITLE,
   SOURCES_LINE,
   SPLASH_HELPLINE_TEXT,
   SPLASH_EXAMPLE_QUESTIONS,
@@ -198,19 +204,21 @@ console.log("\nTest 4: a full-service answer has no notice");
   assert(!html.includes("Limited mode"), "no notice");
 }
 
-console.log("\nTest 5: Home states what SafeGirl can and cannot do");
+console.log("\nTest 5: Home asks what is on her mind");
 {
   const html = renderChat([]);
 
   assert(
     html.includes(
-      '<h1 tabindex="-1" id="home-title" class="hero-title">Ask about your body, periods, pregnancy or sex.</h1>',
-    ),
-    "the hero heading is the h1",
+      `<h1 tabindex="-1" id="home-title" class="home-headline">${escapeHtml(HOME_HEADLINE)}</h1>`,
+    ) && HOME_HEADLINE === "What's on your mind?",
+    "the headline is the h1",
   );
   assert(
-    html.includes(`${SOURCES_LINE} ${escapeHtml("This can't diagnose you.")}`),
-    "the shared sources line, then that it can't diagnose",
+    /<p class="home-greeting">Hey, good (morning|afternoon|evening)<\/p><h1/.test(
+      html,
+    ),
+    "the greeting (greetingFor) comes just before it",
   );
 }
 
@@ -434,9 +442,14 @@ console.log("\nTest 17: Home before the first question, the ask bar after it");
       started.includes('placeholder="Ask about your body or health…"'),
     "the conversation has the ask bar at the bottom",
   );
-  for (const html of [empty, started]) {
-    assert(html.split("<input").length === 2, "exactly one input either way");
-  }
+  assert(
+    empty.split("<textarea").length === 2 && !empty.includes("<input"),
+    "Home: exactly one text field (the question card's textarea)",
+  );
+  assert(
+    started.split("<input").length === 2 && !started.includes("<textarea"),
+    "the conversation: exactly one input",
+  );
 }
 
 console.log("\nTest 18: the answer screen is for knowledge-base answers only");
@@ -508,7 +521,12 @@ console.log(
   const screens: [string, JSX.Element][] = [
     // The splash is full-bleed, outside AppShell, with its own Exit pill.
     ["splash", <Splash onContinue={noop} onExit={noop} />],
-    ["chat, empty", chat([])],
+    [
+      "chat, empty",
+      <AppShell onExit={noop} help={closedHelp} footerInContent headerless>
+        <ChatInterface turns={[]} onSend={noop} isLoading={false} />
+      </AppShell>,
+    ],
     [
       "chat, answer",
       chat(reply({ outcome: "grounded_answer", answerFound: true })),
@@ -577,6 +595,26 @@ console.log(
       );
       continue;
     }
+    // Home (no app header: its own band) has the splash's helpline button
+    // instead of the footer line, and Quick exit in its band.
+    if (name === "chat, empty") {
+      const exitAt = html.indexOf(
+        '<button class="btn-home-exit" type="button">',
+      );
+      const helplineAt = html.indexOf(
+        `<a class="home-helpline" ${href} aria-label="${escapeHtml(telName(GBV_HELPLINE, SPLASH_HELPLINE_TEXT))}">`,
+      );
+      assert(
+        !html.includes('class="danger-line"') &&
+          !html.includes('class="app-header"') &&
+          exitAt > -1 &&
+          html.indexOf(`${QUICK_EXIT_LABEL}</button>`) > exitAt &&
+          helplineAt > html.indexOf('class="home-topic-grid"') &&
+          helplineAt < html.indexOf('class="home-clear"'),
+        "Home: Quick exit in its band; the helpline, then Clear and leave, last",
+      );
+      continue;
+    }
     // The splash has its own bordered helpline button instead of the
     // footer line (splash refresh), built from the same constant.
     if (name === "splash") {
@@ -619,15 +657,7 @@ console.log(
       exitAt > -1 && exitAt < html.indexOf('class="danger-line"'),
       `${name}: an Exit button is present, before the content`,
     );
-    if (name === "chat, empty") {
-      const tilesAt = html.indexOf('class="topic-tiles"');
-      const anonymousAt = html.indexOf('class="home-anonymous"');
-      const lineAt = html.indexOf('class="danger-line"');
-      assert(
-        tilesAt > -1 && tilesAt < anonymousAt && anonymousAt < lineAt,
-        "Home: the tiles, then 'Anonymous…', then the footer line",
-      );
-    } else if (name.startsWith("chat")) {
+    if (name.startsWith("chat")) {
       const lineAt = html.indexOf('class="danger-line"');
       const barAt = html.search(/class="(input-row|ask-pill-bar)"/);
       assert(
@@ -1083,43 +1113,83 @@ console.log("\nTest 28: Home");
 {
   const html = renderChat([]);
   assert(html.split("<h1").length === 2, "exactly one h1 on Home");
+  const band = html.slice(0, html.indexOf("</section>"));
   assert(
-    html.includes('<p class="hero-sub">') && html.includes(SOURCES_LINE),
-    "the hero uses the shared sources constant",
+    band.includes('<section class="home-band surface-dark"') &&
+      band.includes('<span class="mark mark--splash"') &&
+      band.includes('<span class="home-wordmark">SafeGirl</span>'),
+    "the band: the splash's logo tile and the SafeGirl wordmark",
+  );
+  const helpAt = band.indexOf(
+    `aria-haspopup="dialog" aria-expanded="false">${HOME_GET_HELP}</button>`,
+  );
+  const exitAt = band.indexOf('<button class="btn-home-exit" type="button">');
+  assert(
+    HOME_GET_HELP === "Get help" &&
+      helpAt > band.indexOf("home-wordmark") &&
+      exitAt > helpAt &&
+      band.includes(`</svg> ${QUICK_EXIT_LABEL}</button>`),
+    `"${HOME_GET_HELP}" (opens the Help sheet), then "${QUICK_EXIT_LABEL}"`,
   );
   assert(
-    /<p class="hero-tag"><svg[^>]*>.*?<\/svg> Private and anonymous<\/p>/.test(
-      html,
+    band.includes(
+      '<svg class="home-flowers" viewBox="0 0 80 96" aria-hidden="true"',
     ),
-    'the "Private and anonymous" tag with its lock icon',
+    "the splash's flower cluster, hidden from screen readers",
   );
-  const pill = html.slice(
-    html.indexOf('<div class="ask-card">'),
-    html.indexOf("</div></div>", html.indexOf('<div class="ask-card">')),
+  const card = html.slice(
+    html.indexOf('<form class="home-ask">'),
+    html.indexOf("</form>"),
   );
-  assert(pill.split("<input").length === 2, "the ask card has one input");
   assert(
-    pill.includes(
-      `<label class="ask-card-label" for="chat-input">${ASK_LABEL}</label>`,
-    ) && pill.includes('id="chat-input"'),
+    card.split("<textarea").length === 2 && !card.includes("<input"),
+    "the question card has one textarea",
+  );
+  assert(
+    card.includes(
+      `<label class="home-ask-label" for="chat-input">${ASK_LABEL}</label>`,
+    ) &&
+      card.includes('id="chat-input"') &&
+      ASK_LABEL === "Type your question",
     `a visible label, "${ASK_LABEL}", tied to it`,
   );
   assert(
-    pill.includes(`aria-label="${ASK_SEND_NAME}"`) &&
-      pill.includes('class="btn-send"'),
-    `a send button named "${ASK_SEND_NAME}"`,
+    card.includes(`placeholder="${HOME_QUESTION_PLACEHOLDER}"`) &&
+      HOME_QUESTION_PLACEHOLDER ===
+        "Ask about periods, puberty, your body or health.",
+    "the fixed placeholder (no rotation)",
   );
   assert(
-    pill.includes(`placeholder="${escapeHtml(PLACEHOLDER_EXAMPLES[0])}"`),
-    "the placeholder starts with the first example",
+    card.includes(
+      `<button class="btn-home-send" type="submit" disabled="" aria-label="${ASK_SEND_NAME}">`,
+    ),
+    `a round send button named "${ASK_SEND_NAME}", disabled while empty`,
+  );
+  assert(!html.includes("aria-live"), "nothing on Home is in a live region");
+  const chips = [
+    ...html.matchAll(
+      /<button class="home-chip" type="button">([^<]+)<\/button>/g,
+    ),
+  ].map((m) => m[1]);
+  assert(
+    JSON.stringify(chips) ===
+      JSON.stringify(HOME_EXAMPLE_QUESTIONS.map(escapeHtml)) &&
+      JSON.stringify(HOME_EXAMPLE_QUESTIONS) ===
+        JSON.stringify([
+          "Will the clinic tell my parents?",
+          "How do I stay clean on my period?",
+        ]),
+    "Try asking: the two example questions, as plain buttons",
   );
   assert(
-    !html.slice(0, html.indexOf("ask-card")).includes("aria-live"),
-    "the placeholder is not in a live region",
+    html.includes(
+      '<button class="home-link" type="button" aria-expanded="true" aria-controls="home-suggestions">Hide suggestions</button>',
+    ),
+    'a "Hide suggestions" link, suggestions shown at first',
   );
   const tiles = [
     ...html.matchAll(
-      /<button class="topic-tile topic-tile--([a-z]+)" data-topic="[a-z]+" type="button">.*?<span class="topic-tile-label">([^<]+)<\/span><span class="topic-tile-sub">([^<]+)<\/span><\/button>/g,
+      /<button class="home-topic home-topic--([a-z]+)" data-topic="[a-z]+" type="button">.*?<span class="home-topic-label">([^<]+)<\/span><span class="home-topic-sub">([^<]+)<\/span><\/button>/g,
     ),
   ].map((m) => ({ topicClass: m[1], label: m[2], subtitle: m[3] }));
   assert(
@@ -1137,21 +1207,45 @@ console.log("\nTest 28: Home");
     const words = topic.subtitle.split(/\s+/).length;
     assert(words >= 3 && words <= 5, `"${topic.subtitle}" is 3 to 5 words`);
   }
-  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
-  const tile = /\.topic-tile \{[^}]*min-height: (\d+)px;/.exec(css);
+  const support = html.slice(html.indexOf('<button class="home-support"'));
   assert(
-    tile !== null && Number(tile[1]) >= 88,
-    "tiles are at least 88px tall (44px or more)",
+    support.startsWith(
+      '<button class="home-support" type="button" aria-haspopup="dialog">',
+    ) &&
+      support.includes(
+        `<span class="home-topic-label">${HOME_SUPPORT_TITLE}</span><span class="home-topic-sub">${HOME_SUPPORT_SUB}</span>`,
+      ),
+    `the support row, "${HOME_SUPPORT_TITLE}", opens the Help sheet`,
+  );
+  const footer = html.slice(html.indexOf('<footer class="home-footer">'));
+  assert(
+    footer.includes(
+      `<button class="home-clear" type="button"><span class="home-clear-title">${HOME_CLEAR_LEAVE}</span><span class="home-clear-sub">${HOME_CLEAR_LEAVE_SUB}</span></button>`,
+    ),
+    `the footer: "${HOME_CLEAR_LEAVE}" with "${HOME_CLEAR_LEAVE_SUB}"`,
   );
   const shell = renderToStaticMarkup(
-    <AppShell onExit={() => undefined} help={closedHelp} footerInContent>
+    <AppShell
+      onExit={() => undefined}
+      help={closedHelp}
+      footerInContent
+      headerless
+    >
       <ChatInterface turns={[]} onSend={() => undefined} isLoading={false} />
     </AppShell>,
   );
   assert(
-    shell.includes('<button class="btn-exit" type="button">Exit</button>') &&
-      shell.split("In danger? Call ").length === 2,
-    "Exit and the footer line are on Home",
+    !shell.includes('class="app-header"') &&
+      shell.includes('class="btn-home-exit"') &&
+      shell.split('href="tel:').length === 2,
+    "headerless on Home: its own Quick exit and the helpline, once",
+  );
+  const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
+  assert(
+    app.includes(
+      "headerless={onChatScreen && turns.length === 0 && !isHelpOpen}",
+    ),
+    "App drops its header only on Home, and brings it back with the Help sheet",
   );
 }
 
@@ -1266,7 +1360,7 @@ console.log(
   for (const topic of TOPICS) {
     assert(
       home.includes(
-        `class="topic-tile topic-tile--${topic.topicClass}" data-topic="${topic.topicClass}"`,
+        `class="home-topic home-topic--${topic.topicClass}" data-topic="${topic.topicClass}"`,
       ),
       `the ${topic.label} tile carries its class for the list and for focus`,
     );
@@ -2259,10 +2353,17 @@ console.log("\nTest 46: every phone link's name says which service it calls");
       const text = link.replace(/<[^>]*>/g, "");
       const name = label ?? text;
       const visible = text.replace(/\s+/g, " ").trim();
+      // The visible words before any aria-hidden separator (the helpline
+      // button's "·", spaced by CSS).
+      const lead = link
+        .split(/<span[^>]*aria-hidden="true"/)[0]
+        .replace(/<[^>]*>/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
       assert(
         services.some((service) => name.includes(service)) &&
           (label === undefined ||
-            label.startsWith(visible.split(/(?<=\d)(?=[A-Z])/)[0])),
+            label.startsWith(lead.split(/(?<=\d)(?=[A-Z])/)[0])),
         `"${visible.slice(0, 40)}": named "${name.slice(0, 50)}", which starts with the visible text`,
       );
     }
@@ -2303,77 +2404,68 @@ console.log(
   );
 }
 
-/** The Home ask bar alone, for its send button's state. */
-function AskBarForTest({ value }: { value: string }) {
+/** Home alone, with this draft, for its send button's state. */
+function HomeForTest({
+  draft,
+  isLoading = false,
+}: {
+  draft: string;
+  isLoading?: boolean;
+}) {
+  const noop = () => undefined;
   return (
-    <AskBar
-      variant="hero"
-      value={value}
-      onChange={() => undefined}
-      onSubmit={() => undefined}
-      disabled={false}
-      placeholder="p"
-      inputRef={{ current: null }}
+    <Home
+      draft={draft}
+      onDraftChange={noop}
+      onSubmit={noop}
+      isLoading={isLoading}
+      onTopic={noop}
+      onOpenHelp={noop}
+      isHelpOpen={false}
+      onExit={noop}
+      onClearAndLeave={noop}
     />
   );
 }
 
-console.log("\nTest 48: Home polish (step 4b)");
+console.log("\nTest 48: Home refresh (H1)");
 {
-  const html = renderChat([]);
   assert(
-    html.includes(`</svg> ${HERO_PILL}</p>`) &&
-      html.indexOf('class="hero-tag"') < html.indexOf("<h1"),
-    `the "${HERO_PILL}" pill with its lock, above the h1`,
+    ASK_LABEL === "Type your question" && ASK_SEND_NAME === "Get an answer",
+    "the label and send name, each in one constant",
   );
-  assert(
-    HERO_PILL === "Private and anonymous" &&
-      ASK_LABEL === "Type your question" &&
-      ASK_SEND_NAME === "Get an answer",
-    "the new copy, each in one constant",
-  );
-  assert(
-    html.includes('<span class="hero-decor" aria-hidden="true">') &&
-      html.split("hero-circle hero-circle--").length === 3 &&
-      html.includes("hero-sparkle-icon"),
-    "the hero decoration (two circles and a sparkle) is hidden from screen readers",
-  );
-  assert(
-    html.indexOf('class="ask-card"') > html.indexOf("</section>"),
-    "the ask card follows the hero card",
-  );
-  /** True when Home's send button is enabled for this field value. */
-  const send = (value: string) =>
-    !renderToStaticMarkup(<AskBarForTest value={value} />).includes(
-      'disabled="" aria-label="Get an answer"',
-    );
+  /** True when Home's send button is enabled for this draft. */
+  const send = (draft: string, isLoading = false) =>
+    !renderToStaticMarkup(
+      <HomeForTest draft={draft} isLoading={isLoading} />,
+    ).includes(`disabled="" aria-label="${ASK_SEND_NAME}"`);
   assert(!send(""), "the send button is disabled while the field is empty");
-  assert(!send("   "), "and while it holds only spaces");
+  assert(!send("   \n "), "and while it holds only spaces or new lines");
   assert(send("is my period normal"), "and enabled once there is text");
-  const footer = html.slice(html.indexOf('<footer class="home-footer">'));
+  assert(!send("is my period normal", true), "and disabled while loading");
+  const chat = readFileSync(
+    new URL("./ChatInterface.tsx", import.meta.url),
+    "utf8",
+  );
   assert(
-    footer.includes('<p class="home-anonymous"><svg') &&
-      footer.includes("Anonymous. We never ask for your name.") &&
-      footer.includes(
-        `<a href="${telHref(GBV_HELPLINE)}" aria-label="${telName(GBV_HELPLINE)}">${GBV_HELPLINE}</a>`,
-      ),
-    "the footer card: lock, the anonymous line and the footer line with its tel: link from the constant",
+    !/PLACEHOLDER_EXAMPLES|startPlaceholderRotation/.test(chat),
+    "no placeholder rotation on Home",
   );
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
     app.includes("End session") &&
       app.indexOf("<ChatInterface") < app.indexOf("End session"),
-    "End session stays, directly after the chat (below the footer card)",
+    "End session stays, directly after the chat",
   );
   assert(
     JSON.stringify(TOPICS.map((t) => [t.label, t.topicClass, t.subtitle])) ===
       JSON.stringify([
-        ["Periods and health", "general", "Cycle, pain, clinics"],
-        ["Pregnancy", "pregnancy", "Signs, care, school"],
-        ["Contraception", "contraception", "Methods and myths"],
-        ["STIs and HIV", "sti", "Signs, testing, care"],
+        ["Periods and health", "general", "Puberty, cramps, clinics"],
+        ["Pregnancy", "pregnancy", "Signs, food, school"],
+        ["Contraception", "contraception", "Methods and condoms"],
+        ["STIs and HIV", "sti", "Signs and testing"],
       ]),
-    "labels and classes unchanged; the new subtitles",
+    "labels and classes unchanged; the H1 subtitles",
   );
   const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
   const rule = (selector: string) => {

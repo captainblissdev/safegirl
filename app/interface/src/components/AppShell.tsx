@@ -25,6 +25,12 @@ interface Props {
   calm?: boolean;
   /** The help and referral screens: header without Help, "Quick exit". */
   support?: boolean;
+  /**
+   * Home, while the Help sheet is closed: no app header, since Home's
+   * own band has the logo, "Get help" and Quick exit. The header returns
+   * with the Help sheet, so its Exit stays in view.
+   */
+  headerless?: boolean;
   children: ReactNode;
 }
 
@@ -41,17 +47,20 @@ export default function AppShell({
   footerInContent = false,
   calm = false,
   support = false,
+  headerless = false,
   children,
 }: Props) {
   return (
     <div className={calm ? "app-shell" : "app-shell app-shell--playful"}>
-      <AppHeader
-        onExit={onExit}
-        onOpenHelp={help.onOpen}
-        isHelpOpen={help.isOpen}
-        helpButtonRef={help.buttonRef}
-        support={support}
-      />
+      {!headerless && (
+        <AppHeader
+          onExit={onExit}
+          onOpenHelp={help.onOpen}
+          isHelpOpen={help.isOpen}
+          helpButtonRef={help.buttonRef}
+          support={support}
+        />
+      )}
       {/* While the Help sheet is open, the screen stays mounted but hidden
           (its state is kept), and the sheet is the page under the header,
           whose Exit stays in view. */}

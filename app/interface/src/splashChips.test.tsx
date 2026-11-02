@@ -77,7 +77,7 @@ console.log("\nTest 3: on continue, the input is prefilled; nothing is sent");
       />,
     );
     assert(
-      html.includes(`value="${escapeHtml(question)}"`),
+      html.includes(`>${escapeHtml(question)}</textarea>`),
       `the input holds "${question}"`,
     );
     assert(sent === 0, `${question}: nothing is sent`);
@@ -94,7 +94,7 @@ console.log("\nTest 3: on continue, the input is prefilled; nothing is sent");
     />,
   );
   assert(
-    !/<input[^>]*value="[^"]+"/.test(empty),
+    /<textarea[^>]*><\/textarea>/.test(empty),
     "none chosen (skip): the input is empty",
   );
 }

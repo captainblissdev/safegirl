@@ -189,3 +189,32 @@ export function splashStarter(chosen: string | null): string {
     ? chosen
     : "";
 }
+
+/** Home (refresh): the header band's help button. */
+export const HOME_GET_HELP = "Get help";
+
+/** Home (refresh): the headline under the greeting, on one line. */
+export const HOME_HEADLINE = "What's on your mind?";
+
+/** Home (refresh): the question card's label and placeholder. */
+export const HOME_QUESTION_PLACEHOLDER =
+  "Ask about periods, puberty, your body or health.";
+
+/**
+ * Home (refresh): the "Try asking" examples. Tapping one fills the
+ * question field; it is never sent on its own. Both are answered from the
+ * knowledge base in the 21- and 62-entry configurations (KB-G1, KB-G5;
+ * rehearsal of 2 November 2026).
+ */
+export const HOME_EXAMPLE_QUESTIONS: readonly string[] = [
+  "Will the clinic tell my parents?",
+  "How do I stay clean on my period?",
+];
+
+/** Home (refresh): the support row under the topic grid (opens Help). */
+export const HOME_SUPPORT_TITLE = "Feelings and staying safe";
+export const HOME_SUPPORT_SUB = "Someone to talk to, and where to get help";
+
+/** Home (refresh): the footer's second action. */
+export const HOME_CLEAR_LEAVE = "Clear and leave";
+export const HOME_CLEAR_LEAVE_SUB = "Deletes this chat from this phone";
