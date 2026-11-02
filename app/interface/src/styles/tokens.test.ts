@@ -309,15 +309,15 @@ console.log("\nTest 6: control edges and the header's new pairs");
 }
 
 console.log(
-  "\nTest 7: the splash, worst case: lightest stop with a glow on top",
+  "\nTest 7: the splash, every stop of the gradient and the glows on top",
 );
 {
   const stops = [...token("--gradient-splash").matchAll(/#[0-9a-f]{6}/g)].map(
     (m) => m[0],
   );
   assert(
-    stops.join(",") === "#3b0f6b,#5b21b6,#a21caf",
-    "the splash gradient runs #3B0F6B, #5B21B6, #A21CAF",
+    stops.join(",") === "#5b21b6,#7e22ce,#a21caf,#be2a93",
+    "the splash gradient runs #5B21B6, #7E22CE, #A21CAF, #BE2A93",
   );
 
   /** rgba(r, g, b, a) composited over a hex colour, as hex. */
@@ -338,10 +338,15 @@ console.log(
   const worst = (fg: string, backgrounds: string[]) =>
     Math.min(...backgrounds.map((bg) => contrast(fg, bg)));
 
-  const lightest = stops[2];
-  const withRose = over(token("--splash-glow-rose"), lightest);
-  const withOrchid = over(token("--splash-glow-orchid"), lightest);
-  const anywhere = [...stops, withRose, withOrchid];
+  // Each glow at full strength (a worst case: both fade out from their
+  // centres) over the stops it covers: the light glow sits on the right
+  // between 26% and about 64% of the height (#7E22CE to #A21CAF); the
+  // pink glow covers the bottom-left quarter (#A21CAF to #BE2A93).
+  const glows = [
+    ...stops.slice(1, 3).map((s) => over(token("--splash-glow-light"), s)),
+    ...stops.slice(2, 4).map((s) => over(token("--splash-glow-pink"), s)),
+  ];
+  const anywhere = [...stops, ...glows];
   const white = token("--color-on-dark");
 
   const text = worst(white, anywhere);
@@ -349,30 +354,33 @@ console.log(
     text >= 4.5,
     `white text anywhere on the splash: ${text.toFixed(2)}:1`,
   );
-
-  // The rose glow ends above the tagline (.splash-glow--rose ends 150px
-  // from the top; the tagline starts below the 84px tile and the 44px
-  // wordmark), so the tagline is checked without it.
-  const tagline = worst(token("--splash-tagline"), [...stops, withOrchid]);
+  // The greeting sits in the top third (under the brand row): the first
+  // two stops, with the right-hand light glow; the pink glow is
+  // bottom-left, far below it.
+  const top = stops.slice(0, 2);
+  const greeting = worst(token("--splash-greeting"), [
+    ...top,
+    ...top.map((s) => over(token("--splash-glow-light"), s)),
+  ]);
   assert(
-    tagline >= 4.5,
-    `tagline and privacy line #F6E9FF: ${tagline.toFixed(2)}:1`,
-  );
-  const taglineOverRose = contrast(token("--splash-tagline"), withRose);
-  console.log(
-    `  (for the record: #F6E9FF over the rose glow would be ${taglineOverRose.toFixed(2)}:1)`,
+    greeting >= 4.5,
+    `the greeting #FAE8FF where it sits: ${greeting.toFixed(2)}:1`,
   );
 
   const glass = anywhere.map((bg) => over(token("--splash-glass-bg"), bg));
-  const cards = worst(white, glass);
+  const onGlass = worst(white, glass);
   assert(
-    cards >= 4.5,
-    `white text on the glass cards and Exit pill: ${cards.toFixed(2)}:1`,
+    onGlass >= 4.5,
+    `white text on the chips, icon tiles and helpline: ${onGlass.toFixed(2)}:1`,
   );
-  const pillEdge = worst(white, anywhere);
+  const edge = Math.min(
+    ...anywhere.map((bg) =>
+      contrast(over(token("--splash-glass-border"), bg), bg),
+    ),
+  );
   assert(
-    pillEdge >= 3,
-    `the Exit pill's white border: ${pillEdge.toFixed(2)}:1`,
+    edge >= 3,
+    `control borders (Quick exit, chips, helpline): ${edge.toFixed(2)}:1`,
   );
 
   const ring = worst(token("--focus-ring-on-dark"), anywhere);
@@ -387,12 +395,19 @@ console.log(
   );
 
   for (const name of [
-    "--splash-icon-lock",
-    "--splash-icon-speech",
-    "--splash-icon-shield",
+    "--splash-flower-pink",
+    "--splash-flower-white",
+    "--splash-flower-centre",
   ]) {
-    const icon = contrast(token(name), token("--color-card"));
-    assert(icon >= 3, `${name} on its white tile: ${icon.toFixed(2)}:1`);
+    const alpha = Number(
+      token(name)
+        .replace(/[^0-9.,]/g, "")
+        .split(",")[3],
+    );
+    assert(
+      alpha >= 0.2 && alpha <= 0.35,
+      `${name} is 20 to 35 percent opacity`,
+    );
   }
 }
 

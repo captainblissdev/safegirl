@@ -2261,8 +2261,9 @@ console.log(
     "Home's tiles: two shrinkable columns, labels that wrap",
   );
   assert(
-    rule(".splash-wordmark").includes("font-size: min(44px, 16vw);"),
-    "the splash wordmark is never wider than the screen",
+    rule(".splash-wordmark").includes("font-size: min(30px, 9vw);") &&
+      rule(".splash-headline").includes("font-size: min(32px, 9vw);"),
+    "the splash wordmark and headline are never wider than the screen",
   );
   assert(
     !css.includes("answer-dock") && !css.includes("position: sticky"),

@@ -41,27 +41,36 @@
     #8a24c9 55%,
     #a21caf 100%
   );
-  /* Splash: deep plum, violet, magenta. */
+  /* Splash (refresh): purple to magenta, top to bottom. */
   --gradient-splash: linear-gradient(
-    165deg,
-    #3b0f6b 0%,
-    #5b21b6 45%,
-    #a21caf 100%
+    170deg,
+    #5b21b6 0%,
+    #7e22ce 35%,
+    #a21caf 70%,
+    #be2a93 100%
   );
-  --splash-glow-rose: rgba(244, 114, 182, 0.28);
-  --splash-glow-orchid: rgba(192, 38, 211, 0.3);
-  --splash-tagline: #f6e9ff;
   /*
-   * Glass cards and the Exit pill: 7% white, darkened from the design's
-   * 14% so that white text keeps 4.5:1 over the lightest part of the
-   * gradient with a glow on top (4.52:1; 14% gave 4.04:1).
+   * The two soft glows: pink bottom-left, faint light on the right. The
+   * pink is the strength at its centre; it fades out from there. 10%
+   * keeps white text on the helpline's fill at 4.5:1 even if its centre
+   * sat on the bottom stop (16% gave 4.38:1 with a 6% fill).
    */
-  --splash-glass-bg: rgba(255, 255, 255, 0.07);
-  --splash-glass-border: rgba(255, 255, 255, 0.28);
+  --splash-glow-pink: rgba(244, 114, 182, 0.1);
+  --splash-glow-light: rgba(255, 255, 255, 0.08);
+  /* The greeting: 4.58:1 or more on every stop. */
+  --splash-greeting: #fae8ff;
+  /*
+   * Chips, icon tiles and the helpline: 6% white, so white text keeps
+   * 4.5:1 on it over every stop and glow (4.59:1 at worst; 10% gave
+   * 4.31:1). Control borders at 70% white keep 3:1 everywhere.
+   */
+  --splash-glass-bg: rgba(255, 255, 255, 0.06);
+  --splash-glass-border: rgba(255, 255, 255, 0.7);
   --splash-button-text: #4c1d95;
-  --splash-icon-lock: #6d28d9;
-  --splash-icon-speech: #a21caf;
-  --splash-icon-shield: #be185d;
+  /* Flowers: decorative, 20 to 35 percent opacity, pale pink and white. */
+  --splash-flower-pink: rgba(249, 168, 212, 0.34);
+  --splash-flower-white: rgba(255, 255, 255, 0.24);
+  --splash-flower-centre: rgba(253, 242, 248, 0.3);
 
   /* Home hero: the tag pill's fill (white text 4.94:1 at the light end). */
   /* Home (step 4b): the hero card, its pill and decoration, the ask
