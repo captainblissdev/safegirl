@@ -26,9 +26,9 @@ import {
  * behaves as before; double Escape works here too (App listens on the
  * window on every screen).
  *
- * Three parts: the top row (Quick exit, always visible), the content
- * (scrolls on short phones) and the actions (continue and the helpline,
- * always visible at the bottom).
+ * One page: the top row (Quick exit), the content, then the actions
+ * (continue and the helpline). On a short phone the whole page scrolls;
+ * nothing is fixed.
  *
  * English only. The greeting follows the device clock (wording only).
  * The example questions are a convenience: see SPLASH_EXAMPLE_QUESTIONS.
@@ -95,6 +95,27 @@ function Flower({
   );
 }
 
+/** A small up-right arrow at the end of each example question. */
+function ArrowUpRightIcon() {
+  return (
+    <svg
+      width={20}
+      height={20}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M7 17L17 7" />
+      <path d="M8 7h9v9" />
+    </svg>
+  );
+}
+
 /** The flower cluster, top right: decoration only, never behind content. */
 function Flowers() {
   return (
@@ -144,7 +165,7 @@ export default function Splash({ onContinue, onExit, now }: Props) {
         </button>
       </div>
 
-      <div className="splash-scroll">
+      <div className="splash-content">
         <div className="splash-head">
           <div className="splash-brand">
             <ShieldHeartMark variant="splash" size={56} />
@@ -152,7 +173,7 @@ export default function Splash({ onContinue, onExit, now }: Props) {
           </div>
           <p className="splash-greeting">{greeting}</p>
           <h1 id="splash-title" className="splash-headline">
-            Honest answers. No judgment.
+            Honest answers. No{" "}judgment.
           </h1>
           <Flowers />
         </div>
@@ -187,7 +208,7 @@ export default function Splash({ onContinue, onExit, now }: Props) {
 
         <section className="splash-question" aria-labelledby="splash-scope">
           <h2 id="splash-scope" className="splash-scope">
-            Ask about periods, puberty, your body and health.
+            <strong>Ask about</strong> periods, puberty, your body and health.
           </h2>
           <p className="splash-sub">
             Not sure where to start? Tap one to try it:
@@ -207,7 +228,8 @@ export default function Splash({ onContinue, onExit, now }: Props) {
                   setChosen((current) => toggleSplashChip(current, question))
                 }
               >
-                {question}
+                <span>{question}</span>
+                <ArrowUpRightIcon />
               </button>
             ))}
           </div>
@@ -251,7 +273,10 @@ export default function Splash({ onContinue, onExit, now }: Props) {
           <PhoneIcon size={18} />
           <span>{SPLASH_HELPLINE.lead}</span>{" "}
           <strong>{SPLASH_HELPLINE.call}</strong>{" "}
-          <span>{SPLASH_HELPLINE.tail}</span>
+          <span className="splash-helpline-dot" aria-hidden="true">
+            ·
+          </span>
+          <span className="splash-helpline-tail">{SPLASH_HELPLINE.tail}</span>
         </a>
       </div>
     </main>

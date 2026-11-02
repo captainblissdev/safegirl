@@ -712,19 +712,18 @@
 /* Splash (v3): a full-bleed screen of its own */
 
 /*
- * Three parts in one screen-high column: the top row (Quick exit) and
- * the actions (continue and the helpline) always visible; the content
- * between them scrolls when the phone is short. Nothing is sticky: the
- * scrolling part is its own box, so focus inside it is never hidden
- * under the actions.
+ * One page that scrolls as a whole when the phone is short: the top row
+ * (Quick exit), the content, then the actions (continue and the
+ * helpline) at the end. Nothing is fixed or sticky. On a tall phone the
+ * actions sit at the bottom of the screen.
  */
 .splash-screen {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
   background: var(--gradient-splash);
   color: var(--color-on-dark);
 }
@@ -734,6 +733,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
   pointer-events: none;
 }
 
@@ -755,7 +755,7 @@
 }
 
 .splash-topbar,
-.splash-scroll,
+.splash-content,
 .splash-actions {
   position: relative;
   z-index: 1;
@@ -764,9 +764,8 @@
 /* Top row: Quick exit only, right-aligned. */
 .splash-topbar {
   display: flex;
-  flex: none;
   justify-content: flex-end;
-  padding: 16px 20px 4px;
+  padding: 16px 20px 0;
 }
 
 .btn-exit-pill {
@@ -785,15 +784,12 @@
   cursor: pointer;
 }
 
-.splash-scroll {
+.splash-content {
   display: flex;
-  flex: 1 1 auto;
+  flex: 1 0 auto;
   flex-direction: column;
-  gap: 24px;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 8px 20px 20px;
+  gap: 18px;
+  padding: 8px 20px 0;
 }
 
 /*
@@ -805,7 +801,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .splash-brand {
@@ -826,7 +822,7 @@
   margin-top: 14px;
   padding-right: 84px;
   color: var(--splash-greeting);
-  font-size: 17px;
+  font-size: 16px;
   font-weight: var(--weight-semibold);
 }
 
@@ -839,7 +835,7 @@
 .splash-promises {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   list-style: none;
 }
 
@@ -858,39 +854,50 @@
 
 .promise-icon {
   display: grid;
-  flex: 0 0 38px;
+  flex: 0 0 30px;
   place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
   background: var(--splash-glass-bg);
   color: var(--color-on-dark);
 }
 
+/* The scope line: body size, with a bold lead. */
 .splash-scope {
-  font-size: 19px;
-  font-weight: var(--weight-black);
-  line-height: 1.3;
+  font-size: 17px;
+  font-weight: var(--weight-regular);
+  line-height: 1.4;
   text-wrap: pretty;
 }
 
+.splash-scope strong {
+  font-weight: var(--weight-black);
+}
+
 .splash-sub {
-  margin-top: 6px;
+  margin-top: 10px;
   font-size: 15px;
 }
 
+/* The example questions: full-width rows with an arrow. */
 .splash-chips {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 14px;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .splash-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
   min-height: var(--tap-target);
   border: 1.5px solid var(--splash-chip-border);
-  border-radius: 22px;
-  padding: 10px 16px;
+  border-radius: 999px;
+  padding: 10px 18px;
   background: var(--splash-glass-bg);
   color: var(--color-on-dark);
   font-size: 15px;
@@ -898,6 +905,10 @@
   line-height: 1.3;
   text-align: left;
   cursor: pointer;
+}
+
+.splash-chip svg {
+  flex: none;
 }
 
 .splash-chip[aria-pressed="true"] {
@@ -932,10 +943,9 @@
   line-height: 1.45;
 }
 
-/* The actions: always at the bottom, above the device's safe area. */
+/* The actions, at the end of the page (bottom of the screen on tall phones). */
 .splash-actions {
   display: flex;
-  flex: none;
   flex-direction: column;
   gap: 12px;
   padding: 12px 20px max(20px, env(safe-area-inset-bottom));
@@ -964,8 +974,8 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 4px 6px;
-  min-height: 52px;
+  gap: 2px 6px;
+  min-height: 50px;
   border: 2px solid var(--splash-helpline-border);
   border-radius: 28px;
   padding: 6px 16px;
@@ -979,6 +989,21 @@
 .splash-helpline strong {
   font-size: 18px;
   font-weight: var(--weight-bold);
+}
+
+/*
+ * On narrow phones the line does not fit: "free, 24 hours" moves to a
+ * line of its own and the separator dot is dropped, so no line starts
+ * with it.
+ */
+@media (max-width: 379px) {
+  .splash-helpline-dot {
+    display: none;
+  }
+
+  .splash-helpline-tail {
+    flex-basis: 100%;
+  }
 }
 
 /*

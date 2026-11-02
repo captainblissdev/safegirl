@@ -62,7 +62,6 @@ import {
   greetingFor,
   PLACEHOLDER_EXAMPLES,
   SOURCES_LINE,
-  SPLASH_HELPLINE,
   SPLASH_HELPLINE_TEXT,
   SPLASH_EXAMPLE_QUESTIONS,
 } from "../content/uiText";
@@ -587,7 +586,7 @@ console.log(
             `<a class="splash-helpline" ${href} aria-label="${escapeHtml(telName(GBV_HELPLINE, SPLASH_HELPLINE_TEXT))}">`,
           ) &&
           html.includes(
-            `<span>In danger?</span> <strong>Call ${GBV_HELPLINE}</strong> <span>${SPLASH_HELPLINE.tail}</span></a>`,
+            `<span>In danger?</span> <strong>Call ${GBV_HELPLINE}</strong> <span class="splash-helpline-dot" aria-hidden="true">·</span><span class="splash-helpline-tail">free, 24 hours</span></a>`,
           ) &&
           SPLASH_HELPLINE_TEXT === `${line}${GBV_HELPLINE} · free, 24 hours`,
         "splash: the helpline button, built from GBV_HELPLINE, no footer line",
@@ -727,7 +726,7 @@ console.log("\nTest 22: the splash is a full-bleed screen of its own");
   assert(html.split("<h1").length === 2, "exactly one h1");
   assert(
     html.includes(
-      '<h1 id="splash-title" class="splash-headline">Honest answers. No judgment.</h1>',
+      '<h1 id="splash-title" class="splash-headline">Honest answers. No judgment.</h1>',
     ),
     "the headline is the h1 and labels the screen",
   );
@@ -735,7 +734,7 @@ console.log("\nTest 22: the splash is a full-bleed screen of its own");
   assert(!html.includes("btn-help"), "no Help button on the splash");
   const topbar = html.slice(
     html.indexOf('<div class="splash-topbar">'),
-    html.indexOf('<div class="splash-scroll">'),
+    html.indexOf('<div class="splash-content">'),
   );
   assert(
     topbar.startsWith(
@@ -778,11 +777,11 @@ console.log("\nTest 22: the splash is a full-bleed screen of its own");
   );
   assert(
     html.indexOf('<div class="splash-topbar">') <
-      html.indexOf('<div class="splash-scroll">') &&
-      html.indexOf('<div class="splash-scroll">') <
+      html.indexOf('<div class="splash-content">') &&
+      html.indexOf('<div class="splash-content">') <
         html.indexOf('<div class="splash-actions">') &&
       html.includes('<div class="splash-actions"><button class="btn-splash"'),
-    "top row, scrolling content, then the pinned actions (continue first)",
+    "top row, content, then the actions (continue first), in one page",
   );
   assert(
     html.split('class="promise-icon"').length === 4,
@@ -790,7 +789,7 @@ console.log("\nTest 22: the splash is a full-bleed screen of its own");
   );
   const promisesEnd = html.indexOf("</ul>", html.indexOf("splash-promises"));
   const scopeAt = html.indexOf(
-    '<h2 id="splash-scope" class="splash-scope">Ask about periods, puberty, your body and health.</h2>',
+    '<h2 id="splash-scope" class="splash-scope"><strong>Ask about</strong> periods, puberty, your body and health.</h2>',
   );
   const subAt = html.indexOf(
     '<p class="splash-sub">Not sure where to start? Tap one to try it:</p>',
@@ -807,9 +806,9 @@ console.log("\nTest 22: the splash is a full-bleed screen of its own");
       !html.includes("Tap one to start, or skip."),
     "the v1 question and sub-line are gone",
   );
-  const chips = [...html.matchAll(/class="splash-chip"[^>]*>([^<]+)</g)].map(
-    (m) => m[1],
-  );
+  const chips = [
+    ...html.matchAll(/class="splash-chip"[^>]*><span>([^<]+)<\/span><svg/g),
+  ].map((m) => m[1]);
   assert(
     chips.join("|") === SPLASH_EXAMPLE_QUESTIONS.join("|") &&
       chips.join("|") ===

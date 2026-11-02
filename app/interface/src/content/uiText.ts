@@ -169,11 +169,11 @@ export function greetingFor(now: Date): string {
 export const SPLASH_HELPLINE = {
   lead: "In danger?",
   call: `Call ${GBV_HELPLINE}`,
-  tail: "· free, 24 hours",
+  tail: "free, 24 hours",
 } as const;
 
 /** The same button as one line, for its accessible name and the tests. */
-export const SPLASH_HELPLINE_TEXT = `${SPLASH_HELPLINE.lead} ${SPLASH_HELPLINE.call} ${SPLASH_HELPLINE.tail}`;
+export const SPLASH_HELPLINE_TEXT = `${SPLASH_HELPLINE.lead} ${SPLASH_HELPLINE.call} · ${SPLASH_HELPLINE.tail}`;
 
 /** The chip choice after a tap: tapping the chosen chip again clears it. */
 export function toggleSplashChip(
