@@ -2470,11 +2470,11 @@ console.log("\nTest 48: Home refresh (H1)");
     JSON.stringify(TOPICS.map((t) => [t.label, t.topicClass, t.subtitle])) ===
       JSON.stringify([
         ["Periods and health", "general", "Puberty, cramps, clinics"],
-        ["Pregnancy", "pregnancy", "Signs, food, school"],
+        ["Pregnancy", "pregnancy", "Warning signs, food, school"],
         ["Contraception", "contraception", "Methods and condoms"],
-        ["STIs and HIV", "sti", "Signs and testing"],
+        ["STIs and HIV", "sti", "Symptoms, treatment, prevention"],
       ]),
-    "labels and classes unchanged; the H1 subtitles",
+    "labels and classes unchanged; the H1b subtitles",
   );
   const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
   const rule = (selector: string) => {

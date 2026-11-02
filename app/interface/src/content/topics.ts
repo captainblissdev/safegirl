@@ -30,7 +30,7 @@ export const TOPICS: readonly Topic[] = [
   {
     label: "Pregnancy",
     topicClass: "pregnancy",
-    subtitle: "Signs, food, school",
+    subtitle: "Warning signs, food, school",
   },
   // KB-C1 to C5: getting it as a teenager, methods, condoms, fertility.
   {
@@ -42,6 +42,6 @@ export const TOPICS: readonly Topic[] = [
   {
     label: "STIs and HIV",
     topicClass: "sti",
-    subtitle: "Signs and testing",
+    subtitle: "Symptoms, treatment, prevention",
   },
 ];
