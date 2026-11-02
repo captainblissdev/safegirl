@@ -1664,13 +1664,231 @@ html:has(.app-shell--home) {
   opacity: 1;
 }
 
-/* Topic list (redesign Step 5) */
+/* Topic list (T1): the same system as Home */
 
-.topic-screen {
-  justify-content: flex-start;
-  gap: 14px;
-  padding: 8px 8px 12px;
+/*
+ * One page on Home's sheet (the shell's own header is off here too):
+ * the gradient band, then the lists in the centred column. The ask bar
+ * and the helpline are pinned to the bottom of the screen; the shell
+ * keeps their height free at the end, so the footnote is never hidden.
+ * Quick exit (in the band) scrolls with the page.
+ */
+.topic-page {
+  --home-gutter: 20px;
+  --home-column: min(100% - 2 * var(--home-gutter), 520px);
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: hidden;
+  padding-bottom: 20px;
 }
+
+.topic-page > :not(.home-band) {
+  width: var(--home-column);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.app-shell--home:has(.topic-page) {
+  --home-footer-space: calc(172px + env(safe-area-inset-bottom));
+}
+
+html:has(.topic-page) {
+  scroll-padding-bottom: calc(188px + env(safe-area-inset-bottom));
+}
+
+/* The band: Home's, sized to its content (nothing overlaps it here). */
+.home-band.topic-band {
+  min-height: 0;
+  padding-bottom: 22px;
+}
+
+/* "All topics": an outlined pill on the band, like "Get help". */
+.topic-back {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 4px;
+  min-height: var(--tap-target);
+  border: 2px solid var(--splash-glass-border);
+  border-radius: 999px;
+  padding: 0 14px 0 8px;
+  background: transparent;
+  color: var(--color-on-dark);
+  font-size: 15px;
+  font-weight: var(--weight-extrabold);
+  cursor: pointer;
+}
+
+/* The icon tile, title and hint; the flowers sit in their own column on
+   the right, so they never cover the text. */
+.topic-band-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.topic-band-icon {
+  display: grid;
+  flex: 0 0 52px;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--mark-tile-light);
+  color: var(--home-icon);
+}
+
+.topic-band-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.topic-page .topic-title {
+  color: var(--color-on-dark);
+  font-size: min(28px, 7.4vw);
+  font-weight: var(--weight-black);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.topic-page .topic-hint {
+  margin-top: 4px;
+  color: var(--splash-greeting);
+  font-size: 15px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.35;
+}
+
+.topic-flowers {
+  display: block;
+  flex: none;
+  align-self: flex-start;
+  width: 44px;
+  height: 54px;
+}
+
+/* One pale pink, as on Home. */
+.topic-flowers .splash-flower ellipse {
+  fill: var(--home-flower);
+}
+
+/* The only motion here: the flowers fade and scale in once. Static when
+   the device asks for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .topic-flowers {
+    animation: splash-flowers-in 600ms ease-out both;
+  }
+}
+
+.topic-group-label {
+  margin-top: 20px;
+  margin-bottom: 8px;
+  color: var(--color-plum);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+/* An ungrouped list under the band (a group's label has its own gap). */
+.topic-page > .topic-list {
+  margin-top: 20px;
+}
+
+/* A white box with Home's 3:1 card edge. */
+.topic-list {
+  overflow: hidden;
+  border: 1.5px solid var(--home-card-edge);
+  border-radius: 18px;
+  background: var(--color-card);
+  box-shadow: var(--home-card-shadow);
+  list-style: none;
+}
+
+.topic-list li + li {
+  border-top: 1px solid var(--list-row-divider);
+}
+
+.topic-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  padding: 11px 12px 11px 16px;
+  background: none;
+  color: var(--color-ink);
+  font-size: 13.5px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The focus ring sits inside the box, so it is not clipped. */
+.topic-row:focus-visible {
+  outline-offset: -4px;
+}
+
+.topic-row-go {
+  display: grid;
+  flex: 0 0 30px;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--home-icon-tile);
+  color: var(--home-icon);
+}
+
+.topic-page .topic-footnote {
+  margin-top: 14px;
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.5;
+}
+
+/* Pinned: the ask bar, then the helpline, in the centred column. */
+.topic-page > .topic-footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: auto;
+  padding: 10px max(var(--home-gutter), calc((100% - 520px) / 2))
+    max(10px, env(safe-area-inset-bottom));
+  background: var(--home-sheet-end);
+  box-shadow: var(--home-footer-shadow);
+}
+
+/* The shared ask pill, matched to Home on this page: the card edge, and
+   a grey Send while the field is empty (disabled). */
+.topic-footer .ask-pill-bar {
+  border-color: var(--home-card-edge);
+}
+
+.topic-footer .ask-pill-bar .btn-send:disabled {
+  background: var(--home-send-disabled-bg);
+  color: var(--home-send-disabled-icon);
+  box-shadow: none;
+}
+
+@media (max-width: 359px) {
+  .topic-page {
+    --home-gutter: 16px;
+  }
+}
+
+/* Shared with the answer screen: its back link and related questions
+   (redesign Steps 5 and 6). */
 
 .back-link {
   display: inline-flex;
@@ -1685,51 +1903,6 @@ html:has(.app-shell--home) {
   font-size: 15px;
   font-weight: var(--weight-extrabold);
   cursor: pointer;
-}
-
-.topic-head {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  overflow: hidden;
-  border-radius: 26px;
-  padding: 18px;
-  background: var(--topic-head-bg);
-}
-
-.topic-head-icon {
-  display: grid;
-  flex: 0 0 56px;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 18px;
-  background: var(--color-card);
-  box-shadow: var(--topic-head-tile-shadow);
-}
-
-.topic-head--general .topic-head-icon {
-  color: var(--topic-periods-text);
-}
-
-.topic-head--pregnancy .topic-head-icon {
-  color: var(--topic-pregnancy-text);
-}
-
-.topic-head--contraception .topic-head-icon {
-  color: var(--topic-contraception-text);
-}
-
-.topic-head--sti .topic-head-icon {
-  color: var(--topic-sti-text);
-}
-
-.topic-title {
-  color: var(--color-plum);
-  font-size: 26px;
-  font-weight: var(--weight-black);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
 }
 
 .topic-count {
@@ -2230,7 +2403,6 @@ html:has(.app-shell--home) {
     margin-left: 4px;
   }
 
-  .topic-screen,
   .answer-screen,
   .help-sheet {
     padding-right: 4px;
@@ -2239,20 +2411,6 @@ html:has(.app-shell--home) {
 }
 
 /* Topic list and answer screen (redesign Step 6b) */
-
-.topic-hint {
-  margin-top: 4px;
-  color: var(--footer-card-text);
-  font-size: 14px;
-  font-weight: var(--weight-bold);
-}
-
-.topic-footnote {
-  color: var(--color-muted);
-  font-size: 13px;
-  font-weight: var(--weight-semibold);
-  line-height: 1.5;
-}
 
 .answer-source strong {
   color: var(--color-ink);

@@ -2415,11 +2415,13 @@ console.log(
       [...css.matchAll(/\n([^\n{}]+) \{[^}]*position: fixed;/g)]
         .map((m) => m[1].trim())
         .every((selector) =>
-          [".app-shell--playful::before", ".home > .home-footer"].includes(
-            selector,
-          ),
+          [
+            ".app-shell--playful::before",
+            ".home > .home-footer",
+            ".topic-page > .topic-footer",
+          ].includes(selector),
         ),
-    "nothing is docked or sticky at the bottom except Home's footer, whose height the page keeps free and whose focus padding stops it hiding focus (WCAG 2.4.11; step 7c, H1b)",
+    "nothing is docked or sticky at the bottom except the Home and Topic list footers, whose height the page keeps free and whose focus padding stops them hiding focus (WCAG 2.4.11; step 7c, H1b, T1)",
   );
 }
 
@@ -3212,6 +3214,84 @@ console.log(
       app.includes("via,") &&
       app.includes("submitQuery(text, { signal: request.signal })"),
     "related rows and Topic list rows are tapped, ask bars typed; the request is still the text alone",
+  );
+}
+
+console.log("\nTest 60: Topic list styling (T1)");
+{
+  const css = readFileSync(new URL("../App.css", import.meta.url), "utf8");
+  const rule = (selector: string) => {
+    const start = css.indexOf(`\n${selector} {`);
+    return start === -1 ? "" : css.slice(start, css.indexOf("}", start));
+  };
+  const topicCss = css.slice(
+    css.indexOf("/* Topic list (T1)"),
+    css.indexOf("/* Shared with the answer screen"),
+  );
+  assert(
+    rule(".topic-list").includes(
+      "border: 1.5px solid var(--home-card-edge);",
+    ) && rule(".topic-list").includes("background: var(--color-card);"),
+    "the question boxes: white, with Home's 1.5px #8F82B3 edge",
+  );
+  assert(
+    rule(".topic-row").includes("font-size: 13.5px;") &&
+      rule(".topic-row").includes("font-weight: var(--weight-semibold);") &&
+      rule(".topic-row").includes("min-height: 52px;") &&
+      !rule(".topic-row").includes("nowrap"),
+    "rows: 13.5px semibold, wrapping allowed, at least 44px tall",
+  );
+  assert(
+    rule(".topic-row-go").includes("border-radius: 50%;") &&
+      rule(".topic-row-go").includes("background: var(--home-icon-tile);"),
+    "a pink round chevron on each row",
+  );
+  assert(
+    rule(".topic-band-icon").includes("background: var(--mark-tile-light);") &&
+      rule(".topic-band-icon").includes("color: var(--home-icon);") &&
+      !/topic-(sti|periods|pregnancy|contraception)-text/.test(topicCss),
+    "the icon tile: white to pale pink, a purple icon (no red)",
+  );
+  assert(
+    /@media \(prefers-reduced-motion: no-preference\) \{\s*\.topic-flowers \{\s*animation: splash-flowers-in 600ms ease-out both;\s*\}\s*\}/.test(
+      topicCss,
+    ) && !/transition|infinite/.test(topicCss),
+    "the flowers fade in once, only without reduced motion; no other motion",
+  );
+  const pinned = rule(".topic-page > .topic-footer");
+  assert(
+    pinned.includes("position: fixed;") &&
+      pinned.includes("bottom: 0;") &&
+      pinned.includes("max(10px, env(safe-area-inset-bottom))") &&
+      rule(".app-shell--home:has(.topic-page)").includes(
+        "--home-footer-space: calc(172px + env(safe-area-inset-bottom));",
+      ) &&
+      rule("html:has(.topic-page)").includes("scroll-padding-bottom:"),
+    "the ask bar and helpline are pinned; the page keeps their height free",
+  );
+  assert(
+    !rule(".home-band.topic-band").includes("position") &&
+      !rule(".topic-back").includes("position"),
+    "Quick exit and the back pill scroll with the page",
+  );
+  const sizes = [...topicCss.matchAll(/font-size: ([\d.]+)px/g)].map((m) =>
+    Number(m[1]),
+  );
+  assert(Math.min(...sizes) >= 13, "no topic text under 13px");
+  assert(
+    rule(".topic-footer .ask-pill-bar").includes(
+      "border-color: var(--home-card-edge);",
+    ) &&
+      rule(".topic-footer .ask-pill-bar .btn-send:disabled").includes(
+        "background: var(--home-send-disabled-bg);",
+      ),
+    "the ask pill: Home's card edge, and a grey Send while it is disabled",
+  );
+  assert(
+    /@media \(max-width: 359px\) \{\s*\.home-wordmark \{\s*display: none;/.test(
+      css.replace(/\.home \{\s*--home-gutter: 16px;\s*\}\s*/, ""),
+    ),
+    "below 360px the shared top row hides the wordmark (the logo stays)",
   );
 }
 
