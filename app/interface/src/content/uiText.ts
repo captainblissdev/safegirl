@@ -143,7 +143,7 @@ export const ANONYMOUS_LINE = "Anonymous. We never ask for your name.";
 export const SPLASH_EXAMPLE_QUESTIONS: readonly string[] = [
   "What is a normal period?",
   "What changes happen during puberty?",
-  "How can I look after my body?",
+  "What can I do about period pain?",
 ];
 
 /**

@@ -812,7 +812,7 @@ console.log("\nTest 22: the splash is a full-bleed screen of its own");
   assert(
     chips.join("|") === SPLASH_EXAMPLE_QUESTIONS.join("|") &&
       chips.join("|") ===
-        "What is a normal period?|What changes happen during puberty?|How can I look after my body?",
+        "What is a normal period?|What changes happen during puberty?|What can I do about period pain?",
     "the three example questions, in order",
   );
   const lockAt = html.indexOf(escapeHtml("We don't store your questions."));

@@ -37,7 +37,7 @@ console.log("Test 1: the three example questions");
   const expected = [
     "What is a normal period?",
     "What changes happen during puberty?",
-    "How can I look after my body?",
+    "What can I do about period pain?",
   ];
   assert(
     JSON.stringify(SPLASH_EXAMPLE_QUESTIONS) === JSON.stringify(expected),
