@@ -831,6 +831,20 @@ console.log("\nTest 22: the splash is a full-bleed screen of its own");
       html.includes('<p id="splash-how" class="splash-how" hidden="">'),
     "Learn how toggles the explanation, hidden at first",
   );
+  const how = html.slice(
+    html.indexOf('<p id="splash-how"'),
+    html.indexOf("</p>", html.indexOf('<p id="splash-how"')),
+  );
+  assert(
+    how
+      .replace(/<[^>]+>/g, "")
+      .replace(/\s+/g, " ")
+      .trim() ===
+      escapeHtml(
+        "Your questions and answers stay in this tab's memory only. We don't save them on our server, and they are gone when you close or refresh the page. You never give your name.",
+      ),
+    "the Learn how text, word for word",
+  );
   assert(
     html.includes(
       '<button class="btn-splash" type="button">I understand, continue <svg',

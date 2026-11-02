@@ -250,9 +250,9 @@ export default function Splash({ onContinue, onExit, now }: Props) {
             </button>
           </p>
           <p id="splash-how" className="splash-how" hidden={!isHowOpen}>
-            Your questions and answers stay in this tab&apos;s memory only. They
-            are not saved on your phone or on our server, and they are gone when
-            you close or refresh the page. You never give your name.
+            Your questions and answers stay in this tab&apos;s memory only. We
+            don&apos;t save them on our server, and they are gone when you close
+            or refresh the page. You never give your name.
           </p>
         </div>
       </div>
