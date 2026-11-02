@@ -2,6 +2,8 @@
  * Interface text that tests check or that more than one component uses.
  */
 
+import { GBV_HELPLINE } from "../offline/helpContent";
+
 /**
  * Where the answers come from: the one place this line is written. Used
  * on the splash, in the Help sheet and on Home. "Most", because four of
@@ -131,3 +133,52 @@ export const GBV_HELP_SHEET_NOTE =
 
 /** On Home's footer card and at the foot of the Help sheet (step 3c). */
 export const ANONYMOUS_LINE = "Anonymous. We never ask for your name.";
+
+/**
+ * The splash's "What's on your mind today?" chips and the starter phrase
+ * each puts in the chat input when the user continues. The phrase is
+ * only a prefill: editable, never sent on its own, and kept in memory
+ * for this session only. No chip routes, scopes or tags a query.
+ */
+export const SPLASH_TOPIC_STARTERS: readonly {
+  readonly label: string;
+  readonly starter: string;
+}[] = [
+  { label: "Periods", starter: "I have a question about my period" },
+  { label: "My body", starter: "I have a question about my body" },
+  { label: "Feelings", starter: "I want to talk about my feelings" },
+  {
+    label: "Friends and boys",
+    starter: "I have a question about friends and boys",
+  },
+  { label: "Staying safe", starter: "I want to know how to stay safe" },
+];
+
+/**
+ * The splash greeting from the device clock (wording only): "morning"
+ * from 5 am to noon, "afternoon" until 5 pm, and "evening" otherwise,
+ * late night included, as there are only three words.
+ */
+export function greetingFor(now: Date): string {
+  const hour = now.getHours();
+  const part =
+    hour >= 5 && hour < 12
+      ? "morning"
+      : hour >= 12 && hour < 17
+        ? "afternoon"
+        : "evening";
+  return `Hey, good ${part}`;
+}
+
+/**
+ * The splash's helpline button, in three parts so "Call" and the number
+ * can be bold. The number is the helpline constant, never typed here.
+ */
+export const SPLASH_HELPLINE = {
+  lead: "In danger?",
+  call: `Call ${GBV_HELPLINE}`,
+  tail: "· free, 24 hours",
+} as const;
+
+/** The same button as one line, for its accessible name and the tests. */
+export const SPLASH_HELPLINE_TEXT = `${SPLASH_HELPLINE.lead} ${SPLASH_HELPLINE.call} ${SPLASH_HELPLINE.tail}`;

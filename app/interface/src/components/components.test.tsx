@@ -58,7 +58,14 @@ import AnswerView from "./AnswerView";
 import { splitReply } from "../replySplit";
 import AskBar from "./AskBar";
 import { announcementFor, replyViewOf } from "../replyView";
-import { PLACEHOLDER_EXAMPLES, SOURCES_LINE } from "../content/uiText";
+import {
+  greetingFor,
+  PLACEHOLDER_EXAMPLES,
+  SOURCES_LINE,
+  SPLASH_HELPLINE,
+  SPLASH_HELPLINE_TEXT,
+  SPLASH_TOPIC_STARTERS,
+} from "../content/uiText";
 import AppHeader from "./AppHeader";
 import AppShell from "./AppShell";
 import ChatInterface from "./ChatInterface";
@@ -218,10 +225,8 @@ console.log("\nTest 6: the privacy wording on the disclaimer and session end");
   );
 
   assert(
-    disclaimer.includes(
-      escapeHtml("We don't save your questions or your answers."),
-    ),
-    "the splash (the disclaimer) says questions and answers are not saved",
+    disclaimer.includes(escapeHtml("We don't store your questions.")),
+    "the splash (the disclaimer) says questions are not stored",
   );
   assert(
     !disclaimer.includes("keep anything"),
@@ -573,6 +578,31 @@ console.log(
       );
       continue;
     }
+    // The splash has its own bordered helpline button instead of the
+    // footer line (splash refresh), built from the same constant.
+    if (name === "splash") {
+      assert(
+        !html.includes('class="danger-line"') &&
+          html.includes(
+            `<a class="splash-helpline" ${href} aria-label="${escapeHtml(telName(GBV_HELPLINE, SPLASH_HELPLINE_TEXT))}">`,
+          ) &&
+          html.includes(
+            `<span>In danger?</span> <strong>Call ${GBV_HELPLINE}</strong> <span>${SPLASH_HELPLINE.tail}</span></a>`,
+          ) &&
+          SPLASH_HELPLINE_TEXT === `${line}${GBV_HELPLINE} · free, 24 hours`,
+        "splash: the helpline button, built from GBV_HELPLINE, no footer line",
+      );
+      const pillAt = html.indexOf(
+        '<button class="btn-exit-pill" type="button">',
+      );
+      assert(
+        pillAt > -1 &&
+          html.indexOf("Quick exit</button>") > pillAt &&
+          pillAt < html.indexOf('class="splash-helpline"'),
+        "splash: the Quick exit pill, before the content",
+      );
+      continue;
+    }
     assert(
       html.split('class="danger-line"').length === 2,
       `${name}: the footer line appears once`,
@@ -686,56 +716,97 @@ console.log(
 
 console.log("\nTest 22: the splash is a full-bleed screen of its own");
 {
+  const at = new Date(2026, 10, 2, 19, 30);
   const html = renderToStaticMarkup(
-    <Splash onContinue={() => undefined} onExit={() => undefined} />,
+    <Splash onContinue={() => undefined} onExit={() => undefined} now={at} />,
   );
   assert(
     html.startsWith('<main class="splash-screen surface-dark"'),
     "a full-bleed dark screen (white focus ring)",
   );
   assert(html.split("<h1").length === 2, "exactly one h1");
-  assert(/<h1[^>]*>SafeGirl<\/h1>/.test(html), "the wordmark is the h1");
+  assert(
+    html.includes(
+      '<h1 id="splash-title" class="splash-headline">Honest answers. No judgment.</h1>',
+    ),
+    "the headline is the h1 and labels the screen",
+  );
   assert(!html.includes("<header"), "no app header on the splash");
   assert(!html.includes("btn-help"), "no Help button on the splash");
+  const topbar = html.slice(
+    html.indexOf('<div class="splash-topbar">'),
+    html.indexOf('<div class="splash-head">'),
+  );
   assert(
-    html.includes('<button class="btn-exit-pill" type="button">Exit</button>'),
-    "a compact Exit pill",
+    topbar.startsWith(
+      '<div class="splash-topbar"><button class="btn-exit-pill" type="button"><svg',
+    ) &&
+      topbar.endsWith(" Quick exit</button></div>") &&
+      topbar.split("<button").length === 2,
+    "the top row holds only the Quick exit pill, with its close icon",
   );
   assert(
     html.includes('<div class="splash-decor" aria-hidden="true">') &&
-      html.indexOf("splash-decor") < html.indexOf("btn-exit-pill"),
-    "the decoration is hidden from screen readers, and the pill is above it",
+      html.indexOf("splash-decor") < html.indexOf("btn-exit-pill") &&
+      !html.includes("splash-sparkle"),
+    "the decoration is hidden from screen readers, below the pill; no sparkles",
   );
   assert(
     html.includes('class="mark mark--splash"') &&
-      html.includes('style="width:84px;height:84px"'),
-    "the shared shield-and-heart mark, 84 by 84",
+      html.includes('<p class="splash-wordmark">SafeGirl</p>'),
+    "the shield-and-heart tile and SafeGirl",
   );
   assert(
-    html.includes("Honest answers about your body, health and growing up."),
-    "the tagline",
+    html.includes('<p class="splash-greeting">Hey, good evening</p>'),
+    "the greeting from the clock",
   );
   for (const promise of [
-    "<strong>Anonymous.</strong> We never ask for your name.",
-    `<strong>Real guidance.</strong> ${SOURCES_LINE}`,
-    `<strong>Not a doctor.</strong> ${escapeHtml("This can't diagnose you.")} A nurse or clinic can.`,
+    "<strong>Anonymous.</strong> No name asked.",
+    "<strong>Guided by</strong> MoH and WHO.",
+    "<strong>Not a doctor.</strong> A nurse can help.",
   ]) {
-    assert(html.includes(promise), `promise: ${promise.slice(0, 40)}…`);
+    assert(html.includes(`<span>${promise}</span>`), `promise: ${promise}`);
   }
-  for (const icon of ["lock", "speech", "shield"]) {
-    assert(
-      html.includes(`promise-icon promise-icon--${icon}`),
-      `the ${icon} icon tile`,
-    );
-  }
-  const privacyAt = html.indexOf(
-    escapeHtml("We don't save your questions or your answers."),
-  );
-  const buttonAt = html.indexOf('<button class="btn-splash"');
-  const lineAt = html.indexOf('class="danger-line"');
   assert(
-    privacyAt > -1 && privacyAt < buttonAt && buttonAt < lineAt,
-    "privacy line, then the button, then the footer line",
+    html.split('class="splash-flowers').length === 3 &&
+      html
+        .split('class="splash-flowers')
+        .every((part, i) => i === 0 || part.includes('aria-hidden="true"')),
+    "two flower clusters, hidden from screen readers",
+  );
+  assert(
+    html.split('class="promise-icon"').length === 4,
+    "three promise icons (lock, document, info)",
+  );
+  assert(
+    html.includes(escapeHtml("What's on your mind today?")) &&
+      html.includes("Tap one to start, or skip."),
+    "the question and its sub-line",
+  );
+  const chips = [...html.matchAll(/class="splash-chip"[^>]*>([^<]+)</g)].map(
+    (m) => m[1],
+  );
+  assert(
+    chips.join("|") === SPLASH_TOPIC_STARTERS.map((c) => c.label).join("|") &&
+      chips.join("|") ===
+        "Periods|My body|Feelings|Friends and boys|Staying safe",
+    "the five chips, in order",
+  );
+  const lockAt = html.indexOf(escapeHtml("We don't store your questions."));
+  const learnAt = html.indexOf('class="splash-learn"');
+  const buttonAt = html.indexOf('<button class="btn-splash"');
+  const helplineAt = html.indexOf('class="splash-helpline"');
+  assert(
+    lockAt > -1 &&
+      lockAt < learnAt &&
+      learnAt < buttonAt &&
+      buttonAt < helplineAt,
+    "the lock line and Learn how, then the button, then the helpline",
+  );
+  assert(
+    html.includes('aria-expanded="false" aria-controls="splash-how"') &&
+      html.includes('<p id="splash-how" class="splash-how" hidden="">'),
+    "Learn how toggles the explanation, hidden at first",
   );
   assert(
     html.includes(
@@ -743,6 +814,21 @@ console.log("\nTest 22: the splash is a full-bleed screen of its own");
     ),
     '"I understand, continue" with an arrow',
   );
+  for (const [hour, word] of [
+    [4, "evening"],
+    [5, "morning"],
+    [11, "morning"],
+    [12, "afternoon"],
+    [16, "afternoon"],
+    [17, "evening"],
+    [23, "evening"],
+    [2, "evening"],
+  ] as const) {
+    assert(
+      greetingFor(new Date(2026, 10, 2, hour)) === `Hey, good ${word}`,
+      `${hour}:00 is ${word}`,
+    );
+  }
 }
 
 console.log("\nTest 23: the Help sheet");
@@ -914,15 +1000,29 @@ console.log("\nTest 26: one sources line, used everywhere it appears");
   const sheet = renderToStaticMarkup(
     <HelpSheet onClose={() => undefined} onTopic={() => undefined} />,
   );
-  assert(splash.includes(SOURCES_LINE), "on the splash");
+  // The splash refresh replaced the splash's sources promise with the
+  // short "Guided by MoH and WHO."; Help and Home keep the full line.
+  assert(
+    splash.includes("<span><strong>Guided by</strong> MoH and WHO.</span>") &&
+      !splash.includes(SOURCES_LINE),
+    "the splash's short promise",
+  );
   assert(sheet.includes(SOURCES_LINE), "in the Help sheet");
-  for (const file of ["./Splash.tsx", "./HelpSheet.tsx"]) {
-    const source = readFileSync(new URL(file, import.meta.url), "utf8");
-    assert(
-      source.includes("SOURCES_LINE") && !source.includes("Ministry of"),
-      `${file} uses the constant and does not retype the line`,
-    );
-  }
+  const sheetSource = readFileSync(
+    new URL("./HelpSheet.tsx", import.meta.url),
+    "utf8",
+  );
+  assert(
+    sheetSource.includes("SOURCES_LINE") &&
+      !sheetSource.includes("Ministry of"),
+    "./HelpSheet.tsx uses the constant and does not retype the line",
+  );
+  assert(
+    !readFileSync(new URL("./Splash.tsx", import.meta.url), "utf8").includes(
+      "Ministry of",
+    ),
+    "./Splash.tsx does not retype the long line",
+  );
   assert(
     !(splash + sheet).includes("Answers come from Kenyan"),
     'the old "Answers come from…" wording is gone',
