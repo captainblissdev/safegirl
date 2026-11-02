@@ -1,12 +1,17 @@
 import { readFileSync } from "node:fs";
-import * as React from "react";
-import type { ReactElement, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { clearAndLeave } from "./clearAndLeave";
 import BandTopbar from "./components/BandTopbar";
 import Home from "./components/Home";
 import ChatInterface from "./components/ChatInterface";
 import { HOME_EXAMPLE_QUESTIONS } from "./content/uiText";
+import {
+  byClass,
+  elements,
+  harness as hooksHarness,
+  recordingStorage,
+  textOf,
+} from "./testHarness";
 import {
   continueFromSplash,
   SPLASH_SEEN_KEY,
@@ -39,115 +44,9 @@ const read = (path: string) =>
   readFileSync(new URL(path, import.meta.url), "utf8");
 
 type Props = Parameters<typeof Home>[0];
-type AnyElement = ReactElement<
-  Record<string, unknown> & { children?: ReactNode }
->;
 
-/**
- * Calls Home as a function with stand-in hooks. State and refs persist
- * across renders of the same harness; effects are not run (as on the
- * server). Returns the element tree of each render.
- */
-function harness(props: Props) {
-  const internals = (
-    React as unknown as {
-      __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: {
-        ReactCurrentDispatcher: { current: unknown };
-      };
-    }
-  ).__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
-  const slots: unknown[] = [];
-  let cursor = 0;
-  const dispatcher = {
-    useState: (initial: unknown) => {
-      const i = cursor++;
-      if (!(i in slots)) {
-        slots[i] =
-          typeof initial === "function"
-            ? (initial as () => unknown)()
-            : initial;
-      }
-      const set = (next: unknown) => {
-        slots[i] =
-          typeof next === "function"
-            ? (next as (current: unknown) => unknown)(slots[i])
-            : next;
-      };
-      return [slots[i], set];
-    },
-    useRef: (initial: unknown) => {
-      const i = cursor++;
-      if (!(i in slots)) slots[i] = { current: initial };
-      return slots[i];
-    },
-    useEffect: () => undefined,
-  };
-  return (next: Partial<Props> = {}) => {
-    cursor = 0;
-    const saved = internals.ReactCurrentDispatcher.current;
-    internals.ReactCurrentDispatcher.current = dispatcher;
-    try {
-      return Home({ ...props, ...next }) as AnyElement;
-    } finally {
-      internals.ReactCurrentDispatcher.current = saved;
-    }
-  };
-}
-
-/** Every element in the tree (Home's own markup; children not rendered). */
-function elements(node: ReactNode): AnyElement[] {
-  if (Array.isArray(node)) return node.flatMap(elements);
-  if (!React.isValidElement(node)) return [];
-  const el = node as AnyElement;
-  return [el, ...elements(el.props.children)];
-}
-
-const byClass = (tree: AnyElement, name: string) =>
-  elements(tree).filter((el) => el.props.className === name);
-const textOf = (node: ReactNode): string =>
-  Array.isArray(node)
-    ? node.map(textOf).join("")
-    : typeof node === "string"
-      ? node
-      : React.isValidElement(node)
-        ? textOf((node as AnyElement).props.children)
-        : "";
-
-/** Recording fakes for every browser store, installed for fn. */
-function recordingStorage(fn: () => void): string[] {
-  const writes: string[] = [];
-  const store = (name: string) => ({
-    getItem: () => null,
-    setItem: (key: string) => writes.push(`${name}.setItem(${key})`),
-    removeItem: (key: string) => writes.push(`${name}.removeItem(${key})`),
-    clear: () => writes.push(`${name}.clear()`),
-    key: () => null,
-    length: 0,
-  });
-  const g = globalThis as Record<string, unknown>;
-  const keys = ["localStorage", "sessionStorage", "indexedDB", "document"];
-  const saved = keys.map((k) => [k, g[k]] as const);
-  g.localStorage = store("localStorage");
-  g.sessionStorage = store("sessionStorage");
-  g.indexedDB = {
-    open: (name: string) => writes.push(`indexedDB.open(${name})`),
-    deleteDatabase: (name: string) => writes.push(`indexedDB.delete(${name})`),
-  };
-  g.document = {
-    get cookie() {
-      return "";
-    },
-    set cookie(value: string) {
-      writes.push(`document.cookie=${value}`);
-    },
-  };
-  try {
-    fn();
-  } finally {
-    for (const [k, v] of saved) g[k] = v;
-  }
-  return writes;
-}
+/** Home called with stand-in hooks (see testHarness.ts). */
+const harness = (props: Props) => hooksHarness(Home, props);
 
 /** Home's props, with a log of every callback it makes. */
 function homeProps(log: string[], draft = ""): Props {
