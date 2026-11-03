@@ -227,3 +227,12 @@ export const HOME_SUPPORT_SUB = "Someone to talk to, and where to get help";
 /** Home (refresh): the footer's second action. */
 export const HOME_CLEAR_LEAVE = "Clear and leave";
 export const HOME_CLEAR_LEAVE_SUB = "Deletes this chat from this phone";
+
+/** Referral screen (RF1): the emergency card and the helplines. */
+export const REFERRAL_DANGER_TITLE = "In immediate danger?";
+export const REFERRAL_TALK_TITLE = "Someone to talk to";
+
+/** Referral screen (RF1): opens the messages app (trustedMessage.ts). */
+export const TRUSTED_MESSAGE_LABEL = "Message someone I trust";
+export const TRUSTED_MESSAGE_NOTE =
+  'Opens your messages with "Can you call me?"';

@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import type { Topic } from "../content/topics";
+import { useFocusOnArrival } from "../focusOnArrival";
 import { splitReply } from "../replySplit";
 import {
   BACK_TO_QUESTIONS,
@@ -38,15 +38,6 @@ import TopicChoices from "./TopicChoices";
  * never on the held, help or referral screens.
  */
 
-/** Focus the h1 when a reply arrives. */
-function useFocusOnArrival(key: string) {
-  const ref = useRef<HTMLHeadingElement>(null);
-  useEffect(() => {
-    ref.current?.focus();
-  }, [key]);
-  return ref;
-}
-
 /** "You asked" and her question, as plain text (React escapes it). */
 function YouAsked({ text }: { text: string }) {
   return (
@@ -57,7 +48,7 @@ function YouAsked({ text }: { text: string }) {
   );
 }
 
-function Pill({ icon, label }: { icon: ReactNode; label: string }) {
+export function Pill({ icon, label }: { icon: ReactNode; label: string }) {
   return (
     <p className="reply-pill">
       {icon} {label}

@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent as ReactKeyboardEvent } from "react";
-import { contactNote, telHref, telName } from "../content/telHref";
 import {
   ANONYMOUS_LINE,
-  GBV_HELP_SHEET_NOTE,
   HELP_CALLS_NOTE,
   HELP_LEAVE_TEXT,
   HELP_LEAVE_TITLE,
@@ -12,13 +10,9 @@ import {
   SOURCES_LINE,
 } from "../content/uiText";
 import { trapTab } from "../focusTrap";
-import {
-  CHILDLINE_KENYA,
-  EMERGENCY_NUMBERS,
-  GBV_HELPLINE,
-} from "../offline/helpContent";
 import Flowers from "./Flowers";
-import { ChevronRightIcon, CloseIcon, PhoneIcon } from "./Icons";
+import { DangerCalls, HelplineCards } from "./HelpCalls";
+import { ChevronRightIcon, CloseIcon } from "./Icons";
 
 /**
  * The Help sheet ("Get help"), opened from the header's Help button, the
@@ -31,11 +25,8 @@ import { ChevronRightIcon, CloseIcon, PhoneIcon } from "./Icons";
  * moves to the close button; Tab stays inside it; one Escape or the close
  * button closes it, and App returns focus to the control that opened it.
  *
- * Every number and tap-to-call link comes from the helpline constants;
- * none is typed here. The GBV note's facts rest on Cindy's phone check,
- * recorded in docs/decision-log.md ("Quick exit"). The Childline note is
- * the SUPPORT_SECTIONS constant, word for word (the Childline wording
- * decision in docs/decision-log.md).
+ * The call buttons and helpline cards are shared with the referral
+ * screen (HelpCalls.tsx); every number comes from the helpline constants.
  */
 
 interface Props {
@@ -63,11 +54,6 @@ export default function HelpSheet({ onClose, onExit }: Props) {
       trapTab(event.nativeEvent, sheetRef.current);
     }
   };
-
-  const lines = [
-    { number: GBV_HELPLINE, note: GBV_HELP_SHEET_NOTE },
-    { number: CHILDLINE_KENYA, note: contactNote(CHILDLINE_KENYA) },
-  ];
 
   return (
     <div
@@ -104,45 +90,14 @@ export default function HelpSheet({ onClose, onExit }: Props) {
           <h2 id="help-danger-title" className="help-section-title">
             In immediate danger?
           </h2>
-          <div className="help-danger-calls">
-            {EMERGENCY_NUMBERS.map((number) => (
-              <a
-                key={number}
-                className="help-danger-call"
-                href={telHref(number)}
-                aria-label={telName(number, `Call ${number}`)}
-              >
-                <PhoneIcon size={20} />
-                <span>Call {number}</span>
-              </a>
-            ))}
-          </div>
+          <DangerCalls />
         </section>
 
         <section className="help-talk" aria-labelledby="help-talk-title">
           <h2 id="help-talk-title" className="help-section-title">
             Need to talk to someone?
           </h2>
-          <ul className="help-lines">
-            {lines.map(({ number, note }) => (
-              <li key={number} className="help-line">
-                <span className="help-line-icon" aria-hidden="true">
-                  <PhoneIcon size={20} />
-                </span>
-                <span className="help-line-text">
-                  <span className="help-line-number">{number}</span>
-                  <span className="help-line-note">{note}</span>
-                </span>
-                <a
-                  className="help-line-call"
-                  href={telHref(number)}
-                  aria-label={telName(number, `Call ${number}`)}
-                >
-                  Call
-                </a>
-              </li>
-            ))}
-          </ul>
+          <HelplineCards />
           <p className="help-calls-note">{HELP_CALLS_NOTE}</p>
         </section>
 

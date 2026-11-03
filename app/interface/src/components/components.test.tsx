@@ -356,7 +356,12 @@ console.log("\nTest 11: the line is shown under answers only when enabled");
 console.log("\nTest 12: the referral screen never shows details");
 {
   const html = renderToStaticMarkup(
-    <ReferralScreen message="referral" onContinueChat={() => undefined} />,
+    <ReferralScreen
+      message="referral"
+      onContinueChat={() => undefined}
+      onExit={() => undefined}
+      onClearAndLeave={() => undefined}
+    />,
   );
 
   assert(!html.includes("classifier:"), "no details line");
@@ -566,7 +571,12 @@ console.log(
     [
       "referral",
       <AppShell onExit={noop} help={closedHelp} calm footerInContent>
-        <ReferralScreen message="referral" onContinueChat={noop} />
+        <ReferralScreen
+          message="referral"
+          onContinueChat={noop}
+          onExit={noop}
+          onClearAndLeave={noop}
+        />
       </AppShell>,
     ],
     [
@@ -587,7 +597,11 @@ console.log(
     if (withCalls.includes(name)) {
       assert(
         !html.includes('class="danger-line"') &&
-          html.includes(`class="call-button call-button--main" ${href}`),
+          html.includes(
+            name === "referral"
+              ? `class="help-line-call" ${href}`
+              : `class="call-button call-button--main" ${href}`,
+          ),
         `${name}: no footer line; the GBV call button is on the screen`,
       );
       assert(
@@ -1292,10 +1306,10 @@ console.log("\nTest 28: Home");
   );
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
-    /headerless=\{\s*isHelpOpen \|\|\s*\(onChatScreen && turns\.length === 0\) \|\|\s*screen === "topic"\s*\}/.test(
+    /headerless=\{\s*isHelpOpen \|\|\s*\(onChatScreen && turns\.length === 0\) \|\|\s*screen === "topic" \|\|\s*screen === "referral"\s*\}/.test(
       app,
     ),
-    "App drops its header on Home, the Topic list and while the Help sheet (with its own Quick exit) is open",
+    "App drops its header on Home, the Topic list, the referral (RF1) and while the Help sheet (with its own Quick exit) is open",
   );
 }
 
@@ -1431,8 +1445,13 @@ console.log(
   );
   assert(
     renderToStaticMarkup(
-      <ReferralScreen message="m" onContinueChat={() => undefined} />,
-    ).includes('<h1 tabindex="-1" class="support-title">m</h1>'),
+      <ReferralScreen
+        message="m"
+        onContinueChat={() => undefined}
+        onExit={() => undefined}
+        onClearAndLeave={() => undefined}
+      />,
+    ).includes('<h1 tabindex="-1" class="referral-title">m</h1>'),
     "the referral heading (its message) can take focus when it appears",
   );
 }
@@ -1765,7 +1784,12 @@ const KINDS: [string, string, Partial<ChatTurn>][] = [
 ];
 const referral = (message: string) =>
   renderToStaticMarkup(
-    <ReferralScreen message={message} onContinueChat={() => undefined} />,
+    <ReferralScreen
+      message={message}
+      onContinueChat={() => undefined}
+      onExit={() => undefined}
+      onClearAndLeave={() => undefined}
+    />,
   );
 
 console.log("\nTest 37: each reply kind has one h1, its reply text, focusable");
@@ -1792,7 +1816,11 @@ console.log("\nTest 37: each reply kind has one h1, its reply text, focusable");
     // rest under it (step 7c); clarify and no answer show it whole.
     const split = /held|help|referral/.test(name);
     const { first, rest } = splitReply(text);
-    const cls = /help|referral/.test(name) ? "support-title" : "reply-title";
+    const cls = name.includes("referral")
+      ? "referral-title"
+      : name.includes("help")
+        ? "support-title"
+        : "reply-title";
     assert(
       split
         ? html.includes(
@@ -1814,9 +1842,13 @@ console.log("\nTest 37: each reply kind has one h1, its reply text, focusable");
     new URL("./ReplyViews.tsx", import.meta.url),
     "utf8",
   );
+  const hook = readFileSync(
+    new URL("../focusOnArrival.ts", import.meta.url),
+    "utf8",
+  );
   assert(
     /useEffect\(\(\) => \{\s*ref\.current\?\.focus\(\);\s*\}, \[key\]\);/.test(
-      views,
+      hook,
     ) && views.split("useFocusOnArrival(id)").length === 6,
     "focus moves to the h1 on arrival, on all five reply screens",
   );
@@ -1926,7 +1958,7 @@ console.log(
 }
 
 console.log(
-  "\nTest 39: call buttons from the constants on held, help and referral",
+  "\nTest 39: call buttons from the constants on held and help (referral: referralScreen.test.tsx)",
 );
 {
   const contacts = SUPPORT_SECTIONS.flatMap((section) => section.contacts);
@@ -1940,7 +1972,6 @@ console.log(
     ["held A", renderReply(HELD_TOPIC_MESSAGES.A, KINDS[1][2])],
     ["held C", renderReply(HELD_TOPIC_MESSAGES.C, KINDS[3][2])],
     ["help", renderReply(SIGNPOSTING_MESSAGE, KINDS[4][2])],
-    ["referral", referral(ABUSE_REFERRAL_MESSAGE)],
   ];
   for (const [name, html] of withCalls) {
     const mainAt = html.indexOf(button("main", GBV_HELPLINE));
@@ -2089,6 +2120,8 @@ console.log("\nTest 41: Exit, the footer line and the ask bar on every reply");
           <ReferralScreen
             message={ABUSE_REFERRAL_MESSAGE}
             onContinueChat={noop}
+            onExit={noop}
+            onClearAndLeave={noop}
           />
         </AppShell>,
       ),
@@ -2397,7 +2430,12 @@ console.log("\nTest 46: every phone link's name says which service it calls");
     renderToStaticMarkup(<HelpSheet onClose={noop} onExit={noop} />),
     renderToStaticMarkup(<SupportContent />),
     renderToStaticMarkup(
-      <ReferralScreen message={ABUSE_REFERRAL_MESSAGE} onContinueChat={noop} />,
+      <ReferralScreen
+        message={ABUSE_REFERRAL_MESSAGE}
+        onContinueChat={noop}
+        onExit={noop}
+        onClearAndLeave={noop}
+      />,
     ),
     renderChat([]),
   ];
@@ -2893,7 +2931,6 @@ console.log("\nTest 51: reply screens aligned with the design (step 7c)");
     renderReply(SIGNPOSTING_MESSAGE, { outcome: "signposting", kind: "help" }),
     "help",
   );
-  support(referral(ABUSE_REFERRAL_MESSAGE), "referral");
   const header = (supportScreen: boolean) =>
     renderToStaticMarkup(
       <AppHeader
@@ -3006,11 +3043,6 @@ console.log("\nTest 52: clarify and help/referral boards (step 7d)");
           kind: "help",
         }),
     ],
-    [
-      "referral",
-      ABUSE_REFERRAL_MESSAGE,
-      () => referral(ABUSE_REFERRAL_MESSAGE),
-    ],
   ] as [string, string, () => string][]) {
     const html = render();
     const { first, rest } = splitReply(text);
@@ -3046,7 +3078,7 @@ console.log("\nTest 52: clarify and help/referral boards (step 7d)");
       readFileSync(
         new URL("./ReferralScreen.tsx", import.meta.url),
         "utf8",
-      ).includes("onBack={onContinueChat}"),
+      ).includes("onClick={onContinueChat}"),
     '"Back to questions" keeps the old Continue chat behaviour',
   );
 }

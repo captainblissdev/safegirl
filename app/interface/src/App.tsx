@@ -387,7 +387,10 @@ export default function App() {
       }}
       calm={screen === "referral"}
       headerless={
-        isHelpOpen || (onChatScreen && turns.length === 0) || screen === "topic"
+        isHelpOpen ||
+        (onChatScreen && turns.length === 0) ||
+        screen === "topic" ||
+        screen === "referral"
       }
       support={
         screen === "referral" ||
@@ -472,6 +475,8 @@ export default function App() {
         <ReferralScreen
           message={referralMessage}
           onContinueChat={() => setScreen("chat")}
+          onExit={handleExit}
+          onClearAndLeave={handleClearAndLeave}
         />
       )}
 

@@ -25,8 +25,9 @@ interface Props {
   support?: boolean;
   /**
    * No app header: on Home and the Topic list (their band has the logo,
-   * "Get help" and Quick exit), and while the Help sheet is open (its
-   * band has Quick exit and the close button).
+   * "Get help" and Quick exit), on the referral (its band has the logo
+   * and Quick exit), and while the Help sheet is open (its band has
+   * Quick exit and the close button).
    */
   headerless?: boolean;
   children: ReactNode;
