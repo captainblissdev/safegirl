@@ -3154,6 +3154,45 @@ html:has(.help-sheet) {
 }
 
 /*
+ * Limited-mode reply (OFF-B): the reply text in a card with the answer
+ * card's 2px edge, under the limited-mode notice as a calm note. Nothing
+ * of a real answer: no "Answer" pill, source line, related questions or
+ * matched-question heading (the plain view has none). Only a reply with
+ * the notice changes; other plain replies keep their bubble.
+ */
+.bot-turn:has(.limited-notice) {
+  width: 100%;
+  max-width: 560px;
+  gap: 10px;
+}
+
+.bot-turn .limited-notice {
+  border: 0;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: var(--answer-note-bg);
+  color: var(--color-plum);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+  line-height: 1.45;
+}
+
+.bot-turn:has(.limited-notice) .bot-bubble {
+  border: 2px solid var(--home-card-edge);
+  border-radius: 22px;
+  padding: 18px 16px;
+  background: var(--color-card);
+  box-shadow: var(--home-card-shadow);
+}
+
+.bot-turn:has(.limited-notice) .plain-reply {
+  color: var(--color-ink);
+  font-size: 16px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.55;
+}
+
+/*
  * Answer screen (A1): Home's 2px card edge on the closest question,
  * the answer card and the related questions; the source in full under
  * its own small label, then the disclaimer as a calm note, inside the
