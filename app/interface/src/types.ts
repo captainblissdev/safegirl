@@ -114,6 +114,9 @@ export interface ChatTurn {
   // How the question was asked (interface state only, never sent): typed
   // in an ask bar, or tapped on a Topic list or related-question row.
   via?: AnswerVia;
+  // On held-topic replies, the group from the response, as sent: group C
+  // shows its last sentence as a callout (display only).
+  heldTopicGroup?: "A" | "B" | "C";
 }
 
 /** How a question reached the pipeline: typed, or a tapped question row. */

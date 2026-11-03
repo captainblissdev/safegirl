@@ -1,20 +1,26 @@
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import type { Topic } from "../content/topics";
 import { useFocusOnArrival } from "../focusOnArrival";
-import { splitReply } from "../replySplit";
+import { splitLastSentence, splitReply } from "../replySplit";
 import {
   BACK_TO_QUESTIONS,
   CALL_CARD_HEADING,
   CLARIFY_FALLBACK,
   CLARIFY_MORE_WORDS,
   CLARIFY_PICK_LABEL,
+  HELD_ASK_DIFFERENT,
+  HELD_WONDER_QUESTIONS,
+  HELD_WONDER_TITLE,
   NO_ANSWER_RETRY,
   PERSON_MESSAGE,
   QUICK_EXIT_HINT,
   REPLY_PILLS,
 } from "../content/uiText";
+import BandTopbar from "./BandTopbar";
 import CallButtons, { EmergencyButtons, EmergencyLine } from "./CallButtons";
 import DangerLine from "./DangerLine";
+import { HelplineCards } from "./HelpCalls";
+import HelplineButton from "./HelplineButton";
 import {
   HeartIcon,
   HeroSparkle,
@@ -101,35 +107,90 @@ export function ClarifyReply({
   );
 }
 
+/**
+ * The held-topic reply (H2-B), on Home's system: the band (logo, "Get
+ * help", Quick exit, then the "Talk to a nurse" pill and the reply's
+ * first sentence as the h1); the rest of the reply. Group C shows its
+ * last sentence (heavy bleeding or severe pain), word for word, as a
+ * callout and no call card; groups A and B, whose text names the GBV
+ * helpline and Childline, keep the call card with the Help sheet's cards.
+ * Then two related
+ * questions (a tap fills the ask bar and sends nothing), "Ask a different
+ * question" (Home), and the ask bar and the helpline, pinned. No source
+ * badge and no entry id.
+ */
 export function HeldReply({
   id,
   text,
+  group,
   askBar,
   onAskDifferent,
-}: ReplyProps & { onAskDifferent: () => void }) {
+  onFillAsk,
+  band,
+}: ReplyProps & {
+  /** The held-topic group, as sent. */
+  group?: "A" | "B" | "C";
+  onAskDifferent: () => void;
+  /** Put a related question in the ask bar (it is not sent). */
+  onFillAsk: (question: string) => void;
+  /** The band's "Get help" and Quick exit (BandTopbar). */
+  band: Omit<ComponentProps<typeof BandTopbar>, "onOpenHelp"> & {
+    onOpenHelp: () => void;
+  };
+}) {
   const headingRef = useFocusOnArrival(id);
   const { first, rest } = splitReply(text);
+  // Group C: the last sentence as a callout, if it splits off cleanly.
+  const split = group === "C" && rest !== null ? splitLastSentence(rest) : null;
+  const body = split ? split.head : rest;
   return (
-    <main className="screen chat-screen reply-screen">
-      <section className="reply-card reply-card--held">
-        <Pill icon={<InfoIcon size={16} />} label={REPLY_PILLS.held} />
-        <h1 ref={headingRef} tabIndex={-1} className="reply-title">
-          {first}
-        </h1>
-        {rest !== null && <p className="reply-body">{rest}</p>}
+    <main className="topic-page held-page">
+      <section className="home-band held-band surface-dark">
+        <BandTopbar {...band} />
+        <div className="held-hero">
+          <Pill icon={<InfoIcon size={16} />} label={REPLY_PILLS.held} />
+          <h1 ref={headingRef} tabIndex={-1} className="held-title">
+            {first}
+          </h1>
+        </div>
       </section>
-      {/* The call buttons, in their own card. No footer line here: the
-          card carries the GBV call button. */}
-      <section className="call-card" aria-labelledby="call-card-title">
-        <h2 id="call-card-title" className="call-card-title">
-          {CALL_CARD_HEADING}
+      {body !== null && <p className="held-text">{body}</p>}
+      {split ? (
+        <p className="held-callout">{split.last}</p>
+      ) : (
+        group !== "C" && (
+          <section className="held-calls" aria-labelledby="call-card-title">
+            <h2 id="call-card-title" className="help-section-title">
+              {CALL_CARD_HEADING}
+            </h2>
+            <HelplineCards />
+          </section>
+        )
+      )}
+      <section className="held-wonder" aria-labelledby="held-wonder-title">
+        <h2 id="held-wonder-title" className="help-section-title">
+          {HELD_WONDER_TITLE}
         </h2>
-        <CallButtons surface="held" />
+        <div className="home-chips">
+          {HELD_WONDER_QUESTIONS.map((question) => (
+            <button
+              key={question}
+              className="home-chip"
+              type="button"
+              onClick={() => onFillAsk(question)}
+            >
+              {question}
+            </button>
+          ))}
+        </div>
       </section>
-      <button className="reply-link" type="button" onClick={onAskDifferent}>
-        Ask a different question
+      <button className="held-different" type="button" onClick={onAskDifferent}>
+        {HELD_ASK_DIFFERENT}
       </button>
-      <div className="screen-bottom">{askBar}</div>
+      <footer className="topic-footer">
+        {askBar}
+        <HelplineButton className="home-helpline" />
+      </footer>
     </main>
   );
 }

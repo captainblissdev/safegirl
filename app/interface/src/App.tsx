@@ -146,6 +146,7 @@ export default function App() {
           source: response.source,
           loopLimited: reachesLoopLimit(loopCountRef.current),
           via,
+          heldTopicGroup: response.heldTopicGroup,
         };
 
         setTurns((prev) => [...prev, botTurn]);
@@ -390,7 +391,8 @@ export default function App() {
         isHelpOpen ||
         (onChatScreen && turns.length === 0) ||
         screen === "topic" ||
-        screen === "referral"
+        screen === "referral" ||
+        (onChatScreen && !isLoading && replyViewOf(lastTurn) === "held")
       }
       support={
         screen === "referral" ||

@@ -228,6 +228,18 @@ export const HOME_SUPPORT_SUB = "Someone to talk to, and where to get help";
 export const HOME_CLEAR_LEAVE = "Clear and leave";
 export const HOME_CLEAR_LEAVE_SUB = "Deletes this chat from this phone";
 
+/** Held-topic reply (H2-B): two related questions; a tap fills the ask
+ *  bar and sends nothing. Each was checked to reach its own entry
+ *  (KB-G1, KB-G7) under the 21- and 62-entry configurations. */
+export const HELD_WONDER_TITLE = "You might also wonder";
+export const HELD_WONDER_QUESTIONS = [
+  "Will the clinic tell my parents?",
+  "What does a youth-friendly clinic offer?",
+] as const;
+
+/** Leaves the held-topic reply for Home. */
+export const HELD_ASK_DIFFERENT = "Ask a different question";
+
 /** Referral screen (RF1): the emergency card and the helplines. */
 export const REFERRAL_DANGER_TITLE = "In immediate danger?";
 export const REFERRAL_TALK_TITLE = "Someone to talk to";

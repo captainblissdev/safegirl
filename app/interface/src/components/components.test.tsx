@@ -17,7 +17,6 @@ import {
   TOPIC_LIST_HINT,
   TOPIC_LIST_PLACEHOLDER,
   BACK_TO_QUESTIONS,
-  CALL_CARD_HEADING,
   MATCH_HINT,
   MATCH_LABEL,
   ANONYMOUS_LINE,
@@ -57,7 +56,7 @@ import {
 } from "../content/kbQuestions";
 import TopicList from "./TopicList";
 import AnswerView from "./AnswerView";
-import { splitReply } from "../replySplit";
+import { splitLastSentence, splitReply } from "../replySplit";
 import Home from "./Home";
 import { announcementFor, replyViewOf } from "../replyView";
 import {
@@ -598,7 +597,7 @@ console.log(
       assert(
         !html.includes('class="danger-line"') &&
           html.includes(
-            name === "referral"
+            name === "referral" || name === "chat, held"
               ? `class="help-line-call" ${href}`
               : `class="call-button call-button--main" ${href}`,
           ),
@@ -1306,10 +1305,10 @@ console.log("\nTest 28: Home");
   );
   const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
   assert(
-    /headerless=\{\s*isHelpOpen \|\|\s*\(onChatScreen && turns\.length === 0\) \|\|\s*screen === "topic" \|\|\s*screen === "referral"\s*\}/.test(
+    /headerless=\{\s*isHelpOpen \|\|\s*\(onChatScreen && turns\.length === 0\) \|\|\s*screen === "topic" \|\|\s*screen === "referral" \|\|\s*\(onChatScreen && !isLoading && replyViewOf\(lastTurn\) === "held"\)\s*\}/.test(
       app,
     ),
-    "App drops its header on Home, the Topic list, the referral (RF1) and while the Help sheet (with its own Quick exit) is open",
+    "App drops its header on Home, the Topic list, the referral (RF1), the held reply (H2-B) and while the Help sheet (with its own Quick exit) is open",
   );
 }
 
@@ -1776,9 +1775,21 @@ const renderReply = (
   );
 const KINDS: [string, string, Partial<ChatTurn>][] = [
   ["clarify", VAGUE_QUERY_MESSAGE, { outcome: "clarification", kind: "vague" }],
-  ["held A", HELD_TOPIC_MESSAGES.A, { outcome: "held", kind: "held-topic" }],
-  ["held B", HELD_TOPIC_MESSAGES.B, { outcome: "held", kind: "held-topic" }],
-  ["held C", HELD_TOPIC_MESSAGES.C, { outcome: "held", kind: "held-topic" }],
+  [
+    "held A",
+    HELD_TOPIC_MESSAGES.A,
+    { outcome: "held", kind: "held-topic", heldTopicGroup: "A" },
+  ],
+  [
+    "held B",
+    HELD_TOPIC_MESSAGES.B,
+    { outcome: "held", kind: "held-topic", heldTopicGroup: "B" },
+  ],
+  [
+    "held C",
+    HELD_TOPIC_MESSAGES.C,
+    { outcome: "held", kind: "held-topic", heldTopicGroup: "C" },
+  ],
   ["help", SIGNPOSTING_MESSAGE, { outcome: "signposting", kind: "help" }],
   ["no answer", NO_ANSWER_MESSAGE, { answerFound: false, kind: "abstain" }],
 ];
@@ -1818,15 +1829,22 @@ console.log("\nTest 37: each reply kind has one h1, its reply text, focusable");
     const { first, rest } = splitReply(text);
     const cls = name.includes("referral")
       ? "referral-title"
-      : name.includes("help")
-        ? "support-title"
-        : "reply-title";
+      : name.includes("held")
+        ? "held-title"
+        : name.includes("help")
+          ? "support-title"
+          : "reply-title";
     assert(
       split
         ? html.includes(
             `<h1 tabindex="-1" class="${cls}">${escapeHtml(first)}</h1>`,
           ) &&
-            (rest === null || html.includes(`>${escapeHtml(rest)}</p>`))
+            (rest === null ||
+              (name === "held C"
+                ? html.includes(
+                    `<p class="held-text">${escapeHtml(splitLastSentence(rest)?.head ?? "")}</p><p class="held-callout">${escapeHtml(splitLastSentence(rest)?.last ?? "")}</p>`,
+                  )
+                : html.includes(`>${escapeHtml(rest)}</p>`)))
         : html.includes(
             `<h1 tabindex="-1" class="reply-title">${escapeHtml(text)}</h1>`,
           ),
@@ -1958,7 +1976,7 @@ console.log(
 }
 
 console.log(
-  "\nTest 39: call buttons from the constants on held and help (referral: referralScreen.test.tsx)",
+  "\nTest 39: call buttons from the constants on help (held: heldReply.test.tsx; referral: referralScreen.test.tsx)",
 );
 {
   const contacts = SUPPORT_SECTIONS.flatMap((section) => section.contacts);
@@ -1969,8 +1987,6 @@ console.log(
   const button = (kind: string, number: string) =>
     `<a class="call-button call-button--${kind}" href="${telHref(number)}"><svg`;
   const withCalls: [string, string][] = [
-    ["held A", renderReply(HELD_TOPIC_MESSAGES.A, KINDS[1][2])],
-    ["held C", renderReply(HELD_TOPIC_MESSAGES.C, KINDS[3][2])],
     ["help", renderReply(SIGNPOSTING_MESSAGE, KINDS[4][2])],
   ];
   for (const [name, html] of withCalls) {
@@ -1989,7 +2005,7 @@ console.log(
       );
     }
   }
-  for (const [name, html] of withCalls.slice(2)) {
+  for (const [name, html] of withCalls) {
     const [first, second] = EMERGENCY_NUMBERS;
     assert(
       html.includes(
@@ -2088,7 +2104,7 @@ console.log(
   const held = renderReply(HELD_TOPIC_MESSAGES.A, KINDS[1][2]);
   assert(
     held.includes(
-      '<button class="reply-link" type="button">Ask a different question</button>',
+      '<button class="held-different" type="button">Ask a different question</button>',
     ) && app.includes("onHome={handleNewChat}"),
     'held: "Ask a different question" returns to Home (whose h1 takes focus)',
   );
@@ -2863,34 +2879,7 @@ console.log("\nTest 51: reply screens aligned with the design (step 7c)");
       JSON.stringify({ first: "One sentence only.", rest: null }),
     "one sentence: no paragraph",
   );
-  const held = renderReply(HELD_TOPIC_MESSAGES.A, {
-    outcome: "held",
-    kind: "held-topic",
-  });
-  const card = held.slice(
-    held.indexOf('class="reply-card reply-card--held"'),
-    held.indexOf("</section>"),
-  );
-  const calls = held.slice(held.indexOf('<section class="call-card"'));
-  assert(
-    !card.includes("call-button") &&
-      calls.includes(
-        `<h2 id="call-card-title" class="call-card-title">${CALL_CARD_HEADING}</h2>`,
-      ) &&
-      calls.includes(
-        `class="call-button call-button--main" href="${telHref(GBV_HELPLINE)}"`,
-      ) &&
-      calls.includes(
-        `class="call-button call-button--second" href="${telHref(CHILDLINE_KENYA)}"`,
-      ),
-    `held: the call buttons are in their own card under "${CALL_CARD_HEADING}", hrefs from the constants`,
-  );
-  assert(
-    !held.includes('class="danger-line"') &&
-      held.includes('<div class="screen-bottom"><div class="ask-pill-bar">') &&
-      held.includes('placeholder="Ask something else…"'),
-    "held: no footer line; the ask bar is a white pill with no panel",
-  );
+  // The held reply's layout: heldReply.test.tsx (H2-B).
   const support = (html: string, name: string) => {
     const hero = html.slice(
       html.indexOf('<section class="support-hero'),

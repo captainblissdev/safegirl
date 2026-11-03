@@ -169,8 +169,19 @@ export default function ChatInterface({
       <HeldReply
         id={lastTurn.id}
         text={lastTurn.text}
+        group={lastTurn.heldTopicGroup}
         askBar={askBar}
         onAskDifferent={onHome}
+        onFillAsk={(question) => {
+          setDraft(question);
+          inputRef.current?.focus();
+        }}
+        band={{
+          onOpenHelp,
+          isHelpOpen,
+          helpButtonRef: homeHelpButtonRef,
+          onExit,
+        }}
       />
     );
   }

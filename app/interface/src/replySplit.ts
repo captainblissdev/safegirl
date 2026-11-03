@@ -15,3 +15,19 @@ export function splitReply(text: string): {
   const end = match.index + 1;
   return { first: text.slice(0, end), rest: text.slice(end + 1) };
 }
+
+/**
+ * Splits off a text's last sentence, for display only (the held group C
+ * callout, H2-B): it starts after the last ".", "?" or "!" that is
+ * followed by a space. As with splitReply, nothing is added, removed or
+ * reordered: head + " " + last is always the original text. With one
+ * sentence only, there is nothing to split and the result is null.
+ */
+export function splitLastSentence(
+  text: string,
+): { head: string; last: string } | null {
+  const matches = [...text.matchAll(/[.?!] /g)];
+  if (matches.length === 0) return null;
+  const end = (matches[matches.length - 1].index ?? 0) + 1;
+  return { head: text.slice(0, end), last: text.slice(end + 1) };
+}
