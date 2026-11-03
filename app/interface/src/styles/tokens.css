@@ -154,6 +154,10 @@
      the emergency buttons. */
   --referral-band: linear-gradient(170deg, #5b21b6 0%, #4c1d95 100%);
   --referral-danger-bg: #ffe4f1;
+  /* Held-topic reply (H2-B): the group C callout, pale rose with a rose
+     edge (3:1 on it and on the sheet). */
+  --held-callout-bg: #fff0f7;
+  --held-callout-edge: #db2777;
   /* Topic pills: text, and a lighter tint of it for the border that
      still reaches 3:1 on the page and its glows. */
   --pill-periods-text: #9d174d;

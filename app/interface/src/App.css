@@ -3190,14 +3190,17 @@ html:has(.referral-screen) {
   gap: 10px;
 }
 
-/* The pill on the band: glass, like the band's other quiet controls. */
-.referral-band .reply-pill {
+/* The pill on the band: glass, like the band's other quiet controls
+   (also the held-topic reply's band). */
+.referral-band .reply-pill,
+.held-band .reply-pill {
   border: 1.5px solid var(--splash-glass-border);
   background: var(--splash-glass-bg);
   color: var(--color-on-dark);
 }
 
-.referral-title {
+.referral-title,
+.held-title {
   font-size: 22px;
   font-weight: var(--weight-black);
   line-height: 1.25;
@@ -3295,4 +3298,64 @@ html:has(.referral-screen) {
   .referral-screen {
     --home-gutter: 16px;
   }
+}
+
+/*
+ * Held-topic reply (H2-B): the Topic page's layout (the centred column,
+ * the ask bar and the helpline pinned) under Home's band, with the pill
+ * and the h1. No decoration and no motion.
+ */
+.home-band.held-band {
+  gap: 14px;
+  min-height: 0;
+  padding-bottom: 22px;
+}
+
+.held-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.held-page > .held-text {
+  margin-top: 16px;
+  color: var(--color-ink);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Group C: the last sentence, word for word, as a callout. */
+.held-page > .held-callout {
+  margin-top: 12px;
+  border: 1.5px solid var(--held-callout-edge);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: var(--held-callout-bg);
+  color: var(--color-ink);
+  font-size: 15px;
+  font-weight: var(--weight-bold);
+  line-height: 1.45;
+}
+
+.held-page > .held-calls {
+  margin-top: 18px;
+}
+
+.held-page > .held-wonder {
+  margin-top: 20px;
+}
+
+/* Ask a different question: an outlined button, the column's width. */
+.held-page > .held-different {
+  min-height: var(--tap-target);
+  margin-top: 18px;
+  border: 2px solid var(--home-card-edge);
+  border-radius: 999px;
+  padding: 0 20px;
+  background: var(--color-card);
+  color: var(--color-plum);
+  font: inherit;
+  font-size: 15px;
+  font-weight: var(--weight-black);
+  cursor: pointer;
 }
