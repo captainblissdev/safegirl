@@ -3149,6 +3149,117 @@ html:has(.help-sheet) {
 }
 
 /*
+ * Answer screen (A1): Home's 2px card edge on the closest question,
+ * the answer card and the related questions; the source in full under
+ * its own small label, then the disclaimer as a calm note, inside the
+ * card; the related questions as the Topic page's rows; a pale flower
+ * cluster in the answer card's corner (decoration only). Wording, order
+ * and headings are unchanged. The shared .topic-questions card keeps its
+ * own edge elsewhere.
+ */
+.answer-screen .back-link {
+  min-width: var(--tap-target);
+  padding: 0 12px 0 4px;
+  color: var(--color-plum);
+}
+
+.answer-screen .closest {
+  border: 2px solid var(--home-card-edge);
+  border-radius: 20px;
+  padding: 14px 16px;
+}
+
+.answer-screen .answer-card {
+  position: relative;
+  gap: 14px;
+  border: 2px solid var(--home-card-edge);
+  border-radius: 22px;
+  padding: 18px 16px 16px;
+  box-shadow: var(--home-card-shadow);
+}
+
+/* Beside the "Answer" pill, clear of the text below it. */
+.answer-flowers {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  width: 38px;
+  height: 46px;
+  pointer-events: none;
+}
+
+.answer-flowers .splash-flower--pink ellipse {
+  fill: var(--answer-flower-pink);
+}
+
+.answer-flowers .splash-flower--white ellipse {
+  fill: var(--answer-flower-lilac);
+}
+
+.answer-flowers .splash-flower-centre {
+  fill: var(--answer-flower-centre);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .answer-flowers {
+    animation: splash-flowers-in 600ms ease-out both;
+  }
+}
+
+.answer-screen .answer-meta {
+  gap: 10px;
+  padding-top: 12px;
+  font-size: 13.5px;
+}
+
+/* The source in full, wrapping at any width; its label on a line of
+   its own, quieter. */
+.answer-screen .answer-source {
+  overflow-wrap: anywhere;
+}
+
+.answer-screen .answer-source strong {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-black);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* The disclaimer: a calm note. */
+.answer-screen .answer-disclaimer {
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: var(--answer-note-bg);
+  color: var(--color-ink);
+}
+
+/* Related questions: the Topic page's rows. */
+.answer-screen .topic-questions--related {
+  border: 2px solid var(--home-card-edge);
+  border-radius: 18px;
+  box-shadow: var(--home-card-shadow);
+}
+
+.answer-screen .topic-questions--related .topic-question {
+  min-height: 52px;
+  padding: 11px 12px 11px 16px;
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.4;
+}
+
+.answer-screen .topic-questions--related .topic-question-go {
+  flex-basis: 30px;
+  width: 30px;
+  height: 30px;
+  background: var(--home-icon-tile);
+  color: var(--home-icon);
+}
+
+/*
  * Referral (RF1): Home's sheet and centred column under a flat purple
  * band (the logo and Quick exit, then the pill and the h1). The calls
  * reuse the Help sheet's buttons and cards. Nothing is pinned, and there

@@ -4,6 +4,7 @@ import { relatedQuestions } from "../content/kbQuestions";
 import { ANSWER_DISCLAIMER, MATCH_HINT, MATCH_LABEL } from "../content/uiText";
 import type { ChatTurn } from "../types";
 import DangerLine from "./DangerLine";
+import Flowers from "./Flowers";
 import { CheckIcon, ChevronLeftIcon, ChevronRightIcon } from "./Icons";
 
 /**
@@ -20,6 +21,11 @@ import { CheckIcon, ChevronLeftIcon, ChevronRightIcon } from "./Icons";
  * Related questions are two other knowledge-base questions of the same
  * class; tapping one sends its exact text through the full pipeline, like
  * the ask bar. Focus moves to the h1 when the answer arrives.
+ *
+ * Styling (A1): Home's 2px card edge, the source under its own label and
+ * the disclaimer as a calm note inside the card, the related questions
+ * as Topic-page rows, and a pale flower cluster on the answer card
+ * (decoration only, aria-hidden). No wording or order changed.
  */
 
 interface Props {
@@ -65,6 +71,7 @@ export default function AnswerView({ turn, onSend, back, askBar }: Props) {
       )}
 
       <article className="answer-card" aria-labelledby="answer-title">
+        <Flowers className="answer-flowers" />
         <h2 id="answer-title" className="answer-pill">
           <CheckIcon size={16} /> Answer
         </h2>

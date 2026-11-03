@@ -158,6 +158,13 @@
      edge (3:1 on it and on the sheet). */
   --held-callout-bg: #fff0f7;
   --held-callout-edge: #db2777;
+  /* Answer screen (A1): the flower cluster on the white answer card,
+     opaque pale pink and lilac (decoration only), and the calm note
+     behind the disclaimer. */
+  --answer-flower-pink: #fbcfe8;
+  --answer-flower-lilac: #e4d4fb;
+  --answer-flower-centre: #fdf2f8;
+  --answer-note-bg: #f5effe;
   /* Topic pills: text, and a lighter tint of it for the border that
      still reaches 3:1 on the page and its glows. */
   --pill-periods-text: #9d174d;
