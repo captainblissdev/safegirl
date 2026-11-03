@@ -3169,6 +3169,11 @@ html:has(.help-sheet) {
   padding: 14px 16px;
 }
 
+/* The banner's label: 13px, the smallest text on the page. */
+.answer-screen .closest-label {
+  font-size: 13px;
+}
+
 .answer-screen .answer-card {
   position: relative;
   gap: 14px;
