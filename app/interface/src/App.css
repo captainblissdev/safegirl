@@ -3147,3 +3147,152 @@ html:has(.help-sheet) {
   font-weight: var(--weight-black);
   line-height: 1.3;
 }
+
+/*
+ * Referral (RF1): Home's sheet and centred column under a flat purple
+ * band (the logo and Quick exit, then the pill and the h1). The calls
+ * reuse the Help sheet's buttons and cards. Nothing is pinned, and there
+ * is no decoration and no motion.
+ */
+.app-shell--home:has(.referral-screen) {
+  --home-footer-space: 0px;
+}
+
+html:has(.referral-screen) {
+  scroll-padding-bottom: 0;
+}
+
+.referral-screen {
+  --home-gutter: 20px;
+  --home-column: min(100% - 2 * var(--home-gutter), 520px);
+
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0;
+  gap: 0;
+  padding: 0;
+  color: var(--color-ink);
+}
+
+.home-band.referral-band {
+  gap: 14px;
+  min-height: 0;
+  border-radius: 0 0 28px 28px;
+  padding-bottom: 22px;
+  background: var(--referral-band);
+}
+
+.referral-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* The pill on the band: glass, like the band's other quiet controls. */
+.referral-band .reply-pill {
+  border: 1.5px solid var(--splash-glass-border);
+  background: var(--splash-glass-bg);
+  color: var(--color-on-dark);
+}
+
+.referral-title {
+  font-size: 22px;
+  font-weight: var(--weight-black);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.referral-body {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  gap: 16px;
+  width: var(--home-column);
+  margin: 0 auto;
+  padding: 16px 0 20px;
+}
+
+.referral-text {
+  color: var(--color-ink);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* In immediate danger? A pale rose card around the two rose buttons. */
+.referral-danger {
+  border-radius: 18px;
+  padding: 14px 14px 16px;
+  background: var(--referral-danger-bg);
+}
+
+/* Message someone I trust: a white outlined button, two lines. */
+.referral-trust {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: 56px;
+  border: 2px solid var(--home-card-edge);
+  border-radius: 18px;
+  padding: 8px 16px;
+  background: var(--color-card);
+  color: var(--color-plum);
+  text-align: center;
+  text-decoration: none;
+}
+
+.referral-trust-label {
+  font-size: 16px;
+  font-weight: var(--weight-black);
+}
+
+.referral-trust-note {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: var(--weight-semibold);
+}
+
+.referral-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.referral-exit-hint {
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+  text-align: center;
+}
+
+.referral-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 16px;
+}
+
+/* Back to questions and Clear and leave: text buttons, 48px tall. */
+.btn-referral-text {
+  min-height: 48px;
+  border: 0;
+  padding: 0 12px;
+  background: none;
+  color: var(--color-plum);
+  font: inherit;
+  font-size: 15px;
+  font-weight: var(--weight-black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+@media (max-width: 359px) {
+  .referral-screen {
+    --home-gutter: 16px;
+  }
+}

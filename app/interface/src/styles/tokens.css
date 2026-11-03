@@ -150,6 +150,10 @@
   --help-call-second-icon: #be185d;
   /* Help sheet (HS1): the "Need to leave quickly?" card, light lavender. */
   --help-leave-bg: #efe8fd;
+  /* Referral (RF1): a flat purple band, and the pale rose card behind
+     the emergency buttons. */
+  --referral-band: linear-gradient(170deg, #5b21b6 0%, #4c1d95 100%);
+  --referral-danger-bg: #ffe4f1;
   /* Topic pills: text, and a lighter tint of it for the border that
      still reaches 3:1 on the page and its glows. */
   --pill-periods-text: #9d174d;
