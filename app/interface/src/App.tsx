@@ -407,8 +407,8 @@ export default function App() {
       </p>
       {isOffline && (
         <div className="offline-banner" role="status">
-          You&apos;re offline — answers come from information stored on this
-          device and may be more limited.
+          You&apos;re offline. SafeGirl can only give general answers until
+          you&apos;re back online.
         </div>
       )}
 

@@ -333,14 +333,19 @@
   font-size: 1rem;
 }
 
+/* Offline (OFF-B): a calm note, not an alarm; in the page's centred
+   column on every screen. */
 .offline-banner {
-  margin: 12px 0 0;
+  width: min(100% - 32px, 520px);
+  margin: 12px auto 0;
+  border: 1.5px solid var(--home-card-edge);
+  border-radius: 14px;
   padding: 10px 14px;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--lilac);
-  color: var(--ink);
-  font-size: 1rem;
+  background: var(--answer-note-bg);
+  color: var(--color-plum);
+  font-size: 14px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.45;
   text-align: center;
 }
 
