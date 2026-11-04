@@ -2,40 +2,45 @@
 
 The interface was re-themed on `feature/ui-theme` (14 October 2026) to
 follow the approved SafeGirl wireframes: calm, warm, mobile-first, plain
-English, purple and lavender, no alarm colours.
+English, purple and lavender, no alarm colours. It was redesigned again
+in November 2026 (splash, Home, topic pages, answer, Get help, referral,
+held-topic reply and limited mode).
 
-## The wireframes
+## The wireframes (November 2026)
 
-![SafeGirl wireframes](ui-wireframes.png)
+![SafeGirl wireframes, 1 of 2: asking and answers](ui-wireframes-1-asking.png)
 
-`docs/design/ui-wireframes.png` had not been added to the repository when
-the re-theme was done, so the palette was not sampled from the image. It
-uses the agreed starting values (primary gradient `#5b2fc7` to `#8b3fe0`,
-deep text `#2a1457`, page `#f7f2ff`, lilac `#efe6fc`, border `#d9c9f3`,
-white cards) and was refined by eye. Re-check it against the image once
-it is added.
+![SafeGirl wireframes, 2 of 2: help, safety and resilience](ui-wireframes-2-safety.png)
+
+The two boards are built from screenshots of the app itself, so each
+screen, label and line of text is what the app shows. Wording on the
+safety screens (5 to 8) is interim and pending clinician review.
 
 ## The interface now
 
-Taken from the production build at 390px (phone) and 1280px (desktop).
+Taken from the production build at 390 x 844 on 4 November 2026
+(branch `ui/offline-refresh`).
 
-| Screen | 390px | 1280px |
+| # | Screen | Screenshot |
 |---|---|---|
-| Session start / disclaimer | ![](screenshots/01-disclaimer-390.png) | ![](screenshots/01-disclaimer-1280.png) |
-| Chat before the first question | ![](screenshots/02a-chat-start-390.png) | ![](screenshots/02a-chat-start-1280.png) |
-| Chat with a reply | ![](screenshots/02-chat-reply-390.png) | ![](screenshots/02-chat-reply-1280.png) |
-| "Need help now?" panel | ![](screenshots/03-help-panel-390.png) | ![](screenshots/03-help-panel-1280.png) |
-| Limited-mode notice | ![](screenshots/04-limited-mode-390.png) | ![](screenshots/04-limited-mode-1280.png) |
-| Referral | ![](screenshots/05-referral-390.png) | ![](screenshots/05-referral-1280.png) |
-| Session end | ![](screenshots/06-session-end-390.png) | ![](screenshots/06-session-end-1280.png) |
+| 1 | Splash | ![](screenshots/01-splash.png) |
+| 2 | Home | ![](screenshots/02-home.png) |
+| 3 | Topic page (STIs and HIV) | ![](screenshots/03-topic.png) |
+| 4 | Answer (a typed question) | ![](screenshots/04-answer.png) |
+| 5 | Get help | ![](screenshots/05-get-help.png) |
+| 6 | Referral (a flagged query) | ![](screenshots/06-referral.png) |
+| 7 | Held-topic reply ("My period is late") | ![](screenshots/07-held-topic.png) |
+| 8 | Limited mode (offline) | ![](screenshots/08-limited-mode.png) |
 
 How they were taken: headless Chrome against `vite preview`, with
 `ml_service` and a local gateway (authentication disabled). The answers
-are real. Firebase anonymous sign-in was answered by a stub in the test
-browser, because the local Firebase configuration was not available; the
-limited-mode shots block `/api/query` to simulate an unreachable service.
+are real. The limited-mode shot loads the app once, then blocks the
+network and reloads it from the service worker cache.
 
-## Deliberate differences from the wireframe
+The sections below record the October re-theme and compare it with the
+earlier wireframe, which has been replaced by the boards above.
+
+## Deliberate differences from the wireframe (October 2026)
 
 | What | Wireframe | Interface | Why |
 |---|---|---|---|
