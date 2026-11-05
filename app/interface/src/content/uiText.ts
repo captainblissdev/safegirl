@@ -2,7 +2,7 @@
  * Interface text that tests check or that more than one component uses.
  */
 
-import { GBV_HELPLINE } from "../offline/helpContent";
+import { GBV_HELPLINE } from "../offline/helpContent.ts";
 
 /**
  * Where the answers come from: the one place this line is written. Used
