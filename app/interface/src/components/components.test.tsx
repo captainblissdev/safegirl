@@ -162,6 +162,11 @@ console.log("\nTest 2: the header has the wordmark, a Help button and Exit");
   );
 }
 
+/** The band's exit button (BandTopbar): its class, icon and label. */
+const BAND_EXIT = new RegExp(
+  `<button class="btn-home-exit" type="button"><svg.*?</svg> ${QUICK_EXIT_LABEL}</button>`,
+);
+
 const renderChat = (turns: ChatTurn[]) =>
   renderToStaticMarkup(
     <ChatInterface turns={turns} onSend={() => undefined} isLoading={false} />,
@@ -580,7 +585,7 @@ console.log(
     ],
     [
       "session end",
-      <AppShell onExit={noop} help={closedHelp}>
+      <AppShell onExit={noop} help={closedHelp} plainHeader>
         <SessionEnd onStartNew={noop} />
       </AppShell>,
     ],
@@ -604,10 +609,8 @@ console.log(
         `${name}: no footer line; the GBV call button is on the screen`,
       );
       assert(
-        /<button class="btn-exit" type="button">(Exit|Quick exit)<\/button>/.test(
-          html,
-        ),
-        `${name}: an Exit button in the header`,
+        BAND_EXIT.test(html),
+        `${name}: a Quick exit button in the header`,
       );
       continue;
     }
@@ -667,7 +670,9 @@ console.log(
       `${name}: its tap-to-call link is built from GBV_HELPLINE`,
     );
     const exitAt = html.search(
-      /<button class="btn-exit(-pill)?" type="button">Exit<\/button>/,
+      name === "session end"
+        ? /<button class="btn-exit" type="button">Exit<\/button>/
+        : BAND_EXIT,
     );
     assert(
       exitAt > -1 && exitAt < html.indexOf('class="danger-line"'),
@@ -2144,10 +2149,7 @@ console.log("\nTest 41: Exit, the footer line and the ask bar on every reply");
     ],
   ];
   for (const [name, html] of framed) {
-    assert(
-      html.includes('<button class="btn-exit" type="button">Exit</button>'),
-      `${name}: Exit in the header`,
-    );
+    assert(BAND_EXIT.test(html), `${name}: Quick exit in the header`);
     // Held, help and referral carry the call buttons: no footer line.
     const withCalls = /held|help|referral/.test(name);
     assert(
@@ -2408,10 +2410,10 @@ console.log("\nTest 45: the Talk to a person screen");
       `${kind} at the limit: the four topic pills`,
     );
     assert(
-      html.includes('<button class="btn-exit" type="button">Exit</button>') &&
+      BAND_EXIT.test(html) &&
         html.split('class="danger-line"').length === 2 &&
         html.includes(`${GBV_HELPLINE}</a>, free and open 24 hours.`),
-      `${kind} at the limit: Exit and the footer line`,
+      `${kind} at the limit: Quick exit and the footer line`,
     );
   }
   assert(
@@ -3085,9 +3087,9 @@ console.log("\nTest 53: the Help sheet as a page under the header (step 3c)");
     </AppShell>,
   );
   assert(
-    open.includes('<button class="btn-exit" type="button">Exit</button>') &&
-      open.indexOf("btn-exit") < open.indexOf('role="dialog"'),
-    "with the sheet open, the header's Exit stays in view, before the sheet",
+    BAND_EXIT.test(open) &&
+      open.indexOf("btn-home-exit") < open.indexOf('role="dialog"'),
+    "with the sheet open, the header's Quick exit stays in view, before the sheet",
   );
   assert(
     open.includes(
