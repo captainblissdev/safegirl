@@ -3,7 +3,8 @@ import { HOME_GET_HELP, QUICK_EXIT_LABEL } from "../content/uiText";
 import { CloseIcon, ShieldHeartMark } from "./Icons";
 
 /**
- * The top row of the gradient header band on Home and the Topic list:
+ * The top row of the gradient header band on Home, the Topic list and
+ * the chat screens:
  * the logo tile and wordmark on the left; "Get help" (outlined, opens
  * the Help sheet) and Quick exit (solid white, quickExit.ts) on the
  * right. Below 360px wide the wordmark is hidden (CSS). Its classes keep

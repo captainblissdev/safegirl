@@ -398,6 +398,7 @@ export default function App() {
         screen === "referral" ||
         (onChatScreen && !isLoading && replyViewOf(lastTurn) === "help")
       }
+      plainHeader={screen === "sessionEnd"}
       footerInContent={
         screen === "chat" || screen === "topic" || screen === "referral"
       }

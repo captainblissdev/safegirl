@@ -1,10 +1,11 @@
 import type { ReactNode, RefObject } from "react";
 import AppHeader from "./AppHeader";
+import BandTopbar from "./BandTopbar";
 import DangerLine from "./DangerLine";
 import HelpSheet from "./HelpSheet";
 
 interface Props {
-  /** Quick exit (quickExit.ts), from the header's Exit button. */
+  /** Quick exit (quickExit.ts), from the header's exit button. */
   onExit: () => void;
   /** The Help sheet's state and actions (owned by App). */
   help: {
@@ -21,8 +22,10 @@ interface Props {
   footerInContent?: boolean;
   /** The calm variant without the playful background (referral). */
   calm?: boolean;
-  /** The help and referral screens: header without Help, "Quick exit". */
+  /** The help and referral screens: header without "Get help". */
   support?: boolean;
+  /** The session end: the white header (logo, Help, Exit). */
+  plainHeader?: boolean;
   /**
    * No app header: on Home and the Topic list (their band has the logo,
    * "Get help" and Quick exit), on the referral (its band has the logo
@@ -34,11 +37,12 @@ interface Props {
 }
 
 /**
- * The frame of every screen: the header (logo, Help, Exit) first, then
- * the screen, then the footer line with the GBV helpline. Every screen in
- * App.tsx, the splash included, is rendered inside it, so none can lose
- * the header's Exit button or the footer line. The Help sheet opens on
- * any screen, as the page under the header.
+ * The frame of every screen: the header first (Home's band with the logo,
+ * "Get help" and Quick exit), then the screen, then the footer line with
+ * the GBV helpline. Every screen in App.tsx, the splash included, is
+ * rendered inside it, so none can lose the header's exit button or the
+ * footer line. The Help sheet opens on any screen, as the page under the
+ * header.
  */
 export default function AppShell({
   onExit,
@@ -46,6 +50,7 @@ export default function AppShell({
   footerInContent = false,
   calm = false,
   support = false,
+  plainHeader = false,
   headerless = false,
   children,
 }: Props) {
@@ -55,15 +60,25 @@ export default function AppShell({
         headerless ? " app-shell--home" : ""
       }`}
     >
-      {!headerless && (
-        <AppHeader
-          onExit={onExit}
-          onOpenHelp={help.onOpen}
-          isHelpOpen={help.isOpen}
-          helpButtonRef={help.buttonRef}
-          support={support}
-        />
-      )}
+      {!headerless &&
+        (plainHeader ? (
+          <AppHeader
+            onExit={onExit}
+            onOpenHelp={help.onOpen}
+            isHelpOpen={help.isOpen}
+            helpButtonRef={help.buttonRef}
+            support={support}
+          />
+        ) : (
+          <header className="home-band chat-band surface-dark">
+            <BandTopbar
+              onOpenHelp={support ? undefined : help.onOpen}
+              isHelpOpen={help.isOpen}
+              helpButtonRef={help.buttonRef}
+              onExit={onExit}
+            />
+          </header>
+        ))}
       {/* While the Help sheet is open, the screen stays mounted but hidden
           (its state is kept), and the sheet is the whole page. */}
       <div className="shell-content" hidden={help.isOpen}>

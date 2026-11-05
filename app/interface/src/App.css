@@ -3160,6 +3160,34 @@ html:has(.help-sheet) {
  * matched-question heading (the plain view has none). Only a reply with
  * the notice changes; other plain replies keep their bubble.
  */
+/*
+ * The chat screens' header (CH-1): Home's band, its top row only. The shell
+ * spans the page so the band can too; the content keeps the shell's width
+ * and gutters, because .shell-content has no box of its own.
+ */
+.app-shell:has(> .chat-band) {
+  --chat-gutter: max(24px, calc((100vw - 1072px) / 2));
+
+  width: 100%;
+  padding: 0 var(--chat-gutter) 24px;
+}
+
+.home-band.chat-band {
+  --home-gutter: 20px;
+
+  min-height: 0;
+  margin: 0 calc(-1 * var(--chat-gutter)) 14px;
+  padding-bottom: 14px;
+}
+
+@media (max-width: 600px) {
+  .app-shell:has(> .chat-band) {
+    --chat-gutter: 12px;
+
+    padding-bottom: 12px;
+  }
+}
+
 .bot-turn:has(.limited-notice) {
   width: 100%;
   max-width: 560px;
