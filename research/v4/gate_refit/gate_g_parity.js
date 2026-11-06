@@ -11,7 +11,10 @@
  * that same file through createClassifierClient's getEntryById option, so
  * the gateway's own default base is not changed.
  *
- * Reads JSON {kb: path, items: [{id, text}]} on stdin; writes JSON
+ * With kb null (gate_g_parity.py --demo-config) the gateway's own lookup
+ * is used, so KB_SET=kb62 selects the 62-entry set as in the demo.
+ *
+ * Reads JSON {kb: path or null, items: [{id, text}]} on stdin; writes JSON
  * {id: {served: entry id or null, kind, source}} to stdout (ids only).
  */
 
@@ -28,7 +31,7 @@ const { extractive } = require(path.join(GW, "generationModule"));
 
 async function main(input) {
   const { kb, items } = JSON.parse(input);
-  const entries = new Map(
+  const entries = kb === null ? null : new Map(
     JSON.parse(fs.readFileSync(kb, "utf8")).map((e) => [
       e.id,
       { kbId: e.id, question: e.title, answer: e.content, source: e.source, category: e.class },
@@ -41,7 +44,10 @@ async function main(input) {
   }
   let served;
   const handleQuery = createHandleQuery({
-    classifierClient: createClassifierClient({ getEntryById: (id) => entries.get(id) || null, logger: quiet }),
+    classifierClient: createClassifierClient({
+      ...(entries ? { getEntryById: (id) => entries.get(id) || null } : {}),
+      logger: quiet,
+    }),
     gateG,
     generate: (entry) => {
       served = entry ? entry.kbId : null;

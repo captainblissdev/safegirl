@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { VitePWA } from "vite-plugin-pwa";
+import { kbSetPlugin } from "./kbSetPlugin";
 
 // PWA configuration supports NFR-06 by providing an installable,
 // responsive application shell that can remain available during
@@ -8,6 +9,8 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   plugins: [
     react(),
+    // No plugin unless VITE_KB_SET=kb62 (the 62-entry set); see kbSetPlugin.ts.
+    kbSetPlugin(process.env.VITE_KB_SET, __dirname),
     VitePWA({
       registerType: "autoUpdate",
 
