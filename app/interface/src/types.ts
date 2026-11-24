@@ -51,6 +51,13 @@ export interface QueryResponse {
   // contraception failure), "B" (pregnancy decisions) or "C" (possible
   // pregnancy and testing).
   heldTopicGroup?: "A" | "B" | "C";
+  // Only with follow-up context on: her follow-up as the one question the
+  // gateway answered ("how long does it last?" after the implant: "how
+  // long does the contraceptive implant last?").
+  followUp?: {
+    resolvedQuestion: string;
+    mode: "pronoun" | "swap" | "ellipsis";
+  };
 
   // Present on grounded_answer responses.
   // Category of the knowledge-base entry actually served; null when no
@@ -117,6 +124,9 @@ export interface ChatTurn {
   // On held-topic replies, the group from the response, as sent: group C
   // shows its last sentence as a callout (display only).
   heldTopicGroup?: "A" | "B" | "C";
+  // With follow-up context on: how the gateway read her follow-up, shown
+  // under the answer's heading.
+  followUpQuestion?: string;
 }
 
 /** How a question reached the pipeline: typed, or a tapped question row. */

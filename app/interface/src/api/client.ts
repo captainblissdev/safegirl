@@ -101,6 +101,12 @@ export interface QueryClientDeps {
 export interface SubmitOptions {
   /** Aborting it cancels the request: see QueryCancelledError. */
   signal?: AbortSignal;
+  /**
+   * The previous answer's knowledge-base question, for follow-up context
+   * (the gateway uses it only with FOLLOWUP_CONTEXT_ENABLED). Never her
+   * earlier words. Left out of the request body when absent.
+   */
+  previousQuestion?: string;
 }
 
 /** Marker: no token because the network is down or too slow. */
@@ -174,6 +180,7 @@ export function createQueryClient(
     text: string,
     token: string,
     signal: AbortSignal | undefined,
+    previousQuestion: string | undefined,
   ): Promise<Attempt> {
     const controller = new AbortController();
     const onCancel = () => controller.abort();
@@ -181,7 +188,7 @@ export function createQueryClient(
     const timer = timers.setTimeout(() => controller.abort(), QUERY_TIMEOUT_MS);
 
     try {
-      const response = await deps.fetch("/api/query", {
+      const init: RequestInit = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -189,7 +196,12 @@ export function createQueryClient(
         },
         body: JSON.stringify({ text }),
         signal: controller.signal,
-      });
+      };
+      // Follow-up context only: the previous answer's question as well.
+      if (previousQuestion) {
+        init.body = JSON.stringify({ text, previousQuestion });
+      }
+      const response = await deps.fetch("/api/query", init);
 
       if (!response.ok) {
         return { status: response.status, ok: false };
@@ -225,6 +237,7 @@ export function createQueryClient(
   async function run(
     text: string,
     signal: AbortSignal | undefined,
+    previousQuestion?: string,
   ): Promise<QueryResponse> {
     if (!deps.isOnline()) {
       return fallback(text);
@@ -235,7 +248,7 @@ export function createQueryClient(
       return fallback(text);
     }
 
-    let result = await attempt(text, token, signal);
+    let result = await attempt(text, token, signal, previousQuestion);
     if (result === null) {
       return fallback(text);
     }
@@ -246,7 +259,7 @@ export function createQueryClient(
         return fallback(text);
       }
 
-      result = await attempt(text, freshToken, signal);
+      result = await attempt(text, freshToken, signal, previousQuestion);
       if (result === null) {
         return fallback(text);
       }
@@ -273,7 +286,7 @@ export function createQueryClient(
       throw new QueryCancelledError();
     }
 
-    const response = await run(text, options.signal);
+    const response = await run(text, options.signal, options.previousQuestion);
 
     // A request cancelled while it was finishing is still cancelled: its
     // answer, and any limited-mode notice, must not be shown.

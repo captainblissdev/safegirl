@@ -41,6 +41,12 @@ export const LIMITED_MODE_NOTICE =
 /** Over the matched question when she typed her question (step 6c). */
 export const MATCH_LABEL = "I found a question like yours";
 
+/**
+ * Follow-up context (FOLLOWUP_CONTEXT_ENABLED): before her follow-up as
+ * the gateway read it, under the banner.
+ */
+export const FOLLOW_UP_LABEL = "I took that as";
+
 /** Under that banner (step 6c). */
 export const MATCH_HINT =
   "Not what you meant? Try different words or pick a topic.";

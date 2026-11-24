@@ -107,6 +107,18 @@ export default function App() {
     // One request at a time: a question sent while a reply loads is not
     // sent (the ask bar is disabled meanwhile).
     if (pendingRef.current) return;
+    // Follow-up context: a typed message after an answer carries that
+    // answer's knowledge-base question (never her earlier words). A tapped
+    // row is a full question of its own and carries none.
+    const lastReply = turns[turns.length - 1];
+    const previousQuestion =
+      via === "typed" &&
+      lastReply?.role === "assistant" &&
+      (lastReply.kind === "answer-scoped" ||
+        lastReply.kind === "answer-unscoped") &&
+      lastReply.matchedQuestion
+        ? lastReply.matchedQuestion
+        : undefined;
     const userTurn: ChatTurn = {
       id: crypto.randomUUID(),
       role: "user",
@@ -123,7 +135,15 @@ export default function App() {
     pendingRef.current = request;
 
     try {
-      const response = await submitQuery(text, { signal: request.signal });
+      // Only the text, as for every question, unless a typed follow-up
+      // carries the previous answer's question.
+      const response =
+        previousQuestion === undefined
+          ? await submitQuery(text, { signal: request.signal })
+          : await submitQuery(text, {
+              signal: request.signal,
+              previousQuestion,
+            });
       loopCountRef.current = nextLoopCount(loopCountRef.current, response.kind);
 
       if (response.outcome === "referral") {
@@ -147,6 +167,7 @@ export default function App() {
           loopLimited: reachesLoopLimit(loopCountRef.current),
           via,
           heldTopicGroup: response.heldTopicGroup,
+          followUpQuestion: response.followUp?.resolvedQuestion,
         };
 
         setTurns((prev) => [...prev, botTurn]);

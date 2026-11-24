@@ -1,7 +1,12 @@
 import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { relatedQuestions } from "../content/kbQuestions";
-import { ANSWER_DISCLAIMER, MATCH_HINT, MATCH_LABEL } from "../content/uiText";
+import {
+  ANSWER_DISCLAIMER,
+  FOLLOW_UP_LABEL,
+  MATCH_HINT,
+  MATCH_LABEL,
+} from "../content/uiText";
 import type { ChatTurn } from "../types";
 import AnswerFeedback from "./AnswerFeedback";
 import DangerLine from "./DangerLine";
@@ -82,6 +87,12 @@ export default function AnswerView({
             <span className="closest-label">{MATCH_LABEL}</span>
             <span className="closest-question">{matchedQuestion}</span>
           </h1>
+          {turn.followUpQuestion && (
+            // Follow-up context: how her short follow-up was read.
+            <p className="follow-up-read">
+              {FOLLOW_UP_LABEL} &ldquo;{turn.followUpQuestion}&rdquo;
+            </p>
+          )}
           <p className="match-hint">{MATCH_HINT}</p>
         </>
       )}

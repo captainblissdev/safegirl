@@ -2057,6 +2057,14 @@ html:has(.topic-page) {
   font-weight: var(--weight-black);
 }
 
+/* Follow-up context: how her follow-up was read, under the banner. */
+.follow-up-read {
+  color: var(--color-muted);
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.45;
+}
+
 /* "Did that help?" under the answer card (AnswerFeedback.tsx): a short
    question with two pill buttons; after a choice, a note and, for "Not
    quite", the next steps. */
