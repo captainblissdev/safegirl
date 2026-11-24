@@ -42,6 +42,13 @@
  * GENERATION_ENABLED, a Gemini answer from the retrieved entry (see
  * generationModule.js). It runs only for an entry that passed the
  * relevance gate.
+ *
+ * Follow-up context (only with FOLLOWUP_CONTEXT_ENABLED, see followUp.js):
+ * after steps 1 to 3 pass on her own words, a short follow-up to the
+ * previous answer is resolved into one self-contained question, and
+ * steps 1 to 3 run again on that question before it goes on to step 4.
+ * The flag needs V4_TRIAGE_ENABLED too. The response then carries
+ * followUp: { resolvedQuestion, mode }.
  */
 
 const { checkSafety: defaultCheckSafety } = require("./safetyNet");
@@ -61,6 +68,12 @@ const {
   relevanceGateDecision,
 } = require("./relevanceGate");
 const { gateGDecision, gateGFromEnv } = require("./gateG");
+const {
+  entryIdForQuestion,
+  followUpEnabledFromEnv,
+  resolveFollowUp,
+} = require("./followUp");
+const { loadKnowledgeBase } = require("./retrievalModule");
 
 // Note returned when the relevance gate abstains. The user sees the
 // standard no-answer help message, not this note.
@@ -86,7 +99,12 @@ const RELEVANCE_GATE_NOTE =
  *        generationModule exports or createGenerator returns.
  * @param {object|null} [deps.gateG] - The loaded gate (g) (gateG.js), or
  *        null for the current gate. Used only for queries V4 classified.
- * @returns {(queryText: string) => Promise<object>} Query handler.
+ * @param {boolean} [deps.followUp] - Whether follow-up context is on
+ *        (FOLLOWUP_CONTEXT_ENABLED).
+ * @param {Function} [deps.servedEntries] - The served knowledge-base
+ *        entries ({ kbId, question }), for checking the previous question.
+ * @returns {(queryText: string, context?: object) => Promise<object>}
+ *          Query handler.
  */
 function createHandleQuery({
   classifierClient,
@@ -97,14 +115,18 @@ function createHandleQuery({
   relevanceGate = isRelevanceGateEnabled(),
   generate: generateAnswer = generate,
   gateG = null,
+  followUp = followUpEnabledFromEnv(),
+  servedEntries = () => Object.values(loadKnowledgeBase()).flat(),
 }) {
   /**
    * Process a SafeGirl user query.
    *
    * @param {string} queryText - User's SRH question.
+   * @param {object} [context] - With follow-up context on only:
+   *        { previousQuestion }, the previous answer's entry question.
    * @returns {Promise<object>} Final response produced by the orchestrator.
    */
-  return async function handleQuery(queryText) {
+  return async function handleQuery(queryText, context = {}) {
     // Validate the query before entering the processing pipeline.
     if (typeof queryText !== "string" || queryText.trim().length === 0) {
       throw new TypeError("queryText must be a non-empty string");
@@ -122,6 +144,35 @@ function createHandleQuery({
     const heldGroup = safety.flagged ? null : matchHeld(queryText);
     if (heldGroup) {
       return hold(heldGroup);
+    }
+
+    // Follow-up context: resolve a short follow-up to the previous answer
+    // into one question, then hold it to steps 1 to 3 again.
+    let followUpInfo = null;
+    if (followUp && !safety.flagged && context.previousQuestion) {
+      const resolution = await resolveWithContext(
+        queryText,
+        context.previousQuestion,
+      );
+      if (resolution) {
+        const { resolved, mode } = resolution;
+        const resolvedSafety = await Promise.resolve(checkSafety(resolved));
+        if (resolvedSafety.flagged) {
+          return orchestrate({
+            safety: resolvedSafety,
+            classification: null,
+            generation: null,
+            retrievedEntry: null,
+            retrievalScope: null,
+            relevanceGate: undefined,
+          });
+        }
+        if (isHelpRequest(resolved)) return signpost();
+        const resolvedHeld = matchHeld(resolved);
+        if (resolvedHeld) return hold(resolvedHeld);
+        followUpInfo = { resolvedQuestion: resolved, mode };
+        queryText = resolved;
+      }
     }
 
     // 4. Vague query: ask what the user means, without classifying.
@@ -207,7 +258,7 @@ function createHandleQuery({
      * null and the orchestrator is responsible for returning the
      * appropriate referral or escalation guidance.
      */
-    return orchestrate({
+    const response = orchestrate({
       safety,
       classification,
       generation,
@@ -215,7 +266,20 @@ function createHandleQuery({
       retrievalScope,
       relevanceGate: gateResult,
     });
+    return followUpInfo ? { ...response, followUp: followUpInfo } : response;
   };
+
+  /**
+   * The resolved follow-up, or null: the previous question must be a
+   * served entry's and the message a follow-up (followUp.js).
+   */
+  async function resolveWithContext(queryText, previousQuestion) {
+    const entries = servedEntries();
+    const kbId = entryIdForQuestion(previousQuestion, entries);
+    if (!kbId) return null;
+    const previous = entries.find((entry) => entry.kbId === kbId);
+    return resolveFollowUp(queryText, previous, entries);
+  }
 }
 
 // Created once at module load, as the keyword classifier was before.

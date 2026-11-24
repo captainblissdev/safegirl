@@ -15,6 +15,10 @@
  */
 
 const express = require("express");
+const {
+  MAX_PREVIOUS_LENGTH,
+  followUpEnabledFromEnv,
+} = require("./src/followUp");
 
 /**
  * Maximum accepted JSON body size. A query is a single chat message;
@@ -98,7 +102,7 @@ function createApp({ handleQuery, authMiddleware, logger = console }) {
    */
   app.post("/api/query", authMiddleware, parseJson, async (req, res, next) => {
     try {
-      const { text } = req.body || {};
+      const { text, previousQuestion } = req.body || {};
 
       // Reject missing or empty queries before processing.
       if (typeof text !== "string" || text.trim() === "") {
@@ -107,8 +111,16 @@ function createApp({ handleQuery, authMiddleware, logger = console }) {
         });
       }
 
-      // Delegate query processing to the application layer.
-      const result = await handleQuery(text.trim());
+      // Delegate query processing to the application layer. With
+      // follow-up context on (followUp.js), the previous answer's entry
+      // question goes too; otherwise only the query text is passed on.
+      const result =
+        followUpEnabledFromEnv() &&
+        typeof previousQuestion === "string" &&
+        previousQuestion.trim() !== "" &&
+        previousQuestion.length <= MAX_PREVIOUS_LENGTH
+          ? await handleQuery(text.trim(), { previousQuestion })
+          : await handleQuery(text.trim());
 
       return res.json(result);
     } catch (err) {
@@ -201,6 +213,11 @@ if (require.main === module) {
 
   createApp({ handleQuery, authMiddleware }).listen(PORT, () => {
     console.log(`SafeGirl backend listening on :${PORT}`);
+    if (followUpEnabledFromEnv()) {
+      console.log(
+        "[followUp] follow-up context is ON: short follow-ups to an answer are resolved (src/followUp.js)",
+      );
+    }
   });
 }
 

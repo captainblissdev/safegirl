@@ -1,0 +1,299 @@
+{
+  "about": "Synthetic follow-up development set (written for the follow-up context rule, 24 Nov 2026). Each item: the previous answer's knowledge-base question (KB-62 id), her follow-up, and what the system should do. 'expect' lists acceptable entry ids, or a reply kind for items that must not be answered from an entry. No real user text; no DR-04, sealed, Round 2 or demo-risk query. Non-blind: the resolution rule, its word limit and the out-of-scope cut-off were chosen on this set; NEG-08 to NEG-14 were added before the cut-off was chosen.",
+  "items": [
+    {
+      "id": "FU-01",
+      "prev": "KB-C8",
+      "text": "can it make me gain weight?",
+      "expect": ["KB-C17"]
+    },
+    {
+      "id": "FU-02",
+      "prev": "KB-C8",
+      "text": "is it normal to bleed a lot with it?",
+      "expect": ["KB-C7"]
+    },
+    {
+      "id": "FU-03",
+      "prev": "KB-C9",
+      "text": "what if I miss it?",
+      "expect": ["KB-C16"]
+    },
+    {
+      "id": "FU-04",
+      "prev": "KB-C9",
+      "text": "does it make you fat?",
+      "expect": ["KB-C17"]
+    },
+    {
+      "id": "FU-05",
+      "prev": "KB-C10",
+      "text": "does it cause cancer?",
+      "expect": ["KB-C20"]
+    },
+    {
+      "id": "FU-06",
+      "prev": "KB-C10",
+      "text": "how soon can I get pregnant after I stop it?",
+      "expect": ["KB-C21"]
+    },
+    {
+      "id": "FU-07",
+      "prev": "KB-C12",
+      "text": "what about the female one?",
+      "expect": ["KB-C13"]
+    },
+    {
+      "id": "FU-08",
+      "prev": "KB-C12",
+      "text": "do I still need them if I'm on the pill?",
+      "expect": ["KB-C4"]
+    },
+    {
+      "id": "FU-09",
+      "prev": "KB-C8",
+      "text": "what about the injection?",
+      "expect": ["KB-C9"]
+    },
+    {
+      "id": "FU-10",
+      "prev": "KB-C9",
+      "text": "and the implant?",
+      "expect": ["KB-C8"]
+    },
+    {
+      "id": "FU-11",
+      "prev": "KB-C8",
+      "text": "what about the coil?",
+      "expect": ["KB-C15"]
+    },
+    {
+      "id": "FU-12",
+      "prev": "KB-C10",
+      "text": "how about the injection?",
+      "expect": ["KB-C9"]
+    },
+    {
+      "id": "FU-13",
+      "prev": "KB-S11",
+      "text": "how soon after sex does it work?",
+      "expect": ["KB-S12"]
+    },
+    {
+      "id": "FU-14",
+      "prev": "KB-S14",
+      "text": "is there a vaccine for it?",
+      "expect": ["KB-S6"]
+    },
+    {
+      "id": "FU-15",
+      "prev": "KB-S5",
+      "text": "can I have one without knowing?",
+      "expect": ["KB-S8"]
+    },
+    {
+      "id": "FU-16",
+      "prev": "KB-S4",
+      "text": "what if it's thick and white?",
+      "expect": ["KB-S21"]
+    },
+    {
+      "id": "FU-17",
+      "prev": "KB-S15",
+      "text": "what if it doesn't hurt?",
+      "expect": ["KB-S18"]
+    },
+    {
+      "id": "FU-18",
+      "prev": "KB-S7",
+      "text": "what if I've already been exposed?",
+      "expect": ["KB-S3"]
+    },
+    {
+      "id": "FU-19",
+      "prev": "KB-S5",
+      "text": "does my partner need it too?",
+      "expect": ["KB-S20"]
+    },
+    {
+      "id": "FU-20",
+      "prev": "KB-P9",
+      "text": "what should I eat?",
+      "expect": ["KB-P7"]
+    },
+    {
+      "id": "FU-21",
+      "prev": "KB-P9",
+      "text": "which signs mean I should rush to hospital?",
+      "expect": ["KB-P6"]
+    },
+    {
+      "id": "FU-22",
+      "prev": "KB-G4",
+      "text": "can I still play sports?",
+      "expect": ["KB-G17"]
+    },
+    {
+      "id": "FU-23",
+      "prev": "KB-G9",
+      "text": "how do I throw it away?",
+      "expect": ["KB-G10"]
+    },
+    {
+      "id": "FU-24",
+      "prev": "KB-G9",
+      "text": "what should I never use instead?",
+      "expect": ["KB-G15"]
+    },
+    {
+      "id": "FU-25",
+      "prev": "KB-G3",
+      "text": "what if I haven't started yet?",
+      "expect": ["KB-G14"]
+    },
+    {
+      "id": "FU-26",
+      "prev": "KB-G11",
+      "text": "can I get pregnant once it starts?",
+      "expect": ["KB-G13"]
+    },
+    {
+      "id": "FU-27",
+      "prev": "KB-G4",
+      "text": "what about headaches?",
+      "expect": ["KB-G18"]
+    },
+    {
+      "id": "FU-28",
+      "prev": "KB-G5",
+      "text": "what if it smells bad?",
+      "expect": ["KB-G16"]
+    },
+    {
+      "id": "FU-29",
+      "prev": "KB-C1",
+      "text": "do my parents have to agree?",
+      "expect": ["KB-C2"]
+    },
+    {
+      "id": "FU-30",
+      "prev": "KB-C3",
+      "text": "what about if I'm breastfeeding?",
+      "expect": ["KB-C19"]
+    },
+    {
+      "id": "FU-31",
+      "prev": "KB-C8",
+      "text": "how long does it last?",
+      "expect": ["KB-C8"]
+    },
+    {
+      "id": "FU-32",
+      "prev": "KB-C15",
+      "text": "how long does it last?",
+      "expect": ["KB-C15"]
+    },
+    {
+      "id": "FU-33",
+      "prev": "KB-C9",
+      "text": "how often do I need it?",
+      "expect": ["KB-C9"]
+    },
+    {
+      "id": "FU-34",
+      "prev": "KB-G9",
+      "text": "is it ok to swim with one?",
+      "expect": ["KB-G17"]
+    },
+    {
+      "id": "FU-35",
+      "prev": "KB-S11",
+      "text": "can I do it myself at home?",
+      "expect": ["KB-S11"]
+    },
+    {
+      "id": "NEG-01",
+      "prev": "KB-C12",
+      "text": "what if it breaks?",
+      "expect": ["held-topic"]
+    },
+    {
+      "id": "NEG-02",
+      "prev": "KB-C10",
+      "text": "what if I forget one?",
+      "expect": ["held-topic", "abstain", "vague"]
+    },
+    {
+      "id": "NEG-03",
+      "prev": "KB-C8",
+      "text": "he forced me to have sex",
+      "expect": ["referral"]
+    },
+    {
+      "id": "NEG-04",
+      "prev": "KB-C8",
+      "text": "Can STIs be cured?",
+      "expect": ["KB-S5"]
+    },
+    {
+      "id": "NEG-05",
+      "prev": "KB-P8",
+      "text": "am I pregnant?",
+      "expect": ["held-topic"]
+    },
+    {
+      "id": "NEG-06",
+      "prev": "KB-G4",
+      "text": "I need someone to talk to",
+      "expect": ["help"]
+    },
+    {
+      "id": "NEG-07",
+      "prev": "KB-C8",
+      "text": "what is the capital of Kenya?",
+      "expect": ["abstain", "vague"]
+    },
+    {
+      "id": "NEG-08",
+      "prev": "KB-C8",
+      "text": "is it going to rain today?",
+      "expect": ["abstain", "vague"]
+    },
+    {
+      "id": "NEG-09",
+      "prev": "KB-G4",
+      "text": "what time is it?",
+      "expect": ["abstain", "vague"]
+    },
+    {
+      "id": "NEG-10",
+      "prev": "KB-S11",
+      "text": "who is the president of Kenya?",
+      "expect": ["abstain", "vague"]
+    },
+    {
+      "id": "NEG-11",
+      "prev": "KB-C12",
+      "text": "can you do my maths homework for me?",
+      "expect": ["abstain", "vague"]
+    },
+    {
+      "id": "NEG-12",
+      "prev": "KB-P8",
+      "text": "what about football?",
+      "expect": ["abstain", "vague"]
+    },
+    {
+      "id": "NEG-13",
+      "prev": "KB-G9",
+      "text": "how do I cook it?",
+      "expect": ["abstain", "vague"]
+    },
+    {
+      "id": "NEG-14",
+      "prev": "KB-C10",
+      "text": "is it expensive to fly to Mombasa?",
+      "expect": ["abstain", "vague"]
+    }
+  ]
+}
