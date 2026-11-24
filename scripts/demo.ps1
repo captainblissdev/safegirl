@@ -40,6 +40,11 @@
 
   The gateway is started exactly as the README says
   (node --env-file=.env server.js); authentication is unchanged.
+
+  -FollowUp (gateway only) sets FOLLOWUP_CONTEXT_ENABLED=true for the
+  process: a short follow-up to an answer ("how long does it last?") is
+  read with that answer's question (app/gateway/src/followUp.js). It
+  needs V4 on (-Mode on or -Kb 62). Off unless given.
 #>
 param(
   [Parameter(Mandatory = $true)][ValidateSet("ml", "gateway")][string]$Part,
@@ -47,7 +52,8 @@ param(
   [ValidateSet("21", "62")][string]$Kb = "21",
   [switch]$Offline,
   [switch]$Check,
-  [switch]$ShowConfig
+  [switch]$ShowConfig,
+  [switch]$FollowUp
 )
 
 $ErrorActionPreference = "Stop"
@@ -127,6 +133,16 @@ if ($Part -eq "ml") {
   Set-Location (Join-Path $repo "app\gateway")
   $env:KB_SET = $kbSet
   $env:GATE_G_ENABLED = $gateG
+  if ($FollowUp) {
+    if ($flag -ne "true") {
+      Write-Host "-FollowUp needs V4 triage on: add -Mode on or -Kb 62."
+      exit 1
+    }
+    $env:FOLLOWUP_CONTEXT_ENABLED = "true"
+    Write-Host "Follow-up context: ON (FOLLOWUP_CONTEXT_ENABLED=true)"
+  } else {
+    $env:FOLLOWUP_CONTEXT_ENABLED = "false"
+  }
   if ($kb62) {
     Write-Host "Interface: start it with VITE_KB_SET=kb62 so it bundles the 62-entry copies."
   }

@@ -3370,3 +3370,53 @@ text, Safety Net pattern or helpline changed.
   "Related questions") is unchanged.
 - **Tests.** `src/answerFeedback.test.tsx` (9 tests); no existing test
   changed.
+
+## Follow-up context behind a flag (PROPOSED) (2026-11-24)
+
+`feat/follow-up-context`, on Cindy's brief: a short follow-up to an
+answer should reach the right entry ("how long does it last?" after the
+implant answer). **Off by default** (`FOLLOWUP_CONTEXT_ENABLED`, which
+also needs `V4_TRIAGE_ENABLED`). With the flag off, the request, the
+pipeline and every response are unchanged. No classifier, threshold,
+gate, knowledge-base text, Safety Net pattern, held-topic rule or
+helpline changed.
+
+- **What is sent.** After an answer, a typed message carries that
+  answer's knowledge-base question (`previousQuestion`), never her
+  earlier words. A tapped row carries nothing. The gateway accepts it
+  only if it is a served entry's exact question.
+- **Resolution** (`app/gateway/src/followUp.js`). A message of at most
+  10 words that shares a word with a served entry's question (or names
+  a health term) is rewritten as one question, using a short subject
+  per entry (`src/content/followUpSubjects.json`, interface data only):
+  the last pronoun becomes the subject ("can it make me gain weight?"
+  after KB-C8: "can the contraceptive implant make me gain weight?");
+  "what about X?" asks "What is X?"; "what about if ...?" asks
+  "<subject> if ...?"; a vague message gets ", about <subject>?".
+- **Order kept, and stricter.** The Safety Net, the help rule and the
+  held-topic rules run on her own words first, unchanged, and again on
+  the resolved question; any of them wins. The resolved question then
+  goes through the vague rule, V4, retrieval and gate (g) as usual. The
+  response carries `followUp: { resolvedQuestion, mode }`, and the
+  answer screen shows "I took that as ..." under the banner.
+- **Development evidence, not a test.** A synthetic set of 35
+  follow-ups and 14 negatives (`app/gateway/test/fixtures/followUps.json`;
+  no DR-04, sealed, Round 2 or demo-risk text), run with
+  `node app/gateway/scripts/follow-up-eval.js` (V4, gate (g), KB-62,
+  generation off). Follow-ups answered with an acceptable entry: 4/35
+  without context, **25/35 with**; wrong entries served: 4 and 4.
+  Negatives handled as expected: 13/14 both ways, and none answered
+  with context. The one miss ("what if it breaks?" after condoms) gets
+  the vague reply in both runs, not the held-topic reply. **Non-blind:**
+  the word limit, the vocabulary guard and the swap template were
+  chosen on this set (simple appending of the previous question was
+  tried first and rejected: it re-served the previous entry and
+  answered "what is the capital of Kenya?" with KB-C8). Nothing here
+  is a Chapter 5 result.
+- **To decide before the demo.** Whether the flag is on for the
+  defence needs Mr. Ouma's decision under the demo freeze.
+  Sign-off: Mr. Ouma [FILL, date].
+- **Tests.** Gateway `test/followUp.test.js` (19); interface
+  `src/followUpContext.test.tsx` (4). No existing test changed;
+  `test/clearFlags.js` also clears the new flag. `scripts/demo.ps1`
+  gains `-FollowUp` (gateway part, needs V4).
