@@ -10,6 +10,10 @@
  *
  *     node scripts/build-kb-questions.js           # write the list
  *     node scripts/build-kb-questions.js --check   # exit 1 if it is stale
+ *
+ * With --kb-set kb62 it reads the 62-entry set (approved entries only)
+ * and writes kbQuestions_kb62.json instead; kbQuestions.json is not
+ * touched.
  */
 
 const fs = require("node:fs");
@@ -27,10 +31,18 @@ const OUTPUT_FILE = path.join(
   "kbQuestions.json",
 );
 
+/** The output for the kb62 set, next to the default one. */
+const OUTPUT_FILE_KB62 = path.join(
+  path.dirname(OUTPUT_FILE),
+  "kbQuestions_kb62.json",
+);
+
 /** The list to write: id, class and question only. */
-function buildKbQuestions() {
+function buildKbQuestions(kbSet) {
   const questions = [];
-  for (const [topicClass, entries] of Object.entries(loadKnowledgeBase())) {
+  for (const [topicClass, entries] of Object.entries(
+    loadKnowledgeBase(kbSet),
+  )) {
     for (const entry of entries) {
       questions.push({ id: entry.kbId, topicClass, question: entry.question });
     }
@@ -48,25 +60,32 @@ function buildKbQuestions() {
 const serialize = (list) => `${JSON.stringify(list, null, 2)}\n`;
 
 function main(argv) {
-  const text = serialize(buildKbQuestions());
+  const setIndex = argv.indexOf("--kb-set");
+  const kbSet = setIndex >= 0 ? argv[setIndex + 1] : undefined;
+  if (setIndex >= 0 && kbSet !== "kb62") {
+    console.error('--kb-set takes "kb62" (the default set needs no option)');
+    return 2;
+  }
+  const outputFile = kbSet === "kb62" ? OUTPUT_FILE_KB62 : OUTPUT_FILE;
+  const shown = `app/interface/src/content/${path.basename(outputFile)}`;
+  const rerun = `node scripts/build-kb-questions.js${kbSet ? " --kb-set kb62" : ""}`;
+  const text = serialize(buildKbQuestions(kbSet));
 
   if (argv.includes("--check")) {
-    const current = fs.existsSync(OUTPUT_FILE)
-      ? fs.readFileSync(OUTPUT_FILE, "utf8")
+    const current = fs.existsSync(outputFile)
+      ? fs.readFileSync(outputFile, "utf8")
       : null;
     if (current !== text) {
-      console.error(
-        "app/interface/src/content/kbQuestions.json is out of date. Run: node scripts/build-kb-questions.js",
-      );
+      console.error(`${shown} is out of date. Run: ${rerun}`);
       return 1;
     }
-    console.log("app/interface/src/content/kbQuestions.json is up to date.");
+    console.log(`${shown} is up to date.`);
     return 0;
   }
 
-  fs.writeFileSync(OUTPUT_FILE, text);
+  fs.writeFileSync(outputFile, text);
   console.log(
-    `Wrote ${JSON.parse(text).questions.length} questions to app/interface/src/content/kbQuestions.json`,
+    `Wrote ${JSON.parse(text).questions.length} questions to ${shown}`,
   );
   return 0;
 }
@@ -75,4 +94,4 @@ if (require.main === module) {
   process.exitCode = main(process.argv.slice(2));
 }
 
-module.exports = { buildKbQuestions, serialize, OUTPUT_FILE };
+module.exports = { buildKbQuestions, serialize, OUTPUT_FILE, OUTPUT_FILE_KB62 };

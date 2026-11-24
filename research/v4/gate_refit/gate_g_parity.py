@@ -16,8 +16,13 @@ Compares, on the 150 scored development items, the serve-or-abstain
 decision and the served entry id. Prints counts and disagreeing ids only
 and writes the comparison (ids only) to --out.
 
+With --demo-config the live side uses the demo's 62-entry configuration
+instead: ml_service serves the repository's ml_service/knowledge_base_kb62.json
+(hash checked) and the gateway runs with KB_SET=kb62, so entries are looked
+up through the gateway's own loader (scripts/demo.ps1 -Kb 62).
+
 Usage (no other ml_service on the port; e5 in the local cache):
-  HF_HUB_OFFLINE=1 .venv/Scripts/python.exe -I research/v4/gate_refit/gate_g_parity.py
+  HF_HUB_OFFLINE=1 .venv/Scripts/python.exe -I research/v4/gate_refit/gate_g_parity.py [--demo-config]
 """
 
 from __future__ import annotations
@@ -78,13 +83,16 @@ def start_ml(kb_path: Path):
     raise RuntimeError("ml_service did not become healthy with V4 and 62 entries")
 
 
-def live(items, kb_path: Path):
+def live(items, kb_path: Path, demo_config: bool = False):
     env = {**os.environ, "CLASSIFIER_SERVICE_URL": f"http://127.0.0.1:{PORT}", "GATE_G_ENABLED": "true",
            "V4_TRIAGE_ENABLED": "true", "AUTH_DISABLED": "true", "CLASSIFIER_TIMEOUT_MS": "60000"}
-    for name in ("GENERATION_ENABLED", "GEMINI_API_KEY", "RELEVANCE_GATE"):
+    for name in ("GENERATION_ENABLED", "GEMINI_API_KEY", "RELEVANCE_GATE", "KB_SET"):
         env.pop(name, None)
+    if demo_config:
+        env["KB_SET"] = "kb62"
+    kb = None if demo_config else str(kb_path)
     run = subprocess.run(["node", str(HERE / "gate_g_parity.js")], cwd=REPO,
-                         input=json.dumps({"kb": str(kb_path), "items": [{"id": i["id"], "text": i["text"]} for i in items]}),
+                         input=json.dumps({"kb": kb, "items": [{"id": i["id"], "text": i["text"]} for i in items]}),
                          capture_output=True, text=True, encoding="utf-8", env=env)
     if run.returncode != 0:
         raise RuntimeError(f"gate_g_parity.js failed: {run.stderr.strip()[:300]}")
@@ -95,19 +103,24 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     for k, v in gr.DEFAULTS.items():
         ap.add_argument(f"--{k.replace('_', '-')}", type=Path, default=v)
+    ap.add_argument("--demo-config", action="store_true")
     args = ap.parse_args(argv)
     items = gr.load_items(args)
     scored = [i for i in items if i["scored"]]
     expected = harness(items)
 
-    kb_bytes = gr.git_bytes(gr.KB_COMMIT, "ml_service/knowledge_base.json")
+    if args.demo_config:
+        kb_bytes = (REPO / "ml_service" / "knowledge_base_kb62.json").read_bytes()
+    else:
+        kb_bytes = gr.git_bytes(gr.KB_COMMIT, "ml_service/knowledge_base.json")
     gr.check_hash("kb62", gr.sha256_bytes(kb_bytes), gr.HASHES["kb62"])
     with tempfile.TemporaryDirectory() as tmp:
-        kb_path = Path(tmp) / "kb62.json"
-        kb_path.write_bytes(kb_bytes)
+        kb_path = (REPO / "ml_service" / "knowledge_base_kb62.json") if args.demo_config else Path(tmp) / "kb62.json"
+        if not args.demo_config:
+            kb_path.write_bytes(kb_bytes)
         proc, health = start_ml(kb_path)
         try:
-            got = live(items, kb_path)
+            got = live(items, kb_path, args.demo_config)
         finally:
             proc.terminate()
             proc.wait(timeout=60)
@@ -130,7 +143,7 @@ def main(argv=None):
               "rows": rows}
     args.out.mkdir(parents=True, exist_ok=True)
     (args.out / "gate_g_parity.json").write_text(json.dumps(result, indent=1), encoding="utf-8")
-    print(f"scored {len(rows)}; serve-or-abstain agree {decision_agree}; decision and entry agree {agree}; "
+    print(f"{'demo config (repo kb62 file, KB_SET=kb62); ' if args.demo_config else ''}scored {len(rows)}; serve-or-abstain agree {decision_agree}; decision and entry agree {agree}; "
           f"harness served {result['harness_served']}, live served {result['live_served']}; "
           f"live classifier sources {sources}; disagree ids {result['disagree_ids']}")
     return 0 if agree == len(rows) else 1

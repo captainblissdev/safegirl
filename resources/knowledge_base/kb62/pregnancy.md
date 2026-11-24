@@ -1,0 +1,90 @@
+# Knowledge Base — Pregnancy
+
+## KB-P1
+- **Intent:** Pregnancy
+- **User question:** Do I have to get a pelvic exam right away at my first visit?
+- **Answer:** No — youth-friendly facilities should let you delay pelvic exams and blood tests until you're ready, while still addressing your immediate needs another way.
+- **Evidence/claim:** YFS facilities must offer options to delay pelvic exams and blood tests until the client is psychologically/emotionally prepared, alongside alternative ways to meet immediate needs.
+- **Source:** Kenya MoH YFS Guidelines (2005), Ch. 3 §3.3, p. 18
+- **Conditions/limitations:** 2005 document — flag for domain expert to confirm still standard practice.
+- **Safety/referral notes:** None required.
+- **Status:** approved
+
+## KB-P5
+- **Intent:** Pregnancy
+- **User question:** Can I stay in school if I'm pregnant, and can I go back after the baby?
+- **Answer:** Under Kenya's 2020 national school re-entry guidelines, a pregnant learner is allowed to stay in school for as long as possible and to sit national exams if her health allows. After delivery she is re-admitted to the same class she was in before. The guidelines give the return time as six months after delivery and also as the start of the next calendar year, so ask your school's guidance and counselling teacher what applies to you.
+- **Evidence/claim:** A pregnant learner shall be allowed to remain in school as long as possible and to sit national exams if her health permits; after delivery she is re-admitted to the same class unconditionally.
+- **Source:** Ministry of Education, Kenya, National Guidelines for School Re-Entry in Early Learning and Basic Education (2020), Section 3.2
+- **Conditions/limitations:** The guidelines state the return both as six months after delivery and as the start of the next calendar year, which can differ. These are national guidelines; practice in schools varies.
+- **Safety/referral notes:** If a school refuses, she can ask the guidance and counselling teacher. A verified escalation route was not found.
+- **Status:** approved
+
+## KB-P6
+- **Intent:** Pregnancy
+- **User question:** What warning signs in pregnancy mean I should go to hospital right away?
+- **Answer:** Kenya's Mother and Child Health Handbook lists these warning signs: vaginal bleeding, severe stomach pain, the baby moving less or not at all, fits, fever, a severe headache, waters breaking, and swelling of the face and hands. If you have any of them, go to a health facility straight away.
+- **Evidence/claim:** The handbook lists these danger signs and advises being prepared to seek skilled care at a health facility for any of them.
+- **Source:** Kenya MoH, Mother & Child Health Handbook (Afya ya Mama na Mtoto), revised 2020
+- **Conditions/limitations:** A lay list from the handbook, not a clinical triage protocol. An earlier (2016) copy lists a different set of signs, so use the 2020 edition.
+- **Safety/referral notes:** Any of these signs means going to the nearest health facility immediately. She should not wait or treat at home.
+- **Status:** approved
+
+## KB-P7
+- **Intent:** Pregnancy
+- **User question:** Do I need iron and folic acid tablets in pregnancy, and what should I eat?
+- **Answer:** Kenya's Mother and Child Health Handbook says to take iron and folic acid supplements every day throughout pregnancy and to eat at least 5 of the 10 food groups each day. The clinic gives you the tablets. If you feel very tired, look pale or get breathless, tell the clinic.
+- **Evidence/claim:** Take iron and folic acid supplements every day throughout pregnancy and eat at least 5 of the 10 food groups every day.
+- **Source:** Kenya MoH, Mother & Child Health Handbook (2020); Kenya MoH, Basic Obstetric Protocols, 1st ed. (2026)
+- **Conditions/limitations:** The dose is for clinicians to prescribe and is not given here. Side effects were not found in a source. The WHO iron and folic acid guideline (2012) could not be opened.
+- **Safety/referral notes:** Tiredness with a pale look or breathlessness may be anaemia and needs a clinic visit.
+- **Status:** approved
+
+## KB-P8
+- **Intent:** Pregnancy
+- **User question:** How can I know if I am pregnant or not, and how do I get a pregnancy test?
+- **Answer:** The way to find out is a urine pregnancy test. Kenya's guidelines say that when a period is late, irregular or you are not sure, a urine pregnancy test should be done. Ask a health worker or a youth-friendly clinic for one. Until you have a test result, you cannot be sure you are not pregnant. Use a condom or avoid sex until your period comes or the result is confirmed.
+- **Evidence/claim:** "if uncertain, irregular, or delayed then a urine pregnancy test should be performed" (IG2026, p. 29). "If pregnancy testing is not available, counsel the client to use barrier methods or abstain from intercourse until her menses occur or pregnancy is confirmed" (FP7, p. 45). "Pregnancy cannot completely be ruled out using the checklist" (FP7, p. 45).
+- **Source:** Kenya MoH, HIV/STI Guidelines (IG2026), p. 29; Kenya MoH, National Family Planning Guidelines for Health Service Providers, 7th ed. (FP7), p. 45. Both quotes were found by exact text search; page numbers are printed pages and should be re-checked in the PDFs.
+- **Conditions/limitations:** Both sources are written for health workers, not for girls. Neither says how soon after sex or a missed period a test is reliable, so no timing is given. The line "ask a health worker or a youth-friendly clinic for one" is not stated in these pages; it is a referral note for the clinician to confirm. FP7 p. 45 lists situations where a provider can be reasonably sure a client is not pregnant (for example a negative test and no unprotected sex in 3 weeks). That is a provider screening tool and is deliberately NOT turned into advice to the girl.
+- **Safety/referral notes:** Never tell her she is not pregnant. If she may have been raped or forced, route to the help reply (1195, 999, 112). Possible pregnancy with severe pain or heavy bleeding needs a facility visit. Held-topic group C should still send late-period and "am I pregnant" queries to a health worker; this entry would answer the "how do I get a test" wording only if the clinicians and Mr. Ouma agree it should replace or sit beside the held reply.
+- **Status:** approved
+
+## KB-P9
+- **Intent:** Pregnancy
+- **User question:** How many antenatal clinic visits do I need, and what happens at the first one?
+- **Answer:** Go to the clinic as soon as you can. Kenya's Mother and Child Health Handbook says to go for antenatal care as soon as possible and to attend 8 times during the pregnancy, and WHO also recommends a minimum of eight contacts. At the first visit the health worker examines you and checks your blood, urine and blood sugar, and offers testing for HIV, syphilis and hepatitis. If you have a question, the handbook says to ask a health worker or a community health volunteer without any hesitation.
+- **Evidence/claim:** "Go for ANC visit as soon as possible and attend 8 times during the pregnancy" [...] "PHYSICAL EXAMINATION [1st Visit]" [...] "Triple testing (HIV/Syphilis/Hepatitis)" [...] "If you have any question, please ask a health worker or a Community Health Volunteer (CHV) without any hesitation" [...] "A minimum of eight contacts are recommended to reduce perinatal mortality and improve women’s experience of care."
+- **Source:** Kenya MoH, Mother and Child Health Handbook (2020), pp. 1, 8 and 14 (page numbers from a web summary of the PDF); WHO, Recommendations on antenatal care for a positive pregnancy experience (2016), news release of 7 Nov 2016
+- **Conditions/limitations:** The quotes were taken from a web summary of the handbook and WHO guidance; the medic checked the entry against the sources on 22 Oct 2026. Page numbers are from the summary. The handbook is about 'ANC contacts' counted from the first visit. It does not say what is done at the other visits in the pages read.
+- **Safety/referral notes:** Bleeding, severe pain, a severe headache, fever or the baby moving less means going to a facility at once (see NEW-P-02).
+- **Status:** approved
+
+## KB-P10
+- **Intent:** Pregnancy
+- **User question:** How do I prepare for giving birth?
+- **Answer:** Kenya's Mother and Child Health Handbook has a birth plan, which a health worker fills in with you during your antenatal visits. It covers where you will give birth, who will assist you, how you will get to the health facility, who could donate blood if needed, and how you will pay for the birth. The handbook also says to have transport ready to reach the facility and to prepare money, a birth companion and an emergency kit. Talk to a health worker at your antenatal visits to make your plan.
+- **Evidence/claim:** "Birth Plan: Preparing for a safe and healthy childbirth" [...] "Financial plan for childbirth" [...] "Ensure transport to the health facility is available (Birth preparedness; money, birth companion, emergency kit)"
+- **Source:** Kenya MoH, Mother and Child Health Handbook (2020), Birth Plan, p. 1; birth preparedness, p. 4 (page numbers from a web summary of the PDF)
+- **Conditions/limitations:** The quotes were taken from a web summary of the handbook; the medic checked the entry against the sources on 22 Oct 2026. The handbook sentences about who 'could donate blood' and 'who will assist you' are paraphrases of the birth-plan headings and need checking. It does not say what to pack in the emergency kit.
+- **Safety/referral notes:** Labour pains, waters breaking, bleeding or the baby not moving means going to a health facility straight away (see NEW-P-02).
+- **Status:** approved
+
+---
+
+## HELD — pending supervisor/legal review
+
+### KB-P4 (abortion/PAC wording)
+- **User question:** Can I get safe abortion care even if what I did was illegal?
+- **Evidence:** WHO (2018) — post-abortion care (PAC) must be provided free of charge and free of coercion regardless of whether the abortion was legal. Kenya MoH (2005) — termination legally permitted in Kenya specifically where conception results from rape, subject to psychiatric evaluation.
+- **Source:** WHO (2018) Ch. 5 §5.3.2/5.4, pp. 27, 29 + Kenya MoH (2005) Annex 1, p. 28
+- **Status:** 🔴 HOLD. Most legally/politically sensitive topic in the KB. Do not finalize wording without supervisor and domain-expert sign-off, and possibly legal review given the sourcing gap (both sources predate the 2010 Constitution's abortion provisions).
+
+### KB-P2 (antenatal checkups / consent wording)
+- **User question:** Do I have to pay for antenatal checkups as a teenager?
+- **Answer:** Health services for young people are meant to be confidential. The rules on parental consent for under-18s can differ by service, so a health worker can explain what applies to you.
+- **Original answer (pre-interim):** Maternal healthcare is expected to be free, confidential, and accessible without needing a third party's permission.
+- **Evidence:** Maternal health care must be free, confidential, adolescent-responsive, and accessible without third-party authorization.
+- **Source:** WHO Recommendations (2018), Ch. 4 §4.2, p. 18
+- **Conditions/limitations:** Consent wording is interim pending legal review (Children Act 2022 s.16(1)).
+- **Status:** 🟡 HOLD. Held: the whole answer was a consent claim; needs a rewrite after legal review.

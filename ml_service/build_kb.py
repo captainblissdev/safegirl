@@ -53,6 +53,13 @@ ML_SERVICE_DIR = Path(__file__).resolve().parent
 KB_SOURCE_DIR = ML_SERVICE_DIR.parent / "resources" / "knowledge_base"
 OUTPUT_PATH = ML_SERVICE_DIR / "knowledge_base.json"
 
+# The 62-entry set (--kb-set kb62): its own source folder and output, next
+# to the default ones, which are not touched. Its entries carry a review
+# status; only approved ones are exported (as on kb/merge-60).
+KB62_SOURCE_DIR = KB_SOURCE_DIR / "kb62"
+KB62_OUTPUT_PATH = ML_SERVICE_DIR / "knowledge_base_kb62.json"
+KB_STATUSES = ("approved", "pending")
+
 # class value -> source file. Class values must match EXPECTED_LABELS in
 # app.py. gbv is deliberately absent (see module docstring).
 SOURCE_FILES = {
@@ -109,7 +116,7 @@ def split_active_and_held(raw_text: str) -> tuple[str, str]:
     return parts[0], parts[1] if len(parts) > 1 else ""
 
 
-def parse_entry(block: str, filename: str, entry_class: str) -> dict:
+def parse_entry(block: str, filename: str, entry_class: str, with_status: bool = False) -> dict:
     entry_id = ENTRY_ID.match(block).group(1)
 
     expected_prefix = ID_PREFIX_FOR_CLASS[entry_class]
@@ -132,16 +139,26 @@ def parse_entry(block: str, filename: str, entry_class: str) -> dict:
         if value and not NONE_PLACEHOLDER.match(value):
             content_parts.append(f"{prefix}: {value}")
 
-    return {
+    entry = {
         "id": entry_id,
         "class": entry_class,
         "title": fields["User question"],
         "content": "\n\n".join(content_parts),
         "source": fields["Source"],
     }
+    if with_status:
+        status = get_field(block, "Status")
+        if status not in KB_STATUSES:
+            found = f"unknown status {status!r}" if status else "no status"
+            raise KBParseError(
+                f"{filename}: {entry_id} has {found} "
+                f"(expected one of {list(KB_STATUSES)})."
+            )
+        entry["_status"] = status
+    return entry
 
 
-def parse_file(path: Path, entry_class: str) -> list[dict]:
+def parse_file(path: Path, entry_class: str, with_status: bool = False) -> list[dict]:
     raw_text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
     active, held = split_active_and_held(raw_text)
 
@@ -150,10 +167,17 @@ def parse_file(path: Path, entry_class: str) -> list[dict]:
     # retrievalModule.js.
     blocks = ENTRY_HEADING.split(active)[1:]
     entries = [
-        parse_entry(block, path.name, entry_class)
+        parse_entry(block, path.name, entry_class, with_status)
         for block in blocks
         if ENTRY_ID.match(block)
     ]
+    if with_status:
+        # Pending entries are validated above but never exported.
+        entries = [
+            {k: v for k, v in e.items() if k != "_status"}
+            for e in entries
+            if e["_status"] == "approved"
+        ]
 
     if not entries:
         raise KBParseError(f"{path.name}: no active KB entries found.")
@@ -172,14 +196,14 @@ def parse_file(path: Path, entry_class: str) -> list[dict]:
     return entries
 
 
-def build_kb(source_dir: Path = KB_SOURCE_DIR) -> list[dict]:
+def build_kb(source_dir: Path = KB_SOURCE_DIR, with_status: bool = False) -> list[dict]:
     entries: list[dict] = []
 
     for entry_class, filename in SOURCE_FILES.items():
         path = source_dir / filename
         if not path.is_file():
             raise KBParseError(f"Knowledge-base file not found: {path}")
-        entries.extend(parse_file(path, entry_class))
+        entries.extend(parse_file(path, entry_class, with_status))
 
     ids = [e["id"] for e in entries]
     dupes = sorted({i for i in ids if ids.count(i) > 1})
@@ -213,30 +237,39 @@ def main() -> int:
         action="store_true",
         help="Do not write; exit 1 if knowledge_base.json is missing or stale.",
     )
+    parser.add_argument(
+        "--kb-set",
+        choices=("kb62",),
+        help="Build the 62-entry set (resources/knowledge_base/kb62/, approved "
+             "entries only) into knowledge_base_kb62.json instead.",
+    )
     args = parser.parse_args()
+    kb62 = args.kb_set == "kb62"
+    source_dir, output_path = (KB62_SOURCE_DIR, KB62_OUTPUT_PATH) if kb62 else (KB_SOURCE_DIR, OUTPUT_PATH)
 
     try:
-        entries = build_kb()
+        entries = build_kb(source_dir, with_status=kb62)
     except KBParseError as exc:
         print(f"KB conversion failed: {exc}", file=sys.stderr)
         return 1
 
     text = serialize(entries)
-    rel_output = OUTPUT_PATH.relative_to(ML_SERVICE_DIR.parent).as_posix()
+    rel_output = output_path.relative_to(ML_SERVICE_DIR.parent).as_posix()
+    rel_source = source_dir.relative_to(ML_SERVICE_DIR.parent).as_posix()
 
     if args.check:
-        current = OUTPUT_PATH.read_text(encoding="utf-8") if OUTPUT_PATH.exists() else None
+        current = output_path.read_text(encoding="utf-8") if output_path.exists() else None
         if current != text:
             print(
-                f"{rel_output} is out of date with resources/knowledge_base/. "
-                "Run: python ml_service/build_kb.py",
+                f"{rel_output} is out of date with {rel_source}/. "
+                f"Run: python ml_service/build_kb.py{' --kb-set kb62' if kb62 else ''}",
                 file=sys.stderr,
             )
             return 1
         print(f"{rel_output} is up to date ({len(entries)} entries).")
         return 0
 
-    write_atomically(OUTPUT_PATH, text)
+    write_atomically(output_path, text)
 
     by_class: dict[str, int] = {}
     for entry in entries:

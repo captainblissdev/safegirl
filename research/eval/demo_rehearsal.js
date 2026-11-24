@@ -22,6 +22,14 @@
  * Usage:
  *   node research/eval/demo_rehearsal.js --queries C:/.../demo.csv
  *        --out C:/.../rehearsal [--ml http://127.0.0.1:8001] [--offline]
+ *
+ * With --kb 62 it rehearses the 62-entry configuration instead, in one
+ * mode ("kb62-gate-g"): V4 on, gate (g) (GATE_G_ENABLED), the 62 approved
+ * entries, looked up in the 62-entry base, and an ml_service serving
+ * ml_service/knowledge_base_kb62.json in question embed mode (started on
+ * --ml, default http://127.0.0.1:8012, if none answers there; one that
+ * answers with another base is refused). As gate_g_parity.py/.js. The
+ * default, --kb 21, is unchanged.
  */
 
 "use strict";
@@ -36,11 +44,15 @@ const { createHandleQuery } = require(path.join(GW, "backend"));
 const { createClassifierClient } = require(path.join(GW, "classifierClient"));
 const { createGenerator } = require(path.join(GW, "generationModule"));
 const { loadKnowledgeBase } = require(path.join(GW, "retrievalModule"));
+const { loadGateG } = require(path.join(GW, "gateG"));
 
 const MODES = [
   ["off", false],
   ["on", true],
 ];
+
+/** The 62-entry configuration's ml_service settings and default URL. */
+const KB62 = { mode: "kb62-gate-g", kbPath: "./knowledge_base_kb62.json", embedMode: "question", ml: "http://127.0.0.1:8012" };
 
 /** Minimal CSV reader (quoted fields, commas and newlines inside quotes). */
 function parseCsv(text) {
@@ -87,7 +99,7 @@ function readQueries(file) {
 const insideRepo = (p) => !path.relative(ROOT, path.resolve(p)).startsWith("..");
 
 /** Why a reply was not an answer, in plain words (null for an answer). */
-function reason(response) {
+function reason(response, gateLabel = "0.8439") {
   switch (response.kind) {
     case "referral":
       return "Safety Net referral";
@@ -100,7 +112,9 @@ function reason(response) {
         ? "V4 predicted vague: clarifying question"
         : "vague rule (short query without a health term): clarifying question";
     case "abstain":
-      if (response.relevanceGate === "abstained") return "relevance gate: top-1 unscoped score below 0.8439";
+      if (response.relevanceGate === "abstained") {
+        return gateLabel === "g" ? "gate (g) abstained" : "relevance gate: top-1 unscoped score below 0.8439";
+      }
       if (response.retrievalScope === "abstained") {
         return response.classifierSource === "v4"
           ? "V4 label not a topic, or its confidence below 0.45"
@@ -113,7 +127,7 @@ function reason(response) {
 }
 
 /** One output row from a gateway response. */
-function describe(query, mode, response, entryIdOf) {
+function describe(query, mode, response, entryIdOf, gateLabel) {
   return {
     query,
     mode,
@@ -123,7 +137,7 @@ function describe(query, mode, response, entryIdOf) {
     classifier: [response.classifierSource, response.predictedCategory, response.confidence]
       .filter((v) => v !== null && v !== undefined)
       .join(" "),
-    reason: reason(response) ?? "",
+    reason: reason(response, gateLabel) ?? "",
   };
 }
 
@@ -141,24 +155,44 @@ async function health(ml) {
 }
 
 /** Start ml_service with V4 loaded and wait until /health reports it. */
-async function startMl(ml, offline) {
+async function startMl(ml, offline, kb = "21") {
   const port = new URL(ml).port || "8001";
   const env = { ...process.env, MODEL_DIR: "./final", KB_PATH: "./knowledge_base.json", V4_TRIAGE_ENABLED: "true" };
+  if (kb === "62") Object.assign(env, { KB_PATH: KB62.kbPath, RETRIEVAL_EMBED_MODE: KB62.embedMode });
   if (offline) env.HF_HUB_OFFLINE = "1";
   const child = spawn(path.join(ROOT, ".venv", "Scripts", "python.exe"),
     ["-m", "uvicorn", "app:app", "--host", "127.0.0.1", "--port", port],
     { cwd: path.join(ROOT, "ml_service"), env, stdio: "ignore" });
   for (let i = 0; i < 150; i++) {
     const h = await health(ml);
-    if (h && h.v4 === "ok") return child;
+    if (h && h.v4 === "ok" && (kb !== "62" || h.kb_entries === 62)) return child;
     await new Promise((r) => setTimeout(r, 2000));
   }
   child.kill();
   throw new Error("ml_service did not start with V4 loaded within 300 s");
 }
 
-/** Run the queries in both modes with the given ml_service URL. */
-async function rehearse(queries, { ml, fetchImpl = globalThis.fetch, logger = { warn() {} } }) {
+/** The 62-entry configuration: V4 on, gate (g), entries from the 62-entry base. */
+async function rehearse62(queries, { ml, fetchImpl, logger, gateG }) {
+  const entries = Object.values(loadKnowledgeBase("kb62")).flat();
+  const byId = new Map(entries.map((e) => [e.kbId, e]));
+  const entryIdOf = new Map(entries.map((e) => [e.question, e.kbId]));
+  const classifierClient = createClassifierClient({
+    fetch: fetchImpl,
+    config: { serviceUrl: ml, v4TriageEnabled: true },
+    getEntryById: (id) => byId.get(id) || null,
+    logger,
+  });
+  const generate = createGenerator({ env: {} }).generate;
+  const handle = createHandleQuery({ classifierClient, relevanceGate: true, generate, gateG });
+  const rows = [];
+  for (const q of queries) rows.push(describe(q, KB62.mode, await handle(q), entryIdOf, "g"));
+  return rows;
+}
+
+/** Run the queries in both modes with the given ml_service URL (--kb 21), or in the 62-entry configuration. */
+async function rehearse(queries, { ml, fetchImpl = globalThis.fetch, logger = { warn() {} }, kb = "21", gateG = null }) {
+  if (kb === "62") return rehearse62(queries, { ml, fetchImpl, logger, gateG: gateG ?? loadGateG() });
   const entryIdOf = new Map(Object.values(loadKnowledgeBase()).flat().map((e) => [e.question, e.kbId]));
   const generate = createGenerator({ env: {} }).generate;
   const rows = [];
@@ -175,7 +209,7 @@ async function rehearse(queries, { ml, fetchImpl = globalThis.fetch, logger = { 
 }
 
 function parseArgs(argv) {
-  const args = { queries: null, out: null, ml: "http://127.0.0.1:8001", offline: false };
+  const args = { queries: null, out: null, ml: null, offline: false, kb: "21" };
   for (let i = 2; i < argv.length; i++) {
     const key = argv[i].replace(/^--/, "");
     if (key === "offline") args.offline = true;
@@ -183,6 +217,8 @@ function parseArgs(argv) {
     else throw new Error(`Unknown or incomplete argument: ${argv[i]}`);
   }
   if (!args.queries || !args.out) throw new Error("--queries and --out are required");
+  if (args.kb !== "21" && args.kb !== "62") throw new Error('--kb takes "21" or "62"');
+  args.ml = args.ml ?? (args.kb === "62" ? KB62.ml : "http://127.0.0.1:8001");
   if (insideRepo(args.queries) || insideRepo(args.out)) {
     throw new Error("--queries and --out must be outside the repository");
   }
@@ -195,13 +231,15 @@ async function main() {
   let child = null;
   const h = await health(args.ml);
   if (!h) {
-    console.log("ml_service not reachable: starting it with V4 loaded...");
-    child = await startMl(args.ml, args.offline);
+    console.log(`ml_service not reachable: starting it with V4 loaded${args.kb === "62" ? " and the 62-entry base" : ""}...`);
+    child = await startMl(args.ml, args.offline, args.kb);
   } else if (h.v4 !== "ok") {
     throw new Error("ml_service is running without V4 loaded; stop it or start it with V4_TRIAGE_ENABLED=true");
+  } else if (args.kb === "62" && h.kb_entries !== 62) {
+    throw new Error(`ml_service at ${args.ml} serves ${h.kb_entries} entries, not the 62-entry base; use another --ml`);
   }
   try {
-    const rows = await rehearse(queries, { ml: args.ml });
+    const rows = await rehearse(queries, { ml: args.ml, kb: args.kb });
     fs.mkdirSync(args.out, { recursive: true });
     const file = path.join(args.out, `rehearsal_${new Date().toISOString().replace(/[:.]/g, "-")}.csv`);
     fs.writeFileSync(file, toCsv(rows));
@@ -221,4 +259,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { describe, parseArgs, parseCsv, readQueries, reason, rehearse };
+module.exports = { describe, parseArgs, parseCsv, readQueries, reason, rehearse, KB62 };
