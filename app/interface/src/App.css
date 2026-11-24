@@ -2057,6 +2057,51 @@ html:has(.topic-page) {
   font-weight: var(--weight-black);
 }
 
+/* "Did that help?" under the answer card (AnswerFeedback.tsx): a short
+   question with two pill buttons; after a choice, a note and, for "Not
+   quite", the next steps. */
+.answer-feedback {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.answer-feedback-title {
+  color: var(--color-plum);
+  font-size: 15px;
+  font-weight: var(--weight-black);
+}
+
+.answer-feedback-note {
+  color: var(--color-plum);
+  font-size: 15px;
+  font-weight: var(--weight-semibold);
+  line-height: 1.45;
+}
+
+.answer-feedback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.answer-feedback-btn {
+  min-height: var(--tap-target);
+  border: 1.5px solid var(--color-plum);
+  border-radius: 999px;
+  padding: 8px 18px;
+  background: transparent;
+  color: var(--color-plum);
+  font-size: 1rem;
+  font-weight: var(--weight-black);
+  cursor: pointer;
+}
+
+.answer-feedback-btn--primary {
+  background: var(--color-plum);
+  color: var(--color-on-dark);
+}
+
 /* Reply screens (redesign Step 7): clarify, held, help and referral,
    no answer. */
 

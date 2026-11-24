@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { relatedQuestions } from "../content/kbQuestions";
 import { ANSWER_DISCLAIMER, MATCH_HINT, MATCH_LABEL } from "../content/uiText";
 import type { ChatTurn } from "../types";
+import AnswerFeedback from "./AnswerFeedback";
 import DangerLine from "./DangerLine";
 import Flowers from "./Flowers";
 import { CheckIcon, ChevronLeftIcon, ChevronRightIcon } from "./Icons";
@@ -26,6 +27,9 @@ import { CheckIcon, ChevronLeftIcon, ChevronRightIcon } from "./Icons";
  * the disclaimer as a calm note inside the card, the related questions
  * as Topic-page rows, and a pale flower cluster on the answer card
  * (decoration only, aria-hidden). No wording or order changed.
+ *
+ * "Did that help?" (AnswerFeedback) sits between the answer card and
+ * the related questions when the chat passes its actions.
  */
 
 interface Props {
@@ -36,9 +40,21 @@ interface Props {
   back: { label: string; onBack: () => void };
   /** The ask bar, labelled "Ask something else". */
   askBar: ReactNode;
+  /** "Did that help?" actions (AnswerFeedback); omitted, no question. */
+  feedback?: {
+    onAskAgain: () => void;
+    onTalkToPerson: () => void;
+    onNotHelpful: () => void;
+  };
 }
 
-export default function AnswerView({ turn, onSend, back, askBar }: Props) {
+export default function AnswerView({
+  turn,
+  onSend,
+  back,
+  askBar,
+  feedback,
+}: Props) {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const matchedQuestion = turn.matchedQuestion ?? "";
   const related = relatedQuestions(matchedQuestion);
@@ -85,6 +101,10 @@ export default function AnswerView({ turn, onSend, back, askBar }: Props) {
           <p className="answer-disclaimer">{ANSWER_DISCLAIMER}</p>
         </div>
       </article>
+
+      {feedback && (
+        <AnswerFeedback hasRelated={related.length > 0} {...feedback} />
+      )}
 
       {related.length > 0 && (
         <section className="related" aria-labelledby="related-title">

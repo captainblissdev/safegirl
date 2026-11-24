@@ -433,6 +433,11 @@ export default function App() {
               onClearAndLeave={handleClearAndLeave}
               isHelpOpen={isHelpOpen}
               homeHelpButtonRef={homeHelpButtonRef}
+              onNotHelpful={() => {
+                // "Not quite" counts like a reply that did not answer her
+                // (loopLimit.ts); in memory only, like the rest.
+                loopCountRef.current += 1;
+              }}
             />
 
             {error && (

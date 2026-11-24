@@ -3347,3 +3347,26 @@ by default and nothing was deployed.
   62-entry base served by the gateway and ml_service, which needs the
   clinician's sign-off on the KB text, and Mr. Ouma's decision. Until
   then the demo runs KB-21 with the 0.8439 gate.
+
+## "Did that help?" under an answer (2026-11-24)
+
+Interface behaviour only (`feat/answer-check`). No reply text,
+pipeline rule or order, classifier, threshold, gate, knowledge-base
+text, Safety Net pattern or helpline changed.
+
+- **What.** Between the answer card and the related questions, "Did
+  that help?" with "Yes, thanks" and "Not quite". "Yes, thanks" shows
+  "Glad it helped. You can ask something else below." "Not quite"
+  shows a short sorry note (pointing to the related questions when
+  there are any) with "Ask it another way" (focus moves to the ask bar)
+  and "Talk to a person" (the existing Talk to a person screen, in
+  place of that answer). Both notes are announced politely.
+- **Loop limit.** "Not quite" adds one to the in-memory loop count, as
+  a reply that did not answer her. Any answer still resets it.
+- **Privacy.** Nothing is sent, logged or stored: the choice is
+  component state and goes with the next reply.
+- **Accessibility.** The question is the section's label, not a
+  heading, so the answer screen's heading order (h1, "Answer",
+  "Related questions") is unchanged.
+- **Tests.** `src/answerFeedback.test.tsx` (9 tests); no existing test
+  changed.

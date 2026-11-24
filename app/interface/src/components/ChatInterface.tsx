@@ -59,6 +59,8 @@ interface Props {
   isHelpOpen?: boolean;
   /** Home's "Get help", so App can return focus to it. */
   homeHelpButtonRef?: RefObject<HTMLButtonElement>;
+  /** "Not quite" under an answer (App counts it for the loop limit). */
+  onNotHelpful?: () => void;
 }
 
 export default function ChatInterface({
@@ -76,8 +78,13 @@ export default function ChatInterface({
   onClearAndLeave = () => undefined,
   isHelpOpen = false,
   homeHelpButtonRef,
+  onNotHelpful = () => undefined,
 }: Props) {
   const [draft, setDraft] = useState(initialDraft);
+  // The answer whose "Not quite, Talk to a person" was chosen: that
+  // answer's screen gives way to Talk to a person. A new reply has a new
+  // id, so it shows normally.
+  const [personFor, setPersonFor] = useState<string | null>(null);
   // The starter phrase is used once: App clears it after this first render,
   // so a later chat starts empty. Nothing is sent.
   useEffect(() => {
@@ -142,6 +149,16 @@ export default function ChatInterface({
     );
   }
 
+  if (lastTurn && view === "answer" && personFor === lastTurn.id) {
+    return (
+      <PersonReply
+        id={`${lastTurn.id}-person`}
+        askBar={askBar}
+        onTopic={onTopic}
+        onOpenHelp={onOpenHelp}
+      />
+    );
+  }
   if (lastTurn && view === "answer") {
     return (
       <AnswerView
@@ -150,6 +167,11 @@ export default function ChatInterface({
         onSend={(question) => onSend(question, "tapped")}
         back={back}
         askBar={askBar}
+        feedback={{
+          onAskAgain: () => inputRef.current?.focus(),
+          onTalkToPerson: () => setPersonFor(lastTurn.id),
+          onNotHelpful,
+        }}
       />
     );
   }

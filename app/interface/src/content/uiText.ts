@@ -53,6 +53,21 @@ export const ANSWER_DISCLAIMER =
   "General information, not a diagnosis. A nurse or clinic can test and treat you.";
 
 /**
+ * "Did that help?" under a knowledge-base answer (AnswerFeedback.tsx).
+ * Interface wording only: nothing is sent or stored.
+ */
+export const FEEDBACK_QUESTION = "Did that help?";
+export const FEEDBACK_YES = "Yes, thanks";
+export const FEEDBACK_NO = "Not quite";
+export const FEEDBACK_THANKS =
+  "Glad it helped. You can ask something else below.";
+export const FEEDBACK_SORRY = "Sorry that wasn't what you needed. You could:";
+export const FEEDBACK_SORRY_RELATED =
+  "Sorry that wasn't what you needed. Try a related question below, or:";
+export const FEEDBACK_ASK_AGAIN = "Ask it another way";
+export const FEEDBACK_PERSON = "Talk to a person";
+
+/**
  * The label in each reply's pill. The held-topic and support labels are
  * interface wording (the gateway sends no label); the reply text itself
  * always comes from the gateway or the offline copy, unchanged.
